@@ -3210,11 +3210,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			tuntian:{
 				audio:2,
 				audioname:['gz_dengai'],
-				trigger:{player:'loseAfter'},
+				trigger:{
+					player:'loseAfter',
+					source:'gainAfter',
+					global:['equipAfter','addJudgeAfter'],
+				},
 				frequent:true,
 				filter:function(event,player){
 					if(player==_status.currentPhase) return false;
-					return event.cards2&&event.cards2.length>0;
+					var evt=event.getl(player);
+					return evt&&evt.cards2&&evt.cards2.length>0;
 				},
 				content:function(){
 					'step 0'
@@ -4974,9 +4979,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				}
 			},
 			weimu:{
-				trigger:{global:'useCard'},
+				trigger:{global:'useCard1'},
 				audio:2,
 				forced:true,
+				firstDo:true,
 				filter:function (event,player,card){
 					if(get.color(event.card)!='black') return false;
 					return event.card.name=='nanman'&&player!=event.player||event.card.name=='wanjian'&&player!=event.player||event.card.name=='taoyuan'&&player.hp<player.maxHp||event.card.name=='wugu';
