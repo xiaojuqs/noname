@@ -475,6 +475,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					backup:function(links,player){
 						return {
 							audio:'juanhui',
+							popname·true,
 							filterCard:true,
 							viewAs:{
  							name:links[0][2],
@@ -788,7 +789,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			//新岩泽(划掉)留赞
 			refenyin:{
-				audio:'fenyin',
+				audio:2,
 				trigger:{global:['loseAfter','cardsDiscardAfter']},
 				forced:true,
 				filter:function(event,player){
@@ -859,22 +860,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			liji:{
 				enable:'phaseUse',
+				audio:2,
 				filter:function(event,player){
 					return (player.getStat().skill.liji||0)<(event.liji_num||0);
 				},
 				onChooseToUse:function(event){
 					if(game.online) return
 					var num=0;
+					var evt2=event.getParent();
+					if(!evt2.liji_all) evt2.liji_all=(game.players.length>4?8:4);
 					game.getGlobalHistory('cardMove',function(evt){
 						if(evt.name=='cardsDiscard'||(evt.name=='lose'&&evt.position==ui.discardPile)) num+=evt.cards.length;
 					});
-					event.set('liji_num',Math.floor(num/(game.players.length>4?8:4)));
+					event.set('liji_num',Math.floor(num/evt2.liji_all));
 				},
 				filterCard:true,
 				position:'he',
 				check:function(card){
 					var val=get.value(card);
-					if(!_status.event.player.getStorage('fenyin_mark').contains(get.suit(card))) return 12-val;
+					if(!_status.event.player.getStorage('refenyin_mark').contains(get.suit(card))) return 12-val;
 					return 8-val;
 				},
 				filterTarget:lib.filter.notMe,
@@ -884,11 +888,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:1,
 					result:{
-						target:function(player,target){
-							return get.damageEffect(target,player);
-						},
+						target:-1.5
 					},
-				}
+					tag:{
+						damage:1
+					},
+				},
 			},
 			//文鸯
 			xinlvli:{
@@ -1280,13 +1285,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					trigger.cancel();
-				},
-				ai:{
-					effect:{
-						target:function(card,player,target,current){
-							if(card.name=='nanman') return 'zeroplayertarget';
-						}
-					}
 				},
 			},
 			mansi:{
