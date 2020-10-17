@@ -888,7 +888,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:1,
 					result:{
-						target:-1.5
+						target:function(player,target){
+							return get.damageEffect(target,player);
+						},
 					},
 					tag:{
 						damage:1
@@ -1285,6 +1287,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					trigger.cancel();
+				},
+				ai:{
+					effect:{
+						target:function(card,player,target,current){
+							if(card.name=='nanman') return 'zeroplayertarget';
+						}
+					}
 				},
 			},
 			mansi:{
