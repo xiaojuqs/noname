@@ -948,7 +948,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					names.randomSort();
 					event.videoId=lib.status.videoId++;
 					if(player.isUnderControl()){
-						game.modeSwapPlayer(player);
+						game.swapPlayerAuto(player);
 					}
 					var switchToAuto=function(){
 						names.remove('du');
@@ -2286,7 +2286,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					"step 0"
 					event.videoId=lib.status.videoId++;
 					if(player.isUnderControl()){
-						game.modeSwapPlayer(player);
+						game.swapPlayerAuto(player);
 					}
 					var switchToAuto=function(){
 						game.pause();
@@ -5171,7 +5171,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			xinzhilve_mark:{
 				intro:{content:'本回合手牌上限+#'},
-				onunmark:true,
+				onremove:true,
 				charlotte:true,
 				mod:{
 					maxHandcard:function(player,num){

@@ -5143,7 +5143,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					if(!list.length||!skills.length){event.finish();return;}
 					if(player.isUnderControl()){
-						game.modeSwapPlayer(player);
+						game.swapPlayerAuto(player);
 					}
 					var switchToAuto=function(){
 						_status.imchoosing=false;
