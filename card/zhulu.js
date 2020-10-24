@@ -608,7 +608,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					order:9.5,
 					equipValue:function(card,player){
 						if(get.position(card)!='e') return 5;
-						if(_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard')) return 1+2*player.countCards('h');
+						if(_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+3*player.countCards('h');
 						return 0;
 					},
 					basic:{
