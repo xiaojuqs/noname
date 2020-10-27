@@ -323,7 +323,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var cards=target.getCards('h','sha');
 					if(cards.length){
 						event.cards=cards;
-						event.goto(4);
+						event.goto(5);
 					}
 					else player.discardPlayerCard('he',target,true);
 					'step 2'
@@ -356,6 +356,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target.useCard(player,false,{
 							name:'sha',
 							isCard:true,
+							cards:[card],
 						},[card]).card.beizhu=true;
 						event.redo();
 					}
