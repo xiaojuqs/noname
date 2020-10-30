@@ -9963,6 +9963,7 @@
 						if(cards) next.cards=cards.slice(0);
 						if(event.nopopup) next.nopopup=true;
 						if(event.animate===false) next.animate=false;
+						if(event.throw===false) next.throw=false;
 						if(event.addCount===false) next.addCount=false;
 						if(event.noTargetDelay) next.targetDelay=false;
 						if(event.nodelayx) next.delayx=false;
@@ -13711,7 +13712,7 @@
 								player.line(targets,config);
 							}
 						}
-						player.$throw(cards);
+						if(event.throw!==false) player.$throw(cards);
 						if(lib.config.sync_speed&&cards[0]&&cards[0].clone){
 							var waitingForTransition=get.time();
 							event.waitingForTransition=waitingForTransition;
@@ -17842,6 +17843,9 @@
 							}
 							else if(arguments[i]=='noanimate'){
 								next.animate=false;
+							}
+							else if(arguments[i]=='nothrow'){
+								next.throw=false;
 							}
 							else if(arguments[i]=='nodistance'){
 								next.nodistance=true;
@@ -22889,8 +22893,9 @@
 						card=[card.suit,card.number,card.name,card.nature];
 					}
 					var cardnum=card[1]||'';
+					if(parseInt(cardnum)==cardnum) cardnum=parseInt(cardnum);
 					if([1,11,12,13].contains(cardnum)){
-					cardnum={'1':'A','11':'J','12':'Q','13':'K'}[cardnum]
+					cardnum={'1':'A','11':'J','12':'Q','13':'K'}[cardnum];
 					}
 					if(!lib.card[card[2]]){
 						lib.card[card[2]]={};
@@ -24441,7 +24446,7 @@
 				if(mod!='unchanged') return mod;
 				return true;
 			},
-			cardUsable:function(card,player,event){
+			cardUsable2:function(card,player,event){
 				card=get.autoViewAs(card,null,player);
 				var info=get.info(card);
 				if(info.updateUsable=='phaseUse'){
@@ -24455,6 +24460,28 @@
 				num=game.checkMod(card,player,num,'cardUsable',player);
 				if(typeof num!='number') return true;
 				else return(player.countUsed(card)<num);
+			},
+			cardUsable:function(card,player,event){
+				card=get.autoViewAs(card,null,player);
+				var info=get.info(card);
+				if(info.updateUsable=='phaseUse'){
+					event=event||_status.event;
+					if(player!=_status.event.player) return true;
+					if(event.getParent().name!='phaseUse') return true;
+					if(event.getParent().player!=player) return true;
+				}
+				var num=info.usable;
+				if(typeof num=='function') num=num(card,player);
+				num=game.checkMod(card,player,num,'cardUsable',player);
+				if(typeof num!='number') return true;
+				if(player.countUsed(card)<num) return true;
+				if(game.hasPlayer(function(current){
+					return game.checkMod(card,player,current,false,'cardUsableTarget',player);
+				})){
+					_status.event.addCount_extra=true;
+					return true;
+				}
+				return false;
 			},
 			cardDiscardable:function(card,player,event){
 				event=event||_status.event;
@@ -24502,6 +24529,7 @@
 			},
 			targetEnabled:function(card,player,target){
 				if(!card) return false;
+				if(_status.event.addCount_extra&&!lib.filter.cardUsable2(card,player)&&!game.checkMod(card,player,target,false,'cardUsableTarget',player)) return false;
 				var info=get.info(card);
 				var filter=info.filterTarget;
 				var mod=game.checkMod(card,player,target,'unchanged','playerEnabled',player);

@@ -2492,14 +2492,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					targetInRange:function(card,player,target){
 						if(target==player.storage.rexianzhen) return true;
 					},
-					cardUsable:function(card,player,num){
-						if(card.name=='sha'&&typeof num=='number') return num+100;
-					},
-					playerEnabled:function(card,player,target){
-						if(card.name=='sha'&&player.storage.rexianzhen!=target&&!ui.selected.targets.contains(player.storage.rexianzhen)){
-							var num=player.getCardUsable(card)-100;
-							if(num<=0) return false;
-						}
+					cardUsableTarget:function(card,player,target){
+						if(target==player.storage.rexianzhen) return true;
 					}
 				},
 				ai:{
@@ -3311,8 +3305,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 					mark:function(dialog,storage,player){
 						if(storage&&storage.current) dialog.addSmall([[storage.current],'character']);
-						if(storage&&storage.current2) dialog.addText('【'+get.translation(storage.current2)+
-								'】'+lib.translate[storage.current2+'_info']);
+						if(storage&&storage.current2) dialog.add('<div><div class="skill">【'+get.translation(lib.translate[storage.current2+'_ab']||get.translation(storage.current2).slice(0,2))+'】</div><div>'+get.skillInfoTranslation(storage.current2,player)+'</div></div>');
 						if(storage&&storage.character.length){
 							if(player.isUnderControl(true)){
 								dialog.addSmall([storage.character,'character']);
@@ -6496,9 +6489,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					cardEnabled:function(){
 						return false;
 					},
-					cardUsable:function(){
-						return false;
-					},
 					cardRespondable:function(){
 						return false;
 					},
@@ -6559,6 +6549,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					player:["changeHp"],
 				},
 				audio:2,
+				audioname:{gongsunzan:'yicong'},
 				forced:true,
 				filter:function(event,player){
 					return get.sgn(player.hp-2.5)!=get.sgn(player.hp-2.5-event.num);
