@@ -40,7 +40,7 @@ window.config={
 	auto_popped_config:true,
 	auto_popped_history:false,
 	auto_skill:true,
-	auto_confirm:true,
+	auto_confirm:false,
 	enable_drag:true,
 	enable_pressure:false,
 	pressure_taptic:true,
@@ -143,6 +143,7 @@ window.config={
 	show_discardpile:true,
 	show_cardpile_number:true,
 	equip_audio:true,
+	change_skin:true,
 	change_skin_auto:"60000",
 
 	mode:'identity',
