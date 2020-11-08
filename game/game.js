@@ -32,7 +32,7 @@
 		},
 		updateURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
 		mirrorURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
-		hallURL:'47.99.105.222',
+		hallURL:'127.0.0.1',
 		assetURL:'',
 		changeLog:[],
 		updates:[],
@@ -524,7 +524,7 @@
 					},
 					update_link:{
 						name:'更新地址',
-						init:'coding',
+						init:'github',
 						unfrequent:true,
 						item:{
 							coding:'Coding',
@@ -651,7 +651,7 @@
 				config:{
 					theme:{
 						name:'主题',
-						init:'woodden',
+						init:'simple',
 						item:{},
 						visualMenu:function(node,link){
 							if(!node.menu){
@@ -877,7 +877,7 @@
 					},
 					player_height_nova:{
 						name:'角色高度',
-						init:'short',
+						init:'long',
 						item:{
 							// auto:'自动',
 							short:'矮',
@@ -1202,7 +1202,7 @@
 					},
 					change_skin_auto:{
 						name:'自动换肤',
-						init:'off',
+						init:'60000',
 						item:{
 							'off':'关闭',
 							'30000':'半分钟',
@@ -1221,7 +1221,7 @@
 					},
 					card_style:{
 						name:'卡牌样式',
-						init:'default',
+						init:'simple',
 						intro:'设置正面朝上的卡牌的样式',
 						item:{
 							wood:'木纹',
@@ -1344,7 +1344,7 @@
 					cardback_style:{
 						name:'卡背样式',
 						intro:'设置背面朝上的卡牌的样式',
-						init:'default',
+						init:'official',
 						item:{
 							// wood:'木纹',
 							// music:'音乐',
@@ -2549,7 +2549,7 @@
 					cardshape:{
 						name:'手牌显示',
 						intro:'将手牌设置为正方形或长方形',
-						init:'default',
+						init:'oblong',
 						unfrequent:true,
 						item:{
 							default:'默认',
@@ -3394,7 +3394,7 @@
 					},
 					show_cardpile_number:{
 						name:'显示剩余牌数',
-						init:false,
+						init:true,
 						unfrequent:true,
 						onclick:function(bool){
 							game.saveConfig('show_cardpile_number',bool);
@@ -3444,7 +3444,7 @@
 					},
 					show_discardpile:{
 						name:'暂停时显示弃牌堆',
-						init:false,
+						init:true,
 						unfrequent:true,
 					},
 					show_extensionmaker:{
@@ -3507,7 +3507,7 @@
 					},
 					equip_audio:{
 						name:'装备配音',
-						init:false,
+						init:true,
 					},
 					repeat_audio:{
 						name:'播放重复语音',
