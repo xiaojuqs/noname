@@ -1,4 +1,4 @@
-window.noname_source_list=[
+﻿window.noname_source_list=[
 	'card/extra.js',
 	'card/gujian.js',
 	'card/guozhan.js',
@@ -181,4 +181,24 @@ window.noname_source_list=[
 	'node_modules/ultron/test.js',
 	'node_modules/options/package.json',
 	'node_modules/options/lib/options.js',
+	
+	'extension\十周年UI\animation.js',
+	'extension\十周年UI\animations.css',
+	'extension\十周年UI\card.css',
+	'extension\十周年UI\component.css',
+	'extension\十周年UI\component.js',
+	'extension\十周年UI\content.js',
+	'extension\十周年UI\decadeLayout.css',
+	'extension\十周年UI\dialog.css',
+	'extension\十周年UI\effect.js',
+	'extension\十周年UI\effects.css',
+	'extension\十周年UI\equip.css',
+	'extension\十周年UI\extension.js',
+	'extension\十周年UI\icon.css',
+	'extension\十周年UI\identity.css',
+	'extension\十周年UI\layout.css',
+	'extension\十周年UI\player.css',
+	'extension\十周年UI\skill.js',
+	'extension\十周年UI\spine.js',
+	'extension\挑战卡牌\extension.js',
 ];
