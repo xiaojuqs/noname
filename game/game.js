@@ -49008,7 +49008,7 @@
 				//}
 				//return suit;
 			}
-			else if(get.itemtype(card.cards)=='cards'&&!lib.suit.contains(card.suit)){
+			else if(get.itemtype(card.cards)=='cards'&&card.suit!='none'&&!lib.suit.contains(card.suit)){
 				return get.suit(card.cards,player);
 			}
 			else{
@@ -49027,7 +49027,7 @@
 				}
 				return color;
 			}
-			else if(get.itemtype(card.cards)=='cards'&&!lib.suit.contains(card.suit)){
+			else if(get.itemtype(card.cards)=='cards'&&card.suit!='none'&&!lib.suit.contains(card.suit)){
 				return get.color(card.cards,player);
 			}
 			else{
