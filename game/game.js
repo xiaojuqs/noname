@@ -27,11 +27,11 @@
 		configprefix:'noname_0.9_',
 		versionOL:27,
 		updateURLS:{
-			coding:'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw',
-			github:'https://raw.githubusercontent.com/libccy/noname',
+			coding:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
+			github:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
 		},
-		updateURL:'https://raw.githubusercontent.com/libccy/noname',
-		mirrorURL:'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw',
+		updateURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
+		mirrorURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
 		hallURL:'47.99.105.222',
 		assetURL:'',
 		changeLog:[],
@@ -40041,7 +40041,7 @@
 							updatepx.style.whiteSpace='nowrap';
 							updatepx.style.marginTop='8px';
 							var buttonx=ui.create.node('button','访问项目主页',function(){
-								window.open('https://github.com/libccy/noname');
+								window.open('https://github.com/adeFuLoDgu/noname');
 							});
 							updatepx.appendChild(buttonx);
 							ui.updateUpdate=function(){
@@ -42758,6 +42758,20 @@
 					(lib.arenaReady.shift())();
 				}
 				delete lib.arenaReady;
+				//load custom extension start
+				if(!lib.config.extensions.contains('十周年UI')){
+					lib.config.extensions.add('十周年UI');
+					game.saveConfig('extensions',lib.config.extensions);
+					game.saveConfig('extension_'+'十周年UI'+'_enable',true);
+					game.reload();
+				}
+				if(!lib.config.extensions.contains('挑战卡牌')){
+					lib.config.extensions.add('挑战卡牌');
+					game.saveConfig('extensions',lib.config.extensions);
+					game.saveConfig('extension_'+'挑战卡牌'+'_enable',true);
+					game.reload();
+				}
+				//load custom extension end
 				if(lib.config.auto_check_update){
 					setTimeout(function(){
 						game.checkForUpdate(false);
