@@ -5172,7 +5172,7 @@ window.noname_skin_list={
 	sunjian:5,
 	sunliang:1,
 	sunluban:6,
-	sunluyu:6,
+	sunluyu:5,
 	sunqian:4,
 	sunquan:8,
 	sunshangxiang:10,
