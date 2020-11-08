@@ -72,11 +72,11 @@ window.config={
 	alteredSkills:[],
 	brokenFile:[],
 
-	theme:'woodden',
-	layout:'mobile',
-	card_style:'default',
-	cardback_style:'default',
-	hp_style:'default',
+	theme:'simple',
+	layout:'long2',
+	card_style:'simple',
+	cardback_style:'official',
+	hp_style:'glass',
 
 	image_character:'default',
 	image_background:'default',
@@ -126,8 +126,8 @@ window.config={
 	right_click:'pause',
 	sort:'type_sort',
 
-	cards:['standard','ex','extra','sp','classic','basic'],
-	characters:['standard','shenhua','sp','sp2','yijiang','refresh','xinghuoliaoyuan','mobile','extra'],
+	cards:["standard","ex","extra","classic","basic","zhulu","sp","yunchou"],
+	characters:["standard","shenhua","sp","yijiang","refresh","xinghuoliaoyuan","mobile","extra","tw","old","sp2"],
 	connect_characters:['diy'],
 	connect_cards:['huanlekapai','guozhan','sp','zhulu'],
 	plays:[],
@@ -138,6 +138,12 @@ window.config={
 	bannedpile:{},
 	customcardpile:{},
 	addedpile:{},
+	
+	update_link:"github",
+	show_discardpile:true,
+	show_cardpile_number:true,
+	equip_audio:true,
+	change_skin_auto:"60000",
 
 	mode:'identity',
 	mode_config:{
