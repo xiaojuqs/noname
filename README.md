@@ -24,3 +24,15 @@
     <a href="https://github.com/adeFuLoDgu/noname/issues">Request Feature</a>
   </p>
 </p>
+
+## Getting Started
+To get a local copy up and running follow these simple steps.
+
+### Prerequisites
+* <a href="https://github.com/electron/electron/releases/tag/v4.2.12">electron</a>
+
+### Installation
+
+
+## Acknowledgements
+* [libccy noname](https://github.com/libccy/noname)
