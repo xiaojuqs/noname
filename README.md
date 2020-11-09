@@ -29,7 +29,7 @@
 To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
-* <a href="https://github.com/electron/electron/releases/tag/v4.2.12">electron</a>
+* <a href="https://github.com/electron/electron/releases/tag/v4.2.12">electron v4.2.12</a>
 
 ### Installation
 
