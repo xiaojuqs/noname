@@ -13,9 +13,9 @@
 [issues-url]: https://github.com/adeFuLoDgu/noname/issues
 
 <p align="center">
-  <h1 align="center">无名杀</h1>
+  <h1 align="center">noname</h1>
   <p align="center">
-    使用Node.js写成的html5三国杀
+    html5 SanGuoSha
     <br />
     <a href="https://adeFuLoDgu.github.io/noname">View Demo</a>
     ·
