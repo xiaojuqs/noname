@@ -2192,11 +2192,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 										if(!_status.event.nojudge&&target.countCards('j',function(card){
 											return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
 												return current.canAddJudge(card)&&get.attitude(player,current)<0;
-											})
+											});
 										})) return true;
 										if(target.countCards('e',function(card){
 											return get.equipValue(card)<0&&game.hasPlayer(function(current){
-												return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card))
+												return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
 											});
 										})>0) return true;
 									}
@@ -3124,11 +3124,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								if(!_status.event.nojudge&&target.countCards('j',function(card){
 									return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
 										return current.canAddJudge(card)&&get.attitude(player,current)<0;
-									})
+									});
 								})) return true;
 								if(target.countCards('e',function(card){
 									return get.equipValue(card)<0&&game.hasPlayer(function(current){
-										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card))
+										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
 									});
 								})>0) return true;
 							}
@@ -7565,7 +7565,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			xiaoqiao:'旧小乔',
 			zhoutai:'界周泰',
 			zhangjiao:'张角',
-			yuji:'于吉',
 			shensu:'神速',
 			shensu1:'神速',
 			shensu2:'神速',

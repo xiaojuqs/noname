@@ -13509,11 +13509,11 @@
 								if(!_status.event.nojudge&&target.countCards('j',function(card){
 									return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
 										return current.canAddJudge(card)&&get.attitude(player,current)<0;
-									})
+									});
 								})) return 14;
 								if(target.countCards('e',function(card){
 									return get.equipValue(card)<0&&game.hasPlayer(function(current){
-										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card))
+										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
 									});
 								})>0) return 9;
 							}
@@ -13531,23 +13531,24 @@
 							}
 							return 0;
 						}
-						var es=ui.selected.targets[0].getCards('e');
-						var i;
-						var att2=get.sgn(get.attitude(player,ui.selected.targets[0]));
-						for(i=0;i<es.length;i++){
-							if(sgnatt!=0&&att2!=0&&
-								get.sgn(get.equipValue(es[i]))==-att2&&
-								get.sgn(get.effect(target,es[i],player,target))==sgnatt&&
-								target.isEmpty(get.subtype(es[i]))){
-								return Math.abs(att*get.attitude(player,ui.selected.targets[0]));
+						var sec_target=ui.selected.targets[0];
+						var sec_att1=get.attitude(player,sec_target);
+						var sec_att2=get.attitude(player,target);
+						if(sec_target!=target){
+							if(sec_att1>0&&sec_att2<0){
+								if(!_status.event.nojudge&&sec_target.countCards('j',function(card){
+									return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&target.canAddJudge(card);
+								})) return 14;
+								if(sec_target.countCards('e',function(card){
+									return get.equipValue(card)<0&&target.isEmpty(get.subtype(card));
+								})>0) return 9;
+							} else if(sec_att1<0&&sec_att2>0){
+								if(sec_target.countCards('e',function(card){
+									return get.equipValue(card)>0&&target.isEmpty(get.subtype(card));
+								})>0) return 8;
 							}
 						}
-						if(i==es.length&&(_status.event.nojudge||!ui.selected.targets[0].countCards('j',function(card){
-							return target.canAddJudge(card);
-						}))){
-							return 0;
-						}
-						return -att*get.attitude(player,ui.selected.targets[0]);
+						return 0;
 					});
 					next.set('multitarget',true);
 					next.set('targetprompt',_status.event.targetprompt||['被移走','移动目标']);
@@ -13575,8 +13576,7 @@
 								if(get.position(button.link)=='j'&&(button.link.name=='lebu'||button.link.name=='bingliang'||button.link.name=='caomu')) return 12+get.value(button.link);
 								if(get.equipValue(button.link)<0) return 10;
 								return -10;
-							}
-							else {
+							} else if(get.attitude(player,targets0)<0&&get.attitude(player,targets1)>0){
 								if(get.position(button.link)=='j') return -10;
 								if(get.equipValue(button.link)>0&&get.effect(targets1,button.link,player,targets1)>0) return 10+get.equipValue(button.link);
 							}
