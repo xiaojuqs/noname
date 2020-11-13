@@ -546,18 +546,20 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				return false;
 			},
 			content:function(){
-				var num = 0;
+				'step 0'
 				var player = event.player;
+				if(player.isUnderControl()) game.modeSwapPlayer(player);
+				var num = 0;
 				for (var i = 0; i < lib.suit.length; i++) {
 					if (player.hasMark('xinfu_falu_' + lib.suit[i])) num++;
 				}
 				
 				var cards = get.cards(num);
-				var dianhua = decadeUI.content.chooseGuanXing(player, cards, cards.length);
+				var dianhua = decadeUI.content.chooseGuanXing(player, cards, cards.length, null, cards.length);
 				dianhua.caption = '【点化】';
 				game.broadcast(function(player, cards, callback){
 					if (!window.decadeUI) return;
-					var dianhua = decadeUI.content.chooseGuanXing(player, cards, cards.length);
+					var dianhua = decadeUI.content.chooseGuanXing(player, cards, cards.length, null, cards.length);
 					dianhua.caption = '【点化】';
 					dianhua.callback = callback;
 				}, player, cards, dianhua.callback);
@@ -577,26 +579,43 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						judges = player.node.judges.childNodes;
 					}
 					
-					if (judges.length > 0) cheats = decadeUI.get.cheatJudgeCards(cards, judges, friend != null);
-					
-					if (friend) {
-						cards = decadeUI.get.bestValueCards(cards, friend);
-					} else {
-						cards.sort(function(a, b){
-							return get.value(a, next) - get.value(b, next);
-						});
+					if (judges.length) {
+						cheats = decadeUI.get.cheatJudgeCards(cards, judges, friend != null);
 					}
-
-					cards = cheats.concat(cards);
+						
+					if (cards.length && cheats.length == judges.length) {
+						for (var i = 0; i >= 0 && i < cards.length; i++) {
+							if (friend) {
+								if (get.value(cards[i], friend) >= 5) {
+									cheats.push(cards[i]);
+									cards.splice(i, 1)
+								}
+							} else {
+								if (get.value(cards[i], next) < 4) {
+									cheats.push(cards[i]);
+									cards.splice(i, 1)
+								}
+							}
+						}
+					}
+					
 					var time = 500;
-					for (var i = 0; i < cards.length; i++) {
+					for (var i = 0; i < cheats.length; i++) {
 						setTimeout(function(card, index, finished){
 							dianhua.move(card, index, 0);
 							if (finished) dianhua.finishTime(1000);
-						}, time, cards[i], i, i >= cards.length - 1);
+						}, time, cheats[i], i, (i >= cheats.length - 1) && cards.length == 0);
 						time += 500;
 					}
-				}
+					
+					for (var i = 0; i < cards.length; i++) {
+						setTimeout(function(card, index, finished){
+							dianhua.move(card, index, 1);
+							if (finished) dianhua.finishTime(1000);
+						}, time, cards[i], i, (i >= cards.length - 1));
+						time += 500;
+					}
+				};
 				
 				if (event.isOnline()) {
 					event.player.send(function(){
@@ -608,8 +627,11 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				} else if (!event.isMine()) {
 					event.switchToAuto();
 				}
+				'step 1'
+				player.popup(get.cnNumber(event.num1) + '上' + get.cnNumber(event.num2) + '下');
+				game.log(player, '将' + get.cnNumber(event.num1) + '张牌置于牌堆顶，' + get.cnNumber(event.num2) +'张牌置于牌堆底');
+				game.updateRoundNumber()
 			},
-
 		},
 		zongxuan: {
 			audio: 2,
