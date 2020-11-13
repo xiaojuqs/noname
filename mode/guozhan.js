@@ -816,7 +816,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					return event.name=='damage'||(event.player.isAlive()&&!event.player.isFriendOf(player))
 				},
 				content:function(){
-					var num=trigger.num||1;
+					var num=1;
 					var list=_status.characterlist.randomRemove(num);
 					if(list.length){
 						player.storage.yigui.character.addArray(list);
@@ -5186,7 +5186,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(player.hasSkill('huangjintianbingfu')){
 						num+=player.storage.huangjintianbingfu.length;
 					}
-					player.chooseCardButton(num,true,get.cards(num),'按顺将卡牌置于牌堆顶（先选择的在上）').set('ai',function(button){
+					player.chooseCardButton(num,true,get.cards(num),'按顺序将卡牌置于牌堆顶（先选择的在上）').set('ai',function(button){
 						return get.value(button.link);
 					});
 					'step 1'

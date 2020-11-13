@@ -30290,6 +30290,11 @@
 						dialog.add('<div class="text center">'+get.translation(game.players[i])+'</div>');
 						dialog.addSmall(hs);
 					}
+					var muniu=game.players[i].getEquip('muniu');
+					if(muniu&&muniu.cards&&muniu.cards.length){
+						dialog.add('<div class="text center">'+get.translation(game.players[i])+'的'+get.translation('muniu')+'</div>');
+						dialog.addSmall(muniu.cards);
+					}
 				}
 				
 				for(var j=0;j<game.dead.length;j++){
@@ -30695,6 +30700,10 @@
 				if(hs.length){
 					dialog.add('<div class="text center">'+get.translation(game.players[i])+'</div>');
 					dialog.addSmall(hs);
+				}
+				if(muniu&&muniu.cards&&muniu.cards.length){
+					dialog.add('<div class="text center">'+get.translation(game.players[i])+'的'+get.translation('muniu')+'</div>');
+					dialog.addSmall(muniu.cards);
 				}
 			}
 			for(var i=0;i<game.dead.length;i++){
@@ -40837,7 +40846,7 @@
 										nodename2.setBackground(video.name2,'character');
 									}
 									var date=new Date(video.time);
-									var str=date.getFullYear()+'.'+(date.getMonth()+2)+'.'+(date.getDay()+1)+' '+
+									var str=date.getFullYear()+'.'+(date.getMonth()+1)+'.'+(date.getDay()+1)+' '+
 										date.getHours()+':';
 									var minutes=date.getMinutes();
 									if(minutes<10){
