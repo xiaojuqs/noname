@@ -30303,6 +30303,11 @@
 						dialog.add('<div class="text center">'+get.translation(game.dead[j])+'</div>');
 						dialog.addSmall(hs);
 					}
+					var muniu=game.dead[j].getEquip('muniu');
+					if(muniu&&muniu.cards&&muniu.cards.length){
+						dialog.add('<div class="text center">'+get.translation(game.dead[j])+'的'+get.translation('muniu')+'</div>');
+						dialog.addSmall(muniu.cards);
+					}
 				}
 				
 				dialog.add(ui.create.div('.placeholder.slim'));
@@ -30701,6 +30706,7 @@
 					dialog.add('<div class="text center">'+get.translation(game.players[i])+'</div>');
 					dialog.addSmall(hs);
 				}
+				var muniu=game.players[i].getEquip('muniu');
 				if(muniu&&muniu.cards&&muniu.cards.length){
 					dialog.add('<div class="text center">'+get.translation(game.players[i])+'的'+get.translation('muniu')+'</div>');
 					dialog.addSmall(muniu.cards);
@@ -30712,6 +30718,11 @@
 				if(hs.length){
 					dialog.add('<div class="text center">'+get.translation(game.dead[i])+'</div>');
 					dialog.addSmall(hs);
+				}
+				var muniu=game.dead[i].getEquip('muniu');
+				if(muniu&&muniu.cards&&muniu.cards.length){
+					dialog.add('<div class="text center">'+get.translation(game.dead[i])+'的'+get.translation('muniu')+'</div>');
+					dialog.addSmall(muniu.cards);
 				}
 			}
 			dialog.add(ui.create.div('.placeholder.slim'));
