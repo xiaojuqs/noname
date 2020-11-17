@@ -1556,7 +1556,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						var num=Math.min(5,player.countCards('h',function(cardx){
 							return (name=='neifa_basic')!=(get.type(cardx,player)=='basic')
 						}));
-						player.addMark(name,num,false);
+						if(num>0) player.addMark(name,num,false);
 					}
 				},
 				ai:{
@@ -1847,7 +1847,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				trigger:{global:'phaseJieshuBegin'},
 				filter:function(event,player){
-					return event.player!=player&&(event.player.hp>player.hp||event.player.countUsed('sha'))
+					return event.player!=player&&(event.player.hp>player.hp||event.player.getHistory('useCard',function(card){
+						return card.name=='sha';
+					}).length>0);
 				},
 				direct:true,
 				content:function(){
@@ -1856,6 +1858,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					next.set('openskilldialog',get.prompt2('niluan'));
 					next.set('norestore',true);
 					next.set('_backupevent','niluanx');
+					next.set('custom',{
+						add:{},
+						replace:{window:function(){}}
+					});
 					next.backup('niluanx');
 				},
 			},
@@ -8739,7 +8745,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						filter:function(event,player){
 							if(!player.countCards(player.hasSkill('fenxin_nei')?'he':'h',function(card){
 								if(_status.connectMode&&get.position(card)=='h') return true;
-								return get.color(card)=='black';
+								return get.color(card)=='red';
 							})) return false;
 							return event.source&&(event.source.hp>=player.hp||player.hasSkill('fenxin_zhong'))&&player!=event.source;
 						},
@@ -9159,6 +9165,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								next.set('openskilldialog','默识：将一张手牌当'+get.translation(card)+'使用');
 								next.set('norestore',true);
 								next.set('_backupevent','mozhix');
+								next.set('custom',{
+									add:{},
+									replace:{window:function(){}}
+								});
 								next.backup('mozhix');
 							}
 						}

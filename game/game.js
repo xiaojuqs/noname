@@ -33936,7 +33936,7 @@
 		create:{
 			rarity:function(button){
 				var rarity=game.getRarity(button.link);
-				if(rarity!='common'){
+				if(rarity!='common'&&lib.config.show_rarity){
 					var intro=button.node.intro;
 					intro.classList.add('showintro');
 					intro.style.fontFamily='yuanli';
@@ -33950,6 +33950,13 @@
 						case 'junk':intro.dataset.nature='woodm';break;
 					}
 					intro.innerHTML=get.translation(rarity);
+				}
+				if((button.link=='xushu'||button.link=='xin_xushu')&&button.node&&button.node.name&&button.node.group){
+					if(button.classList.contains('newstyle')){
+						button.node.name.dataset.nature='watermm';
+						button.node.group.dataset.nature='water';
+					}
+					else button.node.group.style.backgroundColor=get.translation('weiColor');
 				}
 			},
 			div:function(){
@@ -36342,7 +36349,7 @@
 									for(var i=0;i<buttons.length;i++){
 										buttons[i].classList.add('noclick');
 										buttons[i].listen(banCharacter);
-										if(lib.config.show_rarity) ui.create.rarity(buttons[i]);
+										ui.create.rarity(buttons[i]);
 										buttons[i].node.hp.style.transition='all 0s';
 										buttons[i].node.hp._innerHTML=buttons[i].node.hp.innerHTML;
 										if(mode!='mode_banned'){
@@ -36362,7 +36369,7 @@
 								for(var i=0;i<buttons.length;i++){
 									buttons[i].classList.add('noclick');
 									buttons[i].listen(banCharacter);
-									if(lib.config.show_rarity) ui.create.rarity(buttons[i]);
+									ui.create.rarity(buttons[i]);
 									buttons[i].node.hp.style.transition='all 0s';
 									buttons[i].node.hp._innerHTML=buttons[i].node.hp.innerHTML;
 									if(mode!='mode_banned'){
@@ -36375,7 +36382,7 @@
 							var buttons=ui.create.buttons(list,'character',page);
 							for(var i=0;i<buttons.length;i++){
 								buttons[i].classList.add('noclick');
-								if(lib.config.show_rarity) ui.create.rarity(buttons[i]);
+								ui.create.rarity(buttons[i]);
 								buttons[i].listen(banCharacter);
 								buttons[i].node.hp.style.transition='all 0s';
 								buttons[i].node.hp._innerHTML=buttons[i].node.hp.innerHTML;
