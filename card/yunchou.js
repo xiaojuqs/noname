@@ -65,6 +65,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						event.dialog.setCaption('选择一张牌并用一张手牌替换之');
 					}
 					var next=target.chooseButton(function(button){
+						var list=target.getEnemies();
+						for (var i=0;i<list.length;i++){
+							if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+						}
 						return get.value(button.link,_status.event.player)-minValue;
 					});
 					next.set('dialog',event.preResult);
@@ -150,9 +154,23 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,1]
 					},
 					result:{
-						player:1,
+						player:function(player,target){
+							if (game.players.length>2&&player.hasFriend()){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
+							return 1;
+						},
 						target:function(player,target){
 							if(target.countCards('h')==0) return 0;
+							if (game.players.length>2&&player.hasFriend()){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
 							return (Math.sqrt(target.countCards('h'))-get.distance(player,target,'absolute')/game.countPlayer()/3)/2;
 						}
 					},

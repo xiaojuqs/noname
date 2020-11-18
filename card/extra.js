@@ -286,25 +286,19 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target){
+							if (game.players.length>2){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].hasSkill('sphuangen')&&list[i].hp>1) return 0;
+								}
+							}
 							if(target.isLinked()){
 								if(target.hasSkillTag('link')) return 0;
 								var f=target.hasSkillTag('nofire');
 								var t=target.hasSkillTag('nothunder');
 								if(f&&t) return 0;
 								if(f||t) return 0.5;
-								if (game.players.length>2){
-									var list=target.getEnemies();
-									for (var i=0;i<list.length;i++){
-										if (list[i].hasSkill('sphuangen')&&list[i].hp>1) return 0;
-									}
-								}
 								return 2;
-							}
-							if (game.players.length>2){
-								var list=target.getFriends(true);
-								for (var i=0;i<list.length;i++){
-									if (list[i].hasSkill('sphuangen')&&list[i].hp>1) return 0;
-								}
 							}
 							if(get.attitude(player,target)>=0) return -0.9;
 							if(ui.selected.targets.length) return -0.9;

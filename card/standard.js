@@ -689,6 +689,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								var list=target.getEnemies();
 								for (var i=0;i<list.length;i++){
 									if (list[i].hasSkill('sphuangen')&&list[i].hp>1) return 0;
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
 								}
 							}
 							return 2-2*get.distance(player,target,'absolute')/game.countPlayer();
