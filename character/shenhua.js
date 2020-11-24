@@ -2195,7 +2195,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								//以下節錄game.js的moveCard函數下的target回傳部分
 								var check=game.hasPlayer(function(target){
 									var att=get.attitude(player,target);
-									var sgnatt=get.sgn(att);
 									if(att>0){
 										if(!_status.event.nojudge&&target.countCards('j',function(card){
 											return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
@@ -2213,7 +2212,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 											if(current!=target&&get.attitude(player,current)>0){
 												var es=target.getCards('e');
 												for(var i=0;i<es.length;i++){
-													if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,current)>0) return true;
+													if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
 												}
 											}
 										})){
@@ -3127,7 +3126,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						//以下節錄game.js的moveCard函數下的target回傳部分
 						var check=game.hasPlayer(function(target){
 							var att=get.attitude(player,target);
-							var sgnatt=get.sgn(att);
 							if(att>0){
 								if(!_status.event.nojudge&&target.countCards('j',function(card){
 									return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
@@ -3145,7 +3143,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									if(current!=target&&get.attitude(player,current)>0){
 										var es=target.getCards('e');
 										for(var i=0;i<es.length;i++){
-											if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,current)>0) return true;
+											if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
 										}
 									}
 								})){

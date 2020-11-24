@@ -13633,7 +13633,6 @@
 					next.set('ai',function(target){
 						var player=_status.event.player;
 						var att=get.attitude(player,target);
-						var sgnatt=get.sgn(att);
 						if(ui.selected.targets.length==0){
 							if(att>0){
 								if(!_status.event.nojudge&&target.countCards('j',function(card){
