@@ -786,7 +786,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:5
 					},
 					result:{
-						target:function(player,target){
+						target_use:function(player,target){
 							if(player.hasUnknown(2)&&get.mode()!='guozhan') return 0;
 							if (game.players.length>2){
 								if (target.hasSkill('sphuangen')&&target.hp>0) return 0;
@@ -805,6 +805,15 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 										if(list[i].hp<=1) return 0;
 									}
 								}
+							}
+							if(nh==0) return -2;
+							if(nh==1) return -1.7
+							return -1.5;
+						},
+						target:function(player,target){
+							var nh=target.countCards('h');
+							if(get.mode()=='identity'){
+								if(target.isZhu&&nh<=2&&target.hp<=1) return -100;
 							}
 							if(nh==0) return -2;
 							if(nh==1) return -1.7
@@ -865,7 +874,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:5
 					},
 					result:{
-						target:function(player,target){
+						target_use:function(player,target){
 							if(player.hasUnknown(2)&&get.mode()!='guozhan') return 0;
 							if (game.players.length>2){
 								if (target.hasSkill('sphuangen')&&target.hp>0) return 0;
@@ -883,6 +892,15 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 										if(list[i].hp<=1) return 0;
 									}
 								}
+							}
+							if(nh==0) return -2;
+							if(nh==1) return -1.7
+							return -1.5;
+						},
+						target:function(player,target){
+							var nh=target.countCards('h');
+							if(get.mode()=='identity'){
+								if(target.isZhu&&nh<=2&&target.hp<=1) return -100;
 							}
 							if(nh==0) return -2;
 							if(nh==1) return -1.7
