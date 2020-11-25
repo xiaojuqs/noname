@@ -1965,27 +1965,6 @@ var spine;
 				
 				var dirPath = window.appPath ? appPath : decadeUIPath;
 				path = path.replace(dirPath, '')
-				if(window.resolveLocalFileSystemURL){
-					window.resolveLocalFileSystemURL(dirPath, function(entry){
-						entry.getFile(path, {}, function(fileEntry){
-							fileEntry.file(function(file){
-								var reader = new FileReader();
-								reader.onload = function(e){
-									var data = new Uint8Array(e.target.result);
-									_this.assets[dirPath + path] = data;
-									if (success)
-										success(path, data);
-
-									_this.toLoad--;
-									_this.loaded++;
-								};
-
-								reader.onerror = onerror;
-								reader.readAsArrayBuffer(file);
-							}, onerror);
-						}, onerror)
-					}, onerror);
-				}
 				window.resolveLocalFileSystemURL(dirPath, function(entry){
 					entry.getFile(path, {}, function(fileEntry){
 						fileEntry.file(function(file){
@@ -2042,26 +2021,6 @@ var spine;
 				
 				var dirPath = window.appPath ? appPath : decadeUIPath;
 				path = path.replace(dirPath, '')
-				if(window.resolveLocalFileSystemURL){
-					window.resolveLocalFileSystemURL(dirPath, function(entry){
-						entry.getFile(path, {}, function(fileEntry){
-							fileEntry.file(function(file){
-								var reader = new FileReader();
-								reader.onload = function(e){
-									_this.assets[dirPath + path] = e.target.result;
-									if (success)
-										success(path, e.target.result);
-
-									_this.toLoad--;
-									_this.loaded++;
-								};
-
-								reader.onerror = onerror;
-								reader.readAsText(file);
-							}, onerror);
-						}, onerror)
-					}, onerror);
-				}
 				window.resolveLocalFileSystemURL(dirPath, function(entry){
 					entry.getFile(path, {}, function(fileEntry){
 						fileEntry.file(function(file){
