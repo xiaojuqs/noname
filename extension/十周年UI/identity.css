@@ -19,11 +19,9 @@
 }
 
 .player.dead.died-effect {
-	/*
 	animation: player-died 0.5s linear forwards;
 	-webkit-animation: player-died 0.5s linear forwards;
 	animation-iteration-count: 1;
-	*/
 }
 
 .player::before {
