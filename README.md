@@ -1,17 +1,5 @@
-<p align="center">
-  <h1 align="center">noname</h1>
-  <p align="center">
-    html5 SanGuoSha
-    <br />
-    <a href="https://adeFuLoDgu.github.io/noname">View Demo</a>
-    ·
-    <a href="https://github.com/adeFuLoDgu/noname/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/adeFuLoDgu/noname/issues">Request Feature</a>
-  </p>
-</p>
+## noname
+html5 [Legends of the Three Kingdoms (SanGuoSha)](https://en.wikipedia.org/wiki/Legends_of_the_Three_Kingdoms).
 
-## Acknowledgements
-* [libccy noname](https://github.com/libccy/noname)
-* [iceburgy noname](https://github.com/iceburgy/noname)
-* [lziad noname](https://github.com/lziad/noname-sgs)
+## Live Play
+Click [here](https://adeFuLoDgu.github.io/noname) to play with browser. **(Currently have scrollbar and some css UI bugs with Firefox version greater than 66)**
