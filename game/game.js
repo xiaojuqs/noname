@@ -42961,18 +42961,33 @@
 				}
 				delete lib.arenaReady;
 				//load custom extension start
-				if(!lib.config.extensions.contains('十周年UI')){
-					lib.config.extensions.add('十周年UI');
-					game.saveConfig('extensions',lib.config.extensions);
-					game.saveConfig('extension_'+'十周年UI'+'_enable',true);
-					game.reload();
+				var browser_device;
+				var ua=navigator.userAgent.toLowerCase();
+				if(ua.indexOf('android')!=-1){
+					browser_device='android';
 				}
-				if(!lib.config.extensions.contains('挑战卡牌')){
-					lib.config.extensions.add('挑战卡牌');
-					game.saveConfig('extensions',lib.config.extensions);
-					game.saveConfig('extension_'+'挑战卡牌'+'_enable',true);
-					game.reload();
+				else if(ua.indexOf('iphone')!=-1||ua.indexOf('ipad')!=-1){
+					browser_device='ios';
 				}
+				else if(ua.indexOf('firefox')!=-1){
+					browser_device='firefox';
+				}
+				var use_mobile_ui=browser_device?true:false;
+				var addtional_extention_names=[
+					['十周年UI', !use_mobile_ui],
+					['界面美化', use_mobile_ui],
+					['挑战卡牌', true],
+				];
+				var need_reload=false;
+				for(var i=0;i<addtional_extention_names.length;i++){
+					if(!lib.config.extensions.contains(addtional_extention_names[i][0])&&addtional_extention_names[i][1]){
+						var need_reload=true;
+						lib.config.extensions.add(addtional_extention_names[i][0]);
+						game.saveConfig('extensions',lib.config.extensions);
+						game.saveConfig('extension_'+addtional_extention_names[i][0]+'_enable',addtional_extention_names[i][1]);
+					}
+				}
+				if(need_reload) game.reload();
 				//load custom extension end
 				if(lib.config.auto_check_update){
 					setTimeout(function(){
