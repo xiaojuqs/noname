@@ -2,7 +2,6 @@
 game.import('character',function(lib,game,ui,get,ai,_status){
 	return {
 		name:'mobile',
-		connectBanned:['miheng'],
 		connect:true,
 		characterSort:{
 			mobile:{
@@ -138,7 +137,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				subtype:'equip1',
 				distance:{attackFrom:-8},
 				skills:['ly_piliche'],
-				destroy:'polu'
+				destroy:'polu',
+				ai:{
+					basic:{
+						equipValue:0
+					}
+				},
 			},
 			"wolong_card":{
 				type:"takaramono",
@@ -780,11 +784,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					}
 					else{
-						if(trigger.num1<trigger.num2&&get.position(trigger.card,true)=='o'){
+						if(trigger.num1<trigger.num2&&get.position(trigger.card1,true)=='o'){
 							str+='/拼点牌';
 							cards.push(trigger.card1);
 						}
-						else if(trigger.num1>trigger.num2&&get.position(trigger.card,true)=='o'){
+						else if(trigger.num1>trigger.num2&&get.position(trigger.card2,true)=='o'){
 							str+='/拼点牌';
 							cards.push(trigger.card2);
 						}
@@ -3305,10 +3309,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					player.loseMaxHp();
 				},
 				ai:{
-					filterDamage:true,
-					skillTagFilter:function(player,tag,arg){
-						if(arg&&arg.card&&arg.card.name=='sha') return true;
-						return false;
+					effect:{
+						target:function(card,player,target,current){
+							if(card.name=='sha'&&target.isDamaged()&&target.getFriends().length>0) return 'zeroplayertarget';
+						}
 					},
 				},
 			},
@@ -5327,7 +5331,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target.chooseCard('he','是否交给'+get.translation(player)+'一张牌？',
 							event.cardname?('若如此做，视为'+get.translation(player)+
 							'使用【'+get.translation(event.cardname)+'】'):null).set('ai',function(card){
-							if(_status.event.goon) return 7-get.value(card);
+							if(event.cardname&&_status.event.goon) return 7-get.value(card);
 							return 0;
 						}).set('goon',get.attitude(target,player)>1);
 						event.target=target;

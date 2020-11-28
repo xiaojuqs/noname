@@ -27,12 +27,12 @@
 		configprefix:'noname_0.9_',
 		versionOL:27,
 		updateURLS:{
-			coding:'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw',
-			github:'https://raw.githubusercontent.com/libccy/noname',
+			coding:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
+			github:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
 		},
-		updateURL:'https://raw.githubusercontent.com/libccy/noname',
-		mirrorURL:'https://nakamurayuri.coding.net/p/noname/d/noname/git/raw',
-		hallURL:'47.99.105.222',
+		updateURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
+		mirrorURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
+		hallURL:'127.0.0.1',
 		assetURL:'',
 		changeLog:[],
 		updates:[],
@@ -525,7 +525,7 @@
 					},
 					update_link:{
 						name:'更新地址',
-						init:'coding',
+						init:'github',
 						unfrequent:true,
 						item:{
 							coding:'Coding',
@@ -652,7 +652,7 @@
 				config:{
 					theme:{
 						name:'主题',
-						init:'woodden',
+						init:'simple',
 						item:{},
 						visualMenu:function(node,link){
 							if(!node.menu){
@@ -878,7 +878,7 @@
 					},
 					player_height_nova:{
 						name:'角色高度',
-						init:'short',
+						init:'long',
 						item:{
 							// auto:'自动',
 							short:'矮',
@@ -1203,7 +1203,7 @@
 					},
 					change_skin_auto:{
 						name:'自动换肤',
-						init:'off',
+						init:'60000',
 						item:{
 							'off':'关闭',
 							'30000':'半分钟',
@@ -1222,7 +1222,7 @@
 					},
 					card_style:{
 						name:'卡牌样式',
-						init:'default',
+						init:'simple',
 						intro:'设置正面朝上的卡牌的样式',
 						item:{
 							wood:'木纹',
@@ -1345,7 +1345,7 @@
 					cardback_style:{
 						name:'卡背样式',
 						intro:'设置背面朝上的卡牌的样式',
-						init:'default',
+						init:'official',
 						item:{
 							// wood:'木纹',
 							// music:'音乐',
@@ -2550,7 +2550,7 @@
 					cardshape:{
 						name:'手牌显示',
 						intro:'将手牌设置为正方形或长方形',
-						init:'default',
+						init:'oblong',
 						unfrequent:true,
 						item:{
 							default:'默认',
@@ -3404,7 +3404,7 @@
 					},
 					show_cardpile_number:{
 						name:'显示剩余牌数',
-						init:false,
+						init:true,
 						unfrequent:true,
 						onclick:function(bool){
 							game.saveConfig('show_cardpile_number',bool);
@@ -3454,7 +3454,7 @@
 					},
 					show_discardpile:{
 						name:'暂停时显示弃牌堆',
-						init:false,
+						init:true,
 						unfrequent:true,
 					},
 					show_extensionmaker:{
@@ -3517,7 +3517,7 @@
 					},
 					equip_audio:{
 						name:'装备配音',
-						init:false,
+						init:true,
 					},
 					repeat_audio:{
 						name:'播放重复语音',
@@ -7248,16 +7248,14 @@
 								}
 								_status.evaluatingExtension=false;
 							}
-							else if(lib.config.mode!='connect'||show_splash){
+							else {
 								extensionlist.push(lib.config.extensions[i]);
 							}
 						}
 					}
 					else{
-						if(lib.config.mode!='connect'||show_splash){
-							for(var i=0;i<lib.config.extensions.length;i++){
-								game.import('extension',{name:lib.config.extensions[i]});
-							}
+						for(var i=0;i<lib.config.extensions.length;i++){
+							game.import('extension',{name:lib.config.extensions[i]});
 						}
 					}
 					var loadPack=function(){
@@ -7320,7 +7318,7 @@
 					var styleLoaded=function(){
 						styleToLoad--;
 						if(styleToLoad==0){
-							if(extensionlist.length&&(lib.config.mode!='connect'||show_splash)){
+							if(extensionlist.length){
 								var extToLoad=extensionlist.length;
 								var extLoaded=function(){
 									extToLoad--;
@@ -13637,17 +13635,16 @@
 					next.set('ai',function(target){
 						var player=_status.event.player;
 						var att=get.attitude(player,target);
-						var sgnatt=get.sgn(att);
 						if(ui.selected.targets.length==0){
 							if(att>0){
 								if(!_status.event.nojudge&&target.countCards('j',function(card){
-									return game.hasPlayer(function(current){
+									return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
 										return current.canAddJudge(card)&&get.attitude(player,current)<0;
-									})
+									});
 								})) return 14;
 								if(target.countCards('e',function(card){
-									return get.value(card,target)<0&&game.hasPlayer(function(current){
-										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card))&&get.effect(target,card,player,player)<0;
+									return get.equipValue(card)<0&&game.hasPlayer(function(current){
+										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
 									});
 								})>0) return 9;
 							}
@@ -13656,7 +13653,7 @@
 									if(current!=target&&get.attitude(player,current)>0){
 										var es=target.getCards('e');
 										for(var i=0;i<es.length;i++){
-											if(get.value(es[i],target)>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
+											if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
 										}
 									}
 								})){
@@ -13665,23 +13662,24 @@
 							}
 							return 0;
 						}
-						var es=ui.selected.targets[0].getCards('e');
-						var i;
-						var att2=get.sgn(get.attitude(player,ui.selected.targets[0]));
-						for(i=0;i<es.length;i++){
-							if(sgnatt!=0&&att2!=0&&sgnatt!=att2&&
-								get.sgn(get.value(es[i],ui.selected.targets[0]))==-att2&&
-								get.sgn(get.effect(target,es[i],player,target))==sgnatt&&
-								target.isEmpty(get.subtype(es[i]))){
-								return Math.abs(att);
+						var sec_target=ui.selected.targets[0];
+						var sec_att1=get.attitude(player,sec_target);
+						var sec_att2=get.attitude(player,target);
+						if(sec_target!=target){
+							if(sec_att1>0&&sec_att2<0){
+								if(!_status.event.nojudge&&sec_target.countCards('j',function(card){
+									return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&target.canAddJudge(card);
+								})) return 14;
+								if(sec_target.countCards('e',function(card){
+									return get.equipValue(card)<0&&target.isEmpty(get.subtype(card));
+								})>0) return 9;
+							} else if(sec_att1<0&&sec_att2>0){
+								if(sec_target.countCards('e',function(card){
+									return get.equipValue(card)>0&&target.isEmpty(get.subtype(card));
+								})>0) return 8;
 							}
 						}
-						if(i==es.length&&(_status.event.nojudge||!ui.selected.targets[0].countCards('j',function(card){
-							return target.canAddJudge(card);
-						}))){
-							return 0;
-						}
-						return -att*get.attitude(player,ui.selected.targets[0]);
+						return 0;
 					});
 					next.set('multitarget',true);
 					next.set('targetprompt',_status.event.targetprompt||['被移走','移动目标']);
@@ -13701,20 +13699,20 @@
 					game.delay();
 					'step 3'
 					if(targets.length==2){
-						player.choosePlayerCard('ej',true,function(button){
+						player.choosePlayerCard('ej',true,targets[0]).set('ai',function(button){
 							var player=_status.event.player;
 							var targets0=_status.event.targets0;
 							var targets1=_status.event.targets1;
 							if(get.attitude(player,targets0)>0&&get.attitude(player,targets1)<0){
-								if(get.position(button.link)=='j') return 12;
-								if(get.value(button.link,targets0)<0&&get.effect(targets1,button.link,player,targets1)>0) return 10;
-								return 0;
-							}
-							else{
+								if(get.position(button.link)=='j'&&(button.link.name=='lebu'||button.link.name=='bingliang'||button.link.name=='caomu')) return 12+get.value(button.link);
+								if(get.equipValue(button.link)<0) return 10;
+								return -10;
+							} else if(get.attitude(player,targets0)<0&&get.attitude(player,targets1)>0){
 								if(get.position(button.link)=='j') return -10;
-								return get.value(button.link)*get.effect(targets1,button.link,player,targets1);
+								if(get.equipValue(button.link)>0&&get.effect(targets1,button.link,player,targets1)>0) return 10+get.equipValue(button.link);
 							}
-						},targets[0]).set('nojudge',event.nojudge||false).set('targets0',targets[0]).set('targets1',targets[1]).set('filterButton',function(button){
+							return 0;
+						}).set('nojudge',event.nojudge||false).set('targets0',targets[0]).set('targets1',targets[1]).set('filterButton',function(button){
 							var targets1=_status.event.targets1;
 							if(get.position(button.link)=='j'){
 								if(_status.event.nojudge) return false;
@@ -18389,7 +18387,7 @@
 							for(var i=0;i<es.length;i++){
 								if(game.hasPlayer(function(current2){
 									if(withatt){
-										if(get.sgn(get.value(es[i],current))!=-att) return false;
+										if(get.sgn(get.equipValue(es[i]))!=-att) return false;
 										var att2=get.sgn(get.attitude(player,current2));
 										if(att==att2||att2!=get.sgn(get.effect(current2,es[i],player,current2))) return false;
 									}
@@ -30406,6 +30404,11 @@
 						dialog.add('<div class="text center">'+get.translation(game.players[i])+'</div>');
 						dialog.addSmall(hs);
 					}
+					var muniu=game.players[i].getEquip('muniu');
+					if(muniu&&muniu.cards&&muniu.cards.length){
+						dialog.add('<div class="text center">'+get.translation(game.players[i])+'的'+get.translation('muniu')+'</div>');
+						dialog.addSmall(muniu.cards);
+					}
 				}
 				
 				for(var j=0;j<game.dead.length;j++){
@@ -30413,6 +30416,11 @@
 					if(hs.length){
 						dialog.add('<div class="text center">'+get.translation(game.dead[j])+'</div>');
 						dialog.addSmall(hs);
+					}
+					var muniu=game.dead[j].getEquip('muniu');
+					if(muniu&&muniu.cards&&muniu.cards.length){
+						dialog.add('<div class="text center">'+get.translation(game.dead[j])+'的'+get.translation('muniu')+'</div>');
+						dialog.addSmall(muniu.cards);
 					}
 				}
 				
@@ -30812,6 +30820,11 @@
 					dialog.add('<div class="text center">'+get.translation(game.players[i])+'</div>');
 					dialog.addSmall(hs);
 				}
+				var muniu=game.players[i].getEquip('muniu');
+				if(muniu&&muniu.cards&&muniu.cards.length){
+					dialog.add('<div class="text center">'+get.translation(game.players[i])+'的'+get.translation('muniu')+'</div>');
+					dialog.addSmall(muniu.cards);
+				}
 			}
 			for(var i=0;i<game.dead.length;i++){
 				if(!_status.connectMode&&game.dead[i].isUnderControl(true)&&game.layout!='long2') continue;
@@ -30819,6 +30832,11 @@
 				if(hs.length){
 					dialog.add('<div class="text center">'+get.translation(game.dead[i])+'</div>');
 					dialog.addSmall(hs);
+				}
+				var muniu=game.dead[i].getEquip('muniu');
+				if(muniu&&muniu.cards&&muniu.cards.length){
+					dialog.add('<div class="text center">'+get.translation(game.dead[i])+'的'+get.translation('muniu')+'</div>');
+					dialog.addSmall(muniu.cards);
 				}
 			}
 			dialog.add(ui.create.div('.placeholder.slim'));
@@ -40228,7 +40246,7 @@
 							updatepx.style.whiteSpace='nowrap';
 							updatepx.style.marginTop='8px';
 							var buttonx=ui.create.node('button','访问项目主页',function(){
-								window.open('https://github.com/libccy/noname');
+								window.open('https://github.com/adeFuLoDgu/noname');
 							});
 							updatepx.appendChild(buttonx);
 							ui.updateUpdate=function(){
@@ -40965,7 +40983,7 @@
 										nodename2.setBackground(video.name2,'character');
 									}
 									var date=new Date(video.time);
-									var str=date.getFullYear()+'.'+(date.getMonth()+1)+'.'+(date.getDate())+' '+
+									var str=date.getFullYear()+'.'+(date.getMonth()+1)+'.'+(date.getDay()+1)+' '+
 										date.getHours()+':';
 									var minutes=date.getMinutes();
 									if(minutes<10){
@@ -42945,6 +42963,22 @@
 					(lib.arenaReady.shift())();
 				}
 				delete lib.arenaReady;
+				//load custom extension start
+				var addtional_extention_names=[
+					['十周年UI', true],
+					['挑战卡牌', true],
+				];
+				var need_reload=false;
+				for(var i=0;i<addtional_extention_names.length;i++){
+					if(!lib.config.extensions.contains(addtional_extention_names[i][0])&&addtional_extention_names[i][1]){
+						var need_reload=true;
+						lib.config.extensions.add(addtional_extention_names[i][0]);
+						game.saveConfig('extensions',lib.config.extensions);
+						game.saveConfig('extension_'+addtional_extention_names[i][0]+'_enable',addtional_extention_names[i][1]);
+					}
+				}
+				if(need_reload) game.reload();
+				//load custom extension end
 				if(lib.config.auto_check_update){
 					setTimeout(function(){
 						game.checkForUpdate(false);
@@ -43379,10 +43413,12 @@
 						for(var i of game.connectPlayers){
 							if(!i.nickname&&!i.classList.contains('unselectable2')) num++;
 						}
+						/*
 						if(num>=lib.configOL.number-1){
 							alert('至少要有两名玩家才能开始游戏！');
 							return;
 						}
+						*/
 						game.resume();
 					}
 					button.delete();
