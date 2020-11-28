@@ -668,43 +668,13 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					nanman: ['nanman', 'effect_nanmanruqin'],
 					wanjian: ['wanjian', 'effect_wanjianqifa', 1.5],
 					taoyuan: ['taoyuan', 'effect_taoyuanjieyi'],
-					shan: ['shan', 'effect_shan'],
-					tao: ['tao', 'effect_tao'],
-					jiu: ['jiu', 'effect_jiu'],
-					wuzhong: ['wuzhong', 'effect_wuzhongshengyou'],
-					wuxie: ['wuxie', 'effect_wuxiekeji'],
-					wugu: ['wugu', 'effect_wugufengdeng'],
-					shunshou: ['shunshou', 'effect_shunshouqianyang'],
-					huogong: ['huogong', 'effect_huogong'],
-					guohe: ['guohe', 'effect_guohechaiqiao'],
-					sha: ['sha', undefined],
 				}
 			}
 			
 			var cardAnimate = function(card){
 				var anim = defines.card[card.name];
 				var scale = anim.length >= 3 ? anim[2] : void 0;
-				if(card.name=='sha'){
-					var nature=card.nature;
-					switch (nature) {
-						case 'thunder':
-							animation.playSpine2d('effect_leisha', void 0, scale);
-							break;
-						case 'fire':
-							animation.playSpine2d('effect_huosha', void 0, scale);
-							break;
-						default:
-							if(get.color(card) == 'red'){
-								animation.playSpine2d('effect_hongsha', void 0, scale);
-								break;
-							}else{
-								animation.playSpine2d('effect_heisha', void 0, scale);
-								break;
-							}
-					}
-				}else{
-					animation.playSpine2d(anim[1], void 0, scale);
-				}
+				animation.playSpine2d(anim[1], void 0, scale);
 			};
 			
 			for (var key in defines.card) {
