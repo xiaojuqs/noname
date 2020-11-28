@@ -340,7 +340,7 @@ game.import('extension', function(lib, game, ui, get, ai, _status) {
   };
 
   return {
-    name: '界面美化',
+    name: app.name,
     content: function() {
       return function(next) {
         app.waitAllFunction([
