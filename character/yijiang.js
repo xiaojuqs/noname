@@ -2286,7 +2286,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						trigger.player.line(player);
 						game.delay();
 					}
-				}
+				},
+				ai:{
+					threaten:1.1,
+					expose:0.25,
+				},
 			},
 			qingxian:{
 				audio:2,
@@ -7088,6 +7092,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 				}
 			},
+			qinwang_ai:{},
 			zuoding:{
 				trigger:{global:'useCardToPlayered'},
 				filter:function(event,player){
