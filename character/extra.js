@@ -91,6 +91,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 2'
 					var suit=result.control;
 					player.chat(get.translation(suit+2));
+					game.log(player,'选择了','#y'+get.translation(suit+2))
 					if(target.countCards('h',{suit:suit})){
 						target.chooseCard('h','交给'+get.translation(player)+'一张'+get.translation(suit)+'花色的手牌',true,function(card,player){
 							return get.suit(card,player)==_status.event.suit;
@@ -2215,6 +2216,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:1,
+					fireAttack:true,
 					result:{
 						target:function(player,target){
 							if(target.hasSkillTag('nofire')) return 0;
@@ -2229,6 +2231,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:4,
 				group:['longhun1','longhun2','longhun3','longhun4'],
 				ai:{
+					fireAttack:true,
 					skillTagFilter:function(player,tag){
 						switch(tag){
 							case 'respondSha':{
@@ -2243,6 +2246,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								if(player.countCards('he',{suit:'heart'})<Math.max(1,player.hp)) return false;
 								break;
 							}
+							default:return true;break;
 						}
 					},
 					maixie:true,
@@ -2872,6 +2876,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
 					},
 				},
+				ai:{
+					fireAttack:true,
+					halfneg:true,
+					threaten:1.05,
+				},
 			},
 			"nzry_jieying":{
 				audio:2,
@@ -3051,6 +3060,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:1,
+					fireAttack:true,
 					result:{
 						target:function(player,target){
 							if(target.hasSkillTag('nofire')) return 0;

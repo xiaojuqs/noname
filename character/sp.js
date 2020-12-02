@@ -3316,7 +3316,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(att>0) return att+1;
 						if(att==0) return Math.random();
 						return att;
-					});
+					}).animate=false;
 					'step 1'
 					if(result.bool){
 						var target=result.targets[0];
@@ -4486,7 +4486,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return 1/Math.sqrt(target.hp+1);
 						}
 						return 0;
-					});
+					}).animate=false;
 					'step 1'
 					if(result.bool){
 						var target=result.targets[0];
@@ -12095,6 +12095,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					damage:true,
+					fireAttack:true,
 					threaten:1.5,
 					order:7,
 					result:{
@@ -13688,6 +13689,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return 6-get.value(card);
 					}
 					return 4-get.value(card)
+				},
+				ai:{
+					fireAttack:true,
 				},
 			},
 			"smh_lianhuan":{
