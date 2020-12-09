@@ -5872,7 +5872,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
 					if(!player.hasZhuSkill('shichou'))return false;
 					if(player.countCards('he')<2) return false;
-					return !player.storage.shichou;
+					return game.hasPlayer(function(current){
+						return current!=player&&current.group=='shu';
+					});
 				},
 				init:function(player){
 					if(player.hasZhuSkill('shichou')){
@@ -14415,7 +14417,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								name:get.name(judging),
 								nature:get.nature(judging),
 								suit:suit,
-								number:2,
+								number:5,
 							})
 						};
 						list.sort(function(a,b){
@@ -14434,7 +14436,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						game.log(player,'将判定结果改为了','#y'+get.translation(result.control+2)+5);
 						trigger.fixedResult={
 							suit:result.control,
-							color:get.color({name:result.control}),
+							color:get.color({suit:result.control}),
 							number:5,
 						};
 					}
@@ -14710,6 +14712,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				str+='牌，令此伤害-1。';
 				return str;
 			},
+		},
+		characterReplace:{
+			caoshuang:['caoshuang','ns_caoshuang'],
+			caoang:['caoang','yj_caoang','tw_caoang'],
+			caohong:['caohong','tw_caohong'],
+			xiahouba:['re_xiahouba','xiahouba'],
+			maliang:['maliang','re_maliang','ol_maliang','old_maliang'],
+			dingfeng:['dingfeng','tw_dingfeng'],
+			zumao:['zumao','tw_zumao'],
+			beimihu:['tw_beimihu','beimihu'],
+			panfeng:['re_panfeng','panfeng'],
+			sunluyu:['sunluyu','re_sunluyu'],
+			simazhao:['simazhao','sp_simazhao'],
+			wangyuanji:['wangyuanji','sp_wangyuanji'],
+			wangyun:['re_wangyun','wangyun','old_wangyun'],
+			zhangliang:['re_zhangliang','zhangliang'],
+			lingju:['lingju','old_lingju'],
+			guansuo:['guansuo','old_guansuo'],
+			zhangxingcai:['old_zhangxingcai'],
 		},
 		translate:{
 			"xinfu_lingren":"凌人",
