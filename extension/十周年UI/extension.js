@@ -567,14 +567,15 @@ content:function(config, pack){
 									
 									var tempname = get.translation(cardname);
 									
- 							cards[i]._tempName.dataset.nature='fire';
-										if (cardname == 'sha') {
- 								if(cardnature) tempname=get.translation(cardnature)+tempname;
- 								if(cardnature=='thunder') cards[i]._tempName.dataset.nature='thunder';
- 								if(cardnature=='kami') cards[i]._tempName.dataset.nature='kami';
-										}
+									cards[i]._tempName.dataset.nature='fire';
+									if (cardname == 'sha') {
+										if(cardnature) tempname=get.translation(cardnature)+tempname;
+										if(cardnature=='thunder') cards[i]._tempName.dataset.nature='thunder';
+										if(cardnature=='kami') cards[i]._tempName.dataset.nature='kami';
+										if(cardnature=='ice') cards[i]._tempName.dataset.nature='ice';
+									}
 									
- 							cards[i]._tempName.innerHTML=lib.config.cardtempname=='default'?get.verticalStr(tempname):tempname;
+ 									cards[i]._tempName.innerHTML=lib.config.cardtempname=='default'?get.verticalStr(tempname):tempname;
 									cards[i]._tempName.tempname = tempname;
 								}
 							}
@@ -767,7 +768,7 @@ content:function(config, pack){
 									enable = info.filter(event, player);
 									ui.handSpecial.countIn = false;
 								}
-								if (!game.expandSkills(player.getSkills().concat(lib.skill.global)).contains(skills2[i])&&(info.noHidden||player.hasSkillTag('nomingzhi',false,null,true))) enable=false;
+								if (!game.expandSkills(player.getSkills().concat(lib.skill.global)).contains(skills2[i])&&(info.noHidden||get.mode()!='guozhan'||player.hasSkillTag('nomingzhi',false,null,true))) enable=false;
 								if (info.filter&&!info.filter(event,player)) enable=false;
 								if (info.viewAs && typeof info.viewAs!='function' && event.filterCard && !event.filterCard(info.viewAs, player, event)) enable = false;
 								if (info.viewAs && typeof info.viewAs!='function' && info.viewAsFilter && info.viewAsFilter(player) == false) enable = false;
