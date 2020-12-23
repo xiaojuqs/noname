@@ -1123,6 +1123,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								list.push(['基本','','sha']);
 								list.push(['基本','','sha','fire']);
 								list.push(['基本','','sha','thunder']);
+								list.push(['基本','','sha','ice']);
 							}
 							else if(get.type(name)=='trick') list.push(['锦囊','',name]);
 							else if(get.type(name)=='basic') list.push(['基本','',name]);
@@ -3794,6 +3795,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								list.push(['基本','','sha']);
 								list.push(['基本','','sha','fire']);
 								list.push(['基本','','sha','thunder']);
+								list.push(['基本','','sha','ice']);
 							}
 							else if(get.type(name)=='trick') list.push(['锦囊','',name]);
 							else if(get.type(name)=='basic') list.push(['基本','',name]);
@@ -4347,7 +4349,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						event.finish();
 						return;
 					}
-					var list=['sha','sha','sha','shan','tao','jiu'];
+					var list=['sha','sha','sha','sha','shan','tao','jiu'];
 					if(player.storage.jiaozhao1){
 						list=list.concat(['taoyuan','wugu','juedou','huogong','jiedao','tiesuo','guohe','shunshou','wuzhong','wanjian','nanman']);
 					}
@@ -4358,6 +4360,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							}
 							else if(i==2){
 								list[i]=['基本','',list[i],'thunder'];
+							}
+							else if(i==3){
+								list[i]=['基本','',list[i],'ice'];
 							}
 							else{
 								list[i]=['基本','',list[i]];
@@ -7178,6 +7183,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							list.push(['基本','','sha']);
 							list.push(['基本','','sha','fire']);
 							list.push(['基本','','sha','thunder']);
+							list.push(['基本','','sha','ice']);
 						}
 						if(!player.storage.huomo.tao&&event.filterCard({name:'tao'},player,event)){
 							list.push(['基本','','tao']);
