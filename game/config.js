@@ -126,7 +126,7 @@ window.config={
 	right_click:'pause',
 	sort:'type_sort',
 
-	cards:["standard","ex","extra","classic","basic","zhulu","sp","yunchou"],
+	cards:["standard","ex","extra","classic","basic","zhulu","sp","yunchou","yingbian"],
 	characters:["standard","shenhua","sp","yijiang","refresh","xinghuoliaoyuan","mobile","extra","tw","old","sp2"],
 	connect_characters:['diy'],
 	connect_cards:['huanlekapai','guozhan','sp','zhulu','yingbian'],
