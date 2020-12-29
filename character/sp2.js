@@ -4503,6 +4503,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					"step 2"
 					target.chooseControl("自动分配","手动分配").set("prompt","【严教】：是否让系统自动分配方案？").ai=function(){
+						if(get.attitude(player,target)<=0) return 1;
 						return 0;
 					};
 					"step 3"

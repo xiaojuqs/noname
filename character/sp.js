@@ -2266,6 +2266,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					damage:true,
 					result:{
 						target:function(player,target){
+							if(!game.hasPlayer(function(current){
+								return get.attitude(player,current)<0;
+							})){
+								return 0;
+							}
 							if(target.hp>1){
 								var skills=target.getOriginalSkills();
 								for(var i=0;i<skills.length;i++){
@@ -5754,6 +5759,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				position:'he',
 				check:function(card){
 					var player=_status.event.player;
+					if(!game.hasPlayer(function(current){
+						return get.attitude(player,current)<0;
+					})){
+						return 0;
+					}
 					if(player.hp<3) return 0;
 					var type=get.type(card,'trick');
 					if(type=='trick'){
