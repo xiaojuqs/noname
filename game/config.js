@@ -205,6 +205,7 @@ window.config={
 		"simayi",
 		"key_kagari",
 		"key_shiki",
+		"key_hina",
 		"old_zhonghui",
 		"old_wangyi"
 	],
@@ -267,6 +268,7 @@ window.config={
 		"simayi",
 		"key_kagari",
 		"key_shiki",
+		"key_hina",
 		"old_zhonghui",
 		"old_wangyi"
 	],
