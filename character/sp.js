@@ -4363,6 +4363,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					maixie_defend:true,
+					notemp:true,
 				}
 			},
 			rehengjiang2:{
@@ -7219,7 +7220,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(dh>0){
 						player.chooseToDiscard(dh,true);
 					}
-				}
+				},
+				ai:{combo:'qizhi'},
 			},
 			mouduan:{
 				audio:1,

@@ -43,7 +43,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			xf_tangzi:["male","wei",4,["xinfu_xingzhao"],[]],
 			xf_huangquan:["male","shu",3,["xinfu_dianhu","xinfu_jianji"],[]],
 			xf_sufei:["male","wu",4,["xinfu_lianpian"],[]],
-			xushao:['male','qun',3,['pingjian']],
+			xushao:['male','qun',4,['pingjian']],
 			puyuan:['male','shu',4,['pytianjiang','pyzhuren']],
 			xinpi:['male','wei',3,['xpchijie','yinju']],
 			lisu:['male','qun',2,['lslixun','lskuizhu']],
@@ -4519,6 +4519,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						player.markSkill('biaozhao');
 					}
 				},
+				ai:{
+					notemp:true,
+				},
 			},
 			"biaozhao2":{
 				trigger:{
@@ -4969,8 +4972,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								game.expandSkills(list2);
 								for(var k=0;k<list2.length;k++){
 									var info=lib.skill[list2[k]];
-									if(!info||!info.trigger||!info.trigger.player||info.silent||info.limited||info.juexingji) continue;
+									if(!info||!info.trigger||!info.trigger.player||info.silent||info.limited||info.juexingji||info.zhuanhuanji) continue;
 									if(info.trigger.player==name2||Array.isArray(info.trigger.player)&&info.trigger.player.contains(name2)){
+										if(info.init||info.ai&&(info.ai.combo||info.ai.notemp||info.ai.neg)) continue;
+										if(info.filter){
+											try{
+												var bool=info.filter(trigger,player,name2);
+												if(!bool) continue;
+											}
+											catch(e){
+												continue;
+											}
+										}
 										list.add(name);
 										if(!map[name]) map[name]=[];
 										map[name].push(skills2[j]);
@@ -4982,11 +4995,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(list.length>2) break;
 						}
 						if(!skills.length){
-							player.draw();
+							//player.draw();
 							event.finish();
 						}
 						else{
-							skills.unshift('摸一张牌');
+							//skills.unshift('摸一张牌');
 							player.chooseControl(skills).set('dialog',['请选择要发动的技能，或摸一张牌',[list,'character']]).set('ai',function(){return 0});
 						}
 					}
@@ -5036,8 +5049,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								game.expandSkills(list2);
 								for(var k=0;k<list2.length;k++){
 									var info=lib.skill[list2[k]];
-									if(!info||!info.enable||info.viewAs||info.limited||info.juexingji) continue;
+									if(!info||!info.enable||info.viewAs||info.limited||info.juexingji||info.zhuanhuanji) continue;
 									if(info.enable=='phaseUse'||Array.isArray(info.enable)&&info.enable.contains('phaseUse')){
+										if(info.init||info.onChooseToUse||info.ai&&(info.ai.combo||info.ai.notemp||info.ai.neg)) continue;
+										if(info.filter){
+											try{
+												var bool=info.filter(event.getParent(2),player);
+												if(!bool) continue;
+											}
+											catch(e){
+												continue;
+											}
+										}
 										list.add(name);
 										if(!map[name]) map[name]=[];
 										map[name].push(skills2[j]);
@@ -5049,11 +5072,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(list.length>2) break;
 						}
 						if(!skills.length){
-							player.draw();
+							//player.draw();
 							event.finish();
 						}
 						else{
-							skills.unshift('摸一张牌');
+							//skills.unshift('摸一张牌');
 							player.chooseControl(skills).set('dialog',['请选择要发动的技能，或摸一张牌',[list,'character']]).set('ai',function(){return 0});
 						}
 					}
@@ -5067,7 +5090,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					player.addTempSkill(result.control,'phaseUseEnd');
 					player.addTempSkill('pingjian_temp','phaseUseEnd');
 					player.storage.pingjian_temp=result.control;
-					event.getParent(2).goto(0);
+					//event.getParent(2).goto(0);
 				},
 				ai:{order:10,result:{player:1}},
 			},
@@ -7303,6 +7326,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			wenyang:['wenyang','diy_wenyang'],
 			dingyuan:['ol_dingyuan','dingyuan'],
 			quyi:['quyi','re_quyi'],
+			hansui:['xin_hansui','re_hansui'],
 		},
 		translate:{
 			lijue:"李傕",
@@ -7408,7 +7432,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			zhafu:'札符',
 			zhafu_info:'	限定技，出牌阶段，你可以选择一名其他角色，令其获得一枚「札」。有「札」的角色弃牌阶段开始时，若其手牌数大于1，其移去「札」并选择保留一张手牌，然后将其余的手牌交给你。',
 			pingjian:'评荐',
-			pingjian_info:'结束阶段开始时/当你受到伤害后/出牌阶段限一次，你可以令系统随机从剩余武将牌堆中检索出三张拥有发动时机为结束阶段开始时/当你受到伤害后/出牌阶段的技能的武将牌。然后你可以选择尝试发动其中一个技能或摸一张牌。每个技能每局只能选择一次。',
+			pingjian_info:'结束阶段开始时/当你受到伤害后/出牌阶段限一次，你可以令系统随机从剩余武将牌堆中检索出三张拥有发动时机为结束阶段开始时/当你受到伤害后/出牌阶段的技能的武将牌。然后你可以选择尝试发动其中一个技能。每个技能每局只能选择一次。',
 			pingjian_use:'评荐',
 			pytianjiang:'天匠',
 			pytianjiang_info:'游戏开始时，你随机获得两张不同副类别的装备牌，并置入你的装备区。出牌阶段，你可以将装备区的牌移动至其他角色的装备区（可替换原装备）。若你以此法移动了〖铸刃〗的衍生装备，你摸两张牌。',
