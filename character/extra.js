@@ -2599,7 +2599,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					maixie:true,
-					save:true,
 					respondSha:true,
 					respondShan:true,
 					effect:{
@@ -2630,7 +2629,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					return Math.max(1,_status.event.player.hp);
 				},
 				viewAs:{name:'tao'},
-				filter:function(event,player){
+				viewAsFilter:function(player){
 					return player.countCards('he',{suit:'heart'})>=player.hp;
 				},
 				filterCard:function(card){
@@ -2652,7 +2651,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					return Math.max(1,_status.event.player.hp);
 				},
 				viewAs:{name:'sha',nature:'fire'},
-				filter:function(event,player){
+				viewAsFilter:function(player){
 					return player.countCards('he',{suit:'diamond'})>=player.hp;
 				},
 				filterCard:function(card){
@@ -2807,8 +2806,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					respondSha:true,
 					respondShan:true,
-					save:true,
-					//让系统知道角色“有杀”“有闪”“有桃”
+					//让系统知道角色“有杀”“有闪”
 					skillTagFilter:function(player,tag){
 						var name;
 						switch(tag){
@@ -2839,9 +2837,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return 2;
 					},
 				},
-				//让系统知道玩家“有无懈”
+				//让系统知道玩家“有无懈”“有桃”
 				hiddenCard:function(player,name){
-					return name=='wuxie'&&player.countCards('he',{suit:'spade'})>0;
+					if(name=='wuxie'&&_status.connectMode&&player.countCards('h')>0) return true;
+					if(name=='wuxie') return player.countCards('he',{suit:'spade'})>0;
+					if(name=='tao') return player.countCards('he',{suit:'heart'})>0;
 				},
 				group:['xinlonghun_num','xinlonghun_discard'],
 			},
@@ -2864,7 +2864,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							}
 						}
 					},
-					save:true,
 					respondSha:true,
 					respondShan:true,
 					threaten:1.8
