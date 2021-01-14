@@ -27591,6 +27591,18 @@
 					withport=true;
 				}
 			}
+			
+			var reg=new RegExp("[0-9]+",'g');
+			var temp_ip=ip.match(reg);
+			var real_ip='';
+			var i;
+			for(i=0;i<4;i++){
+				var dot_string=temp_ip.length==i+1?'':'.';
+				real_ip=real_ip+temp_ip[i]+dot_string;
+			}
+			var port_string=withport?':'+temp_ip[4]:'';
+			ip=real_ip+port_string;
+			
 			if(!withport){
 				ip=ip+':8080';
 			}
