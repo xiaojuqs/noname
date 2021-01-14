@@ -27592,6 +27592,8 @@
 				}
 			}
 			
+			console.log(ip);
+			
 			var reg=new RegExp("[0-9]+",'g');
 			var temp_ip=ip.match(reg);
 			var real_ip='';
