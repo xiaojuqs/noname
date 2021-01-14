@@ -683,6 +683,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					check:function(button){
 						if(button.link.name=='du') return 10;
 						var player=_status.event.player;
+						if(_status.event.parent&&_status.event.parent.parent&&_status.event.parent.name=='chooseToRespond'){
+							return get.effect(player,_status.event.parent.parent,player,player)<0?-get.effect(player,_status.event.parent.parent,player,player):0;
+						}
 						return get.effect(player,button.link,player,player)>0?get.effect(player,button.link,player,player):-1;
 					},
 					backup:function(links,player){
