@@ -27593,6 +27593,7 @@
 			}
 			
 			console.log(ip);
+			
 			var reg=new RegExp("[0-9]+",'g');
 			var temp_ip=ip.match(reg);
 			var real_ip='';
@@ -27603,7 +27604,6 @@
 			}
 			var port_string=withport?':'+temp_ip[4]:'';
 			ip=real_ip+port_string;
-			console.log(ip);
 			
 			if(!withport){
 				ip=ip+':8080';
@@ -27615,7 +27615,6 @@
 					game.ws.close();
 					delete game.ws;
 				}
-				console.log(ip);
 				game.ws=new WebSocket('ws://'+ip+'');
 			}
 			catch(e){
