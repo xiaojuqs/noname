@@ -1482,7 +1482,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return target!=player
 					}).ai=function(target){
 						var player=_status.event.player;
-						if(player.storage.nzry_huaiju>2||player.hp>2) return get.attitude(player,target);
+						if((player.storage.nzry_huaiju>2||player.hp>2)&&(target.storage.nzry_huaiju==undefined||target.storage.nzry_huaiju<=0)) return get.attitude(player,target);
 						return -1;
 					};
 					'step 1'
@@ -2222,6 +2222,40 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
 						content:function(){
 							"step 0"
+							var check=false;
+							if(!player.canMoveCard(true)){
+								check=false;
+							}
+							else{
+								//以下節錄game.js的moveCard函數下的target回傳部分
+								var check=game.hasPlayer(function(target){
+									var att=get.attitude(player,target);
+									if(att>0){
+										if(!_status.event.nojudge&&target.countCards('j',function(card){
+											return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
+												return current.canAddJudge(card)&&get.attitude(player,current)<0;
+											});
+										})) return true;
+										if(target.countCards('e',function(card){
+											return get.equipValue(card)<0&&game.hasPlayer(function(current){
+												return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
+											});
+										})>0) return true;
+									}
+									else if(att<0){
+										if(game.hasPlayer(function(current){
+											if(current!=target&&get.attitude(player,current)>0){
+												var es=target.getCards('e');
+												for(var i=0;i<es.length;i++){
+													if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
+												}
+											}
+										})){
+											return true;
+										}
+									}
+								});
+							}
 							player.chooseToDiscard('he',get.prompt('xinjiewei'),'弃置一张牌并移动场上的一张牌',lib.filter.cardDiscardable).set('ai',function(card){
 								if(!_status.event.check) return 0;
 								return 7-get.value(card);
@@ -3053,7 +3087,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					else{
 						var next=player.chooseToDiscard(get.prompt('qiaobian'),'弃置一张手牌并跳过判定阶段');
-						next.set('ai',get.unuseful2);
+						next.set('ai',function(button){
+							if(!player.hasJudge('lebu')&&!player.hasJudge('bingliang')&&!player.hasJudge('caomu')) return 0;
+							return get.unuseful2;
+						})
 						next.set('logSkill','qiaobian1');
 					}
 					"step 1"
@@ -3129,13 +3166,38 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				direct:true,
 				content:function(){
 					"step 0"
-					var check;
+					var check=false;
 					if(!player.canMoveCard(true)){
 						check=false;
 					}
 					else{
-						check=game.hasPlayer(function(current){
-							return get.attitude(player,current)>0&&current.countCards('j');
+						//以下節錄game.js的moveCard函數下的target回傳部分
+						var check=game.hasPlayer(function(target){
+							var att=get.attitude(player,target);
+							if(att>0){
+								if(!_status.event.nojudge&&target.countCards('j',function(card){
+									return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
+										return current.canAddJudge(card)&&get.attitude(player,current)<0;
+									});
+								})) return true;
+								if(target.countCards('e',function(card){
+									return get.equipValue(card)<0&&game.hasPlayer(function(current){
+										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
+									});
+								})>0) return true;
+							}
+							else if(att<0){
+								if(game.hasPlayer(function(current){
+									if(current!=target&&get.attitude(player,current)>0){
+										var es=target.getCards('e');
+										for(var i=0;i<es.length;i++){
+											if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
+										}
+									}
+								})){
+									return true;
+								}
+							}
 						});
 						if(!check){
 							if(player.countCards('h')>player.hp+1){
@@ -3143,9 +3205,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							}
 							else if(player.countCards('h',{name:['wuzhong']})){
 								check=false;
-							}
-							else{
-								check=true;
 							}
 						}
 					}
@@ -3175,7 +3234,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					"step 0"
-					var discard=player.countCards('h')>player.hp;
+					var discard=player.needsToDiscard()>0;
 					var next=player.chooseToDiscard(get.prompt('qiaobian4'),'弃置一张手牌并跳过弃牌阶段');
 					next.logSkill='qiaobian';
 					next.ai=function(card){
@@ -7614,7 +7673,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			xiaoqiao:'旧小乔',
 			zhoutai:'界周泰',
 			zhangjiao:'张角',
-			//yuji:'于吉',
 			shensu:'神速',
 			shensu1:'神速',
 			shensu2:'神速',
