@@ -15107,7 +15107,10 @@
 							game.playAudio('effect','recover');
 						}
 					});
-					if(num>player.maxHp-player.hp) num=player.maxHp-player.hp;
+					if(num>player.maxHp-player.hp){
+						num=player.maxHp-player.hp;
+						event.num=num;
+					}
 					if(num>0){
 						player.changeHp(num,false);
 						game.broadcastAll(function(player){
@@ -15966,8 +15969,6 @@
 						}
 						if(!player.isUnseen(2)){
 							delete player.storage.nohp;
-							player.hp=player.storage.rawHp+player.maxHp-1;
-							player.maxHp=player.storage.rawMaxHp+player.maxHp-1;
 							player.node.hp.show();
 							player.update();
 						}
@@ -44895,7 +44896,8 @@
 				}
 				else{
 					if(get.mode()=='guozhan'){
-						list={wei:'魏',shu:'蜀',wu:'吴',qun:'群'};
+						list={wei:'魏',shu:'蜀',wu:'吴',qun:'群',jin:'晋'};
+						if(_status.forceKey) list.key='键';
 					}
 					var list2=get.copy(list);
 					if(game.getIdentityList2){
@@ -51087,7 +51089,7 @@
 					table.style.position='relative';
 					var listi=['flower','egg'];
 					for(var i=0;i<listi.length;i++){
-						td=ui.create.div('.shadowed.reduce_radius.pointerdiv.tdnode');
+						td=ui.create.div('.menubutton.reduce_radius.pointerdiv.tdnode');
 						ui.throwEmotion.add(td);
 						if(_status.throwEmotionWait) td.classList.add('exclude');
 						td.link=listi[i];
@@ -51104,7 +51106,7 @@
 					var listi=['wine','shoe'];
 					if(game.me.storage.zhuSkill_shanli) listi=['yuxisx','jiasuo'];
 					for(var i=0;i<listi.length;i++){
-						td=ui.create.div('.shadowed.reduce_radius.pointerdiv.tdnode');
+						td=ui.create.div('.menubutton.reduce_radius.pointerdiv.tdnode');
 						ui.throwEmotion.add(td);
 						if(_status.throwEmotionWait) td.classList.add('exclude');
 						td.link=listi[i];
