@@ -4338,6 +4338,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					return true;
 				},
 				viewAs:{name:'nanman'},
+				check:function(card){
+					return 8-get.value(card);
+				},
+				ai:{
+					order:1
+				},
 			},
 			souying:{
 				audio:2,
