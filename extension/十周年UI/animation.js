@@ -15,6 +15,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		
 	};
 	
+	
 	decadeUI.Animation = (function(){
 		function Animation (pathPrefix, parentNode, thisId) {
 			if (!window.spine) return console.error('spine 未定义.');
@@ -28,7 +29,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			var spine2d;
 			var config = { alpha: true };
 			var gl = canvas.getContext('gl', config) || canvas.getContext('experimental-webgl', config);
-			
+			// gl = null;
 			if (gl) {
 				spine2d = {
 					shader: spine.webgl.Shader.newTwoColoredTextured(gl),
@@ -41,6 +42,9 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					skeletons: [],
 				}
 			} else {
+				spine2d = {
+					assets: {},
+				};
 				console.error('当前设备不支持 WebGL.');
 			}
 			
@@ -50,18 +54,29 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			this.pathPrefix = pathPrefix;
 			this.lastFrameTime = void 0;
 			
-			if (!gl) {
-				function empty(){};
-				for (var key in this.__proto__) {
-					if (typeof this.__proto__[key] == 'function') {
-						this.__proto__[key] = empty;
+			this.check = function () {
+				if (!gl) {
+					function empty(){};
+					for (var key in this.__proto__) {
+						if (typeof this.__proto__[key] == 'function') {
+							this.__proto__[key] = empty;
+						}
 					}
+					
+					for (var key in this) {
+						if (typeof this[key] == 'function' && key != 'check') {
+							this[key] = empty;
+						}
+					}
+					
+				} else {
+					resize.addListener(function(){
+						canvas.sizeChanged = true;
+					});
 				}
-			} else {
-				resize.addListener(function(){
-					canvas.sizeChanged = true;
-				});
-			}
+			};
+			
+			this.check();
 		};
 		
 		function LoadNotif (assetName, onload, onerror) {
@@ -237,6 +252,14 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				animName = assetName[1];
 				assetName = assetName[0];
 			}
+			
+			// if (position instanceof HTMLElement && !follow) {
+				// var rect = position.getBoundingClientRect();
+				// position = {
+					// x: rect.left + rect.width / 2,
+					// y: document.body.offsetHeight - rect.top - rect.height / 2,
+				// };
+			// }
 			
 			if (!this.spine2d.assets[assetName]) return console.error('未找到"' + assetName + '"的动画资源.');
 			
@@ -563,6 +586,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 	
 	decadeUI.animation = (function(){
 		var animation = new decadeUI.Animation(decadeUIPath + 'assets/animation/', document.body, 'decadeUI-canvas');
+		animation.check();
 		
 		var fileInfoList = [
 			{ name: 'effect_youxikaishi' },
@@ -589,7 +613,6 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			{ name: 'effect_nvzhuang' },
 			{ name: 'effect_wufengjian' },
 			{ name: 'effect_yajiaoqiang' },
-			{ name: 'effect_yexingyi' },
 			{ name: 'effect_yinfengjia' },
 			{ name: 'effect_zheji' },
 			{ name: 'effect_leisha' },
@@ -617,7 +640,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		];
 		
 		var fileList = fileInfoList.concat();
-		
+
 		var read = function() {
 			if (fileList.length) {
 				var file = fileList.shift();
@@ -633,62 +656,61 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		var skillAnimation = (function(){
 			var defines = {
 				skill:{
-					bagua_skill: ['bagua_skill', 'effect_baguazhen',					0.5],
-					baiyin_skill: ['baiyin_skill', 'effect_baiyinshizi',				0.5],
-					bazhen_bagua: ['bazhen_bagua', 'effect_baguazhen',					0.5],
-					cixiong_skill: ['cixiong_skill', 'effect_cixiongshuanggujian',		0.5],
-					fangtian_skill: ['fangtian_skill', 'effect_fangtianhuaji',			0.7],
-					guanshi_skill: ['guanshi_skill', 'effect_guanshifu',				0.7],
-					guding_skill: ['guding_skill', 'effect_gudingdao',					0.6],
-					hanbing_skill: ['hanbing_skill', 'effect_hanbingjian',				0.5],
-					linglong_bagua: ['linglong_bagua', 'effect_baguazhen',				0.5],
-					qilin_skill: ['qilin_skill', 'effect_qilingong',					0.5],
-					qinggang_skill: ['qinggang_skill', 'effect_qinggangjian',			0.7],
-					qinglong_skill: ['qinglong_skill', 'effect_qinglongyanyuedao',		0.6],
-					renwang_skill: ['renwang_skill', 'effect_renwangdun',				0.5],
-					tengjia1: ['tengjia1', 'effect_tengjiafangyu',						0.6],
-					tengjia2: ['tengjia2', 'effect_tengjiaranshao',						0.6],
-					tengjia3: ['tengjia3', 'effect_tengjiafangyu',						0.6],
-					zhangba_skill: ['zhangba_skill', 'effect_zhangbashemao',			0.7],
-					zhuge_skill: ['zhuge_skill', 'effect_zhugeliannu',					0.5],
-					zhuque_skill: ['zhuque_skill', 'effect_zhuqueyushan',				0.6],
-					jinhe_skill: ['jinhe_skill', 'effect_jinhe',						0.4],
-					numa: ['numa', 'effect_numa',										0.4],
-					nvzhuang: ['nvzhuang', 'effect_nvzhuang',							0.5],
-					wufengjian_skill: ['wufengjian_skill', 'effect_wufengjian',			0.4],
-					yajiaoqiang_skill: ['yajiaoqiang_skill', 'effect_yajiaoqiang',		0.5],
-					yexingyi_skill: ['yexingyi_skill', 'effect_yexingyi',				0.5],
-					yinfengjia_skill: ['yinfengjia_skill', 'effect_yinfengjia',			0.5],
-					zheji: ['zheji', 'effect_zheji',									0.35],
-					lebu: ['lebu', 'effect_lebusishu',									0.7],
-					bingliang: ['bingliang', 'effect_bingliangcunduan',					0.7],
-					shandian: ['shandian', 'effect_shandian',							0.7],
+					bagua_skill: { skill: 'bagua_skill', name: 'effect_baguazhen', scale: 0.5 },
+					baiyin_skill: { skill: 'baiyin_skill', name: 'effect_baiyinshizi', scale: 0.5 },
+					bazhen_bagua: { skill: 'bazhen_bagua', name: 'effect_baguazhen', scale: 0.5 },
+					cixiong_skill: { skill: 'cixiong_skill', name: 'effect_cixiongshuanggujian', scale: 0.5 },
+					fangtian_skill: { skill: 'fangtian_skill', name: 'effect_fangtianhuaji', scale: 0.7 },
+					guanshi_skill: { skill: 'guanshi_skill', name: 'effect_guanshifu', scale: 0.7 },
+					guding_skill: { skill: 'guding_skill', name: 'effect_gudingdao', scale: 0.6, x: [0, 0.4], y: [0, -0.75] },
+					hanbing_skill: { skill: 'hanbing_skill', name: 'effect_hanbingjian', scale: 0.5 },
+					linglong_bagua: { skill: 'linglong_bagua', name: 'effect_baguazhen', scale: 0.5 },
+					qilin_skill: { skill: 'qilin_skill', name: 'effect_qilingong', scale: 0.5 },
+					qinggang_skill: { skill: 'qinggang_skill', name: 'effect_qinggangjian', scale: 0.7 },
+					qinglong_skill: { skill: 'qinglong_skill', name: 'effect_qinglongyanyuedao', scale: 0.6 },
+					renwang_skill: { skill: 'renwang_skill', name: 'effect_renwangdun', scale: 0.5 },
+					tengjia1: { skill: 'tengjia1', name: 'effect_tengjiafangyu', scale: 0.6 },
+					tengjia2: { skill: 'tengjia2', name: 'effect_tengjiaranshao', scale: 0.6 },
+					tengjia3: { skill: 'tengjia3', name: 'effect_tengjiafangyu', scale: 0.6 },
+					zhangba_skill: { skill: 'zhangba_skill', name: 'effect_zhangbashemao', scale: 0.7 },
+					zhuge_skill: { skill: 'zhuge_skill', name: 'effect_zhugeliannu', scale: 0.5 },
+					zhuque_skill: { skill: 'zhuque_skill', name: 'effect_zhuqueyushan', scale: 0.6 },
+					jinhe_lose: { skill: 'jinhe_lose', name: 'effect_jinhe',scale: 0.4 },
+					numa: { skill: 'numa', name: 'effect_numa', scale: 0.4 },
+					nvzhuang: { skill: 'nvzhuang', name: 'effect_nvzhuang', scale: 0.5 },
+					wufengjian_skill: { skill: 'wufengjian_skill', name: 'effect_wufengjian', scale: 0.4 },
+					yajiaoqiang_skill: { skill: 'yajiaoqiang_skill', name: 'effect_yajiaoqiang', scale: 0.5 },
+					yinfengjia_skill: { skill: 'yinfengjia_skill', name: 'effect_yinfengjia', scale: 0.5 },
+					zheji: { skill: 'zheji', name: 'effect_zheji', scale: 0.35 },
+					lebu: { skill: 'lebu', name: 'effect_lebusishu', scale: 0.7 },
+					bingliang: { skill: 'bingliang', name: 'effect_bingliangcunduan', scale: 0.7 },
+					shandian: { skill: 'shandian', name: 'effect_shandian', scale: 0.7 },
 				},
 				card: {
-					nanman: ['nanman', 'effect_nanmanruqin'],
-					wanjian: ['wanjian', 'effect_wanjianqifa', 1.5],
-					taoyuan: ['taoyuan', 'effect_taoyuanjieyi'],
+					nanman: { card: 'nanman', name: 'effect_nanmanruqin', scale: 0.6, y: [0, 0.4] },
+					wanjian: { card: 'wanjian', name: 'effect_wanjianqifa', scale: 1.5},
+					taoyuan: { card: 'taoyuan', name: 'effect_taoyuanjieyi'},
 				}
 			}
 			
 			var cardAnimate = function(card){
 				var anim = defines.card[card.name];
-				var scale = anim.length >= 3 ? anim[2] : void 0;
-				animation.playSpine2d(anim[1], void 0, scale);
+				if (!anim) return console.error('cardAnimate:' + card.name);
+				animation.playSpine2d(anim.name, { x: anim.x, y: anim.y, scale: anim.scale });
 			};
 			
 			for (var key in defines.card) {
-				lib.animate.card[defines.card[key][0]] = cardAnimate;
+				lib.animate.card[defines.card[key].card] = cardAnimate;
 			}
 			
 			var skillAnimate = function (name) {
 				var anim = defines.skill[name];
-				var scale = anim.length >= 3 ? anim[2] : void 0;
-				animation.playSpine2d(anim[1], { scale: scale, parent:this });
+				if (!anim) return console.error('skillAnimate:' + name);
+				animation.playSpine2d(anim.name, { x: anim.x, y: anim.y, scale: anim.scale, parent:this });
 			};
 			
 			for (var key in defines.skill) {
-				lib.animate.skill[defines.skill[key][0]] = skillAnimate;
+				lib.animate.skill[defines.skill[key].skill] = skillAnimate;
 			}
 			
 			var trigger = {
@@ -890,6 +912,14 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					height: [0, 0.8],
 				},
 			},
+			skin_daqiaoxiaoqiao: {
+				战场绝版: {
+					name: 'skin_daqiaoxiaoqiao_战场绝版',
+					//x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				}
+			},
 			skin_diaochan: {
 				玉婵仙子: {
 					name: 'skin_diaochan_玉婵仙子',
@@ -897,6 +927,28 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
+			},
+			skin_fuhuanghou: {
+				万福千灯: {
+					name: 'skin_fuhuanghou_万福千灯',
+					//x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
+			},
+			skin_huaman: {
+				经典形象: {
+					name: 'skin_huaman_经典形象',
+					x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
+				花俏蛮娇: {
+					name: 'skin_huaman_花俏蛮娇',
+					x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				}
 			},
 			skin_lukang: {
 				毁堰破晋: {
@@ -960,6 +1012,14 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					height: [0, 0.8],
 				},
 			},
+			skin_wuxian: {
+				锦运福绵: {
+					name: 'skin_wuxian_锦运福绵',
+					// x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
+			},
 			skin_xiahoushi: {
 				端华夏莲: {
 					name: 'skin_xiahoushi_端华夏莲',
@@ -974,6 +1034,14 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
+				},
+			},
+			skin_xinxianying: {
+				英装素果: {
+					name: 'skin_xinxianying_英装素果',
+					//x: [0, 0.7],
+					y: [75, 0.26],
+					//height: [0, 0.8],
 				},
 			},
 			skin_xushi: {
@@ -1005,6 +1073,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
+				战场绝版: {
+					name: 'skin_zhangchunhua_战场绝版',
+					//x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
 			},
 			skin_zhangqiying: {
 				逐鹿天下: {
@@ -1023,9 +1097,9 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				},
 				洛神御水: {
 					name: 'skin_zhenji_洛神御水',
-					x: [0, 0.7],
+					x: [0, 0.6],
 					y: [75, 0.3],
-					height: [0, 0.8],
+					//height: [0, 0.8],
 				},
 			},
 			skin_zhugeguo: {
@@ -1034,6 +1108,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
+				},
+				英装素果: {
+					name: 'skin_zhugeguo_英装素果',
+					//x: [0, 0.7],
+					y: [75, 0.3],
+					//height: [0, 0.8],
 				},
 			},
 			skin_zhugeliang: {
@@ -1078,6 +1158,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			}
 		};
 		
+		animation.check();
 		var background = decadeUI.config.dynamicBackground
 		if (background != void 0 && background != 'off') {
 			var name = background.split('_');
@@ -1087,5 +1168,9 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		
 		return animation;
 	})();
+	
+	window.anm = decadeUI.backgroundAnimation;
+	window.game = game;
+	window.playerAnimate = decadeUI.animation.playspine2d;
 });
 

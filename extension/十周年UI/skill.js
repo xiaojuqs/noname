@@ -206,7 +206,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				if(event.triggername == 'phaseZhunbeiBegin' && event.num1 == 0) player.addTempSkill('reguanxing_on');
 				player.popup(get.cnNumber(event.num1) + '上' + get.cnNumber(event.num2) + '下');
 				game.log(player, '将' + get.cnNumber(event.num1) + '张牌置于牌堆顶，' + get.cnNumber(event.num2) +'张牌置于牌堆底');
-				game.updateRoundNumber()
+				game.updateRoundNumber();
 			},
 			subSkill:{
 				on:{}
@@ -630,7 +630,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				'step 1'
 				player.popup(get.cnNumber(event.num1) + '上' + get.cnNumber(event.num2) + '下');
 				game.log(player, '将' + get.cnNumber(event.num1) + '张牌置于牌堆顶，' + get.cnNumber(event.num2) +'张牌置于牌堆底');
-				game.updateRoundNumber()
+				game.updateRoundNumber();
 			},
 		},
 		zongxuan: {
@@ -801,6 +801,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				player:'phaseBegin'
 			},
 			content:function(){
+				"step 0"
 				if (player.isUnderControl()) {
 					game.modeSwapPlayer(player);
 				}
@@ -858,6 +859,10 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				} else if (!event.isMine()) {
 					event.switchToAuto();
 				}
+				"step 1"
+				player.popup(get.cnNumber(event.num1) + '上' + get.cnNumber(event.num2) + '下');
+				game.log(player, '将' + get.cnNumber(event.num1) + '张牌置于牌堆顶，' + get.cnNumber(event.num2) +'张牌置于牌堆底');
+				game.updateRoundNumber();
 			},
 		},
 		wuxin:{
@@ -1202,6 +1207,72 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					}
 				} else event.finish();
 			}
+		},
+		kamome_huanmeng:{
+			content:function(){
+				"step 0"
+				if (player.isUnderControl()) {
+					game.modeSwapPlayer(player);
+				}
+				var num = 1 + player.countCards('e');;
+				var cards = get.cards(num);
+				var guanxing = decadeUI.content.chooseGuanXing(player, cards, cards.length, null, cards.length);
+				guanxing.caption = '【幻梦】';
+				game.broadcast(function(player, cards, callback){
+					if (!window.decadeUI) return;
+					var guanxing = decadeUI.content.chooseGuanXing(player, cards, cards.length, null, cards.length);
+					guanxing.caption = '【幻梦】';
+					guanxing.callback = callback;
+				}, player, cards, guanxing.callback);
+				
+				event.switchToAuto = function(){
+					var cards = guanxing.cards[0].concat();
+					var cheats = [];
+					var judges = player.node.judges.childNodes;
+
+					if (judges.length) cheats = decadeUI.get.cheatJudgeCards(cards, judges, true);
+					if (cards.length) {
+						for (var i = 0; i >= 0 && i < cards.length; i++) {
+							if (get.value(cards[i], player) >= 5) {
+								cheats.push(cards[i]);
+								cards.splice(i, 1)
+							}
+						}
+					}
+					
+					var time = 500;
+					for (var i = 0; i < cheats.length; i++) {
+						setTimeout(function(card, index, finished){
+							guanxing.move(card, index, 0);
+							if (finished) guanxing.finishTime(1000);
+						}, time, cheats[i], i, (i >= cheats.length - 1) && cards.length == 0);
+						time += 500;
+					}
+					
+					for (var i = 0; i < cards.length; i++) {
+						setTimeout(function(card, index, finished){
+							guanxing.move(card, index, 1);
+							if (finished) guanxing.finishTime(1000);
+						}, time, cards[i], i, (i >= cards.length - 1));
+						time += 500;
+					}
+				}
+				
+				if (event.isOnline()) {
+					event.player.send(function(){
+						if (!window.decadeUI && decadeUI.eventDialog) _status.event.finish();
+					}, event.player);
+					
+					event.player.wait();
+					decadeUI.game.wait();
+				} else if (!event.isMine()) {
+					event.switchToAuto();
+				}
+				"step 1"
+				player.popup(get.cnNumber(event.num1) + '上' + get.cnNumber(event.num2) + '下');
+				game.log(player, '将' + get.cnNumber(event.num1) + '张牌置于牌堆顶，' + get.cnNumber(event.num2) +'张牌置于牌堆底');
+				game.updateRoundNumber()
+			},
 		},
 	}
 	

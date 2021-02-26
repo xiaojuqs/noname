@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 game.import("extension", function(lib,game,ui,get,ai,_status){ return { name:"十周年UI",
 content:function(config, pack){
+	'use strict';
 	var extensionName = '十周年UI';
 	var extension = lib.extensionMenu['extension_' + extensionName];
 	var extensionPath = lib.assetURL + 'extension/' + extensionName + '/';
@@ -49,7 +50,7 @@ content:function(config, pack){
 		initOverride:function(){
 		    function override (source, target) {
 				var ok = true;
-				for (key in source) {
+				for (var key in source) {
 					if (target[key]) {
 						ok = override(source[key], target[key]);
 						if (ok) {
@@ -66,6 +67,7 @@ content:function(config, pack){
 						cards: ui.create.cards,
 						volume: ui.create.volume,
 						chat: ui.create.chat,
+						button: ui.create.button,
 					},
 				},
 				get:{
@@ -92,6 +94,7 @@ content:function(config, pack){
 							$compare: lib.element.player.$compare,
 							$disableEquip: lib.element.player.$disableEquip,
 							$damagepop: lib.element.player.$damagepop,
+							$skill: lib.element.player.$skill,
 						},
 						event:{
 							send: lib.element.event.send,
@@ -105,6 +108,7 @@ content:function(config, pack){
 				element:{
 					player:{
 						$skill:function(name, type, color, avatar){
+							if (!decadeUI.config.gameAnimationEffect || !decadeUI.animation.gl) return base.lib.element.player.$skill.apply(this, arguments);
 							var _this = this;
 							if (typeof type != 'string') type = 'legend';
 							game.addVideo('skill', this, [name, type, color, avatar]);
@@ -147,23 +151,137 @@ content:function(config, pack){
 					document.body.style.width = '100%';
 					document.body.style.height = '100%';
 					document.body.style.transform = '';
-					// var width = document.documentElement.offsetWidth;
-					// var height = document.documentElement.offsetHeight;
-					// var zoom = game.documentZoom;
-					// decadeUI.zooms.body = zoom;
-					// if(zoom != 1){
-						// width = Math.round(width / zoom);
-						// height = Math.round(height / zoom);
-						// document.body.style.width = width + 'px';
-						// document.body.style.height = height + 'px'
-						// document.body.style.zoom = zoom;
-						// document.body.style.transform = '';
-					// }else{
-						// document.body.style.width = width + 'px';
-						// document.body.style.height = height + 'px';
-						// document.body.style.zoom = 1;
-						// document.body.style.transform = '';
-					// }
+				},
+				create:{
+					rarity:function(button){
+						var rarity = game.getRarity(button.link);
+						var intro = button.node.intro;
+						intro.classList.add('showintro');
+
+						var img = new Image();
+						img.onload = function () {
+							intro.classList.add('rarity');
+							intro.innerHTML = '';
+							intro.style.backgroundImage = 'url(' + img.src + ')';
+						};
+						
+						img.onerror = function () {
+							intro.style.fontFamily = 'yuanli';
+							intro.style.fontSize = '16px';
+							intro.style.bottom = '6px';
+							intro.style.left = '6px';
+							intro.innerHTML = get.translation(rarity);
+						};
+							
+						img.src = decadeUIPath + 'assets/image/rarity_' + rarity + '.png';
+						
+						if ((button.link == 'xushu' || button.link=='xin_xushu') && button.node && button.node.name && button.node.group){
+							if (button.classList.contains('newstyle')) {
+								button.node.name.dataset.nature = 'watermm';
+								button.node.group.dataset.nature = 'water';
+							} else {
+								button.node.group.style.backgroundColor = get.translation('weiColor');
+							}
+						}
+					},
+					
+					button:function(item, type, position, noclick, node){
+						if (type != 'character') return base.ui.create.button.apply(this, arguments);
+						
+						if (node) {
+							node.classList.add('button');
+							node.classList.add('character');
+							node.classList.add('decadeUI');
+							node.style.display = '';
+						} else {
+							node = ui.create.div('.button.character.decadeUI', position);
+						}
+				
+						var character = dui.element.create('character', node);
+						
+						node.setBackground(item,'character');
+						node.link = item;
+						node.node = {
+							character: character,
+							name: ui.create.div('.name', node),
+							hp: ui.create.div('.hp', node),
+							intro: ui.create.div('.intro', node),
+							group: ui.create.div('.identity', node)
+						}
+						
+						var infoitem = lib.character[item];
+						if (!infoitem) {
+							for (var itemx in lib.characterPack) {
+								if (lib.characterPack[itemx][item]) {
+									infoitem = lib.characterPack[itemx][item];
+									break;
+								}
+							}
+						}
+						node.node.name.innerHTML = get.slimName(item);
+						if (lib.config.buttoncharacter_style == 'default' || lib.config.buttoncharacter_style == 'simple') {
+							if (lib.config.buttoncharacter_style == 'simple') {
+								node.node.group.style.display = 'none';
+							}
+							node.node.name.dataset.nature = get.groupnature(infoitem[1]);
+							node.node.group.dataset.nature = get.groupnature(infoitem[1], 'raw');
+							node.classList.add('newstyle');
+							ui.create.div(node.node.hp);
+							var textnode = ui.create.div('.text', get.numStr(infoitem[2]), node.node.hp);
+							if (infoitem[2] == 0) {
+								node.node.hp.hide();
+							} else if (get.infoHp(infoitem[2]) <= 3) {
+								node.node.hp.dataset.condition = 'mid';
+							} else {
+								node.node.hp.dataset.condition = 'high';
+							}
+						} else {
+							var hp = get.infoHp(infoitem[2]);
+							var maxHp = get.infoMaxHp(infoitem[2]);
+							if (maxHp > 14) {
+								if (typeof infoitem[2] == 'string') node.node.hp.innerHTML = infoitem[2];
+								else node.node.hp.innerHTML = get.numStr(infoitem[2]);
+								node.node.hp.classList.add('text');
+							} else {
+								for (var i = 0; i < maxHp; i++) {
+									var next = ui.create.div('', node.node.hp);
+									if (i >= hp) next.classList.add('exclude');
+								}
+							}
+						}
+						if (node.node.hp.childNodes.length == 0) {
+							node.node.name.style.top = '8px';
+						}
+						if (node.node.name.querySelectorAll('br').length >= 4) {
+							node.node.name.classList.add('long');
+							if (lib.config.buttoncharacter_style == 'old') {
+								node.addEventListener('mouseenter', ui.click.buttonnameenter);
+								node.addEventListener('mouseleave', ui.click.buttonnameleave);
+							}
+						}
+						node.node.intro.innerHTML = lib.config.intro;
+						if (!noclick) {
+							lib.setIntro(node);
+						}
+						if (infoitem[1]) {
+							node.node.group.innerHTML = '<div>' + get.translation(infoitem[1]) + '</div>';
+							node.node.group.style.backgroundColor = get.translation(infoitem[1] + 'Color');
+						} else {
+							node.node.group.style.display = 'none';
+						}
+						
+						if (!noclick) {
+							node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.button);
+						} else {
+							node.classList.add('noclick');
+							if (node.querySelector('.intro')) {
+								node.querySelector('.intro').remove();
+							}
+						}
+						
+						for (var i in lib.element.button) node[i] = lib.element.button[i];
+						return node;
+					},
 				},
 				click:{
 					card:function(e){
@@ -173,11 +291,11 @@ content:function(config, pack){
 						if (ui.intro) return;
 						_status.clicked = true;
 						if (this.parentNode && (this.parentNode.classList.contains('judges') || this.parentNode.classList.contains('marks'))) {
-							if (!(e && e.constructor === MouseEvent)) {
+							if (!(e && e instanceof MouseEvent)) {
 								var rect = this.getBoundingClientRect();
 								e = {
-									clientX: rect.left * game.documentZoom + 18,
-									clientY: rect.top * game.documentZoom + 12,
+									clientX: (rect.left + 10) * game.documentZoom,
+									clientY: (rect.top+ 10) * game.documentZoom,
 								};
 							}
 							ui.click.touchpop();
@@ -229,7 +347,7 @@ content:function(config, pack){
 							});
 						}
 					},
-				}
+				},
 			};
 			ride.game = {
 				gameDraw:function(){
@@ -294,11 +412,9 @@ content:function(config, pack){
 				
 				ui._updatexr = setTimeout(ui.updatex, 100);
 			};
-			
+
 			document.body.onresize = ui.updatexr;
-			
-				
-			
+
 			get.infoHp = function(hp){
 				if (typeof hp == 'number') {
 					return hp;
@@ -344,40 +460,6 @@ content:function(config, pack){
 				
 				return skills;
 			};
-			
-			lib.placePoppedDialog = function(dialog, e, element){
-				if (dialog._place_text) {
-					if (dialog._place_text.firstChild.offsetWidth >= 190 || dialog._place_text.firstChild.offsetHeight >= 30) {
-						dialog._place_text.style.textAlign = 'left';
-						dialog._place_text.style.marginLeft = '14px';
-					}
-				}
-				
-				var zoom = game.documentZoom;
-				if (decadeUI.isMobile() && element && element.classList.contains('mark')) zoom = 1;
-				if (e.touches && e.touches[0]) {
-					e = e.touches[0];
-				}
-				
-				var height = Math.min(ui.window.offsetHeight - 20, dialog.content.scrollHeight);
-				if (dialog._mod_height) {
-					height += dialog._mod_height;
-				}
-				dialog.style.height = height + 'px';
-				if ((e.clientX / zoom) < ui.window.offsetWidth / 2) {
-					dialog.style.left = (e.clientX / zoom + 10) + 'px';
-				} else {
-					dialog.style.left = (e.clientX / zoom - dialog.offsetWidth - 10) + 'px';
-				}
-				var idealtop = e.clientY / zoom - dialog.offsetHeight / 2;
-				if (idealtop < 10) {
-					idealtop = 10;
-				} else if (idealtop + dialog.offsetHeight + 10 > ui.window.offsetHeight) {
-					idealtop = ui.window.offsetHeight - 10 - dialog.offsetHeight;
-				}
-				
-				dialog.style.top = idealtop + 'px';
-			};
 
 			game.updateRoundNumber = function(){
 				game.broadcastAll(function(num1, num2, top) {
@@ -416,17 +498,169 @@ content:function(config, pack){
 				return base.game.phaseLoop.apply(this, arguments);
 			};
 			
-			game.loop = function(){
-				var event = _status.event;
-				
-				if (!decadeUI.eventDialog) {
+			if (decadeUI.config.smoothMode) {
+				game.loop = function () {
+					var event = _status.event;
+					var step = event.step;
+					var source = event.source;
+					var player = event.player;
+					var target = event.target;
+					var targets = event.targets;
+					var card = event.card;
+					var cards = event.cards;
+					var skill = event.skill;
+					var forced = event.forced;
+					var num = event.num;
+					var trigger = event._trigger;
+					var result = event._result;
+					if (decadeUI.eventDialog) {
+						decadeUI.game.wait();
+						return;
+					}
+					
 					game.loopLocked = true;
-					base.game.loop.apply(this, arguments);
+					
+					if (!game.loopTime) game.loopTime = performance.now();
+					if (_status.paused2 || _status.imchoosing) {
+						if (!lib.status.dateDelaying) {
+							lib.status.dateDelaying = new Date();
+						}
+					}
+					if (_status.paused || _status.paused2 || _status.over) {
+						game.loopTime = undefined;
+						game.loopLocked = false;
+						return;
+					}
+					if (_status.paused3) {
+						_status.paused3 = 'paused';
+						game.loopTime = undefined;
+						return;
+					}
+					if (lib.status.dateDelaying) {
+						lib.status.dateDelayed += lib.getUTC(new Date()) - lib.getUTC(lib.status.dateDelaying);
+						delete lib.status.dateDelaying;
+					}
+					if (event.next.length > 0) {
+						var next = event.next.shift();
+						if (next.player && next.player.skipList.contains(next.name)) {
+							event.trigger(next.name + 'Skipped');
+							next.player.skipList.remove(next.name);
+							if (lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name);
+						} else {
+							next.parent = event;
+							_status.event = next;
+						}
+					} else if (event.finished) {
+						if (event._triggered == 1) {
+							if (event.type == 'card') event.trigger('useCardToOmitted');
+							event.trigger(event.name + 'Omitted');
+							event._triggered = 4;
+						} else if (event._triggered == 2) {
+							if (event.type == 'card') event.trigger('useCardToEnd');
+							event.trigger(event.name + 'End');
+							event._triggered = 3;
+						} else if (event._triggered == 3) {
+							if (event.type == 'card') event.trigger('useCardToAfter');
+							event.trigger(event.name + 'After');
+							event._triggered++;
+						} else if (event.after && event.after.length) {
+							var next = event.after.shift();
+							if (next.player && next.player.skipList.contains(next.name)) {
+								event.trigger(next.name + 'Skipped');
+								next.player.skipList.remove(next.name);
+								if (lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name)
+							} else {
+								next.parent = event;
+								_status.event = next;
+							}
+						} else {
+							if (event.parent) {
+								if (event.result) {
+									event.parent._result = event.result;
+								}
+								_status.event = event.parent;
+							} else {
+								game.loopTime = undefined;
+								game.loopLocked = false;
+								return;
+							}
+						}
+					} else {
+						if (event._triggered == 0) {
+							if (event.type == 'card') event.trigger('useCardToBefore');
+							event.trigger(event.name + 'Before');
+							event._triggered++;
+						} else if (event._triggered == 1) {
+							if (event.type == 'card') event.trigger('useCardToBegin');
+							if (event.name == 'phase' && !event._begun) {
+								var next = game.createEvent('phasing', false, event);
+								next.player = event.player;
+								next.skill = event.skill;
+								next.setContent('phasing');
+								event._begun = true;
+							} else {
+								event.trigger(event.name + 'Begin');
+								event._triggered++;
+							}
+						} else {
+							if (player && player.classList.contains('dead') && !event.forceDie && event.name != 'phaseLoop') {
+								game.broadcastAll(function() {
+									while (_status.dieClose.length) {
+										_status.dieClose.shift().close();
+									}
+								});
+								if (event._oncancel) {
+									event._oncancel();
+								}
+								event.finish();
+							} else if (player && player.removed && event.name != 'phaseLoop') {
+								event.finish();
+							} else if (player && player.isOut() && event.name != 'phaseLoop' && !event.includeOut) {
+								if (event.name == 'phase' && player == _status.roundStart && !event.skill) {
+									_status.roundSkipped = true;
+								}
+								event.finish();
+							} else {
+								if (_status.withError || lib.config.compatiblemode || (_status.connectMode && !lib.config.debug)) {
+									try {
+										event.content(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai);
+									} catch(e) {
+										game.print('游戏出错：' + event.name);
+										game.print(e.toString());
+										console.log(e);
+									}
+								} else {
+									event.content(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai);
+								}
+							}
+							event.step++;
+						}
+					}
+					
 					game.loopLocked = false;
-				} else {
-					decadeUI.game.wait();
-				}
-			};
+					
+					var delta = performance.now() - game.loopTime;
+					if (delta > 10) {
+						game.loopTime = undefined;
+						setTimeout(game.loop, 0);
+					} else {
+						game.loop();
+					}
+					
+				};
+			} else {
+				game.loop = function () {
+					var event = _status.event;
+					
+					if (!decadeUI.eventDialog) {
+						game.loopLocked = true;
+						base.game.loop.apply(this, arguments);
+						game.loopLocked = false;
+					} else {
+						decadeUI.game.wait();
+					}
+				};
+			}
 			
 			game.check = function(event){
 				var i, j, range;
@@ -2447,15 +2681,10 @@ content:function(config, pack){
 						break;
 					
 					case 'guozhan':
-				        if (identity == 'ye' && get.is.jun(this)) {
+				    if (identity == 'ye' && get.is.jun(this)) {
 							this.identity = identity = lib.character[this.name1][1];
 						}
-						if(_status.playback&&['zhu','zhong','nei','fan'].includes(identity)){
-							this.group=lib.character[this.name1][1];
-							if(this.group=='shen') this.group=this.groupshen;
-						}else{
 				        this.group = identity;
-						}
 				        break;
 				    case 'versus':
 						this.finalSide = this.side;
@@ -2641,8 +2870,12 @@ content:function(config, pack){
 				var itemtype = get.itemtype(card);
 				if (typeof card == 'number') {
 					throwns = [];
+					var c;
 					while (card--) {
-						throwns.push(decadeUI.element.create('card infohidden'));
+						c = decadeUI.element.create('card infohidden infoflip');
+						c.moveTo = lib.element.card.moveTo;
+						c.moveDelete = lib.element.card.moveDelete;
+						throwns.push(c);
 					}
 					throwns.flip = true;
 				} else if (itemtype == 'cards') {
@@ -2729,7 +2962,7 @@ content:function(config, pack){
 				            eventName = '使用';
 								}
 						
-						if (decadeUI.config.cardUseEffect && event.card && event.card.cards && event.card.cards.length == 1 && event.card.cards[0].clone == card) {
+						if (decadeUI.config.cardUseEffect && event.card && event.card.cards && event.card.cards.length == 1) {
 							var name = event.card.name;
 							var nature = event.card.nature;
 							switch (name) {
@@ -2971,6 +3204,9 @@ content:function(config, pack){
 								case 'fire':
 									name = 'huo' + name;
 									break;
+								case 'ice':
+									name = 'bing' + name;
+									break;
 							}
 						}
 						
@@ -2993,7 +3229,7 @@ content:function(config, pack){
 								res.image = new Image();
 								res.image.onload = function(){
 									this.onload = null;
-									res.onload = true;
+									res.loaded = true;
 								};
 								
 								res.image.onerror = function(){
@@ -3133,7 +3369,7 @@ content:function(config, pack){
 									
 									case 'object':
 										for (var i = cards.length - 1; i >= 0; i--) {
-											for (j in filter) {
+											for (var j in filter) {
 												var value;
 												if (j == 'type' || j == 'subtype' || j == 'color' || j == 'suit' || j == 'number') {
 													value = get[j](cards[i]);
@@ -3576,20 +3812,6 @@ content:function(config, pack){
 			check:function(){
 				if (!this.frames) this.frames = [];
 				
-				if (!ui.window) {
-					console.log('ui.window is not created.');
-					return;
-				}
-				
-				if (!this.window) {
-					this.window = ui.window.appendChild(document.createElement('canvas'));
-					this.window.id = 'decadeUI-animate-window';
-					this.frames[0] = { 
-						updates: [],
-						canvas: this.window,
-					};
-				}
-				
 				if (!ui.arena) {
 					console.log('ui.arena is not created.');
 					return;
@@ -3604,7 +3826,7 @@ content:function(config, pack){
 					};
 				}
 			},
-			add:function(funcOrObejct, isArena){
+			add:function(funcOrObejct){
 				if (typeof funcOrObejct != 'function') throw 'funcOrObejct';
 				this.check();
 
@@ -3621,11 +3843,7 @@ content:function(config, pack){
 					}
 				}
 				
-				if (isArena === true) {
 					this.frames[2].updates.push(obj);
-				} else {
-					this.frames[0].updates.push(obj);
-				}
 				
 				if (!this.frameId) this.update();
 				return obj;
@@ -3819,7 +4037,7 @@ content:function(config, pack){
 				expand.scrollLeft = shrink.scrollLeft = this.maximumWidth;
 				
 				var sensor = this;
-				sensor.doScroll = function () {
+				sensor.onscroll = function (e) {
 					sensor.newWidth = sensor.element.clientWidth || 1;
 					sensor.newHeight = sensor.element.clientHeight || 1;
 
@@ -3837,15 +4055,15 @@ content:function(config, pack){
 					expand.scrollLeft = shrink.scrollLeft = sensor.maximumWidth;
 				};
 				
-				expand.addEventListener('scroll', sensor.doScroll);
-				shrink.addEventListener('scroll', sensor.doScroll);
+				expand.addEventListener('scroll', sensor.onscroll);
+				shrink.addEventListener('scroll', sensor.onscroll);
 				sensor.expand = expand;
 				sensor.shrink = shrink;
 				}
 				
 			ResizeSensor.prototype.close = function(){
-				this.expand.removeEventListener('scroll', this.doScroll);
-				this.shrink.removeEventListener('scroll', this.doScroll);
+				this.expand.removeEventListener('scroll', this.onscroll);
+				this.shrink.removeEventListener('scroll', this.onscroll);
 				
 				if (!this.element){
 					this.element.removeChild(this.expand);
@@ -4813,6 +5031,7 @@ content:function(config, pack){
 		ui.arena.dataset.borderLevel = decadeUI.config.borderLevel;
 		ui.arena.dataset.gainSkillsVisible = decadeUI.config.gainSkillsVisible;
 	};
+	window.dui = decadeUI;
 	decadeUI.init();
 	console.timeEnd(extensionName);
 },
@@ -4971,18 +5190,22 @@ config:{
         name: '调试助手(开发用)',
         init: false,
     },
-    cardReplace:{
-        name: '使用新杀卡牌素材',
-        init: true,
-    },
-    cardSecondaryNameVisible:{
-        name: '显示卡牌辅助名称',
-        init: false,
-        onclick:function(value){
-            game.saveConfig('extension_十周年UI_cardSecondaryNameVisible', value);
-            if (window.decadeUI) ui.arena.dataset.cardSecondaryNameVisible = value ? 'on' : 'off';
-        },
-    },
+    smoothMode: {
+		name: '流畅模式',
+		init: false,
+	},
+  cardReplace:{
+      name: '使用新杀卡牌素材',
+      init: true,
+  },
+  cardSecondaryNameVisible:{
+      name: '显示卡牌辅助名称',
+      init: false,
+      onclick:function(value){
+          game.saveConfig('extension_十周年UI_cardSecondaryNameVisible', value);
+          if (window.decadeUI) ui.arena.dataset.cardSecondaryNameVisible = value ? 'on' : 'off';
+      },
+  },
 	campIdentityImageMode:{
         name: '势力身份名图片化',
         init: true,
@@ -5093,7 +5316,11 @@ config:{
 			skin_caiwenji_才颜双绝: '蔡文姬-才颜双绝',
 			skin_caojie_战场绝版: '曹节-战场绝版',
 			skin_daqiao_战场绝版: '大乔-战场绝版',
+			skin_daqiaoxiaoqiao_战场绝版: '大乔小乔-战场绝版',
 			skin_diaochan_玉婵仙子: '貂蝉-玉婵仙子',
+			skin_fuhuanghou_万福千灯: '伏皇后-万福千灯',
+			skin_huaman_花俏蛮娇: '花鬘-花俏蛮娇',
+			skin_huaman_经典形象: '花鬘-经典形象',
 			skin_lukang_毁堰破晋: '陆抗-毁堰破晋',
 			skin_luxun_谋定天下: '陆逊-谋定天下',
 			skin_luxunlvmeng_清雨踏春: '陆逊吕蒙-清雨踏春',
@@ -5103,16 +5330,20 @@ config:{
 			skin_wangyi_绝色异彩: '王异-绝色异彩',
 			skin_wangyi_战场绝版: '王异-战场绝版',
 			skin_wolongzhuge_隆中陇亩: '卧龙诸葛-隆中陇亩',
+			skin_wuxian_锦运福绵: '吴苋-锦运福绵',
 			skin_xiahoushi_端华夏莲: '夏侯氏-端华夏莲',
 			skin_xiaoqiao_花好月圆: '小乔-花好月圆',
+			skin_xinxianying_英装素果: '辛宪英-英装素果',
 			skin_xushi_拈花思君: '徐氏-拈花思君',
 			skin_xushi_为夫弑敌: '徐氏-为夫弑敌',
 			skin_zhangchangpu_钟桂香蒲: '张昌蒲-钟桂香蒲',
 			skin_zhangchunhua_花好月圆: '张春华-花好月圆',
+			skin_zhangchunhua_战场绝版: '张春华-战场绝版',
 			skin_zhangqiying_逐鹿天下: '张琪英-逐鹿天下',
 			skin_zhenji_才颜双绝: '甄姬-才颜双绝',
 			skin_zhenji_洛神御水: '甄姬-洛神御水',
 			skin_zhugeguo_兰荷艾莲: '诸葛果-兰荷艾莲',
+			skin_zhugeguo_英装素果: '诸葛果-英装素果',
 			skin_zhugeliang_空城退敌: '诸葛亮-空城退敌',
 			off: '关闭',
 		},
@@ -5152,21 +5383,20 @@ package:{
     intro:(function(){
 		var log = [
 			'有bug请先关闭UI重试下，不行再联系作者，目前有些置牌堆顶丢弃的牌不会消失有虾皮。',
-			'当前版本：1.9.105.7.0.1:',
-			'更新日期：2020-11-03',
-			'- 修复不能导入扩展的BUG；',
-			'- 再次的再次优化击杀特效；',
-			'- 新增发动[限定技]的动画；',
-			'- 稍微延时游戏开始时机，提升流畅度；',
+			'当前版本：1.9.108.4.1.1',
+			'更新日期：2021-2-9',
+			'- 新增[辛宪英-英装素果]、[诸葛果-英装素果]、[张春华-战场绝版]、[大乔小乔-战场绝版]、[伏皇后-万福千灯]、[吴苋-锦运福绵]动态背景；',
+			'- 新增DIY包久岛欧/野村美希的【幻梦】、应变篇【洞烛先机】的显示UI；',
+			'- 更新chooseTuUse代码；',
 		];
 
 
-		return '<p style="color:rgb(200,200,000); font-size:12px; line-height:14px; text-shadow: 0 0 2px black;">' + log.join('<br>') + '</p>';
+		return '<p style="color:rgb(210,210,000); font-size:12px; line-height:14px; text-shadow: 0 0 2px black;">' + log.join('<br>') + '</p>';
 	})(),
     author:"短歌 QQ464598631",
     diskURL:"",
     forumURL:"",
-    version:"1.9.105.7.0.1",
+    version:"1.9.108.4.1.1",
 },
 files:{
     "character":[],
@@ -5356,4 +5586,27 @@ editable: false
 - 再次的再次优化击杀特效；
 - 新增发动[限定技]的动画；
 - 稍微延时游戏开始时机，提升流畅度；
+1.9.105.9.0.1:
+- 将张琪瑛的[点化]调整为最新版本；
+- 将武将评级替换为A、S、SS、SSS图标；
+- 修复翻面牌移动的BUG；
+- 修复限定动画资源缓存的BUG；
+- 修复已经修复过的BUG；
+1.9.105.9.1.1:
+- 优化选将露头皮肤显示；
+- 修复重复修复的BUG；
+1.9.105.9.1.2:
+- 将[南蛮入侵]大象腿特效替换为原卡牌的特效；
+- 修复选将预览切换皮肤不更新显示的BUG；
+1.9.105.10.0.1:
+- 增加【身在曹营心在汉】的彩蛋
+- 优化[落英]AI拿牌显示时的速度；
+1.9.106.0.0.1:
+- 增加[流畅模式]功能，可能略微降低游戏出牌速度；
+- 增加[花鬘-花俏蛮娇]、[花鬘-经典形象]动态背景；
+- 修复最新版不显示出牌特效的BUG（临时打磨）；
+1.9.108.4.1.1:
+- 新增[辛宪英-英装素果]、[诸葛果-英装素果]、[张春华-战场绝版]、[大乔小乔-战场绝版]、[伏皇后-万福千灯]、[吴苋-锦运福绵]动态背景；
+- 新增DIY包久岛欧/野村美希的【幻梦】、应变篇【洞烛先机】的显示UI；
+- 修复chooseTuUse代码；
 */

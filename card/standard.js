@@ -1604,6 +1604,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								var mode=get.mode();
 								if(mode=='identity'){
 									if(target.identity=='nei') return 1;
+									if(player.hasUnknown(2)) return 0;
 									var situ=get.situation();
 									if(target.identity=='fan'){
 										if(situ>1) return 1;
@@ -1633,6 +1634,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						// damage:1,
 						// natureDamage:1,
 						// thunderDamage:1,
+						expose:0.2,
 					}
 				}
 			},

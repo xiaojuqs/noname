@@ -802,6 +802,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						// damage:1,
 						// natureDamage:1,
 						// fireDamage:1,
+						expose:0.2,
 					}
 				}
 			},

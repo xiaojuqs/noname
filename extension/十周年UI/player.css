@@ -163,7 +163,7 @@
 }
 
 .player>.camp-zone[data-camp='jin']>.camp-back {
-	background: linear-gradient(to bottom, rgb(17,178,160), rgb(6,59,53));
+	background: linear-gradient(to bottom, rgb(93,44,105), rgb(54,18,58));
 }
 
 .player>.camp-zone[data-camp='han']>.camp-back {

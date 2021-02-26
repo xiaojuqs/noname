@@ -125,14 +125,14 @@
 	text-shadow: 0 0 10px red;
 	opacity: 0;
 	animation: scale-rout 0.5s forwards;
-	animation-delay: 0.2s;
+	animation-delay: 0.5s;
 	filter: none;
 	-webkit-filter: none;
 }
 
 .effect-window>.victim>.rout.shadow {
 	animation: scale-rout-shadow 1s forwards;
-	animation-delay: 0.5s;
+	animation-delay: 0.8s;
 }
 
 .effect-window>.li {

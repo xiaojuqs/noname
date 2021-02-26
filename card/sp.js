@@ -187,6 +187,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							return lib.card.shandian.ai.result.target(player,target);
 						}
 					},
+					tag:{
+						expose:0.2,
+					}
 				}
 			},
 			qibaodao:{

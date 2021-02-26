@@ -91,11 +91,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			var bounds = anim.getSpine2dBounds('effect_youxikaishi');
 			if (bounds == null) return;
 			var sz = bounds.size;
-			var scale = Math.min(anim.canvas.width / sz.x, anim.canvas.height / sz.y) * 0.8;
+			var scale = Math.min(anim.canvas.width / sz.x, anim.canvas.height / sz.y) * 0.76;
 			anim.playSpine2d('effect_youxikaishi', { scale: scale });
 		},
 		
 		line:function(dots){
+			// decadeUI.delay(300);
 			decadeUI.animate.add(function(source, target, e){
 				var ctx = e.context;
 				ctx.shadowColor = 'yellow';
@@ -224,6 +225,8 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						if (!attachment.cached[camp]) {
 							region = animation.createTextureRegion(bgImage);
 							attachment.cached[camp] = region;
+						} else {
+							region = attachment.cached[camp];
 						}
 						
 						attachment.width = region.width;
@@ -254,10 +257,39 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					effect.view.skillName.innerHTML = skillName;
 					effect.view.skillName.style.top = 'calc(50% + ' + 165 * scale + 'px)';
 					
+					// effect.view.playerName = decadeUI.element.create('player-name', effect);
+					// effect.view.playerName.innerHTML = get.verticalStr(playerName);
 					effect.style.zIndex = 5;
 					animation.canvas.parentNode.insertBefore(effect, animation.canvas.nextSibling);
 					effect.removeSelf(2180);
 					effect = null;
+					
+					// if (!skeleton.skeleton.findSlot('bg_xianding')) {
+						// var hdIndex = skeleton.skeleton.findSlotIndex('wujiang');
+						// var hdSlot = skeleton.skeleton.slots[hdIndex];
+						// var bgImage = new Image();
+						// bgImage.onload = function () {
+							// 搞了半天原来已经定义了，留着以后可能会用到
+							// var boneData = new spine.BoneData(hdSlot.data.boneData.index, 'bg_xianding', hdSlot.data.boneData.parent);
+							// var slotData = new spine.SlotData(hdSlot.data.index, 'bg_xianding', boneData);
+							// var xdSlot = new spine.Slot(hdSlot.data.copy(), hdSlot.bone);
+							// var xdAtta = hdSlot.getAttachment().copy();
+							// var bgRegion = animation.createTextureRegion(bgImage);
+							// xdAtta.name = 'bg_xianding';
+							// xdAtta.path = xdAtta.name;
+							// xdAtta.width = bgRegion.width;
+							// xdAtta.height = bgRegion.height;
+							// xdAtta.attachmentName = xdAtta.name;
+							// xdAtta.setRegion(bgRegion);
+							// xdAtta.updateOffset();
+
+							// xdSlot.setAttachment(xdAtta);
+							// skeleton.skeleton.slots.push(xdSlot);
+							// skeleton.skeleton.drawOrder.push(xdSlot);
+						// }
+						
+						// bgImage.src = decadeUIPath + 'assets/image/bg_xianding_qun.png';
+					// }
 				};
 				
 				bgImage.onerror = function () {
