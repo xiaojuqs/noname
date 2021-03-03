@@ -2601,6 +2601,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(!game.zhu.isZhu){
 					zhongmode=true;
 				}
+				var max_hp_exclude_zhu_and_self=0;
+				for(var i=0;i<game.players.length;i++){
+					if(game.players[i]!=from&&game.players[i].identity!='zhu'){
+						max_hp_exclude_zhu_and_self=Math.max(max_hp_exclude_zhu_and_self,game.players[i].hp);
+					}
+				}
 				switch(identity){
 					case 'zhu':
 						switch(identity2){
@@ -2611,10 +2617,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							case 'mingzhong': return 6;
 							case 'nei':
 								if(game.players.length==2) return -10;
-								if(to.identity=='zhong') return 0;
+								if(to.identity=='zhong'&&get.population('fan')>0) return 0;
 								if(get.population('fan')==0){
+									if(to.hp>=3&&!from.hasSkill('yimie')){
+										return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
+									}
 									if(to.ai.identity_mark=='zhong'&&to.ai.shown<1) return 0;
-									return -0.5;
+									return 0;
 								}
 								if(zhongmode&&to.ai.sizhong&&to.ai.shown<1) return 6;
 								if(get.population('fan')==1&&get.population('nei')==1&&game.players.length==3){
@@ -2657,7 +2666,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							case 'zhong':case 'mingzhong': return 4;
 							case 'nei':
 								if(get.population('fan')==0){
-									return -(to.countCards('h')+to.countCards('e')*1.5+to.hp*2);
+									return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
 								}
 								if(zhongmode&&to.ai.sizhong&&to.ai.shown<1) return 6;
 								return Math.min(3,-situation);
