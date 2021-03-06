@@ -3,18 +3,10 @@
 	var wss=new WebSocketServer({port:8080});
 	var bannedKeys=[];
 	var bannedIps=[];
-	var version='1.9.108';
-
 	var rooms=[{},{},{},{},{},{},{},{}];
-	var systemEvent={
-		content:'公告内容',
-		avatar:'key_yuri',
-		nickname:'系统管理员',
-		title:'系统公告',
-	};
-	var events=[systemEvent];
+	var events=[];
 	var clients={};
-	var bannedKeyWords=['ghs','直肠','性交','做爱','http','吃奶','骚逼','哈巴狗','美眉','癌','屁眼','艹','傻逼','操你','做鸡','奸','姦','华为','屄','狗子','屎','同性恋','肖战','鸡巴','精液','粪水','挂月亮中','贱骨头','吃屁'];
+	var bannedKeyWords=[];
 	var messages={
 		enter:function(index,nickname,avatar,config,mode){
 			this.nickname=nickname;
@@ -81,9 +73,8 @@
 			}
 		},
 		key:function(id){
-			if(!id||typeof id!='object'||version!=id[1]){
-				console.log(id, this._socket.remoteAddress, '使用旧版本登录');
-				this.sendl('denied','version');
+			if(!id||typeof id!='object'){
+				this.sendl('denied','key');
 				this.close();
 				clearTimeout(this.keyCheck);
 				delete this.keyCheck;
@@ -91,7 +82,6 @@
 			}
 			else if(bannedKeys.indexOf(id[0])!=-1){
 				bannedIps.push(this._socket.remoteAddress);
-				console.log(id, this._socket.remoteAddress, '被封禁用户登录');
 				this.close();
 			}
 			this.onlineKey=id[0];
@@ -149,9 +139,7 @@
 						cfg.creator=id;
 						cfg.id=util.getid();
 						cfg.members=[id];
-						events.splice(0,1);
 						events.unshift(cfg);
-						events.unshift(systemEvent);
 						changed=true;
 					}
 				}
