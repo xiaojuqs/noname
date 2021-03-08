@@ -6618,7 +6618,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				trigger:{
 					player:['loseAfter','gainAfter'],
-					global:['equipAfter','addJudgeAfter','gainAfter'],
+					global:['equipAfter','addJudgeAfter','gainAfter','loseAsyncAfter'],
 				},
 				direct:true,
 				filter:function(event,player){
@@ -11799,7 +11799,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			shoucheng:{
 				trigger:{
-					global:['equipAfter','addJudgeAfter','loseAfter','gainAfter'],
+					global:['equipAfter','addJudgeAfter','loseAfter','gainAfter','loseAsyncAfter'],
 				},
 				audio:2,
 				direct:true,
@@ -12162,7 +12162,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			sijian:{
 				trigger:{
 					player:'loseAfter',
-					global:['equipAfter','addJudgeAfter','gainAfter'],
+					global:['equipAfter','addJudgeAfter','gainAfter','loseAsyncAfter'],
 				},
 				direct:true,
 				audio:2,
@@ -12241,7 +12241,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				trigger:{global:'phaseJieshuBegin'},
 				filter:function(event,player){
-					return event.player.countCards('h')<=1;
+					return event.player.countCards('h')<=1&&player.hasSkill('junbing');
 				},
 				direct:true,
 				checkx:function(target,player){
@@ -12259,7 +12259,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					"step 0"
 					event.target=player;
 					event.player=trigger.player;
-					event.player.chooseBool('是否对'+get.translation(event.target)+'发动【郡兵】？',event.player==event.target?'摸一张牌':'摸一张牌，将所有手牌交给该角色，然后该角色交给你等量的手牌').set('choice',lib.skill.junbing.checkx(event.target,event.player));
+				 var prompt;
+				 if(player==event.player) prompt='是否发动【郡兵】摸一张牌？';
+				 else prompt=('###是否对'+get.translation(event.target)+'发动【郡兵】？###'+(event.player==event.target?'摸一张牌':'摸一张牌，将所有手牌交给该角色，然后该角色交给你等量的手牌'));
+					event.player.chooseBool(prompt).set('choice',lib.skill.junbing.checkx(event.target,event.player));
 					"step 1"
 					if(!result.bool){event.finish();return}
 					target.logSkill('junbing',player);

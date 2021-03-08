@@ -15,7 +15,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				extra_key:['key_kagari','key_shiki','key_hina'],
 				extra_ol:['ol_zhangliao','shen_caopi','shen_zhenji'],
 				extra_offline:['shen_diaochan'],
-				extra_mini:['mini_zhugeliang','mini_lvbu'],
+				extra_mini:['mini_zhugeliang','mini_lvbu','mini_lvmeng'],
 			},
 		},
 		character:{
@@ -43,6 +43,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			
 			mini_zhugeliang:['male','shen',3,['qixing','minikuangfeng','minidawu'],['shu']],
 			mini_lvbu:['male','shen',6,['miniwuqian','minishenfen']],
+			mini_lvmeng:['male','shen',3,['shelie','minigongxin']],
 		},
 		characterIntro:{
 			shen_guanyu:'关羽，字云长。曾水淹七军、擒于禁、斩庞德、威震华夏，吓得曹操差点迁都躲避，但是东吴偷袭荆州，关羽兵败被害。后传说吕蒙因关羽之魂索命而死。',
@@ -57,6 +58,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			shen_zhangliao:['shen_zhangliao','ol_zhangliao'],
 			shen_zhugeliang:['shen_zhugeliang','mini_zhugeliang'],
 			shen_lvbu:['shen_lvbu','mini_lvbu'],
+			shen_lvmeng:['shen_lvmeng','mini_lvmeng'],
 		},
 		characterFilter:{
 			shen_diaochan:function(mode){
@@ -3117,17 +3119,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					event.dialog.close();
 					var card=event.card;
 					if(result.control=='gongxin_top'){
-						target.lose(card,ui.special);
 						player.showCards(card,'置于牌堆顶');
+						target.lose(card,ui.cardPile,'insert','visible');
+						game.log(player,'将',event.card,'置于牌堆顶');
 					}
 					else{
 						target.discard(card);
-						event.finish();
 					}
-					"step 3"
-					event.card.fix();
-					ui.cardPile.insertBefore(event.card,ui.cardPile.firstChild);
-					game.log(player,'将',event.card,'置于牌堆顶');
 				},
 				ai:{
 					threaten:1.5,
@@ -3137,6 +3135,96 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					order:10,
+					expose:0.4,
+				}
+			},
+			minigongxin:{
+				audio:'gongxin',
+				audioname:['re_lvmeng','gexuan'],
+				trigger:{
+					player:'useCardToPlayered',
+					target:'useCardToTargeted',
+				},
+				usable:1,
+				filter:function(event,player){
+					if(event.player==event.target||event.targets.length!=1) return false;
+					return (player==event.player?event.target:event.player).countCards('h')>0;
+				},
+				logTarget:function(event,player){
+					return player==event.player?event.target:event.player;
+				},
+				check:function(event,player){
+					return get.attitude(player,player==event.player?event.target:event.player)<=0;
+				},
+				content:function(){
+					"step 0"
+					var target=(player==trigger.player?trigger.target:trigger.player);
+					event.target=target;
+					event.videoId=lib.status.videoId++;
+					var cards=target.getCards('h');
+					if(player.isOnline2()){
+						player.send(function(cards,id){
+							ui.create.dialog('攻心',cards).videoId=id;
+						},cards,event.videoId);
+					}
+					event.dialog=ui.create.dialog('攻心',cards);
+					event.dialog.videoId=event.videoId;
+					if(!event.isMine()){
+						event.dialog.style.display='none';
+					}
+					player.chooseButton().set('filterButton',function(button){
+						return get.color(button.link)=='red';
+					}).set('dialog',event.videoId).set('ai',function(button){
+						return get.value(button.link);
+					});
+					"step 1"
+					if(result.bool){
+						event.card=result.links[0];
+						var func=function(card,id){
+							var dialog=get.idDialog(id);
+							if(dialog){
+								for(var i=0;i<dialog.buttons.length;i++){
+									if(dialog.buttons[i].link==card){
+										dialog.buttons[i].classList.add('selectedx');
+									}
+									else{
+										dialog.buttons[i].classList.add('unselectable');
+									}
+								}
+							}
+						}
+						if(player.isOnline2()){
+							player.send(func,event.card,event.videoId);
+						}
+						else if(event.isMine()){
+							func(event.card,event.videoId);
+						}
+						player.chooseControl('获得此牌','gongxin_top');
+					}
+					else{
+						if(player.isOnline2()){
+							player.send('closeDialog',event.videoId);
+						}
+						event.dialog.close();
+						event.finish();
+					}
+					"step 2"
+					if(player.isOnline2()){
+						player.send('closeDialog',event.videoId);
+					}
+					event.dialog.close();
+					var card=event.card;
+					if(result.control=='gongxin_top'){
+						player.showCards(card,'置于牌堆顶');
+						target.lose(card,ui.cardPile,'insert','visible');
+						game.log(player,'将',event.card,'置于牌堆顶');
+					}
+					else{
+						player.gain(card,target,'give');
+					}
+				},
+				ai:{
+					threaten:1.7,
 					expose:0.4,
 				}
 			},
@@ -3451,7 +3539,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					listm=listm.concat(listv);
 					var func=function(skill){
 						var info=get.info(skill);
-						if(!info||info.charlotte||info.zhuSkill||info.juexingji||info.limited||(info.unique&&!info.gainable)||lib.skill.drlt_duorui.bannedList.contains(skill)) return false;
+						if(!info||info.charlotte||info.hiddenSkill||info.zhuSkill||info.juexingji||info.limited||(info.unique&&!info.gainable)||lib.skill.drlt_duorui.bannedList.contains(skill)) return false;
 						return true;
 					};
 					for(var i=0;i<listm.length;i++){
@@ -3866,7 +3954,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			"drlt_duorui1":"失效技能",
 			"drlt_duorui1_bg":"锐",
 			"drlt_duorui":"夺锐",
-			"drlt_duorui_info":"当你于出牌阶段内对一名其他角色造成伤害后，你可以废除你装备区内的一个装备栏（若已全部废除则可以跳过此步骤），然后获得该角色的一个技能直到其的下回合结束或其死亡(觉醒技，限定技，主公技等特殊技能除外)。若如此做，该角色该技能失效且你不能再发动〖夺锐〗直到你失去以此法获得的技能。",
+			"drlt_duorui_info":"当你于出牌阶段内对一名其他角色造成伤害后，你可以废除你装备区内的一个装备栏（若已全部废除则可以跳过此步骤），然后获得该角色的一个技能直到其的下回合结束或其死亡(觉醒技，限定技，主公技，隐匿技等特殊技能除外)。若如此做，该角色该技能失效且你不能再发动〖夺锐〗直到你失去以此法获得的技能。",
 			"drlt_zhiti":"止啼",
 			"drlt_zhiti_info":"锁定技，你攻击范围内已受伤的其他角色手牌上限-1；当你拼点或【决斗】胜利，或受到伤害后，你恢复一个装备栏",
 			
@@ -4006,6 +4094,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			miniwuqian_info:'锁定技，当你于回合内使用【杀】或【决斗】指定目标后，若此牌是你本回合内使用的第一张【杀】或【决斗】，则你令其每次响应此牌需要使用的【闪】或打出的【杀】的数量+1，且令其防具无效直到此牌对其结束。',
 			minishenfen:'神愤',
 			minishenfen_info:'限定技，出牌阶段，你可以失去3点体力，对所有其他角色各造成1点伤害。这些角色弃置装备区内的所有牌，然后弃置四张手牌。',
+			mini_lvmeng:'SP神吕蒙',
+			minigongxin:'攻心',
+			minigongxin_info:'每回合限一次，当你使用牌指定其他角色为唯一目标后，或成为其他角色使用牌的唯一目标后，你可观看对方的手牌。然后你可以展示其中的一张红色牌并选择一项：①获得此牌。②将此牌置于牌堆顶。',
 			
 			key_kagari:'篝',
 			kagari_zongsi:'纵丝',
