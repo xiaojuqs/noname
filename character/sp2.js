@@ -3788,8 +3788,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					game.updateRoundNumber();
 				},
 				ai:{
+					//modified tuntian ai effect
+					effect:{
+						target:function(card,player,target,current){
+							if(!target.hasFriend()&&!player.hasUnknown()) return;
+							if(_status.currentPhase==target) return;
+							if(player.hasSkill('moying2')) return;
+							if(get.tag(card,'loseCard')&&target.countCards('he')){
+								if(target.hasSkill('ziliang')) return 0.7;
+								return [0.5,Math.max(2,target.countCards('h'))];
+							}
+						}
+					},
+					nodiscard:true,
+					nolose:true,
 					noh:true,
-					noe:true,
+					skillTagFilter:function(player){
+						return !player.hasSkill('moying2');
+					},
 				}
 			},
 			moying2:{},

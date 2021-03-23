@@ -41821,7 +41821,7 @@
 										nodename2.setBackground(video.name2,'character');
 									}
 									var date=new Date(video.time);
-									var str=date.getFullYear()+'.'+(date.getMonth()+1)+'.'+(date.getDay()+1)+' '+
+									var str=date.getFullYear()+'.'+(date.getMonth()+1)+'.'+(date.getDate())+' '+
 										date.getHours()+':';
 									var minutes=date.getMinutes();
 									if(minutes<10){

@@ -1759,7 +1759,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					effect:{
 						player:function(card,player,target,current){
-							if (player.hasSkill('renjie2')&&!player.hasSkill('jilue')&&card.name!='wuzhong'){
+							var draw_two_cards=get.tag(card,'draw')>1;
+							if (player.hasSkill('renjie2')&&!player.hasSkill('jilue')&&!draw_two_cards){
 								return 'zeroplayertarget';
 							}
 						}
