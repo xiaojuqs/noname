@@ -6249,6 +6249,11 @@
 						init:true,
 						frequent:true
 					},
+					jiazuzhizheng:{
+						name:'家族之争',
+						init:true,
+						frequent:true
+					},
 					tongqueduopao:{
 						name:'铜雀夺袍',
 						init:true,
@@ -21705,6 +21710,7 @@
 				isFriendOf:function(player){
 					if(get.mode()=='guozhan'){
 						if(this==player) return true;
+						if(this.storage.yexinjia_friend==player||player.storage.yexinjia_friend==this) return true;
 						if(this.identity=='unknown'||this.identity=='ye') return false;
 						if(player.identity=='unknown'||player.identity=='ye') return false;
 						return this.identity==player.identity;
@@ -27443,6 +27449,7 @@
 			western:'thunder',
 			key:'key',
 			jin:'thunder',
+			ye:'thunder',
 		},
 		phaseName:['phaseZhunbei','phaseJudge','phaseDraw','phaseUse','phaseDiscard','phaseJieshu'],
 		quickVoice:[
@@ -42638,11 +42645,11 @@
 									dialog.buttons[i].classList.add('nodisplay');
 								}
 								else if(dialog.currentgroup=='double'){
-									if(dialog.buttons[i]._changeGroup) dialog.buttons[i].classList.remove('nodisplay');
+									if(dialog.buttons[i]._changeGroup||dialog.buttons[i].group=='ye') dialog.buttons[i].classList.remove('nodisplay');
 									else dialog.buttons[i].classList.add('nodisplay');
 								}
 								else{
-									if(dialog.buttons[i]._changeGroup||dialog.buttons[i].group!=dialog.currentgroup){
+									if(dialog.buttons[i]._changeGroup||dialog.buttons[i].group=='ye'||dialog.buttons[i].group!=dialog.currentgroup){
 										dialog.buttons[i].classList.add('nodisplay');
 									}
 									else{
