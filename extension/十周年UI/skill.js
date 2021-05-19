@@ -1287,29 +1287,5 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			 }
 		}
 	}
-	
-	var muniuSkill = lib.skill['muniu_skill'];
-	if (muniuSkill) {
-		muniuSkill.sync = function(muniu){
-			if(game.online){
-				return;
-			}
-			if(!muniu.cards){
-				muniu.cards=[];
-			}
-			for(var i=0;i<muniu.cards.length;i++){
-				var parent = muniu.cards[i].parentNode;
-				if(!parent || (parent.id != 'special' && !parent.classList.contains('special'))){
-					muniu.cards[i].classList.remove('selected');
-					muniu.cards[i].classList.remove('selectable');
-					muniu.cards[i].classList.remove('un-selectable');
-					muniu.cards.splice(i--,1);
-				}
-			}
-			game.broadcast(function(muniu,cards){
-				muniu.cards=cards;
-			},muniu,muniu.cards);
-		};
-	}
 });
 
