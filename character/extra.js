@@ -2689,7 +2689,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				prompt:function(){
 					return '将'+get.cnNumber(Math.max(1,_status.event.player.hp))+'张红桃牌当作桃使用';
 				},
-				position:'he',
+				position:'hes',
 				check:function(card,event){
 					if(_status.event.player.hp>1) return 0;
 					return 10-get.value(card);
@@ -2699,7 +2699,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				viewAs:{name:'tao'},
 				viewAsFilter:function(player){
-					return player.countCards('he',{suit:'heart'})>=player.hp;
+					return player.countCards('hes',{suit:'heart'})>=player.hp;
 				},
 				filterCard:function(card){
 					return get.suit(card)=='heart';
@@ -2711,7 +2711,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				prompt:function(){
 					return '将'+get.cnNumber(Math.max(1,_status.event.player.hp))+'张方片当作火杀使用或打出';
 				},
-				position:'he',
+				position:'hes',
 				check:function(card,event){
 					if(_status.event.player.hp>1) return 0;
 					return 10-get.value(card);
@@ -2721,7 +2721,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				viewAs:{name:'sha',nature:'fire'},
 				viewAsFilter:function(player){
-					return player.countCards('he',{suit:'diamond'})>=player.hp;
+					return player.countCards('hes',{suit:'diamond'})>=player.hp;
 				},
 				filterCard:function(card){
 					return get.suit(card)=='diamond';
@@ -2733,7 +2733,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				prompt:function(){
 					return '将'+get.cnNumber(Math.max(1,_status.event.player.hp))+'张黑桃牌当作无懈可击使用';
 				},
-				position:'he',
+				position:'hes',
 				check:function(card,event){
 					if(_status.event.player.hp>1) return 0;
 					return 7-get.value(card);
@@ -2743,7 +2743,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				viewAs:{name:'wuxie'},
 				viewAsFilter:function(player){
-					return player.countCards('he',{suit:'spade'})>=player.hp;
+					return player.countCards('hes',{suit:'spade'})>=player.hp;
 				},
 				filterCard:function(card){
 					return get.suit(card)=='spade';
@@ -2755,13 +2755,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				prompt:function(){
 					return '将'+get.cnNumber(Math.max(1,_status.event.player.hp))+'张梅花牌当作闪使用或打出';
 				},
-				position:'he',
+				position:'hes',
 				check:function(card,event){
 					if(_status.event.player.hp>1) return 0;
 					return 10-get.value(card);
 				},
 				selectCard:function(){
 					return Math.max(1,_status.event.player.hp);
+				},
+				viewAsFilter:function(player){
+					return player.countCards('hes',{suit:'club'})>=player.hp;
 				},
 				viewAs:{name:'shan'},
 				filterCard:function(card){
@@ -2817,7 +2820,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						var map={sha:'diamond',tao:'heart'}
 						for(var i=0;i<list.length;i++){
 							var name=list[i];
-		 				if(player.countCards('he',function(card){
+		 				if(player.countCards('hes',function(card){
 		 					return (name!='sha'||get.value(card)<5)&&get.suit(card,player)==map[name];
 		 				})>0&&player.getUseValue({name:name,nature:name=='sha'?'fire':null})>0){
 		 					var temp=get.order({name:name,nature:name=='sha'?'fire':null});
@@ -2836,8 +2839,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				selectCard:[1,2],
 				//确保选择第一张牌后 重新检测第二张牌的合法性 避免选择两张花色不同的牌
 				complexCard:true,
-				//选牌范围：手牌区和装备区
-				position:'he',
+				//选牌范围：手牌区和装备区和木马
+				position:'hes',
 				//选牌合法性判断
 				filterCard:function(card,player,event){
 					//如果已经选了一张牌 那么第二张牌和第一张花色相同即可
@@ -2863,13 +2866,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					//获取当前时机的卡牌选择限制
 					var filter=event.filterCard;
 					//如果当前时机能够使用/打出火杀并且角色有方片 那么可以发动技能
-					if(filter({name:'sha',nature:'fire'},player,event)&&player.countCards('he',{suit:'diamond'})) return true;
+					if(filter({name:'sha',nature:'fire'},player,event)&&player.countCards('hes',{suit:'diamond'})) return true;
 					//如果当前时机能够使用/打出闪并且角色有梅花 那么可以发动技能
-					if(filter({name:'shan'},player,event)&&player.countCards('he',{suit:'club'})) return true;
+					if(filter({name:'shan'},player,event)&&player.countCards('hes',{suit:'club'})) return true;
 					//如果当前时机能够使用/打出桃并且角色有红桃 那么可以发动技能
-					if(filter({name:'tao'},player,event)&&player.countCards('he',{suit:'heart'})) return true;
+					if(filter({name:'tao'},player,event)&&player.countCards('hes',{suit:'heart'})) return true;
 					//如果当前时机能够使用/打出无懈可击并且角色有黑桃 那么可以发动技能
-					if(filter({name:'wuxie'},player,event)&&player.countCards('he',{suit:'spade'})) return true;
+					if(filter({name:'wuxie'},player,event)&&player.countCards('hes',{suit:'spade'})) return true;
 					return false;
 				},
 				ai:{
@@ -2883,7 +2886,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							case 'respondShan':name='club';break;
 							case 'save':name='heart';break;
 						}
-						if(!player.countCards('he',{suit:name})) return false;
+						if(!player.countCards('hes',{suit:name})) return false;
 					},
 					//AI牌序
 					order:function(item,player){
@@ -2893,7 +2896,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var map={sha:'diamond',tao:'heart'}
 							for(var i=0;i<list.length;i++){
 								var name=list[i];
-			 				if(player.countCards('he',function(card){
+			 				if(player.countCards('hes',function(card){
 		 						return (name!='sha'||get.value(card)<5)&&get.suit(card,player)==map[name];
 		 					})>0&&player.getUseValue({name:name,nature:name=='sha'?'fire':null})>0){
 			 					var temp=get.order({name:name,nature:name=='sha'?'fire':null});
@@ -2908,9 +2911,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				//让系统知道玩家“有无懈”“有桃”
 				hiddenCard:function(player,name){
-					if(name=='wuxie'&&_status.connectMode&&player.countCards('h')>0) return true;
-					if(name=='wuxie') return player.countCards('he',{suit:'spade'})>0;
-					if(name=='tao') return player.countCards('he',{suit:'heart'})>0;
+					if(name=='wuxie'&&_status.connectMode&&player.countCards('hs')>0) return true;
+					if(name=='wuxie') return player.countCards('hes',{suit:'spade'})>0;
+					if(name=='tao') return player.countCards('hes',{suit:'heart'})>0;
 				},
 				group:['relonghun_num','relonghun_discard'],
 				subSkill:{
@@ -2972,7 +2975,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						var map={sha:'diamond',tao:'heart'}
 						for(var i=0;i<list.length;i++){
 							var name=list[i];
-		 				if(player.countCards('h',function(card){
+		 				if(player.countCards('hs',function(card){
 		 					return (name!='sha'||get.value(card)<5)&&get.suit(card,player)==map[name];
 		 				})>0&&player.getUseValue({name:name,nature:name=='sha'?'fire':null})>0){
 		 					var temp=get.order({name:name,nature:name=='sha'?'fire':null});
@@ -2987,7 +2990,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					return 1;
 				},
-				position:'h',
+				position:'hs',
 				filterCard:function(card,player,event){
 					event=event||_status.event;
 					var filter=event._backup.filterCard;
@@ -3000,10 +3003,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				filter:function(event,player){
 					var filter=event.filterCard;
-					if(filter({name:'sha',nature:'fire'},player,event)&&player.countCards('h',{suit:'diamond'})) return true;
-					if(filter({name:'shan'},player,event)&&player.countCards('h',{suit:'club'})) return true;
-					if(filter({name:'tao'},player,event)&&player.countCards('h',{suit:'heart'})) return true;
-					if(filter({name:'wuxie'},player,event)&&player.countCards('h',{suit:'spade'})) return true;
+					if(filter({name:'sha',nature:'fire'},player,event)&&player.countCards('hs',{suit:'diamond'})) return true;
+					if(filter({name:'shan'},player,event)&&player.countCards('hs',{suit:'club'})) return true;
+					if(filter({name:'tao'},player,event)&&player.countCards('hs',{suit:'heart'})) return true;
+					if(filter({name:'wuxie'},player,event)&&player.countCards('hs',{suit:'spade'})) return true;
 					return false;
 				},
 				ai:{
@@ -3016,7 +3019,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							case 'respondShan':name='club';break;
 							case 'save':name='heart';break;
 						}
-						if(!player.countCards('h',{suit:name})) return false;
+						if(!player.countCards('hs',{suit:name})) return false;
 					},
 					order:function(item,player){
 						if(player&&_status.event.type=='phase'){
@@ -3025,7 +3028,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var map={sha:'diamond',tao:'heart'}
 							for(var i=0;i<list.length;i++){
 								var name=list[i];
-			 				if(player.countCards('h',function(card){
+			 				if(player.countCards('hs',function(card){
 		 						return (name!='sha'||get.value(card)<5)&&get.suit(card,player)==map[name];
 		 					})>0&&player.getUseValue({name:name,nature:name=='sha'?'fire':null})>0){
 			 					var temp=get.order({name:name,nature:name=='sha'?'fire':null});
@@ -3039,9 +3042,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 				},
 				hiddenCard:function(player,name){
-					if(name=='wuxie'&&_status.connectMode&&player.countCards('h')>0) return true;
-					if(name=='wuxie') return player.countCards('h',{suit:'spade'})>0;
-					if(name=='tao') return player.countCards('h',{suit:'heart'})>0;
+					if(name=='wuxie'&&_status.connectMode&&player.countCards('hs')>0) return true;
+					if(name=='wuxie') return player.countCards('hs',{suit:'spade'})>0;
+					if(name=='tao') return player.countCards('hs',{suit:'heart'})>0;
 				},
 			},
 			xinjuejing:{

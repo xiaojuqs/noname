@@ -83,7 +83,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				group:["old_guhuo_guess","old_guhuo_respond","old_guhuo_wuxie"],
 				enable:"chooseToUse",
 				filter:function (event,player){
-					if(!player.countCards('h')) return false;
+					if(!player.countCards('hs')) return false;
 					var list=['sha','tao','shan','jiu','taoyuan','wugu','juedou','huogong','jiedao','tiesuo','guohe','shunshou','wuzhong','wanjian','nanman'];
 					if(get.mode()=='guozhan'){
 						list=list.concat(['xietianzi','shuiyanqijunx','lulitongxin','lianjunshengyan','chiling','diaohulishan','yuanjiao','huoshaolianying']);
@@ -121,6 +121,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return {
 							filterCard:true,
 							selectCard:1,
+							position:'hs',
 							viewAs:{name:links[0][2],nature:links[0][3]},
 						}
 					},
@@ -294,7 +295,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				enable:"chooseToUse",
 				filterCard:true,
 				viewAsFilter:function (player){
-					return player.countCards('h')>0;
+					return player.countCards('hs')>0;
 				},
 				viewAs:{
 					name:"wuxie",
@@ -307,7 +308,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				threaten:1.2,
 			},
 			old_zuilun:{
-						audio:'xinfu_zuilun',
+				audio:'xinfu_zuilun',
 				subSkill:{
 					e:{},
 					h:{},
