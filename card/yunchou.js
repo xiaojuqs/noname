@@ -637,7 +637,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							for (var i=0;i<friend_list.length;i++){
 								var treasure=friend_list[i].getEquip(5)
 								if (friend_list[i].getCards('e').length==1&&treasure){
-									if (treasure.name=='muniu'&&treasure.cards.length>0){
+									if (treasure.name=='muniu'&&treasure.cards&&treasure.cards.length>0){
 										do_not_use=true;
 										break;
 									}
