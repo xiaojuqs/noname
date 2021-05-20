@@ -32516,6 +32516,13 @@
 						else if(!selectableTargets&&players[i].classList.contains('selectable')){
 							selectableTargets=true;
 						}
+						if(window.decadeUI){
+							if(players[i].classList.contains('selected')||players[i].classList.contains('selectable')){
+								players[i].classList.remove('un-selectable');
+							}else{
+								players[i].classList.add('un-selectable');
+							}
+						}
 						if(players[i].instance){
 							if(players[i].classList.contains('selected')){
 								players[i].instance.classList.add('selected');
