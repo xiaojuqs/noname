@@ -4632,7 +4632,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(!target.hasFriend()&&!player.hasUnknown()) return;
 							if(_status.currentPhase==target) return;
 							if(player.hasSkill('moying2')) return;
-							if(get.tag(card,'loseCard')&&target.countCards('he')){
+							if(get.tag(card,'loseCard')&&target.countCards('e')){
 								if(target.hasSkill('ziliang')) return 0.7;
 								return [0.5,Math.max(2,target.countCards('h'))];
 							}
