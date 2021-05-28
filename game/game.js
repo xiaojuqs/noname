@@ -4414,6 +4414,12 @@
 						frequent:true,
 						intro:'若开启此选项，选择神武将的玩家需在亮出自己的武将牌之前为自己选择一个势力。'
 					},
+					nei_fullscreenpop:{
+						name:'主内单挑特效',
+						intro:'在进入主内单挑时，弹出全屏文字特效',
+						init:true,
+						unfrequent:true,
+					},
 					double_character:{
 						name:'双将模式',
 						init:false,
@@ -10972,7 +10978,7 @@
 							game.changeCoin(-3);
 						}
 						var hs=game.me.getCards('h');
-						game.addVideo('lose',game.me,[get.cardsInfo(hs),[],[]]);
+						game.addVideo('lose',game.me,[get.cardsInfo(hs),[],[],[]]);
 						for(var i=0;i<hs.length;i++){
 							hs[i].discard(false);
 						}
@@ -11606,7 +11612,7 @@
 						if(result&&result.bool){
 							var hs=player.getCards('h')
 							game.broadcastAll(function(player,hs){
-								game.addVideo('lose',player,[get.cardsInfo(hs),[],[]]);
+								game.addVideo('lose',player,[get.cardsInfo(hs),[],[],[]]);
 								for(var i=0;i<hs.length;i++){
 									hs[i].discard(false);
 								}
@@ -23630,8 +23636,8 @@
 					game.animate.flame(left+this.offsetWidth/2,
 						top+this.offsetHeight-30,700,'recover');
 				},
-				$fullscreenpop:function(str,nature,avatar){
-					game.broadcast(function(player,str,nature,avatar){
+				$fullscreenpop:function(str,nature,avatar,broadcast){
+					if(broadcast!==false) game.broadcast(function(player,str,nature,avatar){
 						player.$fullscreenpop(str,nature,avatar);
 					},this,str,nature,avatar);
 					game.addVideo('fullscreenpop',this,[str,nature,avatar]);
@@ -30131,7 +30137,7 @@
 			},
 			lose:function(player,info){
 				if(player&&info){
-					var hs=info[0],es=info[1],js=info[2],ss=info[3];
+					var hs=info[0]||[],es=info[1]||[],js=info[2]||[],ss=info[3]||[];
 					var phs=player.getCards('h'),pes=player.getCards('e'),pjs=player.getCards('j'),pss=player.getCards('s');
 					var checkMatch=function(l1,l2){
 						for(var i=0;i<l1.length;i++){
@@ -43886,7 +43892,7 @@
 				ui.sortCard=ui.create.system('整理手牌',function(){
 					var hs=game.me.getCards('h');
 					if(!hs.length) return;
-					game.addVideo('lose',game.me,[get.cardsInfo(hs),[],[]]);
+					game.addVideo('lose',game.me,[get.cardsInfo(hs),[],[],[]]);
 					for(var i=0;i<hs.length;i++){
 						hs[i].goto(ui.special);
 					}
