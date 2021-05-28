@@ -15,7 +15,184 @@ content:function(config, pack){
 		default:
 			alert('十周年UI提醒您，请使用<默认>、<手杀>、<新版>布局以获得良好体验（在选项-外观-布局中调整）。');
 			break;
-    }
+	}
+	
+	if(lib.config.extension_十周年UI_newDecadeStyle){
+		lib.skill._kill_framebg = {
+			trigger: {
+				source: "die",
+			},
+			filter: function(event,player) {
+				return player.node.zoneCamp.dataset.borderLevel!='five';
+			},
+			direct:true,
+			content: function() {
+				if (!player.node.zoneCamp.dataset.borderLevel || !player.node.zoneHp.dataset.borderLevel) {
+					player.node.zoneCamp.dataset.borderLevel = '';
+					player.node.zoneHp.dataset.borderLevel = '';
+				}
+				switch (player.node.zoneCamp.dataset.borderLevel) {
+					case 'two':
+						player.node.zoneCamp.dataset.borderLevel = 'three';
+						player.node.zoneHp.dataset.borderLevel = 'three';
+						break;
+					case 'three':
+						player.node.zoneCamp.dataset.borderLevel = 'four';
+						player.node.zoneHp.dataset.borderLevel = 'four';
+						break;
+					case 'four':
+						player.node.zoneCamp.dataset.borderLevel = 'five';
+						player.node.zoneHp.dataset.borderLevel = 'five';
+						break;
+					default:
+						player.node.zoneCamp.dataset.borderLevel = 'two';
+						player.node.zoneHp.dataset.borderLevel = 'two';
+				}
+			}
+		}
+	
+		lib.element.player.markSkillCharacter = function(id, target, name, content) {
+			if (typeof target == 'object') {
+				target = target.name;
+			}
+			game.broadcastAll(function(player, target, name, content, id) {
+				if (player.marks[id]) {
+					player.marks[id].name = name + '_charactermark';
+					player.marks[id]._name = target;
+					player.marks[id].info = {
+						name: name,
+						content: content,
+						id: id
+					};
+					var str = lib.translate[id + '_bg'];
+					if (!str || str[0] == '+' || str[0] == '-') {
+						str = get.translation(id);
+					}
+					player.marks[id].innerHTML = str;
+					game.addVideo('changeMarkCharacter', player, {
+						id: id,
+						name: name,
+						content: content,
+						target: target
+					});
+				} else {
+					player.marks[id] = player.markCharacter(id, {
+						name: name,
+						content: content,
+						id: id
+					});
+					player.marks[id]._name = target;
+					game.addVideo('markCharacter', player, {
+						name: name,
+						content: content,
+						id: id,
+						target: target
+					});
+				}
+			}, this, target, name, content, id);
+			return this;
+		};
+		lib.element.player.markCharacter = function(name, info, learn, learn2) {
+			if (typeof name == 'object') {
+				name = name.name;
+			}
+			var node;
+			if (name.indexOf('unknown') == 0) {
+				node = ui.create.div('.card.mark.drawinghidden');
+				ui.create.div('.background.skillmark', node).innerHTML = get.translation(name)[0];
+			} else {
+				node = ui.create.div('.card.mark.drawinghidden');
+				this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
+				var str = lib.translate[name + '_bg'];
+				if (!str || str[0] == '+' || str[0] == '-') {
+					str = get.translation(name);
+				}
+				ui.create.div('.background.skillmark', node).innerHTML = str;
+			}
+			this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
+			node.name = name + '_charactermark';
+			if (!info) {
+				info = {};
+			}
+			if (!info.name) {
+				info.name = get.translation(name);
+			}
+			if (!info.content) {
+				info.content = get.skillintro(name, learn, learn2)
+			}
+			node.info = info;
+			node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.card);
+			if (!lib.config.touchscreen) {
+				if (lib.config.hover_all) {
+					lib.setHover(node, ui.click.hoverplayer);
+				}
+				if (lib.config.right_info) {
+					node.oncontextmenu = ui.click.rightplayer;
+				}
+			}
+			ui.updatem(this);
+			return node;
+		};
+		lib.element.player.mark = function(name, info, skill) {
+			if (get.itemtype(name) == 'cards') {
+				var marks = [];
+				for (var i = 0; i < name.length; i++) {
+					marks.push(this.mark(name[i], info));
+				}
+				return marks;
+			} else {
+				var node;
+				if (get.itemtype(name) == 'card') {
+					node = name.copy('mark');
+					node.classList.add('drawinghidden');
+					this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
+					node.suit = name.suit;
+					node.number = name.number;
+					// if(name.name&&lib.card[name.name]&&lib.card[name.name].markimage){
+					// 	node.node.image.style.left=lib.card[name.name].markimage;
+					// }
+	
+					if (name.classList.contains('fullborder')) {
+						node.classList.add('fakejudge');
+						node.classList.add('fakemark');
+						(node.querySelector('.background') || ui.create.div('.background', node)).innerHTML = lib.translate[name.name +
+							'_bg'] || get.translation(name.name)[0];
+					}
+	
+					name = name.name;
+				} else {
+					node = ui.create.div('.card.mark.drawinghidden');
+					this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
+					var str = lib.translate[name + '_bg'];
+					if (!str || str[0] == '+' || str[0] == '-') {
+						str = get.translation(name);
+					}
+					ui.create.div('.background.skillmark', node).innerHTML = str;
+					// node.style.fontFamily=lib.config.card_font;
+				}
+				node.name = name;
+				node.skill = skill || name;
+				if (typeof info == 'object') {
+					node.info = info;
+				} else if (typeof info == 'string') {
+					node.markidentifer = info;
+				}
+				node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.card);
+				if (!lib.config.touchscreen) {
+					if (lib.config.hover_all) {
+						lib.setHover(node, ui.click.hoverplayer);
+					}
+					if (lib.config.right_info) {
+						node.oncontextmenu = ui.click.rightplayer;
+					}
+				}
+				this.updateMarks();
+				ui.updatem(this);
+				return node;
+			}
+		}
+	}
+	
 	console.time(extensionName);
 	window.decadeUI = {
 		init:function(){
@@ -839,7 +1016,8 @@ content:function(config, pack){
                             wei: '魏',
                             shu: '蜀',
                             wu: '吴',
-                            qun: '群'
+                            qun: '群',
+                            jin:'晋'
                         };
                     }
                     
@@ -1036,32 +1214,6 @@ content:function(config, pack){
 				decadeUI.dialog.create('icon icon-mount', decadeUI.dialog.create('equip4', equipSolts.back));
 				
 				ui.arena.insertBefore(equipSolts, ui.me);
-				ui.handSpecial = decadeUI.dialog.create('hand-special playerfocus', ui.arena);
-				ui.handSpecial.hide();
-				
-				var properties = {
-					handSpecial:{
-						cards: decadeUI.dialog.create('special cards', ui.handSpecial),
-						reset:function(cards){
-							var elements = ui.handSpecial.cards.childNodes;
-							for (var i = elements.length - 1; i >= 0; i--) {
-								if (cards && cards.contains(elements[i])) continue;
-								ui.special.appendChild(elements[i]);
-							}
-							if (cards && cards.length) {
-								for (var i = 0; i < cards.length; i++) {
-									if (cards[i]) ui.handSpecial.cards.appendChild(cards[i]);
-									}
-								}
-						},
-					}
-				};
-				
-				
-				for (var key in properties.handSpecial) {
-					ui.handSpecial[key] = properties.handSpecial[key];
-				}
-				
 				
 				var sensor = new decadeUI.ResizeSensor(ui.me, decadeUI.layout.resize);
 				decadeUI.layout.resize();
@@ -4532,7 +4684,11 @@ precontent:function(){
 		init:function(){
 			this.css(decadeUIPath + 'layout.css?v=' + thisObject.package.version);
 			this.css(decadeUIPath + 'decadeLayout.css?v=' + thisObject.package.version);
-			this.css(decadeUIPath + 'player.css?v=' + thisObject.package.version);
+			if(lib.config.extension_十周年UI_newDecadeStyle){
+				this.css(decadeUIPath + 'player_new.css?v=' + thisObject.package.version);
+			}else{
+				this.css(decadeUIPath + 'player.css?v=' + thisObject.package.version);
+			}
 			
 			var filePath, ok;
 			var fonts = ['shousha', 'xingkai', 'xinwei'];
@@ -4810,7 +4966,15 @@ config:{
 				decadeUI.backgroundAnimation.play(name, skin);
 			}
 		},
-	}
+	},
+	newDecadeStyle:{
+		name: '十周年新样式',
+		init: false,
+		onclick:function(value){
+			game.saveConfig('extension_十周年UI_newDecadeStyle', value);
+			if (window.decadeUI) decadeUI.config.newDecadeStyle = value;
+		},
+	},
 },
 package:{
     character:{
@@ -4835,11 +4999,13 @@ package:{
     intro:(function(){
 		var log = [
 			'有bug请先关闭UI重试下，不行再联系作者，目前有些置牌堆顶丢弃的牌不会消失有虾皮。',
-			'当前版本：1.9.108.4.1.1',
-			'更新日期：2021-2-9',
-			'- 新增[辛宪英-英装素果]、[诸葛果-英装素果]、[张春华-战场绝版]、[大乔小乔-战场绝版]、[伏皇后-万福千灯]、[吴苋-锦运福绵]动态背景；',
-			'- 新增DIY包久岛欧/野村美希的【幻梦】、应变篇【洞烛先机】的显示UI；',
-			'- 更新chooseTuUse代码；',
+			'当前版本：1.9.108.4.1.5',
+			'更新日期：2021-5-18',
+			'- 适配最新无名杀版本，修改木牛流马。',
+			'- 增加装备栏在左边的新样式。',
+			'- 修复了国战无法标记晋势力的问题',
+			'- 修复了晋势力颜色',
+			'- 其它BUG的修复'
 		];
 
 
@@ -4848,7 +5014,7 @@ package:{
     author:"短歌 QQ464598631",
     diskURL:"",
     forumURL:"",
-    version:"1.9.108.4.1.1",
+    version:"1.9.108.4.1.5",
 },
 files:{
     "character":[],
@@ -5061,4 +5227,10 @@ editable: false
 - 新增[辛宪英-英装素果]、[诸葛果-英装素果]、[张春华-战场绝版]、[大乔小乔-战场绝版]、[伏皇后-万福千灯]、[吴苋-锦运福绵]动态背景；
 - 新增DIY包久岛欧/野村美希的【幻梦】、应变篇【洞烛先机】的显示UI；
 - 修复chooseTuUse代码；
+1.9.108.4.1.5:
+- 适配最新无名杀版本，修改木牛流马。,
+- 增加装备栏在左边的新样式。,
+- 修复了国战无法标记晋势力的问题,
+- 修复了晋势力颜色,
+- 其它BUG的修复
 */

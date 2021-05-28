@@ -1,118 +1,146 @@
 
 effect_wanjianqifa.png
-size: 966,361
+size: 504,504
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-SF_eff_jiangling_wanjianqifa_0000
+wanjian01_17
+  rotate: false
+  xy: 133, 397
+  size: 129, 105
+  orig: 147, 115
+  offset: 7, 0
+  index: -1
+wanjian02_17
   rotate: true
-  xy: 929, 84
-  size: 94, 25
-  orig: 180, 256
-  offset: 51, 216
+  xy: 214, 266
+  size: 129, 93
+  orig: 147, 115
+  offset: 7, 6
   index: -1
-SF_eff_jiangling_wanjianqifa_0001
+wanjian_jian01
   rotate: false
-  xy: 839, 180
-  size: 119, 69
-  orig: 180, 256
-  offset: 47, 179
+  xy: 396, 45
+  size: 66, 71
+  orig: 150, 150
+  offset: 78, 0
   index: -1
-SF_eff_jiangling_wanjianqifa_0002
+wanjian_jian02
+  rotate: false
+  xy: 330, 40
+  size: 64, 76
+  orig: 150, 150
+  offset: 69, 0
+  index: -1
+wanjian_jian03
   rotate: true
-  xy: 150, 4
-  size: 134, 117
-  orig: 180, 256
-  offset: 42, 139
+  xy: 372, 118
+  size: 80, 82
+  orig: 150, 150
+  offset: 60, 0
   index: -1
-SF_eff_jiangling_wanjianqifa_0003
+wanjian_jian04
   rotate: false
-  xy: 444, 167
-  size: 149, 192
-  orig: 180, 256
-  offset: 28, 61
+  xy: 372, 200
+  size: 90, 84
+  orig: 150, 150
+  offset: 51, 4
   index: -1
-SF_eff_jiangling_wanjianqifa_0004
+wanjian_jian05
   rotate: true
-  xy: 565, 6
-  size: 159, 173
-  orig: 180, 256
-  offset: 21, 77
+  xy: 309, 308
+  size: 88, 79
+  orig: 150, 150
+  offset: 47, 9
   index: -1
-SF_eff_jiangling_wanjianqifa_0005
+wanjian_jian06
+  rotate: false
+  xy: 390, 286
+  size: 112, 93
+  orig: 150, 150
+  offset: 38, 0
+  index: -1
+wanjian_jian07
   rotate: true
-  xy: 740, 20
-  size: 147, 187
-  orig: 180, 256
-  offset: 28, 55
+  xy: 118, 4
+  size: 115, 97
+  orig: 150, 150
+  offset: 29, 0
   index: -1
-SF_eff_jiangling_wanjianqifa_0006
+wanjian_jian08
   rotate: true
-  xy: 269, 12
-  size: 126, 178
-  orig: 180, 256
-  offset: 12, 70
+  xy: 180, 135
+  size: 116, 97
+  orig: 150, 150
+  offset: 20, 5
   index: -1
-SF_eff_jiangling_wanjianqifa_0007
-  rotate: false
-  xy: 119, 140
-  size: 164, 219
-  orig: 180, 256
-  offset: 8, 31
-  index: -1
-SF_eff_jiangling_wanjianqifa_0008
-  rotate: false
-  xy: 285, 151
-  size: 157, 208
-  orig: 180, 256
-  offset: 22, 39
-  index: -1
-SF_eff_jiangling_wanjianqifa_0009
-  rotate: false
-  xy: 2, 2
-  size: 146, 120
-  orig: 180, 256
-  offset: 0, 136
-  index: -1
-SF_eff_jiangling_wanjianqifa_0010
-  rotate: false
-  xy: 595, 169
-  size: 157, 190
-  orig: 180, 256
-  offset: 0, 58
-  index: -1
-SF_eff_jiangling_wanjianqifa_0011
-  rotate: false
-  xy: 449, 2
-  size: 114, 163
-  orig: 180, 256
-  offset: 42, 81
-  index: -1
-SF_eff_jiangling_wanjianqifa_0012
-  rotate: false
-  xy: 2, 124
-  size: 115, 235
-  orig: 180, 256
-  offset: 31, 1
-  index: -1
-SF_eff_jiangling_wanjianqifa_0013
-  rotate: false
-  xy: 754, 169
-  size: 83, 190
-  orig: 180, 256
-  offset: 72, 42
-  index: -1
-SF_eff_jiangling_wanjianqifa_0014
+wanjian_jian09
   rotate: true
-  xy: 839, 251
-  size: 108, 125
-  orig: 180, 256
-  offset: 68, 99
+  xy: 217, 17
+  size: 116, 111
+  orig: 150, 150
+  offset: 18, 0
   index: -1
-SF_eff_jiangling_wanjianqifa_0015
+wanjian_jian10
   rotate: false
-  xy: 119, 130
-  size: 4, 8
-  orig: 180, 256
-  offset: 139, 162
+  xy: 2, 382
+  size: 129, 120
+  orig: 150, 150
+  offset: 12, 0
+  index: -1
+wanjian_jian11
+  rotate: false
+  xy: 2, 253
+  size: 121, 127
+  orig: 150, 150
+  offset: 12, 3
+  index: -1
+wanjian_jian12
+  rotate: true
+  xy: 392, 381
+  size: 121, 103
+  orig: 150, 150
+  offset: 18, 10
+  index: -1
+wanjian_jian13
+  rotate: true
+  xy: 279, 151
+  size: 113, 91
+  orig: 150, 150
+  offset: 20, 9
+  index: -1
+wanjian_jian14
+  rotate: true
+  xy: 2, 114
+  size: 137, 95
+  orig: 150, 150
+  offset: 13, 12
+  index: -1
+wanjian_jian15
+  rotate: false
+  xy: 2, 13
+  size: 114, 99
+  orig: 150, 150
+  offset: 32, 15
+  index: -1
+wanjian_jian16
+  rotate: false
+  xy: 264, 398
+  size: 126, 104
+  orig: 150, 150
+  offset: 21, 17
+  index: -1
+wanjian_jian17
+  rotate: true
+  xy: 99, 121
+  size: 130, 79
+  orig: 150, 150
+  offset: 12, 11
+  index: -1
+wanjian_jian18
+  rotate: true
+  xy: 125, 253
+  size: 127, 87
+  orig: 150, 150
+  offset: 12, 9
   index: -1
