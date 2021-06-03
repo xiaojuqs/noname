@@ -7557,14 +7557,16 @@
 								}
 								_status.evaluatingExtension=false;
 							}
-							else {
+							else if(!localStorage.getItem(lib.configprefix+'directstart')&&show_splash){
 								extensionlist.push(lib.config.extensions[i]);
 							}
 						}
 					}
 					else{
-						for(var i=0;i<lib.config.extensions.length;i++){
-							game.import('extension',{name:lib.config.extensions[i]});
+						if(!localStorage.getItem(lib.configprefix+'directstart')&&show_splash){
+							for(var i=0;i<lib.config.extensions.length;i++){
+								game.import('extension',{name:lib.config.extensions[i]});
+							}
 						}
 					}
 					var loadPack=function(){
@@ -15837,7 +15839,7 @@
 						return get.subtype(card,false)==info.subtype;
 					});
 					if(current.length){
-						player.lose(current,false,'visible').set('type','equip').set('getlx',false);
+						player.lose(current,false,'visible').set('type','equip').set('getlx',false).swapEquip=true;
 						if(info.loseThrow){
 							player.$throw(current);
 						}

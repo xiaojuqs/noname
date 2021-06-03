@@ -8027,6 +8027,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 			},
 			zhuhai:{
+				audio:2,
+				audioname:['gz_re_xushu'],
 				trigger:{global:'phaseJieshuBegin'},
 				direct:true,
 				filter:function(event,player){
@@ -8144,9 +8146,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target.discard(target.getJudge('lebu'));
 					}
 					else{
-						var next=player.useCard({name:'lebu'},target,cards);
-						next.animate=false;
-						next.audio=false;
+						player.useCard({name:'lebu'},target,cards).audio=false;
 					}
 					player.draw();
 				},
