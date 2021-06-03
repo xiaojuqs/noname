@@ -7557,16 +7557,14 @@
 								}
 								_status.evaluatingExtension=false;
 							}
-							else if(lib.config.mode!='connect'||(!localStorage.getItem(lib.configprefix+'directstart')&&show_splash)){
+							else {
 								extensionlist.push(lib.config.extensions[i]);
 							}
 						}
 					}
 					else{
-						if(lib.config.mode!='connect'||(!localStorage.getItem(lib.configprefix+'directstart')&&show_splash)){
-							for(var i=0;i<lib.config.extensions.length;i++){
-								game.import('extension',{name:lib.config.extensions[i]});
-							}
+						for(var i=0;i<lib.config.extensions.length;i++){
+							game.import('extension',{name:lib.config.extensions[i]});
 						}
 					}
 					var loadPack=function(){
