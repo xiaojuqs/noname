@@ -15561,6 +15561,16 @@
 					if(event.popup!==false){
 						player.$damagepop(num,'water');
 					}
+					if(_status.dying.contains(player)&&player.hp>0){
+						_status.dying.remove(player);
+						game.broadcast(function(list){
+							_status.dying=list;
+						},_status.dying);
+						var evt=event.getParent('_save');
+						if(evt&&evt.finish) evt.finish();
+						evt=event.getParent('dying');
+						if(evt&&evt.finish) evt.finish()
+					}
 					event.trigger('changeHp');
 				},
 				changeHujia:function(){
@@ -16803,7 +16813,7 @@
 					if(this.classList.contains('minskin')&&this.node.name.querySelectorAll('br').length>=4){
 						this.node.name.classList.add('long');
 					}
-					if(info[4].contains('hiddenSkill')){
+					if(info[4].contains('hiddenSkill')&&!this.noclick){
 						if(!this.hiddenSkills) this.hiddenSkills=[];
 						this.hiddenSkills.addArray(skills);
 						skills=[];
@@ -16867,7 +16877,7 @@
 							};
 						}
 						this.node.count.classList.add('p2');
-						if(info2[4].contains('hiddenSkill')){
+						if(info2[4].contains('hiddenSkill')&&!this.noclick){
 							if(!this.hiddenSkills) this.hiddenSkills=[];
 							this.hiddenSkills.addArray(info2[3]);
 							this.classList.add(_status.video?'unseen2_v':'unseen2');
@@ -35078,7 +35088,7 @@
 				func=lib.filter.all;
 			}
 			var players=game.players.slice(0).concat(game.dead);
-			for(var i=0;i<game.players.length;i++){
+			for(var i=0;i<players.length;i++){
 				if(players[i].isOut()) continue;
 				if(func(players[i])){
 					list.add(players[i]);
@@ -44553,6 +44563,7 @@
 						node.addEventListener('touchstart',ui.click.playertouchstart);
 					}
 				}
+				else node.noclick=true;
 
 				return node;
 			},
