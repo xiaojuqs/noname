@@ -756,7 +756,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
 								}
 							}
-							return 2-2*get.distance(player,target,'absolute')/game.countPlayer();
+							return (1-get.distance(player,target,'absolute')/game.countPlayer())*get.attitude(player,target)>0?0.5:0.7;
 						}
 					},
 					tag:{
@@ -2193,9 +2193,12 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				forced:true,
 				filter:function(event,player){
 					if(event.card.storage&&event.card.storage.nowuxie) return false;
+					var card=event.card;
+					if(event.name=='phaseJudge'&&card.viewAs) card={name:card.viewAs};
+					var info=get.info(card);
+					if(info.wuxieable===false) return false;
 					if(event.name!='phaseJudge'){
 						if(event.getParent().nowuxie) return false;
-						var info=get.info(event.card);
 						if(!event.target){
 							if(info.wuxieable) return true;
 							return false;
