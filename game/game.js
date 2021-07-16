@@ -12101,7 +12101,7 @@
 								}
 								event.buttoned=event.result.skill;
 							}
-							else if(info&&info.precontent&&!game.online){
+							else if(info&&info.precontent&&!game.online&&!event.nouse){
 								var next=game.createEvent('pre_'+event.result.skill);
 								next.setContent(info.precontent);
 								next.set('result',event.result);
@@ -13717,7 +13717,7 @@
 					if(event.prompt2){
 						event.dialog.addText(event.prompt2);
 					}
-					var directh=!lib.config.unauto_choose;
+					var directh=(!lib.config.unauto_choose&&!event.complexSelect);
 					for(var i=0;i<event.position.length;i++){
 						if(event.position[i]=='h'){
 							var hs=target.getDiscardableCards(player,'h');
@@ -13862,7 +13862,7 @@
 					if(event.prompt2){
 						event.dialog.addText(event.prompt2);
 					}
-					var directh=!lib.config.unauto_choose;
+					var directh=(!lib.config.unauto_choose&&!event.complexSelect);
 					for(var i=0;i<event.position.length;i++){
 						if(event.position[i]=='h'){
 							var hs=target.getGainableCards(player,'h');
@@ -15333,7 +15333,11 @@
 									_status.discarded.remove(cards[i]);
 								}
 							}
-							if(event.insert_card){
+							if(event.insert_index){
+								event.position.insertBefore(cards[i],event.insert_index(event,cards[i]));
+								cards[i].fix();
+							}
+							else if(event.insert_card){
 								event.position.insertBefore(cards[i],event.position.firstChild);
 								cards[i].fix();
 							}
@@ -16873,7 +16877,7 @@
 					if(!info[4]){
 						info[4]=[];
 					}
-					var skills=info[3];
+					var skills=info[3].slice(0);
 					this.clearSkills(true);
 					this.classList.add('fullskin');
 					if(!game.minskin&&get.is.newLayout()&&!info[4].contains('minskin')){
@@ -16985,7 +16989,7 @@
 							this.storage.nohp=true;
 							skills.add('g_hidden_ai');
 						}
-						else skills.addArray(info2[3]);
+						else skills=skills.concat(info2[3]);
 
 						this.node.name2.innerHTML=get.slimName(character2);
 					}
