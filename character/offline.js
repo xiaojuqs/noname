@@ -902,7 +902,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						[1,Math.min(player.hp,trigger.targets.length)],function(card,player,target){
 						return _status.event.targets.contains(target);
 					}).set('ai',function(target){
-						return -get.effect(target,trigger.card,trigger.player,_status.event.player);
+						var eff=-get.effect(target,trigger.card,trigger.player,_status.event.player);
+						if(eff==0&&get.tag(trigger.card,'damage')) eff=get.tag(trigger.card,'damage')*get.attitude(target,_status.event.player);
+						if(eff==0&&get.tag(trigger.card,'draw')) eff=-get.tag(trigger.card,'draw')*get.attitude(target,_status.event.player);
+						if(eff==0&&get.tag(trigger.card,'recover')) eff=-get.tag(trigger.card,'recover')*get.attitude(target,_status.event.player);
+						if(eff==0&&trigger.card.name=='tiesuo') eff=get.attitude(target,_status.event.player);
+						return eff;
 					}).set('targets',trigger.targets);
 					"step 1"
 					if(result.bool){
@@ -910,6 +915,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						trigger.excluded.addArray(result.targets);
 						player.draw();
 					}
+				},
+				ai:{
+					expose:0.2,
+					threaten:1.5
 				},
 			},
 			spyicong:{
