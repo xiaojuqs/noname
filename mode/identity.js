@@ -2605,6 +2605,21 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(!game.zhu.isZhu){
 					zhongmode=true;
 				}
+				//fix auto identity mark will cause Zhu and Zhong ai do nothing when all of the Fan are dead:
+				//condition: ai.identity_mark=='finished' and ai.shown==1
+				var mark_bug=false;
+				for(var i=0;i<game.players.length;i++){
+					if(game.players[i].ai.identity_mark=='finished'&&get.population('fan')==0){
+						if(game.players[i].identity=='nei'&&game.players[i].ai.shown>=1){
+							mark_bug=true;break;
+						}
+					}
+				}
+				if(mark_bug&&from.identity!='nei'&&from!=to&&get.population('fan')==0&&identity2=='zhong'){
+					for(var i=0;i<game.players.length;i++){
+						identity2='nei';break;
+					}
+				}
 				var max_hp_exclude_zhu_and_self=0;
 				for(var i=0;i<game.players.length;i++){
 					if(game.players[i]!=from&&game.players[i].identity!='zhu'){
