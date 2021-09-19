@@ -3,7 +3,7 @@
 	var wss=new WebSocketServer({port:8080});
 	var bannedKeys=[];
 	var bannedIps=[];
-	var rooms=[{},{},{},{},{},{},{},{}];
+	var rooms=[{},{},{},{},{},{},{},{},{},{}];
 	var events=[];
 	var clients={};
 	var bannedKeyWords=[];

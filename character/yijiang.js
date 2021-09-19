@@ -8771,6 +8771,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			bingyi:{
 				audio:2,
+				audioname:['xin_guyong'],
 				trigger:{player:'phaseJieshuBegin'},
 				filter:function(event,player){
 					return player.countCards('h')>0;
@@ -9355,6 +9356,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				skillAnimation:true,
 				animationColor:'gray',
 				audio:2,
+				audioname:['xin_caifuren'],
 				unique:true,
 				limited:true,
 				enable:'phaseUse',
@@ -12148,7 +12150,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			zhoucang:['re_zhoucang','xin_zhoucang','zhoucang'],
 			guotufengji:['re_guotufengji','guotufengji'],
 			guanping:['re_guanping','guanping'],
-			caifuren:['re_caifuren','caifuren'],
+			caifuren:['xin_caifuren','re_caifuren','caifuren'],
+			guyong:['xin_guyong','guyong'],
 		},
 		translate:{
 			old_huaxiong:'华雄',
