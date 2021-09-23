@@ -286,7 +286,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							player.judge(function(result){
 								if(get.color(result)=='red') return 2;
 								return -1;
-							});
+							}).judge2=function(result){
+								return result.bool;
+							};
 							'step 1'
 							if(result.bool){
 								trigger.targets.remove(player);
@@ -436,7 +438,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return 1;
 					}).set('callback',function(){
 						event.getParent().orderingCards.remove(event.judgeResult.card);
-					});
+					}).judge2=function(result){
+						return result.bool?true:false;
+					};
 					'step 2'
 					event.cards.push(result.card);
 					if(result.bool&&player.maxHp<10){
@@ -1703,7 +1707,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							target.judge(function(card){
 								if(['tao','taoyuan'].contains(card.name)) return 10;
 								return -10;
-							});
+							}).judge2=function(result){
+								return result.bool==false?true:false;
+							};
 							"step 3"
 							if(!result.bool){
 								lib.element.player.die.apply(target,[]);
