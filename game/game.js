@@ -11680,7 +11680,7 @@
 					if(!window.isNonameServer){
 						var me=game.connectPlayers[0];
 						me.setIdentity('zhu');
-						me.initOL(lib.config.connect_nickname,lib.config.connect_avatar);
+						me.initOL(get.connectNickname(),lib.config.connect_avatar);
 						me.playerid='1';
 						game.onlinezhu='1';
 					}
@@ -17153,7 +17153,7 @@
 						if(this.hp<this.maxHp||config.gameStarted) str+=('人数：'+this.hp+'/'+this.maxHp);
 						else str+=('人数：<span class="firetext">'+this.hp+'/'+this.maxHp+'</span>');
 						
-						str+=('　('+info[0]+' 的房间)');
+						str+=('　('+info[0].slice(0,12)+' 的房间)');
 						this.config=config;
 						if(this.hp==this.maxHp&&!config.gameStarted){
 							this.roomfull=true;
@@ -17492,6 +17492,7 @@
 					}
 				},
 				showGiveup:function(){
+					this._giveUp=true;
 					if(this==game.me){
 						ui.create.giveup();
 					}
@@ -17565,7 +17566,7 @@
 					return state;
 				},
 				setNickname:function(str){
-					this.node.nameol.innerHTML=str||this.nickname||'';
+					this.node.nameol.innerHTML=(str||this.nickname||'').slice(0,12);
 					return this;
 				},
 				setAvatar:function(name,name2,video,fakeme){
@@ -18182,7 +18183,7 @@
 						skills.remove(i);
 					}
 					if(arg4!==false){
-						skills=game.filterSkills(skills,this);
+						skills=game.filterSkills(skills,this,es);
 					}
 					return skills;
 				},
@@ -18225,7 +18226,7 @@
 							skills.remove(i);
 						}
 						if(arg4!==false){
-							skills=game.filterSkills(skills,this);
+							skills=game.filterSkills(skills,this,es);
 						}
 						return skills;
 					}
@@ -26399,7 +26400,7 @@
 				mark:true,
 				intro:{
 					content:function(storage,player,skill){
-						var list=player.getSkills(null,null,false).filter(function(i){
+						var list=player.getSkills(null,false,false).filter(function(i){
 							return lib.skill.fengyin.skillBlocker(i,player);
 						});
 						if(list.length) return '失效技能：'+get.translation(list);
@@ -26421,7 +26422,7 @@
 				mark:true,
 				intro:{
 					content:function(storage,player,skill){
-						var list=player.getSkills(null,null,false).filter(function(i){
+						var list=player.getSkills(null,false,false).filter(function(i){
 							return lib.skill.baiban.skillBlocker(i,player);
 						});
 						if(list.length) return '失效技能：'+get.translation(list);
@@ -26885,6 +26886,7 @@
 					this.inited=true;
 				},
 				result:function(result){
+					if(lib.node.observing.contains(this)) return;
 					var player=lib.playerOL[this.id];
 					if(player){
 						player.unwait(result);
@@ -26938,12 +26940,14 @@
 					}
 				},
 				throwEmotion:function(target,emotion){
+					if(lib.node.observing.contains(this)) return;
 					var player=lib.playerOL[this.id];
 					if(player){
 						player.throwEmotion(target,emotion);
 					}
 				},
 				emotion:function(id,pack,emotion){
+					if(lib.node.observing.contains(this)) return;
 					var that=this;
 					if(!this.id||(!lib.playerOL[this.id]&&(!game.connectPlayers||!function(){
 						for(var i=0;i<game.connectPlayers.length;i++){
@@ -26967,6 +26971,7 @@
 					if(player) lib.element.player.emotion.apply(player,[pack,emotion]);
 				},
 				chat:function(id,str){
+					if(lib.node.observing.contains(this)) return;
 					var that=this;
 					if(!this.id||(!lib.playerOL[this.id]&&(!game.connectPlayers||!function(){
 						for(var i=0;i<game.connectPlayers.length;i++){
@@ -26990,6 +26995,7 @@
 					if(player) lib.element.player.chat.call(player,str);
 				},
 				giveup:function(player){
+					if(lib.node.observing.contains(this)||!player||!player._giveUp) return;
 					_status.event.next.length=0;
 					game.createEvent('giveup',false).setContent(function(){
 						game.log(player,'投降');
@@ -26998,6 +27004,7 @@
 					}).player=player;
 				},
 				auto:function(){
+					if(lib.node.observing.contains(this)) return;
 					var player=lib.playerOL[this.id];
 					if(player){
 						player.isAuto=true;
@@ -27008,6 +27015,7 @@
 					}
 				},
 				unauto:function(){
+					if(lib.node.observing.contains(this)) return;
 					var player=lib.playerOL[this.id];
 					if(player){
 						player.isAuto=false;
@@ -27050,7 +27058,7 @@
 					game.send('init',lib.versionOL,{
 						id:game.onlineID,
 						avatar:lib.config.connect_avatar,
-						nickname:lib.config.connect_nickname
+						nickname:get.connectNickname()
 					},lib.config.banned_info);
 					if(ui.connecting&&!ui.connecting.splashtimeout){
 						ui.connecting.firstChild.innerHTML='重连成功';
@@ -27130,7 +27138,7 @@
 					ui.auto.hide();
 
 					clearTimeout(_status.createNodeTimeout);
-					game.send('server','changeAvatar',lib.config.connect_nickname,lib.config.connect_avatar);
+					game.send('server','changeAvatar',get.connectNickname(),lib.config.connect_avatar);
 
 					var proceed=function(){
 						game.ip=get.trimip(_status.ip);
@@ -27199,7 +27207,7 @@
 												n--;
 												if(findRoom(id)){
 													clearInterval(interval);
-													game.send('server','enter',id,lib.config.connect_nickname,lib.config.connect_avatar);
+													game.send('server','enter',id,get.connectNickname(),lib.config.connect_avatar);
 												}
 											}
 											else{
@@ -27242,7 +27250,7 @@
 							}
 							else{
 								ui.create.connecting();
-								game.send('server',(game.roomId==game.onlineKey)?'create':'enter',game.roomId,lib.config.connect_nickname,lib.config.connect_avatar);
+								game.send('server',(game.roomId==game.onlineKey)?'create':'enter',game.roomId,get.connectNickname(),lib.config.connect_avatar);
 							}
 						}
 						lib.init.onfree();
@@ -27274,7 +27282,7 @@
 							if(!i) continue;
 							map[i[4]]=i;
 							if(!map2[i[4]]){
-								var player=ui.roombase.add('<div class="popup text pointerdiv" style="width:calc(100% - 10px);display:inline-block">空房间</div>');
+								var player=ui.roombase.add('<div class="popup text pointerdiv" style="width:calc(100% - 10px);display:inline-block;white-space:nowrap">空房间</div>');
 								player.roomindex=i;
 								player.initRoom=lib.element.player.initRoom;
 								player.addEventListener(lib.config.touchscreen?'touchend':'click',ui.click.connectroom);
@@ -28162,7 +28170,7 @@
 			}
 			if(!window.isNonameServer){
 				game.me.playerid=get.id();
-				game.me.nickname=lib.config.connect_nickname;
+				game.me.nickname=get.connectNickname();
 				game.me.setNickname();
 			}
 			for(var i=0;i<game.players.length;i++){
@@ -28180,7 +28188,7 @@
 				ui.create.players();
 				ui.create.me();
 				game.me.playerid=game.onlineID;
-				game.me.nickname=lib.config.connect_nickname;
+				game.me.nickname=get.connectNickname();
 				for(var i=0;i<map.length;i++){
 					if(map[i][0]==game.me.playerid){
 						map=map.concat(map.splice(0,i));
@@ -32781,7 +32789,7 @@
 					else{
 						skills2=player.getSkills(true,true,false);
 					}
-					skills2=game.filterSkills(skills2.concat(lib.skill.global),player);
+					skills2=game.filterSkills(skills2.concat(lib.skill.global),player,player.getSkills('e'));
 					event._skillChoice=[];
 					game.expandSkills(skills2);
 					for(i=0;i<skills2.length;i++){
@@ -35181,14 +35189,14 @@
 				}
 			}
 		},
-		filterSkills:function(skills,player){
+		filterSkills:function(skills,player,exclude){
 			var out=skills.slice(0);
 			for(var i in player.disabledSkills){
 				out.remove(i);
 			}
 			if(player.storage.skill_blocker&&player.storage.skill_blocker.length){
 				for(var i=0;i<out.length;i++){
-					if(get.is.blocked(out[i],player)) out.splice(i--,1);
+					if((!exclude||!exclude.contains(out[i]))&&get.is.blocked(out[i],player)) out.splice(i--,1);
 				}
 			}
 			return out;
@@ -35367,7 +35375,7 @@
 				ui.roombase.classList.add('scroll2');
 				ui.roombase.classList.add('noupdate');
 				for(var i=0;i<list.length;i++){
-					var player=ui.roombase.add('<div class="popup text pointerdiv" style="width:calc(100% - 10px);display:inline-block">空房间</div>');
+					var player=ui.roombase.add('<div class="popup text pointerdiv" style="width:calc(100% - 10px);display:inline-block;white-space:nowrap">空房间</div>');
 					player.roomindex=i;
 					player.initRoom=lib.element.player.initRoom;
 					player.addEventListener(lib.config.touchscreen?'touchend':'click',ui.click.connectroom);
@@ -36014,6 +36022,7 @@
 								if(!input.innerHTML||get.is.banWords(input.innerHTML)){
 									input.innerHTML='无名玩家';
 								}
+								input.innerHTML=input.innerHTML.slice(0,12);
 								game.saveConfig('connect_nickname',input.innerHTML);
 								game.saveConfig('connect_nickname',input.innerHTML,'connect');
 							}
@@ -36175,10 +36184,10 @@
 										}
 										config.banned=lib.config['connect_'+active.mode+'_banned'];
 										config.bannedcards=lib.config['connect_'+active.mode+'_bannedcards'];
-										game.send('server','create',game.onlineKey,lib.config.connect_nickname,lib.config.connect_avatar,config,active.mode);
+										game.send('server','create',game.onlineKey,get.connectNickname(),lib.config.connect_avatar,config,active.mode);
 									}
 									else{
-										game.send('server','create',game.onlineKey,lib.config.connect_nickname,lib.config.connect_avatar);
+										game.send('server','create',game.onlineKey,get.connectNickname(),lib.config.connect_avatar);
 									}
 								}
 								else{
@@ -38723,7 +38732,7 @@
 							infoExtLine.appendChild(infoExtName);
 							return infoExtLine;
 						};
-						var authorExtLine=createExtLine('扩展作者',lib.config.connect_nickname);
+						var authorExtLine=createExtLine('扩展作者',get.connectNickname());
 						var introExtLine=createExtLine('扩展描述');
 						var versionExtLine=createExtLine('扩展版本','1.0');
 						var diskExtLine=createExtLine('网盘地址');
@@ -38741,7 +38750,7 @@
 								versionExtLine.querySelector('input').value=lib.extensionPack[name].version||'';
 							}
 							else{
-								authorExtLine.querySelector('input').value=lib.config.connect_nickname||'';
+								authorExtLine.querySelector('input').value=get.connectNickname()||'';
 								introExtLine.querySelector('input').value='';
 								diskExtLine.querySelector('input').value='';
 								forumExtLine.querySelector('input').value='';
@@ -45193,7 +45202,7 @@
 									utc:utc,
 									day:parseInt(daysselect.value),
 									hour:parseInt(hoursselect.value),
-									nickname:lib.config.connect_nickname,
+									nickname:get.connectNickname(),
 									avatar:lib.config.connect_avatar,
 									content:button.input.value,
 									create:game.onlineKey,
@@ -45249,7 +45258,7 @@
 								utc:utc,
 								day:parseInt(daysselect.value),
 								hour:parseInt(hoursselect.value),
-								nickname:lib.config.connect_nickname,
+								nickname:get.connectNickname(),
 								avatar:lib.config.connect_avatar,
 								content:button.input.value
 							},game.onlineKey);
@@ -47661,7 +47670,7 @@
 					if(!_status.enteringroom){
 						_status.enteringroom=true;
 						_status.enteringroomserver=this.serving;
-						game.send('server','enter',this.key,lib.config.connect_nickname,lib.config.connect_avatar);
+						game.send('server','enter',this.key,get.connectNickname(),lib.config.connect_avatar);
 					}
 				}
 			},
@@ -49244,6 +49253,9 @@
 		},
 	};
 	var get={
+		connectNickname:function(){
+			return typeof lib.config.connect_nickname=='string'?(lib.config.connect_nickname.slice(0,12)):'无名玩家';
+		},
 		zhinangs:function(filter){
 			var list=(_status.connectMode?lib.configOL:lib.config).zhinang_tricks;
 			if(!list||!list.filter||!list.length) return get.inpile('trick','trick').randomGets(3);
@@ -51305,6 +51317,8 @@
 		gainableSkills:function(func,player){
 			var list=[];
 			for(var i in lib.character){
+				if(lib.filter.characterDisabled(i)) continue;
+				if(lib.filter.characterDisabled2(i)) continue;
 				if(lib.character[i][4]){
 					if(lib.character[i][4].contains('boss')) continue;
 					if(lib.character[i][4].contains('hiddenboss')) continue;
