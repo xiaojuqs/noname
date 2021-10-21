@@ -16476,12 +16476,12 @@
 						}
 					},this,cards,tag);
 				},
-				removeGaintag:function(tag){
+				removeGaintag:function(tag,cards){
 					game.addVideo('removeGaintag',this,tag);
 					game.broadcastAll(function(player,tag){
-						var cards=player.getCards('h');
+						cards=cards||player.getCards('h');
 						for(var i of cards) i.removeGaintag(tag);
-					},this,tag);
+					},this,tag,cards);
 				},
 				canSave:function(target){
 					var player=this;
@@ -51585,6 +51585,7 @@
 			if(item.cardid&&(get.itemtype(item)=='card'||!item.cards||!item.cards.length||item.name==item.cards[0].name)&&_status.cardtag&&_status.cardtag[tag]&&_status.cardtag[tag].contains(item.cardid)){
 				return true;
 			}
+			if(item.cardtags&&item.cardtags.contains(tag)) return true;
 			return false;
 		},
 		tag:function(item,tag,item2){
