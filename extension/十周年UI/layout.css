@@ -2,10 +2,17 @@
 @import 'component.css';
 @import 'card.css';
 @import 'icon.css';
+@import 'animation.css';
+@import 'effect.css';
+@import 'equip.css';
 
 html {
     background: rgb(60, 60, 60);
 }
+
+/* #arena>.dialog { */
+	/* display: none; */
+/* } */
 
 /* body>.background { */
     /* animation: anime-opacity 1s ease-in-out; */
@@ -17,7 +24,6 @@ html {
 }
 
 #decadeUI-canvas,
-#decadeUI-canvas-sensor,
 #decadeUI-canvas-background {
 	display: block;
 	position: absolute;
@@ -25,18 +31,12 @@ html {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 5;
+	z-index: 8;
 	pointer-events: none;
 }
 
-#decadeUI-canvas-sensor,
 #decadeUI-canvas-background {
 	z-index: -1;
-}
-
-#decadeUI-canvas-sensor {
-	opacity: 0;
-	visibility: hidden;
 }
 
 #decadeUI-animate-window,
@@ -49,9 +49,21 @@ html {
 	pointer-events: none;
 }
 
+#decadeUI-body-sensor {
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	visibility: hidden;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+
 #arena {
-	left: 2%;
-	right: 2%;
+	left: 22px;
+	right: 25px;
 	top: 10%;
 	bottom: 1%;
 	width: auto;
@@ -77,10 +89,6 @@ html {
 	width: auto;
 	right: calc(2% + 50px);
 }
-
-/* #arena>div { */
-	/* pointer-events: auto; */
-/* } */
 
 #arena:not(.chess).decadeUI>#mebg {
     display: none;
@@ -115,13 +123,22 @@ html {
 	text-shadow: 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black;
 }
 
-.hand-zone, .hand-back {
-    left: 150px;
-	right: 150px;
+
+#arena>.hand-wrap,
+#arena>.hand-back {
+    left: 143px;
+	right: 170px;
 	width: auto;
-    height: 180px;
+    height: 170px;
     bottom: 1%;
 	transition: none;
+	z-index: 3;
+}
+
+#arena[data-right-layout='on']>.hand-wrap,
+#arena[data-right-layout='on']>.hand-back {
+	left: 160px;
+	right: 140px;
 }
 
 .discard-zone {
@@ -129,7 +146,7 @@ html {
     height: 10%;
 }
 
-.hand-zone>.fakeme.avatar {
+.hand-wrap>.fakeme.avatar {
     left: -128px;
     top: auto;
     right: auto;
@@ -138,6 +155,11 @@ html {
 	height: 120px;
 	border-radius: 0;
 	background-size: cover;
+}
+
+#arena[data-right-layout='on']>.hand-wrap>.fakeme.avatar {
+	left: auto;
+	right: -128px;
 }
 
 .hand-cards {
@@ -152,7 +174,7 @@ html {
 	display: inline-block;
 	padding: 0;
 	margin: 0;
-	top: 30px;
+	bottom: 0px;
 	width: 100%;
 	height: calc(100% - 30px);
 	min-width: 100%;
@@ -175,7 +197,6 @@ html {
 
 .hand-cards>.handcards>.card.selected {
     boder-radius: 2px;
-    /*transition-timing-function: linear;*/
 }
 
 .hand-cards>.handcards>.card.selectable {
@@ -183,22 +204,6 @@ html {
 	cursor: pointer;
 }
 
-.hand-cards>.handcards>.card::before {
-    opacity: 0;
-    border-radius: inherit !important;
-    box-shadow: 0px -1px 2px yellow, 0px -1px 5px yellow, 0px 0px 15px yellow;
-    transition: opacity 0.5s;
-}
-
-.hand-cards>.handcards>.card.selected::before {
-    opacity: 1;
-}
-
-.hand-cards>.handcards>.card::after,
-.hand-cards>.handcards>.card.selected::after,
-.hand-cards>.handcards>.card.selectable::after {
-    display: none;
-}
 
 .hand-special {
 	left: auto;
@@ -266,41 +271,16 @@ html {
 	-moz-background-size: 100% 100% !important;
 }
 
-.mobile-phone .card {
+.dui-mobile .card {
    box-shadow: 0 1px 2px black;
 }
 
-/* .card.decade-card:not(*:empty) { */
-	/* background: none; */
-/* } */
-
-/* .card.decade-card.infohidden { */
-	/* background-image: url('../../theme/style/cardback/image/liusha2.png') !important; */
-/* } */
-
-.card>.name,
-.card.fullskin>.name,
-.card.fullskin>.name.long,
-.dialog .buttons>.card>.name.long {
-	top: auto;
-	bottom: 5px;
-	line-height: 16px;
-	color: black;
-	font-size: 16px;
-	font-weight: bold;
-	font-family: shousha;
-	text-shadow: 0 0 1px white, 0 0 3px white;
-	border: 1px solid black;
-	border-radius: 2px;
-	z-index: 1;
+#arena.decadeUI.selecting:not(.video)>.dialog:not(.noselect) .buttons>.card.button:not(.selectable):not(.noclick):not(.replaceButton) {
+	opacity: 1;
 }
 
-.card.decade-card:not(*[data-card-type='basic'])>.name {
-    bottom: 20px;
-}
-
-#arena[data-card-Secondary-name-visible='off'] .card>.name {
-    display: none;
+#arena.decadeUI.selecting:not(.video)>.dialog:not(.noselect) .buttons>.card.button:not(.selected):not(.selectable)>.card-mask {
+	opacity: 1;
 }
 
 .card>.background,
@@ -336,64 +316,6 @@ html {
 	visibility: hidden !important;
 }
 
-.card>.tempname {
-	position: absolute;
-	left: 4px;
-    top: calc(50% - 12px);
-    right: 4px;
-    width: auto;
-	height: 24px;
-    color: #181818 !important;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: shousha;
-    line-height: 24px;
-    text-align: center;
-    text-shadow: none;
-	white-space: normal;
-    background: rgba(228, 207, 166, 0.8);
-    border-radius: 2px;
-    border: 1px solid black;
-	pointer-events: none
-}
-
-.card>.tempname[data-nature='fire'] {
-	color: red !important;
-	text-shadow: 0 0 4px #FFF, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 10px #f80, 2px -25px 20px #f20 !important;
-}
-
-.card>.tempname[data-nature='thunder'] {
-	text-shadow: 0 0 5px white, 0 0 10px white !important;
-}
-
-.card>.tempname[data-nature='thunder']::before {
-	content:'';
-	display: block;
-    position: absolute;
-	left: calc(50% - 50px);
-	top: calc(50% - 30px);
-	width: 100px;
-  	height: 60px;
-	text-shadow: 0 0 10px white !important;
-  	background: linear-gradient(to bottom, white, blue 15%, white 30%, blue 50%, white 70%, blue 85%, white);;
-  	clip-path: polygon(100% 0, 20% 50%, 37% 60%, 0 100%, 80% 50%, 63% 40%);
-  	-webkit-clip-path: polygon(100% 0, 20% 50%, 37% 60%, 0 100%, 80% 50%, 63% 40%);
-	transform: scale(0.8);
-}
-
-.card>.tempname>div {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-}
-
-.card>.tempname:empty,
-.card>.tempname>br {
-	display: none;
-}
-
 .card>.image,
 #arena:not(.chess)>.card>.image,
 #arena:not(.chess) .handcards>.card>.image,
@@ -423,38 +345,16 @@ html {
     letter-spacing: -1px;
     transform-origin: 0 0;
 	z-index: 1;
+	-webkit-text-size-adjust: none;
 }
 
-.mobile-phone .card>.suit-num>.suit {
+.dui-mobile .card>.suit-num>.suit {
     font-size: 16px;
 }
 
 .card[data-suit='heart']>.suit-num,
 .card[data-suit='diamond']>.suit-num {
 	color: red;
-}
-
-.buttons .card.button>.info {
-    left: 4px;
-    top: calc(50% - 12px);
-    right: 4px;
-    width: auto;
-    color: #181818;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: shousha;
-    line-height: 24px;
-    text-align: center;
-    text-shadow: none;
-	white-space: normal;
-    background: rgba(228, 207, 166, 0.8);
-    border-radius: 2px;
-    border: 1px solid black;
-	z-index: 2;
-}
-
-.buttons .card.button>.info:empty {
-	display: none;
 }
 
 .card>.range {
@@ -474,31 +374,19 @@ html {
     display: none;
 }
 
-
-.card>.used-info {
-    opacity: 0;
-    margin: 0px;
-    padding: 0px;
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
+.card>.range.card-tag {
+	left: 4px;
+    top: calc(50% + 8px);
+	bottom: auto;
+    right: 4px;
+    width: auto;
+    color: #181818;
+    font-size: 16px;
+    line-height: 24px;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 18px;
-	width: 100%;
-	height: 33%;
-	display: flex;
-	align-items: center;
-	align-content: center;
-	justify-content: center;
-	font-family: 'STHeiti', 'SimHei', 'Microsoft JhengHei', 'Microsoft YaHei', 'WenQuanYi Micro Hei', Helvetica,Arial, sans-serif !important;
-	z-index: 1;
-}
-
-
-.card.thrown:not(.drawingcard):not(.movingcard)>.used-info {
-	opacity: 1;
+    text-shadow: none;
+	white-space: normal;
+    background: rgba(230, 210, 166, 0.8);
 }
 
 .card>.card-mask {
@@ -510,8 +398,9 @@ html {
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.4);
 	border-radius: inherit;
-	transition: none;
-	z-index: 4;
+	transition: opacity 0.1s linear;
+	pointer-events: none;
+	z-index: 8;
 }
 
 .card.invalided>.card-mask,
@@ -552,68 +441,219 @@ html {
 	right: calc(2% + 50px);
 }
 
-
-#arena.decadeUI>.dialog.nobutton {
-    position: absolute;
-    left: 20%;
-    top: auto !important;
-    right: 20%;
-    bottom: 27% !important;
-    width: auto;
-    background: none;
-	transform: none !important;
-    transition-duration: 0.3s;
+#arena>.dialog {
+	z-index: 6;
 }
 
-#arena.decadeUI.phone>.dialog.nobutton {
-    bottom: 25% !important;
-}
 
-#arena.decadeUI>.dialog.nobutton>.skill-info {
-	left: 0;
-    bottom: 74px;
-    width: 100%;
-    color: rgb(250, 250, 200);
-    font-family: shousha;
-    text-shadow: 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black;
-    background: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 10%, rgba(0,0,0,0.2) 90%, transparent 100%);
-    pointer-events: none;
-}
+/*基本对话框 - 下个版本移动至dialog.css*/
+/* #arena.decadeUI>.dialog { */
+    /* position: absolute; */
+    /* left: 143px; */
+    /* top: auto; */
+    /* right: 143px; */
+	/* width: auto; */
+	/* height: auto; */
+	/* max-height: calc(75% - 75px); */
+    /* bottom: calc(19% + 75px); */
+	/* min-height: auto; */
+	/* overflow-y: scroll; */
+/* } */
 
-#arena.decadeUI>.dialog.nobutton>.content-container>.content>.caption {
-    border: none;
-	bottom: 0;
-    height: auto;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    color: rgb(250, 250, 200);
-    background: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 10%, rgba(0,0,0,0.2) 90%, transparent 100%);
-    font-family: shousha;
-    text-shadow: rgb(51,51,51) 1px 0 0, rgb(51,51,51) 0 1px 0, rgb(51,51,51) -1px 0 0, rgb(51,51,51) 0 -1px 0;
-}
+/* #arena.decadeUI.dui-mobile>.dialog { */
+    /* bottom: calc(23% + 75px); */
+/* } */
 
-#arena.decadeUI>.dialog.nobutton>.bar.bottom {
-    display: none;
-}
+/* .dialog>.dui-container { */
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* position: relative; */
+	/* left: 0; */
+	/* top: 0; */
+	/* width: 100%; */
+	/* height: 100%; */
+	/* overflow-y: scroll; */
+/* } */
 
-#arena.decadeUI:not(.chess):not(.choose-character):not(.game-over) #control {
-    transition: all 0.3s;
+/* .dialog>.dui-container>.dui-content { */
+	/* display: flex; */
+	/* flex-direction: column; */
+	/* position: static; */
+	/* flex: 0 0 auto; */
+/* } */
+
+/* .dialog>.dui-container>.dui-content>div { */
+	/* position: static; */
+	/* padding: 0 6px 0 6px; */
+	/* text-align: center; */
+	/* overflow: hidden; */
+/* } */
+
+/* .dialog>.dui-container>.dui-content>table { */
+	/* width: 100%; */
+/* } */
+
+
+
+/*界面操作按钮*/
+#arena>#dui-controls {
 	position: absolute;
-    left: 120px;
+	display: flex;
+	align-items: center;
+    align-content: center;
+    justify-content: center;
 	top: auto;
-    bottom: calc(27% + 28px);
-	width: calc(100% - 240px);
+	left: 143px;
+    right: 150px;
+	bottom: calc(19% + 30px);
+	width: auto;
+	height: 40px;
+	transition: opacity 0.3s;
+	pointer-events: none;
+	z-index: 7;
 }
 
-#arena.decadeUI.phone:not(.chess):not(.choose-character):not(.game-over) #control,
-#arena.decadeUI.oblongcard.phone:not(.chess):not(.choose-character):not(.game-over) #control {
-	transition: all 0.1s;
-	position: absolute;
-    top: auto;
-    bottom: calc(25% + 34px);
+#arena>#dui-controls>* {
+	overflow: auto;
+	pointer-events: auto;
 }
+
+#arena>#dui-controls.bosslist,
+#arena.choose-character>#dui-controls {
+    bottom: 20px;
+}
+
+#arena.dui-mobile:not(.choose-character)>#dui-controls {
+    bottom: calc(23% + 30px);
+}
+
+#arena>#dui-controls>.control {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+    align-content: center;
+    justify-content: center;
+	position: static;
+	height: 34px;
+    line-height: 34px;
+	margin-left: 5px;
+	margin-right: 5px;
+	text-shadow: none;
+	cursor: pointer;
+}
+
+#arena>#dui-controls>.control.stayleft {
+	position: absolute;
+	left: 0;
+	order: 0;
+}
+
+#arena>#dui-controls>.control>div {
+	position: static;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin-left: 5px;
+	margin-right: 5px;
+	opacity: 1;
+}
+
+#arena>#dui-controls>.control>div:only-child {
+	position: static;
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+#arena>#dui-controls>.control.combo-control {
+	flex-direction: row;
+	padding-left: 0;
+	padding-right: 0;
+	height: 100%;
+	box-shadow: none;
+	background: none;
+}
+
+#arena>#dui-controls>.control:not(.disabled)>div:active,
+#arena>#dui-controls>.control:not(.disabled):not(.combo-control):active {
+	transform: scale(0.96);
+}
+
+
+
+
+/* #arena.decadeUI>#control { */
+	/* display: flex; */
+	/* align-items: center; */
+    /* align-content: center; */
+    /* justify-content: center; */
+	/* height: 40px; */
+	/* transition: opacity 0.3s; */
+/* } */
+
+/* #arena.decadeUI>#control>.control { */
+	/* position: static; */
+	/* height: 34px; */
+    /* line-height: 34px; */
+	/* margin-left: 5px; */
+	/* margin-right: 5px; */
+	/* box-shadow: none; */
+	/* text-shadow: none; */
+/* } */
+
+/* #arena.decadeUI>#control>.control.combo-control { */
+	/* display: flex; */
+	/* align-items: center; */
+    /* align-content: center; */
+    /* justify-content: center; */
+	/* flex-direction: row; */
+	/* padding-left: 0; */
+	/* padding-right: 0; */
+	/* background: none; */
+	/* overflow: visible; */
+/* } */
+
+/* #arena.decadeUI>#control>.control:not(.disabled)>.control:active, */
+/* #arena.decadeUI>#control>.control:not(.disabled):not(.combo-control):active { */
+	/* transform: scale(0.96); */
+/* } */
+
+/* #arena.decadeUI>#control>.control>div { */
+	/* position: static; */
+	/* padding-left: 3px; */
+	/* padding-right: 3px; */
+	/* padding-top: 0; */
+	/* padding-bottom: 0; */
+/* } */
+
+/* #arena.decadeUI>#control>.control.combo-control>.control { */
+	/* opacity: 1; */
+	/* padding-left: 10px; */
+	/* padding-right: 10px; */
+	/* padding-top: 2px; */
+	/* padding-bottom: 2px; */
+	/* margin-left: 5px; */
+	/* margin-right: 5px; */
+/* } */
+
+/* #arena.decadeUI:not(.chess):not(.choose-character):not(.game-over)>#control { */
+    /* position: absolute; */
+    /* left: 143px; */
+    /* right: 150px; */
+    /* top: auto; */
+    /* bottom: calc(19% + 30px); */
+    /* width: auto; */
+/* } */
+
+/* #arena.decadeUI.phone:not(.chess):not(.choose-character):not(.game-over)>#control, */
+/* #arena.decadeUI.oblongcard.phone:not(.chess):not(.choose-character):not(.game-over)>#control { */
+	/* transition: all 0.1s; */
+	/* position: absolute; */
+    /* top: auto; */
+    /* bottom: calc(24% + 30px); */
+/* } */
 
 /*暂停记录栏*/
 .pausedbg>#sidebar {
@@ -646,8 +686,8 @@ html {
 	border-width: 15px;
 	border-style: solid;
 	border-color: transparent;
-	border-image-source: url('assets/image/select.png');
-	border-image-slice: 42 48 32 48 fill;
+	border-image-source: url('assets/image/glow_orange.png');
+	border-image-slice: 42 46 32 46 fill;
 }
 
 .button.character.selected::before {
@@ -690,3 +730,26 @@ html {
 	clip-path: url(#solo-clip);
     -webkit-clip-path: url(#solo-clip);
 }
+
+#arena>.card>.judge-mark {
+	visibility: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

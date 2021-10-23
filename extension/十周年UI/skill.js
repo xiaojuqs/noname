@@ -653,7 +653,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					for (var i = 0; i < cards.length; i++) {
 						if (get.value(cards[i], event.player) > 4) return true; 
 					}
-				} else {
+				} else if (_status.currentPhase) {
 					var next = _status.currentPhase.getNext();
 					var judges = next.node.judges.childNodes;
 					if (get.attitude(player, next) > 0) {

@@ -1935,10 +1935,16 @@ var spine;
 			if (success === void 0) { success = null; }
 			if (error === void 0) { error = null; }
 			path = this.pathPrefix + path;
+			if (spine.lodedAssets[path]) {
+				_this.assets[path] = spine.lodedAssets[path];
+				setTimeout(success, 0, path, _this.assets[path]);
+				return;
+			}
+			
 			this.toLoad++;
 			
 			var fs = (window.require == void 0 ? void 0 : require('fs'));
-			if (true) {
+			if (fs) {
 				this.downloadBinary(path, function (data) {
 					_this.assets[path] = data;
 					if (success)
@@ -1965,27 +1971,25 @@ var spine;
 				
 				var dirPath = window.appPath ? appPath : decadeUIPath;
 				path = path.replace(dirPath, '')
-				if(window.resolveLocalFileSystemURL){
-					window.resolveLocalFileSystemURL(dirPath, function(entry){
-						entry.getFile(path, {}, function(fileEntry){
-							fileEntry.file(function(file){
-								var reader = new FileReader();
-								reader.onload = function(e){
-									var data = new Uint8Array(e.target.result);
-									_this.assets[dirPath + path] = data;
-									if (success)
-										success(path, data);
-
-									_this.toLoad--;
-									_this.loaded++;
-								};
-
-								reader.onerror = onerror;
-								reader.readAsArrayBuffer(file);
-							}, onerror);
-						}, onerror)
-					}, onerror);
-				}
+				window.resolveLocalFileSystemURL(dirPath, function(entry){
+					entry.getFile(path, {}, function(fileEntry){
+						fileEntry.file(function(file){
+							var reader = new FileReader();
+							reader.onload = function(e){
+								var data = new Uint8Array(e.target.result);
+								_this.assets[dirPath + path] = data;
+								if (success)
+									success(path, data);
+								
+								_this.toLoad--;
+								_this.loaded++;
+							};
+							
+							reader.onerror = onerror;
+							reader.readAsArrayBuffer(file);
+						}, onerror);
+					}, onerror)
+				}, onerror);
 			}
 		};
 		AssetManager.prototype.loadText = function (path, success, error) {
@@ -1993,10 +1997,16 @@ var spine;
 			if (success === void 0) { success = null; }
 			if (error === void 0) { error = null; }
 			path = this.pathPrefix + path;
+			if (spine.lodedAssets[path]) {
+				_this.assets[path] = spine.lodedAssets[path];
+				setTimeout(success, 0, path, _this.assets[path]);
+				return;
+			}
+			
 			this.toLoad++;
 			
 			var fs = (window.require == void 0 ? void 0 : require('fs'));
-			if (true) {
+			if (fs) {
 				this.downloadText(path, function (data) {
 					_this.assets[path] = data;
 					if (success)
@@ -2023,26 +2033,24 @@ var spine;
 				
 				var dirPath = window.appPath ? appPath : decadeUIPath;
 				path = path.replace(dirPath, '')
-				if(window.resolveLocalFileSystemURL){
-					window.resolveLocalFileSystemURL(dirPath, function(entry){
-						entry.getFile(path, {}, function(fileEntry){
-							fileEntry.file(function(file){
-								var reader = new FileReader();
-								reader.onload = function(e){
-									_this.assets[dirPath + path] = e.target.result;
-									if (success)
-										success(path, e.target.result);
-
-									_this.toLoad--;
-									_this.loaded++;
-								};
-
-								reader.onerror = onerror;
-								reader.readAsText(file);
-							}, onerror);
-						}, onerror)
-					}, onerror);
-				}
+				window.resolveLocalFileSystemURL(dirPath, function(entry){
+					entry.getFile(path, {}, function(fileEntry){
+						fileEntry.file(function(file){
+							var reader = new FileReader();
+							reader.onload = function(e){
+								_this.assets[dirPath + path] = e.target.result;
+								if (success)
+									success(path, e.target.result);
+								
+								_this.toLoad--;
+								_this.loaded++;
+							};
+							
+							reader.onerror = onerror;
+							reader.readAsText(file);
+						}, onerror);
+					}, onerror)
+				}, onerror);
 			}
 		};
 		AssetManager.prototype.loadTexture = function (path, success, error) {
@@ -2219,6 +2227,7 @@ var spine;
 		return AssetManager;
 	}());
 	spine.AssetManager = AssetManager;
+	spine.lodedAssets = {};
 })(spine || (spine = {}));
 var spine;
 (function (spine) {
@@ -2609,8 +2618,6 @@ var spine;
 (function (spine) {
 	var IkConstraint = (function () {
 		function IkConstraint(data, skeleton) {
-			this.mix = 1;
-			this.bendDirection = 0;
 			if (data == null)
 				throw new Error("data cannot be null.");
 			if (skeleton == null)
@@ -6327,6 +6334,7 @@ var spine;
 		};
 		return TextureAtlasReader;
 	}());
+	spine.TextureAtlasReader = TextureAtlasReader;
 	var TextureAtlasPage = (function () {
 		function TextureAtlasPage() {
 		}
@@ -8105,6 +8113,33 @@ var spine;
 				v[webgl.M22] = 1;
 				v[webgl.M33] = 1;
 			}
+			
+			Matrix4.prototype.concat = function(other) {
+				var i, e, a, b, ai0, ai1, ai2, ai3;
+
+				// Calculate e = a * b
+				e = this.values;
+				a = this.values;
+				b = other.values;
+
+				// If e equals b, copy b to temporary matrix.
+				if (e === b) {
+					b = new Float32Array(16);
+					for (i = 0; i < 16; ++i) {
+						b[i] = e[i];
+					}
+				}
+
+				for (i = 0; i < 4; i++) {
+					ai0=a[i];  ai1=a[i+4];  ai2=a[i+8];  ai3=a[i+12];
+					e[i]    = ai0 * b[0]  + ai1 * b[1]  + ai2 * b[2]  + ai3 * b[3];
+					e[i+4]  = ai0 * b[4]  + ai1 * b[5]  + ai2 * b[6]  + ai3 * b[7];
+					e[i+8]  = ai0 * b[8]  + ai1 * b[9]  + ai2 * b[10] + ai3 * b[11];
+					e[i+12] = ai0 * b[12] + ai1 * b[13] + ai2 * b[14] + ai3 * b[15];
+				}
+
+				return this;
+			};
 			Matrix4.prototype.set = function (values) {
 				this.values.set(values);
 				return this;
@@ -8233,6 +8268,7 @@ var spine;
 				v[15] += v[3] * x + v[7] * y + v[11] * z;
 				return this;
 			};
+			
 			Matrix4.prototype.setX = function (x) {
 				var v = this.values;
 				v[12] = v[0] * x;
@@ -8248,6 +8284,79 @@ var spine;
 				v[12] = v[0] * x + v[4] * y;
 				v[13] = v[1] * x + v[5] * y;
 				return this;
+			};
+			Matrix4.prototype.setRotate = function(angle, x, y, z) {
+				var v, s, c, len, rlen, nc, xy, yz, zx, xs, ys, zs;
+
+				angle = Math.PI * angle / 180;
+				v = this.values;
+
+				s = Math.sin(angle);
+				c = Math.cos(angle);
+
+				if (0 !== x && 0 === y && 0 === z) {
+					if (x < 0) s = -s;
+					
+					v[0] = 1;  v[4] = 0;  v[ 8] = 0;  v[12] = 0;
+					v[1] = 0;  v[5] = c;  v[ 9] =-s;  v[13] = 0;
+					v[2] = 0;  v[6] = s;  v[10] = c;  v[14] = 0;
+					v[3] = 0;  v[7] = 0;  v[11] = 0;  v[15] = 1;
+					
+				} else if (0 === x && 0 !== y && 0 === z) {
+					if (y < 0) s = -s;
+					
+					v[0] = c;  v[4] = 0;  v[ 8] = s;  v[12] = 0;
+					v[1] = 0;  v[5] = 1;  v[ 9] = 0;  v[13] = 0;
+					v[2] =-s;  v[6] = 0;  v[10] = c;  v[14] = 0;
+					v[3] = 0;  v[7] = 0;  v[11] = 0;  v[15] = 1;
+				} else if (0 === x && 0 === y && 0 !== z) {
+					if (z < 0) s = -s;
+					
+					v[0] = c;  v[4] =-s;  v[ 8] = 0;  v[12] = 0;
+					v[1] = s;  v[5] = c;  v[ 9] = 0;  v[13] = 0;
+					v[2] = 0;  v[6] = 0;  v[10] = 1;  v[14] = 0;
+					v[3] = 0;  v[7] = 0;  v[11] = 0;  v[15] = 1;
+				} else {
+					len = Math.sqrt(x*x + y*y + z*z);
+					if (len !== 1) {
+					  rlen = 1 / len;
+					  x *= rlen;
+					  y *= rlen;
+					  z *= rlen;
+					}
+					nc = 1 - c;
+					xy = x * y;
+					yz = y * z;
+					zx = z * x;
+					xs = x * s;
+					ys = y * s;
+					zs = z * s;
+
+					v[ 0] = x*x*nc +  c;
+					v[ 1] = xy *nc + zs;
+					v[ 2] = zx *nc - ys;
+					v[ 3] = 0;
+
+					v[ 4] = xy *nc - zs;
+					v[ 5] = y*y*nc +  c;
+					v[ 6] = yz *nc + xs;
+					v[ 7] = 0;
+
+					v[ 8] = zx *nc + ys;
+					v[ 9] = yz *nc - xs;
+					v[10] = z*z*nc +  c;
+					v[11] = 0;
+
+					v[12] = 0;
+					v[13] = 0;
+					v[14] = 0;
+					v[15] = 1;
+				}
+
+				return this;
+			};
+			Matrix4.prototype.rotate = function(angle, x, y, z) {
+			  return this.concat(new spine.webgl.Matrix4().setRotate(angle, x, y, z));
 			};
 			Matrix4.prototype.scale = function (x, y, z) {
 				var v = this.values;
@@ -8621,7 +8730,8 @@ var spine;
 				this.lastTexture = null;
 				this.isDrawing = true;
 				gl.enable(gl.BLEND);
-				gl.blendFunc(this.srcBlend, this.dstBlend);
+				// gl.blendFunc(this.srcBlend, this.dstBlend);
+				gl.blendFuncSeparate(this.srcBlend, this.dstBlend, gl.ONE, this.dstBlend);
 			};
 			PolygonBatcher.prototype.setBlendMode = function (srcBlend, dstBlend) {
 				var gl = this.context.gl;
@@ -8629,7 +8739,8 @@ var spine;
 				this.dstBlend = dstBlend;
 				if (this.isDrawing) {
 					this.flush();
-					gl.blendFunc(this.srcBlend, this.dstBlend);
+					// gl.blendFunc(this.srcBlend, this.dstBlend);
+					gl.blendFuncSeparate(this.srcBlend, this.dstBlend, gl.ONE, this.dstBlend);
 				}
 			};
 			PolygonBatcher.prototype.draw = function (texture, vertices, indices) {
@@ -9295,6 +9406,9 @@ var spine;
 					this.program = null;
 				}
 			};
+
+    
+ 
 			Shader.newColoredTextured = function (context) {
 				var vs = "\n\t\t\t\tattribute vec4 " + Shader.POSITION + ";\n\t\t\t\tattribute vec4 " + Shader.COLOR + ";\n\t\t\t\tattribute vec2 " + Shader.TEXCOORDS + ";\n\t\t\t\tuniform mat4 " + Shader.MVP_MATRIX + ";\n\t\t\t\tvarying vec4 v_color;\n\t\t\t\tvarying vec2 v_texCoords;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tv_color = " + Shader.COLOR + ";\n\t\t\t\t\tv_texCoords = " + Shader.TEXCOORDS + ";\n\t\t\t\t\tgl_Position = " + Shader.MVP_MATRIX + " * " + Shader.POSITION + ";\n\t\t\t\t}\n\t\t\t";
 				var fs = "\n\t\t\t\t#ifdef GL_ES\n\t\t\t\t\t#define LOWP lowp\n\t\t\t\t\tprecision mediump float;\n\t\t\t\t#else\n\t\t\t\t\t#define LOWP\n\t\t\t\t#endif\n\t\t\t\tvarying LOWP vec4 v_color;\n\t\t\t\tvarying vec2 v_texCoords;\n\t\t\t\tuniform sampler2D u_texture;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tgl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n\t\t\t\t}\n\t\t\t";
@@ -9302,6 +9416,7 @@ var spine;
 			};
 			Shader.newTwoColoredTextured = function (context) {
 				var vs = "\n\t\t\t\tattribute vec4 " + Shader.POSITION + ";\n\t\t\t\tattribute vec4 " + Shader.COLOR + ";\n\t\t\t\tattribute vec4 " + Shader.COLOR2 + ";\n\t\t\t\tattribute vec2 " + Shader.TEXCOORDS + ";\n\t\t\t\tuniform mat4 " + Shader.MVP_MATRIX + ";\n\t\t\t\tvarying vec4 v_light;\n\t\t\t\tvarying vec4 v_dark;\n\t\t\t\tvarying vec2 v_texCoords;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tv_light = " + Shader.COLOR + ";\n\t\t\t\t\tv_dark = " + Shader.COLOR2 + ";\n\t\t\t\t\tv_texCoords = " + Shader.TEXCOORDS + ";\n\t\t\t\t\tgl_Position = " + Shader.MVP_MATRIX + " * " + Shader.POSITION + ";\n\t\t\t\t}\n\t\t\t";
+				// var fs = "\n\t\t\t\t#ifdef GL_ES\n\t\t\t\t\t#define LOWP lowp\n\t\t\t\t\tprecision mediump float;\n\t\t\t\t#else\n\t\t\t\t\t#define LOWP\n\t\t\t\t#endif\n\t\t\t\tvarying LOWP vec4 v_light;\n\t\t\t\tvarying LOWP vec4 v_dark;\n\t\t\t\tuniform float u_pma;\n\t\t\t\tvarying vec2 v_texCoords;\n\t\t\t\tuniform sampler2D u_texture;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tvec4 texColor = texture2D(u_texture, v_texCoords);\n\t\t\t\t\tgl_FragColor.a = texColor.a * v_light.a;\n\t\t\t\t\tgl_FragColor.rgb = ((texColor.a - 1.0) * u_pma + 1.0 - texColor.rgb) * v_dark.rgb + texColor.rgb * v_light.rgb;\n\t\t\t\t}\n\t\t\t";
 				var fs = "\n\t\t\t\t#ifdef GL_ES\n\t\t\t\t\t#define LOWP lowp\n\t\t\t\t\tprecision mediump float;\n\t\t\t\t#else\n\t\t\t\t\t#define LOWP\n\t\t\t\t#endif\n\t\t\t\tvarying LOWP vec4 v_light;\n\t\t\t\tvarying LOWP vec4 v_dark;\n\t\t\t\tvarying vec2 v_texCoords;\n\t\t\t\tuniform sampler2D u_texture;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tvec4 texColor = texture2D(u_texture, v_texCoords);\n\t\t\t\t\tgl_FragColor.a = texColor.a * v_light.a;\n\t\t\t\t\tgl_FragColor.rgb = ((texColor.a - 1.0) * v_dark.a + 1.0 - texColor.rgb) * v_dark.rgb + texColor.rgb * v_light.rgb;\n\t\t\t\t}\n\t\t\t";
 				return new Shader(context, vs, fs);
 			};

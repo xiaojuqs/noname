@@ -3,7 +3,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 	decadeUI.effect = {
 		dialog:{
 			create:function(titleText){
-				return decadeUI.dialog.create('effect-dialog');
+				return decadeUI.dialog.create('effect-dialog dui-dialog');
 			},
 			compare:function(source, target){
 				var dialog = this.create();
@@ -88,27 +88,28 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		gameStart:function(){
 			game.playAudio('../extension', decadeUI.extensionName, 'audio/game_start.mp3');
 			var anim = decadeUI.animation;
-			var bounds = anim.getSpine2dBounds('effect_youxikaishi');
+			var bounds = anim.getSpineBounds('effect_youxikaishi');
 			if (bounds == null) return;
 			var sz = bounds.size;
 			var scale = Math.min(anim.canvas.width / sz.x, anim.canvas.height / sz.y) * 0.76;
-			anim.playSpine2d('effect_youxikaishi', { scale: scale });
+			anim.playSpine({
+					name:'effect_youxikaishi',
+				}, { scale: scale });
 		},
 		
 		line:function(dots){
-			// decadeUI.delay(300);
 			decadeUI.animate.add(function(source, target, e){
 				var ctx = e.context;
 				ctx.shadowColor = 'yellow';
-				ctx.shadowBlur = 10;
+				ctx.shadowBlur = 2;
 				
 				if (!this.head) this.head = 0;
 				if (!this.tail) this.tail = -1;
 				
-				this.head += 0.06 * (e.deltaTime / 17);
+				this.head += 0.07 * (e.deltaTime / 17);
 				if (this.head >= 1) {
 					this.head = 1;
-					this.tail += (0.06 * (e.deltaTime / 17));
+					this.tail += (0.07 * (e.deltaTime / 17));
 				}
 				
 				var tail = this.tail < 0 ? 0 : this.tail;
@@ -149,9 +150,10 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			
 			effect.style.backgroundColor = 'rgba(0,0,0,0.7)';
 			effect.style.transition = 'all 4s';
+			effect.style.zIndex = 7;
 			
 			var anim = decadeUI.animation;
-			var bounds = anim.getSpine2dBounds('effect_jisha1');
+			var bounds = anim.getSpineBounds('effect_jisha1');
 			
 			game.playAudio('../extension', decadeUI.extensionName, 'audio/kill_effect_sound.mp3');
 			if (bounds == void 0) {
@@ -179,7 +181,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			} else {
 				var sz = bounds.size;
 				var scale = anim.canvas.width / sz.x * 1.2;
-				anim.playSpine2d('effect_jisha1', { scale: scale });
+				anim.playSpine('effect_jisha1', { scale: scale });
 				ui.window.appendChild(effect);
 				ui.refresh(effect);
 			}
@@ -194,9 +196,9 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			if (get.itemtype(player) != 'player') return console.error('player');
 			
 			var animation = decadeUI.animation;
-			var asset = animation.spine2d.assets['effect_xianding'];
+			var asset = animation.spine.assets['effect_xianding'];
 			if (!asset) return console.error('[技能发动]特效未加载');
-			if (!asset.ready) animation.prepSpine2d('effect_xianding');
+			if (!asset.ready) animation.prepSpine('effect_xianding');
 			
 			var camp = player.group;
 			var playerName, playerAvatar;
@@ -214,10 +216,11 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			
 			image.onload = function () {
 				bgImage.onload = function () {
-					var skeleton = animation.getSpine2dSkeleton('effect_xianding');
+					var skeleton = animation.getSpineAnimation('effect_xianding');
 					var slot = skeleton.skeleton.findSlot('shilidipan');
 					var attachment = slot.getAttachment();
 					var region;
+					skeleton.completed = false;
 					
 					if (attachment.camp !== camp) {
 						if (!attachment.cached) attachment.cached = {};
@@ -249,7 +252,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					
 					var size = skeleton.bounds.size;
 					scale = Math.max(animation.canvas.width / size.x, animation.canvas.height / size.y);
-					animation.playSpine2dSkeleton(skeleton, null, { scale: scale });
+					animation.playSpineAnimation(skeleton, { scale: scale });
 					
 					
 					var effect = decadeUI.element.create('effect-window');
@@ -259,7 +262,6 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					
 					// effect.view.playerName = decadeUI.element.create('player-name', effect);
 					// effect.view.playerName.innerHTML = get.verticalStr(playerName);
-					effect.style.zIndex = 5;
 					animation.canvas.parentNode.insertBefore(effect, animation.canvas.nextSibling);
 					effect.removeSelf(2180);
 					effect = null;

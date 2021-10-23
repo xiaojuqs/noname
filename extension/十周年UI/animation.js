@@ -1,48 +1,28 @@
 'use strict';
 decadeParts.import(function(lib, game, ui, get, ai, _status){
-	
-	var resize = decadeUI.element.create('sensor', document.body);
-	resize.id = 'decadeUI-canvas-sensor';
-	resize.rs = new decadeUI.ResizeSensor(resize, function(){
-		if (resize.listens == void 0) return;
-		for (var i = 0; i < resize.listens.length; i++) {
-			resize.listens[i]();
-		}
-	}, false);
-	resize.addListener = function (callback) {
-		if (resize.listens == void 0) resize.listens = [];
-		resize.listens.push(callback);
-		
-	};
-	
-	
-	decadeUI.Animation = (function(){
-		function Animation (pathPrefix, parentNode, thisId) {
+	decadeUI.AnimationPlayer = (function(){
+		function AnimationPlayer (pathPrefix, parentNode, elementId) {
 			if (!window.spine) return console.error('spine 未定义.');
 			
 			var canvas = document.createElement('canvas');
+			canvas.className = 'animation-player';
+			if (elementId != void 0) canvas.id = elementId;
 			if (parentNode != void 0) parentNode.appendChild(canvas); 
-			if (thisId != void 0) canvas.id = thisId;
-			canvas.width = canvas.clientWidth;
-			canvas.height = canvas.clientHeight;
 			
-			var spine2d;
 			var config = { alpha: true };
 			var gl = canvas.getContext('gl', config) || canvas.getContext('experimental-webgl', config);
-			// gl = null;
 			if (gl) {
-				spine2d = {
+				this.spine = {
 					shader: spine.webgl.Shader.newTwoColoredTextured(gl),
 					batcher: new spine.webgl.PolygonBatcher(gl),
 					skeletonRenderer: new spine.webgl.SkeletonRenderer(gl),
 					shapes: new spine.webgl.ShapeRenderer(gl),
 					assetManager: new spine.webgl.AssetManager(gl),
 					assets: {},
-					playing: {},
-					skeletons: [],
+					animations: [],
 				}
 			} else {
-				spine2d = {
+				this.spine = {
 					assets: {},
 				};
 				console.error('当前设备不支持 WebGL.');
@@ -50,53 +30,48 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			
 			this.gl = gl;
 			this.canvas = canvas;
-			this.spine2d = spine2d;
+			this.$canvas = canvas;
 			this.pathPrefix = pathPrefix;
-			this.lastFrameTime = void 0;
+			this.frameTime = void 0;
+			this.running = false;
+			this.sizeUpdated = false;
+			this.adaptiveDPR = false;
+			this.canvas.width = canvas.clientWidth;
+			this.canvas.height = canvas.clientHeight;
 			
 			this.check = function () {
-				if (!gl) {
+				if (!this.gl) {
 					function empty(){};
-					for (var key in this.__proto__) {
+					var key;
+					for (key in this.__proto__) {
 						if (typeof this.__proto__[key] == 'function') {
 							this.__proto__[key] = empty;
 						}
 					}
 					
-					for (var key in this) {
+					for (key in this) {
 						if (typeof this[key] == 'function' && key != 'check') {
 							this[key] = empty;
 						}
 					}
 					
-				} else {
-					resize.addListener(function(){
-						canvas.sizeChanged = true;
-					});
 				}
 			};
 			
 			this.check();
 		};
 		
-		function LoadNotif (assetName, onload, onerror) {
-			this.name = assetName;
-			this.assetName = assetName;
-			this.onload = onload;
-			this.onerror = onerror;
-			this.loads = 0;
-			this.errors = 0;
-		};
-		
-		Animation.prototype.createTextureRegion = function (image, name) {
+		AnimationPlayer.prototype.createTextureRegion = function (image, name) {
 			var page = new spine.TextureAtlasPage();
 			page.name = name;
 			page.uWrap = spine.TextureWrap.ClampToEdge;
 			page.vWrap = spine.TextureWrap.ClampToEdge;
-			page.texture = this.spine2d.assetManager.textureLoader(image);
+			page.texture = this.spine.assetManager.textureLoader(image);
 			page.texture.setWraps(page.uWrap, page.vWrap);
 			page.width = page.texture.getImage().width;
 			page.height = page.texture.getImage().height;
+			
+			
 			
 			var region = new spine.TextureAtlasRegion();
 			region.page = page;
@@ -125,67 +100,108 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			return region;
 		};
 		
-		Animation.prototype.loadSpine2d = function (assetName, skelType, onload, onerror) {
-			var anim = this;
-			var loadNotif = new LoadNotif(assetName, onload, onerror);
+		AnimationPlayer.prototype.loadSpine = function (filename, skelType, onload, onerror) {
+			var thisAnim = this;
+			var counter = {
+				name: filename,
+				filename: filename,
+				onsuccess: onload,
+				onfailed: onerror,
+				loads: 0,
+				errors: 0,
+				loadMax: 3,
+			};
 			
-			loadNotif.loadSuccess = function(){
-				loadNotif.loads++;
-				if (loadNotif.loads + loadNotif.errors == 3) {
-					if (loadNotif.errors > 0) {
-						console.error('加载[' + loadNotif.assetName + ']动画资源失败.');
-						if (loadNotif.onerror !== void 0) {
-							loadNotif.onerror();
+			counter.onload = function(){
+				counter.loads++;
+				if (counter.loads + counter.errors == counter.loadMax) {
+					if (counter.errors > 0) {
+						console.error('spine: 加载 [' + counter.filename + '] 失败.');
+						if (counter.onfailed !== void 0) {
+							counter.onfailed();
 						}
 					} else {
-						anim.spine2d.assets[loadNotif.assetName] = { name: loadNotif.assetName, skelType: skelType };
-						if (loadNotif.onload !== void 0) {
-							loadNotif.onload();
+						thisAnim.spine.assets[counter.filename] = { name: counter.filename, skelType: skelType };
+						if (counter.onsuccess !== void 0) {
+							counter.onsuccess();
 						}
 					}
 				}
 			};
 			
-			loadNotif.loadError = function(){
-				loadNotif.errors++;
-				if (loadNotif.loads + loadNotif.errors == 3) {
-					console.error('加载[' + loadNotif.assetName + ']动画资源失败.');
-					if (loadNotif.onerror !== void 0) {
-						loadNotif.onerror();
+			counter.onloadText = function(path, data){
+				var reader =  new spine.TextureAtlasReader(data);
+				var increment = 0;
+				var imageName = null;
+				
+				while (true) {
+					var line = reader.readLine();
+					if (line == null) break;
+					line = line.trim();
+					
+					if (line.length == 0) {
+						imageName = null;
+					} else if (!imageName) {
+						imageName = line;
+						counter.loadMax += increment;
+						thisAnim.spine.assetManager.loadTexture(thisAnim.pathPrefix + imageName,
+							counter.onload, counter.onrror);
+						increment++;
+					} else {
+						continue;
+					}
+				}
+				
+				counter.onload();
+			}
+			
+			counter.onerror = function(){
+				counter.errors++;
+				if (counter.loads + counter.errors == counter.loadMax) {
+					console.error('spine: 加载 [' + counter.filename + '] 失败.');
+					if (counter.onfailed !== void 0) {
+						counter.onfailed();
 					}
 				}
 			};
 			
 			if (skelType != void 0 && skelType.toLowerCase() == 'json') {
 				skelType = 'json';
-				this.spine2d.assetManager.loadText(this.pathPrefix + assetName + '.json',
-					loadNotif.loadSuccess, loadNotif.loadError);
+				thisAnim.spine.assetManager.loadText(thisAnim.pathPrefix + filename + '.json',
+					counter.onload, counter.onrror);
 			} else {
 				skelType = 'skel';
-				this.spine2d.assetManager.loadBinary(this.pathPrefix + assetName + '.skel',
-					loadNotif.loadSuccess, loadNotif.loadError);
+				thisAnim.spine.assetManager.loadBinary(thisAnim.pathPrefix + filename + '.skel',
+					counter.onload, counter.onrror);
 			}
 			
-			this.spine2d.assetManager.loadText(this.pathPrefix + assetName + '.atlas',
-				loadNotif.loadSuccess, loadNotif.loadError);
-			this.spine2d.assetManager.loadTexture(this.pathPrefix + assetName + '.png',
-				loadNotif.loadSuccess, loadNotif.loadError);
+			thisAnim.spine.assetManager.loadText(thisAnim.pathPrefix + filename + '.atlas',
+				counter.onloadText, counter.onrror);
+
+			
 		};
 		
-		Animation.prototype.prepSpine2d = function (assetName) {
-			if (!this.spine2d.assets[assetName]) {
-				console.error('未找到' + assetName + '动画资源.');
+		AnimationPlayer.prototype.prepSpine = function (filename, autoLoad) {
+			var thisAnim = this;
+			
+			if (!thisAnim.spine.assets[filename]) {
+				if (autoLoad) {
+					thisAnim.loadSpine(filename, 'skel', function(){
+						thisAnim.prepSpine(filename);
+					});
+					return 'loading';
+				}
+				console.error('spine: 未找到[' + filename + ']动画资源.');
 				return null;
 			}
 			
-			var anim = this;
-			var asset = this.spine2d.assets[assetName];
-			var assetManager = this.spine2d.assetManager;
-			var skelRawData = asset.rawSkel;
+			var asset = thisAnim.spine.assets[filename];
+			var assetManager = thisAnim.spine.assetManager;
+			var skelRawData = asset.skelRawData;
 			if (!skelRawData) {
-				var atlas = new spine.TextureAtlas(assetManager.get(anim.pathPrefix + assetName + '.atlas'),
+				var atlas = new spine.TextureAtlas(assetManager.get(thisAnim.pathPrefix + filename + '.atlas'),
 					function(path){
-						return assetManager.get(anim.pathPrefix + path);
+						return assetManager.get(thisAnim.pathPrefix + path);
 					}
 				);
 				
@@ -196,14 +212,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					skelRawData = new spine.SkeletonBinary(atlasLoader);
 				}
 				
-				anim.spine2d.assets[assetName].rawSkel = skelRawData;
-				anim.spine2d.assets[assetName].ready = true;
+				thisAnim.spine.assets[filename].skelRawData = skelRawData;
+				thisAnim.spine.assets[filename].ready = true;
 			}
 			
-			var skeletonData = skelRawData.readSkeletonData(assetManager.get(this.pathPrefix + assetName + '.' + asset.skelType));
+			var skeletonData = skelRawData.readSkeletonData(assetManager.get(thisAnim.pathPrefix + filename + '.' + asset.skelType));
 			var skeleton = new spine.Skeleton(skeletonData);
-			var skeletons = this.spine2d.skeletons;
-			
 			skeleton.setSkinByName('default');
 			skeleton.setToSetupPose();
 			skeleton.updateWorldTransform();
@@ -219,84 +233,149 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			
 			animationState.addListener({
 				complete:function(track){
+					if (animation.loopCount > 0) animation.loopCount--;
 					if (!track.loop) {
-						skel.complete = true;
+						animation.completed = true;
+					} else if (animation.loopCount == 0) {
+						track.loop = false;
 					}
+					
+					if (animation.complete) animation.complete();
 				}
 			});
 			
-			var skel = {
-				id: skeletons.length,
-				name: assetName,
-				defaultAnimation: skeletonData.animations[0].name,
-				skeleton: skeleton,
-				state: animationState,
-				bounds: bounds,
-				position: void 0,
-				premultipliedAlpha: false,
-				complete: true,
+			var animations = thisAnim.spine.animations;
+			var animation = {
+				id: animations.length,								// id
+				name: filename,										// 名称(文件路径)
+				action: skeletonData.animations[0].name,			// 动作
+				defaultAction: skeletonData.animations[0].name,		// 默认动作
+				skeleton: skeleton,									// 骨骼
+				skeletonData: skeletonData,							// 骨骼数据
+				state: animationState,								// 状态
+				bounds: bounds,										// 实际大小
+				position: undefined,								// 播放位置
+				premultipliedAlpha: false,							// 预乘Alpha
+				loop: false, 		 								// 是否循环
+				loopCount: -1,		 								// 循环次数，只有loop为true时生效
+				speed: 1,			 								// 播放速度
+				filpX: undefined,		 							// boolean 水平镜像
+				filpY: undefined,		 							// boolean 垂直翻转
+				opacity: undefined,									// 0~1     不透明度
+				callback: undefined, 								// 每帧绘制前回调
+				complete: undefined, 								// 每次播放完成后回调
+				completed: true,									// 是否播放结束
 				mvp: new spine.webgl.Matrix4(),
+				rawResetData: {
+					filpX: skeleton.flipX,
+					filpY: skeleton.filpY,
+					opacity: skeleton.color.a,
+				},
+				reset: function() {
+					this.action = this.defaultAction = this.skeletonData.animations[0].name;
+					this.position = undefined;
+					this.premultipliedAlpha = false;
+					this.loop = false;
+					this.loopCount = -1;
+					this.speed = 1;
+					this.flipX = this.skeleton.flipX = this.rawResetData.flipX;
+					this.flipY = this.skeleton.flipY = this.rawResetData.flipY;
+					this.opacity = this.skeleton.color.a = this.rawResetData.opacity;
+					this.callback = undefined;
+					this.complete = undefined;
+					this.completed = true;
+				},
 			};
 			
-			skel.mvp.ortho2d(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
-			skeletons.push(skel);
+			animation.mvp.ortho2d(0, 0, thisAnim.canvas.width, thisAnim.canvas.height);
+			animations.push(animation);
 			
-			return skel.id;
+			return animation;
 		};
 		
-		Animation.prototype.playSpine2d = function (assetName, position){
-			if (!decadeUI.config.gameAnimationEffect) return console.log('十周年UI游戏动画特效已关闭，无法播放动画.');
+		AnimationPlayer.prototype.playSpine = function (animation, position){
+			if (!decadeUI.config.gameAnimationEffect) return;
 			
-			var animName;
-			if (Array.isArray(assetName)) {
-				animName = assetName[1];
-				assetName = assetName[0];
+			switch (typeof animation) {
+				case 'string':
+					var t = {
+						name: animation,	 //	string 动画名称
+						action: undefined,	 // string 播放动作
+						loop: false, 		 // boolean 是否循环
+						loopCount: -1,		 // number 循环次数，只有loop为true时生效
+						speed: 1,			 // number 播放速度
+						filpX: undefined,	 // boolean 水平镜像
+						filpY: undefined,	 // boolean 垂直翻转
+						opacity: undefined,	 // 0~1		不透明度
+						callback: undefined, // function() 每帧回调
+						complete: undefined, // function() 每次播放完成后回调
+					};
+					
+					animation = t;
+					break;
+					
+				case 'number':
+					// 待实现
+					break;
+						
 			}
 			
-			// if (position instanceof HTMLElement && !follow) {
-				// var rect = position.getBoundingClientRect();
-				// position = {
-					// x: rect.left + rect.width / 2,
-					// y: document.body.offsetHeight - rect.top - rect.height / 2,
-				// };
-			// }
-			
-			if (!this.spine2d.assets[assetName]) return console.error('未找到"' + assetName + '"的动画资源.');
-			
-			var skeletons = this.spine2d.skeletons;
-			var skeleton;
-			
-			for (var i = 0; i < skeletons.length; i++) {
-				if (skeletons[i].name == assetName && skeletons[i].complete) {
-					skeleton = skeletons[i++];
-					while (i < skeletons.length) {
-						skeletons[i - 1] = skeletons[i++];
+			var assets = this.spine.assets;
+			if (!assets[animation.name]) {
+				return console.error('spine: 未加载资源[' + animation.name + ']');
+			}
+
+			var animations = this.spine.animations;
+			var foundAnimation;
+
+			for (var i = 0; i < animations.length; i++) {
+				if (animations[i].name == animation.name && animations[i].completed) {
+					foundAnimation = animations[i++];
+					// 调整Z轴
+					while (i < animations.length) {
+						animations[i - 1] = animations[i++];
 					}
 					
-					skeletons[skeletons.length - 1] = skeleton;
+					animations[animations.length - 1] = foundAnimation;
 					break;
 				}
 			}
 			
-			if (!skeleton) {
-				var id = this.prepSpine2d(assetName);
-				for (var i = skeletons.length - 1; i >= 0; i--){
-					if (skeletons[i].id == id) {
-						skeleton = skeletons[i];
-					}
-				}
-			}
+			if (!foundAnimation) foundAnimation = this.prepSpine(animation.name);
+			foundAnimation.reset();
+			if (animation.action) foundAnimation.action = animation.action;
+			if (animation.loop)	foundAnimation.loop = animation.loop;
+			if (animation.loopCount) foundAnimation.loopCount = animation.loopCount;
+			if (animation.speed)	foundAnimation.speed = animation.speed;
+			if (animation.callback)	foundAnimation.callback = animation.callback;
+			if (animation.complete)	foundAnimation.complete = animation.complete;
+			if (animation.flipX) foundAnimation.skeleton.flipX = animation.flipX;
+			if (animation.flipY) foundAnimation.skeleton.flipY = animation.flipY;
+			if (animation.opacity) foundAnimation.skeleton.color.a = animation.opacity;
 			
-			this.playSpine2dSkeleton(skeleton, animName, position);
-			return skeleton.id;
+			return this.playSpineAnimation(foundAnimation, position);
 		};
 		
-		Animation.prototype.stopSpine2d = function (id) {
-			var skels = this.spine2d.skeletons;
-			for (var i = 0; i < skels.length; i++) {
-				if (skels[i].id == id) {
-					skels[i].complete = true;
-					skels[i].state.setEmptyAnimation(0);
+		AnimationPlayer.prototype.loopSpine = function (animation, position) {
+			if (typeof animation == 'string') {
+				animation = {
+					name: animation,
+					loop: true,
+				}
+			} else {
+				animation.loop = true;
+			}
+			
+			return this.playSpine(animation, position);
+		};
+		
+		AnimationPlayer.prototype.stopSpine = function (id) {
+			var animations = this.spine.animations;
+			for (var i = 0; i < animations.length; i++) {
+				if (animations[i].id == id) {
+					if (!animations[i].completed) {
+						animations[i].state.setEmptyAnimation(0);
+					}
 					return true;
 				}
 			}
@@ -304,113 +383,99 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			return false;
 		};
 		
-		Animation.prototype.loopSpine2d = function (assetName, position) {
-			var id = this.playSpine2d(assetName, position);
-			if (id == void 0) return;
-			
-			var skels = this.spine2d.skeletons;
-			for (var i = 0; i < skels.length; i++) {
-				if (skels[i].id == id) {
-					skels[i].complete = false;
-					skels[i].state.tracks[0].loop = true;
-					return id;
+		AnimationPlayer.prototype.stopSpineAll = function () {
+			var animations = this.spine.animations;
+			for (var i = 0; i < animations.length; i++) {
+				if (!animations[i].completed) {
+					animations[i].state.setEmptyAnimation(0);
 				}
 			}
-			
-			return;
 		};
 		
-		Animation.prototype.playSpine2dSkeleton = function (skeleton, animationName, position) {
-			var index = this.spine2d.skeletons.indexOf(skeleton);
-			if (index == -1) return console.error('skeleton not found');
+		AnimationPlayer.prototype.playSpineAnimation = function (animation, position) {
+			var index = this.spine.animations.indexOf(animation);
+			if (index == -1) return console.error('spine: animation not found');
 			
-			var x, y, width, height, scale, parent, follow;
+			var x, y, width, height, scale, angle, parent, follow;
 			if (position != void 0) {
 				x = position.x;
 				y = position.y;
-				width = position.width;
 				height = position.height;
+				width = position.width;
 				scale = position.scale;
+				angle = position.angle;
 				parent = position.parent;
 				follow = position.parent;
 			}
 			
-			var position = {
+			position = {
 				x: x,
 				y: y,
-				width: width,
 				height: height,
+				width: width,
 				scale: scale,
+				angle: angle,
 				parent: parent,
 				follow: follow,
 			}
 			
-			skeleton.complete = false;
-			skeleton.position = position;
-			skeleton.state.setAnimation(0, animationName == void 0 ? skeleton.defaultAnimation : animationName, false);
+			animation.completed = false;
+			animation.position = position;
+			animation.state.setAnimation(0, animation.action ? animation.action : animation.defaultAction,
+				animation.loop);
+			
+			// var track = animation.state.getCurrent(0);
+			// track.timeScale = -1;
+			// track.trackTime = track.animationEnd;
 			
 			if (this.requestId == void 0) {
+				this.running = true;
 				this.canvas.style.visibility = 'visible';
 				this.requestId = requestAnimationFrame(this.render.bind(this));
 			}
 			
-			return skeleton;
+			return animation;
 		};
 		
-		Animation.prototype.getSpine2dSkeleton = function (assetName) {
-			if (!this.spine2d.assets[assetName]) {
-				console.error('未找到"' + assetName + '"的动画资源.');
+		AnimationPlayer.prototype.getSpineAnimation = function (filename) {
+			if (!this.spine.assets[filename]) {
+				console.error('spine: 未找到"' + filename + '"的动画资源.');
 				return null;
 			}
 			
-			var skeletons = this.spine2d.skeletons;
-			var skeleton;
+			var animations = this.spine.animations;
+			var animation;
 			
-			for (var i = 0; i < skeletons.length; i++) {
-				if (skeletons[i].name == assetName && skeletons[i].complete) {
-					skeleton = skeletons[i++];
-					while (i < skeletons.length) {
-						skeletons[i - 1] = skeletons[i++];
-					}
-					
-					skeletons[skeletons.length - 1] = skeleton;
-					break;
-				}
+			for (var i = 0; i < animations.length; i++) {
+				animation = animations[i];
+				if (animation.name == filename && animation.completed) break;
+				animation = null;
 			}
 			
-			if (!skeleton) {
-				var id = this.prepSpine2d(assetName);
-				for (var i = skeletons.length - 1; i >= 0; i--){
-					if (skeletons[i].id == id) {
-						skeleton = skeletons[i];
-					}
-				}
-			}
-			
-			skeleton.complete = false;
-			return skeleton;
+			return animation != null ? animation : this.prepSpine(filename);
 		};
 		
-		Animation.prototype.getSpine2dBounds = function (assetName, nocheck) {
-			var skeletons = this.spine2d.skeletons;
-			
-			for (var i = 0; i < skeletons.length; i++) {
-				if (skeletons[i].name == assetName) {
-					return skeletons[i].bounds;
-				}
-			}
-			
-			if (!nocheck) {
-				var id = this.prepSpine2d(assetName);
-				if (id != null) {
-					return this.getSpine2dBounds(assetName, true);
-				}
-			}
-			
-			return null;
+		AnimationPlayer.prototype.getSpineActions = function (filename) {
+			var animation = this.getSpineAnimation(filename);
+			if (!animation) return null;
+			var actions = animation.skeletonData.animations;
+			var result = new Array(actions.length);
+			for (var i = 0; i < actions.length; i++) result[i] = { name: actions[i].name, duration: actions[i].duration };
+			return result;
 		};
 		
-		Animation.prototype.resizeSkeleton = function (skeleton) {
+		AnimationPlayer.prototype.getSpineBounds = function (filename) {
+			if (!this.sizeUpdated) {
+				var dpr = this.adaptiveDPR ? (Math.max(window.devicePixelRatio * game.documentZoom, 1)) : 1;
+				canvas.elementHeight = canvas.clientHeight;
+				canvas.elementWidth = canvas.clientWidth;
+				canvas.height = canvas.elementHeight * dpr;
+				canvas.width = canvas.elementWidth * dpr;
+			}
+			return this.getSpineAnimation(filename).bounds;
+		};
+		
+		AnimationPlayer.prototype.resizeSkeleton = function (skeleton) {
 			var x,
 				y,
 				width,
@@ -423,26 +488,28 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				position = skeleton.position;
 			
 			var scale = position.scale;
+			var angle = position.angle;
 			var size = { width: canvas.width, height: canvas.height };
 			var isElement = position.parent instanceof HTMLElement;
+			var dpr = this.adaptiveDPR ? (Math.max(window.devicePixelRatio * game.documentZoom, 1)) : 1;
 			
 			if (isElement && (position.follow || !position.init)) {
 				var rect = position.parent.getBoundingClientRect();
-				ox = rect.left;
-				oy = document.body.offsetHeight - rect.top;
+				ox = rect.left * dpr;
+				oy = (document.body.offsetHeight - rect.top) * dpr;
 				
-				dx = ox + rect.width  / 2;
-				dy = oy - rect.height / 2;
-				size.width = rect.width;
-				size.height = rect.height;
+				dx = ox + rect.width  / 2 * dpr;
+				dy = oy - rect.height / 2 * dpr;
+				size.width = rect.width * dpr;
+				size.height = rect.height * dpr;
 			}
 			
 			if (position.x != void 0) {
 				var tx;
 				if (Array.isArray(position.x)) {
-					tx = position.x[0] + position.x[1] * size.width;
+					tx = position.x[0] * dpr + position.x[1] * size.width;
 				} else {
-					tx = position.x;
+					tx = position.x * dpr;
 				}
 				
 				if (x == void 0) {
@@ -455,9 +522,9 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			if (position.y != void 0) {
 				var ty;
 				if (Array.isArray(position.y)) {
-					ty = position.y[0] + position.y[1] * size.height;
+					ty = position.y[0] * dpr + position.y[1] * size.height;
 				} else {
-					ty = position.y;
+					ty = position.y * dpr;
 				}
 				
 				if (y == void 0) {
@@ -490,7 +557,9 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				position.init = true;
 			}
 			
+			
 			skeleton.mvp.ortho2d(0, 0, canvas.width, canvas.height);
+			
 			if (x != void 0 && y == void 0) {
 				skeleton.mvp.translate(x, 0, 0);
 				skeleton.mvp.setY(0);
@@ -503,92 +572,165 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				skeleton.mvp.setPos2D(0, 0);
 			}
 			
-			if (scale != void 0 && scale != 1) {
+			if (scale && scale != 1) {
+				scale *= dpr;
 				skeleton.mvp.scale(scale, scale, 0);
+			}
+			
+			if (angle) {
+				skeleton.mvp.rotate(angle, 0, 0, 1);
 			}
 		};
 		
-		Animation.prototype.render = function () {
-			var complete = true,
+		AnimationPlayer.prototype.render = function () {
+			var completed = true,
 				now = performance.now() / 1000,
 				canvas = this.canvas,
-				skeletons = this.spine2d.skeletons;
+				animations = this.spine.animations;
 				
-			var delta = now - (this.lastFrameTime == void 0 ? now : this.lastFrameTime);
-			this.lastFrameTime = now;
-			for (var i = 0; i < skeletons.length; i++) {
-				if (!skeletons[i].complete) {
-					complete = false;
+			var delta = now - (this.frameTime == void 0 ? now : this.frameTime);
+			this.frameTime = now;
+			for (var i = 0; i < animations.length; i++) {
+				if (!animations[i].completed) {
+					completed = false;
 					break;
 				}
 			}
 			
-			
-			if (canvas.sizeChanged) {
-				canvas.width = canvas.clientWidth;
-				canvas.height = canvas.clientHeight;
-				canvas.sizeChanged = false;
+			var dpr = this.adaptiveDPR ? (Math.max(window.devicePixelRatio * game.documentZoom, 1)) : 1;
+			if (!this.sizeUpdated) {
+				this.sizeUpdated = true;
+				canvas.elementHeight = canvas.clientHeight;
+				canvas.elementWidth = canvas.clientWidth;
+				canvas.height = canvas.elementHeight * dpr;
+				canvas.width = canvas.elementWidth * dpr;
+			} else {
+				if (canvas.height == 0) {
+					canvas.elementHeight = canvas.clientHeight;
+					canvas.height = canvas.elementHeight * dpr;
+				}
+				
+				if (canvas.width == 0) {
+					canvas.elementWidth = canvas.clientWidth;
+					canvas.width = canvas.elementWidth * dpr;
+				}
 			}
-			
-			var width = canvas.width;
-			var height = canvas.height;
 			
 			this.gl.viewport(0, 0, canvas.width, canvas.height);
 			this.gl.clearColor(0, 0, 0, 0);
 			this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 			
-			if (complete) {
-				this.lastFrameTime = void 0;
+			if (completed) {
+				this.frameTime = void 0;
 				this.requestId = void 0;
+				this.running = false;
 				this.canvas.style.visibility = 'hidden';
 				return;
 			}
 			
-			var state, skeleton, bounds, premultipliedAlpha,
-				shader = this.spine2d.shader,
-				batcher = this.spine2d.batcher,
-				skeletonRenderer = this.spine2d.skeletonRenderer;
+			var state, skeleton, bounds, premultipliedAlpha, speed,
+				shader = this.spine.shader,
+				batcher = this.spine.batcher,
+				skeletonRenderer = this.spine.skeletonRenderer;
 			
 			shader.bind();
 			
-			for (var i = 0; i < skeletons.length; i++) {
-				if (skeletons[i].complete) continue; 
+			for (var i = 0; i < animations.length; i++) {
+				if (animations[i].completed) continue; 
+				if (animations[i].callback) animations[i].callback(delta);
 				
-				this.resizeSkeleton(skeletons[i]);
-				state = skeletons[i].state;
-				skeleton = skeletons[i].skeleton;
-				bounds = skeletons[i].bounds;
-				premultipliedAlpha = skeletons[i].premultipliedAlpha;
+				this.resizeSkeleton(animations[i]);
+				state = animations[i].state;
+				skeleton = animations[i].skeleton;
+				bounds = animations[i].bounds;
+				premultipliedAlpha = animations[i].premultipliedAlpha;
+				speed = animations[i].speed;
 				
-				state.update(delta);
+				state.update(delta * speed);
 				state.apply(skeleton);
 				skeleton.updateWorldTransform();
 				
-				
 				shader.setUniformi(spine.webgl.Shader.SAMPLER, 0);
-				shader.setUniform4x4f(spine.webgl.Shader.MVP_MATRIX, skeletons[i].mvp.values);
+				shader.setUniform4x4f(spine.webgl.Shader.MVP_MATRIX, animations[i].mvp.values);
 				
 				batcher.begin(shader);
 				skeletonRenderer.premultipliedAlpha = premultipliedAlpha;
 				skeletonRenderer.draw(batcher, skeleton);
 				batcher.end();
 				
-				
 			}
 			
 			shader.unbind();
-			
 			this.requestId = requestAnimationFrame(this.render.bind(this));
 		};
 		
-		return Animation;
+		return AnimationPlayer;
+	})();
+	
+	decadeUI.AnimationPlayerPool = (function(){
+		function AnimationPlayerPool(size, pathPrefix, thisName){
+			if (!window.spine) return console.error('spine 未定义.');
+			
+			this.name = thisName;
+			this.pathPrefix = pathPrefix;
+			this.animations = new Array(size ? size : 1);
+			for (var i = 0; i < this.animations.length; i++) this.animations[i] = new decadeUI.AnimationPlayer(pathPrefix);
+			
+		};
+		
+		AnimationPlayerPool.prototype.loadSpine = function(filename, skelType, onload, onerror) {
+			var thisAnim = this;
+			thisAnim.animations[0].loadSpine(filename, skelType, function(){
+				var ap;
+				var aps = thisAnim.animations;
+				
+				for (var i = 1; i < aps.length; i++) {
+					ap = aps[i];
+					if (window.requestIdleCallback) {
+						requestIdleCallback(ap.prepSpine.bind(ap, this.name, true), { timeout: 200 });
+					} else {
+						setTimeout(function(ap, name){
+							ap.prepSpine(name, true);
+						}, 50, ap, this.name);
+					}
+				}
+				
+				if (onload) onload();
+			}, onerror);
+		};
+		
+		AnimationPlayerPool.prototype.playSpineTo = function(element, animation, position) {
+			var animations = this.animations;
+			if (element._ap && element._ap.canvas.parentNode == element) {
+				element._ap.playSpine(animation, position);
+				return;
+			}
+			
+			for (var i = 0; i < animations.length; i++) {
+				if (!animations[i].running) {
+					if (animations[i].canvas.parentNode != element) {
+						element._ap = animations[i];
+						element.appendChild(animations[i].canvas);
+					}
+					animations[i].playSpine(animation, position);
+					return;
+				}
+			}
+			
+			console.error('spine:' + (this.name != null ? this.name : '' + '可用动画播放组件不足'));
+			
+		};
+		
+		return AnimationPlayerPool;
 	})();
 	
 	decadeUI.animation = (function(){
-		var animation = new decadeUI.Animation(decadeUIPath + 'assets/animation/', document.body, 'decadeUI-canvas');
-		animation.check();
+		var animation = new decadeUI.AnimationPlayer(decadeUIPath + 'assets/animation/', document.body, 'decadeUI-canvas');
+		decadeUI.bodySensor.addListener(function(){ animation.sizeUpdated = false; }, true);
 		
-		var fileInfoList = [
+		animation.cap = new decadeUI.AnimationPlayerPool(4, animation.pathPrefix, 'decadeUI.animation');
+		
+		var fileList = [
 			{ name: 'effect_youxikaishi' },
 			{ name: 'effect_baguazhen' },
 			{ name: 'effect_baiyinshizi' },
@@ -615,50 +757,62 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			{ name: 'effect_yajiaoqiang' },
 			{ name: 'effect_yinfengjia' },
 			{ name: 'effect_zheji' },
-			{ name: 'effect_leisha' },
-			{ name: 'effect_heisha' },
-			{ name: 'effect_huosha' },
-			{ name: 'effect_hongsha' },
-			{ name: 'effect_shan' },
-			{ name: 'effect_tao' },
-			{ name: 'effect_jiu' },
 			{ name: 'effect_jisha1' },
 			{ name: 'effect_zhenwang' },
 			{ name: 'effect_lebusishu' },
 			{ name: 'effect_bingliangcunduan' },
+			{ name: 'effect_nanmanruqin'},
+			{ name: 'effect_taoyuanjieyi'},
 			{ name: 'effect_shandian' },
-			{ name: 'effect_wuzhongshengyou' },
-			{ name: 'effect_wuxiekeji' },
-			{ name: 'effect_nanmanruqin' },
-			{ name: 'effect_wanjianqifa' },
-			{ name: 'effect_wugufengdeng' },
-			{ name: 'effect_taoyuanjieyi' },
-			{ name: 'effect_shunshouqianyang' },
-			{ name: 'effect_huogong' },
-			{ name: 'effect_guohechaiqiao' },
+			{ name: 'effect_wanjianqifa_full'},
 			{ name: 'effect_xianding', fileType: 'json' },
+			{ name: 'effect_caochuanjiejian', follow: true },
+			{ name: 'effect_guohechaiqiao', follow: true },
+			{ name: 'effect_leisha', follow: true },
+			{ name: 'effect_heisha', follow: true },
+			{ name: 'effect_huosha' , follow: true },
+			{ name: 'effect_hongsha', follow: true },
+			{ name: 'effect_huogong', follow: true },
+			{ name: 'effect_panding', follow: true },
+			{ name: 'effect_shan', follow: true },
+			{ name: 'effect_tao', follow: true },
+			{ name: 'effect_tiesuolianhuan', follow: true },
+			{ name: 'effect_jiu', follow: true },
+			{ name: 'effect_shunshouqianyang', follow: true },
+			{ name: 'effect_shushangkaihua', follow: true },
+			{ name: 'effect_wanjianqifa', follow: true},
+			{ name: 'effect_wuzhongshengyou', follow: true },
+			{ name: 'effect_wuxiekeji', follow: true },
+			{ name: 'effect_wugufengdeng', follow: true },
+			{ name: 'effect_yuanjiaojingong', follow: true },
+			{ name: 'effect_zhijizhibi', follow: true },
+			{ name: 'effect_zhulutianxia', follow: true },
 		];
 		
-		var fileList = fileInfoList.concat();
-
-		var read = function() {
-			if (fileList.length) {
-				var file = fileList.shift();
-				animation.loadSpine2d(file.name, file.fileType == void 0 ? 'skel' : file.fileType, function(){
-					read();
-					animation.prepSpine2d(this.name);
-				});
-			}
-		};
+		var fileNameList = fileList.concat();
 		
-		read();read();
+		var read = function() {
+			if (fileNameList.length) {
+				var file = fileNameList.shift();
+				if (file.follow) {
+					animation.cap.loadSpine(file.name, file.fileType, function(){
+						read();
+					});
+				} else {
+					animation.loadSpine(file.name, file.fileType, function(){
+						read();
+						animation.prepSpine(this.name);
+					});
+				}
+			}
+		};read();read();
 		
 		var skillAnimation = (function(){
 			var defines = {
 				skill:{
-					bagua_skill: { skill: 'bagua_skill', name: 'effect_baguazhen', scale: 0.5 },
+					bagua_skill: { skill: 'bagua_skill', name: 'effect_baguazhen', scale: 0.6 },
 					baiyin_skill: { skill: 'baiyin_skill', name: 'effect_baiyinshizi', scale: 0.5 },
-					bazhen_bagua: { skill: 'bazhen_bagua', name: 'effect_baguazhen', scale: 0.5 },
+					bazhen_bagua: { skill: 'bazhen_bagua', name: 'effect_baguazhen', scale: 0.6 },
 					cixiong_skill: { skill: 'cixiong_skill', name: 'effect_cixiongshuanggujian', scale: 0.5 },
 					fangtian_skill: { skill: 'fangtian_skill', name: 'effect_fangtianhuaji', scale: 0.7 },
 					guanshi_skill: { skill: 'guanshi_skill', name: 'effect_guanshifu', scale: 0.7 },
@@ -688,7 +842,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				},
 				card: {
 					nanman: { card: 'nanman', name: 'effect_nanmanruqin', scale: 0.6, y: [0, 0.4] },
-					wanjian: { card: 'wanjian', name: 'effect_wanjianqifa', scale: 1.5},
+					wanjian: { card: 'wanjian', name: 'effect_wanjianqifa_full', scale: 1.5},
 					taoyuan: { card: 'taoyuan', name: 'effect_taoyuanjieyi'},
 				}
 			}
@@ -696,7 +850,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			var cardAnimate = function(card){
 				var anim = defines.card[card.name];
 				if (!anim) return console.error('cardAnimate:' + card.name);
-				animation.playSpine2d(anim.name, { x: anim.x, y: anim.y, scale: anim.scale });
+				animation.playSpine(anim.name, { x: anim.x, y: anim.y, scale: anim.scale });
 			};
 			
 			for (var key in defines.card) {
@@ -706,7 +860,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			var skillAnimate = function (name) {
 				var anim = defines.skill[name];
 				if (!anim) return console.error('skillAnimate:' + name);
-				animation.playSpine2d(anim.name, { x: anim.x, y: anim.y, scale: anim.scale, parent:this });
+				animation.playSpine(anim.name, { x: anim.x, y: anim.y, scale: anim.scale, parent:this });
 			};
 			
 			for (var key in defines.skill) {
@@ -795,11 +949,11 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		
 		return animation;
 	})();
-
 	
 	decadeUI.backgroundAnimation = (function(){
-		var animation = new decadeUI.Animation(decadeUIPath + 'assets/dynamic/', document.body, 'decadeUI-canvas-background');
+		var animation = new decadeUI.AnimationPlayer(decadeUIPath + 'assets/dynamic/', document.body, 'decadeUI-canvas-background');
 		animation._resizeSkeleton = animation.resizeSkeleton;
+		decadeUI.bodySensor.addListener(function(){ animation.sizeUpdated = false; }, true);
 		
 		animation.resizeSkeleton = function (skeleton) {
 			if (skeleton.asset == void 0) {
@@ -812,6 +966,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			var asset = skeleton.asset;
 			if (asset) {
 				var canvas = this.canvas;
+				
 				var x = asset.x;
 				var y = asset.y;
 				var w = asset.width;
@@ -820,16 +975,16 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				var sx, sy, scale;
 				
 				if (x != void 0 && Array.isArray(x)) {
-					x = x[0] + x[1] * canvas.width;
+					x = x[0] + x[1] * canvas.elementWidth;
 				}
 				
 				if (y != void 0 && Array.isArray(y)) {
-					y = y[0] + y[1] * canvas.height;
+					y = y[0] + y[1] * canvas.elementHeight;
 				}
 				
 				if (w != void 0) {
 					if (Array.isArray(w)) {
-						sx = (w[0] + w[1] * canvas.width) / size.x;
+						sx = (w[0] + w[1] * canvas.elementWidth) / size.x;
 					} else {
 						sx = w / size.x;
 					}
@@ -837,7 +992,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				
 				if (h != void 0) {
 					if (Array.isArray(h)) {
-						sy = (h[0] + h[1] * canvas.height) / size.y;
+						sy = (h[0] + h[1] * canvas.elementHeight) / size.y;
 					} else {
 						sy = h / size.y;
 					}
@@ -858,63 +1013,61 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		};
 		
 		
-		var assets = {
+		animation.definedAssets  = {
 			skin_xiaosha: {
 				default: {
 					name: 'skin_xiaosha_default',
 					x: [ 0, 0.7],
 					y: [ 0, 0.3],
+					height: [0, 0.2],
 				},
 			},
 			skin_daqiao: {
 				战场绝版: {
-					name: 'skin_daqiao_战场绝版',
+					name: 'skin_daqiao_ZhanChang',
 					x: [ 0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
+				清萧清丽: {
+					name: 'skin_daqiao_QingXiaoQingLi',
+					x: [ 0, 0.5],
+					y: [0, 0.33],
+					height: [0, 0.8],
+				}
 			},
 			skin_caojie: {
 				战场绝版: {
-					name: 'skin_caojie_战场绝版',
+					name: 'skin_caojie_ZhanChang',
 					x: [ 0, 0.7],
-					y: [75, 0.3],
-					height: [0, 0.8],
-				},
-			},
-			skin_mayunlu: {
-				战场绝版:{
-					name: 'skin_mayunlu_战场绝版',
-					x: [ 0, 0.6],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
 			skin_baosanniang: {
 				舞剑铸缘: {
-					name: 'skin_baosanniang_舞剑铸缘',
-					animation: 'DaiJi',
+					name: 'skin_baosanniang_WuJianZhuYuan',
+					action: 'DaiJi',
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 				漫花剑俏: {
-					name: 'skin_baosanniang_漫花剑俏',
-					x: [0, 0.7],
-					y: [75, 0.3],
+					name: 'skin_baosanniang_ManHuaJianQiao',
+					// x: [0, 0.7],
+					y: [50, 0.3],
 					height: [0, 0.8],
 				},
 			},
 			skin_caiwenji: {
 				才颜双绝: {
-					name: 'skin_caiwenji_才颜双绝',
-					x: [0, 0.7],
-					y: [75, 0.3],
+					name: 'skin_caiwenji_CaiYanShuangJue',
+					y: [-80, 0.5],
 					height: [0, 0.8],
 				},
 			},
 			skin_daqiaoxiaoqiao: {
 				战场绝版: {
-					name: 'skin_daqiaoxiaoqiao_战场绝版',
+					name: 'skin_daqiaoxiaoqiao_ZhanChang',
 					//x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -922,29 +1075,66 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_diaochan: {
 				玉婵仙子: {
-					name: 'skin_diaochan_玉婵仙子',
+					name: 'skin_diaochan_YuChanXianZi',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
+			skin_dongbai: {
+				娇俏伶俐: {
+					name: 'skin_dongbai_JiaoQiaoLingLi',
+					x: [0, 0.5],
+					y: [0, 0.33],
+					height: [0, 0.96],
+				},
+			},
+			skin_fanyufeng: {
+				斟酒入情: {
+					name: 'skin_fanyufeng_ZhenJiuRuQing',
+					x: [0, 0.5],
+					y: [0, 0.28],
+					height: [0, 1],
+				},
+			},
 			skin_fuhuanghou: {
 				万福千灯: {
-					name: 'skin_fuhuanghou_万福千灯',
+					name: 'skin_fuhuanghou_WanFuQianDeng',
 					//x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
+			skin_guozhao: {
+				雍容尊雅: {
+					name: 'skin_guozhao_YongRongZunYa',
+					x: [0, 0.5],
+					y: [0, 0.33],
+					height: [0, 0.7],
+				},
+			},
+			skin_hetaihou: {
+				鸩毒除患: {
+					name: 'skin_hetaihou_ZhenDuChuHuan',
+					y: [0, 0.33],
+					height: [0, 0.65],
+				},
+				蛇蝎为心:{
+					name: 'skin_hetaihou_SheXieWeiXin',
+					action: 'DaiJi',
+					y: [5, 0.33],
+					height: [0, 0.76],
+				},
+			},
 			skin_huaman: {
 				经典形象: {
-					name: 'skin_huaman_经典形象',
+					name: 'skin_huaman_default',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 				花俏蛮娇: {
-					name: 'skin_huaman_花俏蛮娇',
+					name: 'skin_huaman_HuaQiaoManJiao',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -952,7 +1142,15 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_lukang: {
 				毁堰破晋: {
-					name: 'skin_lukang_毁堰破晋',
+					name: 'skin_lukang_HuiYanPoJin',
+					x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
+			},
+			skin_luxun: {
+				谋定天下: {
+					name: 'skin_luxun_MouDingTianXia',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -960,53 +1158,67 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_luxunlvmeng: {
 				清雨踏春: {
-					name: 'skin_luxunlvmeng_清雨踏春',
+					name: 'skin_luxunlvmeng_QingYuTaChun',
 					// x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
-			skin_luxun: {
-				谋定天下: {
-					name: 'skin_luxun_谋定天下',
-					x: [0, 0.7],
+			skin_mayunlu: {
+				战场绝版:{
+					name: 'skin_mayunlu_ZhanChang',
+					x: [ 0, 0.6],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
 			skin_sundengzhoufei: {
 				鹊星夕情: {
-					name: 'skin_sundengzhoufei_鹊星夕情',
+					name: 'skin_sundengzhoufei_QueXingXiQing',
 					// x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
+			skin_sunluban: {
+				宵靥谜君: {
+					name: 'skin_sunluban_XiaoYeMiJun',
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
+			},
+			skin_sunluyu: {
+				娇俏伶俐: {
+					name: 'skin_sunluyu_JiaoQiaoLingLi',
+					y: [0, 0.3],
+					height: [0, 0.9],
+				},
+			},
 			skin_shuxiangxiang: {
 				花好月圆: {
-					name: 'skin_shuxiangxiang_花好月圆',
+					name: 'skin_shuxiangxiang_HuaHaoYueYuan',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
 			skin_wangyi: {
-				战场绝版: {
-					name: 'skin_wangyi_战场绝版',
-					x: [0, 0.7],
-					y: [75, 0.35],
-					height: [0, 0.8],
-				},
 				绝色异彩: {
-					name: 'skin_wangyi_绝色异彩',
+					name: 'skin_wangyi_JueSeYiCai',
 					x: [0, 0.7],
 					y: [75, 0.3],
+					height: [0, 0.8],
+				},
+				战场绝版: {
+					name: 'skin_wangyi_ZhanChang',
+					x: [0, 0.7],
+					y: [75, 0.35],
 					height: [0, 0.8],
 				},
 			},
 			skin_wolongzhuge: {
 				隆中陇亩: {
-					name: 'skin_wolongzhuge_隆中陇亩',
+					name: 'skin_wolongzhuge_LongZhongLongMu',
 					// x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -1014,7 +1226,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_wuxian: {
 				锦运福绵: {
-					name: 'skin_wuxian_锦运福绵',
+					name: 'skin_wuxian_JinYunFuMian',
 					// x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -1022,15 +1234,20 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_xiahoushi: {
 				端华夏莲: {
-					name: 'skin_xiahoushi_端华夏莲',
+					name: 'skin_xiahoushi_DuanHuaXiaLian',
 					x: [0, 0.7],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
+				战场绝版: {
+					name: 'skin_xiahoushi_ZhanChang',
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
 			skin_xiaoqiao: {
 				花好月圆: {
-					name: 'skin_xiaoqiao_花好月圆',
+					name: 'skin_xiaoqiao_HuaHaoYueYuan',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -1038,21 +1255,21 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_xinxianying: {
 				英装素果: {
-					name: 'skin_xinxianying_英装素果',
+					name: 'skin_xinxianying_YingZhuangSuGuo',
 					//x: [0, 0.7],
 					y: [75, 0.26],
 					//height: [0, 0.8],
 				},
 			},
 			skin_xushi: {
-				为夫弑敌: {
-					name: 'skin_xushi_为夫弑敌',
+				拈花思君: {
+					name: 'skin_xushi_NianHuaSiJun',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
-				拈花思君: {
-					name: 'skin_xushi_拈花思君',
+				为夫弑敌: {
+					name: 'skin_xushi_WeiFuShiDi',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -1060,7 +1277,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_zhangchangpu: {
 				钟桂香蒲: {
-					name: 'skin_zhangchangpu_钟桂香蒲',
+					name: 'skin_zhangchangpu_ZhongGuiXiangPu',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -1068,49 +1285,70 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_zhangchunhua: {
 				花好月圆: {
-					name: 'skin_zhangchunhua_花好月圆',
+					name: 'skin_zhangchunhua_HuaHaoYueYuan',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 				战场绝版: {
-					name: 'skin_zhangchunhua_战场绝版',
+					name: 'skin_zhangchunhua_ZhanChang',
 					//x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
 			skin_zhangqiying: {
+				岁稔年丰: {
+					name: 'skin_zhangqiying_SuiRenNianFeng',
+					y: [0, 0.33],
+					height: [0, 0.8],
+				},
 				逐鹿天下: {
-					name: 'skin_zhangqiying_逐鹿天下',
+					name: 'skin_zhangqiying_ZhuLuTianXia',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 1],
 				},
 			},
+			skin_zhangxingcai: {
+				凯旋星花: {
+					name: 'skin_zhangxingcai_KaiXuanXingHua',
+					x: [0, 0.45],
+					y: [0, 0.33],
+					height: [0, 0.8],
+				},
+			},
 			skin_zhenji: {
 				才颜双绝: {
-					name: 'skin_zhenji_才颜双绝',
+					name: 'skin_zhenji_CaiYanShuangJue',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 				洛神御水: {
-					name: 'skin_zhenji_洛神御水',
+					name: 'skin_zhenji_LuoShenYuShui',
 					x: [0, 0.6],
 					y: [75, 0.3],
 					//height: [0, 0.8],
 				},
 			},
+			skin_zhoufei: {
+				晴空暖鸢: {
+					name: 'skin_zhoufei_QingKongNuanYuan',
+					x: [0, 0.5],
+					y: [0, 0.33],
+					height: [0, 0.8],
+				},
+			},
 			skin_zhugeguo: {
 				兰荷艾莲: {
-					name: 'skin_zhugeguo_兰荷艾莲',
+					name: 'skin_zhugeguo_AiHeAiLian',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 				英装素果: {
-					name: 'skin_zhugeguo_英装素果',
+					name: 'skin_zhugeguo_YingZhuangSuGuo',
 					//x: [0, 0.7],
 					y: [75, 0.3],
 					//height: [0, 0.8],
@@ -1118,43 +1356,40 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_zhugeliang: {
 				空城退敌: {
-					name: 'skin_zhugeliang_空城退敌',
+					name: 'skin_zhugeliang_KongChengTuiDi',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
 			},
+			
+			
 		};
-		
-		animation.assets = assets;
 		
 		animation.play = function (name, skin) {
-			if (assets[name] == void 0 || assets[name][skin] == void 0) return console.log('没有找到[asset:' + name + ', skin:' + skin + ']的资源。');
+			var definedAssets = this.definedAssets;
+			if (definedAssets[name] == void 0 || definedAssets[name][skin] == void 0) return console.log('没有预定义[asset:' + name + ', skin:' + skin + ']的资源。');
 			
 			
-			var asset = assets[name][skin];
-			var assetName;
+			if (this.current && this.current.name == name) return;
+			var asset = definedAssets[name][skin];
+			var skinAnim = {
+				name: asset.name,
+				action: asset.action,
+				loop: true
+			};
 			
-			if (asset.animation == void 0) {
-				assetName = asset.name;
-			} else {
-				assetName = [asset.name, asset.animation];
-			}
-			
-			animation.stop();
-			if (!animation.spine2d.assets[asset.name]) {
-				animation.loadSpine2d(asset.name, 'skel', function(){
-					animation.current = animation.loopSpine2d(assetName);
+			this.stopSpineAll();
+			if (!this.spine.assets[asset.name]) {
+				var _this = this;
+				_this.loadSpine(asset.name, 'skel', function(){
+					if (_this.current && _this.current.name == skinAnim.name) return;
+					_this.current = _this.playSpine(skinAnim);
+					if (_this.current) _this.current.asset = asset;
 				});
 			} else {
-				animation.current = animation.loopSpine2d(assetName);
-			}
-		};
-		
-		animation.stop = function () {
-			if (animation.current != void 0) {
-				animation.stopSpine2d(animation.current);
-				animation.current = void 0;
+				this.current = this.playSpine(skinAnim);
+				if (this.current) this.current.asset = asset;
 			}
 		};
 		
@@ -1168,9 +1403,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		
 		return animation;
 	})();
-	
-	window.anm = decadeUI.backgroundAnimation;
+
+	window.dcdAnim = decadeUI.animation;
+	window.dcdBackAnim = decadeUI.backgroundAnimation;
 	window.game = game;
-	window.playerAnimate = decadeUI.animation.playspine2d;
+	window.get = get;
+	window.ui = ui;
+	window._status = _status;
 });
 

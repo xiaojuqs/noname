@@ -2,201 +2,31 @@
 game.import("extension", function(lib,game,ui,get,ai,_status){ return { name:"十周年UI",
 content:function(config, pack){
 	'use strict';
+	
 	var extensionName = '十周年UI';
 	var extension = lib.extensionMenu['extension_' + extensionName];
 	var extensionPath = lib.assetURL + 'extension/' + extensionName + '/';
-	if (!(extension && extension.enable && extension.enable.init)) return;
-
+	
+    if (!(extension && extension.enable && extension.enable.init)) return;
+    
 	switch(lib.config.layout){
-		case 'long2':
-		case 'nova':
+        case 'long2':
+        case 'nova':
 		case 'mobile':
-			break;
-		default:
-			alert('十周年UI提醒您，请使用<默认>、<手杀>、<新版>布局以获得良好体验（在选项-外观-布局中调整）。');
-			break;
-	}
-	
-	if(lib.config.extension_十周年UI_newDecadeStyle){
-		lib.skill._kill_framebg = {
-			trigger: {
-				source: "die",
-			},
-			filter: function(event,player) {
-				return player.node.zoneCamp.dataset.borderLevel!='five';
-			},
-			direct:true,
-			content: function() {
-				if (!player.node.zoneCamp.dataset.borderLevel || !player.node.zoneHp.dataset.borderLevel) {
-					player.node.zoneCamp.dataset.borderLevel = '';
-					player.node.zoneHp.dataset.borderLevel = '';
-				}
-				switch (player.node.zoneCamp.dataset.borderLevel) {
-					case 'two':
-						player.node.zoneCamp.dataset.borderLevel = 'three';
-						player.node.zoneHp.dataset.borderLevel = 'three';
-						break;
-					case 'three':
-						player.node.zoneCamp.dataset.borderLevel = 'four';
-						player.node.zoneHp.dataset.borderLevel = 'four';
-						break;
-					case 'four':
-						player.node.zoneCamp.dataset.borderLevel = 'five';
-						player.node.zoneHp.dataset.borderLevel = 'five';
-						break;
-					default:
-						player.node.zoneCamp.dataset.borderLevel = 'two';
-						player.node.zoneHp.dataset.borderLevel = 'two';
-				}
-			}
-		}
-	
-		lib.element.player.markSkillCharacter = function(id, target, name, content) {
-			if (typeof target == 'object') {
-				target = target.name;
-			}
-			game.broadcastAll(function(player, target, name, content, id) {
-				if (player.marks[id]) {
-					player.marks[id].name = name + '_charactermark';
-					player.marks[id]._name = target;
-					player.marks[id].info = {
-						name: name,
-						content: content,
-						id: id
-					};
-					var str = lib.translate[id + '_bg'];
-					if (!str || str[0] == '+' || str[0] == '-') {
-						str = get.translation(id);
-					}
-					player.marks[id].innerHTML = str;
-					game.addVideo('changeMarkCharacter', player, {
-						id: id,
-						name: name,
-						content: content,
-						target: target
-					});
-				} else {
-					player.marks[id] = player.markCharacter(id, {
-						name: name,
-						content: content,
-						id: id
-					});
-					player.marks[id]._name = target;
-					game.addVideo('markCharacter', player, {
-						name: name,
-						content: content,
-						id: id,
-						target: target
-					});
-				}
-			}, this, target, name, content, id);
-			return this;
-		};
-		lib.element.player.markCharacter = function(name, info, learn, learn2) {
-			if (typeof name == 'object') {
-				name = name.name;
-			}
-			var node;
-			if (name.indexOf('unknown') == 0) {
-				node = ui.create.div('.card.mark.drawinghidden');
-				ui.create.div('.background.skillmark', node).innerHTML = get.translation(name)[0];
-			} else {
-				node = ui.create.div('.card.mark.drawinghidden');
-				this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
-				var str = lib.translate[name + '_bg'];
-				if (!str || str[0] == '+' || str[0] == '-') {
-					str = get.translation(name);
-				}
-				ui.create.div('.background.skillmark', node).innerHTML = str;
-			}
-			this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
-			node.name = name + '_charactermark';
-			if (!info) {
-				info = {};
-			}
-			if (!info.name) {
-				info.name = get.translation(name);
-			}
-			if (!info.content) {
-				info.content = get.skillintro(name, learn, learn2)
-			}
-			node.info = info;
-			node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.card);
-			if (!lib.config.touchscreen) {
-				if (lib.config.hover_all) {
-					lib.setHover(node, ui.click.hoverplayer);
-				}
-				if (lib.config.right_info) {
-					node.oncontextmenu = ui.click.rightplayer;
-				}
-			}
-			ui.updatem(this);
-			return node;
-		};
-		lib.element.player.mark = function(name, info, skill) {
-			if (get.itemtype(name) == 'cards') {
-				var marks = [];
-				for (var i = 0; i < name.length; i++) {
-					marks.push(this.mark(name[i], info));
-				}
-				return marks;
-			} else {
-				var node;
-				if (get.itemtype(name) == 'card') {
-					node = name.copy('mark');
-					node.classList.add('drawinghidden');
-					this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
-					node.suit = name.suit;
-					node.number = name.number;
-					// if(name.name&&lib.card[name.name]&&lib.card[name.name].markimage){
-					// 	node.node.image.style.left=lib.card[name.name].markimage;
-					// }
-	
-					if (name.classList.contains('fullborder')) {
-						node.classList.add('fakejudge');
-						node.classList.add('fakemark');
-						(node.querySelector('.background') || ui.create.div('.background', node)).innerHTML = lib.translate[name.name +
-							'_bg'] || get.translation(name.name)[0];
-					}
-	
-					name = name.name;
-				} else {
-					node = ui.create.div('.card.mark.drawinghidden');
-					this.node.marks.insertBefore(node, this.node.marks.childNodes[1]);
-					var str = lib.translate[name + '_bg'];
-					if (!str || str[0] == '+' || str[0] == '-') {
-						str = get.translation(name);
-					}
-					ui.create.div('.background.skillmark', node).innerHTML = str;
-					// node.style.fontFamily=lib.config.card_font;
-				}
-				node.name = name;
-				node.skill = skill || name;
-				if (typeof info == 'object') {
-					node.info = info;
-				} else if (typeof info == 'string') {
-					node.markidentifer = info;
-				}
-				node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.card);
-				if (!lib.config.touchscreen) {
-					if (lib.config.hover_all) {
-						lib.setHover(node, ui.click.hoverplayer);
-					}
-					if (lib.config.right_info) {
-						node.oncontextmenu = ui.click.rightplayer;
-					}
-				}
-				this.updateMarks();
-				ui.updatem(this);
-				return node;
-			}
-		}
-	}
+            break;
+        default:
+            alert('十周年UI提醒您，请使用<默认>、<手杀>、<新版>布局以获得良好体验（在选项-外观-布局中调整）。');
+            break;
+    }
 	
 	console.time(extensionName);
 	window.decadeUI = {
 		init:function(){
 			this.extensionName = extensionName;
+			
+			var sensor = decadeUI.element.create('sensor', document.body);
+			sensor.id = 'decadeUI-body-sensor';
+			this.bodySensor = new decadeUI.ResizeSensor(sensor);
 			
 			var SVG_NS = 'http://www.w3.org/2000/svg';
 			var svg = document.body.appendChild(document.createElementNS(SVG_NS, 'svg'));
@@ -220,40 +50,56 @@ content:function(config, pack){
 			soloPath.setAttribute('d', 'M0 0 H1 Q1 0.065 0.9 0.065 Q1 0.065 1 0.11 V0.96 Q1 1 0.9 1 H0.1 Q0 1 0 0.96 V0.11 Q0 0.065 0.1 0.065 Q0 0.065 0 0 Z');
 			duoLPath.setAttribute('d', 'M0 0 H1 V1 Q1 1 0.9 1 H0.1 Q0 1 0 0.96 V0.11 Q0 0.065 0.1 0.065 Q0 0.065 0 0 Z');
 			duoRPath.setAttribute('d', 'M0 0 H1 Q1 0.065 0.9 0.065 Q1 0.065 1 0.11 V0.96 Q1 1 0.9 1 H0 Z');
-
+			
+			document.addEventListener('click', function(e){ dui.set.activeElement(e.target); }, true);
 			this.initOverride();
 			return this;
 		},
 		initOverride:function(){
-		    function override (source, target) {
+			function override (dest, src) {
 				var ok = true;
-				for (var key in source) {
-					if (target[key]) {
-						ok = override(source[key], target[key]);
+				var key;
+				for (key in src) {
+					if (dest[key]) {
+						ok = override(dest[key], src[key]);
 						if (ok) {
-							target[key] = source[key];
+							dest[key] = src[key];
 						}
+					} else {
+						dest[key] = src[key];
 					}
 					ok = false;
 				}
+				
 				return ok;
 			};
+			
 			var base = {
 				ui:{
 					create:{
+						card: ui.create.card,
 						cards: ui.create.cards,
+						confirm: ui.create.confirm,
 						volume: ui.create.volume,
 						chat: ui.create.chat,
 						button: ui.create.button,
+						menu: ui.create.menu,
+						player: ui.create.player,
+						selectlist: ui.create.selectlist,
 					},
+					
+					update: ui.update,
+					updatec: ui.updatec,
 				},
 				get:{
 					infoHp: get.infoHp,
 					infoMaxHp: get.infoMaxHp,
+					objtype: get.objtype,
 					skillState: get.skillState,
 				},
 				game:{
 					check: game.check,
+					expandSkills: game.expandSkills,
 					uncheck: game.uncheck,
 					loop: game.loop,
 					over: game.over,
@@ -264,13 +110,31 @@ content:function(config, pack){
 				},
 				lib:{
 					element:{
+						card:{
+							init: lib.element.card.init,
+						}, 
+						
+						content:{
+							chooseButton: lib.element.content.chooseButton,
+							turnOver: lib.element.content.turnOver,
+						},
+						
+						control:{
+							add: lib.element.control.add,
+							open: lib.element.control.open,
+							close: lib.element.control.close,
+						},
+						
 						player:{
 							getState: lib.element.player.getState,
+							init: lib.element.player.init,
+							uninit: lib.element.player.uninit,
 							setModeState: lib.element.player.setModeState,
-							countCards: lib.element.player.countCards,
 							$compare: lib.element.player.$compare,
 							$disableEquip: lib.element.player.$disableEquip,
+							$damage: lib.element.player.$damage,
 							$damagepop: lib.element.player.$damagepop,
+							$dieAfter: lib.element.player.$dieAfter,
 							$skill: lib.element.player.$skill,
 						},
 						event:{
@@ -283,24 +147,399 @@ content:function(config, pack){
 			var ride = {};
 			ride.lib = {
 				element:{
-					player:{
-						$skill:function(name, type, color, avatar){
-							if (!decadeUI.config.gameAnimationEffect || !decadeUI.animation.gl) return base.lib.element.player.$skill.apply(this, arguments);
-							var _this = this;
-							if (typeof type != 'string') type = 'legend';
-							game.addVideo('skill', this, [name, type, color, avatar]);
-							game.broadcastAll(function(player, type, name, color, avatar){
-									if (window.decadeUI == void 0) {
-										game.delay(2.5);
-										if (name) player.$fullscreenpop(name, color, avatar);
-										return;
-									}
-									decadeUI.delay(2500);
-									if (name) decadeUI.effect.skill(player, name, avatar);
-							}, _this, type, name, color, avatar);
+					dialog:{
+						open:function(){
+							if (this.noopen) return;
+							for (var i = 0; i < ui.dialogs.length; i++) {
+								if (ui.dialogs[i] == this) {
+									this.show();
+									this.refocus();
+									ui.dialogs.remove(this);
+									ui.dialogs.unshift(this);
+									ui.update();
+									return this;
+								}
+								if (ui.dialogs[i].static) ui.dialogs[i].unfocus();
+								else ui.dialogs[i].hide();
+							}
+							ui.dialog = this;
+							ui.arena.appendChild(this);
+							ui.dialogs.unshift(this);
+							ui.update();
+							if (!this.classList.contains('prompt')) {
+								this.style.animation = 'open-dialog 0.5s';
+							}
+							
+							return this;
 						},
 					},
+					
 					card:{
+						init:function(card){
+							if (Array.isArray(card)) {
+								if (card[2] == 'huosha') {
+									card[2] = 'sha';
+									card[3] = 'fire';
+								}
+								if (card[2] == 'leisha') {
+									card[2] = 'sha';
+									card[3] = 'thunder';
+								}
+								if (card[2] == 'kamisha') {
+									card[2] = 'sha';
+									card[3] = 'kami';
+								}
+								if (card[2] == 'icesha') {
+									card[2] = 'sha';
+									card[3] = 'ice';
+								}
+							} else if (typeof card == 'object') {
+								card = [card.suit, card.number, card.name, card.nature];
+							}
+							
+							var cardnum = card[1] || '';
+							var cardsuit = get.translation(card[0]);
+							if (parseInt(cardnum) == cardnum) cardnum = parseInt(cardnum);
+							if ([1, 11, 12, 13].contains(cardnum)) {
+								cardnum = {
+									'1': 'A',
+									'11': 'J',
+									'12': 'Q',
+									'13': 'K'
+								} [cardnum];
+							}
+							if (!lib.card[card[2]]) lib.card[card[2]] = {};
+							var info = lib.card[card[2]];
+							if (info.global && !this.classList.contains('button')) {
+								if (Array.isArray(info.global)) {
+									while (info.global.length) {
+										game.addGlobalSkill(info.global.shift());
+									}
+								} else if (typeof info.global == 'string') {
+									game.addGlobalSkill(info.global);
+								}
+								delete info.global;
+							}
+							if (this.name) {
+								this.classList.remove('epic');
+								this.classList.remove('legend');
+								this.classList.remove('gold');
+								this.classList.remove('unique');
+								this.style.background = '';
+								var subtype = get.subtype(this);
+								if (subtype) {
+									this.classList.remove(subtype);
+								}
+							}
+							if (info.epic) {
+								this.classList.add('epic');
+							} else if (info.legend) {
+								this.classList.add('legend');
+							} else if (info.gold) {
+								this.classList.add('gold');
+							} else if (info.unique) {
+								this.classList.add('unique');
+							}
+							var bg = card[2];
+							if (info.cardimage) {
+								bg = info.cardimage;
+							}
+							var img = lib.card[bg].image;
+							if (img) {
+								if (img.indexOf('db:') == 0) {
+									img = img.slice(3);
+								} else if (img.indexOf('ext:') != 0) {
+									img = null;
+								}
+							}
+							this.classList.remove('fullskin');
+							this.classList.remove('fullimage');
+							this.classList.remove('fullborder');
+							this.dataset.cardName = card[2];
+							this.dataset.cardType = info.type || '';
+							this.dataset.cardSubype = info.subtype || '';
+							this.dataset.cardMultitarget = info.multitarget ? '1': '0';
+							if (this.node.name.dataset.nature) this.node.name.dataset.nature = '';
+							if (!lib.config.hide_card_image && lib.card[bg].fullskin) {
+								this.classList.add('fullskin');
+								if (img) {
+									if (img.indexOf('ext:') == 0) {
+										this.node.image.setBackgroundImage(img.replace(/ext:/, 'extension/'));
+									} else {
+										this.node.image.setBackgroundDB(img);
+									}
+								} else {
+									if (lib.card[bg].modeimage) {
+										this.node.image.setBackgroundImage('image/mode/' + lib.card[bg].modeimage + '/card/' + bg + '.png');
+									} else {
+										this.node.image.setBackgroundImage('image/card/' + bg + '.png');
+									}
+								}
+							// } else if (lib.card[bg].image == 'background') {
+								// if (card[3]) this.node.background.setBackground(bg + '_' + card[3], 'card');
+								// else this.node.background.setBackground(bg, 'card');
+							} else if (lib.card[bg].fullimage) {
+								this.classList.add('fullimage');
+								if (img) {
+									if (img.indexOf('ext:') == 0) {
+										this.setBackgroundImage(img.replace(/ext:/, 'extension/'));
+										this.style.backgroundSize = 'cover';
+									} else {
+										this.setBackgroundDB(img);
+									}
+								} else if (lib.card[bg].image) {
+									if (lib.card[bg].image.indexOf('character:') == 0) {
+										this.setBackground(lib.card[bg].image.slice(10), 'character');
+									} else {
+										this.setBackground(lib.card[bg].image);
+									}
+								} else {
+									var cardPack = lib.cardPack['mode_' + get.mode()];
+									if (Array.isArray(cardPack) && cardPack.contains(bg)) {
+										this.setBackground('mode/' + get.mode() + '/card/' + bg);
+									} else {
+										this.setBackground('card/' + bg);
+									}
+								}
+							} else if (lib.card[bg].fullborder) {
+								this.classList.add('fullborder');
+								if (lib.card[bg].fullborder == 'gold') {
+									this.node.name.dataset.nature = 'metalmm';
+								} else if (lib.card[bg].fullborder == 'silver') {
+									this.node.name.dataset.nature = 'watermm';
+								}
+								if (!this.node.avatar) {
+									this.node.avatar = ui.create.div('.cardavatar');
+									this.insertBefore(this.node.avatar, this.firstChild);
+								}
+								if (!this.node.framebg) {
+									this.node.framebg = ui.create.div('.cardframebg');
+									this.node.framebg.dataset.auto = lib.card[bg].fullborder;
+									this.insertBefore(this.node.framebg, this.firstChild);
+								}
+								if (img) {
+									if (img.indexOf('ext:') == 0) {
+										this.node.avatar.setBackgroundImage(img.replace(/ext:/, 'extension/'));
+										this.node.avatar.style.backgroundSize = 'cover';
+									} else {
+										this.node.avatar.setBackgroundDB(img);
+									}
+								} else if (lib.card[bg].image) {
+									if (lib.card[bg].image.indexOf('character:') == 0) {
+										this.node.avatar.setBackground(lib.card[bg].image.slice(10), 'character');
+									} else {
+										this.node.avatar.setBackground(lib.card[bg].image);
+									}
+								} else {
+									var cardPack = lib.cardPack['mode_' + get.mode()];
+									if (Array.isArray(cardPack) && cardPack.contains(bg)) {
+										this.node.avatar.setBackground('mode/' + get.mode() + '/card/' + bg);
+									} else {
+										this.node.avatar.setBackground('card/' + bg);
+									}
+								}
+							} else if (lib.card[bg].image == 'card') {
+								if (card[3]) this.setBackground(bg + '_' + card[3], 'card');
+								else this.setBackground(bg, 'card');
+							} else if (typeof lib.card[bg].image == 'string' && !lib.card[bg].fullskin) {
+								if (img) {
+									if (img.indexOf('ext:') == 0) {
+										this.setBackgroundImage(img.replace(/ext:/, 'extension/'));
+										this.style.backgroundSize = 'cover';
+									} else {
+										this.setBackgroundDB(img);
+									}
+								} else {
+									this.setBackground(lib.card[bg].image);
+								}
+							} else {
+								this.node.background.textContent = lib.translate[bg + '_cbg'] || lib.translate[bg + '_bg'] || get.translation(bg)[0];
+								// if (this.node.background.innerHTML.length > 1) this.node.background.classList.add('tight');
+								// else this.node.background.classList.remove('tight');
+							}
+							if (!lib.card[bg].fullborder && this.node.avatar && this.node.framebg) {
+								this.node.avatar.remove();
+								this.node.framebg.remove();
+								this.node.avatar = undefined;
+								this.node.framebg = undefined;
+							}
+							if (info.noname && !this.classList.contains('button')) {
+								this.node.name.style.display = 'none';
+							}
+							if (info.addinfo) {
+								if (!this.node.addinfo) {
+									this.node.addinfo = ui.create.div('.range', this);
+								}
+								this.node.addinfo.innerHTML = info.addinfo;
+							} else if (this.node.addinfo) {
+								this.node.addinfo.remove();
+								delete this.node.addinfo;
+							}
+							
+							if (card[0] == 'heart' || card[0] == 'diamond') {
+								this.node.info.classList.add('red');
+							}
+							
+							this.node.image.className = 'image';
+							
+							var filename = card[2];
+							var vertname = '';
+							var cardname = get.translation(card[2]);
+							this.dataset.suit = card[0];
+							this.$suitnum.$num.textContent = cardnum;
+							this.$suitnum.$suit.textContent = cardsuit;
+							
+							if (card[2] == 'sha') {
+								if (card[3] == 'fire') {
+									cardname = '火' + cardname;
+									filename = 'huosha';
+									this.node.image.classList.add('fire');
+								} else if (card[3] == 'thunder') {
+									cardname = '雷' + cardname;
+									filename = 'leisha';
+									this.node.image.classList.add('thunder');
+								} else if (card[3] == 'kami') {
+									cardname = '神' + cardname;
+									this.node.image.classList.add('kami');
+								} else if (card[3] == 'ice') {
+									cardname = '冰' + cardname;
+									filename = 'bingsha';
+									this.node.image.classList.add('ice');
+								}
+							}
+							
+							for (var i = 0; i < cardname.length; i++) vertname += cardname[i] + '\n';
+							this.$name.innerText = cardname;
+							this.$vertname.innerText = vertname;
+							this.$equip.$suitnum.textContent = cardsuit + cardnum;
+							this.$equip.$name.textContent = ' ' + cardname;
+							
+							this.suit = card[0];
+							this.number = parseInt(card[1]) || 0;
+							this.name = card[2];
+							this.classList.add('card');
+							if (card[3]) {
+								if (lib.nature.contains(card[3])) this.nature = card[3];
+								this.classList.add(card[3]);
+							} else if (this.nature) {
+								this.classList.remove(this.nature);
+								delete this.nature;
+							}
+							if (info.subtype) this.classList.add(info.subtype);
+							if (this.inits) {
+								for (var i = 0; i < lib.element.card.inits.length; i++) {
+									lib.element.card.inits[i](this);
+								}
+							}
+							if (typeof info.init == 'function') info.init();
+							switch (get.subtype(this)) {
+								case 'equip1':
+									var added = false;
+									if (lib.card[this.name] && lib.card[this.name].distance) {
+										var dist = lib.card[this.name].distance;
+										if (dist.attackFrom) {
+											added = true;
+											this.$range.textContent = '范围: ' + ( - dist.attackFrom + 1);
+										}
+									}
+									if (!added) this.$range.textContent = '范围: 1';
+									break;
+								case 'equip3':
+									if (info.distance && info.distance.globalTo) {
+										this.$range.textContent = '防御: ' + info.distance.globalTo;
+										this.$equip.$name.textContent += '+';
+									}
+									break;
+								case 'equip4':
+									if (info.distance && info.distance.globalFrom) {
+										this.$range.textContent = '进攻: ' + ( - info.distance.globalFrom);
+										this.$equip.$name.textContent += '-';
+									}
+									break;
+								default:
+									this.$range.textContent = '';
+									break;
+							}
+							if (_status.connectMode && !game.online && lib.cardOL && !this.cardid) {
+								this.cardid = get.id();
+								lib.cardOL[this.cardid] = this;
+							}
+							
+							var tags = [];
+							if (!_status.connectMode && !_status.video) this.cardid = get.id();
+							if (Array.isArray(card[4])) tags.addArray(card[4]);
+							
+							if (this.cardid) {
+								if (!_status.cardtag) _status.cardtag = {};
+								for (var i in _status.cardtag) if (_status.cardtag[i].contains(this.cardid)) { tags.add(i); }
+								if (tags.length) {
+									var tagText = '';
+									for (var i = 0; i < tags.length; i++) {
+										var tag = tags[i];
+										if (!_status.cardtag[tag]) {
+											_status.cardtag[tag] = [];
+										}
+										_status.cardtag[tag].add(this.cardid);
+										tagText += lib.translate[tag + '_tag'];
+									}
+									
+									this.$range.textContent = tagText;
+									this.$range.classList.add('card-tag');
+								}
+							}
+							
+							var imgFormat = decadeUI.config.cardPrettify;
+							if (imgFormat != 'off'){
+								this.classList.add('decade-card');
+								if (!this.classList.contains('infohidden')) {
+									var res = decadeUI.resources.cards[filename];
+									if (!res) {
+										res = {
+											name: filename,
+											chinese: '',
+											image: undefined,		// 图片
+											loaded: undefined, 		// 是否已加载资源
+											rawUrl: undefined, 			// 被替换的图片地址	
+										};
+										
+										decadeUI.resources.cards[filename] = res;
+									}
+									
+									if (res.loaded !== false) {
+										if (!res.loaded) {
+											var url = lib.assetURL + 'extension/' + extensionName + '/image/card/' + res.name + '.' + imgFormat;
+											var image = new Image();
+											
+											image.onload = function(){
+												res.loaded = true;
+												image.onload = null;
+											};
+											
+											var card = this;
+											image.onerror = function(){
+												res.loaded = false;
+												image.onerror = null;
+												card.style.background = image.rawUrl;
+												card.classList.remove('decade-card');
+											}
+											
+											image.rawUrl = this.style.background || this.style.backgroundImage;
+											image.src = url;
+											res.image = image;
+										}
+										
+										this.style.background = 'url("' + res.image.src + '")';
+									} else {
+										this.classList.remove('decade-card');
+									}
+								}
+							} else {
+								this.classList.remove('decade-card');
+							}
+							
+							return this;
+						},
+						
 						updateTransform:function(bool, delay){
 							if (delay) {
 								var that = this;
@@ -312,47 +551,546 @@ content:function(config, pack){
 								if (this._transform && this.parentNode && this.parentNode.parentNode && 
 									this.parentNode.parentNode.parentNode == ui.me && (!_status.mousedown || _status.mouseleft)) {
 									if (bool) {
-										this.style.transform = this._transform + ' translateY(-20px)';
+										this.style.transform = this._transform + ' translateY(-' + (decadeUI.isMobile() ? 15: 20) + 'px)';
 									} else {
 										this.style.transform = this._transform || '';
 									}
 								}
 							}
 						},
-					}
+					},
+					
+					content:{
+						turnOver:function(){
+							game.log(player,'翻面');
+							player.classList.toggle('turnedover');
+							game.broadcast(function(player){
+								player.classList.toggle('turnedover');
+							},player);
+							game.addVideo('turnOver', player, player.classList.contains('turnedover'));
+							player.style.animation = 'turned-over 0.5s linear';
+							setTimeout(function(player){
+								player.style.animation = '';
+							}, 500, player)
+							
+							return result;
+						},
+					},
+					
+					control:{
+						add:function(item){
+							var node = document.createElement('div');
+							node.link = item;
+							node.innerHTML = get.translation(item);
+							node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.control);
+							this.appendChild(node);
+							this.updateLayout();
+						},
+						
+						open:function(){
+							ui.control.insertBefore(this, _status.createControl || ui.confirm);
+							ui.controls.unshift(this);
+							return this;
+						},
+						
+						close:function(){
+							ui.controls.remove(this);
+							if (this.parentNode) this.parentNode.removeChild(this);
+							if(ui.confirm==this) delete ui.confirm;
+							if(ui.skills==this) delete ui.skills;
+							if(ui.skills2==this) delete ui.skills2;
+							if(ui.skills3==this) delete ui.skills3;
+						},
+						
+						replace:function(){
+							var items;
+							var index = 0;
+							var nodes = this.childNodes;
+							
+							if (Array.isArray(arguments[0])) {
+								items = arguments[0];
+							} else {
+								items = arguments;
+							}
+							
+							this.custom = undefined;
+							
+							for (var i = 0; i < items.length; i++){
+								if (typeof items[i] == 'function') {
+									this.custom = items[i];
+								} else {
+									if (index < nodes.length) {
+										nodes[i].link = items[i];
+										nodes[i].innerHTML = get.translation(items[i]);
+									} else {
+										this.add(items[i]);
+									}
+									
+									index++;
+								}
+							}
+							
+							while (index < nodes.length) {
+								nodes[index].remove();
+							}
+							
+							this.updateLayout();
+							ui.updatec();
+							return this;
+						},
+						
+						updateLayout:function(){
+							var nodes = this.childNodes;
+							if (nodes.length >= 2) {
+								this.classList.add('combo-control');
+								for (var i = 0; i < nodes.length; i++) nodes[i].classList.add('control');
+							} else {
+								this.classList.remove('combo-control');
+								if (nodes.length == 1) nodes[0].classList.remove('control');
+							}
+						},
+					},
+					
+					player:{
+						mark:function(item, info, skill){
+							if (get.itemtype(item) == 'cards') {
+								var marks = new Array(item.length);
+								for (var i = 0; i < item.length; i++) marks.push(this.mark(item[i], info));
+								return marks;
+							}
+							
+							var mark;
+							if (get.itemtype(item) == 'card') {
+								mark = item.copy('mark');
+								mark.suit = item.suit;
+								mark.number = item.number;
+								if (item.classList.contains('fullborder')) {
+									mark.classList.add('fakejudge');
+									mark.classList.add('fakemark'); 
+									if (!mark.node.mark) mark.node.mark = mark.querySelector('.mark-text') || decadeUI.element.create('mark-text', mark);
+									mark.node.mark.innerHTML = lib.translate[name.name + '_bg'] || get.translation(name.name)[0];
+								}
+								item = item.name;
+							} else {
+								mark = ui.create.div('.card.mark');
+								var markText = lib.translate[item + '_bg'];
+								if (!markText || markText[0] == '+' || markText[0] == '-') {
+									markText = get.translation(item).substr(0, 2);
+									if (decadeUI.config.playerMarkStyle != 'decade') {
+										markText = markText[0];
+									}
+								}
+								mark.text = decadeUI.element.create('mark-text', mark);
+								if (markText.length == 2) mark.text.classList.add('small-text');
+								mark.text.innerHTML = markText;
+							}
+							
+							mark.name = item;
+							mark.skill = skill || item;
+							if (typeof info == 'object') {
+								mark.info = info;
+							} else if (typeof info == 'string') {
+								mark.markidentifer = info;
+							}
+							
+							mark.addEventListener(lib.config.touchscreen ? 'touchend': 'click', ui.click.card);
+							if (!lib.config.touchscreen) {
+								if (lib.config.hover_all) {
+									lib.setHover(mark, ui.click.hoverplayer);
+								}
+								if (lib.config.right_info) {
+									mark.oncontextmenu = ui.click.rightplayer;
+								}
+							}
+							
+							this.node.marks.appendChild(mark);
+							this.updateMarks();
+							ui.updatem(this);
+							return mark;
+						},
+						
+						markCharacter:function(name, info, learn, learn2){
+							if (typeof name == 'object') name = name.name;
+							
+							var nodeMark = ui.create.div('.card.mark');
+							var nodeMarkText = ui.create.div('.mark-text', nodeMark);
+							
+							if (!info) info = {};
+							if (!info.name) info.name = get.translation(name);
+							if (!info.content) info.content = get.skillintro(name, learn, learn2);
+							
+							if (name.indexOf('unknown') == 0) {
+								nodeMarkText.innerHTML = get.translation(name)[0];
+							} else {
+								if (!lib.character[name]) return console.error(name);
+								var text = info.name.substr(0, 2);
+								if (text.length == 2) nodeMarkText.classList.add('small-text');
+								nodeMarkText.innerHTML = text;
+							}
+							
+							nodeMark.name = name + '_charactermark';
+							nodeMark.info = info;
+							nodeMark.addEventListener(lib.config.touchscreen ? 'touchend': 'click', ui.click.card);
+							if (!lib.config.touchscreen) {
+								if (lib.config.hover_all) {
+									lib.setHover(nodeMark, ui.click.hoverplayer);
+								}
+								if (lib.config.right_info) {
+									nodeMark.oncontextmenu = ui.click.rightplayer;
+								}
+							}
+							
+							this.node.marks.appendChild(nodeMark);
+							ui.updatem(this);
+							return nodeMark;
+						},
+						
+						markSkillCharacter:function(id, target, name, content){
+							if (typeof target == 'object') target = target.name;
+							game.broadcastAll(function(player, target, name, content, id) {
+								if (player.marks[id] && !window.decadeUI) {
+									player.marks[id].name = name + '_charactermark';
+									player.marks[id]._name = target;
+									player.marks[id].info = {
+										name: name,
+										content: content,
+										id: id
+									};
+									player.marks[id].setBackground(target, 'character');
+									game.addVideo('changeMarkCharacter', player, {
+										id: id,
+										name: name,
+										content: content,
+										target: target
+									});
+								} else {
+									player.marks[id] = player.markCharacter(target, {
+										name: name,
+										content: content,
+										id: id
+									});
+									player.marks[id]._name = target;
+									game.addVideo('markCharacter', player, {
+										name: name,
+										content: content,
+										id: id,
+										target: target
+									});
+								}
+							}, this, target, name, content, id);
+							return this;
+						},
+						
+						playDynamic:function(animation, position){
+							this.classList.add('playing-dynamic');
+							
+							var dynamic = this.dynamic;
+							if (!dynamic) {
+								dynamic = new decadeUI.AnimationPlayer(decadeUIPath + 'assets/dynamic/');
+								this.dynamic = dynamic;
+								this.$dynamicWrap.appendChild(dynamic.$canvas);
+							} else {
+								dynamic.stopSpineAll();
+							}
+							
+							dynamic.adaptiveDPR = decadeUI.config.dynamicAdaptiveHD == 'on' ? true : false;
+							this.appendChild(this.$dynamicWrap);
+							var fileName = typeof animation == 'string' ? animation : animation.name;
+							if (dynamic.spine.assets[fileName]) {
+								dynamic.loopSpine(animation, position);
+							} else {
+								dynamic.loadSpine(fileName, null, function(){
+									dynamic.loopSpine(animation, position);
+								});
+							}
+						},
+						
+						stopDynamic:function(){
+							this.$dynamicWrap.remove();
+							this.classList.remove('playing-dynamic');
+							if (this.dynamic) this.dynamic.stopSpineAll();
+						},
+						
+						say:function(str){
+							str = str.replace(/##assetURL##/g, lib.assetURL);
+							
+							if (!this.$chatBubble) {
+								this.$chatBubble = decadeUI.element.create('chat-bubble');
+							} 
+							
+							var bubble = this.$chatBubble;
+							bubble.innerHTML = str;
+							if (this != bubble.parentNode) this.appendChild(bubble);
+							bubble.classList.remove('removing');
+							bubble.style.animation = 'fade-in 0.3s';
+							
+							if (bubble.timeout) clearTimeout(bubble.timeout)
+							bubble.timeout = setTimeout(function(bubble) {
+								bubble.timeout = undefined;
+								bubble.delete();
+							}, 2000, bubble);
+							
+							var name = get.translation(this.name);
+							var info = [name ? (name + '[' + this.nickname + ']') : this.nickname, str];
+							lib.chatHistory.push(info);
+							if (_status.addChatEntry) {
+								if (_status.addChatEntry._origin.parentNode) {
+									_status.addChatEntry(info, false);
+								} else {
+									_status.addChatEntry = undefined;
+								}
+							}
+							if (lib.config.background_speak && lib.quickVoice.indexOf(str) != -1) {
+								game.playAudio('voice', (this.sex == 'female' ? 'female': 'male'), lib.quickVoice.indexOf(str));
+							}
+						},
+						
+						updateMark:function(name, storage){
+							if (!this.marks[name]) {
+								if (lib.skill[name] && lib.skill[name].intro && (this.storage[name] || lib.skill[name].intro.markcount)) {
+									this.markSkill(name);
+									if (!this.marks[name]) return this;
+								} else {
+									return this;
+								}
+							}
+							
+							var mark = this.marks[name];
+							if (storage && this.storage[name]) this.syncStorage(name);
+							if (lib.skill[name] && lib.skill[name].intro && !lib.skill[name].intro.nocount && (this.storage[name] || lib.skill[name].intro.markcount)) {
+								var num = 0;
+								if (typeof lib.skill[name].intro.markcount == 'function') {
+									num = lib.skill[name].intro.markcount(this.storage[name], this);
+								} else if (typeof this.storage[name + '_markcount'] == 'number') {
+									num = this.storage[name + '_markcount'];
+								} else if (name == 'ghujia') {
+									num = this.hujia;
+								} else if (typeof this.storage[name] == 'number') {
+									num = this.storage[name];
+								} else if (Array.isArray(this.storage[name])) {
+									num = this.storage[name].length;
+								} else if (typeof this.storage[name] == 'boolean') {
+									num = this.storage[name] ? '+' : '-';
+								}
+								
+								if (num) {
+									if (!mark.markcount) mark.markcount = decadeUI.element.create('mark-count', mark);
+									mark.markcount.textContent = num;
+								} else if (mark.markcount) {
+									mark.markcount.delete();
+									mark.markcount = undefined;
+								}
+							} else {
+								if (mark.markcount) {
+									mark.markcount.delete();
+									mark.markcount = undefined;
+								}
+								
+								if (lib.skill[name].mark == 'auto') {
+									this.unmarkSkill(name);
+								}
+							}
+							
+							return this;
+						},
+						
+						$damage:function(source){
+							if (get.itemtype(source) == 'player') {
+								game.addVideo('damage', this, source.dataset.position);
+							} else {
+								game.addVideo('damage', this);
+							}
+							game.broadcast(function(player, source){
+								player.$damage(source);
+							}, this, source);
+							
+							this.style.animation = 'player-hurt 0.3s';
+							setTimeout(function(player){
+								player.style.animation = '';
+							}, 310, this)
+							decadeUI.delay(300);
+						},
+						
+						$dieAfter:function(){
+							this.stopDynamic();
+							
+							if (!decadeUI.config.playerDieEffect) {
+								if (base.lib.element.player.$dieAfter) base.lib.element.player.$dieAfter.apply(this, arguments);
+								return;
+							}
+							
+							if(!this.node.dieidentity) this.node.dieidentity = ui.create.div('died-identity', this);
+							this.node.dieidentity.classList.add('died-identity');
+							
+							var that = this;
+							var image = new Image();
+							var identity = decadeUI.getPlayerIdentity(this);
+							var url = extensionPath + 'image/decoration/dead_' + identity + '.png';
+							image.onerror = function(){
+								that.node.dieidentity.innerHTML = decadeUI.getPlayerIdentity(that, that.identity, true) + '<br>阵亡';
+							};
+							
+							that.node.dieidentity.innerHTML = '';
+							that.node.dieidentity.style.backgroundImage = 'url("' + url + '")';
+							image.src = url;
+							setTimeout(function(){
+								var rect = that.getBoundingClientRect();
+								decadeUI.animation.playSpine('effect_zhenwang', {
+									x: rect.left + rect.width / 2 - 7,
+									y: document.body.offsetHeight - rect.top - rect.height / 2 + 1,
+									scale: 0.8,
+								});
+							}, 250);
+						},
+						
+						$skill:function(name, type, color, avatar){
+							if (!decadeUI.config.gameAnimationEffect || !decadeUI.animation.gl) return base.lib.element.player.$skill.apply(this, arguments);
+							var _this = this;
+							if (typeof type != 'string') type = 'legend';
+							
+							game.addVideo('skill', this, [name, type, color, avatar]);
+							game.broadcastAll(function(player, type, name, color, avatar){
+									if (window.decadeUI == void 0) {
+										game.delay(2.5);
+										if (name) player.$fullscreenpop(name, color, avatar);
+										return;
+									}
+									
+									decadeUI.delay(2500);
+									if (name) decadeUI.effect.skill(player, name, avatar);
+							}, _this, type, name, color, avatar);
+						},
+					},
+					
 				}
 			};
+
 			ride.ui = {
+				updatec:function(){
+					var controls = ui.control.childNodes;
+					var stayleft;
+					var offsetLeft;
+					for (var i = 0; i < controls.length; i++) {
+						if (!stayleft && controls[i].stayleft) {
+							stayleft = controls[i];
+						} else if (!offsetLeft) {
+							offsetLeft = controls[i].offsetLeft;
+						}
+						
+						if (stayleft && offsetLeft) break;
+					}
+					
+					if (stayleft) {
+						if (ui.$stayleft != stayleft) {
+							stayleft._width = stayleft.offsetWidth
+							ui.$stayleft = stayleft;
+						}
+						
+						if (offsetLeft < stayleft._width) {
+							stayleft.style.position = 'static';
+						} else {
+							stayleft.style.position = 'absolute';
+						}
+					}
+				},
+				
+				updatej:function(player){
+					if (!player) return;
+				
+					var judges = player.node.judges.childNodes;
+					for (var i = 0; i < judges.length; i++){
+						if (judges[i].classList.contains('removing'))
+							continue;
+						
+						judges[i].classList.remove('drawinghidden');
+						if (_status.connectMode) {
+							if (judges[i].viewAs){
+								judges[i].node.judgeMark.node.judge.innerHTML = get.translation(judges[i].viewAs)[0];
+							} else {
+								judges[i].node.judgeMark.node.judge.innerHTML = get.translation(judges[i].name)[0];
+							}
+						}
+					}
+				},
+				
+				updatem:function(player){
+					// 不需要
+				},
+				
 				updatez:function(){
 					document.body.style.zoom = game.documentZoom;
 					document.body.style.width = '100%';
 					document.body.style.height = '100%';
 					document.body.style.transform = '';
+					// var width = document.documentElement.offsetWidth;
+					// var height = document.documentElement.offsetHeight;
+					// var zoom = game.documentZoom;
+					// decadeUI.zooms.body = zoom;
+					
+					// if(zoom != 1){
+						// width = Math.round(width / zoom);
+						// height = Math.round(height / zoom);
+						// document.body.style.width = width + 'px';
+						// document.body.style.height = height + 'px'
+						// document.body.style.zoom = zoom;
+						// document.body.style.transform = '';
+					// }else{
+						// document.body.style.width = width + 'px';
+						// document.body.style.height = height + 'px';
+						// document.body.style.zoom = 1;
+						// document.body.style.transform = '';
+					// }
 				},
+				
+				update:function(){
+					for (var i = 0; i < ui.updates.length; i++) ui.updates[i]();
+					if (ui.dialog == undefined || ui.dialog.classList.contains('noupdate')) return;
+					if (game.chess) return base.ui.update();
+	
+					if ((!ui.dialog.buttons || !ui.dialog.buttons.length) && !ui.dialog.forcebutton && ui.dialog.classList.contains('fullheight') == false && get.mode() != 'stone') {
+						ui.dialog.classList.add('prompt');
+					} else {
+						ui.dialog.classList.remove('prompt');
+						ui.dialog.style.height = Math.min(decadeUI.get.bodySize().height * 0.42, ui.dialog.content.offsetHeight) + 'px';
+					}
+					
+					if (!ui.dialog.forcebutton && !ui.dialog._scrollset) {
+						ui.dialog.classList.remove('scroll1');
+						ui.dialog.classList.remove('scroll2');
+					} else {
+						ui.dialog.classList.add('scroll1');
+						ui.dialog.classList.add('scroll2');
+					}
+				},
+				
 				create:{
 					rarity:function(button){
 						var rarity = game.getRarity(button.link);
 						var intro = button.node.intro;
 						intro.classList.add('showintro');
-
+						if (intro.innerText) intro.innerText = '';
+						
 						var img = new Image();
 						img.onload = function () {
 							intro.classList.add('rarity');
-							intro.innerHTML = '';
+							// intro.innerHTML = '';
+							// intro.innerText = '';
 							intro.style.backgroundImage = 'url(' + img.src + ')';
 						};
 						
 						img.onerror = function () {
-							intro.style.fontFamily = 'yuanli';
+							intro.style.fontFamily = 'shousha';
 							intro.style.fontSize = '16px';
+							intro.style.top = 'auto';
 							intro.style.bottom = '6px';
 							intro.style.left = '6px';
-							intro.innerHTML = get.translation(rarity);
+							// intro.innerHTML = get.translation(rarity);
+							intro.innerText = get.translation(rarity);
 						};
 							
 						img.src = decadeUIPath + 'assets/image/rarity_' + rarity + '.png';
 						
-						if ((button.link == 'xushu' || button.link=='xin_xushu') && button.node && button.node.name && button.node.group){
+						if ((button.link == 'xushu' || button.link == 'xin_xushu') && button.node && button.node.name && button.node.group){
 							if (button.classList.contains('newstyle')) {
 								button.node.name.dataset.nature = 'watermm';
 								button.node.group.dataset.nature = 'water';
@@ -363,7 +1101,9 @@ content:function(config, pack){
 					},
 					
 					button:function(item, type, position, noclick, node){
-						if (type != 'character') return base.ui.create.button.apply(this, arguments);
+						if (type != 'character' && type != 'characterx') {
+							return base.ui.create.button.apply(this, arguments);
+						}
 						
 						if (node) {
 							node.classList.add('button');
@@ -371,82 +1111,138 @@ content:function(config, pack){
 							node.classList.add('decadeUI');
 							node.style.display = '';
 						} else {
-							node = ui.create.div('.button.character.decadeUI', position);
+							node = ui.create.div('.button.character.decadeUI');
 						}
-				
+						
+						node._link = item;
+						if (type =='characterx') {
+							if (_status.noReplaceCharacter) {
+								type = 'character';
+							} else if (lib.characterReplace[item] && lib.characterReplace[item].length) {
+								 item = lib.characterReplace[item][0];
+							}
+						}
+						
+						node.link = item;
+						var doubleCamp = get.is.double(node._link, true);
 						var character = dui.element.create('character', node);
 						
-						node.setBackground(item,'character');
-						node.link = item;
-						node.node = {
-							character: character,
-							name: ui.create.div('.name', node),
-							hp: ui.create.div('.hp', node),
-							intro: ui.create.div('.intro', node),
-							group: ui.create.div('.identity', node)
+						if (doubleCamp) node._changeGroup = true;
+						if (type=='characterx' && lib.characterReplace[node._link] && lib.characterReplace[node._link].length > 1) {
+							node._replaceButton = true;
 						}
 						
-						var infoitem = lib.character[item];
-						if (!infoitem) {
-							for (var itemx in lib.characterPack) {
-								if (lib.characterPack[itemx][item]) {
-									infoitem = lib.characterPack[itemx][item];
-									break;
+						node.refresh = function(node, item){
+							node.setBackground(item, 'character');
+							if (node.node) {
+								node.node.name.remove();
+								node.node.hp.remove();
+								node.node.group.remove();
+								node.node.intro.remove();
+								if (node.node.replaceButton) node.node.replaceButton.remove();
+							}
+							node.node = {
+								name: decadeUI.element.create('name', node),
+								hp: decadeUI.element.create('hp', node),
+								group: decadeUI.element.create('identity', node),
+								intro: decadeUI.element.create('intro', node),
+							};
+							var infoitem = lib.character[item];
+							if (!infoitem) {
+								for (var itemx in lib.characterPack) {
+									if (lib.characterPack[itemx][item]) {
+										infoitem = lib.characterPack[itemx][item];
+										break;
+									}
 								}
 							}
-						}
-						node.node.name.innerHTML = get.slimName(item);
-						if (lib.config.buttoncharacter_style == 'default' || lib.config.buttoncharacter_style == 'simple') {
-							if (lib.config.buttoncharacter_style == 'simple') {
+							
+							node.node.name.innerText = get.slimName(item).replace(/<br>/g, '\n');
+							if (lib.config.buttoncharacter_style == 'default' || lib.config.buttoncharacter_style == 'simple') {
+								if (lib.config.buttoncharacter_style == 'simple') {
+									node.node.group.style.display = 'none';
+								}
+								node.node.name.dataset.nature = get.groupnature(infoitem[1]);
+								node.node.group.dataset.nature = get.groupnature(infoitem[1], 'raw');
+								node.classList.add('newstyle');
+								if (doubleCamp && doubleCamp.length) {
+									node.node.name.dataset.nature = get.groupnature(doubleCamp[0]);
+									node.node.group.dataset.nature = get.groupnature(doubleCamp[doubleCamp.length == 2 ? 1 : 0]);
+								}
+								ui.create.div(node.node.hp);
+								var textnode = ui.create.div('.text', get.numStr(infoitem[2]), node.node.hp);
+								if (infoitem[2] == 0) {
+									node.node.hp.hide();
+								} else if (get.infoHp(infoitem[2]) <= 3) {
+									node.node.hp.dataset.condition = 'mid';
+								} else {
+									node.node.hp.dataset.condition = 'high';
+								}
+							} else {
+								var hp = get.infoHp(infoitem[2]);
+								var maxHp = get.infoMaxHp(infoitem[2]);
+								if (maxHp > 14) {
+									if (typeof infoitem[2] == 'string') node.node.hp.innerHTML = infoitem[2];
+									else node.node.hp.innerHTML = get.numStr(infoitem[2]);
+									node.node.hp.classList.add('text');
+								} else {
+									for (var i = 0; i < maxHp; i++) {
+										var next = ui.create.div('', node.node.hp);
+										if (i >= hp) next.classList.add('exclude');
+									}
+								}
+							}
+							if (node.node.hp.childNodes.length == 0) {
+								node.node.name.style.top = '8px';
+							}
+							if (node.node.name.querySelectorAll('br').length >= 4) {
+								node.node.name.classList.add('long');
+								if (lib.config.buttoncharacter_style == 'old') {
+									node.addEventListener('mouseenter', ui.click.buttonnameenter);
+									node.addEventListener('mouseleave', ui.click.buttonnameleave);
+								}
+							}
+							
+							node.node.intro.innerText = lib.config.intro;
+							if (!noclick) lib.setIntro(node);
+							if (infoitem[1]) {
+								if (doubleCamp) {
+									var text = '';
+									if (doubleCamp.length == 2) {
+										for (var i = 0; i < doubleCamp.length; i++) text += get.translation(doubleCamp[i]);
+									} else {
+										text = get.translation(doubleCamp[0]);
+									}
+									node.node.group.innerText = text;
+								} else {
+									node.node.group.innerText = get.translation(infoitem[1]);
+								} 
+								node.node.group.style.backgroundColor = get.translation(infoitem[1] + 'Color');
+							} else {
 								node.node.group.style.display = 'none';
 							}
-							node.node.name.dataset.nature = get.groupnature(infoitem[1]);
-							node.node.group.dataset.nature = get.groupnature(infoitem[1], 'raw');
-							node.classList.add('newstyle');
-							ui.create.div(node.node.hp);
-							var textnode = ui.create.div('.text', get.numStr(infoitem[2]), node.node.hp);
-							if (infoitem[2] == 0) {
-								node.node.hp.hide();
-							} else if (get.infoHp(infoitem[2]) <= 3) {
-								node.node.hp.dataset.condition = 'mid';
-							} else {
-								node.node.hp.dataset.condition = 'high';
+							if (node._replaceButton) {
+								var intro = ui.create.div('.button.replaceButton', node);
+								node.node.replaceButton = intro;
+								intro.innerText = '切换';
+								intro._node = node;
+								intro.addEventListener(lib.config.touchscreen ? 'touchend': 'click', function() {
+									_status.tempNoButton = true;
+									var node = this._node;
+									var list = lib.characterReplace[node._link];
+									var link = node.link;
+									var index = list.indexOf(link);
+									if (index == list.length - 1) index = 0;
+									else index++;
+									link = list[index];
+									node.link = link;
+									node.refresh(node, link);
+									setTimeout(function(_status) { _status.tempNoButton = undefined; }, 200, _status);
+								});
 							}
-						} else {
-							var hp = get.infoHp(infoitem[2]);
-							var maxHp = get.infoMaxHp(infoitem[2]);
-							if (maxHp > 14) {
-								if (typeof infoitem[2] == 'string') node.node.hp.innerHTML = infoitem[2];
-								else node.node.hp.innerHTML = get.numStr(infoitem[2]);
-								node.node.hp.classList.add('text');
-							} else {
-								for (var i = 0; i < maxHp; i++) {
-									var next = ui.create.div('', node.node.hp);
-									if (i >= hp) next.classList.add('exclude');
-								}
-							}
-						}
-						if (node.node.hp.childNodes.length == 0) {
-							node.node.name.style.top = '8px';
-						}
-						if (node.node.name.querySelectorAll('br').length >= 4) {
-							node.node.name.classList.add('long');
-							if (lib.config.buttoncharacter_style == 'old') {
-								node.addEventListener('mouseenter', ui.click.buttonnameenter);
-								node.addEventListener('mouseleave', ui.click.buttonnameleave);
-							}
-						}
-						node.node.intro.innerHTML = lib.config.intro;
-						if (!noclick) {
-							lib.setIntro(node);
-						}
-						if (infoitem[1]) {
-							node.node.group.innerHTML = '<div>' + get.translation(infoitem[1]) + '</div>';
-							node.node.group.style.backgroundColor = get.translation(infoitem[1] + 'Color');
-						} else {
-							node.node.group.style.display = 'none';
-						}
+						};
 						
+						node.refresh(node, item);
 						if (!noclick) {
 							node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.button);
 						} else {
@@ -457,9 +1253,176 @@ content:function(config, pack){
 						}
 						
 						for (var i in lib.element.button) node[i] = lib.element.button[i];
+						if (position) position.appendChild(node);
+						
 						return node;
 					},
+					
+					buttons:function(list, type, position, noclick, zoom){
+						var buttons = [];
+						var pre = (type.substr(0,3) == 'pre');
+						if (pre) {
+							if (!_status.prebutton) {
+								_status.prebutton = [];
+								lib.onfree.push(function(){
+									for (var i = 0; i < _status.prebutton.length; i++) {
+										if (_status.prebutton[i].activate) {
+											_status.prebutton[i].activate();
+										}
+									}
+									_status.prebutton = undefined;
+								});
+							}
+						}
+						
+						var fragment = document.createDocumentFragment();
+						for (var i = 0; i < list.length; i++) {
+							if (pre) {
+								buttons.push(fragment.appendChild(ui.create.prebutton(list[i], type.slice(3), null, noclick)));
+							} else {
+								buttons.push(fragment.appendChild(ui.create.button(list[i], type, null, noclick)));
+							}
+						}
+						
+						if (position && fragment.childElementCount) position.appendChild(fragment);
+						
+						fragment = undefined;
+						return buttons;
+					},
+					
+					confirm:function(str, func){
+						if (ui.confirm && ui.confirm.str == str) return;
+						
+						switch (str) {
+							case 'o':
+								if (ui.confirm) {
+									ui.confirm.replace('ok');
+								} else {
+									ui.confirm = ui.create.control('ok');
+								}
+								break;
+								
+							case 'oc':
+							case 'co':
+								if (ui.confirm) {
+									ui.confirm.replace('ok', 'cancel');
+								} else {
+									ui.confirm = ui.create.control('ok', 'cancel');
+								}
+								break;
+								
+							case 'c':
+								if (ui.confirm) {
+									ui.confirm.replace('cancel');
+								} else {
+									ui.confirm = ui.create.control('cancel');
+								}
+								break;
+								
+							default:
+								if (ui.confirm) {
+									ui.confirm.close();
+									ui.confirm = undefined;
+								}
+								break;
+						}
+						
+						if (ui.confirm) {
+							ui.confirm.str = str;
+							if (func) {
+								ui.confirm.custom = func;
+							} else {
+								ui.confirm.custom = undefined;
+							}
+						}
+					},
+					
+					control:function(){
+						var i, controls;
+						var nozoom = false;
+						if (Array.isArray(arguments[0])) {
+							controls = arguments[0];
+						} else {
+							controls = arguments;
+						}
+						
+						var control = document.createElement('div');
+						control.className = 'control';
+						control.style.opacity = 1;
+						for (i in lib.element.control) control[i] = lib.element.control[i];
+						for (i = 0; i < controls.length; i++) {
+							if (typeof controls[i] == 'function') {
+								control.custom = controls[i];
+							} else if (controls[i] == 'nozoom') {
+								nozoom = true;
+							} else if (controls[i] == 'stayleft') {
+								control.stayleft = true;
+								control.classList.add('stayleft');
+							} else {
+								control.add(controls[i]);
+							}
+						}
+						ui.controls.unshift(control);
+						ui.control.insertBefore(control, _status.createControl || ui.confirm);
+						control.addEventListener(lib.config.touchscreen ? 'touchend': 'click', ui.click.control2);
+						return control;
+					},
+					
+					dialog:function(){
+						var i;
+						var hidden = false;
+						var notouchscroll = false;
+						var forcebutton = false;
+						var dialog = decadeUI.element.create('dialog');
+						dialog.contentContainer = decadeUI.element.create('content-container', dialog);
+						dialog.content = decadeUI.element.create('content', dialog.contentContainer);
+						// dialog.contentContainer = decadeUI.element.create('dui-container', dialog);
+						// dialog.content = decadeUI.element.create('dui-content', dialog.contentContainer);
+						dialog.buttons = [];
+						for (i in lib.element.dialog) dialog[i] = lib.element.dialog[i];
+						for (i = 0; i < arguments.length; i++) {
+							if (typeof arguments[i] == 'boolean') dialog.static = arguments[i];
+							else if (arguments[i] == 'hidden') hidden = true;
+							else if (arguments[i] == 'notouchscroll') notouchscroll = true;
+							else if (arguments[i] == 'forcebutton') forcebutton = true;
+							else dialog.add(arguments[i]);
+						}
+						if (!hidden) dialog.open();
+						if (!lib.config.touchscreen) dialog.contentContainer.onscroll = ui.update;
+						if (!notouchscroll) {
+							dialog.contentContainer.ontouchstart = ui.click.dialogtouchStart;
+							dialog.contentContainer.ontouchmove = ui.click.touchScroll;
+							dialog.contentContainer.style.WebkitOverflowScrolling = 'touch';
+							dialog.ontouchstart = ui.click.dragtouchdialog;
+						}
+						
+						if (forcebutton) {
+							dialog.forcebutton = true;
+							dialog.classList.add('forcebutton');
+						}
+						return dialog;
+					},
+					
+					selectlist:function(list, init, position, onchange){
+						var select = document.createElement('select');
+						for (var i = 0; i < list.length; i++) {
+							var option = document.createElement('option');
+							if (Array.isArray(list[i])) {
+								option.value = list[i][0];
+								option.innerText = list[i][1];
+							} else {
+								option.value = list[i];
+								option.innerText = list[i];
+							}
+							if (init == option.value) option.selected = 'selected';
+							select.appendChild(option);
+						}
+						if (position) position.appendChild(select);
+						if (onchange) select.onchange = onchange;
+						return select;
+					},
 				},
+				
 				click:{
 					card:function(e){
 						delete this._waitingfordrag;
@@ -467,7 +1430,7 @@ content:function(config, pack){
 						if (_status.clicked) return;
 						if (ui.intro) return;
 						_status.clicked = true;
-						if (this.parentNode && (this.parentNode.classList.contains('judges') || this.parentNode.classList.contains('marks'))) {
+						if (this.parentNode && (this.parentNode.classList.contains('judges') || this.parentNode.classList.contains('dui-marks'))) {
 							if (!(e && e instanceof MouseEvent)) {
 								var rect = this.getBoundingClientRect();
 								e = {
@@ -475,6 +1438,7 @@ content:function(config, pack){
 									clientY: (rect.top+ 10) * game.documentZoom,
 								};
 							}
+							
 							ui.click.touchpop();
 							ui.click.intro.call(this, e);
 							_status.clicked = false;
@@ -515,6 +1479,7 @@ content:function(config, pack){
 							custom.add.card();
 						}
 						game.check();
+
 						if (lib.config.popequip && get.is.phoneLayout() && arguments[0] != 'popequip' && ui.arena && ui.arena.classList.contains('selecting') && this.parentNode.classList.contains('popequip')) {
 							var rect = this.getBoundingClientRect();
 							ui.click.touchpop();
@@ -525,49 +1490,118 @@ content:function(config, pack){
 						}
 					},
 				},
+				
+				
 			};
+			
 			ride.game = {
+				expandSkills:function(skills){
+					var expands = [];
+					var info;
+					for(var i = 0; i < skills.length; i++){
+						info = get.info(skills[i]);
+						if (info) {
+							if(info.group) {
+								expands.add(info.group);
+							}
+						} else{
+							console.log(skills[i]);
+						}
+					}
+					
+					var i, j;
+					for (i = 0; i < expands.length; i++) {
+						if (Array.isArray(expands[i])) {
+							for (j = 0; j < expands[i].length; j++) {
+								skills.add(expands[i][j]);
+							}
+						} else {
+							skills.add(expands[i]);
+						}
+					}
+					return skills;
+				},
+				
 				gameDraw:function(){
-					decadeUI.delay(200);
+					decadeUI.delay(100);
 					return base.game.gameDraw.apply(game, arguments);
-				}
+				},
+				
+				loop:function(){
+					if (game.loopLocked) return;
+					if (decadeUI.eventDialog) {
+						decadeUI.game.wait();
+						return;
+					}
+					
+					game.loopLocked = true;
+					var loop;
+					do {
+						loop = decadeUI.game.loop(_status);
+						game.looping = false;
+					} while (loop);
+					game.loopLocked = false;
+				},
 			};
-			override(ride.lib, lib);override(ride.ui, ui);override(ride.game, game);
+			
+			ride.get = {
+				objtype:function(obj){
+					obj = Object.prototype.toString.call(obj);
+					switch (obj) {
+						case '[object Array]':
+							return 'array';
+						case '[object Object]':
+							return 'object';
+						case '[object HTMLDivElement]':
+							return 'div';
+						case '[object HTMLTableElement]':
+							return 'table';
+						case '[object HTMLTableRowElement]':
+							return 'tr';
+						case '[object HTMLTableCellElement]':
+							return 'td';
+						case '[object HTMLBodyElement]':
+							return 'td';
+					}
+				},
+			}
+			
+			override(lib, ride.lib);
+			override(ui, ride.ui);
+			override(game, ride.game);
+			override(get, ride.get);
+			
 			if (decadeParts.parts) for (var i = 0; i < decadeParts.parts.length; i++) decadeParts.parts[i](lib, game, ui, get, ai, _status);
 
 			var getNodeIntro = get.nodeintro;
 			var gameLinexyFunction = game.linexy;
-			var gameUncheckFunction = game.uncheck;
+		    var gameUncheckFunction = game.uncheck;
 			var swapControlFunction = game.swapControl;
-			var swapPlayerFunction = game.swapPlayer;
+		    var swapPlayerFunction = game.swapPlayer;
 			var baseChooseCharacter = game.chooseCharacter;
-			var createArenaFunction = ui.create.arena;
+		    var createArenaFunction = ui.create.arena;
 			var createPauseFunction = ui.create.pause;
-			var createPlayerFunction = ui.create.player;
 			var createMenuFunction = ui.create.menu;
-			var createCardFunction = ui.create.card;
 			var initCssstylesFunction = lib.init.cssstyles;
 			var initLayoutFunction = lib.init.layout;
-			var cardInitFunction = lib.element.card.init;
+			
 			var cardCopyFunction = lib.element.card.copy;
 			var playerInitFunction = lib.element.player.init;
 			var playerUninitFunction = lib.element.player.uninit;
 			var playerAddSkillFunction = lib.element.player.addSkill;
-			var playerRemoveSkillFunction = lib.element.player.removeSkill;
-			var playerDamageFunction = lib.element.player.$damage;
+			var playerRemoveSkillFunction = lib.element.player.removeSkill
 			var playerUpdateFunction = lib.element.player.update;
 			var playerChooseTargetFunction = lib.element.player.chooseTarget;
 			var playerThrowFunction = lib.element.player.$throw;
 			var playerDrawFunction = lib.element.player.$draw;
-			var playerDieAfterFunction = lib.element.player.$dieAfter;
 			var playerDieFlipFunction = lib.element.player.$dieflip;
 			
 			
 			ui.updatehl = decadeUI.layout.updateHand;
-			ui.updatej = decadeUI.layout.updateJudges;
 			
 			ui.updatejm = function (player, nodes, start, inv) {
 				if (typeof start != 'number') start = 0;
+				
 				for (var i = 0; i < nodes.childElementCount; i++) {
 					var node = nodes.childNodes[i];
 					if (i < start) {
@@ -575,13 +1609,15 @@ content:function(config, pack){
 					} else if (node.classList.contains('removing')) {
 						start++;
 					} else {
-						ui.refresh(node);
+						// ui.refresh(node);
 						node.classList.remove('drawinghidden');
-						node._transform = 'translateY(' + ((i - start) * 28) + 'px)';
-						node.style.transform = node._transform;
+						// node._transform = 'translateY(' + ((i - start) * 28) + 'px)';
+						// node.style.transform = node._transform;
+						// 采用新布局了
 					}
 				}
 			};
+			
 			ui.updatexr = function(){
 				if (ui._updatexr) {
 					clearTimeout(ui._updatexr);
@@ -589,9 +1625,11 @@ content:function(config, pack){
 				
 				ui._updatexr = setTimeout(ui.updatex, 100);
 			};
-
+			
+			
 			document.body.onresize = ui.updatexr;
 
+			
 			get.infoHp = function(hp){
 				if (typeof hp == 'number') {
 					return hp;
@@ -637,7 +1675,8 @@ content:function(config, pack){
 				
 				return skills;
 			};
-
+			
+			
 			game.updateRoundNumber = function(){
 				game.broadcastAll(function(num1, num2, top) {
 					_status.pileTop = top;
@@ -651,211 +1690,98 @@ content:function(config, pack){
 					var cur;
 					for (var i = 0; i < game.players.length; i++) {
 						cur = game.players[i];
-						if (window.decadeUI&&!cur.node.seat) cur.node.seat = decadeUI.dialog.create('seat', cur);
+						if (!cur.node.seat) cur.node.seat = decadeUI.element.create('seat', cur);
 						cur.node.seat.innerHTML = get.cnNumber(get.distance(firstAction, cur, 'absolute') + 1, true);
 					}
 				}, game.boss);
 				
 				return base.game.bossPhaseLoop.apply(this, arguments);
 			};
-
+			
 			game.phaseLoop = function(player){
 				game.broadcastAll(function(firstAction){
 					var cur;
 					for (var i = 0; i < game.players.length; i++) {
 						cur = game.players[i];
-						if (window.decadeUI&&!cur.node.seat) {
-							cur.node.seat = decadeUI.dialog.create('seat', cur);
-							cur.seat = get.distance(firstAction, cur, 'absolute') + 1;
-							cur.node.seat.innerHTML = get.cnNumber(cur.seat, true);
-						}
+						if (!cur.node.seat) cur.node.seat = decadeUI.element.create('seat', cur);
+						
+						cur.seat = get.distance(firstAction, cur, 'absolute') + 1;
+						cur.node.seat.innerHTML = get.cnNumber(cur.seat, true);
 					}
 				}, player);
 				
 				return base.game.phaseLoop.apply(this, arguments);
 			};
 			
-			if (decadeUI.config.smoothMode) {
-				game.loop = function () {
-					var event = _status.event;
-					var step = event.step;
-					var source = event.source;
-					var player = event.player;
-					var target = event.target;
-					var targets = event.targets;
-					var card = event.card;
-					var cards = event.cards;
-					var skill = event.skill;
-					var forced = event.forced;
-					var num = event.num;
-					var trigger = event._trigger;
-					var result = event._result;
-					if (decadeUI.eventDialog) {
-						decadeUI.game.wait();
-						return;
-					}
-					
-					game.loopLocked = true;
-					
-					if (!game.loopTime) game.loopTime = performance.now();
-					if (_status.paused2 || _status.imchoosing) {
-						if (!lib.status.dateDelaying) {
-							lib.status.dateDelaying = new Date();
-						}
-					}
-					if (_status.paused || _status.paused2 || _status.over) {
-						game.loopTime = undefined;
-						game.loopLocked = false;
-						return;
-					}
-					if (_status.paused3) {
-						_status.paused3 = 'paused';
-						game.loopTime = undefined;
-						return;
-					}
-					if (lib.status.dateDelaying) {
-						lib.status.dateDelayed += lib.getUTC(new Date()) - lib.getUTC(lib.status.dateDelaying);
-						delete lib.status.dateDelaying;
-					}
-					if (event.next.length > 0) {
-						var next = event.next.shift();
-						if (next.player && next.player.skipList.contains(next.name)) {
-							event.trigger(next.name + 'Skipped');
-							next.player.skipList.remove(next.name);
-							if (lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name);
-						} else {
-							next.parent = event;
-							_status.event = next;
-						}
-					} else if (event.finished) {
-						if (event._triggered == 1) {
-							if (event.type == 'card') event.trigger('useCardToOmitted');
-							event.trigger(event.name + 'Omitted');
-							event._triggered = 4;
-						} else if (event._triggered == 2) {
-							if (event.type == 'card') event.trigger('useCardToEnd');
-							event.trigger(event.name + 'End');
-							event._triggered = 3;
-						} else if (event._triggered == 3) {
-							if (event.type == 'card') event.trigger('useCardToAfter');
-							event.trigger(event.name + 'After');
-							event._triggered++;
-						} else if (event.after && event.after.length) {
-							var next = event.after.shift();
-							if (next.player && next.player.skipList.contains(next.name)) {
-								event.trigger(next.name + 'Skipped');
-								next.player.skipList.remove(next.name);
-								if (lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name)
-							} else {
-								next.parent = event;
-								_status.event = next;
-							}
-						} else {
-							if (event.parent) {
-								if (event.result) {
-									event.parent._result = event.result;
-								}
-								_status.event = event.parent;
-							} else {
-								game.loopTime = undefined;
-								game.loopLocked = false;
-								return;
-							}
-						}
-					} else {
-						if (event._triggered == 0) {
-							if (event.type == 'card') event.trigger('useCardToBefore');
-							event.trigger(event.name + 'Before');
-							event._triggered++;
-						} else if (event._triggered == 1) {
-							if (event.type == 'card') event.trigger('useCardToBegin');
-							if (event.name == 'phase' && !event._begun) {
-								var next = game.createEvent('phasing', false, event);
-								next.player = event.player;
-								next.skill = event.skill;
-								next.setContent('phasing');
-								event._begun = true;
-							} else {
-								event.trigger(event.name + 'Begin');
-								event._triggered++;
-							}
-						} else {
-							if (player && player.classList.contains('dead') && !event.forceDie && event.name != 'phaseLoop') {
-								game.broadcastAll(function() {
-									while (_status.dieClose.length) {
-										_status.dieClose.shift().close();
-									}
-								});
-								if (event._oncancel) {
-									event._oncancel();
-								}
-								event.finish();
-							} else if (player && player.removed && event.name != 'phaseLoop') {
-								event.finish();
-							} else if (player && player.isOut() && event.name != 'phaseLoop' && !event.includeOut) {
-								if (event.name == 'phase' && player == _status.roundStart && !event.skill) {
-									_status.roundSkipped = true;
-								}
-								event.finish();
-							} else {
-								if (_status.withError || lib.config.compatiblemode || (_status.connectMode && !lib.config.debug)) {
-									try {
-										event.content(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai);
-									} catch(e) {
-										game.print('游戏出错：' + event.name);
-										game.print(e.toString());
-										console.log(e);
-									}
-								} else {
-									event.content(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai);
-								}
-							}
-							event.step++;
-						}
-					}
-					
-					game.loopLocked = false;
-					
-					var delta = performance.now() - game.loopTime;
-					if (delta > 10) {
-						game.loopTime = undefined;
-						setTimeout(game.loop, 0);
-					} else {
-						game.loop();
-					}
-					
-				};
-			} else {
-				game.loop = function () {
-					var event = _status.event;
-					
-					if (!decadeUI.eventDialog) {
-						game.loopLocked = true;
-						base.game.loop.apply(this, arguments);
-						game.loopLocked = false;
-					} else {
-						decadeUI.game.wait();
-					}
-				};
-			}
+			lib.config.low_performance = true;
 			
 			game.uncheck = function(){
-			    var target = arguments.length == 0;
-			    for (var i = 0; i < arguments.length; i++){
-			        if (arguments[i] === 'target'){
-			            target = true;
-			            break;
-			        }
-			    }
-			    
-			    if (target){
-			        for (var i = 0; i < game.players.length; i++){
-			            game.players[i].classList.remove('un-selectable');
-			        }
-			    }
+				var i, j;
+				if (game.chess) {
+					var shadows = ui.chessContainer.getElementsByClassName('playergrid temp');
+					while (shadows.length) {
+						shadows[0].remove();
+					}
+				}
 				
-			    var result = gameUncheckFunction.apply(this, arguments);
-			    return result;
+				var args = new Array(arguments.length);
+				for (var i = 0; i < args.length; i++) args[i] = arguments[i];
+				if ((args.length == 0 || args.contains('card')) && _status.event.player) {
+					var cards = _status.event.player.getCards('hejs');
+					for (j = 0; j < cards.length; j++) {
+						cards[j].classList.remove('selected');
+						cards[j].classList.remove('selectable');
+						if (cards[j]._tempName) {
+							cards[j]._tempName.textContent = '';
+						}
+						cards[j].updateTransform();
+					}
+					ui.selected.cards.length = 0;
+					_status.event.player.node.equips.classList.remove('popequip');
+				}
+				var players = game.players.slice(0);
+				if (_status.event.deadTarget) players.addArray(game.dead);
+				if ((args.length == 0 || args.contains('target'))) {
+					for (j = 0; j < players.length; j++) {
+						players[j].classList.remove('selected');
+						players[j].classList.remove('selectable');
+						players[j].classList.remove('un-selectable');
+						if (players[j].instance) {
+							players[j].instance.classList.remove('selected');
+							players[j].instance.classList.remove('selectable');
+						}
+					}
+					ui.selected.targets.length = 0;
+				}
+				if ((args.length == 0 || args.contains('button')) && _status.event.dialog && _status.event.dialog.buttons) {
+					for (j = 0; j < _status.event.dialog.buttons.length; j++) {
+						_status.event.dialog.buttons[j].classList.remove('selectable');
+						_status.event.dialog.buttons[j].classList.remove('selected');
+					}
+					ui.selected.buttons.length = 0;
+				}
+				if (args.length == 0) {
+					ui.arena.classList.remove('selecting');
+					ui.arena.classList.remove('tempnoe');
+					_status.imchoosing = false;
+					_status.lastdragchange.length = 0;
+					_status.mousedragging = null;
+					_status.mousedragorigin = null;
+
+					while (ui.touchlines.length) {
+						ui.touchlines.shift().delete();
+					}
+				}
+				// ui.canvas.width = ui.arena.offsetWidth;
+				// ui.canvas.height = ui.arena.offsetHeight;
+				for (var i = 0; i < players.length; i++) {
+					players[i].unprompt();
+				}
+				for (var i = 0; i < _status.dragline.length; i++) {
+					if (_status.dragline[i]) _status.dragline[i].remove();
+				}
+				ui.arena.classList.remove('dragging');
+				_status.dragline.length = 0;
 			};
 			
 			game.swapPlayer = function(player, player2){
@@ -883,7 +1809,7 @@ content:function(config, pack){
 			
 			game.linexy = function(path){
 				if (!decadeUI.config.playerLineEffect) return gameLinexyFunction.apply(this, arguments);
-				if (decadeUI.effect) decadeUI.effect.line(path);
+				decadeUI.effect.line(path);
 			};
 			
 			ui.click.intro = function(e){
@@ -980,167 +1906,104 @@ content:function(config, pack){
             };
             
             ui.click.identity = function(e){
-                if (_status.dragged) return;
-                _status.clicked = true;
-                if (!game.getIdentityList) return;
-                if (_status.video) return;
-                if (this.parentNode.forceShown) return;
-                if (_status.clickingidentity) {
-                    for (var i = 0; i < _status.clickingidentity[1].length; i++) {
-                        _status.clickingidentity[1][i].delete();
-                        _status.clickingidentity[1][i].style.transform = '';
-                    }
-                    if (_status.clickingidentity[0] == this.parentNode) {
-                        delete _status.clickingidentity;
-                        return;
-                    }
-                }
-                var list = game.getIdentityList(this.parentNode);
-                if (!list) return;
-                if (lib.config.mark_identity_style == 'click') {
-                    var list2 = [];
-                    for (var i in list) {
-                        list2.push(i);
-                    }
-                    list2.push(list2[0]);
-                    for (var i = 0; i < list2.length; i++) {
-                        if (this.firstChild.innerHTML == list[list2[i]]) {
-                            this.firstChild.innerHTML = list[list2[i + 1]];
-                            this.dataset.color = list2[i + 1];
-                            break;
-                        }
-                    }
+                if (_status.dragged || !game.getIdentityList || _status.video || this.parentNode.forceShown) return;
+				_status.clicked = true;
+                var identityList = game.getIdentityList(this.parentNode);
+                if (!identityList) return;
+				
+				if (lib.config.mark_identity_style == 'click') {
+					var getNext = false;
+					var theNext;
+					var key;
+					var current = this.firstChild.innerText;
+					
+					for (key in identityList) {
+						if (theNext == null || getNext) {
+							theNext = key;
+							if (getNext) break;
+						}
+						
+						if (current == identityList[key]) getNext = true;
+					}
+					
+					this.parentNode.setIdentity(theNext);
+					
                 } else {
                     if (get.mode() == 'guozhan') {
-                        list = {
+                        identityList = {
                             wei: '魏',
                             shu: '蜀',
                             wu: '吴',
                             qun: '群',
-                            jin:'晋'
+							jin: '晋',
                         };
+						if (_status.forceKey) identityList.key = '键';
                     }
                     
-                    var list2 = get.copy(list);
-                    if (game.getIdentityList2) {
-                        game.getIdentityList2(list2);
-                    }
-                    var rect = this.parentNode.getBoundingClientRect();
-                    this._customintro = function(uiintro) {
-                        if (get.mode() == 'guozhan') {
-                            uiintro.clickintro = true;
-                        } else {
-                            uiintro.touchclose = true;
-                        }
-
-                        uiintro.classList.add('woodbg');
-                        
-                        if (get.is.phoneLayout()) {
-                            uiintro.style.width = '100px';
-                        } else {
-                            uiintro.style.width = '85px';
-                        }
-                        var source = this.parentNode;
-                        for (var i in list) {
-                            var node = ui.create.div();
-                            node.classList.add('guessidentity');
-                            node.classList.add('pointerdiv');
-                            ui.create.div('.menubutton.large', list2[i], node);
-                            if (!get.is.phoneLayout()) {
-                                node.firstChild.style.fontSize = '24px';
-                                node.firstChild.style.lineHeight = '24px';
-                            }
-                            if (get.mode() == 'guozhan') {
-                                if (source._guozhanguess) {
-                                    if (!source._guozhanguess.contains(i)) {
-                                        node.classList.add('transparent');
-                                    }
-                                }
-                                node._source = source;
-                                node.listen(ui.click.identitycircle);
-                            } else {
-                                node.listen(function() {
-                                    var info = this.link;
-                                    info[0].parentNode.setIdentity(info[2]);
-                                    /*
-                                    info[0].firstChild.innerHTML = info[1];
-                                    info[0].dataset.color = info[2];
-                                    */
-                                    _status.clicked = false;
-                                });
-                            }
-                            
-                            node.link = [this, list[i], i];
-                            uiintro.add(node);
-                        }
-                    };
-                    ui.click.touchpop();
-                    ui.click.intro.call(this, {
-                        clientX: (rect.left + rect.width) * game.documentZoom,
-                        clientY: (rect.top) * game.documentZoom
-                    });
-                }
-            };
-			
-			ui.click.skill = function(skill){
-				var info = get.info(skill);
-				var event = _status.event;
-				event.backup(skill);
-				if (info.filterCard && info.discard != false && info.lose != false && !info.viewAs) {
-					var cards = event.player.getCards(event.position);
-					for (var i = 0; i < cards.length; i++) {
-						if (!lib.filter.cardDiscardable(cards[i], event.player)) {
-							cards[i].uncheck('useSkill');
+					if (!dui.$identityMarkBox) {
+						dui.$identityMarkBox = decadeUI.element.create('identity-mark-box');
+						dui.$identityMarkBox.ondeactive = function(){
+							dui.$identityMarkBox.remove();
+							_status.clicked = false;
+							if (!ui.arena.classList.contains('menupaused')) game.resume2();
 						}
 					}
-				}
-				if (typeof event.skillDialog == 'object') {
-					event.skillDialog.close();
-				}
-				if (event.isMine()) {
-					event.skillDialog = true;
-				}
-				game.uncheck();
-				game.check();
-				if (event.skillDialog) {
-					var str = '【' + get.translation(skill) + '】';
-					if (info.prompt) {
-						if (typeof info.prompt == 'function') {
-							str += info.prompt(event);
+					
+					var index = 0;
+					var node;
+					var nodes = dui.$identityMarkBox.childNodes;
+					for (key in identityList) {
+						node = nodes[index];
+						if (!node) {
+							node = decadeUI.element.create('identity-mark-item', dui.$identityMarkBox);
+							node.addEventListener(lib.config.touchscreen ? 'touchend': 'click', function(){
+								this.player.setIdentity(this.link);
+								dui.$identityMarkBox.remove();
+								_status.clicked = false;
+							});
 						} else {
-							str += info.prompt;
+							node.style.display = '';
 						}
 						
-						event.skillDialog = ui.create.dialog(str);
-						if (info.longprompt) {
-							event.skillDialog.forcebutton = true;
-							ui.update();
-						}
-					} else if (info.promptfunc) {
-						event.skillDialog = ui.create.dialog(str, '<div><div style="width:100%">' + info.promptfunc(event, event.player) + '</div></div>');
-					} else if (lib.translate[skill + '_info']) {
-						var dialog = ui.create.dialog(str);
-						var skillInfo = decadeUI.dialog.create('skill-info', dialog);
-						skillInfo.innerHTML = lib.translate[skill + '_info'];
-						event.skillDialog = dialog;
+						node.link = key;
+						node.player = this.parentNode;
+						node.innerText = identityList[key];
+						index++;
 					}
+					
+					while (index < nodes.length) {
+						nodes[index].style.display = 'none';
+						index++;
+					}
+					
+					game.pause2();
+					setTimeout(function(player){ 
+						player.appendChild(dui.$identityMarkBox);
+						dui.set.activeElement(dui.$identityMarkBox); 
+					}, 0, this.parentNode);
 				}
-			};
+				
+				
+            };
 			
 			ui.click.volumn = function(){
 				var setting = ui.create.dialog('hidden');
 				setting.listen(function(e) {
 					e.stopPropagation();
 				});
+				
 				var backVolume = decadeUI.component.slider(0, 8, parseInt(lib.config.volumn_background));
 				var gameVolume = decadeUI.component.slider(0, 8, parseInt(lib.config.volumn_audio));
+				
 				backVolume.onchange = function(){
 					game.saveConfig('volumn_background', backVolume.value);
 					ui.backgroundMusic.volume = backVolume.value / 8;
 				};
+				
 				gameVolume.onchange = function(){
 					game.saveConfig('volumn_audio', gameVolume.value);
 				};
+				
 				setting.add('背景音量');
 				setting.content.appendChild(backVolume);
 				setting.add('游戏音量');
@@ -1148,6 +2011,7 @@ content:function(config, pack){
 				setting.add(ui.create.div('.placeholder'));
 				return setting;
 			};
+			
 			ui.create.pause = function(){
 				var dialog = createPauseFunction.call(this);
 				dialog.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
@@ -1162,7 +2026,7 @@ content:function(config, pack){
 				        continue;
 				    
 				    if (nodes[i].classList.contains('card')){
-				        if(window.decadeUI) decadeUI.layout.clearout(nodes[i]);
+				        decadeUI.layout.clearout(nodes[i]);
 					}else{
 					    nodes[i].delete();
 					}
@@ -1189,8 +2053,13 @@ content:function(config, pack){
 				ui.arena.classList.remove('lslim_player');
 				ui.arena.classList.remove('oldlayout');
 				ui.arena.classList.remove('mobile');
+				ui.arena.classList.add('decadeUI');
+				ui.control.id = 'dui-controls';
 				
 				decadeUI.config.update();
+				
+				
+				// ui.arena.appendChild(ui.cardPile);
 			    return result;
 			};
 			
@@ -1198,24 +2067,24 @@ content:function(config, pack){
 				ui.arena.dataset.layout = game.layout;
 				
 				ui.mebg = ui.create.div('#mebg', ui.arena);
-				ui.me = ui.create.div('.hand-zone', ui.arena);
-				ui.handcards1Container = decadeUI.dialog.create('hand-cards', ui.me);
+				ui.me = ui.create.div('.hand-wrap', ui.arena);
+				ui.handcards1Container = decadeUI.element.create('hand-cards', ui.me);
 				ui.handcards1Container.onmousewheel = decadeUI.handler.handMousewheel;
-				ui.handcards2Container = ui.create.div('#handcards2');
-				ui.arena.classList.add('decadeUI');
-				ui.arena.classList.remove('nome');
-				var equipSolts  = ui.equipSolts = decadeUI.dialog.create('equips-zone');
-				equipSolts.back = decadeUI.dialog.create('equips-back', equipSolts);
 				
-				decadeUI.dialog.create('icon icon-treasure', decadeUI.dialog.create('equip0', equipSolts.back));
-				decadeUI.dialog.create('icon icon-saber', decadeUI.dialog.create('equip1', equipSolts.back));
-				decadeUI.dialog.create('icon icon-shield', decadeUI.dialog.create('equip2', equipSolts.back));
-				decadeUI.dialog.create('icon icon-mount', decadeUI.dialog.create('equip3', equipSolts.back));
-				decadeUI.dialog.create('icon icon-mount', decadeUI.dialog.create('equip4', equipSolts.back));
+				ui.handcards2Container = ui.create.div('#handcards2');
+				ui.arena.classList.remove('nome');
+				
+				var equipSolts  = ui.equipSolts = decadeUI.element.create('equips-wrap');
+				equipSolts.back = decadeUI.element.create('equips-back', equipSolts);
+				
+				decadeUI.element.create('icon icon-treasure', decadeUI.element.create('equip0', equipSolts.back));
+				decadeUI.element.create('icon icon-saber', decadeUI.element.create('equip1', equipSolts.back));
+				decadeUI.element.create('icon icon-shield', decadeUI.element.create('equip2', equipSolts.back));
+				decadeUI.element.create('icon icon-mount', decadeUI.element.create('equip3', equipSolts.back));
+				decadeUI.element.create('icon icon-mount', decadeUI.element.create('equip4', equipSolts.back));
 				
 				ui.arena.insertBefore(equipSolts, ui.me);
-				
-				var sensor = new decadeUI.ResizeSensor(ui.me, decadeUI.layout.resize);
+				decadeUI.bodySensor.addListener(decadeUI.layout.resize);
 				decadeUI.layout.resize();
 				
 				ui.handcards1Container.ontouchstart = ui.click.touchStart;
@@ -1247,35 +2116,298 @@ content:function(config, pack){
 			};
 			
 			ui.create.player = function(position, noclick){
-				var player = createPlayerFunction.call(this, position, noclick);
-				var zoneCamp = decadeUI.dialog.create('camp-zone');
-				var zoneHp = decadeUI.dialog.create('hp-zone');
+				var player = ui.create.div('.player', position);
+				var playerExtend = {
+					node: {
+						avatar: ui.create.div('.avatar', player, ui.click.avatar).hide(),
+						avatar2: ui.create.div('.avatar2', player, ui.click.avatar2).hide(),
+						turnedover: decadeUI.element.create('turned-over', player),
+						framebg: ui.create.div('.framebg', player),
+						intro: ui.create.div('.intro', player),
+						identity: ui.create.div('.identity', player),
+						hp: ui.create.div('.hp', player),
+						name: ui.create.div('.name', player),
+						name2: ui.create.div('.name.name2', player),
+						nameol: ui.create.div('.nameol', player),
+						count: ui.create.div('.card-count', player),
+						equips: ui.create.div('.equips', player).hide(),
+						judges: ui.create.div('.judges', player),
+						marks: decadeUI.element.create('dui-marks', player),
+						chain: decadeUI.element.create('chain', player),
+						handcards1: ui.create.div('.handcards'),
+						handcards2: ui.create.div('.handcards'),
+					},
+					phaseNumber: 0,
+					skipList: [],
+					skills: [],
+					initedSkills: [],
+					additionalSkills: {},
+					disabledSkills: {},
+					hiddenSkills: [],
+					awakenedSkills: [],
+					forbiddenSkills: {},
+					popups: [],
+					damagepopups: [],
+					judging: [],
+					stat: [{
+						card: {},
+						skill: {}
+					}],
+					actionHistory: [{
+						useCard: [],
+						respond: [],
+						skipped: [],
+						lose: [],
+						gain: [],
+						sourceDamage: [],
+						damage: [],
+						custom: []
+					}],
+					tempSkills: {},
+					storage: {},
+					marks: {},
+					ai: {
+						friend: [],
+						enemy: [],
+						neutral: [],
+						handcards: {
+							global: [],
+							source: [],
+							viewed: []
+						}
+					},
+					queueCount: 0,
+					outCount: 0,
+				};
 				
-				player.insertBefore(zoneCamp, player.node.name);
-				player.insertBefore(zoneHp, player.node.hp);
-				player.node.zoneCamp = zoneCamp;
-				player.node.zoneHp = zoneHp;
-				zoneHp.appendChild(player.node.hp);
+				var chainImg = new Image();
+				chainImg.onerror = function() {
+					var node = decadeUI.element.create('chain-back', player.node.chain);
+					for (var i = 0; i < 40; i++) decadeUI.element.create('cardbg', node).style.transform = 'translateX(' + (i * 5 - 5) + 'px)';
+					chainImg.onerror = undefined;
+				};
+				chainImg.src = decadeUIPath + 'assets/image/tie_suo.png';
 				
-				var campProps = {
+				var extend = {
+					$cardCount: playerExtend.node.count,
+					$dynamicWrap: decadeUI.element.create('dynamic-wrap'),
+				}
+				
+				decadeUI.get.extend(player, extend);
+				decadeUI.get.extend(player, playerExtend);
+				decadeUI.get.extend(player, lib.element.player);
+				
+				player.node.action = ui.create.div('.action', player.node.avatar);
+				var realIdentity = ui.create.div(player.node.identity);
+				realIdentity.player = player;
+				
+				Object.defineProperties(realIdentity, {
+					innerHTML:{
+						configurable: true,
+						get:function(){
+							return this.innerText;
+						},
+						set:function(value){
+							if (get.mode() == 'guozhan' || _status.mode == 'jiange' || _status.mode == 'siguo') {
+								this.style.display = 'none';
+								this.innerText = value;
+								this.parentNode.classList.add('guozhan-mode');
+								return;
+							}
+							
+							// var trans = {
+								// '主':{
+									// default: 'zhu',
+									// identity_purple: function(player, color){
+										// if (color[0] == 'b') {
+											// player.classList.add('opposite-camp');
+											// return 'zhushuai_blue';
+										// }
+										
+										// return 'zhushuai';
+									// },
+									
+									// versus_default: function(player, color){
+										// if (get.translation(player.side + 'Color') == 'wei') {
+											// player.classList.add('opposite-camp');
+											// return 'zhu_blue';
+										// }
+										
+										// return 'zhu';
+									// },
+									// doudizhu_normal: 'dizhu',
+								// }
+							// };
+							
+							var fileName;
+							var checked;
+							var identity = this.parentNode.dataset.color;
+							var gameMode = get.mode();
+							switch (value) {
+								case '猜':
+									fileName = 'cai';
+									if (_status.mode == 'purple' && identity == 'cai') {
+										fileName += '_blue';
+										checked = true;
+									}
+									break;
+								case '友':
+									fileName = 'friend';
+									break;
+								case '敌':
+									fileName = 'enemy';
+									break;
+								case '反':
+									fileName = 'fan';
+									if (get.mode() == 'doudizhu') {
+										fileName = 'nongmin';
+										checked = true;
+									}
+									break;
+								case '主':
+									fileName = 'zhu';
+									if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') { 
+										fileName += '_blue';
+										this.player.classList.add('opposite-camp');
+										checked = true;
+									} else if (get.mode() == 'doudizhu') {
+										fileName = 'dizhu';
+										checked = true;
+									}
+									break;
+								case '忠':
+									fileName = 'zhong';
+									if (gameMode == 'identity' && _status.mode == 'purple') {
+										fileName = 'qianfeng';
+									} else if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') { 
+										fileName += '_blue';
+										this.player.classList.add('opposite-camp');
+										checked = true;
+									}
+									break;
+								case '内':
+									if (_status.mode == 'purple') { 
+										fileName = identity == 'rNei' ? 'xizuo' : 'xizuo_blue';
+										checked = true;
+									} else {
+										fileName = 'nei';
+									}
+									break;
+								case '野':
+									fileName = 'ye';
+									break;
+								case '首':
+									fileName = 'zeishou';
+									break;
+								case '帅':
+									fileName = 'zhushuai';
+									break;
+								case '将':
+									fileName = 'dajiang';
+									if (_status.mode == 'three' || get.translation(player.side + 'Color') == 'wei') {
+										fileName = 'zhushuai_blue';
+										checked = true;
+									}
+									break;
+								case '兵':
+								case '卒':
+									fileName = this.player.side === false ? 'qianfeng_blue' : 'qianfeng';
+									checked = true;
+									break;
+								case '师':
+									fileName = 'junshi';
+									break;
+								case '盟':
+									fileName = 'mengjun';
+									break;
+								case '神':
+									fileName = 'boss';
+									break;
+								case '从':
+									fileName = 'suicong';
+									break;
+								default:
+									this.innerText = value;
+									this.style.opacity = 1;
+									this.parentNode.style.backgroundImage = '';
+									return;
+							}
+							
+							if (!checked && this.parentNode.dataset.color) {
+								if (this.parentNode.dataset.color[0] == 'b') {
+									fileName += '_blue';
+									this.player.classList.add('opposite-camp');
+								}
+							}
+							
+							this.innerText = value;
+							if (decadeUI.config.campIdentityImageMode) {
+								this.style.opacity = 0;
+								var image = new Image();
+								image.node = this;
+								image.onerror = function() { this.node.style.opacity = 1; };
+								
+								image.src = extensionPath + 'image/decoration/identity_' + fileName + '.png';
+								this.parentNode.style.backgroundImage = 'url("' + image.src + '")';
+							} else {
+								this.style.opacity = 1;
+							}
+						}
+					}
+				});
+				
+				Object.defineProperties(player.node.count, {
+					innerHTML:{
+						configurable: true,
+						get:function(){
+							return this.textContent;
+						},
+						set:function(value){
+							if (this.textContent == value) return;
+							this.textContent = value;
+							this.dataset.text = value;
+						}
+					}
+				});
+				
+				if (!noclick) {
+					player.addEventListener(lib.config.touchscreen ? 'touchend': 'click', ui.click.target);
+					player.node.identity.addEventListener(lib.config.touchscreen ? 'touchend': 'click', ui.click.identity);
+					if (lib.config.touchscreen) {
+						player.addEventListener('touchstart', ui.click.playertouchstart);
+					}
+				} else {
+					player.noclick = true;
+				}
+
+				var campWrap = decadeUI.element.create('camp-wrap');
+				var hpWrap = decadeUI.element.create('hp-wrap');
+				
+				player.insertBefore(campWrap, player.node.name);
+				player.insertBefore(hpWrap, player.node.hp);
+				player.node.campWrap = campWrap;
+				player.node.hpWrap = hpWrap;
+				hpWrap.appendChild(player.node.hp);
+				
+				var campWrapExtend = {
 					node:{
-						back: decadeUI.dialog.create('camp-back', zoneCamp),
-						border: decadeUI.dialog.create('camp-border', zoneCamp),
-						campName: decadeUI.dialog.create('camp-name', zoneCamp),
+						back: decadeUI.element.create('camp-back', campWrap),
+						border: decadeUI.element.create('camp-border', campWrap),
+						campName: decadeUI.element.create('camp-name', campWrap),
 						avatarName: player.node.name,
-						avatarDefaultName: decadeUI.dialog.create('avatar-name-default', zoneCamp),
+						avatarDefaultName: decadeUI.element.create('avatar-name-default', campWrap),
 					}
 				};
 				
-				for (var key in campProps) zoneCamp[key] = campProps[key];
+				decadeUI.get.extend(campWrap, campWrapExtend);
 				
-				zoneCamp.appendChild(player.node.name);
-				zoneCamp.node.avatarName.className = 'avatar-name';
-				zoneCamp.node.avatarDefaultName.innerHTML = '主<br>将';
+				campWrap.appendChild(player.node.name);
+				campWrap.node.avatarName.className = 'avatar-name';
+				campWrap.node.avatarDefaultName.innerHTML = '主<br>将';
 				
 				var node = {
-					mask: player.insertBefore(decadeUI.dialog.create('mask'), player.node.identity),
-					gainSkill: decadeUI.dialog.create('gain-skill', player),
+					mask: player.insertBefore(decadeUI.element.create('mask'), player.node.identity),
+					gainSkill: decadeUI.element.create('gain-skill', player),
 				}
 				
 				var properties = {
@@ -1315,42 +2447,37 @@ content:function(config, pack){
 					},
 				};
 				
-				for (var key in properties.gainSkill) {
-					node.gainSkill[key] = properties.gainSkill[key];
-				}
-				
-				for (var i in node) {
-					player.node[i] = node[i];
-				}
+				decadeUI.get.extend(node.gainSkill, properties.gainSkill);
+				decadeUI.get.extend(player.node, node);
 				
 				Object.defineProperties(player, {
 					group: {
 						configurable: true,
 						get:function(){
-							return this.node.zoneCamp.dataset.camp;
+							return this.node.campWrap.dataset.camp;
 						},
 						set:function(value){
-							this.node.zoneCamp.dataset.camp = value;
+							this.node.campWrap.dataset.camp = value;
 							
 							if (value){
 								if (decadeUI.config.campIdentityImageMode){
 								    var that = this;
 									var image = new Image();
-									var url = extensionPath + 'image/decoration/name_' + value + '.webp';
+									var url = extensionPath + 'image/decoration/name_' + value + '.png';
 								    that._finalGroup = value;
 									
 								    image.onerror = function(){
-								        that.node.zoneCamp.node.campName.innerHTML = that._finalGroup ? get.translation(that._finalGroup)[0] : '';
+								        that.node.campWrap.node.campName.innerHTML = that._finalGroup ? get.translation(that._finalGroup)[0] : '';
 								    };
 								    
-								    that.node.zoneCamp.node.campName.innerHTML = '';
-								    that.node.zoneCamp.node.campName.style.backgroundImage = 'url("' + url + '")';
+								    that.node.campWrap.node.campName.innerHTML = '';
+								    that.node.campWrap.node.campName.style.backgroundImage = 'url("' + url + '")';
 									image.src = url;
 									
 								    return;
 								}
 								
-								this.node.zoneCamp.node.campName.innerHTML = value ? get.translation(value)[0] : '';
+								this.node.campWrap.node.campName.innerHTML = value ? get.translation(value)[0] : '';
 							}
 						}
 					}
@@ -1360,48 +2487,104 @@ content:function(config, pack){
 			};
 			
 			ui.create.card = function(position, info, noclick){
-				var card = createCardFunction.call(this, position, info, noclick);
+				var card = ui.create.div('.card');
+				card.node = {
+					image: ui.create.div('.image', card),
+					info: ui.create.div('.info'),
+					suitnum: decadeUI.element.create('suit-num', card),
+					name: ui.create.div('.name', card),
+					name2: ui.create.div('.name2', card),
+					background: ui.create.div('.background', card),
+					intro: ui.create.div('.intro', card),
+					range: ui.create.div('.range', card),
+					gaintag: decadeUI.element.create('gaintag info', card),
+					judgeMark: decadeUI.element.create('judge-mark', card),
+					usedInfo: decadeUI.element.create('used-info', card),
+					cardMask: decadeUI.element.create('card-mask', card),
+				};
 				
-				card.node.judgeMark = decadeUI.dialog.create('judge-mark', card);
-				card.node.usedInfo = decadeUI.dialog.create('used-info', card);
-				card.node.cardMask = decadeUI.dialog.create('card-mask', card);
+				var extend = {
+					$name: decadeUI.element.create('top-name', card),
+					$vertname: card.node.name,
+					$equip: card.node.name2,
+					$suitnum: card.node.suitnum,
+					$range: card.node.range,
+					$gaintag: card.node.gaintag,
+					$usedinfo: card.node.usedInfo,
+				};
+				
+				
+				for (var i in extend) card[i] = extend[i];
+				for (var i in lib.element.card) card[i] = lib.element.card[i];
+				card.node.intro.innerText = lib.config.intro;
+				if (!noclick) lib.setIntro(card);
+				
+				card.storage = {};
+				card.vanishtag = [];
+				card.gaintag = [];
+				card._uncheck = [];
+				if (info != 'noclick') {
+					card.addEventListener(lib.config.touchscreen ? 'touchend': 'click', ui.click.card);
+					if (lib.config.touchscreen) {
+						card.addEventListener('touchstart', ui.click.cardtouchstart);
+						card.addEventListener('touchmove', ui.click.cardtouchmove);
+					}
+					if (lib.cardSelectObserver) {
+						lib.cardSelectObserver.observe(card, {
+							attributes: true
+						});
+					}
+				}
+				
+				
+				card.$suitnum.$num = decadeUI.element.create(null, card.$suitnum, 'span');
+				card.$suitnum.$br  = decadeUI.element.create(null, card.$suitnum, 'br');
+				card.$suitnum.$suit = decadeUI.element.create('suit', card.$suitnum, 'span');
+				card.$equip.$suitnum = decadeUI.element.create(null, card.$equip, 'span');
+				card.$equip.$name = decadeUI.element.create(null, card.$equip, 'span');
+				
 				
 				card.node.judgeMark.node = {
-					back: decadeUI.dialog.create('back', card.node.judgeMark),
-					mark: decadeUI.dialog.create('mark', card.node.judgeMark),
-					judge: decadeUI.dialog.create('judge', card.node.judgeMark)
+					back: decadeUI.element.create('back', card.node.judgeMark),
+					mark: decadeUI.element.create('mark', card.node.judgeMark),
+					judge: decadeUI.element.create('judge', card.node.judgeMark)
 				};
-
+				
+				if (position) position.appendChild(card);
 				return card;
 			};
-
+			
 			ui.create.cards = function(){
-				var retval = base.ui.create.cards.apply(this, arguments);
+				var result = base.ui.create.cards.apply(this, arguments);
 				game.updateRoundNumber();
-				return retval;
+				return result;
 			};
 			
-			ui.create.chat = function(){
-				var chatBox = ui.arena.appendChild(decadeUI.component.chatBox());
-				for (var i = 0; i < lib.chatHistory.length; i++) {
-					chatBox.addEntry(lib.chatHistory[i]);
-				}
-				_status.addChatEntry = chatBox.addEntry;
-				Object.defineProperties(_status, {
-					addChatEntry: {
-						configurable: true,
-						get:function(){
-							return chatBox.addEntry;
-						},
-						set:function(value){
-							chatBox.overrideEntry = value;
-						}
-					},
-				});
-				var retVal = base.ui.create.chat.apply(this, arguments);
-				chatBox.addEntry._origin = chatBox;
-				return retVal;
-			};
+			// 不联机就不用
+			// ui.create.chat = function(){
+				// var chatBox = ui.arena.appendChild(decadeUI.component.chatBox());
+				// for (var i = 0; i < lib.chatHistory.length; i++) {
+					// chatBox.addEntry(lib.chatHistory[i]);
+				// }
+				
+				// _status.addChatEntry = chatBox.addEntry;
+				// Object.defineProperties(_status, {
+					// addChatEntry: {
+						// configurable: true,
+						// get:function(){
+							// return chatBox.addEntry;
+						// },
+						// set:function(value){
+							// chatBox.overrideEntry = value;
+						// }
+					// },
+				// });
+				
+				// var retVal = base.ui.create.chat.apply(this, arguments);
+				// chatBox.addEntry._origin = chatBox;
+				// return retVal;
+			// };
+			
 			lib.init.cssstyles = function(){
 			    var temp = lib.config.glow_phase;
 			    lib.config.glow_phase = '';
@@ -1547,7 +2730,6 @@ content:function(config, pack){
 					game.broadcastAll(function(source, player){
 						if (!window.decadeUI) return;
 						if (!decadeUI.config.playerKillEffect) return;
-						if (!decadeUI.effect) return;
 						decadeUI.effect.kill(source, player);
 					}, trigger.source, trigger.player);
 					
@@ -1641,7 +2823,7 @@ content:function(config, pack){
 				if (cards){
 					var owner = get.owner(cards[0]);
 					if (owner){
-						owner.lose(cards, 'visible');
+						event.relatedLose = owner.lose(cards, 'visible').set('getlx', false);
 					}
 				};
 				"step 1";
@@ -1721,60 +2903,11 @@ content:function(config, pack){
 				}
 			};
 			
-			lib.element.content.chooseBool = function(){
-				"step 0"
-				if (event.isMine()) {
-					if (event.frequentSkill && !lib.config.autoskilllist.contains(event.frequentSkill)) {
-						ui.click.ok();
-						return;
-					}
-					ui.create.confirm('oc');
-					if (event.createDialog && !event.dialog) {
-						if (Array.isArray(event.createDialog)) {
-							event.dialog = ui.create.dialog.apply(this, event.createDialog);
-							if (event.dialogselectx) {
-								for (var i = 0; i < event.dialog.buttons.length; i++) {
-									event.dialog.buttons[i].classList.add('selectedx');
-								}
-							}
-						}
-					}
-					if (event.dialog) {
-						event.dialog.open();
-					} else if (event.prompt) {
-						event.dialog = ui.create.dialog(event.prompt);
-						if (event.prompt2) {
-							var skillInfo = decadeUI.dialog.create('skill-info', event.dialog);
-							skillInfo.innerHTML = event.prompt2;
-						}
-					}
-					game.pause();
-					game.countChoose();
-					event.choosing = true;
-				} else if (event.isOnline()) {
-					event.send();
-				} else {
-					event.result = 'ai';
-				}
-				"step 1"
-				if (event.result == 'ai') {
-					if (event.ai) {
-						event.choice = event.ai(event.getParent(), player);
-					}
-					event.result = {
-						bool: event.choice
-					};
-				}
-				_status.imchoosing = false;
-				event.choosing = false;
-				if (event.dialog) event.dialog.close();
-				event.resume();
-			};
-			
 			lib.element.content.chooseToCompare = function(){
 				"step 0"
-				event.forceDie = true;
-				if (player.countCards('h') == 0 || target.countCards('h') == 0) {
+				if (((!event.fixedResult || !event.fixedResult[player.playerid]) 
+					&& player.countCards('h') == 0) || ((!event.fixedResult || !event.fixedResult[target.playerid]) 
+					&& target.countCards('h') == 0)) {
 					event.result = {
 						cancelled: true,
 						bool: false
@@ -1783,17 +2916,27 @@ content:function(config, pack){
 					return;
 				}
 				game.log(player, '对', target, '发起拼点');
+				event.lose_list = [];
 				
 				// 更新拼点框
-				game.broadcastAll(function(player, target){
+				if (event.parent.name == null || event.parent.name == 'trigger') {
+					event.compareName = event.name;
+				} else {
+					event.compareName = event.parent.name;
+				}
+				
+				game.broadcastAll(function(player, target, eventName){
 					if (!window.decadeUI) return;
-					if (!decadeUI.effect) return;
 					
-					decadeUI.effectDialog = ui.arena.appendChild(decadeUI.effect.dialog.compare(player, target));
-					if (!decadeUI.effectDialogs) decadeUI.effectDialogs = [];
-					decadeUI.effectDialogs.push(decadeUI.effectDialog);
+					var dialog = decadeUI.create.compareDialog();
+					dialog.caption = get.translation(eventName) + '拼点';
+					dialog.player = player;
+					dialog.target = target;
+					dialog.open();
+					
 					decadeUI.delay(400);
-				}, player, target);
+					ui.dialogs[eventName] = dialog;
+				}, player, target, event.compareName);
 				
 				"step 1"
 				var sendback = function() {
@@ -1803,109 +2946,126 @@ content:function(config, pack){
 						};
 					}
 				};
-				if (event.fixedResult && event.fixedResult[player.playerid]){
+				
+				if (event.fixedResult && event.fixedResult[player.playerid]) {
 					event.card1 = event.fixedResult[player.playerid];
+					event.lose_list.push([player, event.card1]);//共同丢失逻辑。
 				} else if (player.isOnline()) {
 					player.wait(sendback);
 					event.ol = true;
 					player.send(function(ai) {
-						game.me.chooseCard('请选择拼点牌', true).set('type', 'compare').set('glow_result', true).ai = ai;
+						game.me.chooseCard('请选择拼点牌', true).set('prompt', false).set('type', 'compare').ai = ai;
 						game.resume();
 					}, event.ai);
 				} else {
 					event.localPlayer = true;
-					player.chooseCard('请选择拼点牌', true).set('type', 'compare').set('glow_result', true).ai = event.ai;
+					player.chooseCard('请选择拼点牌', true).set('prompt', false).set('type', 'compare').ai = event.ai;
 				}
-				if (event.fixedResult && event.fixedResult[target.playerid]){
-					event.card2 = event.fixedResult[target.playerid]; 
+				
+				if (event.fixedResult && event.fixedResult[target.playerid]) {
+					event.card2 = event.fixedResult[target.playerid];
+					event.lose_list.push([target, event.card2]);//共同丢失逻辑。
 				} else if (target.isOnline()) {
 					target.wait(sendback);
 					event.ol = true;
 					target.send(function(ai) {
-						game.me.chooseCard('请选择拼点牌', true).set('type', 'compare').set('glow_result', true).ai = ai;
+						game.me.chooseCard('请选择拼点牌', true).set('prompt', false).set('type', 'compare').ai = ai;
 						game.resume();
-					}, event.ai);
+					},
+					event.ai);
 				} else {
 					event.localTarget = true;
 				}
+				
 				"step 2"
 				if (event.localPlayer) {
 					if (result.skill && lib.skill[result.skill] && lib.skill[result.skill].onCompare) {
 						result.cards = lib.skill[result.skill].onCompare(player);
 						player.logSkill(result.skill);
+					} else {
+						event.lose_list.push([player, result.cards[0]]);
 					}
 					event.card1 = result.cards[0];
-					
 					// 更新拼点框
-					game.broadcastAll(function(){
+					game.broadcastAll(function(eventName){
 						if (!window.decadeUI) return;
-						decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-						decadeUI.effectDialog.cards[0].classList.add('infohidden');
-						decadeUI.effectDialog.cards[0].classList.add('infoflip');
-					});
+
+						var dialog = ui.dialogs[eventName];
+						dialog.$playerCard.classList.add('infohidden');
+						dialog.$playerCard.classList.add('infoflip');
+					}, event.compareName);
 				}
 				if (event.localTarget) {
-					target.chooseCard('请选择拼点牌', true).set('type', 'compare').set('glow_result', true).ai = event.ai;
+					target.chooseCard('请选择拼点牌', true).set('prompt', false).set('type', 'compare').ai = event.ai;
 				}
-				"step 3"
+				
+				"step 3"			
 				if (event.localTarget) {
 					if (result.skill && lib.skill[result.skill] && lib.skill[result.skill].onCompare) {
 						target.logSkill(result.skill);
 						result.cards = lib.skill[result.skill].onCompare(target);
+					} else {
+						event.lose_list.push([target,result.cards[0]]);
 					}
-					
+
 					event.card2 = result.cards[0];
 					
 					// 更新拼点框
-					game.broadcastAll(function(){
+					game.broadcastAll(function(eventName){
 						if (!window.decadeUI) return;
-						decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-						decadeUI.effectDialog.cards[1].classList.add('infohidden');
-						decadeUI.effectDialog.cards[1].classList.add('infoflip');
-					});
-					
+						
+						var dialog = ui.dialogs[eventName];
+						dialog.$targetCard.classList.add('infohidden');
+						dialog.$targetCard.classList.add('infoflip');
+					}, event.compareName);
 				}
 				if (!event.resultOL && event.ol) {
 					game.pause();
 				}
+				
 				"step 4"
 				try {
 					if (!event.card1) {
 						if (event.resultOL[player.playerid].skill && lib.skill[event.resultOL[player.playerid].skill] && lib.skill[event.resultOL[player.playerid].skill].onCompare) {
 							player.logSkill(event.resultOL[player.playerid].skill);
 							event.resultOL[player.playerid].cards = lib.skill[event.resultOL[player.playerid].skill].onCompare(player);
-						}
+						} else{
+							event.lose_list.push([player, event.resultOL[player.playerid].cards[0]]);
+						} 
 						event.card1 = event.resultOL[player.playerid].cards[0];
 						
 						// 更新拼点框
-						game.broadcastAll(function(){
+						game.broadcastAll(function(eventName){
 							if (!window.decadeUI) return;
 							
-							decadeUI.effectDialog.cards[0].classList.add('infohidden');
-							decadeUI.effectDialog.cards[0].classList.add('infoflip');
-						});
+							var dialog = ui.dialogs[eventName];
+							dialog.$playerCard.classList.add('infohidden');
+							dialog.$playerCard.classList.add('infoflip');
+						}, event.compareName);
 					};
 					if (!event.card2) {
 						if (event.resultOL[target.playerid].skill && lib.skill[event.resultOL[target.playerid].skill] && lib.skill[event.resultOL[target.playerid].skill].onCompare) {
 							target.logSkill(event.resultOL[target.playerid].skill);
-							event.resultOL[target.playerid].cards = lib.skill[target.resultOL[target.playerid].skill].onCompare(player);
+							event.resultOL[target.playerid].cards = lib.skill[event.resultOL[target.playerid].skill].onCompare(player);
+						} else {
+							event.lose_list.push([target, event.resultOL[target.playerid].cards[0]]);
 						}
-						
 						event.card2 = event.resultOL[target.playerid].cards[0];
-						
 						// 更新拼点框
-						game.broadcastAll(function(){
+						game.broadcastAll(function(eventName){
 							if (!window.decadeUI) return;
-							decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-							decadeUI.effectDialog.cards[1].classList.add('infohidden');
-							decadeUI.effectDialog.cards[1].classList.add('infoflip');
-						});
+							
+							var dialog = ui.dialogs[eventName];
+							dialog.$targetCard.classList.add('infohidden');
+							dialog.$targetCard.classList.add('infoflip');
+						}, event.compareName);
 					}
 					if (!event.card1 || !event.card2) {
 						throw ('err');
 					}
 				} catch(e) {
 					console.log(e);
+					game.print(e);
 					event.finish();
 					return;
 				}
@@ -1914,49 +3074,34 @@ content:function(config, pack){
 						event.addToAI = true;
 					}
 				}
-				player.lose(event.card1, ui.ordering);
-				target.lose(event.card2, ui.ordering);
-				"step 5"
-				game.broadcast(function() {
-					ui.arena.classList.add('thrownhighlight');
-				});
-				ui.arena.classList.add('thrownhighlight');
-				game.addVideo('thrownhighlight1');
+				if (event.lose_list.length) {
+					game.loseAsync({
+						lose_list: event.lose_list,
+					}).setContent('chooseToCompareLose');
+				}
 				
+				"step 5"
 				// 更新拼点框
-				game.broadcastAll(function(player, target, card1, card2){
+				game.broadcastAll(function(eventName, player, target, playerCard, targetCard){
 					if (!window.decadeUI) {
-						player.$compare(card1, target, card2);
+						ui.arena.classList.add('thrownhighlight');
+						player.$compare(playerCard, target, targetCard);
 						return;
 					}
-					decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-					decadeUI.effectDialog.cards[0].appendChild(card1.copy());
-					decadeUI.effectDialog.cards[1].appendChild(card2.copy());
-				}, player, target, event.card1, event.card2);
+					
+					var dialog = ui.dialogs[eventName];
+					dialog.playerCard = playerCard.copy();
+					dialog.targetCard = targetCard.copy();
+				}, event.compareName, player, target, event.card1, event.card2);
 
 				game.log(player, '的拼点牌为', event.card1);
 				game.log(target, '的拼点牌为', event.card2);
-				// 更新拼点框
-				game.broadcastAll(function(player, target){
-					if (!window.decadeUI) return;
-					decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-					
-					var dialog = decadeUI.effectDialog;
-					setTimeout(function(player, target, dialog){
-						player.$throwordered2(dialog.cards[0].firstChild, true);
-						target.$throwordered2(dialog.cards[1].firstChild, true);
-						decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-						decadeUI.effectDialogs.remove(decadeUI.effectDialog);
-						decadeUI.effectDialog.close();
-					}, 1500, player, target, dialog);
-				}, player, target);
-				
-				decadeUI.delay(1500);
 				
 				event.num1 = event.card1.number;
 				event.num2 = event.card2.number;
 				event.trigger('compare');
-
+				decadeUI.delay(400);
+				
 				"step 6"
 				event.result = {
 					player: event.card1,
@@ -1968,12 +3113,12 @@ content:function(config, pack){
 				if (event.num1 > event.num2) {
 					event.result.bool = true;
 					event.result.winner = player;
-					str = get.translation(player.name) + '拼点成功';
+					str = get.translation(player) + '拼点成功';
 					player.popup('胜');
 					target.popup('负');
 				} else {
 					event.result.bool = false;
-					str = get.translation(player.name) + '拼点失败';
+					str = get.translation(player) + '拼点失败';
 					if (event.num1 == event.num2) {
 						event.result.tie = true;
 						player.popup('平');
@@ -1984,21 +3129,40 @@ content:function(config, pack){
 						target.popup('胜');
 					}
 				}
-				game.broadcastAll(function(str) {
-					var dialog = ui.create.dialog(str);
-					dialog.classList.add('center');
-					setTimeout(function() {
+				
+				// 更新拼点框
+				game.broadcastAll(function(str, eventName, result) {
+					if (!window.decadeUI) {
+						var dialog = ui.create.dialog(str);
+						dialog.classList.add('center');
+						setTimeout(function(dialog) {
+							dialog.close();
+						}, 1000, dialog);
+						return;
+					}
+					
+					var dialog = ui.dialogs[eventName];
+					dialog.$playerCard.dataset.result = result ? '赢' : '没赢';
+					
+					setTimeout(function(dialog, eventName){
 						dialog.close();
-					},
-					1000);
-				}, str); 
-				game.delay(2);
+						setTimeout(function(dialog){
+							dialog.player.$throwordered2(dialog.playerCard, true);
+							dialog.target.$throwordered2(dialog.targetCard, true);
+						}, 180, dialog);
+						ui.dialogs[eventName] = undefined;
+						
+					}, 1400, dialog, eventName);
+					
+				}, str, event.compareName, event.result.bool);
+				decadeUI.delay(1800);
+				
 				"step 7"
 				if (typeof event.target.ai.shown == 'number' && event.target.ai.shown <= 0.85 && event.addToAI) {
 					event.target.ai.shown += 0.1;
 				}
 				game.broadcastAll(function() {
-					ui.arena.classList.remove('thrownhighlight');
+					if (!window.decadeUI) ui.arena.classList.remove('thrownhighlight');
 				});
 				game.addVideo('thrownhighlight2');
 				if (event.clear !== false) {
@@ -2040,15 +3204,24 @@ content:function(config, pack){
 				game.log(player, '对', targets, '发起拼点');
 				
 				// 更新拼点框
-				game.broadcastAll(function(source, target){
+				if (event.parent.name == null || event.parent.name == 'trigger') {
+					event.compareName = event.name;
+				} else {
+					event.compareName = event.parent.name;
+				}
+				
+				game.broadcastAll(function(player, target, eventName){
 					if (!window.decadeUI) return;
-					if (!decadeUI.effect) return;
 					
-					decadeUI.effectDialog = ui.arena.appendChild(decadeUI.effect.dialog.compare(source, target));
-					if (!decadeUI.effectDialogs) decadeUI.effectDialogs = [];
-					decadeUI.effectDialogs.push(decadeUI.effectDialog);
+					var dialog = decadeUI.create.compareDialog();
+					dialog.caption = get.translation(eventName) + '拼点';
+					dialog.player = player;
+					dialog.target = target;
+					dialog.open();
+					
 					decadeUI.delay(400);
-				}, player, targets[0]);
+					ui.dialogs[eventName] = dialog;
+				}, player, targets[0], event.compareName);
 				
 				"step 1"
 				event._result = [];
@@ -2075,31 +3248,37 @@ content:function(config, pack){
 				
 				"step 2"
 				var cards = [];
+				var lose_list = [];
 				if (event.fixedResult && event.fixedResult[player.playerid]) {
 					event.list.unshift(player);
 					result.unshift({
 						bool: true,
 						cards: [event.fixedResult[player.playerid]]
 					});
-				} else if (result[0].skill && lib.skill[result[0].skill] && lib.skill[result[0].skill].onCompare) {
-					player.logSkill(result[0].skill);
-					result[0].cards = lib.skill[result[0].skill].onCompare(player);
+					lose_list.push([player, [event.fixedResult[player.playerid]]]);
+				} else {
+					if (result[0].skill && lib.skill[result[0].skill] && lib.skill[result[0].skill].onCompare) {
+						player.logSkill(result[0].skill);
+						result[0].cards = lib.skill[result[0].skill].onCompare(player)
+					} else lose_list.push([player, result[0].cards]);
 				};
-				
-				player.lose(result[0].cards, ui.ordering);
 				for (var j = 0; j < targets.length; j++) {
 					if (event.list.contains(targets[j])) {
 						var i = event.list.indexOf(targets[j]);
 						if (result[i].skill && lib.skill[result[i].skill] && lib.skill[result[i].skill].onCompare) {
 							event.list[i].logSkill(result[i].skill);
 							result[i].cards = lib.skill[result[i].skill].onCompare(event.list[i]);
-						}
-						event.list[i].lose(result[i].cards, ui.ordering);
+						} else lose_list.push([targets[j], result[i].cards]);
 						cards.push(result[i].cards[0]);
 					} else if (event.fixedResult && event.fixedResult[targets[j].playerid]) {
-						targets[j].lose(event.fixedResult[targets[j].playerid], ui.ordering);
 						cards.push(event.fixedResult[targets[j].playerid]);
+						lose_list.push([targets[j], [event.fixedResult[targets[j].playerid]]]);
 					}
+				}
+				if (lose_list.length) {
+					game.loseAsync({
+						lose_list: lose_list,
+					}).setContent('chooseToCompareLose');
 				}
 				event.cardlist = cards;
 				event.cards = cards;
@@ -2115,63 +3294,64 @@ content:function(config, pack){
 				game.log(player, '的拼点牌为', event.card1);
 				
 				// 更新拼点框
-				game.broadcastAll(function(card){
+				game.broadcastAll(function(eventName, playerCard){
 					if (!window.decadeUI) return;
-					decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-					decadeUI.effectDialog.set('card1', card.copy());
-				}, event.card1);
+
+					var dialog = ui.dialogs[eventName];
+					dialog.playerCard = playerCard.copy();
+				}, event.compareName, event.card1);
 				
 				"step 3"
 				if (event.iwhile < targets.length) {
 					event.target = targets[event.iwhile];
-					event.target.animate('target');
-					player.animate('target');
+					// event.target.animate('target');
+					// player.animate('target');
 					event.card2 = event.cardlist[event.iwhile];
 					event.num2 = event.card2.number;
 					game.log(event.target, '的拼点牌为', event.card2);
 					player.line(event.target);
 					
 					// 更新拼点框
-					game.broadcastAll(function(player, target, card1, card2){
+					game.broadcastAll(function(eventName, player, target, playerCard, targetCard){
 						if (!window.decadeUI) {
-							player.$compare(card1, target, card2);
+							player.$compare(playerCard, target, targetCard);
 							return;
 						}
-						decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-						decadeUI.effectDialog.show();
-						decadeUI.effectDialog.set('target', target);
-						decadeUI.effectDialog.set('card2', card2.copy());
 						
-						setTimeout(function(player, target, card2){
-							target.$throwordered2(card2, true);
-							decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-							decadeUI.effectDialog.hide();
-						}, 1500, player, target, decadeUI.effectDialog.cards[1].firstChild);
-					}, player, event.target, event.card1, event.card2);
-					
+						var dialog = ui.dialogs[eventName];
+						dialog.show();
+						dialog.target = target;
+						dialog.targetCard = targetCard.copy();
+					}, event.compareName, player, event.target, event.card1, event.card2);
 					event.trigger('compare');
-					decadeUI.delay(1500);
+					decadeUI.delay(400);
 				} else {
 					// 更新拼点框
-					game.broadcastAll(function(player){
+					game.broadcastAll(function(eventName){
 						if (!window.decadeUI) return;
-						decadeUI.effectDialog = decadeUI.effectDialogs[decadeUI.effectDialogs.length - 1];
-						player.$throwordered2(decadeUI.effectDialog.cards[0].firstChild, true);
-						decadeUI.effectDialog.close();
-						decadeUI.effectDialogs.remove(decadeUI.effectDialog);
-					}, player);
+						
+						var dialog = ui.dialogs[eventName];
+						dialog.close();
+						setTimeout(function(dialog){
+							dialog.player.$throwordered2(dialog.playerCard, true);
+						}, 110, dialog);
+						
+					}, event.compareName);
 					event.goto(7);
 				}
 				"step 4"
 				event.result.num1[event.iwhile] = event.num1;
 				event.result.num2[event.iwhile] = event.num2;
-				var str;
+				
+				var str, result;
 				if (event.num1 > event.num2) {
-					str = get.translation(player.name) + '拼点成功';
+					result = true;
+					str = get.translation(player) + '拼点成功';
 					player.popup('胜');
 					target.popup('负');
 				} else {
-					str = get.translation(player.name) + '拼点失败';
+					result = false;
+					str = get.translation(player) + '拼点失败';
 					if (event.num1 == event.num2) {
 						player.popup('平');
 						target.popup('平');
@@ -2180,20 +3360,39 @@ content:function(config, pack){
 						target.popup('胜');
 					}
 				}
-				game.broadcastAll(function(str) {
-					var dialog = ui.create.dialog(str);
-					dialog.classList.add('center');
-					setTimeout(function() {
-						dialog.close();
-					}, 1000);
-				}, str);
-				game.delay(2);
+				
+				// 更新拼点框
+				game.broadcastAll(function(str, eventName, result) {
+					if (!window.decadeUI) {
+						var dialog = ui.create.dialog(str);
+						dialog.classList.add('center');
+						setTimeout(function(dialog) {
+							dialog.close();
+						}, 1000, dialog);
+						return;
+					}
+					
+					var dialog = ui.dialogs[eventName];
+					dialog.$playerCard.dataset.result = result ? '赢' : '没赢';
+					
+					setTimeout(function(dialog, eventName){
+						dialog.hide();
+						dialog.$playerCard.dataset.result = '';
+						setTimeout(function(dialog){
+							dialog.target.$throwordered2(dialog.targetCard, true);
+						}, 180, dialog);
+					}, 1400, dialog, eventName);
+					
+				}, str, event.compareName, result);
+				decadeUI.delay(1800);
+				
 				"step 5"
 				if (event.callback) {
 					game.broadcastAll(function(card1, card2) {
-						if (window.decadeUI) return;
-						if (card1.clone) card1.clone.style.opacity = 0.5;
-						if (card2.clone) card2.clone.style.opacity = 0.5;
+						if (!window.decadeUI) {
+							if (card1.clone) card1.clone.style.opacity = 0.5;
+							if (card2.clone) card2.clone.style.opacity = 0.5;
+						}
 					}, event.card1, event.card2);
 					var next = game.createEvent('compareMultiple');
 					next.player = player;
@@ -2204,181 +3403,369 @@ content:function(config, pack){
 					next.num2 = event.num2;
 					next.setContent(event.callback);
 				}
+				
 				"step 6"
-				game.broadcastAll(ui.clear);
 				event.iwhile++;
 				event.goto(3);
 				"step 7"
+				game.broadcastAll(ui.clear);
 				event.cards.add(event.card1);
 			};
 			
-		    lib.element.player.init = function(character, character2, skill){
-			    Object.defineProperties(this, {
-					group: {
-						configurable: true,
-						get:function(){
-							return this.node.zoneCamp.dataset.camp;
-						},
-						set:function(value){
-							this.node.zoneCamp.dataset.camp = value;
-							if (value){
-								if (decadeUI.config.campIdentityImageMode){
-								    var that = this;
-									var image = new Image();
-									var url = extensionPath + 'image/decoration/name_' + value + '.webp';
-								    that._finalGroup = value;
-									
-								    image.onerror = function(){
-								        that.node.zoneCamp.node.campName.innerHTML = that._finalGroup ? get.translation(that._finalGroup)[0] : '';
-								    };
-								    
-								    that.node.zoneCamp.node.campName.innerHTML = '';
-								    that.node.zoneCamp.node.campName.style.backgroundImage = 'url("' + url + '")';
-									image.src = url;
-									
-								    return;
-								}
-								
-								this.node.zoneCamp.node.campName.innerHTML = value ? get.translation(value)[0] : '';
+			lib.element.content.chooseToGuanxing = function(){
+				"step 0"
+				if (player.isUnderControl()) {
+					game.modeSwapPlayer(player);
+				}
+				
+				var cards = get.cards(num);
+				var guanxing = decadeUI.content.chooseGuanXing(player, cards, cards.length, null, cards.length);
+				if (this.getParent() && this.getParent().name && get.translation(this.getParent().name) != this.getParent().name) {
+					guanxing.caption = '【' + get.translation(this.getParent().name) + '】';
+				} else {
+					guanxing.caption = "请按顺序排列牌。";
+				}
+				game.broadcast(function(player, cards, callback){
+					if (!window.decadeUI) return;
+					var guanxing = decadeUI.content.chooseGuanXing(player, cards, cards.length, null, cards.length);
+					guanxing.caption = '【观星】';
+					guanxing.callback = callback;
+				}, player, cards, guanxing.callback);
+				
+				event.switchToAuto = function(){
+					var cards = guanxing.cards[0].concat();
+					var cheats = [];
+					var judges = player.node.judges.childNodes;
+
+					if (judges.length) cheats = decadeUI.get.cheatJudgeCards(cards, judges, true);
+					if (cards.length) {
+						for (var i = 0; i >= 0 && i < cards.length; i++) {
+							if (get.value(cards[i], player) >= 5) {
+								cheats.push(cards[i]);
+								cards.splice(i, 1)
 							}
 						}
 					}
-				});	
+					
+					var time = 500;
+					for (var i = 0; i < cheats.length; i++) {
+						setTimeout(function(card, index, finished){
+							guanxing.move(card, index, 0);
+							if (finished) guanxing.finishTime(1000);
+						}, time, cheats[i], i, (i >= cheats.length - 1) && cards.length == 0);
+						time += 500;
+					}
+					
+					for (var i = 0; i < cards.length; i++) {
+						setTimeout(function(card, index, finished){
+							guanxing.move(card, index, 1);
+							if (finished) guanxing.finishTime(1000);
+						}, time, cards[i], i, (i >= cards.length - 1));
+						time += 500;
+					}
+				}
 				
-			    return playerInitFunction.call(this, character, character2, skill);
+				if (event.isOnline()) {
+					event.player.send(function(){
+						if (!window.decadeUI && decadeUI.eventDialog) _status.event.finish();
+					}, event.player);
+					
+					event.player.wait();
+					decadeUI.game.wait();
+				} else if (!event.isMine()) {
+					event.switchToAuto();
+				}
+				"step 1"
+				player.popup(get.cnNumber(event.num1) + '上' + get.cnNumber(event.num2) + '下');
+				game.log(player, '将' + get.cnNumber(event.num1) + '张牌置于牌堆顶，' + get.cnNumber(event.num2) +'张牌置于牌堆底');
+				game.updateRoundNumber()
+			};
+			
+			lib.element.player.init = function(character, character2, skill){
+				var skins = decadeUI.dynamicSkin[character];
+				if (decadeUI.config.dynamicSkin && skins) {
+					var skin = skins[Object.keys(skins)[0]];
+					this.playDynamic({
+						name: skin.name,	 //	string 动画名称   一般是assets/dynamic 下的动皮文件，也可以使用/../.. 来返回到其他文件目录下
+						action: skin.action, // string 播放动作 不填为默认
+						loop: true, 		 // boolean 是否循环播放
+						loopCount: -1,		 // number 循环次数，只有loop为true时生效
+						speed: skin.speed ? skin.speed : 1,			 // number 播放速度
+						filpX: undefined,	 // boolean 水平镜像
+						filpY: undefined,	 // boolean 垂直翻转
+						opacity: undefined,	 // 0~1		不透明度
+					},{
+						x: skin.x,	// 相对于父节点坐标x，不填为居中
+									// (1) x: 10, 相当于 left: 10px；
+									// (2) x: [10, 0.5], 相当于 left: calc(50% + 10px)；
+						y: skin.y,	// 相对于父节点坐标y，不填为居中
+									// (1) y: 10，相当于 top: 10px；
+									// (2) y: [10, 0.5]，相当于 top: calc(50% + 10px)；
+						scale: skin.scale,	// 缩放
+						angle: skin.angle,	// 角度
+					});
+					
+					this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
+				}
+				
+				return base.lib.element.player.init.apply(this, arguments);
 			};
 			
 			lib.element.player.uninit = function(){
-			    this.node.zoneCamp.dataset.camp = null;
-			    this.node.zoneCamp.node.campName.innerHTML = '';
-			    this.node.zoneCamp.node.campName.style.backgroundImage = '';
+			    this.stopDynamic();
+				this.node.campWrap.dataset.camp = null;
+			    this.node.campWrap.node.campName.innerHTML = '';
+			    this.node.campWrap.node.campName.style.backgroundImage = '';
 			    this.node.name2.innerHTML = '';
-			    return playerUninitFunction.call(this);
-			};
-			
-			lib.element.player.update = function(nocallUpdate, damage){
-			    var result;
-			    var nocall = nocallUpdate === 'nocall';
-			    if (!nocall) {
-			        result = playerUpdateFunction.apply(this, arguments);
-			    }
-			    
-			    var hpNode = this.node.hp;
-			    var hp = this.hp - (nocall ? damage : 0);
-			    
-			    if (this.maxHp > 5){
-			        hpNode.innerHTML = (isNaN(hp) ? '×' : (hp == Infinity ? '∞' : hp)) + '<br>/<br>'
-						+ (isNaN(this.maxHp) ? '×' : (this.maxHp == Infinity ? '∞' : this.maxHp)) + '<div></div>';
-					if(hp == 0){
-						hpNode.lastChild.classList.add('lost');
-					}
-					
-					hpNode.classList.add('textstyle');
-			    }else if(nocall) {
-			        hpNode.innerHTML='';
-					hpNode.classList.remove('text');
-					hpNode.classList.remove('textstyle');
-					while (this.maxHp > hpNode.childNodes.length){
-						ui.create.div(hpNode);
-					}
-					
-					while(this.maxHp < hpNode.childNodes.length){
-						hpNode.removeChild(hpNode.lastChild);
-					}
-					
-					for (var i = 0; i < this.maxHp; i++) {
-                        var index = i;
-                        if (get.is.newLayout()) {
-                            index = this.maxHp - i - 1;
-                        }
-                        if (i < hp) {
-                            hpNode.childNodes[index].classList.remove('lost');
-                        } else {
-                            hpNode.childNodes[index].classList.add('lost');
-                        }
-                    }
-			    }
-			    
-			    if (true) {
-                    if (hpNode.classList.contains('room')) {
-                        hpNode.dataset.condition = 'high';
-                    } else if (hp == 0) {
-                        hpNode.dataset.condition = '';
-                    } else if (hp > Math.round(this.maxHp / 2) || hp == this.maxHp) {
-                        hpNode.dataset.condition = 'high';
-                    } else if (hp > Math.floor(this.maxHp / 3)) {
-                        hpNode.dataset.condition = 'mid';
-                    } else {
-                        hpNode.dataset.condition = 'low';
-                    }
-			    }
-			    
-				this.dataset.maxHp = this.maxHp;
 				
-			    return result;
-			};
-
-			lib.element.player.setIdentity = function(identity){
-				if(!identity) identity = this.identity;
+				for (var i = 1; i < 6; i++) if (this.isDisabled(i)) this.$enableEquip('equip' + i);
 				
-				var identityColor = identity;
-				var identityNode = this.node.identity;
-				
-				switch(get.mode()){
-				    case 'identity':
-						if (_status.mode == 'purple' && identity.indexOf('cai') >= 0) {
-							if (this.identity[0] == 'r') {
-								identity = 'cai';
-							} else {
-								identity = 'cai2';
-								this.classList.add('opposite-camp');
-								this.finalSide = false;
+				if (this.storage._disableJudge) {
+					game.broadcastAll(function(player) {
+						player.storage._disableJudge = false;
+						for (var i = 0; i < player.node.judges.childNodes.length; i++) {
+							if (player.node.judges.childNodes[i].name == 'disable_judge') {
+								player.node.judges.removeChild(player.node.judges.childNodes[i]);
+								break;
 							}
-							
 						}
-						break;
-					
-					case 'guozhan':
-				    if (identity == 'ye' && get.is.jun(this)) {
-							this.identity = identity = lib.character[this.name1][1];
-						}
-				        this.group = identity;
-				        break;
-				    case 'versus':
-						this.finalSide = this.side;
-						if (this.side === false) this.classList.add('opposite-camp');
-				        break;
+					}, this);
+				}
+				this.node.avatar.hide();
+				this.node.count.hide();
+				if (this.node.wuxing) {
+					this.node.wuxing.hide();
+				}
+				if (this.node.name_seat) {
+					this.node.name_seat.remove();
+					this.node.name_seat = undefined;
 				}
 				
-				this.finalShownIdentity = identity;
-				identityNode.dataset.color = identityColor;
-				if (lib.huanhuazhizhan) return this;
+				if (this.storage.nohp) this.node.hp.show();
+				this.classList.remove('unseen');
+				this.classList.remove('unseen2');
+				this.name = undefined;
+				this.name1 = undefined;
+				this.sex = undefined;
+				this.group = undefined;
+				this.hp = undefined;
+				this.maxHp = undefined;
+				this.hujia = undefined;
 				
-				if (decadeUI.config.campIdentityImageMode){
-					var that = this;
-					var image = new Image();
-					var url = extensionPath + 'image/decoration/identity_' + decadeUI.getPlayerIdentity(that, identity) + '.webp';
-				    that.finalShownIdentity = identity;
+				this.clearSkills(true);
+				this.node.identity.style.backgroundColor = '';
+				this.node.intro.innerHTML = '';
+				this.node.name.innerHTML = '';
+				this.node.hp.innerHTML = '';
+				this.node.count.innerHTML = '0';
+				if (this.name2) {
+					this.singleHp = undefined;
+					this.node.avatar2.hide();
+					this.node.name2.innerHTML = '';
+					this.classList.remove('fullskin2');
+					this.name2 = undefined;
+					this.node.count.classList.remove('p2');
+				}
+				
+				for (var mark in this.marks) this.marks[mark].remove();
+				ui.updatem(this);
+
+				this.skipList = [];
+				this.skills = this.skills.contains('cangji_yozuru') ? ['cangji_yozuru'] : [];
+				this.initedSkills = [];
+				this.additionalSkills = {};
+				this.disabledSkills = {};
+				this.hiddenSkills = [];
+				this.awakenedSkills = [];
+				this.forbiddenSkills = {};
+				this.phaseNumber = 0;
+				this.stat = [{
+					card: {},
+					skill: {}
+				}];
+				this.tempSkills = {};
+				this.storage = {};
+				this.marks = {};
+				this.ai = {
+					friend: [],
+					enemy: [],
+					neutral: []
+				};
+
+				return this;
+			};
+			
+			lib.element.player.update = function(count, hp, hpMax, hujia){
+				if (!_status.video) {
+					if (this.hp >= this.maxHp) this.hp = this.maxHp;
+					count = this.countCards('h');
+					hp = this.hp;
+					hpMax = this.maxHp;
 					
-					image.identity = identity;
-				    image.onerror = function(){
-						if (this.identity != that.finalShownIdentity) return;
-						
-						that.node.identity.firstChild.style.opacity = '';
-						that.node.identity.firstChild.innerHTML = get.mode() == 'boss' ? get.translation(that.finalShownIdentity) :
-							decadeUI.getPlayerIdentity(that, that.finalShownIdentity, true, true);
-				    };
-				    
-					that.node.identity.firstChild.innerHTML = '';
-					that.node.identity.firstChild.style.opacity = '0';
-					that.node.identity.style.backgroundImage = 'url("' + url + '")';
-					image.src = url;
+					game.broadcast(function(player, hp, maxHp, hujia) {
+						player.hp = hp;
+						player.maxHp = maxHp;
+						player.hujia = hujia;
+						player.update();
+					}, this, hp, hpMax, this.hujia);
 					
-				}else{
-				    this.node.identity.firstChild.innerHTML = get.is.jun(this) ? '君' : get.translation(identity);
+					if (this.hujia) {
+						this.markSkill('ghujia');
+					} else {
+						this.unmarkSkill('ghujia');
+					}
+					
+					game.addVideo('update', this, [count, hp, hpMax, this.hujia]);
+				} else {
+					// 虽然上面的 game.addVideo 提供了好几个参数，但是没啥用，因为videoContent里的update缺只给了1个参数。
+					if (!count) count = this.countCards('h');
+					hp = this.hp;
+					hpMax = this.maxHp;
+				}
+				
+				var hpNode = this.node.hp;
+				if (!this.storage.nohp) {
+					if (hpMax > 5) {
+						hpNode.innerHTML = (isNaN(hp) ? '×' : (hp == Infinity ? '∞' : hp)) + '<br>/<br>'
+							+ (isNaN(hpMax) ? '×' : (hpMax == Infinity ? '∞' : hpMax)) + '<div></div>';
+						if (hp == 0) hpNode.lastChild.classList.add('lost');
+						hpNode.classList.add('textstyle');
+					} else {
+						hpNode.innerHTML = '';
+						hpNode.classList.remove('textstyle');
+						while (hpMax > hpNode.childNodes.length) ui.create.div(hpNode);
+						while (hpMax < hpNode.childNodes.length) hpNode.lastChild.remove();
+
+						for (var i = 0; i < hpMax; i++) {
+							var index = i;
+							if (get.is.newLayout()) {
+								index = hpMax - i - 1;
+							}
+							if (i < hp) {
+								hpNode.childNodes[index].classList.remove('lost');
+							} else {
+								hpNode.childNodes[index].classList.add('lost');
+							}
+						}
+					}
+					
+					if (hpNode.classList.contains('room')) {
+						hpNode.dataset.condition = 'high';
+					} else if (hp == 0) {
+						hpNode.dataset.condition = '';
+					} else if (hp > Math.round(hpMax / 2) || hp === hpMax) {
+						hpNode.dataset.condition = 'high';
+					} else if (hp > Math.floor(hpMax / 3)) {
+						hpNode.dataset.condition = 'mid';
+					} else {
+						hpNode.dataset.condition = 'low';
+					}
+				}
+				
+				this.node.count.innerHTML = count;
+				if (count >= 10) {
+					this.node.count.dataset.condition = 'low';
+				} else if (count > 5) {
+					this.node.count.dataset.condition = 'higher';
+				} else if (count > 2) {
+					this.node.count.dataset.condition = 'high';
+				} else if (count > 0) {
+					this.node.count.dataset.condition = 'mid';
+				} else {
+					this.node.count.dataset.condition = 'none';
+				}
+				
+				this.dataset.maxHp = hpMax;
+				this.updateMarks();
+				
+				if (this.updates) {
+					for (var i = 0; i < lib.element.player.updates.length; i++) {
+						lib.element.player.updates[i](this);
+					}
 				}
 				
 				return this;
+			};
+
+			lib.element.player.setIdentity = function(identity){
+				if (!identity) identity = this.identity;
+				
+				this.node.identity.dataset.color = identity;
+				if (get.mode() == 'guozhan') {
+					if (identity == 'ye' && get.is.jun(this)) this.identity = identity = lib.character[this.name1][1];
+					this.group = identity;
+					this.node.identity.firstChild.innerHTML = get.translation(identity);
+					return this;
+				}
+				 
+				if (get.is.jun(this)) {
+					this.node.identity.firstChild.innerHTML = '君';
+				} else {
+					this.node.identity.firstChild.innerHTML = get.translation(identity);
+				}
+				
+				return this;
+				
+				// if(!identity) identity = this.identity;
+				
+				// var identityColor = identity;
+				// var identityNode = this.node.identity;
+				
+				// switch(get.mode()){
+				    // case 'identity':
+						// if (_status.mode == 'purple' && identity.indexOf('cai') >= 0) {
+							// if (this.identity[0] == 'r') {
+								// identity = 'cai';
+							// } else {
+								// identity = 'cai2';
+								// this.classList.add('opposite-camp');
+								// this.finalSide = false;
+							// }
+							
+						// }
+						// break;
+					
+					// case 'guozhan':
+				        // if (identity == 'ye' && get.is.jun(this)) {
+							// this.identity = identity = lib.character[this.name1][1];
+						// }
+						// this.group = identity;
+				        // break;
+				    // case 'versus':
+						// this.finalSide = this.side;
+						// if (this.side === false) this.classList.add('opposite-camp');
+				        // break;
+				// }
+				
+				// this.finalShownIdentity = identity;
+				// identityNode.dataset.color = identityColor;
+				// if (lib.huanhuazhizhan) return this;
+				
+				// if (decadeUI.config.campIdentityImageMode){
+					// var that = this;
+					// var image = new Image();
+					// var url = extensionPath + 'image/decoration/identity_' + decadeUI.getPlayerIdentity(that, identity) + '.png';
+				    // that.finalShownIdentity = identity;
+					
+					// image.identity = identity;
+				    // image.onerror = function(){
+						// if (this.identity != that.finalShownIdentity) return;
+						
+						// that.node.identity.firstChild.style.opacity = '';
+						// that.node.identity.firstChild.innerHTML = get.mode() == 'boss' ? get.translation(that.finalShownIdentity) :
+							// decadeUI.getPlayerIdentity(that, that.finalShownIdentity, true, true);
+				    // };
+				    
+					// that.node.identity.firstChild.innerHTML = '';
+					// that.node.identity.firstChild.style.opacity = '0';
+					// that.node.identity.style.backgroundImage = 'url("' + url + '")';
+					// image.src = url;
+					
+				// } else {
+				    // this.node.identity.firstChild.innerHTML = get.is.jun(this) ? '君' : get.translation(identity);
+				// }
+				
+				// return this;
 			};
 			
 			lib.element.player.addSkill = function(skill){
@@ -2413,7 +3800,7 @@ content:function(config, pack){
 			
 			lib.element.player.setModeState = function(info){
 				if (info && info.seat) {
-					if (!this.node.seat) this.node.seat = decadeUI.dialog.create('seat', this);
+					if (!this.node.seat) this.node.seat = decadeUI.element.create('seat', this);
 					this.node.seat.innerHTML = get.cnNumber(info.seat, true);
 				}
 				
@@ -2424,102 +3811,102 @@ content:function(config, pack){
 				}
 			};
 			
-			lib.element.player.$damage = function(source){
-			    if (!source) source = this;
-				
-				if (get.itemtype(source) == 'player') {
-					game.addVideo('damage', this, source.dataset.position);
-				} else {
-					game.addVideo('damage', this);
-				}
-				
-				game.broadcast(function(player, source) {
-					player.$damage(source);
-				}, this, source);
-				if (source && source != this && lib.config.damage_shake) {
-					var left, top;
-					if (source.getTop() == this.getTop()) {
-						left = 20;
-						top = 0;
-					} else {
-						var ratio = (source.getLeft() - this.getLeft()) / (source.getTop() - this.getTop());
-						left = Math.abs(20 * ratio / Math.sqrt(1 + ratio * ratio));
-						top = Math.abs(20 / Math.sqrt(1 + ratio * ratio));
-					}
-					
-					if (source.getLeft() - this.getLeft() > 0) left = -left;
-					if (source.getTop() - this.getTop() > 0) top = -top;
-					this.style.transform = 'translate(' + left + 'px,' + top + 'px)';
-				} else {
-					var zoom1 = 0.9,
-					zoom2 = 0.95;
-					
-					if (arguments[1] == 'phase') {
-						zoom1 = 1.05;
-						zoom2 = 1.05;
-					}
-					
-					if (this.classList.contains('linked') && get.is.newLayout()) {
-						this.style.transform = 'scale(' + zoom2 + ') rotate(-90deg)';
-					} else if (game.chess && this._chesstransform) {
-						this.style.transform = 'translate(' + this._chesstransform[0] + 'px,' + this._chesstransform[1] + 'px) scale(' + zoom2 + ')';
-					} else {
-						this.style.transform = 'scale(' + zoom2 + ')';
-					}
-				}
-				
-				this.queue();
-			    var time = getComputedStyle(source).transitionDuration;
-			    if (!time) return;
-			    
-			    if (time.lastIndexOf('ms') != -1){
-			        time = parseInt(time.replace(/ms/, ''));
-			    }else if(time.lastIndexOf('s') != -1){
-			        time = parseFloat(time.replace(/s/, '')) * 1000;
-			    }
-			    
-			    decadeUI.delay(time + 100);
-			    this.update('nocall', _status.event.num);
-			};
-			
 			lib.element.player.$damagepop = function(num, nature, font, nobroadcast){
-				if (typeof num != 'number' || !decadeUI.config.gameAnimationEffect) return base.lib.element.player.$damagepop.apply(this, arguments);
-				
-				var player = this;
-				
-				if (num < 0) {
-					switch (nature) {
-						case 'thunder':
-							if (num <= -2) {
-								decadeUI.animation.playSpine2d(['effect_shoujidonghua', 'play6'], { scale: 0.8, parent: player });
-							} else {
-								decadeUI.animation.playSpine2d(['effect_shoujidonghua', 'play5'], { scale: 0.8, parent: player });
-							}
-							break;
-						case 'fire':
-							if (num <= -2) {
-								decadeUI.animation.playSpine2d(['effect_shoujidonghua', 'play4'], { scale: 0.8, parent: player });
-							} else {
-								decadeUI.animation.playSpine2d(['effect_shoujidonghua', 'play3'], { scale: 0.8, parent: player });
-							}
-							break;
-						case 'water':
-							return base.lib.element.player.$damagepop.apply(this, arguments);
-						default:
-							if (num <= -2) {
-								decadeUI.animation.playSpine2d(['effect_shoujidonghua', 'play2'], { scale: 0.8, parent: player });
-							} else {
-								decadeUI.animation.playSpine2d(['effect_shoujidonghua', 'play1'], { scale: 0.8, parent: player });
-							}
-							break;
+				if (typeof num == 'number' || typeof num == 'string') {
+					game.addVideo('damagepop', this, [num, nature, font]);
+					if (nobroadcast !== false) {
+						game.broadcast(function(player, num, nature, font) {
+							player.$damagepop(num, nature, font);
+						}, this, num, nature, font);
 					}
-				} else {
-					if (nature == 'wood') {
-						decadeUI.animation.playSpine2d('effect_zhiliao', { scale: 0.7, parent: player });
+					
+					var node;
+					if (this.popupNodeCache && this.popupNodeCache.length) {
+						node = this.popupNodeCache.shift();
+					} else {
+						node = decadeUI.element.create('damage');
 					}
+					
+					if (font) {
+						node.classList.add('normal-font');
+					} else {
+						node.classList.remove('normal-font');
+					}
+					
+					if (typeof num == 'number') {
+						node.popupNumber = num;
+						if (num == Infinity) {
+							num = '+∞'
+						} else if (num == -Infinity) {
+							num = '-∞';
+						} else if (num > 0) {
+							num = '+' + num;
+						}
+						
+					} else {
+						node.popupNumber = null;
+					}
+					
+					node.textContent = num;
+					node.dataset.text = num;
+					node.nature = nature || 'soil';
+					// node.dataset.nature = nature || 'soil';
+					this.damagepopups.push(node);
 				}
-			
-				base.lib.element.player.$damagepop.apply(this, arguments);
+				
+				if (this.damagepopups.length && !this.damagepopLocked) {
+					var node = this.damagepopups.shift();
+					this.damagepopLocked = true;
+					if (this != node.parentNode) this.appendChild(node);
+					
+					var player = this;
+					if (typeof node.popupNumber == 'number') {
+						var popupNum = node.popupNumber;
+						if (popupNum < 0) {
+							switch (node.nature) {
+								case 'thunder':
+									if (popupNum <= -2) {
+										decadeUI.animation.playSpine({ name:'effect_shoujidonghua', action: 'play6' }, { scale: 0.8, parent: player });
+									} else {
+										decadeUI.animation.playSpine({ name:'effect_shoujidonghua', action: 'play5' }, { scale: 0.8, parent: player });
+									}
+									break;
+								case 'fire':
+									if (popupNum <= -2) {
+										decadeUI.animation.playSpine({ name:'effect_shoujidonghua', action: 'play4' }, { scale: 0.8, parent: player });
+									} else {
+										decadeUI.animation.playSpine({ name:'effect_shoujidonghua', action: 'play3' }, { scale: 0.8, parent: player });
+									}
+									break;
+								case 'water':
+									break;
+								default:
+									if (popupNum <= -2) {
+										decadeUI.animation.playSpine({ name:'effect_shoujidonghua', action: 'play2' }, { scale: 0.8, parent: player });
+									} else {
+										decadeUI.animation.playSpine({ name:'effect_shoujidonghua', action: 'play1' }, { scale: 0.8, parent: player });
+									}
+									break;
+							}
+						} else {
+							if (node.nature == 'wood') {
+								decadeUI.animation.playSpine('effect_zhiliao', { scale: 0.7, parent: player });
+							}
+						}
+					}
+					
+					node.style.animation = 'open-fade-in-out 1.2s';
+					setTimeout(function(player, node){
+						if (!player.popupNodeCache) player.popupNodeCache = [];
+						node.style.animation = '';
+						player.popupNodeCache.push(node);
+					}, 1210, player, node);
+				
+					setTimeout(function(player) {
+						player.damagepopLocked = false;
+						player.$damagepop();
+					}, 500, player);
+				}
 			};
 			
 			lib.element.player.$throw = function(card, time, init, nosource){
@@ -2550,6 +3937,7 @@ content:function(config, pack){
 							player.$throw(cards, time, init, nosource);
 						}, this, throwns, time, init, nosource);
 					}
+					
 					game.addVideo('throw', this, [get.cardsInfo(throwns), time, nosource]);
 				}
 				
@@ -2563,16 +3951,18 @@ content:function(config, pack){
 					if (game.chess) {
 						this.chessFocus();
 					}
+					
 					this.$throwordered2(throwns[i], nosource);
 				}
+				
 				return throwns[throwns.length - 1];
 			};
 			
-			lib.element.player.$throwordered2 = function(card, nosource){
+			lib.element.player.$throwordered2 = function(card, nosource, usedText){
 				if (_status.connectMode) ui.todiscard = [];
-				
 				card.classList.add('thrown');
 				card.classList.add('transition-none');
+				
 				var inserted = false;
 				
 				if (!card.fixed){
@@ -2587,14 +3977,30 @@ content:function(config, pack){
 				
 				if (!inserted) ui.arena.appendChild(card);
 				if (!card.fixed) ui.thrown.splice(0, 0, card);
-				var parentNode = card.parentNode;
+				var $parent = ui.arena;
 				var x, y;
+				
+				if (!decadeUI.dataset.discardDataUpdated) {
+					decadeUI.dataset.discardDataUpdated = true;
+					decadeUI.dataset.discardData = {
+						card:{
+							width: card.offsetWidth,
+							height: card.offsetHeight,
+							scale: decadeUI.getCardBestScale(),
+						},
+						width: $parent.offsetWidth,
+						height: $parent.offsetHeight,
+					};
+				}
+				
+				var discardData = decadeUI.dataset.discardData;
+				
 				if (nosource){
-					x = ((parentNode.offsetWidth - card.offsetWidth) / 2 - parentNode.offsetWidth * 0.08) + 'px';
-					y = ((parentNode.offsetHeight - card.offsetHeight) / 2) + 'px';
+					x = ((discardData.width - discardData.card.width) / 2 - discardData.width * 0.08) + 'px';
+					y = ((discardData.height - discardData.card.height) / 2) + 'px';
 				}else{
-					x = ((this.offsetWidth - card.offsetWidth) / 2 + this.offsetLeft) + 'px';
-					y = ((this.offsetHeight - card.offsetHeight) / 2 + this.offsetTop) + 'px';
+					x = ((this.offsetWidth - discardData.card.width) / 2 + this.offsetLeft) + 'px';
+					y = ((this.offsetHeight - discardData.card.height) / 2 + this.offsetTop) + 'px';
 				}
 
 				card.style.transform = 'translate(' + x + ', ' + y + ')' + 'scale(' + decadeUI.getCardBestScale() + ')';
@@ -2603,113 +4009,163 @@ content:function(config, pack){
 				card.scaled = true;
 				if (card.fixed) return;
 				decadeUI.layout.invalidateDiscard();
-				var usedInfo = card.querySelector('.used-info');
-				if (!usedInfo) return card;
-				var eventName = '';
+				var usedTextNode = card.querySelector('.used-info');
+				if (!usedTextNode) return card;
+				if (usedText) {
+					usedTextNode.textContent = usedText;
+					return card;
+				}
+				
+				var infoText = '';
+				var showPlayerName = true;
 				var event = _status.event;
-	
+				
 				switch(event.name){
 				    case 'useCard':
 				        if (event.targets.length == 1){
 				            if (event.targets[0] == this){
-				                eventName = '对自己';
+				                infoText = '对自己';
 				            }else{
-				                eventName = '对' + get.translation(event.targets[0]);
+				                infoText = '对' + get.translation(event.targets[0]);
 				            }
 				        }else{
-				            eventName = '使用';
+				            infoText = '使用';
+				        }
+						
+						var cardname = event.card.name;
+						var cardnature = event.card.nature;
+						if ((lib.config.cardtempname != 'off') && ((card.name != cardname) || (card.nature != cardnature))) {
+							if (!card._tempName) card._tempName = ui.create.div('.temp-name', card);
+							
+							var tempname = get.translation(cardname);
+							if (cardnature) {
+								card._tempName.dataset.nature = cardnature;
+								if (cardname == 'sha') {
+									tempname = get.translation(cardnature) + tempname;
 								}
+							}
+							
+							card._tempName.textContent = tempname;
+							card._tempName.tempname = tempname;
+						}
 						
 						if (decadeUI.config.cardUseEffect && event.card && event.card.cards && event.card.cards.length == 1) {
 							var name = event.card.name;
 							var nature = event.card.nature;
+							
 							switch (name) {
+								case 'effect_caochuanjiejian':
+									decadeUI.animation.cap.playSpineTo(card, 'effect_caochuanjiejian');
+									break;
 								case 'sha':
 									switch (nature) {
 										case 'thunder':
-											decadeUI.animation.playSpine2d('effect_leisha', { scale: 0.7, parent: card , follow: true });
+											decadeUI.animation.cap.playSpineTo(card, 'effect_leisha');
 											break;
 										case 'fire':
-											decadeUI.animation.playSpine2d('effect_huosha', { scale: 0.7, parent: card , follow: true });
+											decadeUI.animation.cap.playSpineTo(card, 'effect_huosha');
 											break;
 										default:
 											if (get.color(card) == 'red') {
-												decadeUI.animation.playSpine2d('effect_hongsha', { scale: 0.7, parent: card , follow: true });
+												decadeUI.animation.cap.playSpineTo(card, 'effect_hongsha');
 											} else {
-												decadeUI.animation.playSpine2d('effect_heisha', { scale: 0.7, parent: card , follow: true });
+												decadeUI.animation.cap.playSpineTo(card, 'effect_heisha');
 											}
 											break;
 									}
 									break;
 								case 'shan':
-									decadeUI.animation.playSpine2d('effect_shan', { scale: 0.7, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_shan');
 									break;
 								case 'tao':
-									decadeUI.animation.playSpine2d('effect_tao', { scale: 0.7, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_tao', { scale: 0.9 });
+									break;
+								case 'tiesuo':
+									decadeUI.animation.cap.playSpineTo(card, 'effect_tiesuolianhuan', { scale: 0.9 });
 									break;
 								case 'jiu':
-									decadeUI.animation.playSpine2d('effect_jiu', { scale: 0.7, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_jiu', { y:[-30, 0.5] });
+									break;
+								case 'kaihua':
+									decadeUI.animation.cap.playSpineTo(card, 'effect_shushangkaihua');
 									break;
 								case 'wuzhong':
-									decadeUI.animation.playSpine2d('effect_wuzhongshengyou', { scale: 0.7, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_wuzhongshengyou');
 									break;
 								case 'wuxie':
-									decadeUI.animation.playSpine2d('effect_wuxiekeji', { scale: 0.7, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_wuxiekeji', { y:[10, 0.5], scale: 0.9 });
 									break;
 								// case 'nanman':
-									// decadeUI.animation.playSpine2d('effect_nanmanruqin', { scale: 0.7, parent: card , follow: true });
+									// decadeUI.animation.cap.playSpineTo(card, 'effect_nanmanruqin', { scale: 0.45 });
 									// break;
-								// case 'wanjian':
-									// decadeUI.animation.playSpine2d('effect_wanjianqifa', { scale: 0.7, parent: card , follow: true });
-									// break;
+								case 'wanjian':
+									decadeUI.animation.cap.playSpineTo(card, 'effect_wanjianqifa', { scale: 0.78 });
+									break;
 								case 'wugu':
-									decadeUI.animation.playSpine2d('effect_wugufengdeng', { scale: 0.7, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_wugufengdeng', { y:[10, 0.5] });
 									break;
 								// case 'taoyuan':
-									// decadeUI.animation.playSpine2d('effect_taoyuanjieyi', { scale: 0.7, parent: card , follow: true });
+									// decadeUI.animation.cap.playSpineTo(card, 'effect_taoyuanjieyi', { y:[10, 0.5] });
 									// break;
 								case 'shunshou':
-									decadeUI.animation.playSpine2d('effect_shunshouqianyang', { scale: 0.7, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_shunshouqianyang');
 									break;
 								case 'huogong':
-									decadeUI.animation.playSpine2d('effect_huogong', { scale: 0.5, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_huogong', { x:[8, 0.5], scale: 0.5 });
 									break;
 								case 'guohe':
-									decadeUI.animation.playSpine2d('effect_guohechaiqiao', { scale: 0.8, parent: card , follow: true });
+									decadeUI.animation.cap.playSpineTo(card, 'effect_guohechaiqiao', { y:[10, 0.5] });
+									break;
+								case 'yuanjiao':
+									decadeUI.animation.cap.playSpineTo(card, 'effect_yuanjiaojingong');
+									break;
+								case 'zhibi':
+									decadeUI.animation.cap.playSpineTo(card, 'effect_zhijizhibi');
+									break;
+								case 'zhulu_card':
+									decadeUI.animation.cap.playSpineTo(card, 'effect_zhulutianxia');
 									break;
 							}
+							// if (name == 'sha' || name == 'shan') {
+								// if (!card.animation) card.animation = decadeUI.element.create('animation', card);
+								// if (get.color(card) == 'red') card.animation.style.color = 'rgb(200,0,0)';
+								// else card.animation.style.color = 'black';
+								// card.animation.innerHTML = get.translation(name);
+								// card.animation.dataset.nature = nature;
+								// card.animation.style.webkitAnimation = 'use-card 2.5s forwards';
+							// }
 						}
 				        break;
 				    case 'respond':
-				        eventName = '打出';
+				        infoText = '打出';
 				        break;
 				    case 'useSkill':
-				        eventName = '发动';
-						if(event.skill) eventName+=get.translation(event.skill);
+				        infoText = '发动';
 				        break;
 				    case 'die':
 				        card.classList.add('invalided');
 				        decadeUI.layout.delayClear();
-				        eventName = '弃置';
+				        infoText = '弃置';
 				        break;
 				    case 'lose':
 						if (event.parent && event.parent.name == 'discard' && event.parent.parent) {
 							var skillEvent = event.parent.parent.parent;
 							if (skillEvent) {
-								eventName = lib.translate[skillEvent.name != 'useSkill' ? skillEvent.name : skillEvent.skill];
-								if (eventName == null) eventName = '';
-								eventName += '弃置';
+								infoText = lib.translate[skillEvent.name != 'useSkill' ? skillEvent.name : skillEvent.skill];
+								if (infoText == null) infoText = '';
+								infoText += '弃置';
 								break;
 							}
 						}
 				    case 'discard':
-				        eventName = '弃置';
+				        infoText = '弃置';
 				        break;
 				    case 'phaseJudge':
-				        eventName = '开始判定';
-				        break;
+				        infoText = '即将生效';
+						break;
 				    case 'judge':
-				        eventName = '的判定';
+						showPlayerName = false;
+						infoText = event.judgestr + '的判定牌';
 				        if (!lib.element.content['throwJudgeCallback']){
 				            lib.element.content['throwJudgeCallback'] = function(event,step,source,player,target,targets,card,cards,skill,forced,num,trigger,result,_status,lib,game,ui,get,ai){
     				            var callback = event.parent.overrides.callback;
@@ -2729,65 +4185,98 @@ content:function(config, pack){
     				            
     				            if (event.parent.overrides.step == step){
     				                event.finish();
-    				                return;
+									return;
     				            }
     				            
     				            if (callback) callback.apply(this, arguments);
     				            var card = event.judgeResult.card.clone;
-    				            var judge = event.judgeResult.judge;
-    				            card.node.usedInfo = card.querySelector('.used-info');
-    				            card.node.usedInfo.innerHTML = (judge != 0 ? (judge > 0 ? '洗具' : '杯具') : '不洗不杯');
+								var apcard = event.parent.apcard;
+    				            card.node.usedTextNode = card.querySelector('.used-info');
+								
+								var action;
+								var judgeValue;
+								var getEffect = event.parent.judge2;
+								if (getEffect) {
+									judgeValue = getEffect(event.parent.result);
+								} else {
+									judgeValue = decadeUI.get.judgeEffect(event.parent.judgestr, event.judgeResult.judge);
+								}
+								
+								if ((typeof judgeValue == 'boolean')) {
+									judgeValue = judgeValue ? 1 : -1;
+								} else {
+									judgeValue = event.judgeResult.judge;
+								}
+								
+								if (judgeValue >= 0) {
+									action = 'play4';
+									infoText = '判定生效';
+								} else {
+									action = 'play5';
+									infoText = '判定失效';
+								}
+								
+								if (apcard && apcard._ap) apcard._ap.stopSpineAll();
+								if (apcard && apcard._ap && apcard == card) {
+									apcard._ap.playSpine({
+										name: 'effect_panding',
+										action: action
+									});
+								} else {
+									decadeUI.animation.cap.playSpineTo(card, {
+										name: 'effect_panding',
+										action: action
+									});
+								}
+								
+								event.parent.apcard = undefined;
+								card.node.usedTextNode.innerHTML = get.translation(event.parent.judgestr) + infoText;
 				            };
 				            
 				            lib.element.content['throwJudgeCallback']._parsed = true;
 				        }
 				        
+						if (decadeUI.config.cardUseEffect) {
+							decadeUI.animation.cap.playSpineTo(card, {
+								name: 'effect_panding',
+								action: 'play',
+								loop: true
+							});
+							
+							event.apcard = card;
+						}
+						
 				        if (!event.overrides) event.overrides = { };
 				        event.overrides.callback = event.callback;
 				        event.overrides.step = 1;
 				        event.callback = 'throwJudgeCallback';
 				        break;
 				    default:
-						eventName = get.translation(event.name);
-						if (eventName == event.name) eventName = '';
+						infoText = get.translation(event.name);
+						if (infoText == event.name) infoText = '';
 				        break;
 				}
 				
-				usedInfo.innerHTML = get.translation(this) + eventName;
+				usedTextNode.textContent = (showPlayerName ? get.translation(this) : '') + infoText;
 				return card;
 			};
 			
 			lib.element.player.$dieflip = function(){
 				if (!decadeUI.config.playerDieEffect && playerDieFlipFunction) playerDieFlipFunction.apply(this, arguments);
 			};
-			lib.element.player.$dieAfter = function(){
-				if (!decadeUI.config.playerDieEffect) {
-					if (playerDieAfterFunction) playerDieAfterFunction.apply(this, arguments);
-					return;
+			
+			Object.defineProperties(lib.element.player, {
+				$dieAfter: {
+					configurable: true,
+					get:function(){
+						return ride.lib.element.player.$dieAfter;
+					},
+					set:function(value){
+						base.lib.element.player.$dieAfter = value;
+					}
 				}
-				if(!this.node.dieidentity) this.node.dieidentity = ui.create.div('damage.dieidentity', this);
-				this.node.dieidentity.classList.add('damage');
-				this.node.dieidentity.classList.add('dieidentity');
-				this.classList.add('died-effect');
-				var that = this;
-				var image = new Image();
-				var identity = decadeUI.getPlayerIdentity(this);
-				var url = extensionPath + 'image/decoration/dead_' + identity + '.webp';
-				image.onerror = function(){
-					that.node.dieidentity.innerHTML = decadeUI.getPlayerIdentity(that, that.identity, true) + '<br>阵亡';
-				};
-				that.node.dieidentity.innerHTML = '';
-				that.node.dieidentity.style.backgroundImage = 'url("' + url + '")';
-				image.src = url;
-				setTimeout(function(){
-					var rect = that.getBoundingClientRect();
-					decadeUI.animation.playSpine2d('effect_zhenwang', {
-						x: rect.left + rect.width / 2 - 7,
-						y: document.body.offsetHeight - rect.top - rect.height / 2 + 1,
-						scale: 0.8,
-					});
-				}, 250);
-			};
+			});	
+			
 			lib.element.player.$compare = function(card1, target, card2){
 				game.broadcast(function(player, target, card1, card2) {
 					player.$compare(card1, target, card2);
@@ -2797,6 +4286,7 @@ content:function(config, pack){
 				target.$throwordered2(card2.copy(false));
 				player.$throwordered2(card1.copy(false));
 			};
+			
 			lib.element.player.$disableEquip = function(skill){
 				game.broadcast(function(player, skill) {
 					player.$disableEquip(skill);
@@ -2819,6 +4309,8 @@ content:function(config, pack){
 				card.classList.remove('drawinghidden');
 				card.classList.add('feichu');
 				delete card._transform;
+				
+				
 				var iconName = {
 					equip1: 'icon feichu icon-saber',
 					equip2: 'icon feichu icon-shield',
@@ -2826,10 +4318,12 @@ content:function(config, pack){
 					equip4: 'icon feichu icon-mount',
 					equip5: 'icon feichu icon-treasure'
 				}[skill];
+				
 				if (iconName) {
-					var icon = decadeUI.dialog.create(iconName, card);
+					var icon = decadeUI.element.create(iconName, card);
 					icon.style.zIndex = '1';
 				}
+				
 				var equipNum = get.equipNum(card);
 				var equipped = false;
 				for (var i = 0; i < player.node.equips.childNodes.length; i++) {
@@ -2847,118 +4341,10 @@ content:function(config, pack){
 				}
 				return player;
 			};
-			lib.element.card.init = function(param){
-				var card = cardInitFunction.call(this, param);
-				if (decadeUI.config.cardReplace){
-					card.classList.add('decade-card');
-					if (!card.classList.contains('infohidden')) {
-						var name = card.name;
-						if (name == 'sha') {
-							switch (card.nature) {
-								case 'thunder':
-									name = 'lei' + name;
-									break;
-									
-								case 'fire':
-									name = 'huo' + name;
-									break;
-								case 'ice':
-									name = 'bing' + name;
-									break;
-							}
-						}
-						
-						var res = decadeUI.resources.cards[name];
-						if (!res) {
-							res = {
-								name: name,
-								chinese: '',
-								image: undefined,		// 图片
-								loaded: undefined, 		// 是否已加载资源
-								rawUrl: undefined, 			// 被替换的图片地址	
-							};
-							
-							decadeUI.resources.cards[name] = res;
-						}
-						
-						if (res.loaded !== false) {
-							if (!res.loaded) {
-								var url = lib.assetURL + 'extension/' + extensionName + '/image/card/' + res.name + '.webp';
-								res.image = new Image();
-								res.image.onload = function(){
-									this.onload = null;
-									res.loaded = true;
-								};
-								
-								res.image.onerror = function(){
-									this.onerror = null;
-									res.loaded = false;
-									card.style.background = res.rawUrl;
-									card.classList.remove('decade-card');
-								}
-								
-								if (!res.rawUrl) res.rawUrl = card.style.backgroundImage;
-								res.image.src = url;
-							}
-							
-							card.style.background = 'url("' + res.image.src + '")';
-						} else {
-							card.classList.remove('decade-card');
-						}
-					}
-				} else {
-					card.classList.remove('decade-card');
-				}
-				
-				
-				if (param[0]){
-					card.dataset.suit = param[0];
-					if (param[1]){
-						var cardnum = param[1];
-						var cardsuit = get.translation(param[0]);
-						if([1,11,12,13].contains(cardnum)){
-							cardnum = {'1':'A','11':'J','12':'Q','13':'K'}[cardnum];
-						}
-						
-						if (!card.node.suitNum) {
-							card.node.suitNum = decadeUI.dialog.create('suit-num');
-							card.insertBefore(card.node.suitNum, card.node.info);
-						}
-						
-						card.node.info.innerHTML = null;
-						card.node.suitNum.innerHTML = '<span>' + cardnum + '</span>' + '<br><span class="suit">' + cardsuit + '</span>';
-						card.node.name2.innerHTML = '<span data-suit="' + param[0] + '">' + cardsuit + cardnum + '</span>' + 
-						'<span>&nbsp' + get.translation(this.name) + '</span>';
-						var info = lib.card[this.name];
-						
-						switch(get.subtype(this)){
-    						case 'equip3':
-        						if(info.distance && info.distance.globalTo){
-        							this.node.name2.innerHTML += '&nbsp;+';
-        						}
-        						break;
-    						case 'equip4':
-        						if(info.distance&&info.distance.globalFrom){
-        							this.node.name2.innerHTML += '&nbsp;-';
-        						}
-        						break;
-    					}
-    				
-    				}
-				} else {
-					if (card.node.info.innerText = ' ') card.node.info.innerHTML = null;
-				}
-				
-				if (param[0]) card.dataset.suit = param[0];
-				
-				if (!card.node.topName) card.node.topName = decadeUI.dialog.create('top-name', card);
-				card.node.topName.innerHTML = (this.name == 'sha' ? (card.nature == 'thunder' ? '雷' : (card.nature == 'fire' ? '火' : '')) : '') + get.translation(this.name);
-				return card;
-			};
 			
 			lib.element.card.copy = function(){
 				var clone = cardCopyFunction.apply(this, arguments);
-				
+				clone.nature = this.nature;
 				var res = decadeUI.resources.cards[clone.name];
 				if (res && !res.loaded && clone.classList.contains('decade-card')) {
 					if (res.loaded !== false) {
@@ -3118,7 +4504,7 @@ content:function(config, pack){
                         source.$give(card, player, false, init);
                     },
                     this, card, player, init);
-                    if (typeof card == 'number' && card >= 0) {
+                    if ((typeof card == 'number') && card >= 0) {
                         game.addVideo('give', this, [card, player.dataset.position]);
                     } else {
                         if (get.itemtype(card) == 'card') {
@@ -3141,7 +4527,7 @@ content:function(config, pack){
                             this.$give(card[i], player, false, false);
                         }
                     }
-                } else if (typeof card == 'number' && card >= 0) {
+                } else if ((typeof card == 'number') && card >= 0) {
                     if (log != false && !_status.video) {
                         game.log(player, '从', this, '获得了' + get.cnNumber(card) + '张牌');
                     }
@@ -3447,8 +4833,7 @@ content:function(config, pack){
 					}
 				}
 				
-					this.frames[2].updates.push(obj);
-				
+				this.frames[2].updates.push(obj);
 				if (!this.frameId) this.update();
 				return obj;
 			},
@@ -3559,8 +4944,13 @@ content:function(config, pack){
 				for (var i = frames.length - 1; i >= 0; i--) {
 					if (frames[i] && frames[i].updates.length) {
 						e.canvas = frames[i].canvas;
-						e.canvas.width = e.canvas.parentNode.offsetWidth;
-						e.canvas.height = e.canvas.parentNode.offsetHeight;
+						if (!decadeUI.dataset.animSizeUpdated) {
+							decadeUI.dataset.animSizeUpdated = true;
+							e.canvas.width = e.canvas.parentNode.offsetWidth;
+							e.canvas.height = e.canvas.parentNode.offsetHeight;
+						}
+						
+						e.canvas.height = e.canvas.height
 						e.context = e.canvas.getContext('2d');
 						
 						for (var j = 0; j < frames[i].updates.length; j++) {
@@ -3568,11 +4958,8 @@ content:function(config, pack){
 								args = Array.from(frames[i].updates[j].inits);
 								args.push(e);
 								e.save();
-								try {
-									if (frames[i].updates[j].update.apply(frames[i].updates[j], args)) frames[i].updates.splice(j--, 1);
-								} finally {
-									e.restore();
-								}
+								if (frames[i].updates[j].update.apply(frames[i].updates[j], args)) frames[i].updates.splice(j--, 1);
+								e.restore();
 							}
 							
 							if (frames[i].updates.length == 0) { 
@@ -3585,7 +4972,6 @@ content:function(config, pack){
 					}
 				}
 				
-
 				if (frames.length == cancel) {
 					decadeUI.animate.lastUpdatedTime = null;
 					return;
@@ -3596,6 +4982,7 @@ content:function(config, pack){
 			},
 			cancel:function(){
 				if (this.frameId == null) return;
+				// clearTimeout(this.frameId);
 				cancelAnimationFrame(this.frameId);
 				this.frameId = null;
 			},
@@ -3606,15 +4993,15 @@ content:function(config, pack){
 				
 			},
 		},
-				
 		ResizeSensor:(function(){
-			function ResizeSensor(element, callback, callFrame) {
+			function ResizeSensor(element) {
 				this.element = element;
-				this.elementWidth = element.clientWidth || 1;
-				this.elementHeight = element.clientHeight || 1;
-				this.maximumWidth = 10000 * (this.elementWidth);
-				this.maximumHeight = 10000 * (this.elementHeight);
-
+				this.width = element.clientWidth || 1;
+				this.height = element.clientHeight || 1;
+				this.maximumWidth = 10000 * (this.width);
+				this.maximumHeight = 10000 * (this.height);
+				this.events = [];
+				
 				var expand = document.createElement('div');
 				expand.style.cssText = 'position:absolute;top:0;bottom:0;left:0;right:0;z-index=-10000;overflow:hidden;visibility:hidden;transition:all 0s;';
 				var shrink = expand.cloneNode(false);
@@ -3627,14 +5014,13 @@ content:function(config, pack){
 				expandChild.style.height = this.maximumHeight + 'px';
 				shrinkChild.style.width = '250%';
 				shrinkChild.style.height = '250%';
-
+				
 				expand.appendChild(expandChild);
 				shrink.appendChild(shrinkChild);
 				element.appendChild(expand);
 				element.appendChild(shrink);
-				
 				if (expand.offsetParent != element){
-				  element.style.position = 'relative';
+					element.style.position = 'relative';
 				}
 				
 				expand.scrollTop = shrink.scrollTop = this.maximumHeight;
@@ -3642,16 +5028,16 @@ content:function(config, pack){
 				
 				var sensor = this;
 				sensor.onscroll = function (e) {
-					sensor.newWidth = sensor.element.clientWidth || 1;
-					sensor.newHeight = sensor.element.clientHeight || 1;
-
-					if (sensor.newWidth != sensor.elementWidth || sensor.newHeight != sensor.elementHeight){
-						sensor.elementWidth = sensor.newWidth;
-						sensor.elementHeight = sensor.newHeight;
-						if (callFrame == void 0 || callFrame) {
-							requestAnimationFrame(callback.bind(element));
+					sensor.w = sensor.element.clientWidth || 1;
+					sensor.h = sensor.element.clientHeight || 1;
+					
+					if (sensor.w != sensor.width || sensor.h != sensor.height){
+						sensor.width = sensor.w;
+						sensor.height = sensor.h;
+						if (sensor.requestFrame) {
+							requestAnimationFrame(sensor.dispatchEvent.bind(sensor));
 						} else {
-							callback.call(element, performance.now());
+							sensor.dispatchEvent();
 						}
 					}
 					
@@ -3663,8 +5049,42 @@ content:function(config, pack){
 				shrink.addEventListener('scroll', sensor.onscroll);
 				sensor.expand = expand;
 				sensor.shrink = shrink;
+			}
+			
+			ResizeSensor.prototype.addListener = function (callback, capture) {
+				if (this.events == undefined) this.events = [];
+				this.events.push({
+					callback: callback,
+					capture: capture,
+				});
+			};
+			
+			ResizeSensor.prototype.dispatchEvent = function () {
+				var capture = true;
+				var evt;
+				
+				for (var i = 0; i < this.events.length; i++) {
+					evt = this.events[i];
+					if (evt.capture) {
+						evt.callback();
+					} else {
+						capture = false;
+					}
 				}
 				
+				if (!capture) {
+					requestAnimationFrame(this.dispatchFrameEvent.bind(this));
+				}
+			};
+			
+			ResizeSensor.prototype.dispatchFrameEvent = function () {
+				var evt;
+				for (var i = 0; i < this.events.length; i++) {
+					evt = this.events[i];
+					if (!evt.capture) evt.callback();
+				}
+			};
+			
 			ResizeSensor.prototype.close = function(){
 				this.expand.removeEventListener('scroll', this.onscroll);
 				this.shrink.removeEventListener('scroll', this.onscroll);
@@ -3673,7 +5093,10 @@ content:function(config, pack){
 					this.element.removeChild(this.expand);
 					this.element.removeChild(this.shrink);
 				}
+				
+				this.events = null;
 			};
+			
 			return ResizeSensor;
 		})(),
 		resources:{
@@ -3685,137 +5108,6 @@ content:function(config, pack){
 					loaded: false, 		// 是否已加载资源
 				},
 			},
-			cardNames:{
-				bagua: ['bagua', '八卦阵'],
-				baiyin: ['baiyin', '白银狮子'],
-				bingliang: ['bingliang', '兵粮寸断'],
-				chitu: ['chitu', '赤兔'],
-				cixiong: ['cixiong', '雌雄双股剑'],
-				dawan: ['dawan', '大宛'],
-				dilu: ['dilu', '的卢'],
-				fangtian: ['fangtian', '方天画戟'],
-				guanshi: ['guanshi', '贯石斧'],
-				guding: ['guding', '古锭刀'],
-				guohe: ['guohe', '过河拆桥'],
-				hanbing: ['hanbing', '寒冰剑'],
-				hualiu: ['hualiu', '骅骝'],
-				huogong: ['huogong', '火攻'],
-				huosha: ['huosha', '火杀'],
-				jiedao: ['jiedao', '借刀杀人'],
-				jiu: ['jiu', '酒'],
-				juedou: ['juedou', '决斗'],
-				jueying: ['jueying', '绝影'],
-				lebu: ['lebu', '乐不思蜀'],
-				leisha: ['leisha', '雷杀'],
-				muniu: ['muniu', '木牛流马'],
-				nanman: ['nanman', '南蛮入侵'],
-				qilin: ['qilin', '麒麟弓'],
-				qinggang: ['qinggang', '青釭剑'],
-				qinglong: ['qinglong', '青龙偃月刀'],
-				renwang: ['renwang', '仁王盾'],
-				sha: ['sha', '杀'],
-				shan: ['shan', '闪'],
-				shandian: ['shandian', '闪电'],
-				shunshou: ['shunshou', '顺手牵羊'],
-				tao: ['tao', '桃'],
-				taoyuan: ['taoyuan', '桃园结义'],
-				tengjia: ['tengjia', '藤甲'],
-				tiesuo: ['tiesuo', '铁索连环'],
-				wanjian: ['wanjian', '万箭齐发'],
-				wugu: ['wugu', '五谷丰登'],
-				wuxie: ['wuxie', '无懈可击'],
-				wuzhong: ['wuzhong', '无中生有'],
-				zhangba: ['zhangba', '丈八蛇矛'],
-				zhuahuang: ['zhuahuang', '爪黄飞电'],
-				zhuge: ['zhuge', '诸葛连弩'],
-				zhuque: ['zhuque', '朱雀羽扇'],
-				zixin: ['zixin', '紫骍'],
-				// ★SP包
-				caomu: ['caomu', '草木皆兵'],
-				du: ['du', '毒'],
-				fulei: ['fulei', '浮雷'],
-				jinchan: ['jinchan', '金蝉脱壳'],
-				lanyinjia: ['lanyinjia', '烂银甲'],
-				qibaodao: ['qibaodao', '七宝刀'],
-				qijia: ['qijia', '弃甲曳兵'],
-				shengdong: ['shengdong', '声东击西'],
-				yinyueqiang: ['yinyueqiang', '银月枪'],
-				zengbin: ['zengbin', '增兵减灶'],
-				zhungangshuo: ['zhungangshuo', '衠钢槊'],
-				// 国战
-				chiling: ['chiling', '敕令'],
-				diaohulishan: ['diaohulishan', '调虎离山'],
-				dinglanyemingzhu: ['dinglanyemingzhu', '定澜夜明珠'],
-				feilongduofeng: ['feilongduofeng', '飞龙夺凤'],
-				huoshaolianying: ['huoshaolianying', '火烧连营'],
-				huxinjing: ['huxinjing', '护心镜'],
-				jingfanma: ['jingfanma', '惊帆'],
-				lianjunshengyan: ['lianjunshengyan', '联军盛宴'],
-				liulongcanjia: ['liulongcanjia', '六龙骖驾'],
-				lulitongxin: ['lulitongxin', '勠力同心'],
-				minguangkai: ['minguangkai', '明光铠'],
-				sanjian: ['sanjian', '三尖两刃枪'],
-				shuiyanqijunx: ['shuiyanqijux', '水淹七军'],
-				taipingyaoshu: ['taipingyaoshu', '太平要术'],
-				wuliu: ['wuliu', '吴六剑'],
-				xietianzi: ['xietianzi', '挟天子以令诸侯'],
-				yiyi: ['yiyi', '以逸待劳'],
-				yuanjiao: ['yuanjiao', '远交近攻'],
-				yuxi: ['yuxi', '玉玺'],
-				zhibi: ['zhibi', '知己知彼'],
-				// 衍生
-				fengchu_card: ['fengchu_card', '凤雏'],
-				ly_piliche: ['ly_piliche', '霹雳车'],
-				pyzhuren_club: ['pyzhuren_club', '水波剑'],
-				pyzhuren_diamond: ['pyzhuren_diamond', '烈淬刀'],
-				pyzhuren_heart: ['pyzhuren_heart', '红缎枪'],
-				pyzhuren_shandian: ['pyzhuren_shandian', '天雷刃'],
-				pyzhuren_spade: ['pyzhuren_spade', '淬毒弯刃'],
-				rewrite_bagua: ['wy_meirenji', '先天八卦阵'],
-				rewrite_baiyin: ['wy_meirenji', '玉照狮子盔'],
-				rewrite_lanyinjia: ['wy_meirenji', '精银甲'],
-				rewrite_renwang: ['wy_meirenji', '仁王金刚盾'],
-				rewrite_tengjia: ['wy_meirenji', '桐油百炼甲'],
-				rewrite_zhuge: ['wy_meirenji', '元戎精械弩'],
-				shuijing_card: ['shuijing_card', '水镜'],
-				wolong_card: ['wolong_card', '卧龙'],
-				wy_meirenji: ['wy_meirenji', '美人计'],
-				wy_xiaolicangdao: ['wy_meirenji', '笑里藏刀'],
-				xuanjian_card: ['xuanjian_card', '玄剑'],
-				// 挑战
-				chixueqingfeng: ['chixueqingfeng', '赤血青锋'],
-				chiyanzhenhunqin: ['chiyanzhenhunqin', '赤焰镇魂琴'],
-				guilongzhanyuedao: ['guilongzhanyuedao', '鬼龙斩月刀'],
-				guofengyupao: ['guofengyupao', '国风玉袍'],
-				honghuangzhili: ['honghuangzhili', '洪荒之力'],
-				hongmianbaihuapao: ['hongmianbaihuapao', '红棉百花袍'],
-				juechenjinge: ['juechenjinge', '绝尘金戈'],
-				linglongshimandai: ['linglongshimandai', '玲珑狮蛮带'],
-				longfenghemingjian: ['longfenghemingjian', '鸾凤和鸣剑'],
-				qicaishenlu: ['qicaishenlu', '七彩神鹿'],
-				qimenbagua: ['qimenbagua', '奇门八卦'],
-				sadouchengbing: ['sadouchengbing', '撒豆成兵'],
-				shufazijinguan: ['shufazijinguan', '束发紫金冠'],
-				wushuangfangtianji: ['wushuangfangtianji', '无双方天戟'],
-				xiuluolianyuji: ['xiuluolianyuji', '修罗炼狱戟'],
-				xuwangzhimian: ['xuwangzhimian', '虚妄之冕'],
-				yihuajiemu: ['yihuajiemu', '移花接木'],
-				// 逐鹿天下
-				caochuan: ['caochuan', '草船借箭'],
-				
-				jiejia: ['jiejia', '解甲归田'],
-				jinhe: ['jinhe', '锦盒'],
-				kaihua: ['kaihua', '树上开花'],
-				numa: ['numa', '驽马'],
-				nvzhuang: ['nvzhuang', '女装'],
-				suolianjia: ['suolianjia', '锁链甲'],
-				wufengjian: ['wufengjian', '无锋剑'],
-				yajiaoqiang: ['yajiaoqiang', '涯角枪'],
-				yexingyi: ['yexingyi', '夜行衣'],
-				yinfengjia: ['yinfengjia', '引蜂甲'],
-				zheji: ['zheji', '折戟'],
-				zhulu_card: ['zhulu_card', '逐鹿天下'],
-			} 
 		},
 		sheet:{
 			init:function(){
@@ -3911,49 +5203,63 @@ content:function(config, pack){
 			update:function(){
 				this.updateHand();
 				this.updateDiscard();
+
 			},
 			updateHand:function(){
-				if (!game.me || !ui.handcards1Container) {
-					return console.error('undefined');
-				}
-			
-				var hand = ui.handcards1Container.firstChild;
-				if (!hand) {
-					return console.error('hand undefined');
-				}
-				var cards = [];
-				var count = hand.childElementCount;
-				var handW = ui.handcards1Container.offsetWidth;
-				var handH = ui.handcards1Container.offsetHeight;
-				var card;
+				if (!game.me || !ui.handcards1Container) return;
+				var handNode = ui.handcards1Container.firstChild;
+				if (!handNode) return console.error('hand undefined');
 				
+				
+				
+				var card, cards = [];
+				var count = handNode.childElementCount;
 				for (var i = 0; i < count; i++) {
-					card = hand.childNodes[i];
+					card = handNode.childNodes[i];
 					if (!card.classList.contains('removing')) {
 						cards.push(card);
-					}else{
+					} else {
 						card.scaled = void 0;
 					}
 				}
 				
 				if (!cards.length) return;
+				if (!decadeUI.dataset.handDataUpdated) {
+					decadeUI.dataset.handDataUpdated = true;
+					decadeUI.dataset.handData = {
+						card: {
+							width: cards[0].offsetWidth,
+							height: cards[0].offsetHeight,
+							scale: decadeUI.getCardBestScale(),
+						},
+						width: ui.handcards1Container.offsetWidth,
+						height: ui.handcards1Container.offsetHeight,
+					};
+				}
+				
+				var handData = decadeUI.dataset.handData;
+				var handW = handData.width;
+				var handH = handData.height;
+				
 				
 				var spacing = 1;
-				var scale = decadeUI.getCardBestScale();
-				var cardW = cards[0].offsetWidth;
-				var cardH = cards[0].offsetHeight;
+				var cardW = handData.card.width;
+				var cardH = handData.card.height;
+				var scale = handData.card.scale;
+				
 				var x;
 				var y = ((cardH * scale - cardH) / 2) + 'px';
-				
+
 				var scaleOffset = (cardW - cardW * scale) / 2;
 				var xMin = 27 * scale;
 				cardW = cardW * scale + spacing * 2;
+				
 				var offset = handW - cardW * cards.length;
 				var overflow = offset < 0;
-				if (overflow){
+				if (overflow) {
 					cardW -= spacing * 2;
 					offset = Math.min(Math.abs(offset + spacing * 2 * cards.length) / (cards.length - 1), cardW - xMin);
-				}else{
+				} else {
 					offset /= 2;
 				}
 				
@@ -3974,7 +5280,8 @@ content:function(config, pack){
 					}else{
 						x = Math.round((offset + i * cardW + spacing - scaleOffset));
 					}
-
+					
+					
 					transform = 'translate(' + x + 'px,' + y + ')scale(' + scale + ')';
 					card._transform = transform;
 					card.classList.remove('drawinghidden');
@@ -3984,13 +5291,15 @@ content:function(config, pack){
 					
 					handRequireWidth = x + cardW;
 				}
+				
 				if (handRequireWidth >= (handW + 2)) {
 					ui.handcards1Container.classList.add('scrollh');
 					ui.handcards1Container.style.overflowX = 'scroll';
 				} else {
 					ui.handcards1Container.classList.remove('scrollh');
 				}
-				hand.style.width = handRequireWidth + 'px';
+				
+				handNode.style.width = handRequireWidth + 'px';
 			},
 			updateDiscard:function(){
 				if (!ui.thrown) ui.thrown = [];
@@ -4004,65 +5313,63 @@ content:function(config, pack){
 					}
 				}
 				
-				
 				if (!ui.thrown.length) return;
 				var discards = ui.thrown;
-				var parent = discards[0].parentNode;
-				var scale = decadeUI.getCardBestScale();
+				var $parent = discards[0].parentNode;
+				
+				if (!decadeUI.dataset.discardDataUpdated) {
+					decadeUI.dataset.discardDataUpdated = true;
+					decadeUI.dataset.discardData = {
+						card:{
+							width: discards[0].offsetWidth,
+							height: discards[0].offsetHeight,
+							scale: decadeUI.getCardBestScale(),
+						},
+						width: $parent.offsetWidth,
+						height: $parent.offsetHeight,
+					};
+				}
+				
 				var margin = 1;
-				var cardWidth = discards[0].offsetWidth * scale + margin * 2;
-				var x;
-				var y = Math.round((parent.offsetHeight - discards[0].offsetHeight) / 2) + 'px';
-				var scaleOffset = (1 - scale) * discards[0].offsetWidth / 2;
-				var offset = parent.offsetWidth - cardWidth * discards.length;
-				var overflow = offset < 0;
+				var discardData     = decadeUI.dataset.discardData;
+				var scale           = discardData.card.scale;
+				var cardOrignWidth  = discardData.card.width;
+				var cardScaleWidth  = discardData.card.width * scale + margin * 2;
+				var cardOrignHeight = discardData.card.height;
+				
+				var x, beginX;
+				var y = Math.round((discardData.height - cardOrignHeight) / 2) + 'px';
+				
+				var beginOffset = (1 - scale) * cardOrignWidth / 2;
+				var remainWidth = discardData.width - cardScaleWidth * discards.length;
+				
+				var overflow = (remainWidth < 0);
 				if (overflow){
-					cardWidth -= margin * 2;
-					offset = Math.abs(offset + margin * 2 * discards.length) / (discards.length - 1);
+					cardScaleWidth -= margin * 2;
+					beginX = Math.abs(remainWidth + margin * 2 * discards.length) / (discards.length - 1);
 				}else{
-					offset /= 2;
+					beginX = remainWidth / 2;
 				}
 				
 				
 				for(var i = 0; i < discards.length; i++){
 					if (!discards[i].scaled){
 					    discards[i].classList.add('transition-none');
-					    x = ((parent.offsetWidth - discards[i].offsetWidth) / 2 - parent.offsetWidth * 0.08) + 'px';
+					    x = ((discardData.width - cardOrignWidth) / 2 - discardData.width * 0.08) + 'px';
 					    discards[i].style.transform = 'translate(' + x + ',' + y + ')scale(' + scale + ')';
 					    ui.refresh(discards[i]);
 					    discards[i].scaled = true;
 					    discards[i].classList.remove('transition-none');
 					}
 					
-					
 					if (overflow){
-						x = Math.round((i * (cardWidth - offset) - scaleOffset)) + 'px';
+						x = Math.round((i * (cardScaleWidth - beginX) - beginOffset)) + 'px';
 					}else{
-						x = Math.round((offset + i * cardWidth + margin - scaleOffset)) + 'px';
+						x = Math.round((beginX + i * cardScaleWidth + margin - beginOffset)) + 'px';
 					}
 					discards[i].style.transform = 'translate(' + x + ',' + y + ') scale(' + scale + ')';
 					discards[i]._transthrown = null;
 				}
-			},
-			updateJudges:function(player){
-				if (!player) return;
-				
-				var judges = player.node.judges.childNodes;
-				for (var i = 0; i < judges.length; i++){
-					if (judges[i].classList.contains('removing'))
-						continue;
-					
-					judges[i].classList.remove('drawinghidden');
-					if (_status.connectMode) {
-						if (judges[i].viewAs){
-							judges[i].node.judgeMark.node.judge.innerHTML = get.translation(judges[i].viewAs)[0];
-						} else {
-							judges[i].node.judgeMark.node.judge.innerHTML = get.translation(judges[i].name)[0];
-						}
-					}
-				}
-				
-				return;
 			},
 			clearout:function(card){
 			    if (!card) throw card;
@@ -4109,8 +5416,8 @@ content:function(config, pack){
 				card.classList.add('invalided');
 				setTimeout(function(card){
 					if (card.parentNode != null){
-					    card.classList.add('removing');
 					    card.parentNode.removeChild(card);
+						card.classList.add('removing');
 					}
 					
 					card = null;
@@ -4189,13 +5496,14 @@ content:function(config, pack){
 			    }, timestamp);
 			},
 			resize:function(){
-			    if (decadeUI.isMobile()) ui.window.classList.add('mobile-phone');
-				else ui.window.classList.remove('mobile-phone');
-				//减少引起的抖动
-				var handStyle = decadeUI.sheet.getStyle('.decadeUI > .hand-zone');
-				if (!handStyle){
-				    handStyle = decadeUI.sheet.insertRule('.decadeUI > .hand-zone { left: 0; right: 0; height: 0; }');
-				}
+			    if (decadeUI.isMobile()) ui.arena.classList.add('dui-mobile');
+				else ui.arena.classList.remove('dui-mobile');
+				
+				var set = decadeUI.dataset;
+				set.animSizeUpdated = false;
+				set.handDataUpdated = false;
+				set.discardDataUpdated = false;
+				set.bodySize.updated = false;
 				
 				var buttonsWindow = decadeUI.sheet.getStyle('#window > .dialog.popped .buttons:not(.smallzoom)');
 				if (!buttonsWindow) {
@@ -4207,24 +5515,11 @@ content:function(config, pack){
 				    buttonsArena = decadeUI.sheet.insertRule('#arena:not(.choose-character) .buttons:not(.smallzoom) { zoom: 1; }');
 				}
 				
-				var me = game.me ? game.me : game.players && game.players.length ? game.players[0] : null;
-				
-				if (me){
-					var meWidth = me.offsetWidth;
-					var equipsWidth = ui.equipSolts  ? ui.equipSolts.offsetWidth : meWidth;
-					ui.me.style.left = Math.round(meWidth + 30) + 'px';
-					ui.me.style.right = Math.round(equipsWidth + 30)+ 'px';
-					ui.me.style.width = 'auto';
-				}
-				
 				decadeUI.zooms.card = decadeUI.getCardBestScale();
 				if (ui.me) {
-					ui.me.style.height = Math.round(decadeUI.getHandCardSize().height * decadeUI.zooms.card + 30.4) + 'px';
-					if (handStyle){
-						handStyle.left = ui.me.style.left;
-						handStyle.right = ui.me.style.right;
-						handStyle.height = ui.me.style.height;
-					}
+					var height = Math.round(decadeUI.getHandCardSize().height * decadeUI.zooms.card + 30.4) + 'px';
+					// ui.control.style.bottom = height;
+					ui.me.style.height = height;
 				}
 				
 				if (buttonsArena) {
@@ -4236,19 +5531,23 @@ content:function(config, pack){
 				}
 				
 			    decadeUI.layout.invalidate();
-				},
+			},
+			
 		},
 		handler:{
 			handMousewheel:function(e){
 				if (!ui.handcards1Container) return console.error('ui.handcards1Container');
+				
 				var hand = ui.handcards1Container;
 				if (hand.scrollNum == void 0) hand.scrollNum = 0;
 				if (hand.lastFrameTime == void 0) hand.lastFrameTime = performance.now();
+				
 				function handScroll () {
 					var now = performance.now();
 					var delta = now - hand.lastFrameTime;
 					var num = Math.round(delta / 16 * 16);
 					hand.lastFrameTime = now;
+					
 					if (hand.scrollNum > 0) {
 						num = Math.min(hand.scrollNum, num);
 						hand.scrollNum -= num;
@@ -4257,6 +5556,7 @@ content:function(config, pack){
 						hand.scrollNum += num;
 						num = -num;
 					}
+					
 					if (hand.scrollNum == 0) {
 						hand.frameId = void 0;
 						hand.lastFrameTime = void 0;
@@ -4265,14 +5565,16 @@ content:function(config, pack){
 						ui.handcards1Container.scrollLeft += num;
 					}
 				}
+				
 				if (e.wheelDelta > 0) {
 					hand.scrollNum -= 84;
 				} else {
 					hand.scrollNum += 84;
 				}
+				
 				if (hand.frameId == void 0) {
 					hand.frameId = requestAnimationFrame(handScroll);
-			}
+				}
 			},
 		},
 		zooms:{
@@ -4312,12 +5614,11 @@ content:function(config, pack){
 			
 			return Math.floor(Math.random() * (max + 1 - min)) + min + diff;
 		},
-		getCardBestScale:function(sizeOpt){
-			if (!(sizeOpt && sizeOpt.height)){
-			    sizeOpt = decadeUI.getHandCardSize();
-			}
+		getCardBestScale:function(size){
+			if (!(size && size.height)) size = decadeUI.getHandCardSize();
 			
-			return Math.min(document.body.clientHeight * (decadeUI.isMobile() ? 0.23 : 0.18) / sizeOpt.height, 1);
+			var bodySize = decadeUI.get.bodySize();
+			return Math.min(bodySize.height * (decadeUI.isMobile() ? 0.23 : 0.18) / size.height, 1);
 		},
 		getHandCardSize:function(canUseDefault){
 			var style = decadeUI.sheet.getStyle('.media_defined > .card');
@@ -4373,8 +5674,7 @@ content:function(config, pack){
 							case 'three':
 							case 'four':
 							case 'guandu':
-								var side = player.finalSide ? player.finalSide : player.side;
-								if (side === false) identity += '_false';
+								if (get.translation(player.side + 'Color') == 'wei') identity += '_blue';
 								break;
 								
 							case 'two':
@@ -4405,6 +5705,8 @@ content:function(config, pack){
 								identity = player.special_identity ? player.special_identity : identity + '2';
 							}
 						}
+						
+						// ok
 						break;
 						
 					case 'guozhan':
@@ -4473,7 +5775,225 @@ content:function(config, pack){
 			return identity;
 		},
 		
+		create:{
+			skillDialog:function(){
+				var dialog = document.createElement('div');
+				dialog.className = 'skill-dialog';
+				
+				var extend = {
+					caption: undefined,
+					tip: undefined,
+					
+					open:function(customParent){
+						if (!customParent) {
+							var size = decadeUI.get.bodySize();
+							this.style.minHeight = (parseInt(size.height * 0.42)) + 'px';
+							if (this.parentNode != ui.arena) ui.arena.appendChild(this);
+						}
+						
+						this.style.animation = 'open-dialog 0.4s';
+						return this;
+					},
+					show:function(){
+						this.style.animation = 'open-dialog 0.4s';;
+					},
+					hide:function(){
+						this.style.animation = 'close-dialog 0.1s forwards';
+					},
+					close:function(){
+						var func = function(e){
+							if (e.animationName != 'close-dialog') return;
+							this.remove();
+							this.removeEventListener('animationend', func);
+						};
+						
+						var animation = 'close-dialog';
+						if (this.style.animationName == animation) {
+							setTimeout(function(dialog){
+								dialog.remove();
+							}, 100, this);
+						} else {
+							this.style.animation = animation + ' 0.1s forwards';
+							this.addEventListener('animationend', func);
+						}
+					},
+					
+					appendControl:function(text, clickFunc){
+						var control = document.createElement('div');
+						control.className = 'control-button';
+						control.textContent = text;
+						if (clickFunc) {
+							control.addEventListener('click', clickFunc);
+						}
+						
+						return this.$controls.appendChild(control);
+					},
+					
+					$caption: decadeUI.element.create('caption', dialog),
+					$content: decadeUI.element.create('content', dialog),
+					$tip: decadeUI.element.create('tip', dialog),
+					$controls: decadeUI.element.create('controls', dialog),
+				}; decadeUI.get.extend(dialog, extend);
+				
+				Object.defineProperties(dialog, {
+					caption: {
+						configurable: true,
+						get:function(){
+							return this.$caption.innerHTML;
+						},
+						set:function(value){
+							if (this.$caption.innerHTML == value) return;
+							this.$caption.innerHTML = value;
+						},
+					},
+					tip: {
+						configurable: true,
+						get:function(){
+							return this.$tip.innerHTML;
+						},
+						set:function(value){
+							if (this.$tip.innerHTML == value) return;
+							this.$tip.innerHTML = value;
+						},
+					},
+				});
+				
+				return dialog;
+			},
+			
+			compareDialog:function(player, target){
+				var dialog = decadeUI.create.skillDialog();
+				dialog.classList.add('compare');
+				dialog.$content.classList.add('buttons');
+				
+				var extend = {
+					player: undefined,
+					target: undefined,
+					playerCard: undefined,
+					targetCard: undefined,
+					
+					$player: decadeUI.element.create('player-character player1', dialog.$content),
+					$target: decadeUI.element.create('player-character player2', dialog.$content),
+					$playerCard: decadeUI.element.create('player-card', dialog.$content),
+					$targetCard: decadeUI.element.create('target-card', dialog.$content),
+					$vs: decadeUI.element.create('vs', dialog.$content),
+				}; decadeUI.get.extend(dialog, extend);
+				
+				decadeUI.element.create('image', dialog.$player),
+				decadeUI.element.create('image', dialog.$target),
+				
+				Object.defineProperties(dialog, {
+					player: {
+						configurable: true,
+						get:function(){
+							return this._player;
+						},
+						set:function(value){
+							if (this._player == value) return;
+							this._player = value;
+
+							if (value == null || value.isUnseen()) {
+								this.$player.firstChild.style.backgroundImage = '';
+							} else {
+								this.$player.firstChild.style.backgroundImage = (value.isUnseen(0) ? value.node.avatar2 : value.node.avatar).style.backgroundImage;
+							}
+							
+							if (value) this.$playerCard.dataset.text = get.translation(value) + '发起';
+						},
+					},
+					target: {
+						configurable: true,
+						get:function(){
+							return this._target;
+						},
+						set:function(value){
+							if (this._target == value) return;
+							this._target = value;
+							if (value == null || value.isUnseen()) {
+								this.$target.firstChild.style.backgroundImage = '';
+							} else {
+								this.$target.firstChild.style.backgroundImage = (value.isUnseen(0) ? value.node.avatar2 : value.node.avatar).style.backgroundImage;
+							}
+							
+							if (value) this.$targetCard.dataset.text = get.translation(value);
+						},
+					},
+					playerCard: {
+						configurable: true,
+						get:function(){
+							return this._playerCard;
+						},
+						set:function(value){
+							if (this._playerCard == value) return;
+							if (this._playerCard) this._playerCard.remove();
+							this._playerCard = value;
+							if (value) this.$playerCard.appendChild(value);
+						},
+					},
+					targetCard: {
+						configurable: true,
+						get:function(){
+							return this._targetCard;
+						},
+						set:function(value){
+							if (this._targetCard == value) return;
+							if (this._targetCard) this._targetCard.remove();
+							this._targetCard = value;
+							if (value) this.$targetCard.appendChild(value);
+						},
+					},
+				});
+				
+				if (player) dialog.player = player;
+				if (target) dialog.target = target;
+				
+				return dialog;
+			},
+		
+		},
+		
 		get:{
+			judgeEffect:function(name, value){
+				switch (name) {
+					case 'caomu':
+					case 'fulei':
+					case 'shandian':
+					case 'bingliang':
+					case 'lebu':
+						return value < 0 ? true : false;
+				}
+				
+				return value;
+			},
+			
+			isWebKit:function(){
+				return document.body.style.WebkitBoxShadow !== undefined;
+			},
+			
+			extend:function(target, source){
+				if (source === null || typeof source !== 'object') return target;
+				
+				var keys = Object.keys(source);
+				var i = keys.length;
+				while (i--) {
+					target[keys[i]] = source[keys[i]];
+				}
+
+				return target;
+			},
+			
+			bodySize:function(){
+				var size = decadeUI.dataset.bodySize;
+				if (!size.updated) {
+					var body = document.body;
+					size.updated = true;
+					size.height = body.clientHeight;
+					size.width = body.clientWidth;
+				}
+				
+				return size;
+			},
+			
 			bestValueCards:function(cards, player){
 				if (!player) player = _status.event.player;
 				
@@ -4522,7 +6042,7 @@ content:function(config, pack){
 					return get.value(b, player) - get.value(a, player);
 				});
 				
-				cards =  matchs.concat(cards);
+				cards = matchs.concat(cards);
 				return cards;
 			},
 			cheatJudgeCards:function(cards, judges, friendly){
@@ -4569,6 +6089,31 @@ content:function(config, pack){
 				return top;
 			},
 		},
+		
+		set:{
+			activeElement:function(element){
+				var deactive = dui.$activeElement;
+				dui.$activeElement = element;
+				if (deactive && deactive != element && (typeof deactive.ondeactive == 'function')) {
+					deactive.ondeactive();
+				}
+				
+				if (element && element != deactive && (typeof element.onactive == 'function')) {
+					element.onactive();
+				}
+			}
+		},
+		
+		dataset:{
+			animSizeUpdated: false,
+			handDataUpdated: false,
+			bodySizeUpdated: false,
+			bodySize: {
+				height: 1,
+				width: 1,
+				updated: false,
+			}
+		},
 	};
 	
 	decadeUI.element = {
@@ -4582,6 +6127,7 @@ content:function(config, pack){
 					}, milliseconds);
 					return;
 				}
+				
 				if (remove.parentNode) remove.parentNode.removeChild(remove);
 				return;
 			}
@@ -4590,22 +6136,165 @@ content:function(config, pack){
 			var tag = tagName == void 0 ? 'div' : tagName;
 			var element = document.createElement(tag);
 			element.view = {};
+			
 			for(var key in this.base){
 				element[key] = this.base[key];
 			}
+			
 			if (className)
 				element.className = className;
+			
 			if (parentNode)
 				parentNode.appendChild(element);
+			
 			return element;
 		},
 		clone:function(element){
+			
 		},
 	};
+	
 	decadeUI.game = {
+		loop:function(){
+			if (game.looping) return false; 
+			game.looping = true;
+			var event = _status.event;
+			var step = event.step;
+			var source = event.source;
+			var player = event.player;
+			var target = event.target;
+			var targets = event.targets;
+			var card = event.card;
+			var cards = event.cards;
+			var skill = event.skill;
+			var forced = event.forced;
+			var num = event.num;
+			var trigger = event._trigger;
+			var result = event._result;
+			if (decadeUI.eventDialog) {
+				decadeUI.game.wait();
+				return false;
+			}
+			
+			if (!game.loopTime) game.loopTime = performance.now();
+			if ((_status.paused2 || _status.imchoosing) && !lib.status.dateDelaying) {
+				lib.status.dateDelaying = new Date();
+			}
+			
+			if (_status.paused || _status.paused2 || _status.over) {
+				game.loopTime = undefined;
+				return false;
+			}
+			
+			if (_status.paused3) {
+				_status.paused3 = 'paused';
+				game.loopTime = undefined;
+				return false;
+			}
+			if (lib.status.dateDelaying) {
+				lib.status.dateDelayed += lib.getUTC(new Date()) - lib.getUTC(lib.status.dateDelaying);
+				lib.status.dateDelaying = undefined;
+			}
+			
+			if (event.next.length > 0) {
+				var next = event.next.shift();
+				if (next.player && next.player.skipList.contains(next.name)) {
+					event.trigger(next.name + 'Skipped');
+					next.player.skipList.remove(next.name);
+					if (lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name);
+				} else {
+					next.parent = event;
+					_status.event = next;
+				}
+			} else if (event.finished) {
+				if (event._triggered == 1) {
+					if (event.type == 'card') event.trigger('useCardToOmitted');
+					event.trigger(event.name + 'Omitted');
+					event._triggered = 4;
+				} else if (event._triggered == 2) {
+					if (event.type == 'card') event.trigger('useCardToEnd');
+					event.trigger(event.name + 'End');
+					event._triggered = 3;
+				} else if (event._triggered == 3) {
+					if (event.type == 'card') event.trigger('useCardToAfter');
+					event.trigger(event.name + 'After');
+					event._triggered++;
+				} else if (event.after && event.after.length) {
+					var next = event.after.shift();
+					if (next.player && next.player.skipList.contains(next.name)) {
+						event.trigger(next.name + 'Skipped');
+						next.player.skipList.remove(next.name);
+						if (lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name)
+					} else {
+						next.parent = event;
+						_status.event = next;
+					}
+				} else {
+					if (event.parent) {
+						if (event.result) event.parent._result = event.result;
+						_status.event = event.parent;
+					} else {
+						game.loopTime = undefined;
+						game.loopLocked = false;
+						return false;
+					}
+				}
+			} else {
+				if (event._triggered == 0) {
+					if (event.type == 'card') event.trigger('useCardToBefore');
+					event.trigger(event.name + 'Before');
+					event._triggered++;
+				} else if (event._triggered == 1) {
+					if (event.type == 'card') event.trigger('useCardToBegin');
+					if (event.name == 'phase' && !event._begun) {
+						var next = game.createEvent('phasing', false, event);
+						next.player = event.player;
+						next.skill = event.skill;
+						next.setContent('phasing');
+						event._begun = true;
+					} else {
+						event.trigger(event.name + 'Begin');
+						event._triggered++;
+					}
+				} else {
+					if (player && player.classList.contains('dead') && !event.forceDie && event.name != 'phaseLoop') {
+						game.broadcastAll(function() {
+							while (_status.dieClose.length) {
+								_status.dieClose.shift().close();
+							}
+						});
+						if (event._oncancel) {
+							event._oncancel();
+						}
+						event.finish();
+					} else if (player && player.removed && event.name != 'phaseLoop') {
+						event.finish();
+					} else if (player && player.isOut() && event.name != 'phaseLoop' && !event.includeOut) {
+						if (event.name == 'phase' && player == _status.roundStart && !event.skill) {
+							_status.roundSkipped = true;
+						}
+						event.finish();
+					} else {
+						decadeUI.game.tryContent(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai);
+					}
+					event.step++;
+				}
+			}
+			
+			var delta = performance.now() - game.loopTime;
+			if (delta > 10 && decadeUI.config.smoothMode) {
+				game.loopTime = undefined;
+				setTimeout(game.loop, 0);
+				return false;
+			}
+			
+			return true;
+		},
+		
 		wait:function(){
 			game.pause();
 		},
+		
 		resume:function(){
 			if (!game.loopLocked) {
 				var ok = false;
@@ -4622,20 +6311,37 @@ content:function(config, pack){
 				_status.paused = false;
 			}
 		},
+		
+		tryContent:function(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai){
+			if (_status.withError || lib.config.compatiblemode || (_status.connectMode && !lib.config.debug)) {
+				try {
+					event.content(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai);
+				} catch(e) {
+					game.print('游戏出错：' + event.name);
+					game.print(e.toString());
+					console.log(e);
+				}
+			} else {
+				event.content(event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result, _status, lib, game, ui, get, ai);
+			}
+		}
 	};
 
 	
-	
-	
 	decadeUI.config = config;
 	decadeUI.config.update = function(){
-	    ui.arena.dataset.skillMarkColor = decadeUI.config.skillMarkColor;
-		ui.arena.dataset.outcropSkin = decadeUI.config.outcropSkin ? 'on' : 'off';
-	    ui.arena.dataset.cardSecondaryNameVisible = decadeUI.config.cardSecondaryNameVisible ? 'on' : 'off';
-		ui.arena.dataset.borderLevel = decadeUI.config.borderLevel;
-		ui.arena.dataset.gainSkillsVisible = decadeUI.config.gainSkillsVisible;
+	    var menuConfig = lib.extensionMenu['extension_' + extensionName];
+		for (var key in menuConfig) {
+			if (menuConfig[key] && (typeof menuConfig[key] == 'object')) {
+				if (menuConfig[key].update) {
+					menuConfig[key].update();
+				}
+			}
+		}
 	};
+	
 	window.dui = decadeUI;
+	window.lib = lib;
 	decadeUI.init();
 	console.timeEnd(extensionName);
 },
@@ -4647,6 +6353,7 @@ precontent:function(){
 	var extensionName = '十周年UI';
 	var extension = lib.extensionMenu['extension_' + extensionName];
 	window.decadeUIPath = lib.assetURL + 'extension/' + extensionName + '/';
+	
 	if (lib.config['extension_' + extensionName + '_eruda']) {
 	    var script = document.createElement('script');
         script.src = decadeUIPath + 'eruda.js'; 
@@ -4678,21 +6385,15 @@ precontent:function(){
 	}
 	
 	var thisObject = this;
-	
-
 	window.decadeParts = {
 		init:function(){
 			this.css(decadeUIPath + 'layout.css?v=' + thisObject.package.version);
 			this.css(decadeUIPath + 'decadeLayout.css?v=' + thisObject.package.version);
-			if(lib.config.extension_十周年UI_newDecadeStyle){
-				this.css(decadeUIPath + 'player_new.css?v=' + thisObject.package.version);
-			}else{
-				this.css(decadeUIPath + 'player.css?v=' + thisObject.package.version);
-			}
+			this.css(decadeUIPath + 'player.css?v=' + thisObject.package.version);
 			
 			var filePath, ok;
-			var fonts = ['shousha', 'xingkai', 'xinwei'];
-			var scripts = ['spine', 'component', 'skill', 'content', 'effect', 'animation'];
+			// var fonts = ['shousha', 'xingkai', 'xinwei'];
+			var scripts = ['spine', 'component', 'skill', 'content', 'effect', 'animation', 'dynamicSkin'];
 			
 			var onload = function(){
 				this.remove();
@@ -4705,7 +6406,6 @@ precontent:function(){
 			
 			for (var i = 0; i < scripts.length; i++) {
 				ok = false;
-				
 				filePath = decadeUIPath + scripts[i] + '.js';
 				try {
 					var script = document.createElement('script');
@@ -4719,17 +6419,17 @@ precontent:function(){
 				}
 			}
 			
-			var fontPreload = document.body.appendChild(document.createElement('div'));
-			var fontHtml = '';
-			for (var i = 0; i < fonts.length; i++) {
-				fontHtml += '<font face="' + fonts[i] + '"> </font>'
-			}
+			// var fontPreload = document.body.appendChild(document.createElement('div'));
+			// var fontHtml = '';
+			// for (var i = 0; i < fonts.length; i++) {
+				// fontHtml += '<font face="' + fonts[i] + '"> </font>'
+			// }
 			
-			fontPreload.innerHTML = fontHtml;
-			setTimeout(function(){
-				fontPreload.remove();
-				fontPreload = null;
-			}, 100);
+			// fontPreload.innerHTML = fontHtml;
+			// setTimeout(function(){
+				// fontPreload.remove();
+				// fontPreload = null;
+			// }, 100);
 			return this;
 		},
 		css:function(filePath){
@@ -4746,7 +6446,6 @@ precontent:function(){
 			this.parts.push(part);
 		},
 	}.init();
-	
 	
 	Object.defineProperties(_status, {
 		connectMode: {
@@ -4794,28 +6493,152 @@ precontent:function(){
 	
 },help:{},
 config:{
-    eruda:{
+	eruda:{
         name: '调试助手(开发用)',
         init: false,
     },
     smoothMode: {
 		name: '流畅模式',
-		init: false,
+		init: true,
 	},
-  cardReplace:{
-      name: '使用新杀卡牌素材',
-      init: true,
-  },
-  cardSecondaryNameVisible:{
-      name: '显示卡牌辅助名称',
-      init: false,
-      onclick:function(value){
-          game.saveConfig('extension_十周年UI_cardSecondaryNameVisible', value);
-          if (window.decadeUI) ui.arena.dataset.cardSecondaryNameVisible = value ? 'on' : 'off';
-      },
-  },
+	rightLayout:{
+        name: '右手布局',
+        init: false,
+		update:function(){
+			if (window.decadeUI) ui.arena.dataset.rightLayout = lib.config['extension_十周年UI_rightLayout'] ? 'on' : 'off';
+		}
+    },
+	cardPrettify:{
+        name: '卡牌美化',
+        init: 'webp',
+		item: {
+			off: '关闭',
+			webp: 'WEBP',
+			png: 'PNG',
+		}
+    },
+	dynamicSkin:{
+        name: '动态皮肤',
+        init: false,
+    },
+	dynamicSkinOutcrop:{
+		name: '动皮露头',
+        init: true,
+		update:function(){
+			if (window.decadeUI) {
+				ui.arena.dataset.dynamicSkinOutcrop = lib.config['extension_十周年UI_dynamicSkinOutcrop'] ? 'on' : 'off';
+				var players = game.players;
+				if (!players) return;
+				for (var i = 0; i < players.length; i++) {
+					if (players[i].dynamic) {
+						players[i].dynamic.sizeUpdated = false;
+					}
+				}
+			}
+		}
+	},
+	dynamicBackground:{
+		name: '动态背景',
+		init: 'skin_xiaosha_default',
+		item:{
+			off: '关闭',
+			skin_xiaosha_default: 				'小杀',
+			skin_baosanniang_漫花剑俏: 			'鲍三娘-漫花剑俏',
+			skin_baosanniang_舞剑铸缘: 			'鲍三娘-舞剑铸缘',
+			skin_caiwenji_才颜双绝: 			'蔡文姬-才颜双绝',
+			skin_caojie_战场绝版: 				'曹　节-战场绝版',
+			skin_dongbai_娇俏伶俐: 				'董　白-娇俏伶俐',
+			skin_daqiao_战场绝版: 				'大　乔-战场绝版',
+			skin_daqiao_清萧清丽: 				'大　乔-清萧清丽',
+			skin_daqiaoxiaoqiao_战场绝版: 		'大乔小乔-战场绝版',
+			skin_diaochan_玉婵仙子: 			'貂　蝉-玉婵仙子',
+			skin_fuhuanghou_万福千灯: 			'伏皇后-万福千灯',
+			skin_fanyufeng_斟酒入情: 			'樊玉凤-斟酒入情',
+			skin_guozhao_雍容尊雅: 				'郭　照-雍容尊雅',
+			skin_huaman_花俏蛮娇: 				'花　鬘-花俏蛮娇',
+			skin_huaman_经典形象: 				'花　鬘-经典形象',
+			skin_hetaihou_鸩毒除患: 			'何太后-鸩毒除患',
+			skin_hetaihou_蛇蝎为心: 			'何太后-蛇蝎为心',
+			skin_lukang_毁堰破晋: 				'陆　抗-毁堰破晋',
+			skin_luxun_谋定天下: 				'陆　逊-谋定天下',
+			skin_luxunlvmeng_清雨踏春: 			'陆逊吕蒙-清雨踏春',
+			skin_mayunlu_战场绝版: 				'马云騄-战场绝版',
+			skin_sundengzhoufei_鹊星夕情: 		'孙登周妃-鹊星夕情',
+			skin_sunluban_宵靥谜君: 			'孙鲁班-宵靥谜君',
+			skin_sunluyu_娇俏伶俐: 				'孙鲁育-娇俏伶俐',
+			skin_shuxiangxiang_花好月圆: 		'蜀香香-花好月圆',
+			skin_wangyi_绝色异彩: 				'王　异-绝色异彩',
+			skin_wangyi_战场绝版: 				'王　异-战场绝版',
+			skin_wolongzhuge_隆中陇亩: 			'卧龙诸葛-隆中陇亩',
+			skin_wuxian_锦运福绵: 				'吴　苋-锦运福绵',
+			skin_xiahoushi_端华夏莲: 			'夏侯氏-端华夏莲',
+			skin_xiahoushi_战场绝版: 			'夏侯氏-战场绝版',
+			skin_xiaoqiao_花好月圆: 			'小　乔-花好月圆',
+			skin_xinxianying_英装素果: 			'辛宪英-英装素果',
+			skin_xushi_拈花思君: 				'徐　氏-拈花思君',
+			skin_xushi_为夫弑敌: 				'徐　氏-为夫弑敌',
+			skin_zhangchangpu_钟桂香蒲: 		'张昌蒲-钟桂香蒲',
+			skin_zhangchunhua_花好月圆: 		'张春华-花好月圆',
+			skin_zhangchunhua_战场绝版: 		'张春华-战场绝版',
+			skin_zhoufei_晴空暖鸢: 				'周　妃-晴空暖鸢',
+			skin_zhangqiying_逐鹿天下: 			'张琪瑛-逐鹿天下',
+			skin_zhangqiying_岁稔年丰: 			'张琪瑛-岁稔年丰',
+			skin_zhenji_才颜双绝: 				'甄　姬-才颜双绝',
+			skin_zhenji_洛神御水: 				'甄　姬-洛神御水',
+			skin_zhugeguo_兰荷艾莲: 			'诸葛果-兰荷艾莲',
+			skin_zhugeguo_英装素果: 			'诸葛果-英装素果',
+			skin_zhugeliang_空城退敌: 			'诸葛亮-空城退敌',
+			skin_zhangxingcai_凯旋星花: 		'张星彩-凯旋星花',
+		},
+		update:function(){
+			if (!window.decadeUI) return;
+			
+			var item = lib.config['extension_十周年UI_dynamicBackground'];
+			if (!item || item == 'off') {
+				decadeUI.backgroundAnimation.stopSpineAll();
+			} else {
+				var name = item.split('_');
+				var skin = name.splice(name.length - 1, 1)[0]
+				name = name.join('_')
+				decadeUI.backgroundAnimation.play(name, skin);
+			}
+		}
+	},
+	dynamicAdaptiveHD:{
+		name: '动皮高清自适应',
+		init: 'on',
+		item:{
+			on: '开启',
+			off: '关闭',
+		},
+		update:function(){
+			if (!window.decadeUI) return;
+			var item = lib.config['extension_十周年UI_dynamicAdaptiveHD'];
+			decadeUI.config.dynamicAdaptiveHD = item;
+			var adaptiveDPR = item && (item == 'on');
+			var players = game.players;
+			if (players) {
+				for (var i = 0; i < players.length; i++) {
+					if (players[i].dynamic) {
+						players[i].dynamic.adaptiveDPR = adaptiveDPR;
+						players[i].dynamic.sizeUpdated = false;
+					}
+				}
+			}
+			
+			decadeUI.backgroundAnimation.adaptiveDPR = adaptiveDPR;
+			decadeUI.backgroundAnimation.sizeUpdated = false;
+		},
+	},
+    cardAlternateNameVisible:{
+        name: '卡名辅助显示',
+        init: false,
+		update:function(){
+			if (window.decadeUI) ui.window.dataset.cardAlternateNameVisible = lib.config['extension_十周年UI_cardAlternateNameVisible'] ? 'on' : 'off';
+		}
+    },
 	campIdentityImageMode:{
-        name: '势力身份名图片化',
+        name: '势力身份美化',
         init: true,
     },
 	playerKillEffect:{
@@ -4828,10 +6651,6 @@ config:{
 	},
 	gameAnimationEffect:{
 		name: '游戏动画特效',
-        init: true,
-	},
-	gameStartEffect:{
-		name: '游戏开始特效',
         init: true,
 	},
 	playerKillAndRecoverEffect:{
@@ -4869,10 +6688,9 @@ config:{
 	outcropSkin:{
 		name: '露头皮肤(需对应素材)',
         init: false,
-        onclick:function(value){
-            game.saveConfig('extension_十周年UI_outcropSkin', value);
-			if (window.decadeUI) ui.arena.dataset.outcropSkin = value ? 'on' : 'off';
-        },
+		update:function(){
+			if (window.decadeUI) ui.arena.dataset.outcropSkin = lib.config['extension_十周年UI_outcropSkin'] ? 'on' : 'off';
+		}
 	},
 	borderLevel:{
 		name: '玩家边框等阶',
@@ -4884,10 +6702,9 @@ config:{
 			four:'四阶',
 			five:'五阶',
         },
-        onclick:function(value){
-			game.saveConfig('extension_十周年UI_borderLevel', value);
-			if (window.decadeUI) ui.arena.dataset.borderLevel = value;
-		},
+		update:function(){
+			if (window.decadeUI) ui.arena.dataset.borderLevel = lib.config['extension_十周年UI_borderLevel'];
+		}
 	},
 	gainSkillsVisible:{
 		name: '获得技能显示',
@@ -4897,84 +6714,23 @@ config:{
 			off: '不显示',
 			othersOn : '显示他人',
         },
-        onclick:function(value){
-			game.saveConfig('extension_十周年UI_gainSkillsVisible', value);
-			if (window.decadeUI) ui.arena.dataset.gainSkillsVisible = value;
-		},
+		update:function(){
+			if (window.decadeUI) ui.arena.dataset.gainSkillsVisible = lib.config['extension_十周年UI_gainSkillsVisible'];
+		}
 	},
-    skillMarkColor:{
-        name: '玩家技能标记颜色',
+	playerMarkStyle:{
+        name: '人物标记样式',
         init: 'yellow',
         item:{
-            yellow:'黄色',
-			red:'红色',
+            red:'红色',
+			yellow:'黄色',
+			decade: '十周年',
         },
-        onclick:function(value){
-			game.saveConfig('extension_十周年UI_skillMarkColor', value);
-			if (window.decadeUI) ui.arena.dataset.skillMarkColor = value;
-		},
+		update:function(){
+			if (window.decadeUI) ui.arena.dataset.playerMarkStyle = lib.config['extension_十周年UI_playerMarkStyle'];
+		}
     },
-	dynamicBackground:{
-		name: '动态背景人物',
-		init: 'off',
-		item:{
-			skin_xiaosha_default: '小杀',
-			skin_baosanniang_漫花剑俏: '鲍三娘-漫花剑俏',
-			skin_baosanniang_舞剑铸缘: '鲍三娘-舞剑铸缘',
-			skin_caiwenji_才颜双绝: '蔡文姬-才颜双绝',
-			skin_caojie_战场绝版: '曹节-战场绝版',
-			skin_daqiao_战场绝版: '大乔-战场绝版',
-			skin_daqiaoxiaoqiao_战场绝版: '大乔小乔-战场绝版',
-			skin_diaochan_玉婵仙子: '貂蝉-玉婵仙子',
-			skin_fuhuanghou_万福千灯: '伏皇后-万福千灯',
-			skin_huaman_花俏蛮娇: '花鬘-花俏蛮娇',
-			skin_huaman_经典形象: '花鬘-经典形象',
-			skin_lukang_毁堰破晋: '陆抗-毁堰破晋',
-			skin_luxun_谋定天下: '陆逊-谋定天下',
-			skin_luxunlvmeng_清雨踏春: '陆逊吕蒙-清雨踏春',
-			skin_mayunlu_战场绝版: '马云禄-战场绝版',
-			skin_sundengzhoufei_鹊星夕情: '孙登周妃-鹊星夕情',
-			skin_shuxiangxiang_花好月圆: '蜀香香-花好月圆',
-			skin_wangyi_绝色异彩: '王异-绝色异彩',
-			skin_wangyi_战场绝版: '王异-战场绝版',
-			skin_wolongzhuge_隆中陇亩: '卧龙诸葛-隆中陇亩',
-			skin_wuxian_锦运福绵: '吴苋-锦运福绵',
-			skin_xiahoushi_端华夏莲: '夏侯氏-端华夏莲',
-			skin_xiaoqiao_花好月圆: '小乔-花好月圆',
-			skin_xinxianying_英装素果: '辛宪英-英装素果',
-			skin_xushi_拈花思君: '徐氏-拈花思君',
-			skin_xushi_为夫弑敌: '徐氏-为夫弑敌',
-			skin_zhangchangpu_钟桂香蒲: '张昌蒲-钟桂香蒲',
-			skin_zhangchunhua_花好月圆: '张春华-花好月圆',
-			skin_zhangchunhua_战场绝版: '张春华-战场绝版',
-			skin_zhangqiying_逐鹿天下: '张琪英-逐鹿天下',
-			skin_zhenji_才颜双绝: '甄姬-才颜双绝',
-			skin_zhenji_洛神御水: '甄姬-洛神御水',
-			skin_zhugeguo_兰荷艾莲: '诸葛果-兰荷艾莲',
-			skin_zhugeguo_英装素果: '诸葛果-英装素果',
-			skin_zhugeliang_空城退敌: '诸葛亮-空城退敌',
-			off: '关闭',
-		},
-		onclick:function(value){
-			game.saveConfig('extension_十周年UI_dynamicBackground', value);
-			if (value == 'off') {
-				decadeUI.backgroundAnimation.stop();
-			} else {
-				var name = value.split('_');
-				var skin = name.splice(name.length - 1, 1)[0]
-				name = name.join('_')
-				decadeUI.backgroundAnimation.play(name, skin);
-			}
-		},
-	},
-	newDecadeStyle:{
-		name: '十周年新样式',
-		init: false,
-		onclick:function(value){
-			game.saveConfig('extension_十周年UI_newDecadeStyle', value);
-			if (window.decadeUI) decadeUI.config.newDecadeStyle = value;
-		},
-	},
+
 },
 package:{
     character:{
@@ -4998,23 +6754,26 @@ package:{
     },
     intro:(function(){
 		var log = [
-			'有bug请先关闭UI重试下，不行再联系作者，目前有些置牌堆顶丢弃的牌不会消失有虾皮。',
-			'当前版本：1.9.108.4.1.5',
-			'更新日期：2021-5-18',
-			'- 适配最新无名杀版本，修改木牛流马。',
-			'- 增加装备栏在左边的新样式。',
-			'- 修复了国战无法标记晋势力的问题',
-			'- 修复了晋势力颜色',
-			'- 其它BUG的修复'
+			'有bug请先关闭UI重试下，不行再联系作者。',
+			'当前版本：1.9.110.9.2.3：',
+			'更新日期：2021-10-16',
+			'- 新增动态背景[何太后-蛇蝎为心]；',
+			'- 新增默认动皮武将有界马超、鲍三娘、魏蔡文姬、大乔、小乔、大乔小乔、貂蝉、郭照、黄月英、何太后、花鬘、陆郁生、',
+			'马云禄、潘淑、孙鲁班、孙鲁育、孙尚香、蜀香香、王元姬、王异、吴苋、夏侯氏、小乔、辛宪英、徐氏、杨婉、张菖蒲、张星彩、甄姬、周妃、诸葛果，以及界限突破后的(非界马超除外)。',
+			'- 新增动皮高清自适应开关(移动端效果显著)；',
+			'- 更新 game.check 函数代码；',
+			'- 修复某些动皮白边显示问题；',
+			'- 修复初次导入扩展弹窗问题；',
+			'- 修复弃牌堆不是转换牌也显示的问题；',
+			'- 修复开启动皮后阵亡、翻面不显示问题；',
 		];
-
-
+		
 		return '<p style="color:rgb(210,210,000); font-size:12px; line-height:14px; text-shadow: 0 0 2px black;">' + log.join('<br>') + '</p>';
 	})(),
     author:"短歌 QQ464598631",
     diskURL:"",
     forumURL:"",
-    version:"1.9.108.4.1.5",
+    version:"1.9.110.9.2.3",
 },
 files:{
     "character":[],
@@ -5227,10 +6986,57 @@ editable: false
 - 新增[辛宪英-英装素果]、[诸葛果-英装素果]、[张春华-战场绝版]、[大乔小乔-战场绝版]、[伏皇后-万福千灯]、[吴苋-锦运福绵]动态背景；
 - 新增DIY包久岛欧/野村美希的【幻梦】、应变篇【洞烛先机】的显示UI；
 - 修复chooseTuUse代码；
-1.9.108.4.1.5:
+1.9.108.4.1.5:(星城代耕)
 - 适配最新无名杀版本，修改木牛流马。,
 - 增加装备栏在左边的新样式。,
 - 修复了国战无法标记晋势力的问题,
 - 修复了晋势力颜色,
 - 其它BUG的修复
+1.9.110.1.1.0:
+- 修正木牛流马；
+- 修复晋势力异常显示；
+- 新增[大乔-清萧清丽]、[孙鲁育-娇俏伶俐]、[何太后-鸩毒除患]、[张星彩-凯旋星花]、[张琪瑛-岁稔年丰]、[夏侯氏-战场绝版]、[孙鲁班-宵靥谜君]、[董白-娇俏伶俐]、[郭照-雍容尊雅]、[周妃-晴空暖鸢]、[樊玉凤-斟酒入情]；
+- 拼点按照无名杀本体的要求，添加同时失去牌的机制。
+- 增加边框随击杀数改变的设置。
+1.9.110.8.5.1：
+- 新增卡牌[知己知彼]、[铁锁连环]、[逐鹿天下]、[树上开花]、[草船借箭]、[远交近攻]的使用特效；
+- 新增武将翻面动画及素材，铁索素材，判定特效；
+- 新增卡牌美化图片格式选项[关闭、WEBP、PNG]；
+- 将部分图片素材的格式统一改为PNG(以后也是)，为了兼容如IOS系统；
+- 优化人物边框阴影发光，以及受伤动画；
+- 优化部分代码，提升加载速度及流畅度；
+- 优化界面操作按钮的布局与对应素材图；
+- 优化原有颜色标记的样式，增加动画性；(转换技显示+-)
+- 修复了身份面具在对应模式不显示问题；
+- 修复界面出牌提示文字被操作按钮遮住；
+- 修复spine 读取多张素材图出错的问题(spine 部分函数名已更换)；
+- 预计下个版本增加可选的动态皮肤功能；
+1.9.110.9.1：
+- 优化身份标记框界面；
+- 优化拼点框发动界面；
+- 优化聊天泡泡框界面；
+- 适配新版的判断生效；(judge2)
+- 修复出牌特效过快引起的问题；
+- 修复其他模式阵亡身份的显示问题；
+- 增加了动态皮肤功能，目前只考虑了单武将，后续慢慢优化，相关示例请打开动态皮肤示例开关，如没有显示请检查assets/dynamic下的动皮文件是否完整。
+  动态皮肤功能后续只做优化，具体全动皮实现自行解决或者由其他皮肤扩展实现；
+1.9.110.9.2.2：
+- 增加使用过的牌转换显示；
+- 增加动态皮肤的露头开关，默认预览武将为张琪瑛，相关配置文件为dynamicSkin.js；
+- 调整卡牌的发光阴影为指定素材显示；
+- 优化卡名辅助显示，范围显示可一同控制；
+- 修复结束回合按钮不靠左的问题；
+- 修复对话框中不可选中的卡牌的显示样式；
+- 修复阵亡身份变灰、不正确显示翻面的问题；
+1.9.110.9.2.3：
+- 新增动态背景[何太后-蛇蝎为心]；
+- 新增默认动皮武将有界马超、鲍三娘、魏蔡文姬、大乔、小乔、大乔小乔、貂蝉、郭照、黄月英、何太后、
+  花鬘、陆郁生、马云禄、潘淑、孙鲁班、孙鲁育、孙尚香、蜀香香、王元姬、王异、吴苋、夏侯氏、小乔、
+  辛宪英、徐氏、杨婉、张菖蒲、张星彩、甄姬、周妃、诸葛果，以及界限突破后的(非界马超除外)。
+- 新增动皮高清自适应开关(移动端效果显著)；
+- 更新 game.check 函数代码；
+- 修复某些动皮白边显示问题；
+- 修复初次导入扩展弹窗问题；
+- 修复弃牌堆不是转换牌也显示的问题；
+- 修复开启动皮后阵亡、翻面不显示问题；
 */
