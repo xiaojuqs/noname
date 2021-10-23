@@ -6539,7 +6539,7 @@ config:{
 	},
 	dynamicBackground:{
 		name: '动态背景',
-		init: 'skin_xiaosha_default',
+		init: 'off',
 		item:{
 			off: '关闭',
 			skin_xiaosha_default: 				'小杀',
