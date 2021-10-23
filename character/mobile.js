@@ -923,19 +923,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								return 0;
 							});
 						}
-						else if(!player.hasSkill('xingbu')||!game.hasPlayer(function(current){
-							return current!=player&&get.attitude(player,current)>0;
-						})){
-							next.set('ai',function(card){
-								var player=_status.event.player,js=player.next.getCards('j');
-								if(js.length){
-									var judge=get.judge(js[0]);
-									if(judge&&(judge(card)+0.01)*get.attitude(player,player.next)>0) return 20-get.value(card);
-								}
-								return 0;
-							});
-						}
-						else next.ai=(()=>-1);
+						else next.set('ai',function(card){
+							var player=_status.event.player,js=player.next.getCards('j');
+							if(js.length){
+								var judge=get.judge(js[0]);
+								if(judge&&(judge(card)+0.01)*get.attitude(player,player.next)>0) return 20-get.value(card);
+							}
+							return 0;
+						});
 					}
 					else event.finish();
 					'step 2'
@@ -963,8 +958,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					'step 0'
 					var cards=get.cards(3);
+					for(var i=cards.length-1;i--;i>=0){
+						ui.cardPile.insertBefore(cards[i],ui.cardPile.firstChild);
+					}
+					game.updateRoundNumber();
 					event.cards=cards;
-					game.cardsGotoOrdering(cards);
+					//game.cardsGotoOrdering(cards);
 					player.showCards(cards,get.translation(player)+'发动了【星卜】');
 					'step 1'
 					var num=0;
@@ -5249,6 +5248,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audioname:['feiyi'],
 				trigger:{player:'phaseJieshuBegin'},
 				frequent:true,
+				preHidden:true,
 				filter:function(event,player){
 					return !player.getHistory('sourceDamage').length;
 				},
@@ -5388,6 +5388,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				trigger:{global:'useCard'},
 				forced:true,
+				preHidden:true,
 				filter:function(event,player){
 					if(get.type(event.card)!='equip') return false;
 					var gz=get.mode()=='guozhan';
@@ -11478,6 +11479,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				trigger:{player:'phaseDrawBegin2'},
 				frequent:true,
+				preHidden:true,
 				filter:function(event,player){
 					return !event.numFixed;
 				},
@@ -11502,6 +11504,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				trigger:{player:'phaseDrawBegin2'},
 				frequent:true,
+				preHidden:true,
 				filter:function(event,player){
 					if(event.numFixed||player.storage.tunchu&&player.storage.tunchu.length) return false;
 					return true;

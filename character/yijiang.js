@@ -8300,6 +8300,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			qianxi:{
 				audio:2,
 				trigger:{player:'phaseZhunbeiBegin'},
+				preHidden:true,
 				content:function(){
 					"step 0"
 					player.draw();
@@ -10905,6 +10906,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			zhiyu:{
 				audio:2,
 				trigger:{player:'damageEnd'},
+				preHidden:true,
 				content:function(){
 					"step 0"
 					player.draw();
@@ -12171,7 +12173,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			fuhuanghou:['re_fuhuanghou','xin_fuhuanghou','fuhuanghou','old_fuhuanghou'],
 			chenqun:['chenqun','re_chenqun','old_chenqun'],
 			hanhaoshihuan:['re_hanhaoshihuan','hanhaoshihuan'],
-			caozhen:['re_caozhen','caozhen','old_caozhen'],
+			caozhen:['re_caozhen','xin_caozhen','caozhen','old_caozhen'],
 			wuyi:['re_wuyi','wuyi'],
 			sunluban:['re_sunluban','xin_sunluban','sunluban'],
 			zhuhuan:['zhuhuan','old_zhuhuan'],
