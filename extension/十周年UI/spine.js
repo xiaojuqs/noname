@@ -1935,11 +1935,6 @@ var spine;
 			if (success === void 0) { success = null; }
 			if (error === void 0) { error = null; }
 			path = this.pathPrefix + path;
-			if (spine.lodedAssets[path]) {
-				_this.assets[path] = spine.lodedAssets[path];
-				setTimeout(success, 0, path, _this.assets[path]);
-				return;
-			}
 			
 			this.toLoad++;
 			
@@ -1999,11 +1994,6 @@ var spine;
 			if (success === void 0) { success = null; }
 			if (error === void 0) { error = null; }
 			path = this.pathPrefix + path;
-			if (spine.lodedAssets[path]) {
-				_this.assets[path] = spine.lodedAssets[path];
-				setTimeout(success, 0, path, _this.assets[path]);
-				return;
-			}
 			
 			this.toLoad++;
 			
