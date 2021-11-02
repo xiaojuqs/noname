@@ -5001,6 +5001,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			luanwu:{
 				audio:2,
+				audioname:['re_jiaxu'],
 				unique:true,
 				enable:'phaseUse',
 				limited:true,
