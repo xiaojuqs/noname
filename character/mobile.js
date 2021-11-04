@@ -11718,7 +11718,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			ly_piliche:{
 				trigger:{source:'damageSource'},
 				check:function(event,player){
-					return get.attitude(player,event.player)*get.value(event.player.getDiscardableCards(player,'e'),event.player)>0;
+					return get.attitude(player,event.player)*get.value(event.player.getDiscardableCards(player,'e'),event.player)<0;
 				},
 				filter:function(event,player){
 					return player!=event.player&&event.player.countDiscardableCards(player,'e')>0;
