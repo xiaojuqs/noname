@@ -1148,7 +1148,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					]).set('ai',function(){
 						if(player.countCards('hs',function(card){
 							return get.name(card)=='sha'&&player.hasValueTarget(card);
-						})>player.getCardUsable({name:'sha '})) return 0;
+						})>player.getCardUsable({name:'sha'})) return 0;
 						return 1;
 					});
 					'step 1'
