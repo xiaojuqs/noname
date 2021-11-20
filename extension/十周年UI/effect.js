@@ -87,21 +87,22 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		},
 		gameStart:function(){
 			game.playAudio('../extension', decadeUI.extensionName, 'audio/game_start.mp3');
-			var anim = decadeUI.animation;
-			var bounds = anim.getSpineBounds('effect_youxikaishi');
+			var animation = decadeUI.animation;
+			var bounds = animation.getSpineBounds('effect_youxikaishi');
 			if (bounds == null) return;
 			var sz = bounds.size;
-			var scale = Math.min(anim.canvas.width / sz.x, anim.canvas.height / sz.y) * 0.76;
-			anim.playSpine({
+			var scale = Math.min(animation.canvas.width / sz.x, animation.canvas.height / sz.y) * 0.76;
+			animation.playSpine({
 					name:'effect_youxikaishi',
-				}, { scale: scale });
+					scale: scale
+				});
 		},
 		
 		line:function(dots){
 			decadeUI.animate.add(function(source, target, e){
 				var ctx = e.context;
 				ctx.shadowColor = 'yellow';
-				ctx.shadowBlur = 2;
+				ctx.shadowBlur = 1;
 				
 				if (!this.head) this.head = 0;
 				if (!this.tail) this.tail = -1;
@@ -115,11 +116,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				var tail = this.tail < 0 ? 0 : this.tail;
 				var head = this.head;
 				if (this.tail <= 1) {
-					var x1 = e.lerp(source.x, target.x, tail);
-					var y1 = e.lerp(source.y, target.y, tail);
-					var x2 = e.lerp(source.x, target.x, head);
-					var y2 = e.lerp(source.y, target.y, head);
-					e.drawLine(x1, y1, x2, y2, 'rgb(250,220,140)', 2.5);
+					var x1 = decadeUI.get.lerp(source.x, target.x, tail);
+					var y1 = decadeUI.get.lerp(source.y, target.y, tail);
+					var x2 = decadeUI.get.lerp(source.x, target.x, head);
+					var y2 = decadeUI.get.lerp(source.y, target.y, head);
+					e.drawLine(x1, y1, x2, y2, 'rgb(250,220,140)', 2.6);
+					return false;
 				} else {
 					return true;
 				}
@@ -197,7 +199,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			
 			var animation = decadeUI.animation;
 			var asset = animation.spine.assets['effect_xianding'];
-			if (!asset) return console.error('[技能发动]特效未加载');
+			if (!asset) return console.error('[effect_xianding]特效未加载');
 			if (!asset.ready) animation.prepSpine('effect_xianding');
 			
 			var camp = player.group;
@@ -216,11 +218,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			
 			image.onload = function () {
 				bgImage.onload = function () {
-					var skeleton = animation.getSpineAnimation('effect_xianding');
-					var slot = skeleton.skeleton.findSlot('shilidipan');
+					var animation = decadeUI.animation;
+					var sprite = animation.playSpine('effect_xianding');
+					var skeleton = sprite.skeleton;
+					var slot = skeleton.findSlot('shilidipan');
 					var attachment = slot.getAttachment();
 					var region;
-					skeleton.completed = false;
 					
 					if (attachment.camp !== camp) {
 						if (!attachment.cached) attachment.cached = {};
@@ -239,7 +242,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						attachment.camp = camp;
 					}
 					
-					slot = skeleton.skeleton.findSlot('wujiang');
+					slot = skeleton.findSlot('wujiang');
 					attachment = slot.getAttachment();
 					region = animation.createTextureRegion(image);
 					
@@ -251,47 +254,15 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					
 					
 					var size = skeleton.bounds.size;
-					scale = Math.max(animation.canvas.width / size.x, animation.canvas.height / size.y);
-					animation.playSpineAnimation(skeleton, { scale: scale });
-					
-					
+					sprite.scale = Math.max(animation.canvas.width / size.x, animation.canvas.height / size.y);
+
 					var effect = decadeUI.element.create('effect-window');
 					effect.view.skillName = decadeUI.element.create('skill-name', effect);
 					effect.view.skillName.innerHTML = skillName;
-					effect.view.skillName.style.top = 'calc(50% + ' + 165 * scale + 'px)';
-					
-					// effect.view.playerName = decadeUI.element.create('player-name', effect);
-					// effect.view.playerName.innerHTML = get.verticalStr(playerName);
+					effect.view.skillName.style.top = 'calc(50% + ' + 165 * sprite.scale + 'px)';
+			
 					animation.canvas.parentNode.insertBefore(effect, animation.canvas.nextSibling);
 					effect.removeSelf(2180);
-					effect = null;
-					
-					// if (!skeleton.skeleton.findSlot('bg_xianding')) {
-						// var hdIndex = skeleton.skeleton.findSlotIndex('wujiang');
-						// var hdSlot = skeleton.skeleton.slots[hdIndex];
-						// var bgImage = new Image();
-						// bgImage.onload = function () {
-							// 搞了半天原来已经定义了，留着以后可能会用到
-							// var boneData = new spine.BoneData(hdSlot.data.boneData.index, 'bg_xianding', hdSlot.data.boneData.parent);
-							// var slotData = new spine.SlotData(hdSlot.data.index, 'bg_xianding', boneData);
-							// var xdSlot = new spine.Slot(hdSlot.data.copy(), hdSlot.bone);
-							// var xdAtta = hdSlot.getAttachment().copy();
-							// var bgRegion = animation.createTextureRegion(bgImage);
-							// xdAtta.name = 'bg_xianding';
-							// xdAtta.path = xdAtta.name;
-							// xdAtta.width = bgRegion.width;
-							// xdAtta.height = bgRegion.height;
-							// xdAtta.attachmentName = xdAtta.name;
-							// xdAtta.setRegion(bgRegion);
-							// xdAtta.updateOffset();
-
-							// xdSlot.setAttachment(xdAtta);
-							// skeleton.skeleton.slots.push(xdSlot);
-							// skeleton.skeleton.drawOrder.push(xdSlot);
-						// }
-						
-						// bgImage.src = decadeUIPath + 'assets/image/bg_xianding_qun.png';
-					// }
 				};
 				
 				bgImage.onerror = function () {

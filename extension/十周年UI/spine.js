@@ -1248,8 +1248,10 @@ var spine;
 				var timelineCount = current.animation.timelines.length;
 				var timelines = current.animation.timelines;
 				if (mix == 1) {
-					for (var ii = 0; ii < timelineCount; ii++)
-						timelines[ii].apply(skeleton, animationLast, animationTime, events, 1, spine.MixPose.setup, spine.MixDirection["in"]);
+					for (var ii = 0; ii < timelineCount; ii++) {
+						var timeline = timelines[ii];
+						timeline.apply(skeleton, animationLast, animationTime, events, 1, spine.MixPose.setup, spine.MixDirection["in"]);
+					}
 				}
 				else {
 					var timelineData = current.timelineData;
@@ -1888,7 +1890,7 @@ var spine;
 var spine;
 (function (spine) {
 	var AssetManager = (function () {
-		function AssetManager(textureLoader, pathPrefix) {
+		function AssetManager(textureLoader, pathPrefix, worker) {
 			if (pathPrefix === void 0) { pathPrefix = ""; }
 			this.assets = {};
 			this.errors = {};
@@ -1901,7 +1903,7 @@ var spine;
 			var request = new XMLHttpRequest();
 			request.open("GET", url, true);
 			request.onload = function () {
-				if (request.status == 200) {
+				if (request.status == 200 || (request.status == 0 && request.readyState == 4)) {
 					success(request.responseText);
 				}
 				else {
@@ -1918,8 +1920,30 @@ var spine;
 			request.open("GET", url, true);
 			request.responseType = "arraybuffer";
 			request.onload = function () {
-				if (request.status == 200) {
+				if (request.status == 200 || (request.status == 0 && request.readyState == 4)) {
 					success(new Uint8Array(request.response));
+				}
+				else {
+					error(request.status, request.response);
+				}
+			};
+			request.onerror = function () {
+				error(request.status, request.response);
+			};
+			request.send();
+		};
+		AssetManager.prototype.downloadImageBitmap = function (url, success, error) {
+			var request = new XMLHttpRequest();
+			request.open("GET", url, true);
+			request.responseType = "blob";
+			request.onload = function () {
+				if (request.status == 200 || (request.status == 0 && request.readyState == 4)) {
+					createImageBitmap(request.response, {
+						premultiplyAlpha: 'none',
+						colorSpaceConversion: 'none'
+					}).then((imageBitmap)=>{
+						success(imageBitmap);
+					});
 				}
 				else {
 					error(request.status, request.response);
@@ -1935,127 +1959,96 @@ var spine;
 			if (success === void 0) { success = null; }
 			if (error === void 0) { error = null; }
 			path = this.pathPrefix + path;
+			if (spine.lodedAssets[path]) {
+				_this.assets[path] = spine.lodedAssets[path];
+				if (success)
+					setTimeout(success, 0, path, _this.assets[path]);
+				return;
+			}
 			
 			this.toLoad++;
-			
-			var fs = (window.require == void 0 ? void 0 : require('fs'));
-			if (true) {
-				this.downloadBinary(path, function (data) {
-					_this.assets[path] = data;
-					if (success)
-						success(path, data);
-					_this.toLoad--;
-					_this.loaded++;
-				}, function (state, response) {
-					_this.errors[path] = "Couldn't load binary " + path + ": status " + status + ", " + response;
-					if (error)
-						error(path, "Couldn't load binary " + path + ": status " + status + ", " + response);
-					_this.toLoad--;
-					_this.loaded++;
-				});
-			} else {
-				var onerror = function(){
-					_this.errors[path] = "Couldn't load text " + path;
-					if (error)
-						error(path, "Couldn't load text " + path);
-					
-					console.log("Couldn't load text " + path);
-					_this.toLoad--;
-					_this.loaded++;
-				};
-				
-				var dirPath = window.appPath ? appPath : decadeUIPath;
-				path = path.replace(dirPath, '')
-				if(window.resolveLocalFileSystemURL){
-					window.resolveLocalFileSystemURL(dirPath, function(entry){
-						entry.getFile(path, {}, function(fileEntry){
-							fileEntry.file(function(file){
-								var reader = new FileReader();
-								reader.onload = function(e){
-									var data = new Uint8Array(e.target.result);
-									_this.assets[dirPath + path] = data;
-									if (success)
-										success(path, data);
-									
-									_this.toLoad--;
-									_this.loaded++;
-								};
-								
-								reader.onerror = onerror;
-								reader.readAsArrayBuffer(file);
-							}, onerror);
-						}, onerror)
-					}, onerror);
-				}
-			}
+			this.downloadBinary(path, function (data) {
+				_this.assets[path] = data;
+				spine.lodedAssets[path] = data;
+				if (success)
+					success(path, data);
+				_this.toLoad--;
+				_this.loaded++;
+			}, function (status, response) {
+				_this.errors[path] = "Couldn't load binary " + path + ": status " + status + ", " + response;
+				if (error)
+					error(path, "Couldn't load binary " + path + ": status " + status + ", " + response);
+				_this.toLoad--;
+				_this.loaded++;
+			});
 		};
 		AssetManager.prototype.loadText = function (path, success, error) {
 			var _this = this;
 			if (success === void 0) { success = null; }
 			if (error === void 0) { error = null; }
 			path = this.pathPrefix + path;
+			if (spine.lodedAssets[path]) {
+				_this.assets[path] = spine.lodedAssets[path];
+				setTimeout(success, 0, path, _this.assets[path]);
+				return;
+			}
 			
 			this.toLoad++;
-			
-			var fs = (window.require == void 0 ? void 0 : require('fs'));
-			if (true) {
-				this.downloadText(path, function (data) {
-					_this.assets[path] = data;
-					if (success)
-						success(path, data);
-					_this.toLoad--;
-					_this.loaded++;
-				}, function (state, responseText) {
-					_this.errors[path] = "Couldn't load text " + path + ": status " + status + ", " + responseText;
-					if (error)
-						error(path, "Couldn't load text " + path + ": status " + status + ", " + responseText);
-					_this.toLoad--;
-					_this.loaded++;
-				});
-			} else {
-				var onerror = function(){
-					_this.errors[path] = "Couldn't load text " + path;
-					if (error)
-						error(path, "Couldn't load text " + path);
-					
-					console.log("Couldn't load text " + path);
-					_this.toLoad--;
-					_this.loaded++;
-				};
-				
-				var dirPath = window.appPath ? appPath : decadeUIPath;
-				path = path.replace(dirPath, '')
-				if(resolveLocalFileSystemURL){
-					window.resolveLocalFileSystemURL(dirPath, function(entry){
-						entry.getFile(path, {}, function(fileEntry){
-							fileEntry.file(function(file){
-								var reader = new FileReader();
-								reader.onload = function(e){
-									_this.assets[dirPath + path] = e.target.result;
-									if (success)
-										success(path, e.target.result);
-									
-									_this.toLoad--;
-									_this.loaded++;
-								};
-								
-								reader.onerror = onerror;
-								reader.readAsText(file);
-							}, onerror);
-						}, onerror)
-					}, onerror);
-				}
-			}
+			this.downloadText(path, function (data) {
+				_this.assets[path] = data;
+				spine.lodedAssets[path] = data;
+				if (success)
+					success(path, data);
+				_this.toLoad--;
+				_this.loaded++;
+			}, function (status, responseText) {
+				_this.errors[path] = "Couldn't load text " + path + ": status " + status + ", " + responseText;
+				if (error)
+					error(path, "Couldn't load text " + path + ": status " + status + ", " + responseText);
+				_this.toLoad--;
+				_this.loaded++;
+			});
 		};
 		AssetManager.prototype.loadTexture = function (path, success, error) {
 			var _this = this;
-			if (success === void 0) { success = null; }
-			if (error === void 0) { error = null; }
+			if (success === void 0)
+				success = null;
+			if (error === void 0)
+				error = null;
 			path = this.pathPrefix + path;
+			if (spine.lodedAssets[path]) {
+				var texture = _this.textureLoader(spine.lodedAssets[path]);
+				_this.assets[path] = texture;
+				if (success) setTimeout(success, 0, path, _this.assets[path]);
+				return;
+			}
+			
 			this.toLoad++;
+			if (self.Image == undefined || _this.useImageBitmap) {
+				this.downloadImageBitmap(path, function (imageBitmap) {
+					spine.lodedAssets[path] = imageBitmap;
+					
+					var texture = _this.textureLoader(imageBitmap);
+					_this.assets[path] = texture;
+					_this.toLoad--;
+					_this.loaded++;
+					if (success)
+						success(path, imageBitmap);
+					
+				}, function (status, response) {
+					_this.errors[path] = "Couldn't load texture " + path + ": status " + status + ".";
+					if (error)
+						error(path, "Couldn't load texture " + path + ": status " + status + ".");
+					_this.toLoad--;
+					_this.loaded++;
+				});
+				return;
+			}
+			
 			var img = new Image();
-			// img.crossOrigin = "anonymous";
 			img.onload = function (ev) {
+				spine.lodedAssets[path] = img;
+				
 				var texture = _this.textureLoader(img);
 				_this.assets[path] = texture;
 				_this.toLoad--;
@@ -2173,7 +2166,7 @@ var spine;
 					var atlasPage = atlasPages_1[_i];
 					_loop_1(atlasPage);
 				}
-			}, function (state, responseText) {
+			}, function (status, responseText) {
 				_this.errors[path] = "Couldn't load texture atlas " + path + ": status " + status + ", " + responseText;
 				if (error)
 					error(path, "Couldn't load texture atlas " + path + ": status " + status + ", " + responseText);
@@ -2305,6 +2298,7 @@ var spine;
 			if (skeleton == null)
 				throw new Error("skeleton cannot be null.");
 			this.data = data;
+			this.name = data.name;
 			this.skeleton = skeleton;
 			this.parent = parent;
 			this.setToSetupPose();
@@ -4736,6 +4730,7 @@ var spine;
 			vertices.bones = bonesArray;
 			return vertices;
 		};
+		
 		SkeletonBinary.prototype.readFloatArray = function (input, n, scale) {
 			var array = new Array(n);
 			if (scale == 1) {
@@ -7313,6 +7308,7 @@ var spine;
 		AttachmentType[AttachmentType["LinkedMesh"] = 3] = "LinkedMesh";
 		AttachmentType[AttachmentType["Path"] = 4] = "Path";
 		AttachmentType[AttachmentType["Point"] = 5] = "Point";
+		AttachmentType[AttachmentType["Clipping"] = 6] = "Clipping";
 	})(AttachmentType = spine.AttachmentType || (spine.AttachmentType = {}));
 })(spine || (spine = {}));
 var spine;
@@ -9410,7 +9406,6 @@ var spine;
 			};
 			Shader.newTwoColoredTextured = function (context) {
 				var vs = "\n\t\t\t\tattribute vec4 " + Shader.POSITION + ";\n\t\t\t\tattribute vec4 " + Shader.COLOR + ";\n\t\t\t\tattribute vec4 " + Shader.COLOR2 + ";\n\t\t\t\tattribute vec2 " + Shader.TEXCOORDS + ";\n\t\t\t\tuniform mat4 " + Shader.MVP_MATRIX + ";\n\t\t\t\tvarying vec4 v_light;\n\t\t\t\tvarying vec4 v_dark;\n\t\t\t\tvarying vec2 v_texCoords;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tv_light = " + Shader.COLOR + ";\n\t\t\t\t\tv_dark = " + Shader.COLOR2 + ";\n\t\t\t\t\tv_texCoords = " + Shader.TEXCOORDS + ";\n\t\t\t\t\tgl_Position = " + Shader.MVP_MATRIX + " * " + Shader.POSITION + ";\n\t\t\t\t}\n\t\t\t";
-				// var fs = "\n\t\t\t\t#ifdef GL_ES\n\t\t\t\t\t#define LOWP lowp\n\t\t\t\t\tprecision mediump float;\n\t\t\t\t#else\n\t\t\t\t\t#define LOWP\n\t\t\t\t#endif\n\t\t\t\tvarying LOWP vec4 v_light;\n\t\t\t\tvarying LOWP vec4 v_dark;\n\t\t\t\tuniform float u_pma;\n\t\t\t\tvarying vec2 v_texCoords;\n\t\t\t\tuniform sampler2D u_texture;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tvec4 texColor = texture2D(u_texture, v_texCoords);\n\t\t\t\t\tgl_FragColor.a = texColor.a * v_light.a;\n\t\t\t\t\tgl_FragColor.rgb = ((texColor.a - 1.0) * u_pma + 1.0 - texColor.rgb) * v_dark.rgb + texColor.rgb * v_light.rgb;\n\t\t\t\t}\n\t\t\t";
 				var fs = "\n\t\t\t\t#ifdef GL_ES\n\t\t\t\t\t#define LOWP lowp\n\t\t\t\t\tprecision mediump float;\n\t\t\t\t#else\n\t\t\t\t\t#define LOWP\n\t\t\t\t#endif\n\t\t\t\tvarying LOWP vec4 v_light;\n\t\t\t\tvarying LOWP vec4 v_dark;\n\t\t\t\tvarying vec2 v_texCoords;\n\t\t\t\tuniform sampler2D u_texture;\n\n\t\t\t\tvoid main () {\n\t\t\t\t\tvec4 texColor = texture2D(u_texture, v_texCoords);\n\t\t\t\t\tgl_FragColor.a = texColor.a * v_light.a;\n\t\t\t\t\tgl_FragColor.rgb = ((texColor.a - 1.0) * v_dark.a + 1.0 - texColor.rgb) * v_dark.rgb + texColor.rgb * v_light.rgb;\n\t\t\t\t}\n\t\t\t";
 				return new Shader(context, vs, fs);
 			};
@@ -10042,7 +10037,7 @@ var spine;
 					}
 					else if (attachment instanceof spine.ClippingAttachment) {
 						var clip = (attachment);
-						clipper.clipStart(slot, clip);
+						if (!this.hideSkelClip) clipper.clipStart(slot, clip);
 						continue;
 					}
 					else
@@ -10053,7 +10048,7 @@ var spine;
 						finalColor.r = skeletonColor.r * slotColor.r * attachmentColor.r;
 						finalColor.g = skeletonColor.g * slotColor.g * attachmentColor.g;
 						finalColor.b = skeletonColor.b * slotColor.b * attachmentColor.b;
-						finalColor.a = skeletonColor.a * slotColor.a * attachmentColor.a;
+						finalColor.a = skeletonColor.a * slotColor.a * attachmentColor.a * skeleton.opacity;
 						if (premultipliedAlpha) {
 							finalColor.r *= finalColor.a;
 							finalColor.g *= finalColor.a;
@@ -10379,4 +10374,3 @@ var spine;
 		webgl.WebGLBlendModeConverter = WebGLBlendModeConverter;
 	})(webgl = spine.webgl || (spine.webgl = {}));
 })(spine || (spine = {}));
-//# sourceMappingURL=spine-webgl.js.map

@@ -1,43 +1,420 @@
 'use strict';
-decadeParts.import(function(lib, game, ui, get, ai, _status){
-	decadeUI.AnimationPlayer = (function(){
+var duilib;
+(function(duilib){
+	
+	duilib.lerp = function(min, max, fraction){
+		return (max - min) * fraction + min;
+	};
+	
+	duilib.ease = function(fraction){
+		if (!duilib.b3ease) duilib.b3ease = new duilib.CubicBezierEase(0.25, 0.1, 0.25, 1);
+		return duilib.b3ease.ease(fraction);
+	},
+	
+	duilib.CubicBezierEase = (function(){
+		function CubicBezierEase (p1x, p1y, p2x, p2y) {
+			this.cX = 3 * p1x;
+			this.bX = 3 * (p2x - p1x) - this.cX;
+			this.aX = 1 - this.cX - this.bX;
+
+			this.cY = 3 * p1y;
+			this.bY = 3 * (p2y - p1y) - this.cY;
+			this.aY = 1 - this.cY - this.bY;
+		};
+			
+		CubicBezierEase.prototype.getX = function (t) {
+			return t * (this.cX + t * (this.bX + t * this.aX));
+		};
+			
+		CubicBezierEase.prototype.getXDerivative = function (t) {
+			return this.cX + t * (2 * this.bX + 3 * this.aX * t);
+		};
+			
+		CubicBezierEase.prototype.ease = function (x) {
+			var prev,
+			t = x;
+			do {
+				prev = t;
+				t = t - ((this.getX(t) - x) / this.getXDerivative(t));
+			} while (Math.abs(t - prev) > 1e-4);
+			
+			
+			return t * (this.cY + t * (this.bY + t * this.aY));
+		};
+			
+		return CubicBezierEase;
+	})();
+	
+	duilib.TimeStep = (function(){
+		function TimeStep (initParam) {
+			this.start = initParam.start;
+			this.current = initParam.start;
+			this.end = initParam.end;
+			this.time = 0;
+			this.percent = 0;
+			this.duration = initParam.duration;
+			this.completed = false;
+		};
+		
+		TimeStep.prototype.update = function (delta) {
+			this.time += delta;
+			this.percent = duilib.ease(Math.min(this.time / this.duration, 1));
+			
+			var start, end;
+			var isArray = false;
+			if (Array.isArray(this.start)) {
+				isArray = true;
+				start = this.start;
+			} else {
+				start = [this.start, 0];
+			}
+			
+			if (Array.isArray(this.end)) {
+				isArray = true;
+				end = this.end;
+			} else {
+				end = [this.end, 0];
+			}
+			
+			if (isArray) {
+				this.current = [duilib.lerp(start[0], end[0], this.percent), duilib.lerp(start[1], end[1], this.percent)];
+			} else {
+				this.current = duilib.lerp(start[0], end[0], this.percent);
+			}
+			
+			if (this.time >= this.duration) this.completed = true;
+		};
+		
+		return TimeStep;
+	})();
+	
+	duilib.APNode = (function(){
+		function APNode(initParam) {
+			if (initParam == undefined) initParam = {};
+			this.id = undefined;								// 内部属性，不可更改
+			this.x = initParam.x;
+			this.y = initParam.y;
+			this.height = initParam.height;
+			this.width = initParam.width;
+			this.angle = initParam.angle;
+			this.scale = initParam.scale;
+			this.opacity = initParam.opacity;
+			this.clip = initParam.clip;
+			this.hideSkelClip = initParam.hideSkelClip;
+			this.renderX = undefined;							// 内部属性，不可更改
+			this.renderY = undefined;							// 内部属性，不可更改
+			this.renderAngle = undefined;						// 内部属性，不可更改
+			this.renderScale = undefined;						// 内部属性，不可更改
+			this.renderOpacity = undefined;						// 内部属性，不可更改
+			this.renderClip = undefined;						// 内部属性，不可更改
+			this.mvp = new spine.webgl.Matrix4();				// 内部属性，不可更改
+			this.skeleton = initParam.skeleton;					// 内部属性，不可更改
+			this.name = initParam.name;							// 内部属性，不可更改
+			this.action = initParam.action;						// 内部属性，不可更改
+			this.loop = initParam.loop;
+			this.loopCount = initParam.loopCount;
+			this.speed = initParam.speed;
+			this.onupdate = initParam.onupdate;
+			this.oncomplete = initParam.oncomplete;
+			this.completed = true;								// 内部属性，不可更改
+			this.referNode = initParam.referNode;				
+			this.referFollow = initParam.referFollow;
+			this.referBounds = undefined;						// 内部属性，不可更改
+			this.timestepMap = {};								// 内部属性，不可更改
+			this.flipX = initParam.flipX;
+			this.flipY = initParam.flipY;
+		};
+		
+		APNode.prototype.fadeTo = function (opacity, duration) {
+			if (opacity != undefined) {
+				this.updateTimeStep('opacity', (this.opacity == undefined ? 1 : this.opacity), opacity, duration);
+				this.opacity = opacity;
+			}
+			
+			return this;
+		}
+		
+		APNode.prototype.moveTo = function (x, y, duration) {
+			if (x != undefined) {
+				this.updateTimeStep('x', (this.x == undefined ? [0, 0.5] : this.x), x, duration);
+				this.x = x;
+			}
+			
+			if (y != undefined) {
+				this.updateTimeStep('y', (this.y == undefined ? [0, 0.5] : this.y), y, duration);
+				this.y = y;
+			}
+			
+			return this;
+		};
+		
+		APNode.prototype.scaleTo = function (scale, duration) {
+			if (scale != undefined) {
+				this.updateTimeStep('scale', (this.scale == undefined ? 1 : this.scale), scale, duration);
+				this.scale = scale;
+			}
+			
+			return this;
+		};
+		
+		APNode.prototype.rotateTo = function (angle, duration) {
+			if (angle != undefined) {
+				this.updateTimeStep('angle', (this.angle == undefined ? 0 : this.angle), angle, duration);
+				this.angle = angle;
+			}
+			
+			return this;
+		};
+		
+		APNode.prototype.update = function (e) {
+			function calc(value, refer, dpr) {
+				if (Array.isArray(value)) {
+					return value[0] * dpr + value[1] * refer;
+				} else {
+					return value * dpr;
+				}
+			}
+			
+			var domX, domY, domDefaultX, domDefaultY;
+			var dpr = e.dpr;
+			var referSize = { width: e.canvas.width, height: e.canvas.height };
+			var domNode = this.referNode instanceof HTMLElement ? this.referNode : undefined;
+			if (domNode) {
+				if (this.referFollow || !this.referBounds) {
+					var rect = domNode.getBoundingClientRect();
+					this.referBounds = {
+						x: rect.left,
+						y: decadeUI.get.bodySize().height - rect.bottom,
+						width: rect.width,
+						height: rect.height,
+					};
+				}
+				
+				referSize.height = this.referBounds.height * dpr;
+				referSize.width = this.referBounds.width * dpr;
+			}
+			
+			var timestep, percent;
+			var renderX, renderY, renderScale, renderScaleX, renderScaleY;
+			var skeletonSize = this.skeleton.bounds.size;
+			
+			timestep = this.timestepMap.x;
+			if (timestep != undefined && !timestep.completed) {
+				timestep.update(e.delta);
+				renderX = calc(timestep.current, referSize.width, dpr);
+			} else if (this.x != undefined) {
+				renderX = calc(this.x, referSize.width, dpr);
+			}
+			
+			timestep = this.timestepMap.y;
+			if (timestep != undefined && !timestep.completed) {
+				timestep.update(e.delta);
+				renderY = calc(timestep.current, referSize.height, dpr);
+			} else if (this.y != undefined) {
+				renderY = calc(this.y, referSize.height, dpr);
+			}
+			
+			if (this.width != undefined) renderScaleX = calc(this.width, referSize.width, dpr) / skeletonSize.x;
+			if (this.height != undefined) renderScaleY = calc(this.height, referSize.height, dpr) / skeletonSize.y;
+			
+			if (domNode) {
+				if (renderX == undefined) {
+					renderX = (this.referBounds.x + this.referBounds.width / 2) * dpr;
+				} else {
+					renderX += this.referBounds.x * dpr;
+				}
+				
+				if (renderY == undefined) {
+					renderY = (this.referBounds.y + this.referBounds.height / 2) * dpr;;
+				} else {
+					renderY += this.referBounds.y * dpr;;
+				}
+			}
+			
+			this.mvp.ortho2d(0, 0, e.canvas.width, e.canvas.height);
+			if (renderX != void 0 && renderY == void 0) {
+				this.mvp.translate(renderX, 0, 0);
+				this.mvp.setY(0);
+			} else if (renderX == void 0 && renderY != void 0) {
+				this.mvp.translate(0, renderY, 0);
+				this.mvp.setX(0);
+			} else if (renderX != void 0 && renderY != void 0) {
+				this.mvp.translate(renderX, renderY, 0);
+			} else {
+				this.mvp.setPos2D(0, 0);
+			}
+			
+			timestep = this.timestepMap.scale;
+			if (timestep != undefined && !timestep.completed) {
+				timestep.update(e.delta);
+				renderScale = timestep.current;
+			} else {
+				renderScale = (this.scale == undefined ? 1 : this.scale);
+			}
+			
+			if (renderScaleX && !renderScaleY) {
+				renderScale *= renderScaleX;
+			} else if (!renderScaleX && renderScaleY) {
+				renderScale *= renderScaleY;
+			} else if (renderScaleX && renderScaleY) {
+				renderScale *= Math.min(renderScaleX, renderScaleY);
+			} else {
+				renderScale *= dpr;
+			}
+			
+			if (renderScale != 1) {
+				this.mvp.scale(renderScale, renderScale, 0);
+			}
+			
+			timestep = this.timestepMap.angle;
+			if (timestep != undefined && !timestep.completed) {
+				timestep.update(e.delta);
+				this.renderAngle = timestep.current;
+			} else {
+				this.renderAngle = this.angle;
+			}
+			
+			if (this.renderAngle) {
+				this.mvp.rotate(this.renderAngle, 0, 0, 1);
+			}
+			
+			timestep = this.timestepMap.opacity;
+			if (timestep != undefined && !timestep.completed) {
+				timestep.update(e.delta);
+				this.renderOpacity = timestep.current;
+			} else {
+				this.renderOpacity = this.opacity;
+			}
+			
+			this.renderX = renderX;	this.renderY = renderY;	this.renderScale = renderScale;
+			if (this.clip) {
+				this.renderClip = { 
+					x: calc(this.clip.x, e.canvas.width, dpr),
+					y: calc(this.clip.y, e.canvas.height, dpr),
+					width: calc(this.clip.width, e.canvas.width, dpr),
+					height: calc(this.clip.height, e.canvas.height, dpr)
+				};
+			}
+			if (this.onupdate) this.onupdate();
+		};
+		
+		APNode.prototype.setAction = function (action, transtion) {
+			if (this.skeleton && this.skeleton.node == this) {
+				if (this.skeleton.data.findAnimation(action) == null) return console.error('setAction: 未找到对应骨骼动作');
+				transtion = transtion == undefined ? 0.5 : transtion / 1000;
+				var entry = this.skeleton.state.setAnimation(0, action, this.loop);
+				entry.mixDuration = transtion;
+			} else {
+				console.error('setAction: 节点失去关联');
+			}
+		};
+		
+		APNode.prototype.resetAction = function (transtion) {
+			if (this.skeleton && this.skeleton.node == this) {
+				transtion = transtion == undefined ? 0.5 : transtion / 1000;
+				var entry = this.skeleton.state.setAnimation(0, this.skeleton.defaultAction, this.loop);
+				entry.mixDuration = transtion;
+			} else {
+				console.error('resetAction: 节点失去关联');
+			}
+		};
+		
+		APNode.prototype.complete = function () {
+			if (this.oncomplete) this.oncomplete();
+		};
+		
+		APNode.prototype.updateTimeStep = function (key, start, end, duration) {
+			if (duration == undefined || duration == 0)
+				return;
+			
+			var timestep = this.timestepMap[key];
+			if (timestep) {
+				timestep.start = timestep.completed ? start : timestep.current;
+				timestep.end = end;
+				timestep.time = 0;
+				timestep.percent = 0;
+				timestep.completed = false;
+				timestep.duration = duration;
+			} else {
+				timestep = this.timestepMap[key] = new duilib.TimeStep({
+					start: start,
+					end: end,
+					duration: duration,
+				});
+			}
+			
+			return timestep;
+		}
+		
+		return APNode;
+	})();
+
+	duilib.AnimationPlayer = (function(){
 		function AnimationPlayer (pathPrefix, parentNode, elementId) {
 			if (!window.spine) return console.error('spine 未定义.');
 			
-			var canvas = document.createElement('canvas');
-			canvas.className = 'animation-player';
-			if (elementId != void 0) canvas.id = elementId;
-			if (parentNode != void 0) parentNode.appendChild(canvas); 
+			var canvas;
+			if (parentNode === 'offscreen') {
+				canvas = elementId
+				this.offscreen = true;
+			} else {
+				canvas = document.createElement('canvas');
+				canvas.className = 'animation-player';
+				if (elementId != undefined) canvas.id = elementId;
+				if (parentNode != undefined) parentNode.appendChild(canvas); 
+			}
 			
 			var config = { alpha: true };
-			var gl = canvas.getContext('gl', config) || canvas.getContext('experimental-webgl', config);
+			var gl = canvas.getContext('webgl2', config);
+			if (gl == undefined) {
+				gl = canvas.getContext('webgl', config) || canvas.getContext('experimental-webgl', config);
+			} else {
+				gl.isWebgl2 = true;
+			}
+			
 			if (gl) {
 				this.spine = {
 					shader: spine.webgl.Shader.newTwoColoredTextured(gl),
 					batcher: new spine.webgl.PolygonBatcher(gl),
 					skeletonRenderer: new spine.webgl.SkeletonRenderer(gl),
-					shapes: new spine.webgl.ShapeRenderer(gl),
-					assetManager: new spine.webgl.AssetManager(gl),
+					assetManager: new spine.webgl.AssetManager(gl, pathPrefix),
 					assets: {},
-					animations: [],
+					skeletons: [],
 				}
 			} else {
-				this.spine = {
-					assets: {},
-				};
+				this.spine = { assets: {} };
 				console.error('当前设备不支持 WebGL.');
 			}
 			
 			this.gl = gl;
 			this.canvas = canvas;
 			this.$canvas = canvas;
-			this.pathPrefix = pathPrefix;
-			this.frameTime = void 0;
+			this.frameTime = undefined;
 			this.running = false;
-			this.sizeUpdated = false;
-			this.adaptiveDPR = false;
-			this.canvas.width = canvas.clientWidth;
-			this.canvas.height = canvas.clientHeight;
+			this.resized = false;
+			this.dpr = 1;
+			this.nodes = [];
+			this.BUILT_ID = 0;
+			this._dprAdaptive = false;
+			
+			Object.defineProperties(this, {
+				dprAdaptive: {
+					configurable: true,
+					get:function(){
+						return this._dprAdaptive;
+					},
+					set:function(value){
+						if (this._dprAdaptive == value) return;
+						this._dprAdaptive = value;
+						this.resized = false;
+					},
+				},
+			});
+			
+			if (!this.offscreen) {
+				this.canvas.width = canvas.clientWidth;
+				this.canvas.height = canvas.clientHeight;
+			}
 			
 			this.check = function () {
 				if (!this.gl) {
@@ -100,110 +477,109 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			return region;
 		};
 		
+		AnimationPlayer.prototype.hasSpine = function (filename) {
+			return this.spine.assets[filename] != undefined;
+		};
+		
 		AnimationPlayer.prototype.loadSpine = function (filename, skelType, onload, onerror) {
+			skelType = skelType == undefined ? 'skel' : skelType.toLowerCase();
 			var thisAnim = this;
-			var counter = {
+			var reader = {
 				name: filename,
 				filename: filename,
+				skelType: skelType,
 				onsuccess: onload,
 				onfailed: onerror,
-				loads: 0,
+				loaded: 0,
 				errors: 0,
-				loadMax: 3,
-			};
-			
-			counter.onload = function(){
-				counter.loads++;
-				if (counter.loads + counter.errors == counter.loadMax) {
-					if (counter.errors > 0) {
-						console.error('spine: 加载 [' + counter.filename + '] 失败.');
-						if (counter.onfailed !== void 0) {
-							counter.onfailed();
-						}
-					} else {
-						thisAnim.spine.assets[counter.filename] = { name: counter.filename, skelType: skelType };
-						if (counter.onsuccess !== void 0) {
-							counter.onsuccess();
+				toLoad: 2,
+				onerror:function(path, msg){
+					var _this = reader;
+					_this.toLoad--;
+					_this.errors++;
+					if (_this.toLoad == 0) {
+						console.error('loadSpine: [' + _this.filename + '] 加载失败.');
+						if (_this.onfailed) _this.onfailed();
+					}
+				},
+				onload:function(path, data){
+					var _this = reader;
+					_this.toLoad--;
+					_this.loaded++;
+					if (_this.toLoad == 0) {
+						if (_this.errors > 0) {
+							console.error('loadSpine: [' + _this.filename + '] 加载失败.');
+							if (_this.onfailed) _this.onfailed();
+						} else {
+							thisAnim.spine.assets[_this.filename] = { name: _this.filename, skelType: _this.skelType };
+							if (_this.onsuccess) _this.onsuccess();
 						}
 					}
-				}
-			};
-			
-			counter.onloadText = function(path, data){
-				var reader =  new spine.TextureAtlasReader(data);
-				var increment = 0;
-				var imageName = null;
-				
-				while (true) {
-					var line = reader.readLine();
-					if (line == null) break;
-					line = line.trim();
+				},
+				ontextLoad:function(path, data){
+					var _this = reader;
+					var imageName = null;
+					var atlasReader = new spine.TextureAtlasReader(data);
+					while (true) {
+						var line = atlasReader.readLine();
+						if (line == null) break;
+						line = line.trim();
+						
+						if (line.length == 0) {
+							imageName = null;
+						} else if (!imageName) {
+							imageName = line;
+							_this.toLoad++;
+							thisAnim.spine.assetManager.loadTexture(imageName,
+								_this.onload, _this.onerror);
+						} else {
+							continue;
+						}
+					}
 					
-					if (line.length == 0) {
-						imageName = null;
-					} else if (!imageName) {
-						imageName = line;
-						counter.loadMax += increment;
-						thisAnim.spine.assetManager.loadTexture(thisAnim.pathPrefix + imageName,
-							counter.onload, counter.onrror);
-						increment++;
-					} else {
-						continue;
-					}
-				}
-				
-				counter.onload();
-			}
-			
-			counter.onerror = function(){
-				counter.errors++;
-				if (counter.loads + counter.errors == counter.loadMax) {
-					console.error('spine: 加载 [' + counter.filename + '] 失败.');
-					if (counter.onfailed !== void 0) {
-						counter.onfailed();
-					}
-				}
+					_this.onload(path, data);
+				},
 			};
 			
-			if (skelType != void 0 && skelType.toLowerCase() == 'json') {
-				skelType = 'json';
-				thisAnim.spine.assetManager.loadText(thisAnim.pathPrefix + filename + '.json',
-					counter.onload, counter.onrror);
+			if (skelType == 'json') {
+				thisAnim.spine.assetManager.loadText(filename + '.json',
+					reader.onload, reader.onerror);
 			} else {
-				skelType = 'skel';
-				thisAnim.spine.assetManager.loadBinary(thisAnim.pathPrefix + filename + '.skel',
-					counter.onload, counter.onrror);
+				thisAnim.spine.assetManager.loadBinary(filename + '.skel',
+					reader.onload, reader.onerror);
 			}
 			
-			thisAnim.spine.assetManager.loadText(thisAnim.pathPrefix + filename + '.atlas',
-				counter.onloadText, counter.onrror);
-
-			
+			thisAnim.spine.assetManager.loadText(filename + '.atlas',
+				reader.ontextLoad, reader.onerror);
 		};
 		
 		AnimationPlayer.prototype.prepSpine = function (filename, autoLoad) {
-			var thisAnim = this;
-			
-			if (!thisAnim.spine.assets[filename]) {
+			var _this = this;
+			var spineAssets = _this.spine.assets;
+			if (!spineAssets[filename]) {
 				if (autoLoad) {
-					thisAnim.loadSpine(filename, 'skel', function(){
-						thisAnim.prepSpine(filename);
+					_this.loadSpine(filename, 'skel', function(){
+						_this.prepSpine(filename);
 					});
 					return 'loading';
 				}
-				console.error('spine: 未找到[' + filename + ']动画资源.');
-				return null;
+				return console.error('prepSpine: [' + filename + '] 骨骼没有加载');;
 			}
 			
-			var asset = thisAnim.spine.assets[filename];
-			var assetManager = thisAnim.spine.assetManager;
+			var skeleton;
+			var skeletons = _this.spine.skeletons;
+			for (var i = 0; i < skeletons.length; i++) {
+				skeleton = skeletons[i];
+				if (skeleton.name == filename && skeleton.completed) return skeleton;
+			}
+			
+			var asset = spineAssets[filename];
+			var manager = _this.spine.assetManager;
 			var skelRawData = asset.skelRawData;
 			if (!skelRawData) {
-				var atlas = new spine.TextureAtlas(assetManager.get(thisAnim.pathPrefix + filename + '.atlas'),
-					function(path){
-						return assetManager.get(thisAnim.pathPrefix + path);
-					}
-				);
+				var atlas = new spine.TextureAtlas(manager.get(filename + '.atlas'), function(path){
+						return manager.get(path);
+				});
 				
 				var atlasLoader = new spine.AtlasAttachmentLoader(atlas);
 				if (asset.skelType.toLowerCase() == 'json') {
@@ -212,473 +588,313 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					skelRawData = new spine.SkeletonBinary(atlasLoader);
 				}
 				
-				thisAnim.spine.assets[filename].skelRawData = skelRawData;
-				thisAnim.spine.assets[filename].ready = true;
+				spineAssets[filename].skelRawData = skelRawData;
+				spineAssets[filename].ready = true;
 			}
 			
-			var skeletonData = skelRawData.readSkeletonData(assetManager.get(thisAnim.pathPrefix + filename + '.' + asset.skelType));
-			var skeleton = new spine.Skeleton(skeletonData);
+			var data = skelRawData.readSkeletonData(manager.get(filename + '.' + asset.skelType));
+			skeleton = new spine.Skeleton(data);
+			
+			skeleton.name = filename;
+			skeleton.completed = true;
 			skeleton.setSkinByName('default');
 			skeleton.setToSetupPose();
 			skeleton.updateWorldTransform();
-			
-			var bounds = {
-				offset: new spine.Vector2(),
-				size: new spine.Vector2(),
-			};
-			
-			skeleton.getBounds(bounds.offset, bounds.size, []);
-			var animationStateData = new spine.AnimationStateData(skeleton.data);
-			var animationState = new spine.AnimationState(animationStateData);
-			
-			animationState.addListener({
+			skeleton.state = new spine.AnimationState(new spine.AnimationStateData(skeleton.data));
+			skeleton.state.addListener({
 				complete:function(track){
-					if (animation.loopCount > 0) animation.loopCount--;
-					if (!track.loop) {
-						animation.completed = true;
-					} else if (animation.loopCount == 0) {
-						track.loop = false;
+					var node = skeleton.node;
+					if (node) {
+						track.loop = (node.loop == undefined ? false : node.loop);
+						if (track.loop && node.loopCount > 0) {
+							node.loopCount--;
+							if (node.loopCount == 0) track.loop = false;
+						}
+						skeleton.completed = node.completed = !track.loop;
+						if (node.complete) node.complete();
+					} else {
+						skeleton.completed = !track.loop;
+						console.error('skeleton complete: 超出预期的错误');
 					}
-					
-					if (animation.complete) animation.complete();
 				}
 			});
-			
-			var animations = thisAnim.spine.animations;
-			var animation = {
-				id: animations.length,								// id
-				name: filename,										// 名称(文件路径)
-				action: skeletonData.animations[0].name,			// 动作
-				defaultAction: skeletonData.animations[0].name,		// 默认动作
-				skeleton: skeleton,									// 骨骼
-				skeletonData: skeletonData,							// 骨骼数据
-				state: animationState,								// 状态
-				bounds: bounds,										// 实际大小
-				position: undefined,								// 播放位置
-				premultipliedAlpha: false,							// 预乘Alpha
-				loop: false, 		 								// 是否循环
-				loopCount: -1,		 								// 循环次数，只有loop为true时生效
-				speed: 1,			 								// 播放速度
-				filpX: undefined,		 							// boolean 水平镜像
-				filpY: undefined,		 							// boolean 垂直翻转
-				opacity: undefined,									// 0~1     不透明度
-				callback: undefined, 								// 每帧绘制前回调
-				complete: undefined, 								// 每次播放完成后回调
-				completed: true,									// 是否播放结束
-				mvp: new spine.webgl.Matrix4(),
-				rawResetData: {
-					filpX: skeleton.flipX,
-					filpY: skeleton.filpY,
-					opacity: skeleton.color.a,
-				},
-				reset: function() {
-					this.action = this.defaultAction = this.skeletonData.animations[0].name;
-					this.position = undefined;
-					this.premultipliedAlpha = false;
-					this.loop = false;
-					this.loopCount = -1;
-					this.speed = 1;
-					this.flipX = this.skeleton.flipX = this.rawResetData.flipX;
-					this.flipY = this.skeleton.flipY = this.rawResetData.flipY;
-					this.opacity = this.skeleton.color.a = this.rawResetData.opacity;
-					this.callback = undefined;
-					this.complete = undefined;
-					this.completed = true;
-				},
-			};
-			
-			animation.mvp.ortho2d(0, 0, thisAnim.canvas.width, thisAnim.canvas.height);
-			animations.push(animation);
-			
-			return animation;
+			skeleton.bounds = { offset: new spine.Vector2(), size: new spine.Vector2() };
+			skeleton.getBounds(skeleton.bounds.offset, skeleton.bounds.size, []);
+			skeleton.defaultAction = data.animations[0].name;
+			skeleton.node = undefined;
+			skeletons.push(skeleton);
+			return skeleton;
 		};
 		
-		AnimationPlayer.prototype.playSpine = function (animation, position){
-			if (!decadeUI.config.gameAnimationEffect) return;
+		AnimationPlayer.prototype.playSpine = function (sprite, position){
+			if (self.duicfg && !self.duicfg.gameAnimationEffect) return;
+			if (sprite == undefined) return console.error('playSpine: parameter undefined');
+			if (typeof sprite == 'string') sprite = { name: sprite };
+			if (!this.hasSpine(sprite.name)) return console.error('playSpine: [' + sprite.name + '] 骨骼没有加载');
 			
-			switch (typeof animation) {
-				case 'string':
-					var t = {
-						name: animation,	 //	string 动画名称
-						action: undefined,	 // string 播放动作
-						loop: false, 		 // boolean 是否循环
-						loopCount: -1,		 // number 循环次数，只有loop为true时生效
-						speed: 1,			 // number 播放速度
-						filpX: undefined,	 // boolean 水平镜像
-						filpY: undefined,	 // boolean 垂直翻转
-						opacity: undefined,	 // 0~1		不透明度
-						callback: undefined, // function() 每帧回调
-						complete: undefined, // function() 每次播放完成后回调
-					};
-					
-					animation = t;
-					break;
-					
-				case 'number':
-					// 待实现
-					break;
-						
-			}
+			var skeletons = this.spine.skeletons;
+			var skeleton;
 			
-			var assets = this.spine.assets;
-			if (!assets[animation.name]) {
-				return console.error('spine: 未加载资源[' + animation.name + ']');
-			}
-
-			var animations = this.spine.animations;
-			var foundAnimation;
-
-			for (var i = 0; i < animations.length; i++) {
-				if (animations[i].name == animation.name && animations[i].completed) {
-					foundAnimation = animations[i++];
-					// 调整Z轴
-					while (i < animations.length) {
-						animations[i - 1] = animations[i++];
-					}
-					
-					animations[animations.length - 1] = foundAnimation;
-					break;
+			if (!(sprite instanceof duilib.APNode && sprite.skeleton.completed)) {
+				for (var i = 0; i < skeletons.length; i++) {
+					skeleton = skeletons[i];
+					if (skeleton.name == sprite.name && skeleton.completed) break;
+					skeleton = null;
+				}; if (!skeleton) skeleton = this.prepSpine(sprite.name);
+				
+				if (!(sprite instanceof duilib.APNode)) {
+					var param = sprite;
+					sprite = new duilib.APNode(sprite);
+					sprite.id = param.id == undefined ? this.BUILT_ID++ : param.id;
+					this.nodes.push(sprite);
 				}
+				
+				sprite.skeleton = skeleton;
+				skeleton.node = sprite;
 			}
 			
-			if (!foundAnimation) foundAnimation = this.prepSpine(animation.name);
-			foundAnimation.reset();
-			if (animation.action) foundAnimation.action = animation.action;
-			if (animation.loop)	foundAnimation.loop = animation.loop;
-			if (animation.loopCount) foundAnimation.loopCount = animation.loopCount;
-			if (animation.speed)	foundAnimation.speed = animation.speed;
-			if (animation.callback)	foundAnimation.callback = animation.callback;
-			if (animation.complete)	foundAnimation.complete = animation.complete;
-			if (animation.flipX) foundAnimation.skeleton.flipX = animation.flipX;
-			if (animation.flipY) foundAnimation.skeleton.flipY = animation.flipY;
-			if (animation.opacity) foundAnimation.skeleton.color.a = animation.opacity;
+			sprite.completed = false;
+			skeleton.completed = false;
 			
-			return this.playSpineAnimation(foundAnimation, position);
-		};
-		
-		AnimationPlayer.prototype.loopSpine = function (animation, position) {
-			if (typeof animation == 'string') {
-				animation = {
-					name: animation,
-					loop: true,
-				}
-			} else {
-				animation.loop = true;
+			if (position != undefined) {
+				sprite.x = position.x;
+				sprite.y = position.y;
+				sprite.height = position.height;
+				sprite.width = position.width;
+				sprite.scale = position.scale;
+				sprite.angle = position.angle;
+				sprite.referNode = position.parent;
+				sprite.referFollow = position.follow;
 			}
 			
-			return this.playSpine(animation, position);
-		};
-		
-		AnimationPlayer.prototype.stopSpine = function (id) {
-			var animations = this.spine.animations;
-			for (var i = 0; i < animations.length; i++) {
-				if (animations[i].id == id) {
-					if (!animations[i].completed) {
-						animations[i].state.setEmptyAnimation(0);
-					}
-					return true;
-				}
-			}
-			
-			return false;
-		};
-		
-		AnimationPlayer.prototype.stopSpineAll = function () {
-			var animations = this.spine.animations;
-			for (var i = 0; i < animations.length; i++) {
-				if (!animations[i].completed) {
-					animations[i].state.setEmptyAnimation(0);
-				}
-			}
-		};
-		
-		AnimationPlayer.prototype.playSpineAnimation = function (animation, position) {
-			var index = this.spine.animations.indexOf(animation);
-			if (index == -1) return console.error('spine: animation not found');
-			
-			var x, y, width, height, scale, angle, parent, follow;
-			if (position != void 0) {
-				x = position.x;
-				y = position.y;
-				height = position.height;
-				width = position.width;
-				scale = position.scale;
-				angle = position.angle;
-				parent = position.parent;
-				follow = position.parent;
-			}
-			
-			position = {
-				x: x,
-				y: y,
-				height: height,
-				width: width,
-				scale: scale,
-				angle: angle,
-				parent: parent,
-				follow: follow,
-			}
-			
-			animation.completed = false;
-			animation.position = position;
-			animation.state.setAnimation(0, animation.action ? animation.action : animation.defaultAction,
-				animation.loop);
-			
-			// var track = animation.state.getCurrent(0);
-			// track.timeScale = -1;
-			// track.trackTime = track.animationEnd;
-			
-			if (this.requestId == void 0) {
+			var entry = skeleton.state.setAnimation(0, sprite.action ? sprite.action : skeleton.defaultAction, sprite.loop);
+			entry.mixDuration = 0;
+			if (this.requestId == undefined) {
 				this.running = true;
-				this.canvas.style.visibility = 'visible';
+				if (!this.offscreen) this.canvas.style.visibility = 'visible';
 				this.requestId = requestAnimationFrame(this.render.bind(this));
 			}
 			
-			return animation;
+			sprite.referBounds = undefined;
+			return sprite;
 		};
 		
-		AnimationPlayer.prototype.getSpineAnimation = function (filename) {
-			if (!this.spine.assets[filename]) {
-				console.error('spine: 未找到"' + filename + '"的动画资源.');
-				return null;
+		AnimationPlayer.prototype.loopSpine = function (sprite, position) {
+			if (typeof sprite == 'string') {
+				sprite = {
+					name: sprite,
+					loop: true,
+				}
+			} else {
+				sprite.loop = true;
 			}
 			
-			var animations = this.spine.animations;
-			var animation;
+			return this.playSpine(sprite, position);
+		};
+		
+		AnimationPlayer.prototype.stopSpine = function (sprite) {
+			var nodes = this.nodes;
+			var id = sprite.id == undefined ? sprite : sprite.id;
 			
-			for (var i = 0; i < animations.length; i++) {
-				animation = animations[i];
-				if (animation.name == filename && animation.completed) break;
-				animation = null;
+			for (var i = 0; i < nodes.length; i++) {
+				sprite = nodes[i];
+				if (sprite.id == id) {
+					if (!sprite.completed) {
+						sprite.completed = true;
+						sprite.skeleton.state.setEmptyAnimation(0);
+					}
+					return sprite;
+				}
 			}
 			
-			return animation != null ? animation : this.prepSpine(filename);
+			return null;
+		};
+		
+		AnimationPlayer.prototype.stopSpineAll = function () {
+			var sprite;
+			var nodes = this.nodes;
+			for (var i = 0; i < nodes.length; i++) {
+				sprite = nodes[i];
+				if (!sprite.completed) {
+					sprite.completed = true;
+					sprite.skeleton.state.setEmptyAnimation(0);
+				}
+			}
 		};
 		
 		AnimationPlayer.prototype.getSpineActions = function (filename) {
-			var animation = this.getSpineAnimation(filename);
-			if (!animation) return null;
-			var actions = animation.skeletonData.animations;
+			if (!this.hasSpine(filename)) return console.error('getSpineActions: [' + filename + '] 骨骼没有加载');;
+			
+			var skeleton;
+			var skeletons = this.spine.skeletons;
+			for (var i = 0; i < skeletons.length; i++) {
+				skeleton = skeletons[i];
+				if (skeleton.name == filename) break;
+				skeleton = undefined;
+			}
+			
+			if (skeleton == undefined) skeleton = this.prepSpine(filename);
+			var actions = skeleton.data.animations;
 			var result = new Array(actions.length);
 			for (var i = 0; i < actions.length; i++) result[i] = { name: actions[i].name, duration: actions[i].duration };
 			return result;
 		};
 		
 		AnimationPlayer.prototype.getSpineBounds = function (filename) {
-			if (!this.sizeUpdated) {
-				var dpr = this.adaptiveDPR ? (Math.max(window.devicePixelRatio * game.documentZoom, 1)) : 1;
+			if (!this.hasSpine(filename)) return console.error('getSpineBounds: [' + filename + '] 骨骼没有加载');;
+			
+			if (!this.resized) {
+				var dpr = 1;
+				if (this.dprAdaptive == true)
+					dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
+				
 				canvas.elementHeight = canvas.clientHeight;
 				canvas.elementWidth = canvas.clientWidth;
 				canvas.height = canvas.elementHeight * dpr;
 				canvas.width = canvas.elementWidth * dpr;
 			}
-			return this.getSpineAnimation(filename).bounds;
+			
+			var skeleton;
+			var skeletons = this.spine.skeletons;
+			for (var i = 0; i < skeletons.length; i++) {
+				skeleton = skeletons[i];
+				if (skeleton.name == filename) break;
+				skeleton = undefined;
+			}
+			
+			if (skeleton == undefined) skeleton = this.prepSpine(filename);
+			return skeleton.bounds;
 		};
 		
-		AnimationPlayer.prototype.resizeSkeleton = function (skeleton) {
-			var x,
-				y,
-				width,
-				height,
-				ox,
-				oy,
-				dx,
-				dy,
-				canvas = this.canvas,
-				position = skeleton.position;
-			
-			var scale = position.scale;
-			var angle = position.angle;
-			var size = { width: canvas.width, height: canvas.height };
-			var isElement = position.parent instanceof HTMLElement;
-			var dpr = this.adaptiveDPR ? (Math.max(window.devicePixelRatio * game.documentZoom, 1)) : 1;
-			
-			if (isElement && (position.follow || !position.init)) {
-				var rect = position.parent.getBoundingClientRect();
-				ox = rect.left * dpr;
-				oy = (document.body.offsetHeight - rect.top) * dpr;
-				
-				dx = ox + rect.width  / 2 * dpr;
-				dy = oy - rect.height / 2 * dpr;
-				size.width = rect.width * dpr;
-				size.height = rect.height * dpr;
+		AnimationPlayer.prototype.render = function (timestamp) {
+			var canvas = this.canvas;
+			var offscreen = this.offscreen;
+			var dpr = 1;
+			if (this.dprAdaptive) {
+				if (offscreen)
+					dpr = this.dpr != undefined ? this.dpr : 1;
+				else
+					dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
 			}
+			var delta = timestamp - ((this.frameTime == undefined) ? timestamp : this.frameTime);
+			this.frameTime = timestamp;
 			
-			if (position.x != void 0) {
-				var tx;
-				if (Array.isArray(position.x)) {
-					tx = position.x[0] * dpr + position.x[1] * size.width;
+			var erase = true;
+			var resize = !this.resized || canvas.width == 0 || canvas.height == 0;
+			if (resize) {
+				this.resized = true;
+				if (!offscreen) {
+					canvas.width  = dpr * canvas.clientWidth;
+					canvas.height = dpr * canvas.clientHeight;
+					erase = false;
 				} else {
-					tx = position.x * dpr;
+					if (this.width)  {
+						canvas.width  = dpr * this.width;
+						erase = false;
+					}
+					if (this.height) {
+						canvas.height = dpr * this.height;
+						erase = false;
+					}
 				}
-				
-				if (x == void 0) {
-					x = tx;
+			}
+			
+			var ea = {
+				dpr: dpr,
+				delta: delta,
+				canvas: canvas,
+				frameTime: timestamp,
+			};
+			
+			var nodes = this.nodes;
+			for (var i = 0; i < nodes.length; i++) {
+				if (!nodes[i].completed) {
+					nodes[i].update(ea);
 				} else {
-					x += tx;
+					nodes.remove(nodes[i]);i--;
 				}
 			}
 			
-			if (position.y != void 0) {
-				var ty;
-				if (Array.isArray(position.y)) {
-					ty = position.y[0] * dpr + position.y[1] * size.height;
-				} else {
-					ty = position.y * dpr;
-				}
-				
-				if (y == void 0) {
-					y = ty;
-				} else {
-					y += ty;
-				}
+			var gl = this.gl;
+			gl.viewport(0, 0, canvas.width, canvas.height);
+			if (erase) {
+				gl.clearColor(0, 0, 0, 0);
+				gl.clear(gl.COLOR_BUFFER_BIT);
 			}
 			
-			
-			if (isElement && (position.follow || !position.init)) {
-				if (position.x == void 0) {
-					x = dx;
-				} else {
-					x += ox;
-				}
-				
-				if (position.y == void 0) {
-					y = dy;
-				} else {
-					y += oy;
-				}
-				
-				if (!position.follow) {
-					position.x = x;
-					position.y = y;
-					position.parent = null;
-				}
-				
-				position.init = true;
-			}
-			
-			
-			skeleton.mvp.ortho2d(0, 0, canvas.width, canvas.height);
-			
-			if (x != void 0 && y == void 0) {
-				skeleton.mvp.translate(x, 0, 0);
-				skeleton.mvp.setY(0);
-			} else if (x == void 0 && y != void 0) {
-				skeleton.mvp.translate(0, y, 0);
-				skeleton.mvp.setX(0);
-			} else if (x != void 0 && y != void 0) {
-				skeleton.mvp.translate(x, y, 0);
-			} else {
-				skeleton.mvp.setPos2D(0, 0);
-			}
-			
-			if (scale && scale != 1) {
-				scale *= dpr;
-				skeleton.mvp.scale(scale, scale, 0);
-			}
-			
-			if (angle) {
-				skeleton.mvp.rotate(angle, 0, 0, 1);
-			}
-		};
-		
-		AnimationPlayer.prototype.render = function () {
-			var completed = true,
-				now = performance.now() / 1000,
-				canvas = this.canvas,
-				animations = this.spine.animations;
-				
-			var delta = now - (this.frameTime == void 0 ? now : this.frameTime);
-			this.frameTime = now;
-			for (var i = 0; i < animations.length; i++) {
-				if (!animations[i].completed) {
-					completed = false;
-					break;
-				}
-			}
-			
-			var dpr = this.adaptiveDPR ? (Math.max(window.devicePixelRatio * game.documentZoom, 1)) : 1;
-			if (!this.sizeUpdated) {
-				this.sizeUpdated = true;
-				canvas.elementHeight = canvas.clientHeight;
-				canvas.elementWidth = canvas.clientWidth;
-				canvas.height = canvas.elementHeight * dpr;
-				canvas.width = canvas.elementWidth * dpr;
-			} else {
-				if (canvas.height == 0) {
-					canvas.elementHeight = canvas.clientHeight;
-					canvas.height = canvas.elementHeight * dpr;
-				}
-				
-				if (canvas.width == 0) {
-					canvas.elementWidth = canvas.clientWidth;
-					canvas.width = canvas.elementWidth * dpr;
-				}
-			}
-			
-			this.gl.viewport(0, 0, canvas.width, canvas.height);
-			this.gl.clearColor(0, 0, 0, 0);
-			this.gl.clear(this.gl.COLOR_BUFFER_BIT);
-			
-			if (completed) {
+			if (nodes.length == 0) {
 				this.frameTime = void 0;
 				this.requestId = void 0;
 				this.running = false;
-				this.canvas.style.visibility = 'hidden';
+				if (!offscreen) this.canvas.style.visibility = 'hidden';
 				return;
 			}
 			
-			var state, skeleton, bounds, premultipliedAlpha, speed,
-				shader = this.spine.shader,
-				batcher = this.spine.batcher,
-				skeletonRenderer = this.spine.skeletonRenderer;
+			var sprite, state, skeleton;
+			var shader = this.spine.shader;
+			var batcher = this.spine.batcher;
+			var skeletonRenderer = this.spine.skeletonRenderer;
 			
-			shader.bind();
+			gl.enable(gl.SCISSOR_TEST);
+			gl.scissor(0, 0, canvas.width, canvas.height);
 			
-			for (var i = 0; i < animations.length; i++) {
-				if (animations[i].completed) continue; 
-				if (animations[i].callback) animations[i].callback(delta);
+			if (this.bindShader == undefined) {
+				this.bindShader = shader;
+				shader.bind();
+				shader.setUniformi(spine.webgl.Shader.SAMPLER, 0);
+			}
+			
+			var speed, clipping = false;
+			for (var i = 0; i < nodes.length; i++) {
+				sprite = nodes[i];
+				if (sprite.renderClip != undefined) {
+					clipping = true;
+					gl.scissor(sprite.renderClip.x, sprite.renderClip.y, sprite.renderClip.width, sprite.renderClip.height);
+				}
 				
-				this.resizeSkeleton(animations[i]);
-				state = animations[i].state;
-				skeleton = animations[i].skeleton;
-				bounds = animations[i].bounds;
-				premultipliedAlpha = animations[i].premultipliedAlpha;
-				speed = animations[i].speed;
-				
-				state.update(delta * speed);
+				skeleton = sprite.skeleton;
+				state = skeleton.state;
+				speed = sprite.speed == undefined ? 1 : sprite.speed;
+				skeleton.flipX = sprite.flipX;
+				skeleton.flipY = sprite.flipY
+				skeleton.opacity = (sprite.renderOpacity == undefined ? 1 : sprite.renderOpacity);
+				state.update(delta / 1000 * speed);
 				state.apply(skeleton);
 				skeleton.updateWorldTransform();
 				
-				shader.setUniformi(spine.webgl.Shader.SAMPLER, 0);
-				shader.setUniform4x4f(spine.webgl.Shader.MVP_MATRIX, animations[i].mvp.values);
-				
+				shader.setUniform4x4f(spine.webgl.Shader.MVP_MATRIX, sprite.mvp.values);
 				batcher.begin(shader);
-				skeletonRenderer.premultipliedAlpha = premultipliedAlpha;
+				skeletonRenderer.premultipliedAlpha = sprite.premultipliedAlpha;
+				skeletonRenderer.hideSkelClip = sprite.hideSkelClip;
 				skeletonRenderer.draw(batcher, skeleton);
 				batcher.end();
 				
+				if (clipping) {
+					clipping = false;
+					gl.scissor(0, 0, canvas.width, canvas.height);
+				}
 			}
 			
-			shader.unbind();
+			gl.disable(gl.SCISSOR_TEST);
+			
 			this.requestId = requestAnimationFrame(this.render.bind(this));
 		};
+		
 		
 		return AnimationPlayer;
 	})();
 	
-	decadeUI.AnimationPlayerPool = (function(){
+	duilib.AnimationPlayerPool = (function(){
 		function AnimationPlayerPool(size, pathPrefix, thisName){
-			if (!window.spine) return console.error('spine 未定义.');
+			if (!self.spine) return console.error('spine 未定义.');
 			
 			this.name = thisName;
-			this.pathPrefix = pathPrefix;
 			this.animations = new Array(size ? size : 1);
-			for (var i = 0; i < this.animations.length; i++) this.animations[i] = new decadeUI.AnimationPlayer(pathPrefix);
+			for (var i = 0; i < this.animations.length; i++) this.animations[i] = new duilib.AnimationPlayer(pathPrefix);
 			
 		};
 		
-		AnimationPlayerPool.prototype.loadSpine = function(filename, skelType, onload, onerror) {
+		AnimationPlayerPool.prototype.loadSpine = function (filename, skelType, onload, onerror) {
 			var thisAnim = this;
 			thisAnim.animations[0].loadSpine(filename, skelType, function(){
 				var ap;
@@ -699,8 +915,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			}, onerror);
 		};
 		
-		AnimationPlayerPool.prototype.playSpineTo = function(element, animation, position) {
+		AnimationPlayerPool.prototype.playSpineTo = function (element, animation, position) {
 			var animations = this.animations;
+			if (position && position.parent) {
+				position.parent = undefined;
+				console.log('playSpineTo: position.parent 参数已忽略');
+			}
 			if (element._ap && element._ap.canvas.parentNode == element) {
 				element._ap.playSpine(animation, position);
 				return;
@@ -724,11 +944,145 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		return AnimationPlayerPool;
 	})();
 	
+	duilib.BUILT_ID = 0;
+	duilib.DynamicWorkers = new Array(2);
+	duilib.DynamicPlayer = (function(){
+		function DynamicPlayer(pathPrefix){
+			this.id = duilib.BUILT_ID++;
+			this.dpr = 1;
+			this.width = 300;
+			this.height = 150;
+			this.resized = false;
+			this.dprAdaptive = false;
+			this.BUILT_ID = 0;
+			
+			var offscreen = self.OffscreenCanvas != undefined;
+			if (offscreen) {
+				offscreen = false;
+				var workers = duilib.DynamicWorkers;
+				for (var i = 0; i < workers.length; i++) {
+					if (workers[i] == undefined) {
+						workers[i] = new Worker(decadeUIPath + 'dynamicWorker.js');
+						workers[i].capacity = 0;
+					} else if (workers[i].capacity >= 4) {
+						continue;
+					}
+					
+					this.renderer = workers[i];
+					this.canvas = document.createElement('canvas');
+					this.canvas.className = 'animation-player';
+					var canvas = this.canvas.transferControlToOffscreen();
+					workers[i].postMessage({
+						message: 'CREATE',
+						id: this.id,
+						canvas: canvas,
+						pathPrefix: pathPrefix,
+					}, [canvas]);
+					
+					workers[i].capacity++;
+					this.offscreen = offscreen = true;
+					break;
+				}
+			}
+			
+			if (!offscreen) {
+				this.renderer = new duilib.AnimationPlayer(decadeUIPath + pathPrefix);
+				this.canvas = this.renderer.canvas;
+			}
+		}
+		
+		DynamicPlayer.prototype.play = function (sprite) {
+			var sprite = (typeof sprite == 'string') ? { name: sprite } : sprite;
+			sprite.id = this.BUILT_ID++;
+			sprite.loop = true;
+			
+			if (this.offscreen) {
+				if (!this.resized) this.update(false);
+				this.renderer.postMessage({
+					message: 'PLAY',
+					id: this.id,
+					dpr: this.dpr,
+					dprAdaptive: this.dprAdaptive,
+					width: this.width,
+					height: this.height,
+					sprite: sprite,
+				});
+			} else {
+				var dynamic = this.renderer;
+				var run = function () {
+					var t = dynamic.playSpine(sprite);
+					t.opacity = 0;
+					t.fadeTo(1, 600);
+				};
+				
+				if (dynamic.hasSpine(sprite.name)) {
+					run();
+				} else {
+					dynamic.loadSpine(sprite.name, 'skel', run);
+				}
+			}
+			
+			return sprite;
+		};
+		
+		DynamicPlayer.prototype.stop = function (sprite) {
+			if (this.offscreen) {
+				this.renderer.postMessage({
+					message: 'STOP',
+					id: this.id,
+					sprite: sprite,
+				});
+				return;
+			}
+			
+			this.renderer.stopSpine(sprite);
+		};
+		
+		DynamicPlayer.prototype.stopAll = function () {
+			if (this.offscreen) {
+				this.renderer.postMessage({
+					message: 'STOPALL',
+					id: this.id
+				});
+				return;
+			}
+			
+			this.renderer.stopSpineAll();
+		};
+		
+		DynamicPlayer.prototype.update = function (force) {
+			this.resized = true;
+			if (!this.offscreen) {
+				this.renderer.resized = false;
+				return;
+			}
+			
+			this.dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
+			this.width = this.canvas.clientWidth;
+			this.height = this.canvas.clientHeight;
+			if (force !== false) {
+				this.renderer.postMessage({
+					message: 'UPDATE',
+					id: this.id,
+					dpr: this.dpr,
+					dprAdaptive: this.dprAdaptive,
+					width: this.width,
+					height: this.height,
+				});
+			}
+		}
+		
+		return DynamicPlayer;
+	})();
+	
+})(duilib || (duilib = {}));
+
+var decadeParts; if (decadeParts)
+decadeParts.import(function(lib, game, ui, get, ai, _status){
 	decadeUI.animation = (function(){
 		var animation = new decadeUI.AnimationPlayer(decadeUIPath + 'assets/animation/', document.body, 'decadeUI-canvas');
-		decadeUI.bodySensor.addListener(function(){ animation.sizeUpdated = false; }, true);
-		
-		animation.cap = new decadeUI.AnimationPlayerPool(4, animation.pathPrefix, 'decadeUI.animation');
+		decadeUI.bodySensor.addListener(function(){ animation.resized = false; }, true);
+		animation.cap = new decadeUI.AnimationPlayerPool(4, decadeUIPath + 'assets/animation/', 'decadeUI.animation');
 		
 		var fileList = [
 			{ name: 'effect_youxikaishi' },
@@ -795,10 +1149,13 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			if (fileNameList.length) {
 				var file = fileNameList.shift();
 				if (file.follow) {
+					//	这个是专门播放追踪卡牌的动画，调用方式 decadeUI.animation.cap.playSpineTo(element, animation, position);
+					//	建议非追踪对象的特效不要滥用，因为每次导入1个骨骼会生成4个预制骨骼，资源占用较多
 					animation.cap.loadSpine(file.name, file.fileType, function(){
 						read();
 					});
 				} else {
+					//	这个是专门播放全屏位置的动画
 					animation.loadSpine(file.name, file.fileType, function(){
 						read();
 						animation.prepSpine(this.name);
@@ -952,66 +1309,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 	
 	decadeUI.backgroundAnimation = (function(){
 		var animation = new decadeUI.AnimationPlayer(decadeUIPath + 'assets/dynamic/', document.body, 'decadeUI-canvas-background');
-		animation._resizeSkeleton = animation.resizeSkeleton;
-		decadeUI.bodySensor.addListener(function(){ animation.sizeUpdated = false; }, true);
-		
-		animation.resizeSkeleton = function (skeleton) {
-			if (skeleton.asset == void 0) {
-				var name = skeleton.name.split('_');
-				var skin = name.splice(name.length - 1, 1)[0];
-				skeleton.asset = assets[name.join('_')];
-				if (skeleton.asset) skeleton.asset = skeleton.asset[skin];
-			}
-			
-			var asset = skeleton.asset;
-			if (asset) {
-				var canvas = this.canvas;
-				
-				var x = asset.x;
-				var y = asset.y;
-				var w = asset.width;
-				var h = asset.height;
-				var size = skeleton.bounds.size;
-				var sx, sy, scale;
-				
-				if (x != void 0 && Array.isArray(x)) {
-					x = x[0] + x[1] * canvas.elementWidth;
-				}
-				
-				if (y != void 0 && Array.isArray(y)) {
-					y = y[0] + y[1] * canvas.elementHeight;
-				}
-				
-				if (w != void 0) {
-					if (Array.isArray(w)) {
-						sx = (w[0] + w[1] * canvas.elementWidth) / size.x;
-					} else {
-						sx = w / size.x;
-					}
-				}
-				
-				if (h != void 0) {
-					if (Array.isArray(h)) {
-						sy = (h[0] + h[1] * canvas.elementHeight) / size.y;
-					} else {
-						sy = h / size.y;
-					}
-				}
-				
-				if (sx != void 0 && sy == void 0) {
-					scale = sx;
-				} else if (sx == void 0 && sy != void 0) {
-					scale = sy;
-				} else if (sx != void 0 && sy != void 0) {
-					scale = sy;
-				}
-				
-				skeleton.position = { x: x, y: y, scale: scale };
-			} 
-			
-			this._resizeSkeleton(skeleton);
-		};
-		
+		decadeUI.bodySensor.addListener(function(){ animation.resized = false; }, true);
 		
 		animation.definedAssets  = {
 			skin_xiaosha: {
@@ -1031,9 +1329,17 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 				},
 				清萧清丽: {
 					name: 'skin_daqiao_QingXiaoQingLi',
-					x: [ 0, 0.5],
+					x: [0, 0.5],
 					y: [0, 0.33],
 					height: [0, 0.8],
+				},
+				衣垂绿川: {
+					name: 'skin_daqiao_YiChuiLvChuan',
+					action: 'DaiJi',
+					x: [0, 0.5],
+					y: [-100, 0.5],
+					height: [0, 1.2],
+					hideSkelClip: true,
 				}
 			},
 			skin_caojie: {
@@ -1071,7 +1377,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					//x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
-				}
+				},
 			},
 			skin_diaochan: {
 				玉婵仙子: {
@@ -1201,6 +1507,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
+				花曳心牵: {
+					name: 'skin_shuxiangxiang_HuaYeXinQian',
+					x: [0, 0.5],
+					y: [75, 0.3],
+					height: [0, 0.8],
+				},
 			},
 			skin_wangyi: {
 				绝色异彩: {
@@ -1252,6 +1564,13 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 					y: [75, 0.3],
 					height: [0, 0.8],
 				},
+				采莲江南: {
+					name: 'skin_xiaoqiao_CaiLianJiangNan',
+					action: 'DaiJi',
+					x: [0, 0.5],
+					y: [-100, 0.5],
+					height: [0, 1.2],
+				}
 			},
 			skin_xinxianying: {
 				英装素果: {
@@ -1342,7 +1661,7 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			},
 			skin_zhugeguo: {
 				兰荷艾莲: {
-					name: 'skin_zhugeguo_AiHeAiLian',
+					name: 'skin_zhugeguo_LanHeAiLian',
 					x: [0, 0.7],
 					y: [75, 0.3],
 					height: [0, 0.8],
@@ -1366,35 +1685,30 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			
 		};
 		
+		animation.stop = animation.stopSpineAll;
 		animation.play = function (name, skin) {
 			var definedAssets = this.definedAssets;
-			if (definedAssets[name] == void 0 || definedAssets[name][skin] == void 0) return console.log('没有预定义[asset:' + name + ', skin:' + skin + ']的资源。');
+			if (definedAssets[name] == void 0 || definedAssets[name][skin] == void 0) return console.log('没有预定义[asset:' + name + ', skin:' + skin + ']的动态背景.');
 			
 			
 			if (this.current && this.current.name == name) return;
-			var asset = definedAssets[name][skin];
-			var skinAnim = {
-				name: asset.name,
-				action: asset.action,
-				loop: true
-			};
 			
 			this.stopSpineAll();
-			if (!this.spine.assets[asset.name]) {
+			var playAsset = definedAssets[name][skin];
+			if (!this.hasSpine(playAsset.name)) {
 				var _this = this;
-				_this.loadSpine(asset.name, 'skel', function(){
-					if (_this.current && _this.current.name == skinAnim.name) return;
-					_this.current = _this.playSpine(skinAnim);
-					if (_this.current) _this.current.asset = asset;
+				_this.loadSpine(playAsset.name, 'skel', function(){
+					if (_this.current && _this.current.name == playAsset.name) return;
+					_this.current = _this.loopSpine(playAsset);
 				});
 			} else {
-				this.current = this.playSpine(skinAnim);
-				if (this.current) this.current.asset = asset;
+				this.current = this.loopSpine(playAsset);
 			}
 		};
 		
+		
 		animation.check();
-		var background = decadeUI.config.dynamicBackground
+		var background = duicfg.dynamicBackground
 		if (background != void 0 && background != 'off') {
 			var name = background.split('_');
 			var skin = name.splice(name.length - 1, 1)[0];
@@ -1403,7 +1717,8 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		
 		return animation;
 	})();
-
+	
+	// 下面是我调试用的，可能会删掉
 	window.dcdAnim = decadeUI.animation;
 	window.dcdBackAnim = decadeUI.backgroundAnimation;
 	window.game = game;

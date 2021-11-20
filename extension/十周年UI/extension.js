@@ -148,6 +148,63 @@ content:function(config, pack){
 			ride.lib = {
 				element:{
 					dialog:{
+						add:function(item, noclick, zoom){
+							if (typeof item == 'string') {
+								if (item.indexOf('###') == 0) {
+									var items = item.slice(3).split('###');
+									this.add(items[0], noclick, zoom);
+									this.addText(items[1], items[1].length <= 20, zoom);
+								} else if (noclick) {
+									var strstr = item;
+									item = ui.create.div('', this.content);
+									item.innerHTML = strstr;
+								} else {
+									item = ui.create.caption(item, this.content);
+								}
+							} else if (get.objtype(item) == 'div') {
+								this.content.appendChild(item);
+							} else if (get.itemtype(item) == 'cards') {
+								var buttons = ui.create.div('.buttons', this.content);
+								if (zoom) buttons.classList.add('smallzoom');
+								this.buttons = this.buttons.concat(ui.create.buttons(item, 'card', buttons, noclick));
+							} else if (get.itemtype(item) == 'players') {
+								var buttons = ui.create.div('.buttons', this.content);
+								if (zoom) buttons.classList.add('smallzoom');
+								this.buttons = this.buttons.concat(ui.create.buttons(item, 'player', buttons, noclick));
+							} else {
+								var buttons = ui.create.div('.buttons', this.content);
+								if (zoom) buttons.classList.add('smallzoom');
+								if (item[1] && item[1].indexOf('character') != -1) {
+									if (this.intersection == undefined && self.IntersectionObserver) {
+										this.intersection = new IntersectionObserver(function(entries){
+											for (var i = 0; i < entries.length; i++) {
+												if (entries[i].intersectionRatio > 0) {
+													var target = entries[i].target;
+													target.setBackground(target.awaitItem, 'character');
+													this.unobserve(target);
+												}
+											}
+										},{
+											root: this,
+											rootMargin: '0px',
+											thresholds: 0.01,
+										});
+									}
+									buttons.intersection = this.intersection;
+								}
+								this.buttons = this.buttons.concat(ui.create.buttons(item[0], item[1], buttons, noclick));
+							}
+							if (this.buttons.length) {
+								if (this.forcebutton !== false) this.forcebutton = true;
+								if (this.buttons.length > 3 || (zoom && this.buttons.length > 5)) {
+									this.classList.remove('forcebutton-auto');
+								} else if (!this.noforcebutton) {
+									this.classList.add('forcebutton-auto');
+								}
+							}
+							ui.update();
+							return item;
+						},
 						open:function(){
 							if (this.noopen) return;
 							for (var i = 0; i < ui.dialogs.length; i++) {
@@ -170,6 +227,21 @@ content:function(config, pack){
 								this.style.animation = 'open-dialog 0.5s';
 							}
 							
+							return this;
+						},
+						close:function(){
+							if (this.intersection) {
+								this.intersection.disconnect();
+								this.intersection = undefined;
+							}
+							ui.dialogs.remove(this);
+							if (ui.dialogs.length > 0){
+								ui.dialog = ui.dialogs[0];
+								ui.dialog.show();
+								ui.dialog.refocus();
+								ui.update();
+							}
+							this.delete();
 							return this;
 						},
 					},
@@ -561,6 +633,28 @@ content:function(config, pack){
 					},
 					
 					content:{
+						changeHp:function(){
+							player.hp += num;
+							if (isNaN(player.hp)) player.hp = 0;
+							if (player.hp > player.maxHp) player.hp = player.maxHp;
+							player.update();
+							if (event.popup !== false) {
+								player.$damagepop(num, 'water');
+							}
+							if (_status.dying.contains(player) && player.hp > 0) {
+								_status.dying.remove(player);
+								game.broadcast(function(list) {
+									_status.dying = list;
+								},
+								_status.dying);
+								var evt = event.getParent('_save');
+								if (evt && evt.finish) evt.finish();
+								evt = event.getParent('dying');
+								if (evt && evt.finish) evt.finish()
+							}
+							event.trigger('changeHp');
+							decadeUI.delay(300);
+						},
 						turnOver:function(){
 							game.log(player,'翻面');
 							player.classList.toggle('turnedover');
@@ -781,34 +875,75 @@ content:function(config, pack){
 							return this;
 						},
 						
-						playDynamic:function(animation, position){
-							this.classList.add('playing-dynamic');
-							
+						playDynamic:function(animation, deputy){
+							deputy = deputy === true;
+							if (animation == undefined) return console.error('playDynamic: 参数1不能为空');
 							var dynamic = this.dynamic;
 							if (!dynamic) {
-								dynamic = new decadeUI.AnimationPlayer(decadeUIPath + 'assets/dynamic/');
+								dynamic = new duilib.DynamicPlayer('assets/dynamic/');
 								this.dynamic = dynamic;
-								this.$dynamicWrap.appendChild(dynamic.$canvas);
+								this.$dynamicWrap.appendChild(dynamic.canvas);
 							} else {
-								dynamic.stopSpineAll();
+								if (deputy && dynamic.deputy) {
+									dynamic.stop(dynamic.deputy);
+									dynamic.deputy = null;
+								} else if (dynamic.primary) {
+									dynamic.stop(dynamic.primary);
+									dynamic.primary = null;
+								}
 							}
 							
-							dynamic.adaptiveDPR = decadeUI.config.dynamicAdaptiveHD == 'on' ? true : false;
-							this.appendChild(this.$dynamicWrap);
-							var fileName = typeof animation == 'string' ? animation : animation.name;
-							if (dynamic.spine.assets[fileName]) {
-								dynamic.loopSpine(animation, position);
+							if (typeof animation == 'string') animation = { name: animation };
+							if (this.doubleAvatar) {
+								if (Array.isArray(animation.x)) {
+									animation.x = animation.x.concat();
+									animation.x[1] += deputy ? 0.25 : -0.25;
 							} else {
-								dynamic.loadSpine(fileName, null, function(){
-									dynamic.loopSpine(animation, position);
-								});
+									if (animation.x == undefined) {
+										animation.x = [0, deputy ? 0.75 : 0.25];
+									} else {
+										animation.x = [animation.x, deputy ? 0.25 : -0.25];
 							}
+								}
+								animation.clip = { 
+									x: [0, deputy ? 0.5 : 0],
+									y: 0, width: [0, 0.5], 
+									height:[0, 1], 
+									clipParent: true
+								};
+							}
+							if (this.$dynamicWrap.parentNode != this) this.appendChild(this.$dynamicWrap);
+							dynamic.dprAdaptive = decadeUI.config.dynamicAdaptiveHD ? true : false;
+							var avatar = dynamic.play(animation);
+							if (deputy === true) {
+								dynamic.deputy = avatar;
+							} else {
+								dynamic.primary = avatar;
+							}
+							this.classList.add(deputy ? 'd-skin2' : 'd-skin');
 						},
 						
-						stopDynamic:function(){
+						stopDynamic:function(primary, deputy){
+							var dynamic = this.dynamic;
+							if (!dynamic) return;
+							primary = primary === true;
+							deputy  = deputy  === true;
+							if (primary && dynamic.primary) {
+								dynamic.stop(dynamic.primary);
+								dynamic.primary = null;
+							} else if (deputy && dynamic.deputy) {
+								dynamic.stop(dynamic.deputy);
+								dynamic.deputy = null;
+							} else if (!primary && !deputy) {
+								dynamic.stopAll();
+								dynamic.primary = null;
+								dynamic.deputy = null;
+							}
+							if (!dynamic.primary && !dynamic.deputy) {
+								this.classList.remove('d-skin');
+								this.classList.remove('d-skin2');
 							this.$dynamicWrap.remove();
-							this.classList.remove('playing-dynamic');
-							if (this.dynamic) this.dynamic.stopSpineAll();
+							}
 						},
 						
 						say:function(str){
@@ -908,7 +1043,6 @@ content:function(config, pack){
 							setTimeout(function(player){
 								player.style.animation = '';
 							}, 310, this)
-							decadeUI.delay(300);
 						},
 						
 						$dieAfter:function(){
@@ -937,7 +1071,7 @@ content:function(config, pack){
 								var rect = that.getBoundingClientRect();
 								decadeUI.animation.playSpine('effect_zhenwang', {
 									x: rect.left + rect.width / 2 - 7,
-									y: document.body.offsetHeight - rect.top - rect.height / 2 + 1,
+									y: decadeUI.get.bodySize().height - rect.top - rect.height / 2 + 1,
 									scale: 0.8,
 								});
 							}, 250);
@@ -1018,28 +1152,12 @@ content:function(config, pack){
 				},
 				
 				updatez:function(){
+					window.documentZoom = game.documentZoom;
 					document.body.style.zoom = game.documentZoom;
 					document.body.style.width = '100%';
 					document.body.style.height = '100%';
 					document.body.style.transform = '';
-					// var width = document.documentElement.offsetWidth;
-					// var height = document.documentElement.offsetHeight;
-					// var zoom = game.documentZoom;
-					// decadeUI.zooms.body = zoom;
 					
-					// if(zoom != 1){
-						// width = Math.round(width / zoom);
-						// height = Math.round(height / zoom);
-						// document.body.style.width = width + 'px';
-						// document.body.style.height = height + 'px'
-						// document.body.style.zoom = zoom;
-						// document.body.style.transform = '';
-					// }else{
-						// document.body.style.width = width + 'px';
-						// document.body.style.height = height + 'px';
-						// document.body.style.zoom = 1;
-						// document.body.style.transform = '';
-					// }
 				},
 				
 				update:function(){
@@ -1051,7 +1169,12 @@ content:function(config, pack){
 						ui.dialog.classList.add('prompt');
 					} else {
 						ui.dialog.classList.remove('prompt');
-						ui.dialog.style.height = Math.min(decadeUI.get.bodySize().height * 0.42, ui.dialog.content.offsetHeight) + 'px';
+						var height = ui.dialog.content.offsetHeight;
+						if (decadeUI.isMobile())
+							height = decadeUI.get.bodySize().height * 0.75 - 80;
+						else
+							height = decadeUI.get.bodySize().height * 0.45;
+						ui.dialog.style.height = Math.min(height, ui.dialog.content.offsetHeight) + 'px';
 					}
 					
 					if (!ui.dialog.forcebutton && !ui.dialog._scrollset) {
@@ -1102,7 +1225,9 @@ content:function(config, pack){
 					
 					button:function(item, type, position, noclick, node){
 						if (type != 'character' && type != 'characterx') {
-							return base.ui.create.button.apply(this, arguments);
+							var button = base.ui.create.button.apply(this, arguments);
+							if (position) position.appendChild(button);
+							return button;
 						}
 						
 						if (node) {
@@ -1132,8 +1257,14 @@ content:function(config, pack){
 							node._replaceButton = true;
 						}
 						
-						node.refresh = function(node, item){
+						node.refresh = function(node, item, intersection){
+							if (intersection) {
+								node.awaitItem = item;
+								intersection.observe(node);
+								// node.setBackground(item, 'character');
+							} else {
 							node.setBackground(item, 'character');
+							}
 							if (node.node) {
 								node.node.name.remove();
 								node.node.hp.remove();
@@ -1242,7 +1373,7 @@ content:function(config, pack){
 							}
 						};
 						
-						node.refresh(node, item);
+						node.refresh(node, item, position ? position.intersection : undefined);
 						if (!noclick) {
 							node.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.button);
 						} else {
@@ -1276,17 +1407,19 @@ content:function(config, pack){
 						}
 						
 						var fragment = document.createDocumentFragment();
+						if (position && position.intersection) {
+							fragment.intersection = position.intersection;
+						}
 						for (var i = 0; i < list.length; i++) {
 							if (pre) {
-								buttons.push(fragment.appendChild(ui.create.prebutton(list[i], type.slice(3), null, noclick)));
+								buttons.push(ui.create.prebutton(list[i], type.slice(3), fragment, noclick));
 							} else {
-								buttons.push(fragment.appendChild(ui.create.button(list[i], type, null, noclick)));
+								buttons.push(ui.create.button(list[i], type, fragment, noclick));
 							}
 						}
 						
 						if (position && fragment.childElementCount) position.appendChild(fragment);
 						
-						fragment = undefined;
 						return buttons;
 					},
 					
@@ -1495,6 +1628,24 @@ content:function(config, pack){
 			};
 			
 			ride.game = {
+				addOverDialog:function(dialog, result){
+					var sprite = decadeUI.backgroundAnimation.current;
+					if (!(sprite && sprite.name == 'skin_xiaosha_default')) return;
+					decadeUI.backgroundAnimation.canvas.style.zIndex = 7;
+					switch (result) {
+						case '战斗胜利':
+							sprite.scaleTo(1.8, 600);
+							sprite.setAction('shengli');
+							break;
+						case '平局':
+						case '战斗失败':
+							if (!duicfg.rightLayout) sprite.flipX = true;
+							sprite.moveTo([0, 0.5], [0, 0.25], 600);
+							sprite.scaleTo(2.5, 600);
+							sprite.setAction('gongji');
+							break;
+					}
+				},
 				expandSkills:function(skills){
 					var expands = [];
 					var info;
@@ -1571,6 +1722,7 @@ content:function(config, pack){
 			override(game, ride.game);
 			override(get, ride.get);
 			
+			decadeUI.get.extend(decadeUI, duilib);
 			if (decadeParts.parts) for (var i = 0; i < decadeParts.parts.length; i++) decadeParts.parts[i](lib, game, ui, get, ai, _status);
 
 			var getNodeIntro = get.nodeintro;
@@ -1772,8 +1924,7 @@ content:function(config, pack){
 						ui.touchlines.shift().delete();
 					}
 				}
-				// ui.canvas.width = ui.arena.offsetWidth;
-				// ui.canvas.height = ui.arena.offsetHeight;
+				
 				for (var i = 0; i < players.length; i++) {
 					players[i].unprompt();
 				}
@@ -2119,8 +2270,8 @@ content:function(config, pack){
 				var player = ui.create.div('.player', position);
 				var playerExtend = {
 					node: {
-						avatar: ui.create.div('.avatar', player, ui.click.avatar).hide(),
-						avatar2: ui.create.div('.avatar2', player, ui.click.avatar2).hide(),
+						avatar: ui.create.div('.primary-avatar', player, ui.click.avatar).hide(),
+						avatar2: ui.create.div('.deputy-avatar', player, ui.click.avatar2).hide(),
 						turnedover: decadeUI.element.create('turned-over', player),
 						framebg: ui.create.div('.framebg', player),
 						intro: ui.create.div('.intro', player),
@@ -3482,11 +3633,39 @@ content:function(config, pack){
 			};
 			
 			lib.element.player.init = function(character, character2, skill){
-				var skins = decadeUI.dynamicSkin[character];
-				if (decadeUI.config.dynamicSkin && skins) {
+				this.doubleAvatar = (character2 && lib.character[character2]) != undefined;
+				var CUR_DYNAMIC = decadeUI.CUR_DYNAMIC;
+				var MAX_DYNAMIC = decadeUI.MAX_DYNAMIC;
+				if (CUR_DYNAMIC == undefined) {
+					CUR_DYNAMIC = 0;
+					decadeUI.CUR_DYNAMIC = CUR_DYNAMIC;
+				}
+				if (MAX_DYNAMIC == undefined) {
+					MAX_DYNAMIC = decadeUI.isMobile() ? 2 : 10;
+					if (window.OffscreenCanvas)
+						MAX_DYNAMIC += 8;
+					decadeUI.MAX_DYNAMIC = MAX_DYNAMIC;
+				}
+				if (this.dynamic) 
+					this.stopDynamic();
+				if ((!this.dynamic && CUR_DYNAMIC == MAX_DYNAMIC) || duicfg.dynamicSkin == false) 
+					return base.lib.element.player.init.apply(this, arguments);
+				var skins;
+				var dskins = decadeUI.dynamicSkin;
+				var avatars = this.doubleAvatar ? [character, character2] : [character];
+				var increased;
+				for (var i = 0; i < avatars.length; i++) {
+					skins = dskins[avatars[i]];
+					if (skins == undefined)
+						continue;
+					var keys = Object.keys(skins);
+					if (keys.length == 0) {
+						console.error('player.init: ' + avatars[i] + ' 没有设置动皮参数');
+						continue;
+					}
 					var skin = skins[Object.keys(skins)[0]];
 					this.playDynamic({
-						name: skin.name,	 //	string 动画名称   一般是assets/dynamic 下的动皮文件，也可以使用/../.. 来返回到其他文件目录下
+						name: skin.name,	 //	string 骨骼文件名，一般是assets/dynamic 下的动皮文件，也可以使用.. 来寻找其他文件目录
 						action: skin.action, // string 播放动作 不填为默认
 						loop: true, 		 // boolean 是否循环播放
 						loopCount: -1,		 // number 循环次数，只有loop为true时生效
@@ -3494,7 +3673,6 @@ content:function(config, pack){
 						filpX: undefined,	 // boolean 水平镜像
 						filpY: undefined,	 // boolean 垂直翻转
 						opacity: undefined,	 // 0~1		不透明度
-					},{
 						x: skin.x,	// 相对于父节点坐标x，不填为居中
 									// (1) x: 10, 相当于 left: 10px；
 									// (2) x: [10, 0.5], 相当于 left: calc(50% + 10px)；
@@ -3503,9 +3681,13 @@ content:function(config, pack){
 									// (2) y: [10, 0.5]，相当于 top: calc(50% + 10px)；
 						scale: skin.scale,	// 缩放
 						angle: skin.angle,	// 角度
-					});
+					}, i == 1);
 					
 					this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
+					if (!increased) {
+						increased = true;
+						decadeUI.CUR_DYNAMIC++;
+					}
 				}
 				
 				return base.lib.element.player.init.apply(this, arguments);
@@ -3513,6 +3695,7 @@ content:function(config, pack){
 			
 			lib.element.player.uninit = function(){
 			    this.stopDynamic();
+				this.doubleAvatar = false;
 				this.node.campWrap.dataset.camp = null;
 			    this.node.campWrap.node.campName.innerHTML = '';
 			    this.node.campWrap.node.campName.style.backgroundImage = '';
@@ -3564,7 +3747,6 @@ content:function(config, pack){
 					this.node.name2.innerHTML = '';
 					this.classList.remove('fullskin2');
 					this.name2 = undefined;
-					this.node.count.classList.remove('p2');
 				}
 				
 				for (var mark in this.marks) this.marks[mark].remove();
@@ -3996,14 +4178,14 @@ content:function(config, pack){
 				var discardData = decadeUI.dataset.discardData;
 				
 				if (nosource){
-					x = ((discardData.width - discardData.card.width) / 2 - discardData.width * 0.08) + 'px';
-					y = ((discardData.height - discardData.card.height) / 2) + 'px';
+					x = ((discardData.width - discardData.card.width) / 2 - discardData.width * 0.08);
+					y = ((discardData.height - discardData.card.height) / 2);
 				}else{
-					x = ((this.offsetWidth - discardData.card.width) / 2 + this.offsetLeft) + 'px';
-					y = ((this.offsetHeight - discardData.card.height) / 2 + this.offsetTop) + 'px';
+					x = ((this.offsetWidth - discardData.card.width) / 2 + this.offsetLeft);
+					y = ((this.offsetHeight - discardData.card.height) / 2 + this.offsetTop);
 				}
 
-				card.style.transform = 'translate(' + x + ', ' + y + ')' + 'scale(' + decadeUI.getCardBestScale() + ')';
+				card.style.transform = 'translate(' + x + 'px, ' + y + 'px)' + 'scale(' + decadeUI.getCardBestScale() + ')';
 				ui.refresh(card);
 				card.classList.remove('transition-none');
 				card.scaled = true;
@@ -4800,29 +4982,23 @@ content:function(config, pack){
 		},
 		animate:{
 			check:function(){
-				if (!this.frames) this.frames = [];
+				if (!ui.arena) return false;
 				
-				if (!ui.arena) {
-					console.log('ui.arena is not created.');
-					return;
+				if (this.updates == undefined) this.updates = [];
+				if (this.canvas == undefined) {
+					this.canvas = ui.arena.appendChild(document.createElement('canvas'));
+					this.canvas.id = 'decadeUI-canvas-arena';
 				}
 				
-				if (!this.arena) {
-					this.arena = ui.arena.appendChild(document.createElement('canvas'));
-					this.arena.id = 'decadeUI-animate-arena'
-					this.frames[2] = { 
-						updates: [],
-						canvas: this.arena,
-					};
-				}
+				return true;
 			},
-			add:function(funcOrObejct){
-				if (typeof funcOrObejct != 'function') throw 'funcOrObejct';
-				this.check();
+			add:function(frameFunc){
+				if (typeof frameFunc != 'function') return;
+				if (!this.check()) return;
 
 				var obj = {
 					inits: [],
-					update: funcOrObejct,
+					update: frameFunc,
 					id: decadeUI.getRandom(0, 100),
 				};
 				
@@ -4833,47 +5009,23 @@ content:function(config, pack){
 					}
 				}
 				
-				this.frames[2].updates.push(obj);
-				if (!this.frameId) this.update();
-				return obj;
-			},
-			remove:function(obj){
-				if (!obj) throw obj;
-				this.check();
+				this.updates.push(obj);
+				if (this.frameId == undefined) this.frameId = requestAnimationFrame(this.update.bind(this));
 				
-				var index;
-				var frames = this.frames;
 				
-				for (var i = 0; i < frames.length; i++) {
-					index = frames[i].updates.indexOf(obj);
-					if (index >= 0) {
-						frames[i].updates.splice(index, 1);
-						if (frames[i].updates.length == 0) frames[i].canvas.height = frames[i].canvas.height;
-						break;
-					}
-				}
 				
-				var cancel = true;
-				for (var i = 0; i < frames.length; i++) {
-					if (frames[i].updates.length != 0) cancel = false;
-				}
 				
-				if (cancel) this.cancel();
 			},
 			update:function(){
-				decadeUI.animate.check();
-				decadeUI.animate.cancel();
+				var frameTime = performance.now();
+				var delta = frameTime - (this.frameTime == undefined ? frameTime : this.frameTime);
 
-				var nowTime= new Date();
-				var lastTime = decadeUI.animate.lastUpdatedTime ? decadeUI.animate.lastUpdatedTime : nowTime;
+				this.frameTime = frameTime;
 				
 				var e = {
-					canvas: undefined,
-					context: undefined,
-					deltaTime: (nowTime - lastTime),
-					lerp:function(min, max, fraction){
-						return (max - min) * fraction + min;
-					},
+					canvas: this.canvas,
+					context: this.canvas.getContext('2d'),
+					deltaTime: delta,
 					save:function(){
 						this.context.save();
 						return this.context;
@@ -4936,60 +5088,37 @@ content:function(config, pack){
 					},
 				}
 				
-				var args;
-				var frames;
-				var cancel = 0;
 				
-				frames = decadeUI.animate.frames;
-				for (var i = frames.length - 1; i >= 0; i--) {
-					if (frames[i] && frames[i].updates.length) {
-						e.canvas = frames[i].canvas;
 						if (!decadeUI.dataset.animSizeUpdated) {
 							decadeUI.dataset.animSizeUpdated = true;
 							e.canvas.width = e.canvas.parentNode.offsetWidth;
 							e.canvas.height = e.canvas.parentNode.offsetHeight;
 						}
 						
-						e.canvas.height = e.canvas.height
-						e.context = e.canvas.getContext('2d');
+				e.canvas.height = e.canvas.height;
+				var args;
 						
-						for (var j = 0; j < frames[i].updates.length; j++) {
-							if (frames[i].updates[j]) {
-								args = Array.from(frames[i].updates[j].inits);
+				var task;
+				for (var i = 0; i < this.updates.length; i++) {
+					task = this.updates[i];
+					args = Array.from(task.inits);
 								args.push(e);
 								e.save();
-								if (frames[i].updates[j].update.apply(frames[i].updates[j], args)) frames[i].updates.splice(j--, 1);
+					if (task.update.apply(task, args)) {
+						this.updates.remove(task);i--;
+					}
 								e.restore();
 							}
 							
-							if (frames[i].updates.length == 0) { 
-								cancel++;
-								break;
-							}
-						}
-					} else {
-						cancel++;
-					}
-				}
+				if (this.updates.length == 0) {
+					this.frameId = undefined;
+					this.frameTime = undefined;
 				
-				if (frames.length == cancel) {
-					decadeUI.animate.lastUpdatedTime = null;
 					return;
 				}
 				
-				decadeUI.animate.lastUpdatedTime = nowTime;
-				decadeUI.animate.frameId = requestAnimationFrame(decadeUI.animate.update);
-			},
-			cancel:function(){
-				if (this.frameId == null) return;
-				// clearTimeout(this.frameId);
-				cancelAnimationFrame(this.frameId);
-				this.frameId = null;
-			},
-			pause:function(){
+				this.frameId = requestAnimationFrame(this.update.bind(this));
 				
-			},
-			resume:function(){
 				
 			},
 		},
@@ -5338,7 +5467,7 @@ content:function(config, pack){
 				var cardOrignHeight = discardData.card.height;
 				
 				var x, beginX;
-				var y = Math.round((discardData.height - cardOrignHeight) / 2) + 'px';
+				var y = Math.round((discardData.height - cardOrignHeight) / 2);
 				
 				var beginOffset = (1 - scale) * cardOrignWidth / 2;
 				var remainWidth = discardData.width - cardScaleWidth * discards.length;
@@ -5363,11 +5492,11 @@ content:function(config, pack){
 					}
 					
 					if (overflow){
-						x = Math.round((i * (cardScaleWidth - beginX) - beginOffset)) + 'px';
+						x = Math.round((i * (cardScaleWidth - beginX) - beginOffset));
 					}else{
-						x = Math.round((beginX + i * cardScaleWidth + margin - beginOffset)) + 'px';
+						x = Math.round((beginX + i * cardScaleWidth + margin - beginOffset));
 					}
-					discards[i].style.transform = 'translate(' + x + ',' + y + ') scale(' + scale + ')';
+					discards[i].style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + scale + ')';
 					discards[i]._transthrown = null;
 				}
 			},
@@ -5505,6 +5634,9 @@ content:function(config, pack){
 				set.discardDataUpdated = false;
 				set.bodySize.updated = false;
 				
+				var caches = decadeUI.caches;
+				for (var key in caches) caches[key].updated = false;
+				caches.arena.element = ui.arena;
 				var buttonsWindow = decadeUI.sheet.getStyle('#window > .dialog.popped .buttons:not(.smallzoom)');
 				if (!buttonsWindow) {
 					buttonsWindow = decadeUI.sheet.insertRule('#window > .dialog.popped .buttons:not(.smallzoom) { zoom: 1; }');
@@ -5955,11 +6087,11 @@ content:function(config, pack){
 		get:{
 			judgeEffect:function(name, value){
 				switch (name) {
-					case 'caomu':
-					case 'fulei':
-					case 'shandian':
-					case 'bingliang':
-					case 'lebu':
+					case 'caomu':		case '草木皆兵':
+					case 'fulei': 		case '浮雷':
+					case 'shandian': 	case '闪电':
+					case 'bingliang':	case '兵粮寸断':
+					case 'lebu':		case '乐不思蜀':
 						return value < 0 ? true : false;
 				}
 				
@@ -5970,6 +6102,13 @@ content:function(config, pack){
 				return document.body.style.WebkitBoxShadow !== undefined;
 			},
 			
+			lerp:function(min, max, fraction){
+				return (max - min) * fraction + min;
+			},
+			ease:function(fraction){
+				if (!decadeUI.get._bezier3) decadeUI.get._bezier3 = new duilib.CubicBezierEase(0.25, 0.1, 0.25, 1);
+				return decadeUI.get._bezier3.ease(fraction);
+			},
 			extend:function(target, source){
 				if (source === null || typeof source !== 'object') return target;
 				
@@ -6112,10 +6251,68 @@ content:function(config, pack){
 				height: 1,
 				width: 1,
 				updated: false,
-			}
+			},
 		},
 	};
+	decadeUI.CacheBounds = (function(){
+		function CacheBounds (element, x, y, width, height) {
+			this.element = element;
+			this.updated = false;
+			Object.defineProperties(this, {
+				x:{
+					configurable: true,
+					get:function(){
+						if (!this.updated) this.update();
+						return this._x;
+					},
+					set:function(value){
+						this._x == value;
+					}
+				},
+				y:{
+					configurable: true,
+					get:function(){
+						if (!this.updated) this.update();
+						return this._y;
+					},
+					set:function(value){
+						this._y == value;
+			}
+		},
+				width:{
+					configurable: true,
+					get:function(){
+						if (!this.updated) this.update();
+						return this._width;
+					},
+					set:function(value){
+						this._width == value;
+					}
+				},
+				height:{
+					configurable: true,
+					get:function(){
+						if (!this.updated) this.update();
+						return this._height;
+					},
+					set:function(value){
+						this._height == value;
+					}
+				},
+			});
+		};
+		CacheBounds.prototype.update = function () {
+			var element = this.element;
+			this.updated = true;
+			if (element == undefined) return;
+			this._x = element.offsetLeft;
+			this._y = element.offsetTop;
+			this._width = element.offsetWidth;
+			this._height = element.offsetHeight;
+	};
 	
+		return CacheBounds;
+	})();
 	decadeUI.element = {
 		base:{
 			removeSelf:function(milliseconds){
@@ -6154,6 +6351,9 @@ content:function(config, pack){
 		},
 	};
 	
+	decadeUI.caches = {
+		arena: new decadeUI.CacheBounds(),
+	};
 	decadeUI.game = {
 		loop:function(){
 			if (game.looping) return false; 
@@ -6327,28 +6527,24 @@ content:function(config, pack){
 		}
 	};
 
-	
+	window.duicfg   = config
 	decadeUI.config = config;
-	decadeUI.config.update = function(){
-	    var menuConfig = lib.extensionMenu['extension_' + extensionName];
-		for (var key in menuConfig) {
-			if (menuConfig[key] && (typeof menuConfig[key] == 'object')) {
-				if (menuConfig[key].update) {
-					menuConfig[key].update();
+	duicfg.update = function(){
+	    var menu = lib.extensionMenu['extension_' + extensionName];
+		for (var key in menu) {
+			if (menu[key] && (typeof menu[key] == 'object')) {
+				if (typeof menu[key].update == 'function') {
+					menu[key].update();
 				}
 			}
 		}
 	};
 	
 	window.dui = decadeUI;
-	window.lib = lib;
 	decadeUI.init();
 	console.timeEnd(extensionName);
 },
 precontent:function(){
-	if (window.require) {
-		window.appPath = require('electron').remote.app.getAppPath();;
-	}
 	
 	var extensionName = '十周年UI';
 	var extension = lib.extensionMenu['extension_' + extensionName];
@@ -6387,9 +6583,9 @@ precontent:function(){
 	var thisObject = this;
 	window.decadeParts = {
 		init:function(){
-			this.css(decadeUIPath + 'layout.css?v=' + thisObject.package.version);
-			this.css(decadeUIPath + 'decadeLayout.css?v=' + thisObject.package.version);
-			this.css(decadeUIPath + 'player.css?v=' + thisObject.package.version);
+			this.css(decadeUIPath + 'layout.css');
+			this.css(decadeUIPath + 'decadeLayout.css');
+			this.css(decadeUIPath + 'player.css');
 			
 			var filePath, ok;
 			// var fonts = ['shousha', 'xingkai', 'xinwei'];
@@ -6509,32 +6705,12 @@ config:{
 		}
     },
 	cardPrettify:{
-        name: '卡牌美化',
+        name: '卡牌美化(需重启)',
         init: 'webp',
 		item: {
 			off: '关闭',
-			webp: 'WEBP',
-			png: 'PNG',
-		}
-    },
-	dynamicSkin:{
-        name: '动态皮肤',
-        init: false,
-    },
-	dynamicSkinOutcrop:{
-		name: '动皮露头',
-        init: true,
-		update:function(){
-			if (window.decadeUI) {
-				ui.arena.dataset.dynamicSkinOutcrop = lib.config['extension_十周年UI_dynamicSkinOutcrop'] ? 'on' : 'off';
-				var players = game.players;
-				if (!players) return;
-				for (var i = 0; i < players.length; i++) {
-					if (players[i].dynamic) {
-						players[i].dynamic.sizeUpdated = false;
-					}
-				}
-			}
+			webp: 'WEBP素材',
+			png:  'PNG 素材',
 		}
 	},
 	dynamicBackground:{
@@ -6550,6 +6726,7 @@ config:{
 			skin_dongbai_娇俏伶俐: 				'董　白-娇俏伶俐',
 			skin_daqiao_战场绝版: 				'大　乔-战场绝版',
 			skin_daqiao_清萧清丽: 				'大　乔-清萧清丽',
+			skin_daqiao_衣垂绿川:				'大　乔-衣垂绿川',
 			skin_daqiaoxiaoqiao_战场绝版: 		'大乔小乔-战场绝版',
 			skin_diaochan_玉婵仙子: 			'貂　蝉-玉婵仙子',
 			skin_fuhuanghou_万福千灯: 			'伏皇后-万福千灯',
@@ -6567,6 +6744,7 @@ config:{
 			skin_sunluban_宵靥谜君: 			'孙鲁班-宵靥谜君',
 			skin_sunluyu_娇俏伶俐: 				'孙鲁育-娇俏伶俐',
 			skin_shuxiangxiang_花好月圆: 		'蜀香香-花好月圆',
+			skin_shuxiangxiang_花曳心牵:		'蜀香香-花曳心牵',
 			skin_wangyi_绝色异彩: 				'王　异-绝色异彩',
 			skin_wangyi_战场绝版: 				'王　异-战场绝版',
 			skin_wolongzhuge_隆中陇亩: 			'卧龙诸葛-隆中陇亩',
@@ -6574,6 +6752,7 @@ config:{
 			skin_xiahoushi_端华夏莲: 			'夏侯氏-端华夏莲',
 			skin_xiahoushi_战场绝版: 			'夏侯氏-战场绝版',
 			skin_xiaoqiao_花好月圆: 			'小　乔-花好月圆',
+			skin_xiaoqiao_采莲江南: 			'小　乔-采莲江南',
 			skin_xinxianying_英装素果: 			'辛宪英-英装素果',
 			skin_xushi_拈花思君: 				'徐　氏-拈花思君',
 			skin_xushi_为夫弑敌: 				'徐　氏-为夫弑敌',
@@ -6604,30 +6783,44 @@ config:{
 			}
 		}
 	},
+	dynamicSkin:{
+        name: '动态皮肤',
+        init: false,
+    },
+	dynamicSkinOutcrop:{
+		name: '动皮露头',
+        init: true,
+		update:function(){
+			if (window.decadeUI) {
+				ui.arena.dataset.dynamicSkinOutcrop = lib.config['extension_十周年UI_dynamicSkinOutcrop'] ? 'on' : 'off';
+				var players = game.players;
+				if (!players) return;
+				for (var i = 0; i < players.length; i++) {
+					if (players[i].dynamic) {
+						players[i].dynamic.update();
+					}
+				}
+			}
+		}
+	},
 	dynamicAdaptiveHD:{
 		name: '动皮高清自适应',
-		init: 'on',
-		item:{
-			on: '开启',
-			off: '关闭',
-		},
+		init: true,
 		update:function(){
 			if (!window.decadeUI) return;
 			var item = lib.config['extension_十周年UI_dynamicAdaptiveHD'];
 			decadeUI.config.dynamicAdaptiveHD = item;
-			var adaptiveDPR = item && (item == 'on');
 			var players = game.players;
 			if (players) {
 				for (var i = 0; i < players.length; i++) {
 					if (players[i].dynamic) {
-						players[i].dynamic.adaptiveDPR = adaptiveDPR;
-						players[i].dynamic.sizeUpdated = false;
+						players[i].dynamic.dprAdaptive = item;
+						players[i].dynamic.update();
 					}
 				}
 			}
 			
-			decadeUI.backgroundAnimation.adaptiveDPR = adaptiveDPR;
-			decadeUI.backgroundAnimation.sizeUpdated = false;
+			decadeUI.backgroundAnimation.dprAdaptive = item;
 		},
 	},
     cardAlternateNameVisible:{
@@ -6754,18 +6947,25 @@ package:{
     },
     intro:(function(){
 		var log = [
-			'有bug请先关闭UI重试下，不行再联系作者。',
-			'当前版本：1.9.110.9.2.3：',
-			'更新日期：2021-10-16',
-			'- 新增动态背景[何太后-蛇蝎为心]；',
-			'- 新增默认动皮武将有界马超、鲍三娘、魏蔡文姬、大乔、小乔、大乔小乔、貂蝉、郭照、黄月英、何太后、花鬘、陆郁生、',
-			'马云禄、潘淑、孙鲁班、孙鲁育、孙尚香、蜀香香、王元姬、王异、吴苋、夏侯氏、小乔、辛宪英、徐氏、杨婉、张菖蒲、张星彩、甄姬、周妃、诸葛果，以及界限突破后的(非界马超除外)。',
-			'- 新增动皮高清自适应开关(移动端效果显著)；',
-			'- 更新 game.check 函数代码；',
-			'- 修复某些动皮白边显示问题；',
-			'- 修复初次导入扩展弹窗问题；',
-			'- 修复弃牌堆不是转换牌也显示的问题；',
-			'- 修复开启动皮后阵亡、翻面不显示问题；',
+			'有bug先检查其他扩展，不行再关闭UI重试，最后再联系作者。',
+			'当前版本：1.9.110.9.3.5：',
+			'更新日期：2021-11-14',
+			'- 新增动态背景[大　乔-衣垂绿川]、[小　乔-采莲江南]、[蜀香香-花曳心牵];',
+			'- 新增动态背景小杀的彩蛋；',
+			'- 新增双武将动态皮肤支持；',
+			'- 优化动画相关的布局逻辑;',
+			'- 优化动皮的显示过度动画；',
+			'- 优化代码，提升加载速度；',
+			'- 优化手机端窗口过小问题；',
+			'- 修复手机端按钮大小问题；',
+			'- 修复受伤时动画与体力条未同步的问题；',
+			'- 修复替换武将后动皮未正确显示的问题；',
+			'- 由于动态皮肤过多会导致特效丢失，因此作出以下数量限制；',
+			'  chrome 69 及以上的内核版本，手机端限制在10个，PC端限制在18个；',
+			'  chrome 69 　以下的内核版本，手机端限制在 2个，PC端限制在10个；',
+			'  在控制台输入代码：navigator.appVersion，会返回你的chrome版本；',
+			'- windows端闪屏的请使用诗笺的64位版(chrome 91~)，或者原版的win由里版(chrome 51)，或者自行',
+			'  打包electron 4.0.0(chrome 69) ~ 10.4.7(chrome 85);',
 		];
 		
 		return '<p style="color:rgb(210,210,000); font-size:12px; line-height:14px; text-shadow: 0 0 2px black;">' + log.join('<br>') + '</p>';
@@ -6773,7 +6973,7 @@ package:{
     author:"短歌 QQ464598631",
     diskURL:"",
     forumURL:"",
-    version:"1.9.110.9.2.3",
+    version:"1.9.110.9.3.5",
 },
 files:{
     "character":[],
@@ -7039,4 +7239,22 @@ editable: false
 - 修复初次导入扩展弹窗问题；
 - 修复弃牌堆不是转换牌也显示的问题；
 - 修复开启动皮后阵亡、翻面不显示问题；
+1.9.110.9.3.5：
+- 新增动态背景[大　乔-衣垂绿川]、[小　乔-采莲江南]、[蜀香香-花曳心牵];
+- 新增动态背景小杀的彩蛋；
+- 新增双武将动态皮肤支持；
+- 优化动画相关的布局逻辑;
+- 优化动皮的显示过度动画；
+- 优化代码，提升加载速度；
+- 优化手机端窗口过小问题；
+- 修复手机端按钮大小问题；
+- 修复部分卡牌的判断显示；
+- 修复受伤时动画与体力条未同步的问题；
+- 修复替换武将后动皮未正确显示的问题；
+- 由于动态皮肤过多会导致特效丢失，因此作出以下数量限制；
+  chrome 69 及以上的内核版本，手机端限制在10个，PC端限制在18个；
+  chrome 69 　以下的内核版本，手机端限制在 2个，PC端限制在10个；
+  在控制台输入代码：navigator.appVersion，会返回你的chrome版本；
+- windows端闪屏的请使用诗笺的64位版(chrome 91~)，或者原版的win由里版(chrome 51)，或者自行
+  打包electron 10.4.7(chrome 85) ~ 4.0.0(chrome 69);
 */

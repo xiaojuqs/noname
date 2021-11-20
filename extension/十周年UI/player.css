@@ -108,36 +108,6 @@
     height: 180px !important;
 }
 
-/*动态皮肤*/
-.player>.dynamic-wrap {
-	display: block;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-	background-size: cover;
-    pointer-events: none;
-    z-index: 60;
-}
-
-.player>.dynamic-wrap>.animation-player {
-	display: block;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	height: 100%;
-}
-
-#arena[data-dynamic-skin-outcrop='on']>.player>.dynamic-wrap>.animation-player {
-	height: 200px;
-}
-
-.player.playing-dynamic>.avatar {
-	display: none;
-}
 
 /*玩家锁链*/
 .player>.chain {
@@ -482,115 +452,137 @@
 	transform: none !important;
 }
 
-/*玩家武将显示*/
-.player>.avatar,
-.player>.avatar2,
-#arena.decadeUI:not(*[data-player_height=''])>.player.fullskin:not(*[data-player_height=''])>.avatar,
-#arena.decadeUI:not(*[data-player_height=''])>.player.fullskin2:not(*[data-player_height=''])>.avatar2 {
-	left: 0px !important;
-    top: auto !important;
+/*武将牌显示*/
+.player>.primary-avatar {
+	left: 0;
+    top: auto;
 	bottom: 0;
-    width: 100% !important;
-    height: 100% !important;
-	box-shadow: none;
-	background-image: none;
+    width: 100%;
+    height: 100%;
+	opacity: 1;
+	background-size: cover;
 	background-repeat: no-repeat;
-	border: 0;
+	background-position: top;
+	border-radius: 8px;
+	transition-property: opacity, transform;
+	z-index: 61;
 }
 
-.player.fullskin.fullskin2>.avatar,
-#arena>.player.fullskin2:not(.minskin):not(.unseen2)>.avatar,
-#arena>.player.fullskin2:not(.minskin).unseen2[data-position='0']>.avatar,
-#arena.decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2:not(*[data-player_height=''])>.avatar,
-#arena.decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen:not(*[data-player_height=''])>.avatar,
-#arena.decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen2:not(*[data-player_height=''])>.avatar {
-    width: 50% !important;
-	height: 100% !important;
-	background-position: top !important;
-	border-radius: 8px 0 0 8px !important;
-	clip-path: none;
-    -webkit-clip-path: none;
+.player.fullskin2>.primary-avatar {
+    width: 50%;
+	border-radius: 8px 0 0 8px;
 }
 
-#arena>.player.fullskin2:not(.minskin):not(.unseen)>.avatar2,
-#arena>.player.fullskin2:not(.minskin).unseen[data-position='0']>.avatar2,
-#arena.decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2:not(*[data-player_height=''])>.avatar2,
-#arena.decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen2:not(*[data-player_height=''])>.avatar2 {
-    left: 50% !important;
-	top: auto !important;
-	width: 50% !important;
-	height: 100% !important;
-	background-position: top !important;
-	border-radius: 0 8px 8px 0 !important;
-	clip-path: none;
-    -webkit-clip-path: none;
+.player>.deputy-avatar {
+	left: 50%;
+	top: auto;
+	bottom: 0;
+	width: 50%;
+	height: 100%;
+	opacity: 1;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: top;
+	border-radius: 0 8px 8px 0;
+	transition-property: opacity, transform;
+	z-index: 61;
 }
 
+.player.unseen>.primary-avatar,
+.player.unseen2>.deputy-avatar,
+.player.d-skin>.primary-avatar,
+.player.d-skin2>.deputy-avatar {
+	opacity: 0;
+}
 
-#arena[data-outcrop-skin='on'].decadeUI:not(*[data-player_height=''])>.player.fullskin:not(*[data-player_height=''])>.avatar,
-#arena[data-outcrop-skin='on'].decadeUI:not(*[data-player_height=''])>.player.fullskin2:not(*[data-player_height=''])>.avatar2 {
-	height: 192px !important;
+#arena:not(.observe)>.player[data-position='0'].unseen>.primary-avatar,
+#arena:not(.observe)>.player[data-position='0'].unseen2>.deputy-avatar {
+	opacity: 0.3;
+}
+
+#arena[data-outcrop-skin='on']>.player>.primary-avatar {
+	height: 192px;
 	clip-path: url(#solo-clip);
     -webkit-clip-path: url(#solo-clip);
 }
 
-
-#arena[data-outcrop-skin='on']>.player.fullskin2:not(.minskin):not(.unseen2)>.avatar,
-#arena[data-outcrop-skin='on']>.player.fullskin2:not(.minskin).unseen2[data-position='0']>.avatar,
-#arena[data-outcrop-skin='on'].decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2:not(*[data-player_height=''])>.avatar,
-#arena[data-outcrop-skin='on'].decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen:not(*[data-player_height=''])>.avatar {
-    height: 192px !important;
-	clip-path: url(#solo-clip-l);
-    -webkit-clip-path: url(#duol-clip);
-}
-
-#arena[data-outcrop-skin='on']>.player.fullskin2:not(.minskin):not(.unseen)>.avatar2,
-#arena[data-outcrop-skin='on']>.player.fullskin2:not(.minskin).unseen[data-position='0']>.avatar2,
-#arena[data-outcrop-skin='on'].decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2:not(*[data-player_height=''])>.avatar2,
-#arena[data-outcrop-skin='on'].decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen2:not(*[data-player_height=''])>.avatar2 {
-    height: 192px !important;
-	clip-path: url(#solo-clip-r);
+#arena[data-outcrop-skin='on']>.player>.deputy-avatar {
+    height: 192px;
+	clip-path: url(#duor-clip);
     -webkit-clip-path: url(#duor-clip);
 }
 
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on'])>.player.fullskin2:not(.minskin):not(.unseen2)>.avatar,
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on'])>.player.fullskin2:not(.minskin).unseen2[data-position='0']>.avatar,
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on']).decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2:not(*[data-player_height=''])>.avatar,
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on']).decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen:not(*[data-player_height=''])>.avatar,
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on']).decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen2:not(*[data-player_height=''])>.avatar {
-    height: 60% !important;
-	clip-path: polygon(0 0, 100% 0, 100% 70%, 0 90%) !important;
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 70%, 0 90%) !important;
-	background-position: top !important;
+#arena[data-outcrop-skin='on']>.player.fullskin2>.primary-avatar {
+	clip-path: url(#duol-clip);
+	-webkit-clip-path: url(#duol-clip);
 }
 
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on'])>.player.fullskin2:not(.minskin):not(.unseen)>.avatar2,
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on'])>.player.fullskin2:not(.minskin).unseen[data-position='0']>.avatar2,
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on']).decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2:not(*[data-player_height=''])>.avatar2,
-#arena[data-double-avatar='up-down']:not(*[data-outcrop-skin='on']).decadeUI:not(*[data-player_height=''])>.player.fullskin.fullskin2.unseen2:not(*[data-player_height=''])>.avatar2 {
-	top: 40% !important;
-    height: 60% !important;
-    clip-path: polygon(0 calc(22.5% + 2px), 100% calc(2.5% + 2px), 100% 100%, 0 100%);
-    -webkit-clip-path: polygon(0 calc(22.5% + 2px), 100% calc(2.5% + 2px), 100% 100%, 0 100%);
-	background-position: top !important;
+/*武将牌动皮显示*/
+.player>.dynamic-wrap {
+	display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+	background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 60;
 }
 
-#window:not(*[data-radius_size='']) #arena>.player.fullskin2:not(.minskin):not(.unseen2)>.avatar, 
-#window:not(*[data-radius_size='']) #arena>.player.fullskin2:not(.minskin).unseen2[data-position='0']>.avatar {
-	border-radius: 8px 0 0 8px !important;
+.player>.dynamic-wrap>.animation-player {
+	display: block;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: inherit;
+	pointer-events: none;
 }
 
-#window:not(*[data-radius_size='']) #arena>.player.fullskin2:not(.minskin):not(.unseen)>.avatar2, 
-#window:not(*[data-radius_size='']) #arena>.player.fullskin2:not(.minskin).unseen[data-position='0']>.avatar2 {
-	border-radius: 0 8px 8px 0 !important;
+#arena[data-dynamic-skin-outcrop='on']>.player>.dynamic-wrap>.animation-player {
+	height: 200px;
 }
+
+.player>.dynamic-wrap>.primary-bg,
+.player>.dynamic-wrap>.deputy-bg {
+	left: 0;
+    top: auto;
+	bottom: 0;
+    width: 50%;
+    height: 100%;
+	opacity: 0;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: top;
+	border-radius: 8px 0 0 8px;
+	transition-property: opacity, transform;
+}
+
+.player>.dynamic-wrap>.deputy-bg {
+	left: 50%;
+}
+
+.player.d-skin>.dynamic-wrap>.primary-bg,
+.player.d-skin2>.dynamic-wrap>.deputy-bg {
+	opacity: 1;
+}
+
+#arena:not(.observe)>.player[data-position='0'].unseen.d-skin>.dynamic-wrap>.primary-bg,
+#arena:not(.observe)>.player[data-position='0'].unseen2.d-skin2>.dynamic-wrap>.deputy-bg {
+	opacity: 0.3;
+}
+
+
 
 #window:not(*[data-radius_size='']) .player {
 	border-radius: 8px;
 }
 
 /*行动*/
-.player>.avatar>.action {
+.player>.primary-avatar>.action {
     display: block;
     position: absolute;
     left: 0;

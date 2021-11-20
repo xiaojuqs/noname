@@ -2,8 +2,8 @@
 decadeParts.import(function(lib, game, ui, get, ai, _status){
 	/*
 	十周年UI动皮使用说明：
-	- 首先打开动态皮肤的开关，在非国战模式或者非隐匿技武将下，直接替换武将皮肤显示；
-	- 目前不支持动态皮肤的切换功能，限单武将模式使用；
+	- 首先打开动态皮肤的开关，直接替换原有武将皮肤显示；
+	- 目前不支持动态皮肤的切换功能；
 	- 动态皮肤参数表在线文档链接：https://docs.qq.com/sheet/DS2Vaa0ZGWkdMdnZa；可以在群在线文档提供你设置好的参数
 	- 所有相关的文件请放到	十周年UI/assets/dynamic目录下；
 	- 关于格式请参考下面示例：
@@ -26,12 +26,12 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 			action: undefined,
 			speed: 1,
 			loop: true,				// 勿删
-		},{
 			x: [0, 0.5],
 			y: [0, 0.5],
 			scale: 0.5,
 			angle: 0,
 		});
+		// 这里可以改成  }, true);  设置右将动皮
 	*/
 	
 	decadeUI.dynamicSkin = {
@@ -202,9 +202,9 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		sp_sunshangxiang:{
 			花曳心牵:{
 				name: 'skin_shuxiangxiang_HuaYeXinQian',
-				x: [20, 0.5],
-				y: [18, 0.1],
-				scale: 0.53,
+				x: [0, 0.5],
+				y: [0, 0.5],
+				scale: 0.8,
 				background: 'skin_shuxiangxiang_HuaYeXinQian_bg.png',
 			}
 		},
@@ -343,17 +343,8 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 		re_xinxianying: decadeUI.dynamicSkin.xinxianying,
 		ol_zhangchangpu: decadeUI.dynamicSkin.zhangchangpu,
 		re_zhenji: decadeUI.dynamicSkin.zhenji,
-	};
+	};decadeUI.get.extend(decadeUI.dynamicSkin, extend);
 	
-	
-	decadeUI.get.extend(decadeUI.dynamicSkin, extend);
-	// 如果你不想改原版的参数，又想保留自己配置好的参数，建议采用此种方式在下面重新写个覆盖
-	/*
-		var yourExtend = {
-			zhangqiying:xxxxx,
-		};
-		
-		decadeUI.get.extend(decadeUI.dynamicSkin, yourExtend);
-	*/
 });
-
+//
+//
