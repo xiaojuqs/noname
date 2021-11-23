@@ -182,7 +182,12 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var cards=target.getCards('e'),js=target.getCards('j');
-							var val=get.value(cards,target);
+							var val=0;
+							for(var i=0;i<cards.length;i++){
+								val+=get.equipValue(cards[i]);
+							}
+							var baiyin_card=target.getEquip(2);
+							if(baiyin_card&&cards.length==1&&baiyin_card.name=='baiyin'&&target.isDamaged()) return 0;
 							for(var card of js) val-=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,target)
 							return -val;
 						},
@@ -212,13 +217,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2.5;
-							var val2=0;
 							var card=target.getEquip(1);
-							if(card){
-								val2=get.value(card,target);
-								if(val2<0) return 0;
-							}
-							return -val-val2;
+							if(card&&get.equipValue(card)<=0) return 'zerotarget';
+							if(card) val+=get.equipValue(card);
+							return -val;
 						},
 					},
 				},
@@ -247,11 +249,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						target:function(player,target){
 							var val=(target.hasSex('male')?2.5:0);
 							var val2=0;
-							var card=target.getEquip(1);
-							if(card){
-								val2=get.value(card,target);
-								if(val2<0) return 0;
-							}
+							var card=target.getEquip(2);
+							if(card) val2=get.equipValue(card);
+							if(card&&card.name=='baiyin'&&target.isDamaged()) return 0;
 							return -val-val2;
 						},
 					},
@@ -280,13 +280,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2;
-							var val2=0;
 							var card=target.getEquip(2);
-							if(card){
-								val2=get.value(card,target);
-								if(val2<0) return 0;
-							}
-							return -val-val2;
+							if(card&&card.name=='baiyin'&&target.isDamaged()) return 0;
+							if(card) val+=get.equipValue(card);
+							return -val;
 						},
 					},
 				},
