@@ -10,8 +10,20 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				global:['g_du','g_du_give'],
 				content:function(){},
 				ai:{
-					value:-5,
-					useful:6,
+					value:function(card,player,i){
+						if(player.hp<=1&&_status.currentPhase==player&&_status.event.getParent('phaseUse').name=='phaseUse'
+						&&_status.event.name!='chooseButton'&&_status.event.name!='chooseCard'){
+							return 11;
+						}
+						return -5;
+					},
+					useful:function(card,i){
+						var player=_status.event.player
+						if(player.hp<=1&&_status.currentPhase==player&&_status.event.getParent('phaseDiscard').name=='phaseDiscard'&&player.countCards('h','tao')+player.countCards('h','jiu')<=0){
+							return 11;
+						}
+						return 6;
+					},
 					result:{
 						player:function(player,target){
 							if(player.hasSkillTag('usedu')) return 5;
