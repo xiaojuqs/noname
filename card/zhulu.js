@@ -365,14 +365,14 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					result:{
 						keepAI:true,
 						target:function(player,target){
-							var card=target.getCards('e');
+							var cards=target.getCards('e');
 							if(cards.length==1&&cards[0].name=='nvzhuang') return 0;
 							var val=0;
-							for(var i=0;i<card.length;i++){
-								val+=get.equipValue(card[i]);
+							for(var i=0;i<cards.length;i++){
+								val+=get.equipValue(cards[i]);
 							}
 							var baiyin_card=target.getEquip(2);
-							if(baiyin_card&&card.length==1&&baiyin_card.name=='baiyin'&&target.isDamaged()) return 0;
+							if(baiyin_card&&cards.length==1&&baiyin_card.name=='baiyin'&&target.isDamaged()) return 0;
 							return -val;
 						},
 					},
