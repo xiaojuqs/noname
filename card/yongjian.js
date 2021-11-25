@@ -15,6 +15,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						&&_status.event.name!='chooseButton'&&_status.event.name!='chooseCard'){
 							return 11;
 						}
+						for(var i=0;i<10;i++){
+							if(_status.event.getParent(i)){
+								if(_status.event.getParent(i).name='chooseToCompare') return 11;
+							}
+						}
 						return -5;
 					},
 					useful:function(card,i){
