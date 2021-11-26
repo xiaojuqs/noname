@@ -373,6 +373,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 							var baiyin_card=target.getEquip(2);
 							if(baiyin_card&&cards.length==1&&baiyin_card.name=='baiyin'&&target.isDamaged()) return 0;
+							var tianjitu_card=target.getEquip(5);
+							if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
 							return -val;
 						},
 					},

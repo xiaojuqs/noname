@@ -13,12 +13,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					value:function(card,player,i){
 						if(player.hp<=1&&_status.currentPhase==player&&_status.event.getParent('phaseUse').name=='phaseUse'
 						&&_status.event.name!='chooseButton'&&_status.event.name!='chooseCard'){
-							return 11;
+							return 100;
 						}
 						for(var i=0;i<10;i++){
-							if(_status.event.getParent(i)){
-								if(_status.event.getParent(i).name='chooseToCompare') return 11;
-							}
+							if(_status.event.getParent(i)&&_status.event.getParent(i).name=='chooseToCompare') return 100;
 						}
 						return -5;
 					},
@@ -193,6 +191,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 							var baiyin_card=target.getEquip(2);
 							if(baiyin_card&&cards.length==1&&baiyin_card.name=='baiyin'&&target.isDamaged()) return 0;
+							var tianjitu_card=target.getEquip(5);
+							if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
 							for(var card of js) val-=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,target)
 							return -val;
 						},
