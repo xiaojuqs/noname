@@ -20,7 +20,8 @@ content:function(config, pack){
     }
 	
 	console.time(extensionName);
-	window.decadeUI = {
+	window.duicfg = config;
+	window.dui = window.decadeUI = {
 		init:function(){
 			this.extensionName = extensionName;
 			
@@ -34,22 +35,28 @@ content:function(config, pack){
 			var solo = defs.appendChild(document.createElementNS(SVG_NS, 'clipPath'));
 			var duol = defs.appendChild(document.createElementNS(SVG_NS, 'clipPath'));
 			var duor = defs.appendChild(document.createElementNS(SVG_NS, 'clipPath'));
+			var dskin = defs.appendChild(document.createElementNS(SVG_NS, 'clipPath'));
 			
 			solo.id = 'solo-clip';
 			duol.id = 'duol-clip';
 			duor.id = 'duor-clip';
+			dskin.id = 'dskin-clip';
 			
 			solo.setAttribute('clipPathUnits', 'objectBoundingBox');
 			duol.setAttribute('clipPathUnits', 'objectBoundingBox');
 			duor.setAttribute('clipPathUnits', 'objectBoundingBox');
+			dskin.setAttribute('clipPathUnits', 'objectBoundingBox');
 			
 			var soloPath = solo.appendChild(document.createElementNS(SVG_NS, 'path'));
 			var duoLPath = duol.appendChild(document.createElementNS(SVG_NS, 'path'));
 			var duoRPath = duor.appendChild(document.createElementNS(SVG_NS, 'path'));
 			
-			soloPath.setAttribute('d', 'M0 0 H1 Q1 0.065 0.9 0.065 Q1 0.065 1 0.11 V0.96 Q1 1 0.9 1 H0.1 Q0 1 0 0.96 V0.11 Q0 0.065 0.1 0.065 Q0 0.065 0 0 Z');
-			duoLPath.setAttribute('d', 'M0 0 H1 V1 Q1 1 0.9 1 H0.1 Q0 1 0 0.96 V0.11 Q0 0.065 0.1 0.065 Q0 0.065 0 0 Z');
-			duoRPath.setAttribute('d', 'M0 0 H1 Q1 0.065 0.9 0.065 Q1 0.065 1 0.11 V0.96 Q1 1 0.9 1 H0 Z');
+			var dskinPath = dskin.appendChild(document.createElementNS(SVG_NS, 'path'));
+			// M1 0 H0 Q0 0.06 0.08 0.06 Q0 0.09 0 0.11 V1 H1 Z
+			soloPath.setAttribute('d', 'M0 0 H1 Q1 0.05 0.9 0.06 Q1 0.06 1 0.11 V1 H0 V0.11 Q0 0.06 0.1 0.06 Q0 0.05 0 0 Z');
+			duoLPath.setAttribute('d', 'M1 0 H0 Q0 0.06 0.15 0.06 Q0 0.06 0 0.11 V1 H1 Z');
+			duoRPath.setAttribute('d', 'M0 0 H1 Q1 0.06 0.85 0.06 Q1 0.06 1 0.11 V1 H0 Z');
+			dskinPath.setAttribute('d', 'M0 0 H1 Q1 0.1 0.94 0.1 Q0.985 0.1 1 0.13 V1 H0 V0.14 Q0 0.11 0.06 0.1 Q0 0.1 0 0 Z');
 			
 			document.addEventListener('click', function(e){ dui.set.activeElement(e.target); }, true);
 			this.initOverride();
@@ -74,6 +81,14 @@ content:function(config, pack){
 				return ok;
 			};
 			
+			function overrides (dest, src) {
+				if (!dest._super) dest._super = {};
+				for (var key in src) {
+					if (dest[key])
+						dest._super[key] = dest[key];
+					dest[key] = src[key];
+				}
+			};
 			var base = {
 				ui:{
 					create:{
@@ -143,6 +158,105 @@ content:function(config, pack){
 					},
 				},
 			};
+			
+			var Player = {};
+			(function(Player){
+				Player.init = function (character, character2, skill) {
+					this.doubleAvatar = (character2 && lib.character[character2]) != undefined;
+				
+					var CUR_DYNAMIC = decadeUI.CUR_DYNAMIC;
+					var MAX_DYNAMIC = decadeUI.MAX_DYNAMIC;
+					if (CUR_DYNAMIC == undefined) {
+						CUR_DYNAMIC = 0;
+						decadeUI.CUR_DYNAMIC = CUR_DYNAMIC;
+					}
+					
+					if (MAX_DYNAMIC == undefined) {
+						MAX_DYNAMIC = decadeUI.isMobile() ? 2 : 10;
+						if (window.OffscreenCanvas)
+							MAX_DYNAMIC += 8;
+						decadeUI.MAX_DYNAMIC = MAX_DYNAMIC;
+					}
+					
+					if (this.dynamic) this.stopDynamic();
+					var showDynamic = (this.dynamic || CUR_DYNAMIC < MAX_DYNAMIC) && duicfg.dynamicSkin;
+					if (showDynamic) {
+						var skins;
+						var dskins = decadeUI.dynamicSkin;
+						var avatars = this.doubleAvatar ? [character, character2] : [character];
+						var increased;
+						
+						for (var i = 0; i < avatars.length; i++) {
+							skins = dskins[avatars[i]];
+							if (skins == undefined)
+								continue;
+							
+							var keys = Object.keys(skins);
+							if (keys.length == 0) {
+								console.error('player.init: ' + avatars[i] + ' 没有设置动皮参数');
+								continue;
+							}
+							
+							var skin = skins[Object.keys(skins)[0]];
+							if (skin.speed == undefined)
+								skin.speed = 1;
+							this.playDynamic({
+								name: skin.name,		//	string 骨骼文件名，一般是assets/dynamic 下的动皮文件，也可以使用.. 来寻找其他文件目录
+								action: skin.action,	// string 播放动作 不填为默认
+								loop: true,				// boolean 是否循环播放
+								loopCount: -1,			// number 循环次数，只有loop为true时生效
+								speed: skin.speed,	 	// number 播放速度
+								filpX: undefined,	 	// boolean 水平镜像
+								filpY: undefined,	 	// boolean 垂直翻转
+								opacity: undefined,	 	// 0~1		不透明度
+								x: skin.x,				// 相对于父节点坐标x，不填为居中
+														// (1) x: 10, 相当于 left: 10px；
+														// (2) x: [10, 0.5], 相当于 left: calc(50% + 10px)；
+								y: skin.y,				// 相对于父节点坐标y，不填为居中
+														// (1) y: 10，相当于 top: 10px；
+														// (2) y: [10, 0.5]，相当于 top: calc(50% + 10px)；
+								scale: skin.scale,		// 缩放
+								angle: skin.angle,		// 角度
+								hideSlots: skin.hideSlots,	// 隐藏不需要的部件，想知道具体部件名称请使用SpineAltasSplit工具查看
+								clipSlots: skin.clipSlots,	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
+							}, i == 1);
+							
+							this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
+							if (!increased) {
+								increased = true;
+								decadeUI.CUR_DYNAMIC++;
+							}
+						}
+					}
+					
+					var jie;
+					if (character && duicfg.showJieMark) {
+						jie = lib.characterPack.refresh[character];
+						if (jie == null) {
+							jie = character.substr(0, 3);
+							jie == 're_' || jie == 'ol_' || jie == 'xin' || jie == 'old';
+						}
+							
+						if (jie != null) {
+							jie = lib.translate[character][0];
+							if (jie == '界') {
+								if (this.$jieMark == undefined)
+									this.$jieMark = dui.element.create('jie-mark', this);
+								else
+									this.appendChild(this.$jieMark);
+							}
+						}
+					}
+					
+					var result = this._super.init.apply(this, arguments);
+					if (jie == '界')
+						result.node.name.innerText = result.node.name.innerText.substr(2);
+					
+					return result;
+				};
+			})(Player);
+					
+			overrides(lib.element.player, Player);
 			
 			var ride = {};
 			ride.lib = {
@@ -265,6 +379,10 @@ content:function(config, pack){
 									card[2] = 'sha';
 									card[3] = 'ice';
 								}
+								if(card[2]=='cisha'){
+									card[2] = 'sha';
+									card[3] = 'stab';
+								}
 							} else if (typeof card == 'object') {
 								card = [card.suit, card.number, card.name, card.nature];
 							}
@@ -344,6 +462,9 @@ content:function(config, pack){
 									if (lib.card[bg].modeimage) {
 										this.node.image.setBackgroundImage('image/mode/' + lib.card[bg].modeimage + '/card/' + bg + '.png');
 									} else {
+										if (bg == 'sha' && card[3] == 'stab') 
+											this.node.image.setBackgroundImage('image/card/cisha.png');
+										else
 										this.node.image.setBackgroundImage('image/card/' + bg + '.png');
 									}
 								}
@@ -477,6 +598,9 @@ content:function(config, pack){
 									cardname = '冰' + cardname;
 									filename = 'bingsha';
 									this.node.image.classList.add('ice');
+								} else if (card[3] == 'stab') {
+									name = '刺' + name;
+									filename = 'cisha';
 								}
 							}
 							
@@ -564,46 +688,54 @@ content:function(config, pack){
 							if (imgFormat != 'off'){
 								this.classList.add('decade-card');
 								if (!this.classList.contains('infohidden')) {
-									var res = decadeUI.resources.cards[filename];
-									if (!res) {
-										res = {
+									var res = dui.statics.cards;
+									var asset = res[filename];
+									if (res.READ_OK) {
+										if (asset == undefined) {
+											this.classList.remove('decade-card');
+										} else {
+											this.style.background = 'url("' + asset.url + '")';
+										}
+									} else {
+										var url = lib.assetURL + 'extension/' + extensionName + '/image/card/' + filename + '.' + imgFormat;
+										if (!asset) {
+											res[filename] = asset = {
 											name: filename,
-											chinese: '',
-											image: undefined,		// 图片
-											loaded: undefined, 		// 是否已加载资源
-											rawUrl: undefined, 			// 被替换的图片地址	
+												url: undefined,			// 图片路径
+												loaded: undefined, 		// 是否加载
+												rawUrl: undefined, 		// 原图片地址	
 										};
 										
-										decadeUI.resources.cards[filename] = res;
 									}
 									
-									if (res.loaded !== false) {
-										if (!res.loaded) {
-											var url = lib.assetURL + 'extension/' + extensionName + '/image/card/' + res.name + '.' + imgFormat;
+										if (asset.loaded !== false) {
+											if (asset.loaded == undefined) {
 											var image = new Image();
 											
 											image.onload = function(){
-												res.loaded = true;
-												image.onload = null;
+													asset.loaded = true;
+													image.onload = undefined;
 											};
 											
 											var card = this;
 											image.onerror = function(){
-												res.loaded = false;
-												image.onerror = null;
-												card.style.background = image.rawUrl;
+													asset.loaded = false;
+													image.onerror = undefined;
+													card.style.background = asset.rawUrl;
 												card.classList.remove('decade-card');
 											}
 											
-											image.rawUrl = this.style.background || this.style.backgroundImage;
+												asset.url = url;
+												asset.rawUrl = this.style.background || this.style.backgroundImage;
+												asset.image = image;
 											image.src = url;
-											res.image = image;
 										}
 										
-										this.style.background = 'url("' + res.image.src + '")';
+											this.style.background = 'url("' + url + '")';
 									} else {
 										this.classList.remove('decade-card');
 									}
+								}
 								}
 							} else {
 								this.classList.remove('decade-card');
@@ -623,7 +755,7 @@ content:function(config, pack){
 								if (this._transform && this.parentNode && this.parentNode.parentNode && 
 									this.parentNode.parentNode.parentNode == ui.me && (!_status.mousedown || _status.mouseleft)) {
 									if (bool) {
-										this.style.transform = this._transform + ' translateY(-' + (decadeUI.isMobile() ? 15: 20) + 'px)';
+										this.style.transform = this._transform + ' translateY(-' + (decadeUI.isMobile() ? 10: 12) + 'px)';
 									} else {
 										this.style.transform = this._transform || '';
 									}
@@ -667,7 +799,6 @@ content:function(config, pack){
 								player.style.animation = '';
 							}, 500, player)
 							
-							return result;
 						},
 					},
 					
@@ -881,6 +1012,7 @@ content:function(config, pack){
 							var dynamic = this.dynamic;
 							if (!dynamic) {
 								dynamic = new duilib.DynamicPlayer('assets/dynamic/');
+								dynamic.dprAdaptive = true;
 								this.dynamic = dynamic;
 								this.$dynamicWrap.appendChild(dynamic.canvas);
 							} else {
@@ -907,13 +1039,14 @@ content:function(config, pack){
 								}
 								animation.clip = { 
 									x: [0, deputy ? 0.5 : 0],
-									y: 0, width: [0, 0.5], 
+									y: 0,
+									width: [0, 0.5], 
 									height:[0, 1], 
 									clipParent: true
 								};
 							}
 							if (this.$dynamicWrap.parentNode != this) this.appendChild(this.$dynamicWrap);
-							dynamic.dprAdaptive = decadeUI.config.dynamicAdaptiveHD ? true : false;
+							dynamic.outcropMask = duicfg.dynamicSkinOutcrop;
 							var avatar = dynamic.play(animation);
 							if (deputy === true) {
 								dynamic.deputy = avatar;
@@ -1509,8 +1642,6 @@ content:function(config, pack){
 						var dialog = decadeUI.element.create('dialog');
 						dialog.contentContainer = decadeUI.element.create('content-container', dialog);
 						dialog.content = decadeUI.element.create('content', dialog.contentContainer);
-						// dialog.contentContainer = decadeUI.element.create('dui-container', dialog);
-						// dialog.content = decadeUI.element.create('dui-content', dialog.contentContainer);
 						dialog.buttons = [];
 						for (i in lib.element.dialog) dialog[i] = lib.element.dialog[i];
 						for (i = 0; i < arguments.length; i++) {
@@ -1867,74 +1998,6 @@ content:function(config, pack){
 			
 			lib.config.low_performance = true;
 			
-			game.uncheck = function(){
-				var i, j;
-				if (game.chess) {
-					var shadows = ui.chessContainer.getElementsByClassName('playergrid temp');
-					while (shadows.length) {
-						shadows[0].remove();
-					}
-				}
-				
-				var args = new Array(arguments.length);
-				for (var i = 0; i < args.length; i++) args[i] = arguments[i];
-				if ((args.length == 0 || args.contains('card')) && _status.event.player) {
-					var cards = _status.event.player.getCards('hejs');
-					for (j = 0; j < cards.length; j++) {
-						cards[j].classList.remove('selected');
-						cards[j].classList.remove('selectable');
-						if (cards[j]._tempName) {
-							cards[j]._tempName.textContent = '';
-						}
-						cards[j].updateTransform();
-					}
-					ui.selected.cards.length = 0;
-					_status.event.player.node.equips.classList.remove('popequip');
-				}
-				var players = game.players.slice(0);
-				if (_status.event.deadTarget) players.addArray(game.dead);
-				if ((args.length == 0 || args.contains('target'))) {
-					for (j = 0; j < players.length; j++) {
-						players[j].classList.remove('selected');
-						players[j].classList.remove('selectable');
-						players[j].classList.remove('un-selectable');
-						if (players[j].instance) {
-							players[j].instance.classList.remove('selected');
-							players[j].instance.classList.remove('selectable');
-						}
-					}
-					ui.selected.targets.length = 0;
-				}
-				if ((args.length == 0 || args.contains('button')) && _status.event.dialog && _status.event.dialog.buttons) {
-					for (j = 0; j < _status.event.dialog.buttons.length; j++) {
-						_status.event.dialog.buttons[j].classList.remove('selectable');
-						_status.event.dialog.buttons[j].classList.remove('selected');
-					}
-					ui.selected.buttons.length = 0;
-				}
-				if (args.length == 0) {
-					ui.arena.classList.remove('selecting');
-					ui.arena.classList.remove('tempnoe');
-					_status.imchoosing = false;
-					_status.lastdragchange.length = 0;
-					_status.mousedragging = null;
-					_status.mousedragorigin = null;
-
-					while (ui.touchlines.length) {
-						ui.touchlines.shift().delete();
-					}
-				}
-				
-				for (var i = 0; i < players.length; i++) {
-					players[i].unprompt();
-				}
-				for (var i = 0; i < _status.dragline.length; i++) {
-					if (_status.dragline[i]) _status.dragline[i].remove();
-				}
-				ui.arena.classList.remove('dragging');
-				_status.dragline.length = 0;
-			};
-			
 			game.swapPlayer = function(player, player2){
 			    var result = swapPlayerFunction.call(this, player, player2);
     			if (game.me && game.me != ui.equipSolts.me) {
@@ -2210,7 +2273,6 @@ content:function(config, pack){
 				decadeUI.config.update();
 				
 				
-				// ui.arena.appendChild(ui.cardPile);
 			    return result;
 			};
 			
@@ -2479,7 +2541,7 @@ content:function(config, pack){
 									break;
 								default:
 									this.innerText = value;
-									this.style.opacity = 1;
+									this.style.visibility = '';
 									this.parentNode.style.backgroundImage = '';
 									return;
 							}
@@ -2493,15 +2555,15 @@ content:function(config, pack){
 							
 							this.innerText = value;
 							if (decadeUI.config.campIdentityImageMode) {
-								this.style.opacity = 0;
+								this.style.visibility = 'hidden';
 								var image = new Image();
 								image.node = this;
-								image.onerror = function() { this.node.style.opacity = 1; };
+								image.onerror = function() { this.node.style.visibility = ''; };
 								
 								image.src = extensionPath + 'image/decoration/identity_' + fileName + '.png';
 								this.parentNode.style.backgroundImage = 'url("' + image.src + '")';
 							} else {
-								this.style.opacity = 1;
+								this.style.visibility = '';
 							}
 						}
 					}
@@ -3632,151 +3694,6 @@ content:function(config, pack){
 				game.updateRoundNumber()
 			};
 			
-			lib.element.player.init = function(character, character2, skill){
-				this.doubleAvatar = (character2 && lib.character[character2]) != undefined;
-				var CUR_DYNAMIC = decadeUI.CUR_DYNAMIC;
-				var MAX_DYNAMIC = decadeUI.MAX_DYNAMIC;
-				if (CUR_DYNAMIC == undefined) {
-					CUR_DYNAMIC = 0;
-					decadeUI.CUR_DYNAMIC = CUR_DYNAMIC;
-				}
-				if (MAX_DYNAMIC == undefined) {
-					MAX_DYNAMIC = decadeUI.isMobile() ? 2 : 10;
-					if (window.OffscreenCanvas)
-						MAX_DYNAMIC += 8;
-					decadeUI.MAX_DYNAMIC = MAX_DYNAMIC;
-				}
-				if (this.dynamic) 
-					this.stopDynamic();
-				if ((!this.dynamic && CUR_DYNAMIC == MAX_DYNAMIC) || duicfg.dynamicSkin == false) 
-					return base.lib.element.player.init.apply(this, arguments);
-				var skins;
-				var dskins = decadeUI.dynamicSkin;
-				var avatars = this.doubleAvatar ? [character, character2] : [character];
-				var increased;
-				for (var i = 0; i < avatars.length; i++) {
-					skins = dskins[avatars[i]];
-					if (skins == undefined)
-						continue;
-					var keys = Object.keys(skins);
-					if (keys.length == 0) {
-						console.error('player.init: ' + avatars[i] + ' 没有设置动皮参数');
-						continue;
-					}
-					var skin = skins[Object.keys(skins)[0]];
-					this.playDynamic({
-						name: skin.name,	 //	string 骨骼文件名，一般是assets/dynamic 下的动皮文件，也可以使用.. 来寻找其他文件目录
-						action: skin.action, // string 播放动作 不填为默认
-						loop: true, 		 // boolean 是否循环播放
-						loopCount: -1,		 // number 循环次数，只有loop为true时生效
-						speed: skin.speed ? skin.speed : 1,			 // number 播放速度
-						filpX: undefined,	 // boolean 水平镜像
-						filpY: undefined,	 // boolean 垂直翻转
-						opacity: undefined,	 // 0~1		不透明度
-						x: skin.x,	// 相对于父节点坐标x，不填为居中
-									// (1) x: 10, 相当于 left: 10px；
-									// (2) x: [10, 0.5], 相当于 left: calc(50% + 10px)；
-						y: skin.y,	// 相对于父节点坐标y，不填为居中
-									// (1) y: 10，相当于 top: 10px；
-									// (2) y: [10, 0.5]，相当于 top: calc(50% + 10px)；
-						scale: skin.scale,	// 缩放
-						angle: skin.angle,	// 角度
-					}, i == 1);
-					
-					this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
-					if (!increased) {
-						increased = true;
-						decadeUI.CUR_DYNAMIC++;
-					}
-				}
-				
-				return base.lib.element.player.init.apply(this, arguments);
-			};
-			
-			lib.element.player.uninit = function(){
-			    this.stopDynamic();
-				this.doubleAvatar = false;
-				this.node.campWrap.dataset.camp = null;
-			    this.node.campWrap.node.campName.innerHTML = '';
-			    this.node.campWrap.node.campName.style.backgroundImage = '';
-			    this.node.name2.innerHTML = '';
-				
-				for (var i = 1; i < 6; i++) if (this.isDisabled(i)) this.$enableEquip('equip' + i);
-				
-				if (this.storage._disableJudge) {
-					game.broadcastAll(function(player) {
-						player.storage._disableJudge = false;
-						for (var i = 0; i < player.node.judges.childNodes.length; i++) {
-							if (player.node.judges.childNodes[i].name == 'disable_judge') {
-								player.node.judges.removeChild(player.node.judges.childNodes[i]);
-								break;
-							}
-						}
-					}, this);
-				}
-				this.node.avatar.hide();
-				this.node.count.hide();
-				if (this.node.wuxing) {
-					this.node.wuxing.hide();
-				}
-				if (this.node.name_seat) {
-					this.node.name_seat.remove();
-					this.node.name_seat = undefined;
-				}
-				
-				if (this.storage.nohp) this.node.hp.show();
-				this.classList.remove('unseen');
-				this.classList.remove('unseen2');
-				this.name = undefined;
-				this.name1 = undefined;
-				this.sex = undefined;
-				this.group = undefined;
-				this.hp = undefined;
-				this.maxHp = undefined;
-				this.hujia = undefined;
-				
-				this.clearSkills(true);
-				this.node.identity.style.backgroundColor = '';
-				this.node.intro.innerHTML = '';
-				this.node.name.innerHTML = '';
-				this.node.hp.innerHTML = '';
-				this.node.count.innerHTML = '0';
-				if (this.name2) {
-					this.singleHp = undefined;
-					this.node.avatar2.hide();
-					this.node.name2.innerHTML = '';
-					this.classList.remove('fullskin2');
-					this.name2 = undefined;
-				}
-				
-				for (var mark in this.marks) this.marks[mark].remove();
-				ui.updatem(this);
-
-				this.skipList = [];
-				this.skills = this.skills.contains('cangji_yozuru') ? ['cangji_yozuru'] : [];
-				this.initedSkills = [];
-				this.additionalSkills = {};
-				this.disabledSkills = {};
-				this.hiddenSkills = [];
-				this.awakenedSkills = [];
-				this.forbiddenSkills = {};
-				this.phaseNumber = 0;
-				this.stat = [{
-					card: {},
-					skill: {}
-				}];
-				this.tempSkills = {};
-				this.storage = {};
-				this.marks = {};
-				this.ai = {
-					friend: [],
-					enemy: [],
-					neutral: []
-				};
-
-				return this;
-			};
-			
 			lib.element.player.update = function(count, hp, hpMax, hujia){
 				if (!_status.video) {
 					if (this.hp >= this.maxHp) this.hp = this.maxHp;
@@ -4527,18 +4444,20 @@ content:function(config, pack){
 			lib.element.card.copy = function(){
 				var clone = cardCopyFunction.apply(this, arguments);
 				clone.nature = this.nature;
-				var res = decadeUI.resources.cards[clone.name];
-				if (res && !res.loaded && clone.classList.contains('decade-card')) {
-					if (res.loaded !== false) {
-						var error = res.image.onerror;
-						res.image.onerror = function(){
-							error.apply(this, arguments);
-							clone.style.background = res.rawUrl;
-							clone.classList.remove('decade-card');
-						};
 						
+				var res = dui.statics.cards;
+				var asset = res[clone.name];
+				if (!res.READ_OK)
+					return clone;
+				if (asset && !asset.loaded && clone.classList.contains('decade-card')) {
+					if (asset.loaded == undefined) {
+						var image = asset.image;
+						image.addEventListener('error', function(){
+							clone.style.background = asset.rawUrl;
+							clone.classList.remove('decade-card');
+						});
 					} else {
-						clone.style.background = res.rawUrl;
+						clone.style.background = asset.rawUrl;
 						clone.classList.remove('decade-card');
 					} 
 				}
@@ -5228,16 +5147,6 @@ content:function(config, pack){
 			
 			return ResizeSensor;
 		})(),
-		resources:{
-			cards:{
-				卡牌名称:{
-					name: '拼音名',
-					chinese: '中文名',
-					image: new Image(),	// 图片
-					loaded: false, 		// 是否已加载资源
-				},
-			},
-		},
 		sheet:{
 			init:function(){
 				if (!this.sheetList){
@@ -6243,6 +6152,52 @@ content:function(config, pack){
 			}
 		},
 		
+		statics:{
+			cards: (function(){
+				var cards = {};
+				var readFiles = function (files, entry) {
+					var index, cardname, filename;
+					var cards = dui.statics.cards;
+					var format = duicfg.cardPrettify;
+					var prefix = decadeUIPath + 'image/card/';
+					cards.READ_OK = true;
+					if (format === 'off')
+						return;
+					format = '.' + format.toLowerCase();
+					for (var i = 0; i < files.length; i++) {
+						filename = entry ? files[i].name : files[i];
+						index = filename.lastIndexOf(format);
+						if (index == -1)
+							continue;
+						cardname = filename.substring(0, index);
+						cards[cardname] = {
+							url: prefix + filename,
+							name: cardname,
+							loaded: true,
+						};
+					}
+				};
+				if (window.fs) {
+					console.time('resolve')
+					fs.readdir(__dirname + '/' + decadeUIPath + 'image/card/', function(err, files){
+						if (err)
+							return;
+						console.timeEnd('resolve')
+						readFiles(files);
+					});
+				} else if (window.resolveLocalFileSystemURL) {
+					console.time('resolve')
+					resolveLocalFileSystemURL(decadeUIPath + 'image/card/', function(entry) {
+						var reader = entry.createReader();
+						reader.readEntries(function(entries){
+							readFiles(entries, true);
+						});
+					});
+				}
+				return cards;
+			})(),
+			handTips: [],
+		},
 		dataset:{
 			animSizeUpdated: false,
 			handDataUpdated: false,
@@ -6253,6 +6208,93 @@ content:function(config, pack){
 				updated: false,
 			},
 		},
+	};
+	dui.showHandTip = function (text) {
+		var tip;
+		var tips = this.statics.handTips;
+		for (var i = 0; i < tips.length; i++) {
+			if (tip == undefined && tips[i].closed) {
+				tip = tips[i];
+				tip.closed = false;
+			} else {
+				tips[i].hide();
+			}
+		}
+		if (tip == undefined) {
+			tip = dui.element.create('hand-tip', ui.arena);
+			tips.unshift(tip);
+			tip.clear = function () {
+				var nodes = this.childNodes;
+				for (var i = 0; i < nodes.length; i++)
+					nodes[i].textContent = '';
+				this.dataset.text = '';
+			};
+			tip.setText = function (text, type) {
+				this.clear();
+				this.appendText(text, type);
+			};
+			tip.setInfomation = function (text) {
+				if (this.$info == null)
+					this.$info = dui.element.create('hand-tip-info', ui.arena);
+				this.$info.innerHTML = text;
+			};
+			tip.appendText = function (text, type) {
+				if (text == undefined || text === '')
+					return;
+				if (type == undefined)
+					type = '';
+				var nodes = this.childNodes;
+				for (var i = 0; i < nodes.length; i++) {
+					if (nodes[i].textContent == '') {
+						nodes[i].textContent = text;
+						nodes[i].dataset.type = type;
+						return nodes[i];
+					}
+				}
+				var span = document.createElement('span');
+				span.textContent = text;
+				span.dataset.type = type;
+				return this.appendChild(span);
+			};
+			tip.strokeText = function () {
+				this.dataset.text = this.innerText;
+			};
+			tip.show = function () {
+				this.classList.remove('hidden');
+				if (this.$info && this.$info.innerHTML)
+					this.$info.show();
+			};
+			tip.hide = function () {
+				this.classList.add('hidden');
+				if (this.$info)
+					this.$info.hide();
+			};
+			tip.close = function () {
+				this.closed = true;
+				this.hide();
+				if (tip.$info)
+					tip.$info.innerHTML = '';
+				var tips = dui.statics.handTips;
+				for (var i = 0; i < tips.length; i++) {
+					if (tips[i].closed)
+						continue;
+					tips[i].show();
+					return;
+				}
+			};
+			tip.isEmpty = function () {
+				var nodes = this.childNodes;
+				for (var i = 0; i < nodes.length; i++) {
+					if (nodes[i].textContent != '')
+						return false;
+				}
+				
+				return true;
+			};
+		}
+		tip.setText(text);
+		tip.show();
+		return tip;
 	};
 	decadeUI.CacheBounds = (function(){
 		function CacheBounds (element, x, y, width, height) {
@@ -6527,7 +6569,7 @@ content:function(config, pack){
 		}
 	};
 
-	window.duicfg   = config
+	
 	decadeUI.config = config;
 	duicfg.update = function(){
 	    var menu = lib.extensionMenu['extension_' + extensionName];
@@ -6540,7 +6582,6 @@ content:function(config, pack){
 		}
 	};
 	
-	window.dui = decadeUI;
 	decadeUI.init();
 	console.timeEnd(extensionName);
 },
@@ -6549,6 +6590,10 @@ precontent:function(){
 	var extensionName = '十周年UI';
 	var extension = lib.extensionMenu['extension_' + extensionName];
 	window.decadeUIPath = lib.assetURL + 'extension/' + extensionName + '/';
+	if (window.require) {
+		if (!window.fs)
+			window.fs = require('fs');
+	}
 	
 	if (lib.config['extension_' + extensionName + '_eruda']) {
 	    var script = document.createElement('script');
@@ -6583,12 +6628,14 @@ precontent:function(){
 	var thisObject = this;
 	window.decadeParts = {
 		init:function(){
-			this.css(decadeUIPath + 'layout.css');
-			this.css(decadeUIPath + 'decadeLayout.css');
-			this.css(decadeUIPath + 'player.css');
+			if (ui.css.fontsheet)
+				ui.css.fontsheet.remove();
+			this.css(decadeUIPath + 'font.css?v=' + thisObject.package.version);
+			this.css(decadeUIPath + 'layout.css?v=' + thisObject.package.version);
+			this.css(decadeUIPath + 'decadeLayout.css?v=' + thisObject.package.version);
+			this.css(decadeUIPath + 'player.css?v=' + thisObject.package.version);
 			
 			var filePath, ok;
-			// var fonts = ['shousha', 'xingkai', 'xinwei'];
 			var scripts = ['spine', 'component', 'skill', 'content', 'effect', 'animation', 'dynamicSkin'];
 			
 			var onload = function(){
@@ -6615,17 +6662,7 @@ precontent:function(){
 				}
 			}
 			
-			// var fontPreload = document.body.appendChild(document.createElement('div'));
-			// var fontHtml = '';
-			// for (var i = 0; i < fonts.length; i++) {
-				// fontHtml += '<font face="' + fonts[i] + '"> </font>'
-			// }
 			
-			// fontPreload.innerHTML = fontHtml;
-			// setTimeout(function(){
-				// fontPreload.remove();
-				// fontPreload = null;
-			// }, 100);
 			return this;
 		},
 		css:function(filePath){
@@ -6765,6 +6802,7 @@ config:{
 			skin_zhenji_才颜双绝: 				'甄　姬-才颜双绝',
 			skin_zhenji_洛神御水: 				'甄　姬-洛神御水',
 			skin_zhugeguo_兰荷艾莲: 			'诸葛果-兰荷艾莲',
+			skin_zhugeguo_仙池起舞: 			'诸葛果-仙池起舞',
 			skin_zhugeguo_英装素果: 			'诸葛果-英装素果',
 			skin_zhugeliang_空城退敌: 			'诸葛亮-空城退敌',
 			skin_zhangxingcai_凯旋星花: 		'张星彩-凯旋星花',
@@ -6792,39 +6830,26 @@ config:{
         init: true,
 		update:function(){
 			if (window.decadeUI) {
-				ui.arena.dataset.dynamicSkinOutcrop = lib.config['extension_十周年UI_dynamicSkinOutcrop'] ? 'on' : 'off';
+				var enable = lib.config['extension_十周年UI_dynamicSkinOutcrop'];
+				ui.arena.dataset.dynamicSkinOutcrop = enable ? 'on' : 'off';
 				var players = game.players;
 				if (!players) return;
 				for (var i = 0; i < players.length; i++) {
 					if (players[i].dynamic) {
+						players[i].dynamic.outcropMask = enable;
 						players[i].dynamic.update();
 					}
 				}
 			}
 		}
 	},
-	dynamicAdaptiveHD:{
-		name: '动皮高清自适应',
+	showJieMark:{
+        name: '界标记显示',
 		init: true,
-		update:function(){
-			if (!window.decadeUI) return;
-			var item = lib.config['extension_十周年UI_dynamicAdaptiveHD'];
-			decadeUI.config.dynamicAdaptiveHD = item;
-			var players = game.players;
-			if (players) {
-				for (var i = 0; i < players.length; i++) {
-					if (players[i].dynamic) {
-						players[i].dynamic.dprAdaptive = item;
-						players[i].dynamic.update();
-					}
-				}
-			}
 			
-			decadeUI.backgroundAnimation.dprAdaptive = item;
-		},
 	},
     cardAlternateNameVisible:{
-        name: '卡名辅助显示',
+        name: '牌名辅助显示',
         init: false,
 		update:function(){
 			if (window.decadeUI) ui.window.dataset.cardAlternateNameVisible = lib.config['extension_十周年UI_cardAlternateNameVisible'] ? 'on' : 'off';
@@ -6948,24 +6973,21 @@ package:{
     intro:(function(){
 		var log = [
 			'有bug先检查其他扩展，不行再关闭UI重试，最后再联系作者。',
-			'当前版本：1.9.110.9.3.5：',
-			'更新日期：2021-11-14',
-			'- 新增动态背景[大　乔-衣垂绿川]、[小　乔-采莲江南]、[蜀香香-花曳心牵];',
-			'- 新增动态背景小杀的彩蛋；',
-			'- 新增双武将动态皮肤支持；',
-			'- 优化动画相关的布局逻辑;',
-			'- 优化动皮的显示过度动画；',
-			'- 优化代码，提升加载速度；',
-			'- 优化手机端窗口过小问题；',
-			'- 修复手机端按钮大小问题；',
-			'- 修复受伤时动画与体力条未同步的问题；',
-			'- 修复替换武将后动皮未正确显示的问题；',
-			'- 由于动态皮肤过多会导致特效丢失，因此作出以下数量限制；',
-			'  chrome 69 及以上的内核版本，手机端限制在10个，PC端限制在18个；',
-			'  chrome 69 　以下的内核版本，手机端限制在 2个，PC端限制在10个；',
-			'  在控制台输入代码：navigator.appVersion，会返回你的chrome版本；',
-			'- windows端闪屏的请使用诗笺的64位版(chrome 91~)，或者原版的win由里版(chrome 51)，或者自行',
-			'  打包electron 4.0.0(chrome 69) ~ 10.4.7(chrome 85);',
+			'当前版本：1.1.0.211130',
+			'更新日期：2021-11-30',
+			'- 新增动皮[诸葛果仙池起舞]及其背景；',
+			'- 新增界武将标记显示及其对应的开关；',
+			'- 优化字体加载，配置font.css后秒开；',
+			'- 优化卡牌素材加载时机，提升流畅度；',
+			'- 优化出牌阶段与技能使用时文本提示；',
+			'- 优化武将的发光阴影时机并改为动图；',
+			'- 优化露头动皮其他特效部件显示范围；',
+			'  优化露头动皮有：大乔-衣垂绿川、小乔-采莲江南、何太后-蛇蝎为心、徐氏-为夫弑敌；',
+			'- 调整高清动皮自适应功能默认为开启；',
+			'- 修复在低内核版本下动皮的模糊问题；',
+			'- 修复挑战模式下BOSS图片消失的问题；',
+			'- 修复对决模式下选将图片消失的问题；',
+			'- 关于动皮数量限制，手机端请把chrome 内核更新到90及以上；',
 		];
 		
 		return '<p style="color:rgb(210,210,000); font-size:12px; line-height:14px; text-shadow: 0 0 2px black;">' + log.join('<br>') + '</p>';
@@ -6973,7 +6995,7 @@ package:{
     author:"短歌 QQ464598631",
     diskURL:"",
     forumURL:"",
-    version:"1.9.110.9.3.5",
+    version:"1.1.0.211130",
 },
 files:{
     "character":[],
@@ -7257,4 +7279,18 @@ editable: false
   在控制台输入代码：navigator.appVersion，会返回你的chrome版本；
 - windows端闪屏的请使用诗笺的64位版(chrome 91~)，或者原版的win由里版(chrome 51)，或者自行
   打包electron 10.4.7(chrome 85) ~ 4.0.0(chrome 69);
+1.1.0.211130
+- 新增动皮[诸葛果仙池起舞]及其背景；
+- 新增界武将标记显示及其对应的开关；
+- 优化字体加载，配置font.css后秒开；
+- 优化卡牌素材加载时机，提升流畅度；
+- 优化出牌阶段与技能使用时文本提示；
+- 优化武将的发光阴影时机并改为动图；
+- 优化露头动皮其他特效部件显示范围；
+  优化露头动皮有：大乔-衣垂绿川、小乔-采莲江南、何太后-蛇蝎为心、徐氏-为夫弑敌；
+- 调整高清动皮自适应功能默认为开启；
+- 修复在低内核版本下动皮的模糊问题；
+- 修复挑战模式下BOSS图片消失的问题；
+- 修复对决模式下选将图片消失的问题；
+- 关于动皮数量限制，手机端请把chrome 内核更新到90及以上；
 */

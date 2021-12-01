@@ -17382,6 +17382,17 @@
 					this.update();
 				},
 				uninit:function(){
+					if(window.decadeUI){
+						if (this.$jieMark)
+						this.$jieMark.remove();
+						
+						this.stopDynamic();
+						this.doubleAvatar = false;
+						this.node.campWrap.dataset.camp = null;
+						this.node.campWrap.node.campName.innerHTML = '';
+						this.node.campWrap.node.campName.style.backgroundImage = '';
+						this.node.name2.innerHTML = '';
+					}
 					for(var i=1;i<6;i++){
 						if(this.isDisabled(i)) this.$enableEquip('equip'+i);
 					}
@@ -33123,6 +33134,9 @@
 				for(j=0;j<players.length;j++){
 					players[j].classList.remove('selected');
 					players[j].classList.remove('selectable');
+					if(window.decadeUI){
+						players[j].classList.remove('un-selectable');
+					}
 					if(players[j].instance){
 						players[j].instance.classList.remove('selected');
 						players[j].instance.classList.remove('selectable');
@@ -44646,6 +44660,9 @@
 					delete node.activate;
 				}
 				_status.prebutton.push(node);
+				if(window.decadeUI){
+					if (position) position.appendChild(node);
+				}
 				return node;
 			},
 			button:function(item,type,position,noclick,node){
