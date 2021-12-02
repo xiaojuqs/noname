@@ -6096,6 +6096,9 @@ content:function(config, pack){
 			cheatJudgeCards:function(cards, judges, friendly){
 				if (!cards || !judges) throw arguments;
 				
+				//修正廢除判定區的BUG
+				if (judges.length==1&&get.judge(judges[0])==undefined) return [];
+				
 				var cheats = [];
 				var judgeCost;
 				for(var i = 0; i < judges.length; i++){
