@@ -3276,7 +3276,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 				}
 			},
-			wengua3:{},
+			wengua3:{charlotte:true},
 			daiyan:{
 				audio:2,
 				trigger:{player:'phaseJieshuBegin'},
