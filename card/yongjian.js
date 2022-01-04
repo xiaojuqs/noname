@@ -53,6 +53,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:2,
+					value:7,
 					tag:{
 						recover:1,
 					},

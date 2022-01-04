@@ -439,8 +439,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							if(player.hasSkillTag('pretao')) return 5;
 							return 2;
 						},
-						useful:[6.5,4,3,2],
-						value:[6.5,4,3,2],
+						useful:[10.2,4,3,2],
+						value:[10.2,4,3,2],
 					},
 					result:{
 						target:function(player,target){
