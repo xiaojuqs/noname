@@ -1,5 +1,5 @@
 'use strict';
-decadeParts.import(function(lib, game, ui, get, ai, _status){
+decadeModule.import(function(lib, game, ui, get, ai, _status){
 	decadeUI.content = {
 		chooseGuanXing:function(player, cards1, movable1, cards2, movable2, infohide){
 			if (get.itemtype(player) != 'player') throw player;
@@ -94,6 +94,8 @@ decadeParts.import(function(lib, game, ui, get, ai, _status){
 						y = 'calc(' + (i * 100) + '% + ' + (i * 10) + 'px)';
 						for (var j = 0; j < cards.length; j++) {
 							x = 'calc(' + (j * 100) + '% + ' + (j * 10) + 'px)';
+							// cards[j].style.transform = 'translate(' + x + ', ' + y + ')';
+							// cards[j].style.zIndex = (i * 10 + j + 1);
 							cards[j].style.cssText += ';transform:translate(' + x + ', ' + y + '); z-index:' + (i * 10 + j + 1) + ';';
 						}
 					}

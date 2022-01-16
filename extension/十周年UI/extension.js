@@ -3,7 +3,7 @@ game.import("extension", function(lib,game,ui,get,ai,_status){ return { name:"�
 content:function(config, pack){
 	'use strict';
 	
-	var extensionName = '十周年UI';
+	var extensionName = decadeUIName;
 	var extension = lib.extensionMenu['extension_' + extensionName];
 	var extensionPath = lib.assetURL + 'extension/' + extensionName + '/';
 	
@@ -52,7 +52,6 @@ content:function(config, pack){
 			var duoRPath = duor.appendChild(document.createElementNS(SVG_NS, 'path'));
 			
 			var dskinPath = dskin.appendChild(document.createElementNS(SVG_NS, 'path'));
-			// M1 0 H0 Q0 0.06 0.08 0.06 Q0 0.09 0 0.11 V1 H1 Z
 			soloPath.setAttribute('d', 'M0 0 H1 Q1 0.05 0.9 0.06 Q1 0.06 1 0.11 V1 H0 V0.11 Q0 0.06 0.1 0.06 Q0 0.05 0 0 Z');
 			duoLPath.setAttribute('d', 'M1 0 H0 Q0 0.06 0.15 0.06 Q0 0.06 0 0.11 V1 H1 Z');
 			duoRPath.setAttribute('d', 'M0 0 H1 Q1 0.06 0.85 0.06 Q1 0.06 1 0.11 V1 H0 Z');
@@ -159,8 +158,70 @@ content:function(config, pack){
 				},
 			};
 			
-			var Player = {};
-			(function(Player){
+			var Card = (function(Card){
+				Card.moveTo = function (player) {
+					if (!player)
+						return;
+					
+					var arena = dui.boundsCaches.arena;
+					if (!arena.updated)
+						arena.update();
+					
+					player.checkBoundsCache();
+					this.fixed = true;
+					var x = Math.round((player.cacheWidth - arena.cardWidth) / 2 + player.cacheLeft);
+					var y = Math.round((player.cacheHeight - arena.cardHeight) / 2 + player.cacheTop);
+					var scale = arena.cardScale;
+					
+					this.tx = x;
+					this.ty = y;
+					this.scaled = true;
+					this.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + scale + ')';
+					return this;
+				};
+				Card.moveDelete = function(player){
+					this.fixed = true;
+					this.moveTo(player);
+					setTimeout(function(card){
+						card.delete();
+					}, 460, this);
+				};
+				return Card;
+			})({});
+				
+			var Event = (function(Event){
+				Event.addMessageHook = function (message, callback) {
+					if (this._messages == undefined)
+						this._messages = {};
+					
+					message = message.toLowerCase();
+					if (this._messages[message] == undefined)
+						this._messages[message] = [];
+					
+					message = this._messages[message];
+					message.push(callback);
+				};
+				Event.triggerMessage = function (message) {
+					if (this._messages == undefined)
+						return;
+					
+					message = message.toLowerCase();
+					if (this._messages[message] == undefined)
+						return;
+					
+					message = this._messages[message];
+					for (var i = 0; i < message.length; i++) {
+						if (typeof message[i] == 'function')
+							message[i].call(this);
+					}
+					
+					this._messages[message] = [];
+				};
+				
+				return Event;
+			})({});
+			
+			var Player = (function(Player){
 				Player.init = function (character, character2, skill) {
 					this.doubleAvatar = (character2 && lib.character[character2]) != undefined;
 				
@@ -178,9 +239,10 @@ content:function(config, pack){
 						decadeUI.MAX_DYNAMIC = MAX_DYNAMIC;
 					}
 					
-					if (this.dynamic) this.stopDynamic();
+					if (this.dynamic)
+						this.stopDynamic();
 					var showDynamic = (this.dynamic || CUR_DYNAMIC < MAX_DYNAMIC) && duicfg.dynamicSkin;
-					if (showDynamic) {
+					if (showDynamic && _status.mode != null) {
 						var skins;
 						var dskins = decadeUI.dynamicSkin;
 						var avatars = this.doubleAvatar ? [character, character2] : [character];
@@ -231,6 +293,7 @@ content:function(config, pack){
 					
 					var jie;
 					if (character && duicfg.showJieMark) {
+						if (lib.characterPack.refresh)
 						jie = lib.characterPack.refresh[character];
 						if (jie == null) {
 							jie = character.substr(0, 3);
@@ -249,14 +312,930 @@ content:function(config, pack){
 					}
 					
 					var result = this._super.init.apply(this, arguments);
-					if (jie == '界')
-						result.node.name.innerText = result.node.name.innerText.substr(2);
+					if (jie == '界') {
+						var text = result.node.name.innerText;
+						if (text[1] == '\n')
+							text = text.substr(2);
+						else 
+							text = text.substr(1);
 					
+						result.node.name.innerText = text;
+					}
 					return result;
 				};
-			})(Player);
+				Player.update = function(count, hp, hpMax, hujia){
+					if (!_status.video) {
+						if (this.hp >= this.maxHp) this.hp = this.maxHp;
+						count = this.countCards('h');
+						hp = this.hp;
+						hpMax = this.maxHp;
+						
+						game.broadcast(function(player, hp, maxHp, hujia) {
+							player.hp = hp;
+							player.maxHp = maxHp;
+							player.hujia = hujia;
+							player.update();
+						}, this, hp, hpMax, this.hujia);
+						
+						if (this.hujia) {
+							this.markSkill('ghujia');
+						} else {
+							this.unmarkSkill('ghujia');
+						}
+						
+						game.addVideo('update', this, [count, hp, hpMax, this.hujia]);
+					} else {
+						// 虽然上面的 game.addVideo 提供了好几个参数，但是没啥用，因为videoContent里的update缺只给了1个参数。
+						if (!count)
+							count = this.countCards('h');
+						
+						hp = this.hp;
+						hpMax = this.maxHp;
+					}
 					
+					var hpNode = this.node.hp;
+					if (!this.storage.nohp) {
+						if (hpMax > 5) {
+							var hpText = (isNaN(hp) ? '×' : (hp == Infinity ? '∞' : hp));
+							var hpMaxText = (isNaN(hpMax) ? '×' : (hpMax == Infinity ? '∞' : hpMax));
+							if (!hpNode.textstyle) {
+								hpNode.innerHTML = '';
+								hpNode.textstyle = true;
+								hpNode.classList.add('textstyle');
+								hpNode.$hpText = hpNode.appendChild(document.createTextNode(hpText));
+								hpNode.$br1 = hpNode.appendChild(document.createElement('br'));
+								hpNode.$slash = hpNode.appendChild(document.createTextNode('/'));
+								hpNode.$br2 = hpNode.appendChild(document.createElement('br'));
+								hpNode.$hpMaxText = hpNode.appendChild(document.createTextNode(hpMaxText));
+								hpNode.$div = hpNode.appendChild(document.createElement('div'));
+							} else {
+								hpNode.$hpText.textContent = hpText;
+								hpNode.$hpMaxText.textContent = hpMaxText;
+							}
+							
+							if (hp == 0)
+								hpNode.lastChild.classList.add('lost');
+						} else {
+							if (hpNode.textstyle) {
+								hpNode.innerHTML = '';
+								hpNode.classList.remove('textstyle');
+							}
+							
+							while (hpMax > hpNode.childNodes.length)
+								ui.create.div(hpNode);
+							while (hpMax < hpNode.childNodes.length)
+								hpNode.lastChild.remove();
+							
+							for (var i = 0; i < hpMax; i++) {
+								if (i < hp) {
+									hpNode.childNodes[i].classList.remove('lost');
+								} else {
+									hpNode.childNodes[i].classList.add('lost');
+								}
+							}
+						}
+						
+						if (hpNode.classList.contains('room')) {
+							hpNode.dataset.condition = 'high';
+						} else if (hp == 0) {
+							hpNode.dataset.condition = '';
+						} else if (hp > Math.round(hpMax / 2) || hp === hpMax) {
+							hpNode.dataset.condition = 'high';
+						} else if (hp > Math.floor(hpMax / 3)) {
+							hpNode.dataset.condition = 'mid';
+						} else {
+							hpNode.dataset.condition = 'low';
+						}
+					}
+					
+					this.node.count.innerHTML = count;
+					if (count >= 10) {
+						this.node.count.dataset.condition = 'low';
+					} else if (count > 5) {
+						this.node.count.dataset.condition = 'higher';
+					} else if (count > 2) {
+						this.node.count.dataset.condition = 'high';
+					} else if (count > 0) {
+						this.node.count.dataset.condition = 'mid';
+					} else {
+						this.node.count.dataset.condition = 'none';
+					}
+					
+					this.dataset.maxHp = hpMax;
+					this.updateMarks();
+					
+					if (this.updates) {
+						for (var i = 0; i < lib.element.player.updates.length; i++) {
+							lib.element.player.updates[i](this);
+						}
+					}
+					
+					return this;
+				};
+				Player.directgain = function (cards, broadcast, gaintag) {
+					var player = this;
+					var handcards = player.node.handcards1;
+					var fragment = document.createDocumentFragment();
+					
+					var card;
+					for (var i = 0; i < cards.length; i++) {
+						card = cards[i];
+						card.fix();
+						if (card.parentNode == handcards) {
+							cards.splice(i--, 1);
+							continue;
+						}
+						
+						if (gaintag)
+							card.addGaintag(gaintag);
+						
+						fragment.insertBefore(card, fragment.firstChild);
+					}
+					
+					if (player == game.me) {
+						dui.layoutHandDraws(cards.reverse());
+						dui.queueNextFrameTick(dui.layoutHand, dui);
+					}
+					
+					var s = player.getCards('s');
+					if (s.length)
+						handcards.insertBefore(fragment, s[0]);
+					else
+						handcards.appendChild(fragment);
+
+					if (!_status.video) {
+						game.addVideo('directgain', this, get.cardsInfo(cards));
+						this.update();
+					}
+					
+					if (broadcast !== false) 
+						game.broadcast(function(player, cards) {
+							player.directgain(cards);
+						}, this, cards);
+					return this;
+				};
+				Player.useCard = function () {
+					var event = this._super.useCard.apply(this, arguments);
+					Object.defineProperties(event, {
+						oncard:{
+							get:function() {
+								return this._oncard;
+							},
+							set:function(value) {
+								this._oncard2 = value;
+							}
+						}
+					});
+					event.finish = function () {
+						this.finished = true;
+						var targets = this.targets;
+						for (var i = 0; i < targets.length; i++) {
+							targets[i].classList.remove('target');
+						}
+					};
+					event._oncard = function (card, player) {
+						var player = this.player;
+						var targets = this.targets;
+						for (var i = 0; i < targets.length; i++) {
+							if (targets[i] != player)
+								targets[i].classList.add('target');
+						}
+						
+						
+						if (this._oncard2) this._oncard2(card, player);
+					}
+					return event;
+				};
+				Player.lose = function () {
+					var next = this._super.lose.apply(this, arguments);
+					var event = _status.event;
+					if (event.name == 'useCard') {
+						next.animate = true;
+						next.blameEvent = event;
+						event.throw = false;
+					}
+					
+					return next;
+				};
+				Player.line = function (target, config) {
+					if (get.itemtype(target) == 'players') {
+						for (var i = 0; i < target.length; i++) {
+							this.line(target[i], config);
+						}
+					} else if (get.itemtype(target) == 'player') {
+						if (target == this)
+							return;
+						
+						var player = this;
+						game.broadcast(function(player, target, config) {
+							player.line(target, config);
+						}, player, target, config);
+						game.addVideo('line', player, [target.dataset.position, config]);
+						
+						player.checkBoundsCache(true);
+						target.checkBoundsCache(true);
+						var x1, y1;
+						var x2, y2;
+						var hand = dui.boundsCaches.hand;
+						if (player == game.me) {
+							hand.check();
+							x1 = hand.x + hand.width / 2;
+							y1 = hand.y;
+						} else {
+							x1 = player.cacheLeft + player.cacheWidth / 2;
+							y1 = player.cacheTop + player.cacheHeight / 2;
+						}
+						
+						if (target == game.me) {
+							hand.check();
+							x2 = hand.x + hand.width / 2;
+							y2 = hand.y;
+						} else {
+							x2 = target.cacheLeft + target.cacheWidth / 2;
+							y2 = target.cacheTop + target.cacheHeight / 2;
+						}
+						
+						game.linexy([x1, y1, x2, y2], config, true);
+					}
+				};
+				Player.checkBoundsCache = function (forceUpdate) {
+					var update;
+					var refer = dui.boundsCaches.arena;
+					refer.check();
+					
+					if (this.cacheReferW != refer.width || 
+						this.cacheReferH != refer.height || 
+						this.cachePosition != this.dataset.position)
+						update = true;
+					
+					this.cacheReferW = refer.width;
+					this.cacheReferH = refer.height;
+					this.cachePosition = this.dataset.position;
+					if (this.cacheLeft == null)
+						update = true;
+						
+					if (update || forceUpdate) {
+						this.cacheLeft = this.offsetLeft;
+						this.cacheTop = this.offsetTop;
+						this.cacheWidth = this.offsetWidth;
+						this.cacheHeight = this.offsetHeight;
+					}
+				};
+				Player.queueCssAnimation = function (animation) {
+					var current = this.style.animation;
+					var animations = this._cssanimations;
+					if (animations == undefined) {
+						animations = [];
+						this._cssanimations = animations;
+						this.addEventListener('animationend', function(e){
+							if (this.style.animationName != e.animationName)
+								return;
+							
+							var current = this.style.animation;
+							var animations = this._cssanimations;
+							while (animations.length) {
+								this.style.animation = animations.shift();
+								if (this.style.animation != current)
+									return;
+								
+								animations.current = this.style.animation;
+							}
+							
+							animations.current = '';
+							this.style.animation = '';
+						});
+					}
+					
+					if (animations.current || animations.length) {
+						animations.push(animation);
+						return;
+					}
+					
+					animations.current = animation;
+					this.style.animation = animation;
+				};
+				Player.$draw = function (num, init, config) {
+					if (game.chess) 
+						return this._super.$draw.call(this, num, init, config);
+					
+					if (init !== false && init !== 'nobroadcast'){
+						game.broadcast(function(player, num, init, config){
+							player.$draw(num, init, config);
+						}, this, num, init, config);
+					}
+					
+					var cards;
+					var isDrawCard;
+					if (get.itemtype(num) == 'cards') {
+						cards = num.concat();
+						isDrawCard = true;
+					} else if (get.itemtype(num) == 'card') {
+						cards = [num];
+						isDrawCard = true;
+					} else if (typeof num == 'number') {
+						cards = new Array(num);
+					} else {
+						cards = new Array(1);
+					}
+					
+					if (init !== false){
+						if (isDrawCard){
+							game.addVideo('drawCard', this, get.cardsInfo(cards));
+						} else {
+							game.addVideo('draw', this, num);
+						}
+					}				
+					
+					if (game.me == this)
+						return;
+					
+					var fragment = document.createDocumentFragment();
+					var card;
+					for (var i = 0; i < cards.length; i++){
+						card = cards[i];
+						if (card == null)
+							card = dui.element.create('card thrown drawingcard');
+						else
+							card = card.copy('thrown', 'drawingcard', false);
+						
+						card.fixed = true;
+						cards[i] = card;
+						fragment.appendChild(card);
+					}
+					
+					var player = this;
+					dui.layoutDrawCards(cards, player, true);
+					ui.arena.appendChild(fragment);
+					dui.queueNextFrameTick(function(){
+						dui.layoutDrawCards(cards, player);
+						dui.delayRemoveCards(cards, 460, 220);
+					});
+				};
+				Player.$give = function (cards, target, log, record) {
+					var itemtype;
+					var duiMod = (cards.duiMod && game.me == target);
+					if (typeof cards == 'number') {
+						itemtype = 'number';
+						cards = new Array(cards);
+					} else {
+						itemtype = get.itemtype(cards);
+						if (itemtype == 'cards') {
+							cards = cards.concat();
+						} else if (itemtype == 'card') {
+							cards = [cards];
+						} else {
+							return;
+						}
+					}
+					
+					if (record !== false) {
+						var cards2 = cards;
+						if (itemtype == 'number') {
+							cards2 = cards.length;
+							game.addVideo('give', this, [cards2, target.dataset.position]);
+						} else {
+							game.addVideo('giveCard', this, [get.cardsInfo(cards2), target.dataset.position]);
+						}
+						
+						game.broadcast(function(source, cards2, target, record) {
+							source.$give(cards2, target, false, record);
+						}, this, cards2, target, record);
+					}
+					
+					if (log != false) {
+						if (itemtype == 'number')
+							game.log(target, '从', this, '获得了' + get.cnNumber(cards.length) + '张牌');
+						else
+							game.log(target, '从', this, '获得了', cards);
+					}
+					
+					if (this.$givemod) {
+						this.$givemod(cards, target);
+						return;
+					}
+					
+					if (duiMod)
+						return;
+					
+					var card;
+					var hand = dui.boundsCaches.hand;
+					hand.check();
+					
+					var draws = [];
+					var player = this;
+					var fragment = document.createDocumentFragment();
+					for (var i = 0; i < cards.length; i++) {
+						card = cards[i];
+						if (card) {
+							var cp = card.copy('card', 'thrown', 'gainingcard', false);
+							var hs = player == game.me;
+							if (hs) {
+								if (card.throwWith)
+									hs = card.throwWith == 'h' || card.throwWith == 's';
+								else
+									hs = card.parentNode == player.node.handcards1;
+							}
+							
+							if (hs) {
+								cp.tx = Math.round(hand.x + card.tx);
+								cp.ty = Math.round(hand.y + 30 + card.ty);
+								cp.scaled = true;
+								cp.style.transform = 'translate(' + cp.tx + 'px,' + cp.ty + 'px) scale(' + hand.cardScale + ')';
+							} else {
+								draws.push(cp);
+							}
+							card = cp;
+						} else {
+							card = dui.element.create('card thrown gainingcard');
+							draws.push(card);
+						}
+						
+						cards[i] = card;
+						cards[i].fixed = true;
+						fragment.appendChild(cards[i]);
+					}
+					
+					if (draws.length)
+						dui.layoutDrawCards(draws, player);
+					
+					ui.arena.appendChild(fragment);
+					dui.queueNextFrameTick(function(){
+						dui.layoutDrawCards(cards, target);
+						dui.delayRemoveCards(cards, 460, 220);
+					});
+				};
+				Player.$gain2 = function (cards, log){
+					var type = get.itemtype(cards);
+					if (type != 'cards') {
+						if (type != 'card')
+							return;
+						
+						type = 'cards';
+						cards = [cards];
+					}
+					
+					if (log === true)
+						game.log(this, '获得了', cards);
+					
+					game.broadcast(function(player, cards){
+						player.$gain2(cards);
+					}, this, cards);
+					
+					var gains = [];
+					var draws = [];
+					
+					var card;
+					var clone;
+					for (var i = 0; i < cards.length; i++) {
+						clone = cards[i].clone;
+						card = cards[i].copy('thrown', 'gainingcard');
+						card.fixed = true;
+						if (clone && clone.parentNode == ui.arena) {
+							card.scaled = true;
+							card.style.transform = clone.style.transform;
+							gains.push(card);
+						} else {
+							draws.push(card);
+						}
+					}
+					
+					if (gains.length)
+						game.addVideo('gain2', this, get.cardsInfo(gains));
+					
+					if (draws.length)
+						game.addVideo('drawCard', this, get.cardsInfo(draws));
+					
+					if (cards.duiMod && this == game.me)
+						return;
+					
+					cards = gains.concat(draws);
+					dui.layoutDrawCards(draws, this, true);
+					
+					var player = this;
+					var fragment = document.createDocumentFragment();
+					for (var i = 0; i < cards.length; i++)
+						fragment.appendChild(cards[i]);
+					
+					ui.arena.appendChild(fragment);
+					dui.queueNextFrameTick(function(){
+						dui.layoutDrawCards(cards, player);
+						dui.delayRemoveCards(cards, 460, 220);
+					});
+				};
+				Player.$damage = function (source) {
+					if (get.itemtype(source) == 'player') {
+						game.addVideo('damage', this, source.dataset.position);
+					} else {
+						game.addVideo('damage', this);
+					}
+					game.broadcast(function(player, source){
+						player.$damage(source);
+					}, this, source);
+					
+					this.queueCssAnimation('player-hurt 0.3s');
+				};
+				Player.$throw = function(cards, time, record, nosource) {
+					var itemtype;
+					var duiMod = (cards.duiMod && game.me == this && !nosource);
+					if (typeof cards == 'number') {
+						itemtype = 'number';
+						cards = new Array(cards);
+					} else {
+						itemtype = get.itemtype(cards);
+						if (itemtype == 'cards') {
+							cards = cards.concat();
+						} else if (itemtype == 'card') {
+							cards = [cards];
+						} else {
+							return;
+						}
+					}
+					
+					var card;
+					var clone;
+					var player = this;
+					var hand = dui.boundsCaches.hand;
+					hand.check();
+					
+					for (var i = 0; i < cards.length; i++) {
+						card = cards[i];
+						if (card) {
+							clone = card.copy('thrown');
+							if (duiMod && (card.throwWith == 'h' || card.throwWith == 's')) {
+								clone.tx = Math.round(hand.x + card.tx);
+								clone.ty = Math.round(hand.y + 30 + card.ty);
+								clone.scaled = true;
+								clone.throwordered = true;
+								clone.style.transform = 'translate(' + clone.tx + 'px,' + clone.ty + 'px) scale(' + hand.cardScale + ')';
+							} 
+							card = clone;
+						} else {
+							card = dui.element.create('card infohidden infoflip');
+							card.moveTo = lib.element.card.moveTo;
+							card.moveDelete = lib.element.card.moveDelete;
+						}
+						
+						cards[i] = card;
+					}
+					
+					if (record !== false) {
+						if (record !== 'nobroadcast') {
+							game.broadcast(function(player, cards, time, record, nosource) {
+								player.$throw(cards, time, record, nosource);
+							}, this, cards, 0, record, nosource);
+						}
+						
+						game.addVideo('throw', this, [get.cardsInfo(cards), 0, nosource]);
+					}
+					
+					if (duiMod && cards.length > 2) {
+						cards.sort(function(a, b){
+							if (a.tx == undefined && b.tx == undefined)
+								return 0;
+							
+							if (a.tx == undefined)
+								return duicfg.rightLayout ? -1 : 1;
+							
+							if (b.tx == undefined)
+								return duicfg.rightLayout ? 1 : -1;
+							
+							return b.tx - a.tx;
+						});
+					}
+					
+					for (var i = 0; i < cards.length; i++)
+						player.$throwordered2(cards[i], nosource);
+					
+					if (game.chess)
+						this.chessFocus();
+					
+					return cards[cards.length - 1];
+				};
+				Player.$throwordered2 = function(card, nosource) {
+					if (_status.connectMode)
+						ui.todiscard = [];
+					
+					if (card.throwordered == undefined) {
+						var x, y;
+						var bounds = dui.boundsCaches.arena;
+						if (!bounds.updated)
+							bounds.update();
+						
+						this.checkBoundsCache();
+						if (nosource){
+							x = ((bounds.width - bounds.cardWidth) / 2 - bounds.width * 0.08);
+							y = ((bounds.height - bounds.cardHeight) / 2);
+						} else {
+							x = ((this.cacheWidth - bounds.cardWidth) / 2 + this.cacheLeft);
+							y = ((this.cacheHeight - bounds.cardHeight) / 2 + this.cacheTop);
+						}
+						
+						x = Math.round(x);
+						y = Math.round(y);
+						
+						card.tx = x;
+						card.ty = y;
+						card.scaled = true;
+						card.classList.add('thrown');
+						card.style.transform = 'translate(' + x + 'px, ' + y + 'px)' + 'scale(' + bounds.cardScale + ')';
+					} else {
+						card.throwordered = undefined;
+					}
+					
+					if (card.fixed)
+						return ui.arena.appendChild(card);
+						
+					var before;
+					for (var i = 0; i < ui.thrown; i++){
+						if (ui.thrown[i].parentNode == ui.arena){
+						   before = ui.thrown[i];
+						   break;
+						}
+					}
+					
+					var tagNode = card.querySelector('.used-info');
+					if (tagNode == null)
+						tagNode = card.appendChild(dui.element.create('used-info'));
+					
+					card.$usedtag = tagNode;
+					ui.thrown.unshift(card);
+					if (before)
+						ui.arena.insertBefore(before, card);
+					else
+						ui.arena.appendChild(card);
+					
+					dui.tryAddPlayerCardUseTag(card, this, _status.event);
+					dui.queueNextFrameTick(dui.layoutDiscard, dui);
+					return card;
+				};
+				return Player;
+			})({});
+			
+			var EventContent = (function(EventContent){
+				//以下為game.js的lose:function替換修改。game.js有動到這函數時記得修改。
+				EventContent.lose = function () {
+					"step 0"
+					if (event.insert_card && event.position == ui.cardPile)
+						event.cards.reverse();
+					
+					event.stockcards = cards.concat();
+					var hs = [], es = [], js = [], ss = [];
+					var cards = event.cards;
+					var gainmap = event.gaintag_map = {};
+					var be = event.blameEvent;
+					var pe = event.getParent();
+					var pename = pe.name;
+					
+					if (be == undefined && pename != 'discard' && event.type != 'discard') {
+						event.animate = false;
+						event.delay = false;
+					} else {
+						if (pe.delay === false)
+							event.delay = false;
+						
+						if (event.animate == undefined)
+							event.animate = pe.animate;
+					}
+					
+					
+					var card, pileNode;
+					var hej = player.getCards('hejs');
+					for (var i = 0; i < cards.length; i++) {
+						card = cards[i];
+						if (card.gaintag && card.gaintag.length) {
+							gainmap[card.cardid] = card.gaintag.concat();
+							card.removeGaintag(true);
+						}
+						
+						pileNode = card.parentNode;
+						if (!hej.contains(card)) {
+							cards.splice(i--, 1);
+							continue;
+						} else if (pileNode) {
+							if (pileNode.classList.contains('equips')) {
+								es.push(card);
+								card.throwWith = card.original = 'e';
+							} else if (pileNode.classList.contains('judges')) {
+								js.push(card);
+								card.throwWith = card.original = 'j';
+							} else if (pileNode.classList.contains('handcards')) {
+								if (card.classList.contains('glows')) {
+									ss.push(card);
+									card.throwWith = card.original = 's';
+								} else {
+									hs.push(card);
+									card.throwWith = card.original = 'h';
+								}
+							} else {
+								card.throwWith = card.original = null;
+							}
+						}
+						
+						var info = lib.card[card.name];
+						if (info.destroy || card._destroy) {
+							card.delete();
+							card.destroyed = info.destroy || card._destroy;
+						} else if (event.position) {
+							if (_status.discarded) {
+								if (event.position == ui.discardPile) {
+									_status.discarded.add(card);
+								} else {
+									_status.discarded.remove(card);
+								}
+							}
+							
+							if (event.insert_index) {
+								card.fix();
+								event.position.insertBefore(card, event.insert_index(event, card));
+							} else if (event.insert_card) {
+								card.fix();
+								event.position.insertBefore(card, event.position.firstChild);
+							} else {
+								if (event.position == ui.cardPile)
+									card.fix();
+								
+								event.position.appendChild(card);
+							}
+						} else {
+							card.remove();
+						}
+						
+						card.recheck();
+						card.classList.remove('glow');
+						card.classList.remove('glows');
+					}
+					
+					if (player == game.me)
+						dui.queueNextFrameTick(dui.layoutHand, dui);
+					
+					ui.updatej(player);
+					game.broadcast(function(player, cards, num) {
+						for (var i = 0; i < cards.length; i++) {
+							cards[i].classList.remove('glow');
+							cards[i].classList.remove('glows');
+							cards[i].fix();
+							cards[i].remove();
+						}
+						
+						if (player == game.me)
+							ui.updatehl();
+						
+						ui.updatej(player);
+						_status.cardPileNum = num;
+					}, player, cards, ui.cardPile.childNodes.length);
+					if (event.animate != false) {
+						pe.discardid = lib.status.videoId++;
+						game.broadcastAll(function(player, cards, id) {
+							cards.duiMod = true;
+							player.$throw(cards, null, 'nobroadcast');
+							var cardnodes = [];
+							cardnodes._discardtime = get.time();
+							for (var i = 0; i < cards.length; i++) {
+								if (cards[i].clone) {
+									cardnodes.push(cards[i].clone);
+								}
+							}
+							ui.todiscard[id] = cardnodes;
+						}, player, cards, pe.discardid);
+						if (lib.config.sync_speed && cards[0] && cards[0].clone) {
+							var evt;
+							if (pe.delay != false)
+								evt = pe;
+							else if (pe.getParent().discardTransition)
+								evt = pe.getParent();
+							
+							if (evt) {
+								evt.discardTransition = undefined;
+								var waitingForTransition = get.time();
+								evt.waitingForTransition = waitingForTransition;
+								cards[0].clone.listenTransition(function(){
+									if (_status.waitingForTransition == waitingForTransition && _status.paused)
+										game.resume();
+									
+									evt.waitingForTransition = undefined;
+								});
+							}
+						}
+					}
+					
+					game.addVideo('lose', player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js), get.cardsInfo(ss)]);
+					event.cards2 = hs.concat(es);
+					player.getHistory('lose').push(event);
+					game.getGlobalHistory().cardMove.push(event);
+					player.update();
+					game.addVideo('loseAfter', player);
+					event.num = 0;
+					if (event.position == ui.ordering) {
+						var evt = event.relatedEvent || event.getParent();
+						if (!evt.orderingCards) evt.orderingCards = [];
+						if (!event.noOrdering && !event.cardsOrdered) {
+							event.cardsOrdered = true;
+							var next = game.createEvent('orderingDiscard', false, evt.getParent());
+							next.relatedEvent = evt;
+							next.setContent('orderingDiscard');
+						}
+						if (!event.noOrdering) {
+							evt.orderingCards.addArray(cards);
+							evt.orderingCards.addArray(ss);
+						}
+					} else if (event.position == ui.cardPile) {
+						game.updateRoundNumber();
+					}
+					if (event.toRenku) _status.renku.addArray(cards);
+					event.hs = hs;
+					event.es = es;
+					event.js = js;
+					event.ss = ss;
+					"step 1"
+					if (num < cards.length) {
+						if (event.es.contains(cards[num])) {
+							event.loseEquip = true;
+							player.removeEquipTrigger(cards[num]);
+							var info = get.info(cards[num]);
+							if (info.onLose && (!info.filterLose || info.filterLose(cards[num], player))) {
+								event.goto(2);
+								return;
+							}
+						}
+						event.num++;
+						event.redo();
+					} else {
+						if (event.loseEquip) {
+							player.addEquipTrigger();
+						}
+						event.goto(3);
+					}
+					"step 2"
+					var info = get.info(cards[num]);
+					if (info.loseDelay != false && (player.isAlive() || info.forceDie)) {
+						player.popup(cards[num].name);
+						game.delayx();
+					}
+					if (Array.isArray(info.onLose)) {
+						for (var i = 0; i < info.onLose.length; i++) {
+							var next = game.createEvent('lose_' + cards[num].name);
+							next.setContent(info.onLose[i]);
+							if (info.forceDie) next.forceDie = true;
+							next.player = player;
+							next.card = cards[num];
+						}
+					} else {
+						var next = game.createEvent('lose_' + cards[num].name);
+						next.setContent(info.onLose);
+						next.player = player;
+						if (info.forceDie) next.forceDie = true;
+						next.card = cards[num];
+					}
+					event.num++;
+					event.goto(1);
+					"step 3"
+					if (event.toRenku) {
+						if (_status.renku.length > 6) {
+							var cards = _status.renku.splice(0, _status.renku.length - 6);
+							game.log(cards, '从仁库进入了弃牌堆');
+							game.cardsDiscard(cards).set('outRange', true).fromRenku = true;
+						}
+						game.updateRenku();
+					}
+					"step 4"
+					var evt = event.getParent();
+					if (evt.name != 'discard' && event.type != 'discard') return;
+					if (evt.delay != false) {
+						if (evt.waitingForTransition) {
+							_status.waitingForTransition = evt.waitingForTransition;
+							game.pause();
+						} else {
+							game.delayx();
+						}
+					}
+				};
+				return EventContent;
+			})({});
+			
+			var Game = (function(Game){
+				Game.phaseLoop = function (player) {
+					game.broadcastAll(function(firstAction){
+						var cur;
+						for (var i = 0; i < game.players.length; i++) {
+							cur = game.players[i];
+							if (!cur.node.seat)
+								cur.node.seat = decadeUI.element.create('seat', cur);
+							
+							cur.seat = get.distance(firstAction, cur, 'absolute') + 1;
+							cur.node.seat.innerHTML = get.cnNumber(cur.seat, true);
+						}
+					}, player);
+					
+					return this._super.phaseLoop.apply(this, arguments);
+				};
+				return Game;
+			})({});
+			
+			overrides(lib.element.card, Card);
+			overrides(lib.element.event, Event);
 			overrides(lib.element.player, Player);
+			overrides(lib.element.content, EventContent);
+			overrides(game, Game);
 			
 			var ride = {};
 			ride.lib = {
@@ -468,9 +1447,6 @@ content:function(config, pack){
 										this.node.image.setBackgroundImage('image/card/' + bg + '.png');
 									}
 								}
-							// } else if (lib.card[bg].image == 'background') {
-								// if (card[3]) this.node.background.setBackground(bg + '_' + card[3], 'card');
-								// else this.node.background.setBackground(bg, 'card');
 							} else if (lib.card[bg].fullimage) {
 								this.classList.add('fullimage');
 								if (img) {
@@ -547,8 +1523,6 @@ content:function(config, pack){
 								}
 							} else {
 								this.node.background.textContent = lib.translate[bg + '_cbg'] || lib.translate[bg + '_bg'] || get.translation(bg)[0];
-								// if (this.node.background.innerHTML.length > 1) this.node.background.classList.add('tight');
-								// else this.node.background.classList.remove('tight');
 							}
 							if (!lib.card[bg].fullborder && this.node.avatar && this.node.framebg) {
 								this.node.avatar.remove();
@@ -764,43 +1738,7 @@ content:function(config, pack){
 						},
 					},
 					
-					content:{
-						changeHp:function(){
-							player.hp += num;
-							if (isNaN(player.hp)) player.hp = 0;
-							if (player.hp > player.maxHp) player.hp = player.maxHp;
-							player.update();
-							if (event.popup !== false) {
-								player.$damagepop(num, 'water');
-							}
-							if (_status.dying.contains(player) && player.hp > 0) {
-								_status.dying.remove(player);
-								game.broadcast(function(list) {
-									_status.dying = list;
-								},
-								_status.dying);
-								var evt = event.getParent('_save');
-								if (evt && evt.finish) evt.finish();
-								evt = event.getParent('dying');
-								if (evt && evt.finish) evt.finish()
-							}
-							event.trigger('changeHp');
-							decadeUI.delay(300);
-						},
-						turnOver:function(){
-							game.log(player,'翻面');
-							player.classList.toggle('turnedover');
-							game.broadcast(function(player){
-								player.classList.toggle('turnedover');
-							},player);
-							game.addVideo('turnOver', player, player.classList.contains('turnedover'));
-							player.style.animation = 'turned-over 0.5s linear';
-							setTimeout(function(player){
-								player.style.animation = '';
-							}, 500, player)
 							
-						},
-					},
 					
 					control:{
 						add:function(item){
@@ -819,12 +1757,12 @@ content:function(config, pack){
 						},
 						
 						close:function(){
+							this.remove();
 							ui.controls.remove(this);
-							if (this.parentNode) this.parentNode.removeChild(this);
-							if(ui.confirm==this) delete ui.confirm;
-							if(ui.skills==this) delete ui.skills;
-							if(ui.skills2==this) delete ui.skills2;
-							if(ui.skills3==this) delete ui.skills3;
+							if(ui.confirm == this) ui.confirm = null;
+							if(ui.skills == this)  ui.skills  = null;
+							if(ui.skills2 == this) ui.skills2 = null;
+							if(ui.skills3 == this) ui.skills3 = null;
 						},
 						
 						replace:function(){
@@ -1162,21 +2100,7 @@ content:function(config, pack){
 							return this;
 						},
 						
-						$damage:function(source){
-							if (get.itemtype(source) == 'player') {
-								game.addVideo('damage', this, source.dataset.position);
-							} else {
-								game.addVideo('damage', this);
-							}
-							game.broadcast(function(player, source){
-								player.$damage(source);
-							}, this, source);
 							
-							this.style.animation = 'player-hurt 0.3s';
-							setTimeout(function(player){
-								player.style.animation = '';
-							}, 310, this)
-						},
 						
 						$dieAfter:function(){
 							this.stopDynamic();
@@ -1261,6 +2185,9 @@ content:function(config, pack){
 					}
 				},
 				
+				updatehl:function(){
+					dui.queueNextFrameTick(dui.layoutHand, dui);
+				},
 				updatej:function(player){
 					if (!player) return;
 				
@@ -1324,27 +2251,13 @@ content:function(config, pack){
 						var rarity = game.getRarity(button.link);
 						var intro = button.node.intro;
 						intro.classList.add('showintro');
-						if (intro.innerText) intro.innerText = '';
 						
-						var img = new Image();
-						img.onload = function () {
 							intro.classList.add('rarity');
-							// intro.innerHTML = '';
-							// intro.innerText = '';
-							intro.style.backgroundImage = 'url(' + img.src + ')';
-						};
+						if (intro.innerText)
+							intro.innerText = '';
 						
-						img.onerror = function () {
-							intro.style.fontFamily = 'shousha';
-							intro.style.fontSize = '16px';
-							intro.style.top = 'auto';
-							intro.style.bottom = '6px';
-							intro.style.left = '6px';
-							// intro.innerHTML = get.translation(rarity);
-							intro.innerText = get.translation(rarity);
-						};
+						intro.style.backgroundImage = 'url("' + decadeUIPath + 'assets/image/rarity_' + rarity + '.png")';
 							
-						img.src = decadeUIPath + 'assets/image/rarity_' + rarity + '.png';
 						
 						if ((button.link == 'xushu' || button.link == 'xin_xushu') && button.node && button.node.name && button.node.group){
 							if (button.classList.contains('newstyle')) {
@@ -1394,7 +2307,6 @@ content:function(config, pack){
 							if (intersection) {
 								node.awaitItem = item;
 								intersection.observe(node);
-								// node.setBackground(item, 'character');
 							} else {
 							node.setBackground(item, 'character');
 							}
@@ -1854,15 +2766,17 @@ content:function(config, pack){
 			override(get, ride.get);
 			
 			decadeUI.get.extend(decadeUI, duilib);
-			if (decadeParts.parts) for (var i = 0; i < decadeParts.parts.length; i++) decadeParts.parts[i](lib, game, ui, get, ai, _status);
+			if (decadeModule.modules)
+				for (var i = 0; i < decadeModule.modules.length; i++)
+					decadeModule.modules[i](lib, game, ui, get, ai, _status);
 
 			var getNodeIntro = get.nodeintro;
 			var gameLinexyFunction = game.linexy;
-		    var gameUncheckFunction = game.uncheck;
+		  var gameUncheckFunction = game.uncheck;
 			var swapControlFunction = game.swapControl;
-		    var swapPlayerFunction = game.swapPlayer;
+		  var swapPlayerFunction = game.swapPlayer;
 			var baseChooseCharacter = game.chooseCharacter;
-		    var createArenaFunction = ui.create.arena;
+		  var createArenaFunction = ui.create.arena;
 			var createPauseFunction = ui.create.pause;
 			var createMenuFunction = ui.create.menu;
 			var initCssstylesFunction = lib.init.cssstyles;
@@ -1880,7 +2794,6 @@ content:function(config, pack){
 			var playerDieFlipFunction = lib.element.player.$dieflip;
 			
 			
-			ui.updatehl = decadeUI.layout.updateHand;
 			
 			ui.updatejm = function (player, nodes, start, inv) {
 				if (typeof start != 'number') start = 0;
@@ -1892,22 +2805,13 @@ content:function(config, pack){
 					} else if (node.classList.contains('removing')) {
 						start++;
 					} else {
-						// ui.refresh(node);
 						node.classList.remove('drawinghidden');
-						// node._transform = 'translateY(' + ((i - start) * 28) + 'px)';
-						// node.style.transform = node._transform;
-						// 采用新布局了
 					}
 				}
 			};
 			
-			ui.updatexr = function(){
-				if (ui._updatexr) {
-					clearTimeout(ui._updatexr);
-				}
+			ui.updatexr = duilib.throttle(ui.updatex, 100, ui);
 				
-				ui._updatexr = setTimeout(ui.updatex, 100);
-			};
 			
 			
 			document.body.onresize = ui.updatexr;
@@ -1963,37 +2867,11 @@ content:function(config, pack){
 			game.updateRoundNumber = function(){
 				game.broadcastAll(function(num1, num2, top) {
 					_status.pileTop = top;
-					if (ui.cardPileNumber && window.decadeUI) ui.cardPileNumber.innerHTML = '牌堆' + num2 + ' 第' + num1 + '轮';
-					else if (ui.cardPileNumber) ui.cardPileNumber.innerHTML = num1 + '轮 剩余牌: ' + num2;
+					if (ui.cardPileNumber && window.decadeUI)
+						ui.cardPileNumber.textContent = '牌堆' + num2 + ' 第' + num1 + '轮';
+					else if (ui.cardPileNumber)
+						ui.cardPileNumber.textContent = num1 + '轮 剩余牌: ' + num2;
 				}, game.roundNumber, ui.cardPile.childNodes.length, ui.cardPile.firstChild);
-			};
-			
-			game.bossPhaseLoop = function(){
-				game.broadcastAll(function(firstAction){
-					var cur;
-					for (var i = 0; i < game.players.length; i++) {
-						cur = game.players[i];
-						if (!cur.node.seat) cur.node.seat = decadeUI.element.create('seat', cur);
-						cur.node.seat.innerHTML = get.cnNumber(get.distance(firstAction, cur, 'absolute') + 1, true);
-					}
-				}, game.boss);
-				
-				return base.game.bossPhaseLoop.apply(this, arguments);
-			};
-			
-			game.phaseLoop = function(player){
-				game.broadcastAll(function(firstAction){
-					var cur;
-					for (var i = 0; i < game.players.length; i++) {
-						cur = game.players[i];
-						if (!cur.node.seat) cur.node.seat = decadeUI.element.create('seat', cur);
-						
-						cur.seat = get.distance(firstAction, cur, 'absolute') + 1;
-						cur.node.seat.innerHTML = get.cnNumber(cur.seat, true);
-					}
-				}, player);
-				
-				return base.game.phaseLoop.apply(this, arguments);
 			};
 			
 			lib.config.low_performance = true;
@@ -2121,7 +2999,7 @@ content:function(config, pack){
             
             ui.click.identity = function(e){
                 if (_status.dragged || !game.getIdentityList || _status.video || this.parentNode.forceShown) return;
-				_status.clicked = true;
+								_status.clicked = true;
                 var identityList = game.getIdentityList(this.parentNode);
                 if (!identityList) return;
 				
@@ -2149,7 +3027,7 @@ content:function(config, pack){
                             shu: '蜀',
                             wu: '吴',
                             qun: '群',
-							jin: '晋',
+														jin: '晋',
                         };
 						if (_status.forceKey) identityList.key = '键';
                     }
@@ -2247,17 +3125,6 @@ content:function(config, pack){
 				}
 			};
 			
-			if ((typeof ui.create.menu) == 'function') {
-				var str = ui.create.menu.toString();
-				str = str.substring(str.indexOf('{'));
-				str = str.replace(/game\.documentZoom|1\.3/g, '1');
-				createMenuFunction = new Function('connectMenu', '_status','lib','game','ui','get','ai', str);
-			}
-			
-			ui.create.menu = function(connectMenu){
-				return createMenuFunction.call(this, connectMenu, _status, lib, game, ui, get, ai);
-			};
-			
 			ui.create.arena = function(){
 				ui.updatez();
 				var result = createArenaFunction.apply(this, arguments);
@@ -2312,8 +3179,7 @@ content:function(config, pack){
 					ui.handcards2 = game.me.node.handcards2;
 					ui.handcards1Container.appendChild(ui.handcards1);
 					ui.handcards2Container.appendChild(ui.handcards2);
-				}
-				else if(game.players.length){
+				} else if(game.players.length){
 					game.me = game.players[0];
 					ui.handcards1 = game.me.node.handcards1;
 					ui.handcards2 = game.me.node.handcards2;
@@ -2428,29 +3294,7 @@ content:function(config, pack){
 								return;
 							}
 							
-							// var trans = {
-								// '主':{
-									// default: 'zhu',
-									// identity_purple: function(player, color){
-										// if (color[0] == 'b') {
-											// player.classList.add('opposite-camp');
-											// return 'zhushuai_blue';
-										// }
-										
-										// return 'zhushuai';
-									// },
-									
-									// versus_default: function(player, color){
-										// if (get.translation(player.side + 'Color') == 'wei') {
-											// player.classList.add('opposite-camp');
-											// return 'zhu_blue';
-										// }
-										
-										// return 'zhu';
-									// },
-									// doudizhu_normal: 'dizhu',
-								// }
-							// };
+
 							
 							var fileName;
 							var checked;
@@ -2712,7 +3556,6 @@ content:function(config, pack){
 					range: ui.create.div('.range', card),
 					gaintag: decadeUI.element.create('gaintag info', card),
 					judgeMark: decadeUI.element.create('judge-mark', card),
-					usedInfo: decadeUI.element.create('used-info', card),
 					cardMask: decadeUI.element.create('card-mask', card),
 				};
 				
@@ -2723,7 +3566,6 @@ content:function(config, pack){
 					$suitnum: card.node.suitnum,
 					$range: card.node.range,
 					$gaintag: card.node.gaintag,
-					$usedinfo: card.node.usedInfo,
 				};
 				
 				
@@ -2772,31 +3614,6 @@ content:function(config, pack){
 				game.updateRoundNumber();
 				return result;
 			};
-			
-			// 不联机就不用
-			// ui.create.chat = function(){
-				// var chatBox = ui.arena.appendChild(decadeUI.component.chatBox());
-				// for (var i = 0; i < lib.chatHistory.length; i++) {
-					// chatBox.addEntry(lib.chatHistory[i]);
-				// }
-				
-				// _status.addChatEntry = chatBox.addEntry;
-				// Object.defineProperties(_status, {
-					// addChatEntry: {
-						// configurable: true,
-						// get:function(){
-							// return chatBox.addEntry;
-						// },
-						// set:function(value){
-							// chatBox.overrideEntry = value;
-						// }
-					// },
-				// });
-				
-				// var retVal = base.ui.create.chat.apply(this, arguments);
-				// chatBox.addEntry._origin = chatBox;
-				// return retVal;
-			// };
 			
 			lib.init.cssstyles = function(){
 			    var temp = lib.config.glow_phase;
@@ -2881,7 +3698,7 @@ content:function(config, pack){
 				}
 			};
 	        
-	        lib.skill._discard = {
+			lib.skill._discard = {
 				trigger: { global: ['discardAfter'] },
 				forced: true,
 				popup: false,
@@ -2915,20 +3732,6 @@ content:function(config, pack){
     						time);
     					}
     				}, trigger.discardid);
-				}
-			};
-			
-			lib.skill._decadeUI_gameStartEffect = {
-				trigger:{ global:'gameDrawAfter' },
-				forced: true,
-				popup: false,
-				priority: -100,
-				filter:function(){
-					return lib.skill._decadeUI_gameStartEffect.played == void 0;
-				},
-				content:function(){
-					lib.skill._decadeUI_gameStartEffect.played = true;
-					decadeUI.effect.gameStart();
 				}
 			};
 			
@@ -3138,6 +3941,12 @@ content:function(config, pack){
 					event.compareName = event.parent.name;
 				}
 				
+				// 有空重写拼点
+				event.addMessageHook('finished', function(){
+					var dialog = ui.dialogs[this.compareName];
+					if (dialog)
+						dialog.close();
+				});
 				game.broadcastAll(function(player, target, eventName){
 					if (!window.decadeUI) return;
 					
@@ -3423,6 +4232,12 @@ content:function(config, pack){
 					event.compareName = event.parent.name;
 				}
 				
+				// 有空重写拼点
+				event.addMessageHook('finished', function(){
+					var dialog = ui.dialogs[this.compareName];
+					if (dialog)
+						dialog.close();
+				});
 				game.broadcastAll(function(player, target, eventName){
 					if (!window.decadeUI) return;
 					
@@ -3517,8 +4332,6 @@ content:function(config, pack){
 				"step 3"
 				if (event.iwhile < targets.length) {
 					event.target = targets[event.iwhile];
-					// event.target.animate('target');
-					// player.animate('target');
 					event.card2 = event.cardlist[event.iwhile];
 					event.num2 = event.card2.number;
 					game.log(event.target, '的拼点牌为', event.card2);
@@ -3694,97 +4507,16 @@ content:function(config, pack){
 				game.updateRoundNumber()
 			};
 			
-			lib.element.player.update = function(count, hp, hpMax, hujia){
-				if (!_status.video) {
-					if (this.hp >= this.maxHp) this.hp = this.maxHp;
-					count = this.countCards('h');
-					hp = this.hp;
-					hpMax = this.maxHp;
 					
-					game.broadcast(function(player, hp, maxHp, hujia) {
-						player.hp = hp;
-						player.maxHp = maxHp;
-						player.hujia = hujia;
-						player.update();
-					}, this, hp, hpMax, this.hujia);
 					
-					if (this.hujia) {
-						this.markSkill('ghujia');
-					} else {
-						this.unmarkSkill('ghujia');
-					}
 					
-					game.addVideo('update', this, [count, hp, hpMax, this.hujia]);
-				} else {
-					// 虽然上面的 game.addVideo 提供了好几个参数，但是没啥用，因为videoContent里的update缺只给了1个参数。
-					if (!count) count = this.countCards('h');
-					hp = this.hp;
-					hpMax = this.maxHp;
-				}
 				
-				var hpNode = this.node.hp;
-				if (!this.storage.nohp) {
-					if (hpMax > 5) {
-						hpNode.innerHTML = (isNaN(hp) ? '×' : (hp == Infinity ? '∞' : hp)) + '<br>/<br>'
-							+ (isNaN(hpMax) ? '×' : (hpMax == Infinity ? '∞' : hpMax)) + '<div></div>';
-						if (hp == 0) hpNode.lastChild.classList.add('lost');
-						hpNode.classList.add('textstyle');
-					} else {
-						hpNode.innerHTML = '';
-						hpNode.classList.remove('textstyle');
-						while (hpMax > hpNode.childNodes.length) ui.create.div(hpNode);
-						while (hpMax < hpNode.childNodes.length) hpNode.lastChild.remove();
 
-						for (var i = 0; i < hpMax; i++) {
-							var index = i;
-							if (get.is.newLayout()) {
-								index = hpMax - i - 1;
-							}
-							if (i < hp) {
-								hpNode.childNodes[index].classList.remove('lost');
-							} else {
-								hpNode.childNodes[index].classList.add('lost');
-							}
-						}
-					}
 					
-					if (hpNode.classList.contains('room')) {
-						hpNode.dataset.condition = 'high';
-					} else if (hp == 0) {
-						hpNode.dataset.condition = '';
-					} else if (hp > Math.round(hpMax / 2) || hp === hpMax) {
-						hpNode.dataset.condition = 'high';
-					} else if (hp > Math.floor(hpMax / 3)) {
-						hpNode.dataset.condition = 'mid';
-					} else {
-						hpNode.dataset.condition = 'low';
-					}
-				}
 				
-				this.node.count.innerHTML = count;
-				if (count >= 10) {
-					this.node.count.dataset.condition = 'low';
-				} else if (count > 5) {
-					this.node.count.dataset.condition = 'higher';
-				} else if (count > 2) {
-					this.node.count.dataset.condition = 'high';
-				} else if (count > 0) {
-					this.node.count.dataset.condition = 'mid';
-				} else {
-					this.node.count.dataset.condition = 'none';
-				}
 				
-				this.dataset.maxHp = hpMax;
-				this.updateMarks();
 				
-				if (this.updates) {
-					for (var i = 0; i < lib.element.player.updates.length; i++) {
-						lib.element.player.updates[i](this);
-					}
-				}
 				
-				return this;
-			};
 
 			lib.element.player.setIdentity = function(identity){
 				if (!identity) identity = this.identity;
@@ -3805,66 +4537,6 @@ content:function(config, pack){
 				
 				return this;
 				
-				// if(!identity) identity = this.identity;
-				
-				// var identityColor = identity;
-				// var identityNode = this.node.identity;
-				
-				// switch(get.mode()){
-				    // case 'identity':
-						// if (_status.mode == 'purple' && identity.indexOf('cai') >= 0) {
-							// if (this.identity[0] == 'r') {
-								// identity = 'cai';
-							// } else {
-								// identity = 'cai2';
-								// this.classList.add('opposite-camp');
-								// this.finalSide = false;
-							// }
-							
-						// }
-						// break;
-					
-					// case 'guozhan':
-				        // if (identity == 'ye' && get.is.jun(this)) {
-							// this.identity = identity = lib.character[this.name1][1];
-						// }
-						// this.group = identity;
-				        // break;
-				    // case 'versus':
-						// this.finalSide = this.side;
-						// if (this.side === false) this.classList.add('opposite-camp');
-				        // break;
-				// }
-				
-				// this.finalShownIdentity = identity;
-				// identityNode.dataset.color = identityColor;
-				// if (lib.huanhuazhizhan) return this;
-				
-				// if (decadeUI.config.campIdentityImageMode){
-					// var that = this;
-					// var image = new Image();
-					// var url = extensionPath + 'image/decoration/identity_' + decadeUI.getPlayerIdentity(that, identity) + '.png';
-				    // that.finalShownIdentity = identity;
-					
-					// image.identity = identity;
-				    // image.onerror = function(){
-						// if (this.identity != that.finalShownIdentity) return;
-						
-						// that.node.identity.firstChild.style.opacity = '';
-						// that.node.identity.firstChild.innerHTML = get.mode() == 'boss' ? get.translation(that.finalShownIdentity) :
-							// decadeUI.getPlayerIdentity(that, that.finalShownIdentity, true, true);
-				    // };
-				    
-					// that.node.identity.firstChild.innerHTML = '';
-					// that.node.identity.firstChild.style.opacity = '0';
-					// that.node.identity.style.backgroundImage = 'url("' + url + '")';
-					// image.src = url;
-					
-				// } else {
-				    // this.node.identity.firstChild.innerHTML = get.is.jun(this) ? '君' : get.translation(identity);
-				// }
-				
-				// return this;
 			};
 			
 			lib.element.player.addSkill = function(skill){
@@ -3949,7 +4621,6 @@ content:function(config, pack){
 					node.textContent = num;
 					node.dataset.text = num;
 					node.nature = nature || 'soil';
-					// node.dataset.nature = nature || 'soil';
 					this.damagepopups.push(node);
 				}
 				
@@ -4008,357 +4679,6 @@ content:function(config, pack){
 				}
 			};
 			
-			lib.element.player.$throw = function(card, time, init, nosource){
-				time = void 0;
-				var throwns;
-				var itemtype = get.itemtype(card);
-				if (typeof card == 'number') {
-					throwns = [];
-					var c;
-					while (card--) {
-						c = decadeUI.element.create('card infohidden infoflip');
-						c.moveTo = lib.element.card.moveTo;
-						c.moveDelete = lib.element.card.moveDelete;
-						throwns.push(c);
-					}
-					throwns.flip = true;
-				} else if (itemtype == 'cards') {
-					throwns = card.concat();
-				} else if (itemtype == 'card') {
-					throwns = [card];
-				} else {
-					return;
-				}
-				
-				if (init !== false) {
-					if (init !== 'nobroadcast') {
-						game.broadcast(function(player, cards, time, init, nosource) {
-							player.$throw(cards, time, init, nosource);
-						}, this, throwns, time, init, nosource);
-					}
-					
-					game.addVideo('throw', this, [get.cardsInfo(throwns), time, nosource]);
-				}
-				
-				if (!throwns.flip) {
-					for (var i = 0; i < throwns.length; i++) {
-						throwns[i] = throwns[i].copy('thrown');
-					}
-				}
-				
-				for (var i = 0; i < throwns.length; i++) {
-					if (game.chess) {
-						this.chessFocus();
-					}
-					
-					this.$throwordered2(throwns[i], nosource);
-				}
-				
-				return throwns[throwns.length - 1];
-			};
-			
-			lib.element.player.$throwordered2 = function(card, nosource, usedText){
-				if (_status.connectMode) ui.todiscard = [];
-				card.classList.add('thrown');
-				card.classList.add('transition-none');
-				
-				var inserted = false;
-				
-				if (!card.fixed){
-    				for (var i = 0; i < ui.thrown; i++){
-    			        if (ui.thrown[i].parentNode == ui.arena){
-    			            ui.arena.insertBefore(card, ui.thrown[i]);
-    			            inserted = true;
-    			            break;
-    			        }
-    			    }
-				}
-				
-				if (!inserted) ui.arena.appendChild(card);
-				if (!card.fixed) ui.thrown.splice(0, 0, card);
-				var $parent = ui.arena;
-				var x, y;
-				
-				if (!decadeUI.dataset.discardDataUpdated) {
-					decadeUI.dataset.discardDataUpdated = true;
-					decadeUI.dataset.discardData = {
-						card:{
-							width: card.offsetWidth,
-							height: card.offsetHeight,
-							scale: decadeUI.getCardBestScale(),
-						},
-						width: $parent.offsetWidth,
-						height: $parent.offsetHeight,
-					};
-				}
-				
-				var discardData = decadeUI.dataset.discardData;
-				
-				if (nosource){
-					x = ((discardData.width - discardData.card.width) / 2 - discardData.width * 0.08);
-					y = ((discardData.height - discardData.card.height) / 2);
-				}else{
-					x = ((this.offsetWidth - discardData.card.width) / 2 + this.offsetLeft);
-					y = ((this.offsetHeight - discardData.card.height) / 2 + this.offsetTop);
-				}
-
-				card.style.transform = 'translate(' + x + 'px, ' + y + 'px)' + 'scale(' + decadeUI.getCardBestScale() + ')';
-				ui.refresh(card);
-				card.classList.remove('transition-none');
-				card.scaled = true;
-				if (card.fixed) return;
-				decadeUI.layout.invalidateDiscard();
-				var usedTextNode = card.querySelector('.used-info');
-				if (!usedTextNode) return card;
-				if (usedText) {
-					usedTextNode.textContent = usedText;
-					return card;
-				}
-				
-				var infoText = '';
-				var showPlayerName = true;
-				var event = _status.event;
-				
-				switch(event.name){
-				    case 'useCard':
-				        if (event.targets.length == 1){
-				            if (event.targets[0] == this){
-				                infoText = '对自己';
-				            }else{
-				                infoText = '对' + get.translation(event.targets[0]);
-				            }
-				        }else{
-				            infoText = '使用';
-				        }
-						
-						var cardname = event.card.name;
-						var cardnature = event.card.nature;
-						if ((lib.config.cardtempname != 'off') && ((card.name != cardname) || (card.nature != cardnature))) {
-							if (!card._tempName) card._tempName = ui.create.div('.temp-name', card);
-							
-							var tempname = get.translation(cardname);
-							if (cardnature) {
-								card._tempName.dataset.nature = cardnature;
-								if (cardname == 'sha') {
-									tempname = get.translation(cardnature) + tempname;
-								}
-							}
-							
-							card._tempName.textContent = tempname;
-							card._tempName.tempname = tempname;
-						}
-						
-						if (decadeUI.config.cardUseEffect && event.card && event.card.cards && event.card.cards.length == 1) {
-							var name = event.card.name;
-							var nature = event.card.nature;
-							
-							switch (name) {
-								case 'effect_caochuanjiejian':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_caochuanjiejian');
-									break;
-								case 'sha':
-									switch (nature) {
-										case 'thunder':
-											decadeUI.animation.cap.playSpineTo(card, 'effect_leisha');
-											break;
-										case 'fire':
-											decadeUI.animation.cap.playSpineTo(card, 'effect_huosha');
-											break;
-										default:
-											if (get.color(card) == 'red') {
-												decadeUI.animation.cap.playSpineTo(card, 'effect_hongsha');
-											} else {
-												decadeUI.animation.cap.playSpineTo(card, 'effect_heisha');
-											}
-											break;
-									}
-									break;
-								case 'shan':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_shan');
-									break;
-								case 'tao':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_tao', { scale: 0.9 });
-									break;
-								case 'tiesuo':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_tiesuolianhuan', { scale: 0.9 });
-									break;
-								case 'jiu':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_jiu', { y:[-30, 0.5] });
-									break;
-								case 'kaihua':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_shushangkaihua');
-									break;
-								case 'wuzhong':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_wuzhongshengyou');
-									break;
-								case 'wuxie':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_wuxiekeji', { y:[10, 0.5], scale: 0.9 });
-									break;
-								// case 'nanman':
-									// decadeUI.animation.cap.playSpineTo(card, 'effect_nanmanruqin', { scale: 0.45 });
-									// break;
-								case 'wanjian':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_wanjianqifa', { scale: 0.78 });
-									break;
-								case 'wugu':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_wugufengdeng', { y:[10, 0.5] });
-									break;
-								// case 'taoyuan':
-									// decadeUI.animation.cap.playSpineTo(card, 'effect_taoyuanjieyi', { y:[10, 0.5] });
-									// break;
-								case 'shunshou':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_shunshouqianyang');
-									break;
-								case 'huogong':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_huogong', { x:[8, 0.5], scale: 0.5 });
-									break;
-								case 'guohe':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_guohechaiqiao', { y:[10, 0.5] });
-									break;
-								case 'yuanjiao':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_yuanjiaojingong');
-									break;
-								case 'zhibi':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_zhijizhibi');
-									break;
-								case 'zhulu_card':
-									decadeUI.animation.cap.playSpineTo(card, 'effect_zhulutianxia');
-									break;
-							}
-							// if (name == 'sha' || name == 'shan') {
-								// if (!card.animation) card.animation = decadeUI.element.create('animation', card);
-								// if (get.color(card) == 'red') card.animation.style.color = 'rgb(200,0,0)';
-								// else card.animation.style.color = 'black';
-								// card.animation.innerHTML = get.translation(name);
-								// card.animation.dataset.nature = nature;
-								// card.animation.style.webkitAnimation = 'use-card 2.5s forwards';
-							// }
-						}
-				        break;
-				    case 'respond':
-				        infoText = '打出';
-				        break;
-				    case 'useSkill':
-				        infoText = '发动';
-				        break;
-				    case 'die':
-				        card.classList.add('invalided');
-				        decadeUI.layout.delayClear();
-				        infoText = '弃置';
-				        break;
-				    case 'lose':
-						if (event.parent && event.parent.name == 'discard' && event.parent.parent) {
-							var skillEvent = event.parent.parent.parent;
-							if (skillEvent) {
-								infoText = lib.translate[skillEvent.name != 'useSkill' ? skillEvent.name : skillEvent.skill];
-								if (infoText == null) infoText = '';
-								infoText += '弃置';
-								break;
-							}
-						}
-				    case 'discard':
-				        infoText = '弃置';
-				        break;
-				    case 'phaseJudge':
-				        infoText = '即将生效';
-						break;
-				    case 'judge':
-						showPlayerName = false;
-						infoText = event.judgestr + '的判定牌';
-				        if (!lib.element.content['throwJudgeCallback']){
-				            lib.element.content['throwJudgeCallback'] = function(event,step,source,player,target,targets,card,cards,skill,forced,num,trigger,result,_status,lib,game,ui,get,ai){
-    				            var callback = event.parent.overrides.callback;
-    				            if (callback){
-    				                if (!callback._parsed){
-    				                    event.parent.overrides.callback = lib.init.parse(callback);
-    				                    event.parent.overrides.callback._parsed = true;
-    				                    callback = event.parent.overrides.callback;
-    				                    var steps = callback.toString().match(/case(.*?)(?=:)/g);
-    				                    
-    				                    if (steps && steps.length){
-    				                        event.parent.overrides.step = parseInt(steps[steps.length - 1].replace('case', '')) + 1;
-    				                    }
-    				                    
-    				                }
-    				            }
-    				            
-    				            if (event.parent.overrides.step == step){
-    				                event.finish();
-									return;
-    				            }
-    				            
-    				            if (callback) callback.apply(this, arguments);
-    				            var card = event.judgeResult.card.clone;
-								var apcard = event.parent.apcard;
-    				            card.node.usedTextNode = card.querySelector('.used-info');
-								
-								var action;
-								var judgeValue;
-								var getEffect = event.parent.judge2;
-								if (getEffect) {
-									judgeValue = getEffect(event.parent.result);
-								} else {
-									judgeValue = decadeUI.get.judgeEffect(event.parent.judgestr, event.judgeResult.judge);
-								}
-								
-								if ((typeof judgeValue == 'boolean')) {
-									judgeValue = judgeValue ? 1 : -1;
-								} else {
-									judgeValue = event.judgeResult.judge;
-								}
-								
-								if (judgeValue >= 0) {
-									action = 'play4';
-									infoText = '判定生效';
-								} else {
-									action = 'play5';
-									infoText = '判定失效';
-								}
-								
-								if (apcard && apcard._ap) apcard._ap.stopSpineAll();
-								if (apcard && apcard._ap && apcard == card) {
-									apcard._ap.playSpine({
-										name: 'effect_panding',
-										action: action
-									});
-								} else {
-									decadeUI.animation.cap.playSpineTo(card, {
-										name: 'effect_panding',
-										action: action
-									});
-								}
-								
-								event.parent.apcard = undefined;
-								card.node.usedTextNode.innerHTML = get.translation(event.parent.judgestr) + infoText;
-				            };
-				            
-				            lib.element.content['throwJudgeCallback']._parsed = true;
-				        }
-				        
-						if (decadeUI.config.cardUseEffect) {
-							decadeUI.animation.cap.playSpineTo(card, {
-								name: 'effect_panding',
-								action: 'play',
-								loop: true
-							});
-							
-							event.apcard = card;
-						}
-						
-				        if (!event.overrides) event.overrides = { };
-				        event.overrides.callback = event.callback;
-				        event.overrides.step = 1;
-				        event.callback = 'throwJudgeCallback';
-				        break;
-				    default:
-						infoText = get.translation(event.name);
-						if (infoText == event.name) infoText = '';
-				        break;
-				}
-				
-				usedTextNode.textContent = (showPlayerName ? get.translation(this) : '') + infoText;
-				return card;
-			};
 			
 			lib.element.player.$dieflip = function(){
 				if (!decadeUI.config.playerDieEffect && playerDieFlipFunction) playerDieFlipFunction.apply(this, arguments);
@@ -4465,260 +4785,7 @@ content:function(config, pack){
 				return clone;
 			};
 			
-			lib.element.card.moveTo = function(player){
-                if (!player) return;
-                
-                this.fixed = true;
-                this.moving = true;
-                var x = Math.round((player.offsetWidth - this.offsetWidth) / 2 + player.offsetLeft);
-                var y = Math.round((player.offsetHeight - this.offsetHeight) / 2 + player.offsetTop);
-                var scale = decadeUI.getCardBestScale();
-                this.style.transform = 'translate(' + x + 'px,' + y + 'px)scale(' + scale + ')';
-                return this;
-            };
-            
-            lib.element.card.moveDelete = function(player, handUpdate){
-				this.fixed = true;
-				this.moving = true;
-				if(!this._listeningEnd || this._transitionEnded){
-					this.moveTo(player);
-					if (!handUpdate && ui.thrown.indexOf(this) != -1){
-					    decadeUI.layout.invalidateDiscard();
-					}
-					
-					setTimeout(function(card){
-						card.delete();
-					}, 330, this);
-				}
-				else{
-					this._onEndMoveDelete = player;
-				}
-			};
-			
-			lib.element.player.$draw = function(num, init, config){
-                if (game.chess) return playerDrawFunction.call(this, num, init, config);
-                if (init !== false && init !== 'nobroadcast'){
-                    game.broadcast(function(player, num, init, config){
-                        player.$draw(num, init, config);
-                    }, this, num, init, config);
-                }
-                
-                var cards;
-                if (get.itemtype(num) == 'cards'){
-                    cards = num;
-                    num = cards.length;
-                } else if (get.itemtype(num) == 'card'){
-                    cards = [num];
-                    num = 1;
-                } else if (num == null){
-					num = 1;
-				}
-                
-                if (init !== false){
-                    if (cards){
-                        game.addVideo('drawCard', this, get.cardsInfo(cards));
-                    } else {
-                        game.addVideo('draw', this, num);
-                    }
-                }				
-                
-                var nodes = [];
-                for (var i = 0; i < num; i++){
-                    var card = cards ? cards[i].copy('thrown', 'drawingcard') : ui.create.div('.card.thrown.drawingcard');
-                    card.fixed = true;
-                    card.hide();
-                    card.classList.add('transition-none');
-                    this.parentNode.appendChild(card);
-                    nodes.push(card);
-                }
 
-                var parentNode = this.parentNode;
-                var scale = decadeUI.getCardBestScale();
-				var cardWidth = nodes[0].offsetWidth * scale;
-				var x;
-				var y = Math.round((parentNode.offsetHeight - nodes[0].offsetHeight) / 2);
-				var margin = (parentNode.offsetWidth - this.offsetWidth) / 2 - (nodes[0].offsetWidth - cardWidth) / 2;
-				var marginOffset = Math.round(margin - this.offsetLeft + (nodes[0].offsetWidth - cardWidth) / 2);
-				var offset = this.offsetWidth - cardWidth * nodes.length;
-				var overflow = offset < 0;
-				if (overflow){
-					offset = Math.abs(offset) / (nodes.length - 1);
-				}else{
-					offset /= 2;
-				}
-                
-                var tx, ty, time = 50;
-                for (var i = 0; i < nodes.length; i++){
-                    var node = nodes[i];
-					if (overflow){
-						x = Math.round((i * (cardWidth - offset) + margin));
-					}else{
-						x = Math.round((offset + i * cardWidth + margin));
-					}
-					
-					node.style.transform = 'translate(' + x + 'px,' + y + 'px)scale(' + scale + ')';
-					
-                    tx = x - marginOffset;
-                    ty = (this.offsetHeight - node.offsetHeight) / 2 + this.offsetTop;
-                    
-                    setTimeout(function(mnode, mnodes, mtx, mty, mscale){
-                        mnode.show();
-                        mnode.classList.remove('transition-none');
-                        ui.refresh(mnode);
-                        mnode.style.transform = 'translate(' + mtx + 'px, ' + mty + 'px)' + 'scale(' + mscale + ')';
-                        
-                        if (mnode == mnodes[mnodes.length - 1]){
-                            mnode.deletes = mnodes;
-                            
-							var time = getComputedStyle(mnode).transitionDuration;
-							if (time) {
-								if (time.lastIndexOf('ms') != -1){
-								time = parseInt(time.replace(/ms/, ''));
-								}else if(time.lastIndexOf('s') != -1){
-									time = parseFloat(time.replace(/s/, '')) * 1000;
-								}
-							} else {
-								time = 500;
-							}
-							
-							setTimeout(function(){
-								var deletes = mnode.deletes;
-                                if (!deletes) return;
-                                
-                                for (var i = 0; i < deletes.length; i++){
-                                    deletes[i].style.transitionDuration = '0.3s';
-                                    deletes[i].delete();
-                                }
-								
-                                mnode.deletes = null;
-							}, time);                           
-                        }
-                    }, time, node, nodes, tx, ty, scale);
-                    
-                    time += 50;
-				}
-            };
-            
-            lib.element.player.$give = function(card, player, log, init) {
-                if (init !== false) {
-                    game.broadcast(function(source, card, player, init) {
-                        source.$give(card, player, false, init);
-                    },
-                    this, card, player, init);
-                    if ((typeof card == 'number') && card >= 0) {
-                        game.addVideo('give', this, [card, player.dataset.position]);
-                    } else {
-                        if (get.itemtype(card) == 'card') {
-                            card = [card];
-                        }
-                        if (get.itemtype(card) == 'cards') {
-                            game.addVideo('giveCard', this, [get.cardsInfo(card), player.dataset.position]);
-                        }
-                    }
-                }
-                
-                if (get.itemtype(card) == 'cards') {
-                    if (log != false && !_status.video) {
-                        game.log(player, '从', this, '获得了', card);
-                    }
-                    if (this.$givemod) {
-                        this.$givemod(card, player);
-                    } else {
-                        for (var i = 0; i < card.length; i++) {
-                            this.$give(card[i], player, false, false);
-                        }
-                    }
-                } else if ((typeof card == 'number') && card >= 0) {
-                    if (log != false && !_status.video) {
-                        game.log(player, '从', this, '获得了' + get.cnNumber(card) + '张牌');
-                    }
-                    if (this.$givemod) {
-                        this.$givemod(card, player);
-                    } else {
-                        while (card--) this.$give('', player, false, false);
-                    }
-                } else {
-                    if (log != false && !_status.video) {
-                        if (get.itemtype(card) == 'card' && log != false) {
-                            game.log(player, '从', this, '获得了', card);
-                        } else {
-                            game.log(player, '从', this, '获得了一张牌');
-                        }
-                    }
-                    if (this.$givemod) {
-                        this.$givemod(card, player);
-                    } else {
-                        var node;
-                        if (get.itemtype(card) == 'card') {
-                            node = card.copy('card', 'thrown', false);
-                        } else {
-                            node = ui.create.div('.card.thrown');
-                        }
-                        
-                        node.fixed = true;
-                        this.$throwordered2(node);
-                        node.moveTo = lib.element.card.moveTo;
-                        node.moveDelete = lib.element.card.moveDelete;
-                        node.moveDelete(player);
-                    }
-                }
-            },
-            
-            lib.element.player.$gain2 = function(cards, log){
-                if (log === true) game.log(this, '获得了', cards);
-                
-                game.broadcast(function(player, cards){
-                    player.$gain2(cards);
-                }, this, cards);
-                
-                switch(get.itemtype(cards)){
-                    case 'card':
-                        cards = [cards];
-                        break;
-						
-                    case 'cards':
-                        cards = cards;
-                        break;
-						
-                    default:
-                        if (cards.cards) {
-							cards = cards.cards;
-							break;
-						}
-						
-						return;
-                }
-                
-                var list = [], list2 = [];
-                var update = false;
-                
-                for (var i = 0; i < cards.length; i++){
-                    if (cards[i].clone && (cards[i].clone.parentNode == this.parentNode || cards[i].clone.parentNode == ui.arena)){
-                        if (!update){
-                            update = ui.thrown.indexOf(cards[i].clone) != -1;
-                        }
-                        
-                        cards[i].clone.moveDelete(this, true);
-                        list2.push(cards[i].clone);
-                    } else {
-                        list.push(cards[i]);
-                    }
-                }
-                
-                if (update){
-                    ui.clear();
-                    decadeUI.layout.invalidateDiscard();
-                }
-                
-                if (list2.length){
-                    game.addVideo('gain2', this, get.cardsInfo(list2));
-                }
-                
-                if (list.length){
-                    this.$draw(list, 'nobroadcast');
-                    return true;
-                }
-			};
 		
 		},
 		dialog:{
@@ -5082,12 +5149,8 @@ content:function(config, pack){
 					if (sensor.w != sensor.width || sensor.h != sensor.height){
 						sensor.width = sensor.w;
 						sensor.height = sensor.h;
-						if (sensor.requestFrame) {
-							requestAnimationFrame(sensor.dispatchEvent.bind(sensor));
-						} else {
 							sensor.dispatchEvent();
 						}
-					}
 					
 					expand.scrollTop = shrink.scrollTop = sensor.maximumHeight;
 					expand.scrollLeft = shrink.scrollLeft = sensor.maximumWidth;
@@ -5129,7 +5192,8 @@ content:function(config, pack){
 				var evt;
 				for (var i = 0; i < this.events.length; i++) {
 					evt = this.events[i];
-					if (!evt.capture) evt.callback();
+					if (!evt.capture)
+						evt.callback();
 				}
 			};
 			
@@ -5244,182 +5308,144 @@ content:function(config, pack){
 
 			},
 			updateHand:function(){
-				if (!game.me || !ui.handcards1Container) return;
-				var handNode = ui.handcards1Container.firstChild;
-				if (!handNode) return console.error('hand undefined');
+				if (!game.me)
+					return;
+				
+				var handNode = ui.handcards1;
+				if (!handNode)
+					return console.error('hand undefined');
 				
 				
-				
-				var card, cards = [];
-				var count = handNode.childElementCount;
-				for (var i = 0; i < count; i++) {
-					card = handNode.childNodes[i];
+				var card;
+				var cards = [];
+				var childs = handNode.childNodes;
+				for (var i = 0; i < childs.length; i++) {
+					card = childs[i];
 					if (!card.classList.contains('removing')) {
 						cards.push(card);
 					} else {
-						card.scaled = void 0;
+						card.scaled = false;
 					}
 				}
 				
-				if (!cards.length) return;
-				if (!decadeUI.dataset.handDataUpdated) {
-					decadeUI.dataset.handDataUpdated = true;
-					decadeUI.dataset.handData = {
-						card: {
-							width: cards[0].offsetWidth,
-							height: cards[0].offsetHeight,
-							scale: decadeUI.getCardBestScale(),
-						},
-						width: ui.handcards1Container.offsetWidth,
-						height: ui.handcards1Container.offsetHeight,
-					};
-				}
+				if (!cards.length)
+					return;
 				
-				var handData = decadeUI.dataset.handData;
-				var handW = handData.width;
-				var handH = handData.height;
+				var bounds = dui.boundsCaches.hand;
+				bounds.check();
 				
+				var pw = bounds.width;
+				var ph = bounds.height;
+				var cw = bounds.cardWidth;
+				var ch = bounds.cardHeight;
+				var cs = bounds.cardScale;
 				
-				var spacing = 1;
-				var cardW = handData.card.width;
-				var cardH = handData.card.height;
-				var scale = handData.card.scale;
+				var csw  = cw * cs;
 				
 				var x;
-				var y = ((cardH * scale - cardH) / 2) + 'px';
+				var y = Math.round((ch * cs - ch) / 2);
 
-				var scaleOffset = (cardW - cardW * scale) / 2;
-				var xMin = 27 * scale;
-				cardW = cardW * scale + spacing * 2;
+				var xMargin = csw + 2;
+				var xStart = (csw - cw) / 2;
+				var totalW = cards.length * csw + (cards.length - 1) * 2;
+				var limitW = pw;
+				var expand;
 				
-				var offset = handW - cardW * cards.length;
-				var overflow = offset < 0;
-				if (overflow) {
-					cardW -= spacing * 2;
-					offset = Math.min(Math.abs(offset + spacing * 2 * cards.length) / (cards.length - 1), cardW - xMin);
+				if (totalW > limitW) {
+					xMargin = csw - Math.abs(limitW - csw * cards.length) / (cards.length - 1);
+					if (lib.config.fold_card) {
+						var min = 27 * cs;
+						if (xMargin < min) {
+							expand = true;
+							xMargin = min;
+						}
+					}
 				} else {
-					offset /= 2;
+					xStart += (limitW - totalW) / 2;
 				}
 				
-				var transform, handRequireWidth;
+				var card;
 				for (var i = 0; i < cards.length; i++) {
+					x = Math.round(xStart + i * xMargin);
 					card = cards[i];
-					if (!card.scaled) {
-						card.classList.add('transition-none');
-						x = -Math.round(scaleOffset);
-						card.style.transform = 'translate(' + x + 'px,' + y + ')scale(' + scale + ')';
+					card.tx = x;
+					card.ty = y;
 						card.scaled = true;
-						ui.refresh(card);
-						card.classList.remove('transition-none');
+					card.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + cs + ')';
+					card._transform = card.style.transform;
 					}
 					
-					if (overflow){
-						x = Math.round((i * (cardW - offset) - scaleOffset));
-					}else{
-						x = Math.round((offset + i * cardW + spacing - scaleOffset));
-					}
+				if (expand) {
 					
 					
-					transform = 'translate(' + x + 'px,' + y + ')scale(' + scale + ')';
-					card._transform = transform;
-					card.classList.remove('drawinghidden');
-					if (card.style.transform !== transform) {
-						card.style.transform = transform;
-					}
 					
-					handRequireWidth = x + cardW;
-				}
 				
-				if (handRequireWidth >= (handW + 2)) {
-					ui.handcards1Container.classList.add('scrollh');
 					ui.handcards1Container.style.overflowX = 'scroll';
+					ui.handcards1Container.style.overflowY = 'hidden';
+					handNode.style.width = Math.round(cards.length * xMargin + (csw - xMargin)) + 'px';
 				} else {
-					ui.handcards1Container.classList.remove('scrollh');
+					ui.handcards1Container.style.overflowX = '';
+					ui.handcards1Container.style.overflowY = '';
+					handNode.style.width = '100%';
 				}
 				
-				handNode.style.width = handRequireWidth + 'px';
 			},
 			updateDiscard:function(){
-				if (!ui.thrown) ui.thrown = [];
+				if (!ui.thrown)
+					ui.thrown = [];
 				for (var i = ui.thrown.length - 1; i >= 0; i--){
 					if (ui.thrown[i].classList.contains('drawingcard') ||
 					   ui.thrown[i].classList.contains('removing') ||
-					   ui.thrown[i].parentNode != ui.arena || ui.thrown[i].moving){
+					   ui.thrown[i].parentNode != ui.arena || ui.thrown[i].fixed){
 						ui.thrown.splice(i, 1);
 					}else{
 					    ui.thrown[i].classList.remove('removing');
 					}
 				}
 				
-				if (!ui.thrown.length) return;
-				var discards = ui.thrown;
-				var $parent = discards[0].parentNode;
+				if (!ui.thrown.length)
+					return;
 				
-				if (!decadeUI.dataset.discardDataUpdated) {
-					decadeUI.dataset.discardDataUpdated = true;
-					decadeUI.dataset.discardData = {
-						card:{
-							width: discards[0].offsetWidth,
-							height: discards[0].offsetHeight,
-							scale: decadeUI.getCardBestScale(),
-						},
-						width: $parent.offsetWidth,
-						height: $parent.offsetHeight,
-					};
-				}
+				var cards = ui.thrown;
+				var bounds = dui.boundsCaches.arena;
+				bounds.check();
 				
-				var margin = 1;
-				var discardData     = decadeUI.dataset.discardData;
-				var scale           = discardData.card.scale;
-				var cardOrignWidth  = discardData.card.width;
-				var cardScaleWidth  = discardData.card.width * scale + margin * 2;
-				var cardOrignHeight = discardData.card.height;
-				
-				var x, beginX;
-				var y = Math.round((discardData.height - cardOrignHeight) / 2);
-				
-				var beginOffset = (1 - scale) * cardOrignWidth / 2;
-				var remainWidth = discardData.width - cardScaleWidth * discards.length;
-				
-				var overflow = (remainWidth < 0);
-				if (overflow){
-					cardScaleWidth -= margin * 2;
-					beginX = Math.abs(remainWidth + margin * 2 * discards.length) / (discards.length - 1);
-				}else{
-					beginX = remainWidth / 2;
-				}
-				
-				
-				for(var i = 0; i < discards.length; i++){
-					if (!discards[i].scaled){
-					    discards[i].classList.add('transition-none');
-					    x = ((discardData.width - cardOrignWidth) / 2 - discardData.width * 0.08) + 'px';
-					    discards[i].style.transform = 'translate(' + x + ',' + y + ')scale(' + scale + ')';
-					    ui.refresh(discards[i]);
-					    discards[i].scaled = true;
-					    discards[i].classList.remove('transition-none');
-					}
-					
-					if (overflow){
-						x = Math.round((i * (cardScaleWidth - beginX) - beginOffset));
+				var pw = bounds.width;
+				var ph = bounds.height;
+				var cw = bounds.cardWidth;
+				var ch = bounds.cardHeight;
+				var cs = bounds.cardScale;
+				var csw  = cw * cs;
+				var x;
+				var y = Math.round((ph - ch) / 2);
+				var xMargin = csw + 2;
+				var xStart = (csw - cw) / 2;
+				var totalW = cards.length * csw + (cards.length - 1) * 2;
+				var limitW = pw;
+				if (totalW > limitW) {
+					xMargin = csw - Math.abs(limitW - csw * cards.length) / (cards.length - 1);
 					}else{
-						x = Math.round((beginX + i * cardScaleWidth + margin - beginOffset));
+					xStart += (limitW - totalW) / 2;
 					}
-					discards[i].style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + scale + ')';
-					discards[i]._transthrown = null;
+				var card;
+				for (var i = 0; i < cards.length; i++){
+					x = Math.round(xStart + i * xMargin);
+					card = cards[i];
+					card.tx = x;
+					card.ty = y;
+					card.scaled = true;
+					card.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + cs + ')';
 				}
 			},
 			clearout:function(card){
-			    if (!card) throw card;
-			    if (card.classList.contains('drawingcard') ||
-			       card.classList.contains('removing') ||
-			       card.fixed || card.moving) return;
+			    if (!card)
+					return;
+			    if (card.fixed || card.classList.contains('removing'))
+					return;
 			    
 				if (ui.thrown.indexOf(card) == -1){
 					ui.thrown.splice(0, 0, card);
-					card.style.left = 'auto';
-					card.style.top = 'auto';
-					decadeUI.layout.updateDiscard();
+					dui.queueNextFrameTick(dui.layoutDiscard, dui);
 				}
 				
 				if (!card.classList.contains('invalided')){
@@ -5427,39 +5453,23 @@ content:function(config, pack){
     				var judging = event.triggername == 'judge' || event.name == 'judge';
     				if (event.name == 'judge' && !ui.clear.delay){
     				    ui.clear.delay = 'judge';
-    				    Object.defineProperties(event.parent, {
-        					finished: {
-        						configurable: true,
-        						get:function(){
-        							return this._finished;
-        						},
-        						set:function(value){
-        							this._finished = value;
-        							if (this._finished == true && ui.clear.delay == 'judge'){
+    				    event.parent.addMessageHook('finished', function(){
+							if (ui.clear.delay == 'judge'){
         							    ui.clear.delay = false;
         							    ui.clear();
         							}
-        						}
-        					},
-        					_finished: {
-        					    value: false,
-        					    writable: true
-        					}
         				});
     				}
     				
-    				if (ui.clear.delay || (judging && !event.finished)) return;
+    				if (ui.clear.delay || (judging && !event.finished))
+						return;
 				}
 				
 				card.classList.add('invalided');
 				setTimeout(function(card){
-					if (card.parentNode != null){
-					    card.parentNode.removeChild(card);
-						card.classList.add('removing');
-					}
+					card.remove();
+					dui.queueNextFrameTick(dui.layoutDiscard, dui);
 					
-					card = null;
-					decadeUI.layout.invalidateDiscard();
 				}, 2333, card);
 			},
 			delayClear:function(){
@@ -5534,18 +5544,18 @@ content:function(config, pack){
 			    }, timestamp);
 			},
 			resize:function(){
-			    if (decadeUI.isMobile()) ui.arena.classList.add('dui-mobile');
-				else ui.arena.classList.remove('dui-mobile');
+				if (decadeUI.isMobile())
+					ui.arena.classList.add('dui-mobile');
+				else 
+					ui.arena.classList.remove('dui-mobile');
 				
 				var set = decadeUI.dataset;
 				set.animSizeUpdated = false;
-				set.handDataUpdated = false;
-				set.discardDataUpdated = false;
 				set.bodySize.updated = false;
 				
-				var caches = decadeUI.caches;
-				for (var key in caches) caches[key].updated = false;
-				caches.arena.element = ui.arena;
+				var caches = decadeUI.boundsCaches;
+				for (var key in caches)
+					caches[key].updated = false;
 				var buttonsWindow = decadeUI.sheet.getStyle('#window > .dialog.popped .buttons:not(.smallzoom)');
 				if (!buttonsWindow) {
 					buttonsWindow = decadeUI.sheet.insertRule('#window > .dialog.popped .buttons:not(.smallzoom) { zoom: 1; }');
@@ -5559,7 +5569,6 @@ content:function(config, pack){
 				decadeUI.zooms.card = decadeUI.getCardBestScale();
 				if (ui.me) {
 					var height = Math.round(decadeUI.getHandCardSize().height * decadeUI.zooms.card + 30.4) + 'px';
-					// ui.control.style.bottom = height;
 					ui.me.style.height = height;
 				}
 				
@@ -5631,6 +5640,429 @@ content:function(config, pack){
 			game.pause();
 			_status.timeout = setTimeout(game.resume, milliseconds);
 		},
+		
+		queueNextTick:function(callback, ctx){
+			if (!dui._tickEntries)
+				dui._tickEntries = [];
+			
+			dui._tickEntries.push({
+				ctx: ctx,
+				callback: callback
+			});
+			
+			if (dui._queueTick)
+				return;
+			
+			dui._queueTick = Promise.resolve().then(function(){
+				dui._queueTick = null;
+				var entries = dui._tickEntries;
+				dui._tickEntries = [];
+				for (var i = 0; i < entries.length; i++)
+					entries[i].callback.call(entries[i].ctx);
+			});
+		},
+		queueNextFrameTick:function(callback, ctx){
+			if (!dui._frameTickEntries)
+				dui._frameTickEntries = [];
+			
+			dui._frameTickEntries.push({
+				ctx: ctx,
+				callback: callback
+			});
+			
+			if (dui._queueFrameTick)
+				return;
+			
+			dui._queueFrameTick = requestAnimationFrame(function(){
+				dui._queueFrameTick = null;
+				setTimeout(function(entries){
+					for (var i = 0; i < entries.length; i++)
+						entries[i].callback.call(entries[i].ctx);
+					
+				}, 0, dui._frameTickEntries);
+				dui._frameTickEntries = [];
+			})
+		},
+		
+		layoutHand:function(){
+			dui.layout.updateHand();
+		},
+		
+		layoutHandDraws:function(cards){
+			var bounds = dui.boundsCaches.hand;
+			bounds.check();
+			
+			var x, y;
+			var pw = bounds.width;
+			var ph = bounds.height;
+			var cw = bounds.cardWidth;
+			var ch = bounds.cardHeight;
+			var cs = bounds.cardScale;
+			var csw = cw * cs;
+			var xStart, xMargin;
+			
+			var draws = [];
+			var card;
+			var clone;
+			var source = cards.duiMod;
+			if (source && source != game.me) {
+				source.checkBoundsCache();
+				xMargin = 27;
+				xStart =  source.cacheLeft - bounds.x - csw / 2 - (cw - csw) / 2;
+				var totalW = xMargin * cards.length + (csw - xMargin);
+				var limitW = source.cacheWidth + csw;
+				if (totalW > limitW) {
+					xMargin = csw - Math.abs(limitW - csw * cards.length) / (cards.length - 1);
+				} else {
+					xStart += (limitW - totalW) / 2;
+				}
+				
+				y = Math.round((source.cacheTop - bounds.y - 30 + (source.cacheHeight - ch) / 2));
+				for (var i = 0; i < cards.length; i++) {
+					x = Math.round(xStart + i * xMargin);
+					card = cards[i];
+					card.tx = x;
+					card.ty = y;
+					card.fixed = true;
+					card.scaled = true;
+					card.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + cs + ')';
+				}
+				return;
+			} else {
+				for (var i = 0; i < cards.length; i++) {
+					card = cards[i];
+					clone = card.clone;
+					if (clone && !clone.fixed && clone.parentNode == ui.arena) {
+						x = Math.round(clone.tx - bounds.x);
+						y = Math.round(clone.ty - (bounds.y + 30));
+						card.tx = x;
+						card.ty = y;
+						card.scaled = true;
+						card.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + cs + ')';
+					} else {
+						draws.push(card);
+					}
+				}
+			}
+			
+			y = Math.round(-ch * cs * 2);
+			xMargin = csw * 0.5;
+			xStart = (pw - xMargin * (draws.length + 1)) / 2 - (cw - csw) / 2;
+			
+			for (var i = 0; i < draws.length; i++) {
+				x = Math.round(xStart + i * xMargin);
+				card = draws[i];
+				card.tx = x;
+				card.ty = y;
+				card.scaled = true;
+				card.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + cs + ')';
+			}
+		},
+		
+		layoutDrawCards:function(cards, player, center){
+			var bounds = dui.boundsCaches.arena;
+			if (!bounds.updated)
+				bounds.update();
+			
+			player.checkBoundsCache();
+			var playerX = player.cacheLeft;
+			var playerY = player.cacheTop;
+			var playerW = player.cacheWidth;
+			var playerH = player.cacheHeight;
+			
+			var pw = bounds.width;
+			var ph = bounds.height;
+			var cw = bounds.cardWidth;
+			var ch = bounds.cardHeight;
+			var cs = bounds.cardScale;
+			var csw = cw * cs;
+			
+			var xMargin = 27;
+			var xStart = (center ? (pw - playerW) / 2 : playerX) - csw / 2 - (cw - csw) / 2;
+			var totalW = xMargin * cards.length + (csw - xMargin);
+			var limitW = playerW + csw;
+			
+			if (totalW > limitW) {
+				xMargin = csw - Math.abs(limitW - csw * cards.length) / (cards.length - 1);
+			} else {
+				xStart += (limitW - totalW) / 2;
+			}
+			
+			var x;
+			var y;
+			if (center)
+				y = Math.round((ph - ch) / 2);
+			else
+				y = Math.round(playerY + (playerH - ch) / 2);
+			
+			var card;
+			for (var i = 0; i < cards.length; i++) {
+				x = Math.round(xStart + i * xMargin);
+				card = cards[i];
+				card.tx = x;
+				card.ty = y;
+				card.scaled = true;
+				card.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + cs + ')';
+			}
+		},
+		
+		layoutDiscard:function(){
+			dui.layout.updateDiscard();
+		},
+		
+		delayRemoveCards:function(cards, delay, delay2){
+			if (!Array.isArray(cards))
+				cards = [cards];
+			
+			setTimeout(function(cards, delay2){
+				var remove = function (cards) {
+					for (var i = 0; i < cards.length; i++)
+						cards[i].remove();
+				};
+				
+				if (delay2 == null) {
+					remove(cards);
+					return;
+				}
+				
+				for (var i = 0; i < cards.length; i++)
+					cards[i].classList.add('removing');
+				
+				setTimeout(remove, delay2, cards)
+			}, delay, cards, delay2)
+		},
+		
+		tryAddPlayerCardUseTag:function(card, player, event){
+			if (!card)
+				return;
+			
+			if (!player)
+				return;
+			
+			if (!event)
+				return;
+			
+			var noname;
+			var tagText = '';
+			var tagNode = card.querySelector('.used-info');
+			if (tagNode == null)
+				tagNode = card.appendChild(dui.element.create('used-info'));
+			
+			card.$usedtag = tagNode;
+			var blameEvent;
+			if (event.blameEvent)
+				event = event.blameEvent;
+			
+			switch (event.name.toLowerCase()) {
+				case 'usecard':
+					if (event.targets.length == 1){
+						if (event.targets[0] == player)
+							tagText = '对自己';
+						else
+							tagText = '对' + get.translation(event.targets[0]);
+					} else {
+						tagText = '使用';
+					}
+				case 'respond':
+					if (tagText == '')
+						tagText = '打出';
+					
+					var cardname = event.card.name;
+					var cardnature = event.card.nature;
+					if ((lib.config.cardtempname != 'off') && ((card.name != cardname) || (card.nature != cardnature))) {
+						if (!card._tempName) card._tempName = ui.create.div('.temp-name', card);
+						
+						var tempname = get.translation(cardname);
+						if (cardnature) {
+							card._tempName.dataset.nature = cardnature;
+							if (cardname == 'sha') {
+								tempname = get.translation(cardnature) + tempname;
+							}
+						}
+						
+						card._tempName.textContent = tempname;
+						card._tempName.tempname = tempname;
+					}
+					
+					if (duicfg.cardUseEffect && event.card && (!event.card.cards || event.card.cards.length == 1)) {
+						var name = event.card.name;
+						var nature = event.card.nature;
+						
+						switch (name) {
+							case 'effect_caochuanjiejian':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_caochuanjiejian');
+								break;
+							case 'sha':
+								switch (nature) {
+									case 'thunder':
+										decadeUI.animation.cap.playSpineTo(card, 'effect_leisha');
+										break;
+									case 'fire':
+										decadeUI.animation.cap.playSpineTo(card, 'effect_huosha');
+										break;
+									default:
+										if (get.color(card) == 'red') {
+											decadeUI.animation.cap.playSpineTo(card, 'effect_hongsha');
+										} else {
+											decadeUI.animation.cap.playSpineTo(card, 'effect_heisha');
+										}
+										break;
+								}
+								break;
+							case 'shan':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_shan');
+								break;
+							case 'tao':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_tao', { scale: 0.9 });
+								break;
+							case 'tiesuo':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_tiesuolianhuan', { scale: 0.9 });
+								break;
+							case 'jiu':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_jiu', { y:[-30, 0.5] });
+								break;
+							case 'kaihua':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_shushangkaihua');
+								break;
+							case 'wuzhong':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_wuzhongshengyou');
+								break;
+							case 'wuxie':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_wuxiekeji', { y:[10, 0.5], scale: 0.9 });
+								break;
+							// case 'nanman':
+								// decadeUI.animation.cap.playSpineTo(card, 'effect_nanmanruqin', { scale: 0.45 });
+								// break;
+							case 'wanjian':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_wanjianqifa', { scale: 0.78 });
+								break;
+							case 'wugu':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_wugufengdeng', { y:[10, 0.5] });
+								break;
+							// case 'taoyuan':
+								// decadeUI.animation.cap.playSpineTo(card, 'effect_taoyuanjieyi', { y:[10, 0.5] });
+								// break;
+							case 'shunshou':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_shunshouqianyang');
+								break;
+							case 'huogong':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_huogong', { x:[8, 0.5], scale: 0.5 });
+								break;
+							case 'guohe':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_guohechaiqiao', { y:[10, 0.5] });
+								break;
+							case 'yuanjiao':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_yuanjiaojingong');
+								break;
+							case 'zhibi':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_zhijizhibi');
+								break;
+							case 'zhulu_card':
+								decadeUI.animation.cap.playSpineTo(card, 'effect_zhulutianxia');
+								break;
+						}
+					}
+					break;
+				case 'useskill':
+					tagText = '发动';
+					break;
+				case 'die':
+					tagText = '弃置';
+					card.classList.add('invalided');
+					dui.layout.delayClear();
+					break;
+				case 'lose':
+					if (event.parent && event.parent.name == 'discard' && event.parent.parent) {
+						var skillEvent = event.parent.parent.parent;
+						if (skillEvent) {
+							tagText = lib.translate[skillEvent.name != 'useSkill' ? skillEvent.name : skillEvent.skill];
+							if (!tagText) 
+								tagText = '';
+							
+							tagText += '弃置';
+							break;
+						}
+					}
+				case 'discard':
+					tagText = '弃置';
+					break;
+				case 'phaseJudge':
+					tagText = '即将生效';
+					break;
+				case 'judge':
+					noname = true;
+					tagText = event.judgestr + '的判定牌';
+					event.addMessageHook('judgeResult', function(){
+						var event = this;
+						var card = event.result.card.clone;
+						var apcard = event.apcard;
+						
+						var tagText = '';
+						var tagNode = card.querySelector('.used-info');
+						if (tagNode == null)
+							tagNode = card.appendChild(dui.element.create('used-info'));
+						
+						var action;
+						var judgeValue;
+						var getEffect = event.judge2;
+						if (getEffect) {
+							judgeValue = getEffect(event.result);
+						} else {
+							judgeValue = decadeUI.get.judgeEffect(event.judgestr, event.result.judge);
+						}
+						
+						if ((typeof judgeValue == 'boolean')) {
+							judgeValue = judgeValue ? 1 : -1;
+						} else {
+							judgeValue = event.result.judge;
+						}
+						
+						if (judgeValue >= 0) {
+							action = 'play4';
+							tagText = '判定生效';
+						} else {
+							action = 'play5';
+							tagText = '判定失效';
+						}
+						
+						if (apcard && apcard._ap)
+							apcard._ap.stopSpineAll();
+						if (apcard && apcard._ap && apcard == card) {
+							apcard._ap.playSpine({
+								name: 'effect_panding',
+								action: action
+							});
+						} else {
+							decadeUI.animation.cap.playSpineTo(card, {
+								name: 'effect_panding',
+								action: action
+							});
+						}
+						
+						event.apcard = undefined;
+						tagNode.textContent = get.translation(event.judgestr) + tagText;
+					});
+					
+					if (duicfg.cardUseEffect) {
+						decadeUI.animation.cap.playSpineTo(card, {
+							name: 'effect_panding',
+							action: 'play',
+							loop: true
+						});
+						
+						event.apcard = card;
+					}
+					break;
+				default:
+					tagText = get.translation(event.name);
+					if (tagText == event.name)
+						tagText = '';
+					break;
+			}
+			
+			tagNode.textContent = (noname ? '' : get.translation(player)) + tagText;
+		},
+		
 		getRandom:function(min, max) {
 			if (min == null) {
 				min = -2147483648;
@@ -5747,7 +6179,6 @@ content:function(config, pack){
 							}
 						}
 						
-						// ok
 						break;
 						
 					case 'guozhan':
@@ -6096,9 +6527,6 @@ content:function(config, pack){
 			cheatJudgeCards:function(cards, judges, friendly){
 				if (!cards || !judges) throw arguments;
 				
-				//修正廢除判定區的BUG
-				if (judges.length==1&&get.judge(judges[0])==undefined) return [];
-				
 				var cheats = [];
 				var judgeCost;
 				for(var i = 0; i < judges.length; i++){
@@ -6139,10 +6567,25 @@ content:function(config, pack){
 				
 				return top;
 			},
+			handcardInitPos:function(){
+				var hand = dui.boundsCaches.hand;
+				if (!hand.updated)
+					hand.update();
+				var cardW = hand.cardWidth;
+				var cardH = hand.cardHeight;
+				var scale = hand.cardScale;
+				var x = -Math.round((cardW - cardW * scale) / 2);
+				var y = ((cardH * scale - cardH) / 2);
+				return {
+					x: x,
+					y: y,
+					scale: scale
+				};
+			},
 		},
 		
-		set:{
-			activeElement:function(element){
+		set:(function(set){
+			set.activeElement = function (element) {
 				var deactive = dui.$activeElement;
 				dui.$activeElement = element;
 				if (deactive && deactive != element && (typeof deactive.ondeactive == 'function')) {
@@ -6152,18 +6595,19 @@ content:function(config, pack){
 				if (element && element != deactive && (typeof element.onactive == 'function')) {
 					element.onactive();
 				}
-			}
-		},
-		
+			};
+			return set;
+		})({}),
 		statics:{
-			cards: (function(){
-				var cards = {};
+			cards: (function(cards){
 				var readFiles = function (files, entry) {
 					var index, cardname, filename;
 					var cards = dui.statics.cards;
 					var format = duicfg.cardPrettify;
 					var prefix = decadeUIPath + 'image/card/';
 					cards.READ_OK = true;
+					if (format == null)
+						format = 'webp';
 					if (format === 'off')
 						return;
 					format = '.' + format.toLowerCase();
@@ -6181,15 +6625,13 @@ content:function(config, pack){
 					}
 				};
 				if (window.fs) {
-					console.time('resolve')
 					fs.readdir(__dirname + '/' + decadeUIPath + 'image/card/', function(err, files){
 						if (err)
 							return;
-						console.timeEnd('resolve')
+						
 						readFiles(files);
 					});
 				} else if (window.resolveLocalFileSystemURL) {
-					console.time('resolve')
 					resolveLocalFileSystemURL(decadeUIPath + 'image/card/', function(entry) {
 						var reader = entry.createReader();
 						reader.readEntries(function(entries){
@@ -6198,12 +6640,11 @@ content:function(config, pack){
 					});
 				}
 				return cards;
-			})(),
+			})({}),
 			handTips: [],
 		},
 		dataset:{
 			animSizeUpdated: false,
-			handDataUpdated: false,
 			bodySizeUpdated: false,
 			bodySize: {
 				height: 1,
@@ -6299,9 +6740,10 @@ content:function(config, pack){
 		tip.show();
 		return tip;
 	};
-	decadeUI.CacheBounds = (function(){
-		function CacheBounds (element, x, y, width, height) {
+	decadeUI.BoundsCache = (function(){
+		function BoundsCache (element, updateBefore) {
 			this.element = element;
+			this.updateBefore = updateBefore;
 			this.updated = false;
 			Object.defineProperties(this, {
 				x:{
@@ -6346,7 +6788,14 @@ content:function(config, pack){
 				},
 			});
 		};
-		CacheBounds.prototype.update = function () {
+		
+		BoundsCache.prototype.check = function () {
+			if (!this.updated)
+				this.update();
+		};
+		BoundsCache.prototype.update = function () {
+			if (this.updateBefore)
+				this.updateBefore();
 			var element = this.element;
 			this.updated = true;
 			if (element == undefined) return;
@@ -6356,8 +6805,58 @@ content:function(config, pack){
 			this._height = element.offsetHeight;
 	};
 	
-		return CacheBounds;
+		return BoundsCache;
 	})();
+	decadeUI.boundsCaches = (function(boundsCaches){
+		boundsCaches.window = new decadeUI.BoundsCache(null, function(){
+			this.element = ui.window;
+		});
+		boundsCaches.arena = new decadeUI.BoundsCache(null, function(){
+			this.element = ui.arena;
+			if (ui.arena == null)
+				return;
+			this.cardScale = dui.getCardBestScale();
+			if (this.cardWidth != null)
+				return;
+			var childs = ui.arena.childNodes;
+			for (var i = 0; i < childs.length; i++) {
+				if (childs[i].classList.contains('card')) {
+					this.cardWidth = childs[i].offsetWidth;
+					this.cardHeight = childs[i].offsetHeight;
+					return;
+				}
+			}
+			var card = dui.element.create('card');
+			card.style.opacity = 0;
+			ui.arena.appendChild(card);
+			this.cardWidth = card.offsetWidth;
+			this.cardHeight = card.offsetHeight;
+			card.remove();
+		});
+		boundsCaches.hand = new decadeUI.BoundsCache(null, function(){
+			this.element = ui.me;
+			if (ui.handcards1 == null)
+				return;
+			this.cardScale = dui.getCardBestScale();
+			if (this.cardWidth != null)
+				return;
+			var childs = ui.handcards1.childNodes;
+			for (var i = 0; i < childs.length; i++) {
+				if (childs[i].classList.contains('card')) {
+					this.cardWidth = childs[i].offsetWidth;
+					this.cardHeight = childs[i].offsetHeight;
+					return;
+				}
+			}
+			var card = dui.element.create('card');
+			card.style.opacity = 0;
+			ui.handcards1.appendChild(card);
+			this.cardWidth = card.offsetWidth;
+			this.cardHeight = card.offsetHeight;
+			card.remove();
+		});
+		return boundsCaches;
+	})({});
 	decadeUI.element = {
 		base:{
 			removeSelf:function(milliseconds){
@@ -6396,9 +6895,6 @@ content:function(config, pack){
 		},
 	};
 	
-	decadeUI.caches = {
-		arena: new decadeUI.CacheBounds(),
-	};
 	decadeUI.game = {
 		loop:function(){
 			if (game.looping) return false; 
@@ -6421,7 +6917,8 @@ content:function(config, pack){
 				return false;
 			}
 			
-			if (!game.loopTime) game.loopTime = performance.now();
+			if (!game.loopTime) 
+				game.loopTime = performance.now();
 			if ((_status.paused2 || _status.imchoosing) && !lib.status.dateDelaying) {
 				lib.status.dateDelaying = new Date();
 			}
@@ -6475,6 +6972,8 @@ content:function(config, pack){
 						_status.event = next;
 					}
 				} else {
+					if (event.triggerMessage)
+						event.triggerMessage('finished');
 					if (event.parent) {
 						if (event.result) event.parent._result = event.result;
 						_status.event = event.parent;
@@ -6527,9 +7026,9 @@ content:function(config, pack){
 			}
 			
 			var delta = performance.now() - game.loopTime;
-			if (delta > 10 && decadeUI.config.smoothMode) {
+			if (delta > 15 && decadeUI.config.smoothMode) {
 				game.loopTime = undefined;
-				setTimeout(game.loop, 0);
+				requestIdleCallback(game.loop, { timeout: 16 });
 				return false;
 			}
 			
@@ -6590,22 +7089,23 @@ content:function(config, pack){
 },
 precontent:function(){
 	
-	var extensionName = '十周年UI';
-	var extension = lib.extensionMenu['extension_' + extensionName];
-	window.decadeUIPath = lib.assetURL + 'extension/' + extensionName + '/';
-	if (window.require) {
-		if (!window.fs)
-			window.fs = require('fs');
-	}
+	window.decadeUIName = '十周年UI';
+	window.decadeUIPath = lib.assetURL + 'extension/' + decadeUIName + '/';
+	if (lib.config['extension_' + decadeUIName + '_eruda']) {
 	
-	if (lib.config['extension_' + extensionName + '_eruda']) {
 	    var script = document.createElement('script');
         script.src = decadeUIPath + 'eruda.js'; 
         document.body.appendChild(script); 
         script.onload = function(){ eruda.init(); };
 	}
 	
-	if (!(extension && extension.enable && extension.enable.init)) return;
+	var extension = lib.extensionMenu['extension_' + decadeUIName];
+	if (!(extension && extension.enable && extension.enable.init))
+		return;
+	if (window.require) {
+		if (!window.fs)
+			window.fs = require('fs');
+	}
 	
 	lib.configMenu.appearence.config.layout.visualMenu = function(node, link){
 		node.className = 'button character themebutton ' + lib.config.theme;
@@ -6622,66 +7122,65 @@ precontent:function(){
 		}
 	};
 	
+	var decadePack = this;
+	window.decadeModule = (function(decadeModule){
 	if (ui.css.layout) {
-		if (!ui.css.layout.href || ui.css.layout.href.indexOf('long2') < 0) {
+			if (!ui.css.layout.href || ui.css.layout.href.indexOf('long2') < 0)
 			ui.css.layout.href = lib.assetURL + 'layout/long2/layout.css';
 		}
-	}
 	
-	var thisObject = this;
-	window.decadeParts = {
-		init:function(){
 			if (ui.css.fontsheet)
 				ui.css.fontsheet.remove();
-			this.css(decadeUIPath + 'font.css?v=' + thisObject.package.version);
-			this.css(decadeUIPath + 'layout.css?v=' + thisObject.package.version);
-			this.css(decadeUIPath + 'decadeLayout.css?v=' + thisObject.package.version);
-			this.css(decadeUIPath + 'player.css?v=' + thisObject.package.version);
 			
-			var filePath, ok;
-			var scripts = ['spine', 'component', 'skill', 'content', 'effect', 'animation', 'dynamicSkin'];
-			
-			var onload = function(){
-				this.remove();
-			};
-			
-			var onerror = function(){
-				console.error(this.src + 'not found');
-				this.remove();
-			};
-			
-			for (var i = 0; i < scripts.length; i++) {
-				ok = false;
-				filePath = decadeUIPath + scripts[i] + '.js';
-				try {
-					var script = document.createElement('script');
-					script.addEventListener('load', onload);
-					script.addEventListener('error', onerror);
-					script.src = filePath;
-					document.head.appendChild(script);
-					ok = true;
-				} finally {
-					if (!ok) console.error('script error');
-				}
-			}
-			
-			
+		decadeModule.init = function () {
+			this.css(decadeUIPath + 'font.css');
+			this.css(decadeUIPath + 'layout.css');
+			this.css(decadeUIPath + 'decadeLayout.css');
+			this.css(decadeUIPath + 'player.css');
+			this.js(decadeUIPath + 'spine.js');
+			this.js(decadeUIPath + 'component.js');
+			this.js(decadeUIPath + 'skill.js');
+			this.js(decadeUIPath + 'content.js');
+			this.js(decadeUIPath + 'effect.js');
+			this.js(decadeUIPath + 'animation.js');
+			this.js(decadeUIPath + 'dynamicSkin.js');
+			//this.js(decadeUIPath + 'menu.js');
 			return this;
-		},
-		css:function(filePath){
-			if (!filePath) return console.error('filePath');
+		};
+		decadeModule.js = function (path) {
+			if (!path) return console.error('path');
+			
+			var _this = this;
+			var script = document.createElement('script');
+			script.onload = function () {
+				this.remove();
+			};
+			
+			script.onerror = function () {
+				this.remove();
+				console.error(this.src + 'not found');
+			};
+			
+			script.src = path + '?v=' + decadePack.package.version;
+			
+			document.head.appendChild(script);
+			return script;
+		};
+		decadeModule.css = function (path) {
+			if (!path) return console.error('path');
 			var link = document.createElement('link');
 			link.rel = 'stylesheet';
-			link.href = filePath;
+			link.href = path + '?v=' + decadePack.package.version;
 			document.head.appendChild(link);
 			return link;
-		},
-		import:function(part){
-			if (!this.parts) this.parts = [];
-			if (typeof part != 'function') return console.error('import failed');
-			this.parts.push(part);
-		},
-	}.init();
+		};
+		decadeModule.import = function (module) {
+			if (!this.modules) this.modules = [];
+			if (typeof module != 'function') return console.error('import failed');
+			this.modules.push(module);
+		};
+		return decadeModule.init();
+	})({})
 	
 	Object.defineProperties(_status, {
 		connectMode: {
@@ -6696,7 +7195,7 @@ precontent:function(){
 					var startBeforeFunction = lib.init.startBefore;
 
 					for (var i = 0; i < lib.extensions.length; i++) {
-						if (lib.extensions[i][0] == extensionName) {
+						if (lib.extensions[i][0] == decadeUIName) {
 							decadeExtension = lib.extensions[i];
 							break;
 						}
@@ -6711,7 +7210,7 @@ precontent:function(){
 							decadeExtension[1](decadeExtension[2], decadeExtension[4]);
 							delete _status.extension;
 							delete _status.evaluatingExtension;
-							console.log('%c' + extensionName + ': 联机成功', 'color:blue');
+							console.log('%c' + decadeUIName + ': 联机成功', 'color:blue');
 						} catch(e) {
 							console.log(e);
 						}
@@ -6762,13 +7261,16 @@ config:{
 			skin_baosanniang_漫花剑俏: 			'鲍三娘-漫花剑俏',
 			skin_baosanniang_舞剑铸缘: 			'鲍三娘-舞剑铸缘',
 			skin_caiwenji_才颜双绝: 			'蔡文姬-才颜双绝',
+			skin_caojie_凤历迎春: 				'曹　节-凤历迎春',
 			skin_caojie_战场绝版: 				'曹　节-战场绝版',
-			skin_dongbai_娇俏伶俐: 				'董　白-娇俏伶俐',
-			skin_daqiao_战场绝版: 				'大　乔-战场绝版',
+			skin_caoying_巾帼花舞: 				'曹　婴-巾帼花舞',
 			skin_daqiao_清萧清丽: 				'大　乔-清萧清丽',
 			skin_daqiao_衣垂绿川:				'大　乔-衣垂绿川',
+			skin_daqiao_战场绝版: 				'大　乔-战场绝版',
 			skin_daqiaoxiaoqiao_战场绝版: 		'大乔小乔-战场绝版',
 			skin_diaochan_玉婵仙子: 			'貂　蝉-玉婵仙子',
+			skin_diaochan_战场绝版: 			'貂　蝉-战场绝版',
+			skin_dongbai_娇俏伶俐: 				'董　白-娇俏伶俐',
 			skin_fuhuanghou_万福千灯: 			'伏皇后-万福千灯',
 			skin_fanyufeng_斟酒入情: 			'樊玉凤-斟酒入情',
 			skin_guozhao_雍容尊雅: 				'郭　照-雍容尊雅',
@@ -6776,6 +7278,7 @@ config:{
 			skin_huaman_经典形象: 				'花　鬘-经典形象',
 			skin_hetaihou_鸩毒除患: 			'何太后-鸩毒除患',
 			skin_hetaihou_蛇蝎为心: 			'何太后-蛇蝎为心',
+			skin_hetaihou_耀紫迷幻: 			'何太后-耀紫迷幻',
 			skin_lukang_毁堰破晋: 				'陆　抗-毁堰破晋',
 			skin_luxun_谋定天下: 				'陆　逊-谋定天下',
 			skin_luxunlvmeng_清雨踏春: 			'陆逊吕蒙-清雨踏春',
@@ -6785,10 +7288,12 @@ config:{
 			skin_sunluyu_娇俏伶俐: 				'孙鲁育-娇俏伶俐',
 			skin_shuxiangxiang_花好月圆: 		'蜀香香-花好月圆',
 			skin_shuxiangxiang_花曳心牵:		'蜀香香-花曳心牵',
+			skin_wangrong_云裳花容: 			'王　荣-云裳花容',
 			skin_wangyi_绝色异彩: 				'王　异-绝色异彩',
 			skin_wangyi_战场绝版: 				'王　异-战场绝版',
 			skin_wolongzhuge_隆中陇亩: 			'卧龙诸葛-隆中陇亩',
 			skin_wuxian_锦运福绵: 				'吴　苋-锦运福绵',
+			skin_wuxian_金玉满堂: 				'吴　苋-金玉满堂',
 			skin_xiahoushi_端华夏莲: 			'夏侯氏-端华夏莲',
 			skin_xiahoushi_战场绝版: 			'夏侯氏-战场绝版',
 			skin_xiaoqiao_花好月圆: 			'小　乔-花好月圆',
@@ -6808,6 +7313,7 @@ config:{
 			skin_zhugeguo_仙池起舞: 			'诸葛果-仙池起舞',
 			skin_zhugeguo_英装素果: 			'诸葛果-英装素果',
 			skin_zhugeliang_空城退敌: 			'诸葛亮-空城退敌',
+			skin_zhouyi_剑舞浏漓: 				'周　夷-剑舞浏漓',
 			skin_zhangxingcai_凯旋星花: 		'张星彩-凯旋星花',
 		},
 		update:function(){
@@ -6840,7 +7346,7 @@ config:{
 				for (var i = 0; i < players.length; i++) {
 					if (players[i].dynamic) {
 						players[i].dynamic.outcropMask = enable;
-						players[i].dynamic.update();
+						players[i].dynamic.update(false);
 					}
 				}
 			}
@@ -6976,21 +7482,19 @@ package:{
     intro:(function(){
 		var log = [
 			'有bug先检查其他扩展，不行再关闭UI重试，最后再联系作者。',
-			'当前版本：1.1.0.211130',
-			'更新日期：2021-11-30',
-			'- 新增动皮[诸葛果仙池起舞]及其背景；',
-			'- 新增界武将标记显示及其对应的开关；',
-			'- 优化字体加载，配置font.css后秒开；',
-			'- 优化卡牌素材加载时机，提升流畅度；',
-			'- 优化出牌阶段与技能使用时文本提示；',
-			'- 优化武将的发光阴影时机并改为动图；',
-			'- 优化露头动皮其他特效部件显示范围；',
-			'  优化露头动皮有：大乔-衣垂绿川、小乔-采莲江南、何太后-蛇蝎为心、徐氏-为夫弑敌；',
-			'- 调整高清动皮自适应功能默认为开启；',
-			'- 修复在低内核版本下动皮的模糊问题；',
-			'- 修复挑战模式下BOSS图片消失的问题；',
-			'- 修复对决模式下选将图片消失的问题；',
-			'- 关于动皮数量限制，手机端请把chrome 内核更新到90及以上；',
+			'当前版本：1.2.0.220113',
+			'更新日期：2022-01-14',
+			'- 新增动皮及背景：[曹节-凤历迎春]、[曹婴-巾帼花舞]、[貂蝉-战场绝版]、[何太后-耀紫迷幻]、[王荣-云裳花容]、[吴苋-金玉满堂]、[周夷-剑舞浏漓]；',
+			'- 新增动皮oncomplete支持(函数内部只能调用this.xxx代码)；',
+			'- 优化了主玩家攻击指示线的位置显示；',
+			'- 优化了主玩家出牌摸牌相关呈现动画；',
+			'- 优化折叠手牌，开关跟随系统的设置；',
+			'- 优化部分代码，提升游戏整体流畅度；',
+			'- 修复关闭界包后因界标记弹窗的问题；',
+			'- 修复挑战模式下界武将名丢失的问题；',
+			'- 修复挑战模式下动皮异常拉伸的问题；',
+			'- 修复了加载其他目录的特效文件问题；',
+			'- 修复低版本窗口改动后动皮模糊问题；'
 		];
 		
 		return '<p style="color:rgb(210,210,000); font-size:12px; line-height:14px; text-shadow: 0 0 2px black;">' + log.join('<br>') + '</p>';
@@ -6998,7 +7502,7 @@ package:{
     author:"短歌 QQ464598631",
     diskURL:"",
     forumURL:"",
-    version:"1.1.0.211130",
+    version:"1.2.0.220114",
 },
 files:{
     "character":[],
@@ -7282,7 +7786,7 @@ editable: false
   在控制台输入代码：navigator.appVersion，会返回你的chrome版本；
 - windows端闪屏的请使用诗笺的64位版(chrome 91~)，或者原版的win由里版(chrome 51)，或者自行
   打包electron 10.4.7(chrome 85) ~ 4.0.0(chrome 69);
-1.1.0.211130
+1.1.0.211130：
 - 新增动皮[诸葛果仙池起舞]及其背景；
 - 新增界武将标记显示及其对应的开关；
 - 优化字体加载，配置font.css后秒开；
@@ -7296,4 +7800,16 @@ editable: false
 - 修复挑战模式下BOSS图片消失的问题；
 - 修复对决模式下选将图片消失的问题；
 - 关于动皮数量限制，手机端请把chrome 内核更新到90及以上；
+1.2.0.220114:
+- 新增动皮及背景：[曹节-凤历迎春]、[曹婴-巾帼花舞]、[貂蝉-战场绝版]、[何太后-耀紫迷幻]、[王荣-云裳花容]、[吴苋-金玉满堂]、[周夷-剑舞浏漓]；
+- 新增动皮oncomplete支持(函数内部只能调用this.xxx代码)；
+- 优化了主玩家攻击指示线的位置显示；
+- 优化了主玩家出牌摸牌相关呈现动画；
+- 优化折叠手牌，开关跟随系统的设置；
+- 优化部分代码，提升游戏整体流畅度；
+- 修复关闭界包后因界标记弹窗的问题；
+- 修复挑战模式下界武将名丢失的问题；
+- 修复挑战模式下动皮异常拉伸的问题；
+- 修复了加载其他目录的特效文件问题；
+- 修复低版本窗口改动后动皮模糊问题；
 */

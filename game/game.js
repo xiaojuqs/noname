@@ -11205,8 +11205,12 @@
 				gameDraw:function(){
 					"step 0"
 					if(_status.brawl&&_status.brawl.noGameDraw){
-						event.finish();
-						return;
+						if(window.decadeUI){
+							return event.goto(4);
+						}else{
+							event.finish();
+							return;
+						}
 					}
 					var end=player;
 					var numx=num;
@@ -11216,6 +11220,10 @@
 						}
 						if(player.getTopCards) player.directgain(player.getTopCards(numx));
 						else player.directgain(get.cards(numx));
+						
+						if(window.decadeUI){
+							player.$draw(numx);
+						}
 						if(player.singleHp===true&&get.mode()!='guozhan'&&(lib.config.mode!='doudizhu'||_status.mode!='online')){
 							player.doubleDraw();
 						}
@@ -11237,7 +11245,11 @@
 						}
 					}
 					else{
-						event.finish();
+						if(window.decadeUI){
+							event.goto(4);
+						}else{
+							event.finish();
+						}
 					}
 					"step 2"
 					if(event.changeCard=='once'){
@@ -11274,7 +11286,15 @@
 						if(event.dialog) event.dialog.close();
 						if(ui.confirm) ui.confirm.close();
 						game.me._start_cards=game.me.getCards('h');
-						event.finish();
+						if(window.decadeUI){
+							event.goto(4);
+						}else{
+							event.finish();
+						}
+					}
+					"step 4"
+					if(window.decadeUI){
+						setTimeout(decadeUI.effect.gameStart, 51);
 					}
 				},
 				phaseLoop:function(){

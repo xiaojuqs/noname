@@ -132,7 +132,7 @@ body>.background {
     height: 170px;
     bottom: 1%;
 	transition: none;
-	z-index: 3;
+	z-index: 6;
 }
 
 #arena[data-right-layout='on']>.hand-wrap,
@@ -269,6 +269,7 @@ body>.background {
 	background-repeat: no-repeat !important;
 	background-size: 100% 100% !important;
 	-moz-background-size: 100% 100% !important;
+	transition: all 0.46s;
 }
 
 .dui-mobile .card {
@@ -442,7 +443,7 @@ body>.background {
 }
 
 #arena>.dialog {
-	z-index: 6;
+	z-index: 7;
 }
 
 
@@ -463,7 +464,7 @@ body>.background {
 	font-family: xinwei;
 	transition: opacity 0.3s;
 	pointer-events: none;
-	z-index: 7;
+	z-index: 8;
 }
 
 #arena>#dui-controls>* {

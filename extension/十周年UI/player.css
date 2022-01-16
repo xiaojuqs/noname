@@ -39,7 +39,7 @@
 	background-image: url('assets/image/sprites_glow_blue.png');
 	background-repeat: no-repeat;
 	animation-name: kf-sprites-glow;
-	animation-duration: 0.9s;
+	animation-duration: 0s;
     animation-delay: 0s;
     animation-iteration-count: infinite;
     animation-fill-mode: forwards;
@@ -52,12 +52,14 @@
 .player.selected:not(.target):before,
 .player.glow_phase:not(.selectable):not(*[data-position='0'])::before {
 	/* border-image-source: url('assets/image/glow_orange.png'); */
+	animation-duration: 0.9s;
 	background-image: url('assets/image/sprites_glow_orange.png');
 	opacity: 1;
 }
 
 .player.selectable:not(.selected):not(.target)::before {
-    opacity: 1;
+	animation-duration: 0.9s;
+	opacity: 1;
 }
 
 .player::after,
@@ -81,7 +83,7 @@
 	background-image: url('assets/image/sprites_glow_red.png');
 	background-repeat: no-repeat;
 	animation-name: kf-sprites-glow;
-	animation-duration: 0.9s;
+	animation-duration: 0s;
     animation-delay: 0s;
     animation-iteration-count: infinite;
     animation-fill-mode: forwards;
@@ -92,7 +94,8 @@
 }
 
 .player.target:not(.glow_phase):not(.selectable):not(.selected)::after {
-    opacity: 1;
+    animation-duration: 0.9s;
+	opacity: 1;
 }
 
 
@@ -436,14 +439,18 @@
 .player>.hp-wrap>.hp,
 #arena.slim_player .player .hp,
 #window>.player:not(.minskin) .hp {
+	display: flex;
 	left: 0;
     right: 0;
     width: 12px;
     bottom: -8px;
 	font-size: 13px;
     line-height: 14px;
-	display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
+}
+
+.player>.hp-wrap>.hp.textstyle {
+	flex-direction: column;
 }
 
 .player>.hp-wrap>.hp.hidden {
@@ -458,7 +465,6 @@
 	line-height: 100%;
 	border: none;
 }
-
 
 .hp:not(.text):not(.actcount):not(.treasure)>.lost,
 .hp:not(.text):not(.actcount):not(.treasure)[data-condition="mid"]>div:not(.lost), 

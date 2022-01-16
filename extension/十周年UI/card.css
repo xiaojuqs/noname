@@ -32,6 +32,11 @@
 	z-index: 5;
 }
 
+#arena>.card.thrown.gainingcard,
+#arena>.card.thrown.drawingcard {
+	z-index: 6;
+}
+
 .card>.animation {
 	position: absolute;
     width: 100%;
