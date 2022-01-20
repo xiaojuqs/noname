@@ -1602,7 +1602,7 @@ content:function(config, pack){
 								}
 							}
 							if (typeof info.init == 'function') info.init();
-							switch (get.subtype(this)) {
+							switch (get.subtype({card:this.name})) {
 								case 'equip1':
 									var added = false;
 									if (lib.card[this.name] && lib.card[this.name].distance) {
