@@ -16639,14 +16639,24 @@
 							event.node=card.copy('thrown','center',ui.arena).animate('start');
 						}
 						else{
-							event.node=player.$throwordered(card.copy(),true);
+							if(window.decadeUI){
+								event.node = player.$throwordered2(card.copy(), true);
+							} else {
+								event.node=player.$throwordered(card.copy(),true);
+							}
 						}
 						if(lib.cardOL) lib.cardOL[cardid]=event.node;
 						event.node.cardid=cardid;
-						event.node.classList.add('thrownhighlight');
-						ui.arena.classList.add('thrownhighlight');
-						event.dialog=ui.create.dialog(str);
-						event.dialog.classList.add('center');
+						if (!window.decadeUI) {
+							event.node.classList.add('thrownhighlight');
+							ui.arena.classList.add('thrownhighlight');
+							event.dialog=ui.create.dialog(str);
+							event.dialog.classList.add('center');
+						} else {
+							event.dialog = dui.showHandTip(str);
+							event.dialog.strokeText();
+							if (game.online) ui.dialogs.push(event.dialog);
+						}
 						event.dialog.videoId=id;
 					},player,player.judging[0],judgestr,event.videoId,get.id());
 
@@ -16685,12 +16695,15 @@
 						if(dialog){
 							dialog.close();
 						}
-						ui.arena.classList.remove('thrownhighlight');
+						if (!window.decadeUI) ui.arena.classList.remove('thrownhighlight');
 					},event.videoId);
 					event.dialog.close();
 					game.addVideo('judge2',null,event.videoId);
 					ui.arena.classList.remove('thrownhighlight');
 					game.log(player,'的判定结果为',event.result.card);
+					if(window.decadeUI){
+						event.triggerMessage('judgeresult');
+					}
 					if(event.callback){
 						var next=game.createEvent('judgeCallback',false);
 						next.player=player;
