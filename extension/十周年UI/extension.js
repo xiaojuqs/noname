@@ -431,48 +431,6 @@ content:function(config, pack){
 
 				return this;
 			};
-			Player.directgain = function (cards, broadcast, gaintag) {
-				var player = this;
-				var handcards = player.node.handcards1;
-				var fragment = document.createDocumentFragment();
-
-				var card;
-				for (var i = 0; i < cards.length; i++) {
-					card = cards[i];
-					card.fix();
-					if (card.parentNode == handcards) {
-						cards.splice(i--, 1);
-						continue;
-					}
-
-					if (gaintag)
-					card.addGaintag(gaintag);
-
-					fragment.insertBefore(card, fragment.firstChild);
-				}
-
-				if (player == game.me) {
-					dui.layoutHandDraws(cards.reverse());
-					dui.queueNextFrameTick(dui.layoutHand, dui);
-				}
-
-				var s = player.getCards('s');
-				if (s.length)
-				handcards.insertBefore(fragment, s[0]);
-				else
-				handcards.appendChild(fragment);
-
-				if (!_status.video) {
-					game.addVideo('directgain', this, get.cardsInfo(cards));
-					this.update();
-				}
-
-				if (broadcast !== false)
-				game.broadcast(function(player, cards) {
-					player.directgain(cards);
-				}, this, cards);
-				return this;
-			};
 			Player.useCard = function () {
 				var event = this._super.useCard.apply(this, arguments);
 				Object.defineProperties(event, {
