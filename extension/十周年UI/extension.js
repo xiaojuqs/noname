@@ -6544,7 +6544,8 @@ content:function(config, pack){
 				var cards = dui.statics.cards;
 				var format = duicfg.cardPrettify;
 				var prefix = decadeUIPath + 'image/card/';
-				cards.READ_OK = true;
+				//以下會造成其他模式沒有素材的卡片加載不出來
+				//cards.READ_OK = true;
 				if (format == null)
 				format = 'webp';
 				if (format === 'off')
