@@ -7173,7 +7173,7 @@ config:{
 	},
 	smoothMode: {
 		name: '流畅模式',
-		init: true,
+		init: false,
 	},
 	rightLayout:{
 		name: '右手布局',
