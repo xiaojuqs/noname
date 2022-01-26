@@ -361,7 +361,7 @@ content:function(config, pack){
 						if (!hpNode.textstyle) {
 							hpNode.innerHTML = '';
 							hpNode.textstyle = true;
-							//hpNode.classList.add('textstyle');
+							hpNode.classList.add('textstyle');
 							hpNode.$hpText = hpNode.appendChild(document.createTextNode(hpText));
 							hpNode.$br1 = hpNode.appendChild(document.createElement('br'));
 							hpNode.$slash = hpNode.appendChild(document.createTextNode('/'));
@@ -373,12 +373,12 @@ content:function(config, pack){
 							hpNode.$hpMaxText.textContent = hpMaxText;
 						}
 
-						hpNode.classList.add('textstyle');
 						if (hp == 0) hpNode.lastChild.classList.add('lost');
 						if (hp > 0) hpNode.lastChild.classList.remove('lost');
 					} else {
 						if (hpNode.textstyle) {
 							hpNode.innerHTML = '';
+							hpNode.textstyle = false;
 							hpNode.classList.remove('textstyle');
 						}
 
