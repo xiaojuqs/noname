@@ -10617,6 +10617,7 @@
 						},event.chooseTime);
 					}
 					if(event.isMine()){
+						delete ui.selected.guanxing_button;
 						var list=event.list,filterMove=event.filterMove,filterOk=event.filterOk;
 						_status.imchoosing=true;
 						var event=_status.event;
@@ -14959,18 +14960,6 @@
 						}
 						return null;
 					}
-					var info=get.info(card,false);
-					if(!info.nodelay&&event.animate!=false){
-						if(event.delayx!==false){
-							if(event.waitingForTransition){
-								_status.waitingForTransition=event.waitingForTransition;
-								game.pause();
-							}
-							else{
-								game.delayx();
-							}
-						}
-					}
 					"step 4"
 					if(event.all_excluded) return;
 					if(!event.triggeredTargets1) event.triggeredTargets1=[];
@@ -15012,6 +15001,19 @@
 						event.redo();
 					}
 					"step 6"
+					var info=get.info(card,false);
+					if(!info.nodelay&&event.animate!=false){
+						if(event.delayx!==false){
+							if(event.waitingForTransition){
+								_status.waitingForTransition=event.waitingForTransition;
+								game.pause();
+							}
+							else{
+								game.delayx();
+							}
+						}
+					}
+					"step 7"
 					if(event.all_excluded) return;
 					if(!event.triggeredTargets3) event.triggeredTargets3=[];
 					var target=event.getTriggerTarget(targets,event.triggeredTargets3);
@@ -15031,7 +15033,7 @@
 						if(event.forceDie) next.forceDie=true;
 						event.redo();
 					}
-					"step 7"
+					"step 8"
 					if(event.all_excluded) return;
 					if(!event.triggeredTargets4) event.triggeredTargets4=[];
 					var target=event.getTriggerTarget(targets,event.triggeredTargets4);
@@ -15054,7 +15056,7 @@
 						}
 						event.redo();
 					}
-					"step 8"
+					"step 9"
 					var info=get.info(card,false);
 					if(info.contentBefore){
 						var next=game.createEvent(card.name+'ContentBefore');
@@ -15076,7 +15078,7 @@
 						next.type='precard';
 						if(event.forceDie) next.forceDie=true;
 					}
-					"step 9"
+					"step 10"
 					if(event.all_excluded) return;
 					var info=get.info(card,false);
 					if(num==0&&targets.length>1){
@@ -15140,13 +15142,13 @@
 							game.delayx(0.5);
 						}
 					}
-					"step 10"
+					"step 11"
 					if(event.all_excluded) return;
 					if(!get.info(event.card,false).multitarget&&num<targets.length-1&&!event.cancelled){
 						event.num++;
-						event.goto(9);
+						event.goto(10);
 					}
-					"step 11"
+					"step 12"
 					if(get.info(card,false).contentAfter){
 						var next=game.createEvent(card.name+'ContentAfter');
 						next.setContent(get.info(card,false).contentAfter);
@@ -15158,7 +15160,7 @@
 						next.type='postcard';
 						if(event.forceDie) next.forceDie=true;
 					}
-					"step 12"
+					"step 13"
 					if(event.postAi){
 						event.player.logAi(event.targets,event.card);
 					}
@@ -15172,7 +15174,7 @@
 					else{
 						event.finish();
 					}
-					"step 13"
+					"step 14"
 					event._oncancel();
 				},
 				useSkill:function(){
@@ -46340,8 +46342,8 @@
 					};
 					ui.click.touchpop();
 					ui.click.intro.call(this,{
-						clientX:(rect.left+rect.width)*game.documentZoom,
-						clientY:(rect.top)*game.documentZoom
+						clientX:(rect.left+rect.width),
+						clientY:(rect.top)
 					});
 					// var nodes=[];
 					// _status.clickingidentity=[this.parentNode,nodes];
@@ -51602,7 +51604,8 @@
 				}
 			}
 			if(method=='attack') return m;
-			return n;
+			if(method=='unchecked') return n;
+			return Math.max(1,n);
 		},
 		info:function(item,player){
 			if(typeof item=='string'){
