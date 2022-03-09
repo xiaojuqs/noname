@@ -305,12 +305,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 									}
 									return -0.5;
 								}
-								var xiuluolianyuji_weapon=player.getEquip(1)&&player.getEquip(1).name=='xiuluolianyuji';
-								var baiyin_armor=target.getEquip(2)&&target.getEquip(2).name=='baiyin';
-								if(xiuluolianyuji_weapon&&baiyin_armor) return 1;
 								return -1.5;
 							}();
-							if(!isLink&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
+							if(!isLink&&target&&target.mayHaveShan()&&!player.hasSkillTag('directHit_ai',true,{
 								target:target,
 								card:card,
 							},true)) return eff/1.2;
