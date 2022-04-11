@@ -941,14 +941,15 @@ content:function(config, pack){
 				event.cards.reverse();
 
 				event.stockcards = cards.concat();
-				var hs = [], es = [], js = [], ss = [];
+				var hs = [], es = [], js = [], ss = [], xs=[];
+				var unmarks=[];
 				var cards = event.cards;
 				var gainmap = event.gaintag_map = {};
 				var be = event.blameEvent;
 				var pe = event.getParent();
 				var pename = pe.name;
 
-				if (be == undefined && pename != 'discard' && event.type != 'discard') {
+				if((be==undefined&&pename!='discard'&&event.type!='discard')&&(pename!='loseToDiscardpile'&&event.type!='loseToDiscardpile')){
 					event.animate = false;
 					event.delay = false;
 				} else {
@@ -961,14 +962,9 @@ content:function(config, pack){
 
 
 				var card, pileNode;
-				var hej = player.getCards('hejs');
+				var hej = player.getCards('hejsx');
 				for (var i = 0; i < cards.length; i++) {
 					card = cards[i];
-					if (card.gaintag && card.gaintag.length) {
-						gainmap[card.cardid] = card.gaintag.concat();
-						card.removeGaintag(true);
-					}
-
 					pileNode = card.parentNode;
 					if (!hej.contains(card)) {
 						cards.splice(i--, 1);
@@ -980,6 +976,10 @@ content:function(config, pack){
 						} else if (pileNode.classList.contains('judges')) {
 							js.push(card);
 							card.throwWith = card.original = 'j';
+						} else if (pileNode.classList.contains('expansions')) {
+							xs.push(card);
+							card.throwWith = card.original = 'x';
+							if(card.gaintag&&card.gaintag.length) unmarks.addArray(card.gaintag);
 						} else if (pileNode.classList.contains('handcards')) {
 							if (card.classList.contains('glows')) {
 								ss.push(card);
@@ -991,6 +991,11 @@ content:function(config, pack){
 						} else {
 							card.throwWith = card.original = null;
 						}
+					}
+					
+					if (card.gaintag && card.gaintag.length) {
+						gainmap[card.cardid] = card.gaintag.concat();
+						card.removeGaintag(true);
 					}
 
 					var info = lib.card[card.name];
@@ -1027,8 +1032,7 @@ content:function(config, pack){
 					card.classList.remove('glows');
 				}
 
-				if (player == game.me)
-				dui.queueNextFrameTick(dui.layoutHand, dui);
+				if (player == game.me) dui.queueNextFrameTick(dui.layoutHand, dui);
 
 				ui.updatej(player);
 				game.broadcast(function(player, cards, num) {
@@ -1039,8 +1043,9 @@ content:function(config, pack){
 						cards[i].remove();
 					}
 
-					if (player == game.me)
-					ui.updatehl();
+					if (player == game.me){
+						ui.updatehl();
+					}
 
 					ui.updatej(player);
 					_status.cardPileNum = num;
@@ -1103,11 +1108,16 @@ content:function(config, pack){
 				} else if (event.position == ui.cardPile) {
 					game.updateRoundNumber();
 				}
-				if (event.toRenku) _status.renku.addArray(cards);
+				if(unmarks.length){
+					for(var i of unmarks){
+						player[(lib.skill[i]&&lib.skill[i].mark||player.hasCard((card)=>card.hasGaintag(i),'x'))?'markSkill':'unmarkSkill'](i);
+					}
+				}
 				event.hs = hs;
 				event.es = es;
 				event.js = js;
 				event.ss = ss;
+				event.xs=xs;
 				"step 1"
 				if (num < cards.length) {
 					if (event.es.contains(cards[num])) {
@@ -1161,7 +1171,7 @@ content:function(config, pack){
 				}
 				"step 4"
 				var evt = event.getParent();
-				if (evt.name != 'discard' && event.type != 'discard') return;
+				if((evt.name!='discard'&&event.type!='discard')&&(evt.name!='loseToDiscardpile'&&event.type!='loseToDiscardpile')) return;
 				if (evt.delay != false) {
 					if (evt.waitingForTransition) {
 						_status.waitingForTransition = evt.waitingForTransition;
@@ -3170,6 +3180,7 @@ content:function(config, pack){
 					chain: decadeUI.element.create('chain', player),
 					handcards1: ui.create.div('.handcards'),
 					handcards2: ui.create.div('.handcards'),
+					expansions: ui.create.div('.expansions'),
 				},
 				phaseNumber: 0,
 				skipList: [],
