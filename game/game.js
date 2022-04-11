@@ -14749,7 +14749,7 @@
 					}
 					if(!get.info(card,false).noForceDie) event.forceDie=true;
 					if(cards.length){
-						var owner=get.owner(cards[0]);
+						var owner=(get.owner(cards[0])||player);
 						var next=owner.lose(cards,'visible',ui.ordering).set('type','use');
 						var directDiscard=[];
 						for(var i=0;i<cards.length;i++){
@@ -15515,7 +15515,7 @@
 					}
 					player.actionHistory[player.actionHistory.length-1].respond.push(event);
 					if(cards.length){
-						var owner=get.owner(cards[0]);
+						var owner=(get.owner(cards[0])||player);
 						var next=owner.lose(cards,'visible',ui.ordering).set('type','use');
 						var directDiscard=[];
 						for(var i=0;i<cards.length;i++){
@@ -18141,6 +18141,8 @@
 						equips:this.getCards('e'),
 						judges:this.getCards('j'),
 						specials:this.getCards('s'),
+						expansions:this.getCards('x'),
+						expansion_gaintag:[],
 						disableJudge:this.storage._disableJudge,
 						disableEquip:this.storage.disableEquip,
 						views:[],
@@ -18162,6 +18164,9 @@
 					}
 					for(var i=0;i<state.handcards.length;i++){
 						state.gaintag[i]=state.handcards[i].gaintag;
+					}
+					for(var i=0;i<state.expansions.length;i++){
+						state.expansion_gaintag[i]=state.expansions[i].gaintag;
 					}
 					if(this.getModeState){
 						state.mode=this.getModeState();
@@ -20449,9 +20454,9 @@
 						var sort=lib.config.sort_card(cards[i]);
 						this.node.expansions.insertBefore(cards[i],this.node.expansions.firstChild);
 					}
-					if(broadcast!==false) game.broadcast(function(player,cards){
-						player.$addToExpansion(cards);
-					},this,cards);
+					if(broadcast!==false) game.broadcast(function(player,cards,gaintag){
+						player.$addToExpansion(cards,null,gaintag);
+					},this,cards,gaintag);
 					return this;
 				},
 				directgain:function(cards,broadcast,gaintag){
@@ -28576,6 +28581,15 @@
 							}
 							for(var i=0;i<info.specials.length;i++){
 								info.specials[i].classList.add('glows');
+							}
+							if(info.expansions.length){
+								var expansion_gaintag=[];
+								player.$addToExpansion(info.expansions);
+								for(var i=0;i<info.expansions.length;i++){
+									info.expansions[i].addGaintag(info.expansion_gaintag[i]);
+									expansion_gaintag.addArray(info.expansion_gaintag[i]);
+								}
+								for(var i of expansion_gaintag) player.markSkill[i];
 							}
 							for(var i=0;i<info.judges.length;i++){
 								if(info.views[i]&&info.views[i]!=info.judges[i]){
