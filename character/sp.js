@@ -11679,7 +11679,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				delay:false,
 				content:function(){
 					if(!target.storage.rezhoufu2_markcount) target.storage.rezhoufu2_markcount=0;
-					target.markAuto(cards,player,'give').gaintag.add('rezhoufu2');
+					target.addToExpansion(cards, player,'give').gaintag.add('rezhoufu2');
 				},
 				ai:{
 					order:1,
@@ -11777,6 +11777,34 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			yingbin:{
 				audio:2,
+			},
+			kuiwei:{
+				audio:2,
+				trigger:{player:'phaseJieshuBegin'},
+				check:function(event,player){
+					if(player.isTurnedOver()) return true;
+					var num=game.countPlayer(function(current){
+						return current.getEquip(1);
+					});
+					return num>1;
+				},
+				content:function(){
+					"step 0"
+					player.turnOver();
+					"step 1"
+					var num=game.countPlayer(function(current){
+						return current.getEquip(1);
+					});
+					player.draw(2+num);
+					player.addSkill('kuiwei2');
+				},
+				ai:{
+					effect:{
+						target:function(card){
+							if(card.name=='guiyoujie') return [0,2];
+						}
+					}
+				}
 			},
 			kuiwei2:{
 				trigger:{player:'phaseDrawBegin'},

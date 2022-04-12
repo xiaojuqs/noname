@@ -6695,7 +6695,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				mod:{
 					maxHandcardBase:function(player,num){
-						if(get.mode()!='guozhan'&&player.storage.buqu&&player.storage.buqu.length) return player.storage.buqu.length;
+						if(get.mode()!='guozhan'&&player.getExpansions('buqu')&&player.getExpansions('buqu').length) return player.getExpansions('buqu').length;
 					},
 				},
 				ai:{
