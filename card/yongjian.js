@@ -18,6 +18,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						for(var i=0;i<10;i++){
 							if(_status.event.getParent(i)&&_status.event.getParent(i).name=='chooseToCompare') return 100;
 						}
+						if(_status.currentPhase==player&&_status.event.name=='chooseCard') return 100;
 						return -5;
 					},
 					useful:function(card,i){

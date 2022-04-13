@@ -211,7 +211,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							else{
 								game.log(target,'展示了',target.getCards('h'));
 							}
-							player.discardPlayerCard(target,'h',true,'visible');
+							player.discardPlayerCard(target,'h',true,'visible').set('ai',(card)=>get.value(card));
 						}
 						event.finish();
 					}

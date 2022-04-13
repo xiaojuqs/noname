@@ -3001,7 +3001,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var he=player.getCards('he');
 					if(!he.length) event.finish();
 					else if(he.length<num) event._result={bool:true,cards:he};
-					else player.chooseCard('he',true,num,'选择'+get.cnNumber(num)+'张牌作为生');
+					else player.chooseCard('he',true,num,'选择'+get.cnNumber(num)+'张牌作为生').set('ai',(card)=>6.5-get.value(card));
 					'step 3'
 					if(result.bool){
 						var cards=result.cards;
