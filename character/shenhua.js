@@ -3359,7 +3359,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						locked:false,
 						mod:{
 							globalFrom:function(from,to,distance){
-								if(from.storage.tuntian){
+								if(from.getExpansions('tuntian')){
 									var num=distance-from.getExpansions('tuntian').length;
 									if(_status.event.skill=='jixi_backup'||_status.event.skill=='gzjixi_backup') num++;
 									return num;

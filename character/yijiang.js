@@ -2869,7 +2869,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							cards.sort(function(a,b){
 								return get.useful(a)-get.useful(b);
 							});
-							cards2=cards.splice(0,player.storage.bizhuan.length);
+							cards2=cards.splice(0,expansions.length);
 						}
 						return [cards2,cards];
 					});

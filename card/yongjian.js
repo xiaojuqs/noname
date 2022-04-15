@@ -335,9 +335,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				skills:['xinge'],
 				ai:{
-					equipValue:2,
+					equipValue:0,
 					basic:{
-						equipValue:2,
+						equipValue:0,
 					},
 				}
 			},
@@ -657,7 +657,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						target:function(player,target){
 							var card=ui.selected.cards[0];
 							if(!card||target.hasSkillTag('refuseGifts')) return 0;
-							if(get.type(card,false)=='equip') return get.effect(target,card,target,target);
+							if(get.type(card,false)=='equip'){
+								var target_equip_card=target.getEquip(get.equiptype(card))
+								if(target_equip_card&&get.equipValue(target_equip_card)>0&&get.equipValue(card)<=0) return -1+get.equipValue(card);
+								return get.effect(target,card,target,target);
+							}
 							if(card.name=='du') return player.hp>target.hp?-1:0;
 							if(target.hasSkillTag('nogain')) return 0;
 							return Math.max(1,get.value(card,player)-get.value(card,target));
