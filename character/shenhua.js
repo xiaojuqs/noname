@@ -8,7 +8,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			shenhua:{
 				shenhua_feng:["sp_zhangjiao","re_yuji","old_zhoutai","old_caoren","re_xiahouyuan","re_xiaoqiao","huangzhong","re_weiyan"],
 				shenhua_huo:['dianwei','xunyu','pangtong','sp_zhugeliang','taishici','yanwen','re_yuanshao','re_pangde'],
-				shenhua_lin:['caopi','xuhuang','menghuo','zhurong','re_lusu','sunjian','dongzhuo','jiaxu'],
+				shenhua_lin:['caopi','re_xuhuang','menghuo','zhurong','re_lusu','sunjian','dongzhuo','jiaxu'],
 				shenhua_shan:['dengai','zhanghe','liushan','jiangwei','zhangzhang','sunce','caiwenji','zuoci'],
 				shenhua_yin:['wangji','kuailiangkuaiyue','yanyan','wangping','sunliang','luji','xuyou','yl_luzhi'],
 				shenhua_lei:['haozhao','guanqiujian','chendao','zhugezhan','lukang','zhoufei','zhangxiu','yl_yuanshu'],
@@ -17,7 +17,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		character:{
 			old_zhoutai:['male','wu',4,['buqu','new_fenji']],
 			old_caoren:['male','wei',4,['moon_jushou','jiewei']],
-			xuhuang:['male','wei',4,['gzduanliang']],
+			re_xuhuang:['male','wei',4,['duanliang','jiezi']],
 			re_pangde:['male','qun',4,['mashu','jianchu']],
 			re_xiahouyuan:['male','wei',4,['xinshensu']],
 			huangzhong:['male','shu',4,['liegong']],
@@ -3434,14 +3434,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return ui.create.dialog('急袭',player.getExpansions('tuntian'),'hidden');
 					},
 					backup:function(links,player){
+						var skill=_status.event.buttoned;
 						return {
 							audio:'jixi',
 							audioname:['re_dengai','gz_dengai','ol_dengai'],
 							selectCard:-1,
 							position:'x',
-							filterCard:function(card){
-								return card==lib.skill.jixi_backup.card;
-							},
+							filterCard:skill=='jixi'?(card)=>card==lib.skill.jixi_backup.card:(card)=>card==lib.skill.gzjixi_backup.card,
 							viewAs:{name:'shunshou'},
 							card:links[0],
 						}
@@ -7363,7 +7362,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			pangde:['ol_pangde','re_pangde','pangde'],
 			yanwen:['re_yanwen','yanwen'],
 			caopi:['caopi','re_caopi'],
-			xuhuang:['re_xuhuang','xuhuang'],
+			xuhuang:['ol_xuhuang','re_xuhuang','xuhuang'],
 			menghuo:['re_menghuo','menghuo'],
 			zhurong:['re_zhurong','ol_zhurong','zhurong'],
 			sunjian:['ol_sunjian','re_sunjian','sunjian'],
@@ -7579,7 +7578,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			zhurong:'祝融',
 			menghuo:'孟获',
 			caopi:'曹丕',
-			re_xuhuang:'界徐晃',
+			re_xuhuang:'徐晃',
 			lusu:'旧鲁肃',
 			sunjian:'孙坚',
 			dongzhuo:'董卓',
@@ -7698,7 +7697,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			
 			old_zhoutai:'周泰',
 			old_caoren:'曹仁',
-			xuhuang:'徐晃',
+			xuhuang:'旧徐晃',
 			pangde:'旧庞德',
 			xiahouyuan:'旧夏侯渊',
 			caoren:'界曹仁',
