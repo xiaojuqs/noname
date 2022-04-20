@@ -1085,7 +1085,7 @@ content:function(config, pack){
 					}
 				}
 
-				game.addVideo('lose', player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js), get.cardsInfo(ss)]);
+				game.addVideo('lose', player, [get.cardsInfo(hs), get.cardsInfo(es), get.cardsInfo(js), get.cardsInfo(ss), get.cardsInfo(xs)]);
 				event.cards2 = hs.concat(es);
 				player.getHistory('lose').push(event);
 				game.getGlobalHistory().cardMove.push(event);
@@ -2838,8 +2838,6 @@ content:function(config, pack){
 				ui.cardPileNumber.textContent = num1 + '轮 剩余牌: ' + num2;
 			}, game.roundNumber, ui.cardPile.childNodes.length, ui.cardPile.firstChild);
 		};
-
-		lib.config.low_performance = true;
 
 		game.swapPlayer = function(player, player2){
 			var result = swapPlayerFunction.call(this, player, player2);
