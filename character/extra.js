@@ -1364,11 +1364,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				trigger:{player:'phaseUseEnd'},
 				direct:true,
 				filter:function(event,player){
-					return player.getStorage('qixing').length>0;
+					return player.getExpansions('qixing').length>0;
 				},
 				content:function(){
 					'step 0'
-					player.chooseTarget([1,Math.min(game.players.length,player.getStorage('qixing').length)],get.prompt2('minikuangfeng')).set('ai',function(target){
+					player.chooseTarget([1,Math.min(game.players.length,player.getExpansions('qixing').length)],get.prompt2('minikuangfeng')).set('ai',function(target){
 						var player=_status.event.player;
 						var eff=get.damageEffect(target,player,player);
 						if(target.hp==1||!ui.selected.targets.length) return eff;
@@ -1377,7 +1377,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 1'
 					if(result.bool){
 						event.targets=result.targets;
-						player.chooseButton(['请选择要移去的“星”',player.getStorage('qixing')],true,result.targets.length).set('ai',function(button){
+						player.chooseButton(['请选择要移去的“星”',player.getExpansions('qixing')],true,result.targets.length).set('ai',function(button){
 							return -get.value(button.link);
 						});
 					}
@@ -1396,11 +1396,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				trigger:{player:'phaseJieshuBegin'},
 				direct:true,
 				filter:function(event,player){
-					return player.getStorage('qixing').length>0;
+					return player.getExpansions('qixing').length>0;
 				},
 				content:function(){
 					'step 0'
-					player.chooseButton([get.prompt('minidawu'),player.getStorage('qixing')]).set('ai',function(button){
+					player.chooseButton([get.prompt('minidawu'),player.getExpansions('qixing')]).set('ai',function(button){
 						return 1/Math.max(0.01,get.value(button.link));
 					});
 					'step 1'

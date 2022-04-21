@@ -9327,7 +9327,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								result:{
 									target:function(player,target){
 	  							if(player!=target) return 0;
-	  							if(player.hasSkill('requanji')||(player.countCards('h')+2<=player.hp+player.storage.quanji.length)) return 1;
+	  							if(player.hasSkill('requanji')||(player.countCards('h')+2<=player.hp+player.getExpansions('quanji').length)) return 1;
 	  							return 0;
 	  						}
 	  					},
