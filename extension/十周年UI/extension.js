@@ -1162,6 +1162,9 @@ content:function(config, pack){
 				event.goto(1);
 				"step 3"
 				if (event.toRenku) {
+					_status.renku.addArray(cards.filter(function(card){
+						return !card.destroyed;
+					}));
 					if (_status.renku.length > 6) {
 						var cards = _status.renku.splice(0, _status.renku.length - 6);
 						game.log(cards, '从仁库进入了弃牌堆');
