@@ -9,7 +9,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				old_shenhua:["yuji","zhangjiao","old_zhugezhan","old_guanqiujian","xiahouyuan","weiyan","xiaoqiao","pangde","xuhuang"],
 				old_refresh:["old_zhangfei","old_huatuo","old_zhaoyun","ol_huaxiong"],
 				old_yijiang1:["masu","xushu","xin_yujin","old_xusheng","old_lingtong","fazheng"],
-				old_yijiang2:["old_zhonghui"],
+				old_yijiang2:["old_zhonghui","madai"],
 				old_yijiang3:["liru","old_zhuran","old_fuhuanghou","old_caochong"],
 				old_yijiang4:["old_caozhen","old_chenqun","old_zhuhuan"],
 				old_yijiang5:["old_caoxiu","old_quancong","old_zhuzhi"],
@@ -20,6 +20,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 		},
 		character:{
+			madai:['male','shu',4,['mashu','oldqianxi']],
 			xuhuang:['male','wei',4,['gzduanliang']],
 			junk_simayi:['male','jin',3,['buchen','smyyingshi','xiongzhi','quanbian'],['hiddenSkill']],
 			fazheng:['male','shu',3,['enyuan','xuanhuo']],
@@ -791,6 +792,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			fazheng:'旧法正',
 			junk_simayi:'旧晋司马懿',
 			junk_simayi_ab:'司马懿',
+			madai:'旧马岱',
 			
 			old_standard:'标准包',
 			old_shenhua:'神话再临',
@@ -802,6 +804,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			old_yijiang5:'一将成名2015',
 			old_yijiang67:'原创设计',
 			old_sp:'SP',
+			old_yingbian:'文德武备',
 			old_mobile:'移动版',
 		}
 	};
