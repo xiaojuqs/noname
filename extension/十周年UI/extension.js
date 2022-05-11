@@ -9,6 +9,12 @@ content:function(config, pack){
 
 	if (!(extension && extension.enable && extension.enable.init)) return;
 
+	lib.arenaReady.push(function(){
+		if(ui.roundmenu){
+			ui.roundmenu.style.zIndex = 8;
+		}
+	});
+
 	switch(lib.config.layout){
 		case 'long2':
 		case 'nova':
@@ -1809,16 +1815,26 @@ content:function(config, pack){
 							item = item.name;
 						} else {
 							mark = ui.create.div('.card.mark');
-							var markText = lib.translate[item + '_bg'];
-							if (!markText || markText[0] == '+' || markText[0] == '-') {
-								markText = get.translation(item).substr(0, 2);
-								if (decadeUI.config.playerMarkStyle != 'decade') {
-									markText = markText[0];
+							if(lib.skill[item]&&lib.skill[item].markimage){
+								mark.text = decadeUI.element.create('mark-text', mark);
+								mark.text.innerHTML = " ";
+								mark.text.setBackgroundImage(lib.skill[item].markimage);
+								mark.text.style['box-shadow']='none';
+								mark.text.style.backgroundPosition = 'center';
+								mark.text.style.backgroundSize = 'contain';
+								mark.text.style.backgroundRepeat = 'no-repeat';
+							}else{
+								var markText = lib.translate[item + '_bg'];
+								if (!markText || markText[0] == '+' || markText[0] == '-') {
+									markText = get.translation(item).substr(0, 2);
+									if (decadeUI.config.playerMarkStyle != 'decade') {
+										markText = markText[0];
+									}
 								}
+								mark.text = decadeUI.element.create('mark-text', mark);
+								if (markText.length == 2) mark.text.classList.add('small-text');
+								mark.text.innerHTML = markText;
 							}
-							mark.text = decadeUI.element.create('mark-text', mark);
-							if (markText.length == 2) mark.text.classList.add('small-text');
-							mark.text.innerHTML = markText;
 						}
 
 						mark.name = item;
@@ -2036,10 +2052,12 @@ content:function(config, pack){
 
 						var mark = this.marks[name];
 						if (storage && this.storage[name]) this.syncStorage(name);
-						if (lib.skill[name] && lib.skill[name].intro && !lib.skill[name].intro.nocount && (this.storage[name] || lib.skill[name].intro.markcount)) {
+						if (lib.skill[name] && lib.skill[name].intro && !lib.skill[name].intro.nocount && (this.storage[name] || lib.skill[name].intro.markcount || name == 'ghujia')) {
 							var num = 0;
 							if (typeof lib.skill[name].intro.markcount == 'function') {
 								num = lib.skill[name].intro.markcount(this.storage[name], this);
+							} else if (lib.skill[name].intro.markcount == 'expansion') {
+								num = this.countCards('x', (card) => card.hasGaintag(name));
 							} else if (typeof this.storage[name + '_markcount'] == 'number') {
 								num = this.storage[name + '_markcount'];
 							} else if (name == 'ghujia') {
@@ -2270,6 +2288,8 @@ content:function(config, pack){
 					var character = dui.element.create('character', node);
 
 					if (doubleCamp) node._changeGroup = true;
+					var double=get.is.double(node._link,true);
+					if(double) node._changeGroup=true;
 					if (type=='characterx' && lib.characterReplace[node._link] && lib.characterReplace[node._link].length > 1) {
 						node._replaceButton = true;
 					}
@@ -2312,12 +2332,18 @@ content:function(config, pack){
 							node.node.name.dataset.nature = get.groupnature(infoitem[1]);
 							node.node.group.dataset.nature = get.groupnature(infoitem[1], 'raw');
 							node.classList.add('newstyle');
-							if (doubleCamp && doubleCamp.length) {
-								node.node.name.dataset.nature = get.groupnature(doubleCamp[0]);
-								node.node.group.dataset.nature = get.groupnature(doubleCamp[doubleCamp.length == 2 ? 1 : 0]);
+							if(double&&double.length){
+								node.node.name.dataset.nature=get.groupnature(double[0]);
+								node.node.group.dataset.nature=get.groupnature(double[double.length==2?1:0]);
 							}
 							ui.create.div(node.node.hp);
-							var textnode = ui.create.div('.text', get.numStr(infoitem[2]), node.node.hp);
+							var hp=get.infoHp(infoitem[2]),maxHp=get.infoMaxHp(infoitem[2]),hujia=get.infoHujia(infoitem[2]);
+							var str=get.numStr(hp);
+							if(hp!=maxHp){
+								str+='/';
+								str+=get.numStr(maxHp);
+							}
+							var textnode=ui.create.div('.text',str,node.node.hp);
 							if (infoitem[2] == 0) {
 								node.node.hp.hide();
 							} else if (get.infoHp(infoitem[2]) <= 3) {
@@ -2325,9 +2351,14 @@ content:function(config, pack){
 							} else {
 								node.node.hp.dataset.condition = 'high';
 							}
+							if(hujia>0){
+								ui.create.div(node.node.hp,'.shield');
+								ui.create.div('.text',get.numStr(hujia),node.node.hp);
+							}
 						} else {
 							var hp = get.infoHp(infoitem[2]);
 							var maxHp = get.infoMaxHp(infoitem[2]);
+							var shield=get.infoHujia(infoitem[2]);
 							if (maxHp > 14) {
 								if (typeof infoitem[2] == 'string') node.node.hp.innerHTML = infoitem[2];
 								else node.node.hp.innerHTML = get.numStr(infoitem[2]);
@@ -2336,6 +2367,9 @@ content:function(config, pack){
 								for (var i = 0; i < maxHp; i++) {
 									var next = ui.create.div('', node.node.hp);
 									if (i >= hp) next.classList.add('exclude');
+								}
+								for(var i=0;i<shield;i++){
+									ui.create.div(node.node.hp,'.shield');
 								}
 							}
 						}
@@ -7437,7 +7471,7 @@ package:{
 	intro:(function(){
 		var log = [
 		'有bug先检查其他扩展，不行再关闭UI重试，最后再联系作者。',
-		'当前版本：1.2.0.220113',
+		'当前版本：1.2.0.220114',
 		'更新日期：2022-01-14',
 		'- 新增动皮及背景：[曹节-凤历迎春]、[曹婴-巾帼花舞]、[貂蝉-战场绝版]、[何太后-耀紫迷幻]、[王荣-云裳花容]、[吴苋-金玉满堂]、[周夷-剑舞浏漓]；',
 		'- 新增动皮oncomplete支持(函数内部只能调用this.xxx代码)；',
