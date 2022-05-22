@@ -127,6 +127,7 @@ content:function(config, pack){
 				phaseLoop: game.phaseLoop,
 				bossPhaseLoop: game.bossPhaseLoop,
 				gameDraw: game.gameDraw,
+				swapSeat:game.swapSeat,
 			},
 			lib:{
 				element:{
@@ -156,6 +157,7 @@ content:function(config, pack){
 						$damagepop: lib.element.player.$damagepop,
 						$dieAfter: lib.element.player.$dieAfter,
 						$skill: lib.element.player.$skill,
+						setSeatNum:lib.element.player.setSeatNum,
 					},
 					event:{
 						send: lib.element.event.send,
@@ -1202,12 +1204,19 @@ content:function(config, pack){
 						if (!cur.node.seat)
 						cur.node.seat = decadeUI.element.create('seat', cur);
 
-						cur.seat = get.distance(firstAction, cur, 'absolute') + 1;
+						cur.seat = cur.getSeatNum();
 						cur.node.seat.innerHTML = get.cnNumber(cur.seat, true);
 					}
 				}, player);
 
 				return this._super.phaseLoop.apply(this, arguments);
+			};
+			Game.swapSeat = function(player1,player2,prompt,behind,noanimate){
+				base.game.swapSeat.apply(this,arguments);
+				player1.seat = player1.getSeatNum();
+				if(player1.node.seat)player1.node.seat.innerHTML = get.cnNumber(player1.seat, true);
+				player2.seat = player2.getSeatNum();
+				if(player2.node.seat)player2.node.seat.innerHTML = get.cnNumber(player2.seat, true);
 			};
 			return Game;
 		})({});
@@ -1896,7 +1905,11 @@ content:function(config, pack){
 						ui.updatem(this);
 						return nodeMark;
 					},
-
+					setSeatNum:function(){
+						base.lib.element.player.setSeatNum.apply(this,arguments);
+						this.seat = this.getSeatNum();
+						this.node.seat.innerHTML = get.cnNumber(this.seat, true);
+					},
 					markSkillCharacter:function(id, target, name, content){
 						if (typeof target == 'object') target = target.name;
 						game.broadcastAll(function(player, target, name, content, id) {
@@ -7446,7 +7459,6 @@ config:{
 			if (window.decadeUI) ui.arena.dataset.playerMarkStyle = lib.config['extension_十周年UI_playerMarkStyle'];
 		}
 	},
-
 },
 package:{
 	character:{
