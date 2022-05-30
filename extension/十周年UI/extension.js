@@ -4133,8 +4133,14 @@ content:function(config, pack){
 			game.log(player, '的拼点牌为', event.card1);
 			game.log(target, '的拼点牌为', event.card2);
 
-			event.num1 = event.card1.number;
-			event.num2 = event.card2.number;
+			var getNum=function(card){
+				for(var i of event.lose_list){
+					if(i[1]==card) return get.number(card,i[0]);
+				}
+				return get.number(card,false);
+			}
+			event.num1 = getNum(event.card1);
+			event.num2 = getNum(event.card2);
 			event.trigger('compare');
 			decadeUI.delay(400);
 
@@ -4322,10 +4328,17 @@ content:function(config, pack){
 					lose_list: lose_list,
 				}).setContent('chooseToCompareLose');
 			}
+			event.lose_list=lose_list;
+			event.getNum=function(card){
+				for(var i of event.lose_list){
+					if(i[1].contains&&i[1].contains(card)) return get.number(card,i[0]);
+				}
+				return get.number(card,false);
+			}
 			event.cardlist = cards;
 			event.cards = cards;
 			event.card1 = result[0].cards[0];
-			event.num1 = event.card1.number;
+			event.num1 = event.getNum(event.card1);
 			event.iwhile = 0;
 			event.result = {
 				player: event.card1,
@@ -4347,7 +4360,7 @@ content:function(config, pack){
 			if (event.iwhile < targets.length) {
 				event.target = targets[event.iwhile];
 				event.card2 = event.cardlist[event.iwhile];
-				event.num2 = event.card2.number;
+				event.num2 = event.getNum(event.card2);
 				game.log(event.target, '的拼点牌为', event.card2);
 				player.line(event.target);
 
