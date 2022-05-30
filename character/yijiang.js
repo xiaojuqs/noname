@@ -2305,7 +2305,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								card:arg.card
 							}))) return true;
 							return player.countCards('h',function(card){
-								return card!=arg.card&&(!arg.card.cards||!arg.card.cards.contains(card))&&get.value(card)<=4&&(card.number>=(11+arg.target.countCards('h')/2)||get.suit(card,player)=='heart');
+								return card!=arg.card&&(!arg.card.cards||!arg.card.cards.contains(card))&&get.value(card)<=4&&(get.number(card)>=(11+arg.target.countCards('h')/2)||get.suit(card,player)=='heart');
 							})>0;
 						}();
 						delete player._zhuandui_temp;
@@ -2325,7 +2325,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var player=_status.event.player;
 					return (!player.hasCard(function(card){
 						var val=get.value(card);
-						return val<0||(val<=4&&(card.number>=11||get.suit(card)=='heart'));
+						return val<0||(val<=4&&(get.number(card)>=11||get.suit(card)=='heart'));
 					},'h'))?20:0;
 				},
 				filter:function(event){
@@ -4506,7 +4506,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var type=get.type(i,false);
 							if(type=='basic'||type=='trick'){
 								var card={name:i,storage:{
-									nowuxie:true,jiaozhao:player,
+									jiaozhao:player,
 								}};
 								if(event.filterCard(card,player,event)) list.push([type,'',i]);
 								if(i=='sha'){
@@ -4525,7 +4525,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							name:button.link[2],
 							nature:button.link[3],
 							storage:{
-								nowuxie:true,
 								jiaozhao:player,
 							}
 						};
@@ -4541,7 +4540,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								name:links[0][2],
 								nature:links[0][3],
 								storage:{
-									nowuxie:true,
 									jiaozhao:player,
 								},
 							},
@@ -5403,7 +5401,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				logTarget:function(event,player){
 					return player.storage.xinxianzhen;
 				},
-				prompt2:'令该角色也成为此牌的目标',
+				prompt2:(event,player)=>('令'+get.translation(player.storage.decadexianzhen2)+'也成为'+get.translation(event.card)+'的目标'),
 				content:function(){
 					var target=player.storage.xinxianzhen;
 					trigger.targets.push(target);
@@ -5457,7 +5455,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return 1;
 						}
 						for(var i=0;i<cards.length;i++){
-							if(cards[i].name!='sha'&&cards[i].number>11&&get.value(cards[i])<7){
+							if(cards[i].name!='sha'&&get.number(cards[i])>11&&get.value(cards[i])<7){
 								return 9;
 							}
 						}
@@ -6857,11 +6855,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						console.log(e);
 						event.finish();
 						return;
-					}
-					if(event.card2.number>=10||event.card2.number<=4){
-						if(target.countCards('h')>2){
-							event.addToAI=true;
-						}
 					}
 					game.broadcastAll(function(card1,card2){
 						card1.classList.remove('glow');
@@ -8615,10 +8608,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									var val=get.value(card)
 									if(nd&&val<0) return true;
 									if(val<=5){
-										return card.number>=12;
+										return get.number(card)>=12;
 									}
 									if(val<=6){
-										return card.number>=13;
+										return get.number(card)>=13;
 									}
 									return false;
 								})) return -1;
@@ -9511,7 +9504,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						for(var i=0;i<cards.length;i++){
 							var useful=get.useful(cards[i]);
 							if(useful<5) return true;
-							if(cards[i].number>9&&useful<7) return true;
+							if(get.number(cards[i])>9&&useful<7) return true;
 						}
 					}
 					return false;
@@ -9704,8 +9697,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			gongji2:{
 				mod:{
-					attackFrom:function(){
-						return -Infinity;
+					attackRangeBase:function(){
+						return Infinity;
 					},
 				},
 			},
@@ -11831,7 +11824,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					aiOrder:function(player,card,num){
 						if(typeof card=='object'&&player.isPhaseUsing()){
 							var evt=player.getLastUsed();
-							if(evt&&evt.card&&(get.suit(evt.card)&&get.suit(evt.card)==get.suit(card)||evt.card.number&&evt.card.number==card.number)){
+							if(evt&&evt.card&&(get.suit(evt.card)&&get.suit(evt.card)==get.suit(card)||evt.card.number&&evt.card.number==get.number(card))){
 								return num+10;
 							}
 						}
@@ -11845,8 +11838,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(!player.isPhaseUsing()) return false;
 					var evt2=evt.getParent('phaseUse');
 					if(!evt2||evt2.name!='phaseUse'||evt2.player!=player) return false;
-					return get.suit(evt.card)&&get.suit(evt.card)==get.suit(event.card)||
-						evt.card.number&&evt.card.number==event.card.number;
+					return get.suit(evt.card)!='none'&&get.suit(evt.card)==get.suit(event.card)||
+						typeof get.number(evt.card,false)=='number'&&get.number(evt.card,false)==get.number(event.card);
 				},
 				content:function(){
 					player.draw();
@@ -12085,13 +12078,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			caozhi:['re_caozhi','caozhi'],
 			zhangchunhua:['re_zhangchunhua','zhangchunhua','mini_zhangchunhua'],
 			yujin:['yujin_yujin','ol_yujin','xin_yujin','yujin'],
-			xushu:['re_xushu','xin_xushu','xushu'],
+			dc_xushu:['dc_xushu','re_xushu'],
+			xushu:['xin_xushu','xushu'],
 			fazheng:['re_fazheng','xin_fazheng','fazheng'],
 			masu:['xin_masu','re_masu','masu'],
 			xusheng:['xin_xusheng','re_xusheng','xusheng','old_xusheng'],
 			wuguotai:['xin_wuguotai','re_wuguotai','wuguotai'],
 			lingtong:['xin_lingtong','re_lingtong','lingtong','old_lingtong'],
-			gaoshun:['gaoshun','re_gaoshun'],
+			gaoshun:['xin_gaoshun','re_gaoshun','gaoshun'],
 			zhonghui:['re_zhonghui','xin_zhonghui','zhonghui','old_zhonghui'],
 			wangyi:['re_wangyi','wangyi','old_wangyi'],
 			caozhang:['re_caozhang','xin_caozhang','caozhang'],
