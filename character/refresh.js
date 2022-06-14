@@ -221,7 +221,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
 						check:function(event,player){
 							return game.countPlayer(function(current){
-								if(target==player||target.countGainableCards(player,'h')==0) return false;
+								if(current==player||current.countGainableCards(player,'h')==0) return false;
 								var att=get.attitude(player,current);
 								if(current.hasSkill('tuntian')) return att>0;
 								return att<1;

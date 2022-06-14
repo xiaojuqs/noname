@@ -147,7 +147,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				check:function(event,player){
 					return player.maxHp>3&&player.isDamaged()&&player.hasCard(function(card){
 						return game.hasPlayer(function(current){
-							return current!=player&&get.attitude(player,current)<0&&player.canUse(card,current,null,true)&&get.effect(target,card,player,player)>0;
+							return current!=player&&get.attitude(player,current)<0&&player.canUse(card,current,null,true)&&get.effect(current,card,player,player)>0;
 						})&&player.hasValueTarget(card);
 					},'hs');
 				},
