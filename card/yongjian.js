@@ -195,7 +195,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							if(baiyin_card&&cards.length==1&&baiyin_card.name=='baiyin'&&target.isDamaged()) return 0;
 							var tianjitu_card=target.getEquip(5);
 							if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
-							for(var card of js) val-=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,target)
+							for(var card of js) val+=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,target)*get.attitude(player,target)*10;
 							return -val;
 						},
 					},
@@ -306,13 +306,23 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:9,
-					equipValue:0,
+					equipValue:-1,
 					value:function(card,player){
-						if(player.getEquip(2)==card) return 0;
+						if(player.getEquip(4)==card) return 0;
 						return 0.5;
 					},
 					basic:{
-						equipValue:0,
+						equipValue:-1,
+					},
+					result:{
+						keepAI:true,
+						target:function(player,target){
+							var val=2.5;
+							var card=target.getEquip(4);
+							if(card&&get.equipValue(card)<=0) return 'zerotarget';
+							if(card) val+=get.equipValue(card);
+							return -val;
+						},
 					},
 				},
 			},
@@ -664,6 +674,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 							if(card.name=='du') return player.hp>target.hp?-1:0;
 							if(target.hasSkillTag('nogain')) return 0;
+							if(game.hasPlayer(function(current){
+								return current.getEquip(5)&&current.getEquip(5).name=='shanrangzhaoshu'&&get.attitude(target,current)<0;
+							})) return 0;
 							return Math.max(1,get.value(card,player)-get.value(card,target));
 						},
 					},
@@ -739,7 +752,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['club',1,'duanjian',null,['gifts']],
 			['club',2,'sha','stab'],
 			['club',3,'yinfengyi',null,['gifts']],
-			['club',4,'du'],
+			['club',4,'du',null,['gifts']],
 			['club',5,'yitianjian'],
 			['club',6,'sha','stab'],
 			['club',7,'sha','stab'],

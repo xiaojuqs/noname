@@ -448,8 +448,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							if(player.hasSkillTag('pretao')) return 5;
 							return 2;
 						},
-						useful:[10.2,4,3,2],
-						value:[10.2,4,3,2],
+						useful:[10.2,9.2,3,2],
+						value:[10.2,9.2,3,2],
 					},
 					result:{
 						target:function(player,target){
@@ -464,6 +464,13 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								keep=true;
 							}
 							var mode=get.mode();
+							
+							if(target.hasFriend()){
+								if(target.hp>=2&&game.hasPlayer(function(current){
+									if(target!=current&&get.attitude(target,current)>=3&&current.hp<=2&&target.countCards('h','tao')<=nd&&target.countCards('h','tao')<=2) return true;
+								})) return 0;
+							}
+							
 							if(target.hp>=2&&keep&&target.hasFriend()){
 								if(target.hp>2||nd==0) return 0;
 								if(target.hp==2){

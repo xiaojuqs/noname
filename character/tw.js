@@ -191,10 +191,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					player.chooseControl().set('prompt','征建：请选择一种效果').set('choiceList',[
 						'令“出牌阶段内未使用过非基本牌”的其他角色受到惩罚',
 						'令“出牌阶段内未获得过牌”的其他角色受到惩罚',
-					]);
+					]).set('ai',()=>Math.random()<=0.5?0:1);
 					'step 1'
 					player.addSkill('twzhengjian_eff'+result.index);
-					game.log(player,'获得了','#g【征建】','的','#y效果'+get.cnNumber(result.index+1,true)).set('ai',()=>Math.random()<=0.5?0:1);
+					game.log(player,'获得了','#g【征建】','的','#y效果'+get.cnNumber(result.index+1,true));
 					game.delayx();
 				},
 				onremove:true,
@@ -220,7 +220,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var target=trigger.player;
 							event.target=target;
 							if(player.storage.twzhengjian){
-								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？').set('ai',()=>_status.event.goon).set('goon',get.damageEffect(target,player,player)>0);
+								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？').set('ai',()=>_status.event.goon).set('goon',get.damageEffect(target,player,player)>0&&get.attitude(target,player)<0);
 							}
 							else{
 								target.chooseCard('he',true,'交给'+get.translation(player)+'一张牌');
@@ -268,7 +268,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var target=trigger.player;
 							event.target=target;
 							if(player.storage.twzhengjian){
-								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？');
+								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？').set('ai',()=>_status.event.goon).set('goon',get.damageEffect(target,player,player)>0&&get.attitude(target,player)<0);;
 							}
 							else{
 								target.chooseCard('he',true,'交给'+get.translation(player)+'一张牌');
@@ -538,7 +538,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(!arg||!arg.name||arg.name!='sha') return false;
 						if(player.storage.counttrigger&&player.storage.counttrigger.twzhenxi) return false;
 						if(!arg.target) return false;
-						var card=target.getEquip(2);
+						var card=arg.target.getEquip(2);
 						return card&&get.value(card)>0&&game.hasPlayer(function(current){
 							return current!=arg.target&&current.canEquip(card)&&get.effect(current,card,player,player)>0;
 						})

@@ -15373,21 +15373,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:11,
 					result:{
 						target:function(player,target){
-							if((player.countMark('xionghuo')>=2||!game.hasPlayer(function(current){
+							if((player.countMark('xionghuo')>=(player.hp>1?2:0)||!game.hasPlayer(function(current){
 								return current!=player&&get.attitude(player,current)<0&&current.hasMark('xionghuo');
 							}))&&player.countCards('h',function(card){
 								return get.tag(card,'damage')&&player.canUse(card,target,null,true)
 								&&player.getUseValue(card)>0&&get.effect_use(target,card,player)>0
-								&&target.hasSkillTag('filterDamage',null,{
+								&&!target.hasSkillTag('filterDamage',null,{
 									player:player,
 									card:card,
 								});
-							})) return 3/Math.max(1,target.hp);
-							if((!player.hasUnknown()&&game.countPlayer(function(current){
-								return get.attitude(player,current)<0;
-							})<=1)||player.countMark('xionghuo')>=2){
-								return -1;
-							}
+							})) return player.hp>1?-3/Math.max(1,target.hp):-1;
 							return 0;
 						},
 					},

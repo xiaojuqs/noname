@@ -1543,10 +1543,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						});
 						if(ts>0&&ts>damaged) return 0;
 					}
-					var has_sha_target = (player.hasSha()&&game.hasPlayer(function(current){
-						return (player.canUse('sha',current)&&
-							get.attitude(player,current)<0&&
-							get.effect(current,{name:'sha'},player,player)>0)
+					var has_sha_target=(player.hasSha()&&game.hasPlayer(function(current){
+						return player.canUse(card,current,null,true)
+						&&player.getUseValue(card)>0&&get.effect_use(current,card,player)>0
+						&&!current.hasSkillTag('filterDamage',null,{
+							player:current,
+							card:card,
+						});
 					}));
 					if (!has_sha_target&&player.maxHp==player.hp) return 0;
 					if(card.name=='shan') return 15;
