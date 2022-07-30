@@ -500,14 +500,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								return targets1.isEmpty(get.subtype(button.link));
 							}
 						}).set('ai',function(button){
-							var player=_status.event.player,target=_status.event.targets1,source=_status.event.targets[0];
+							var player=_status.event.player,target=_status.event.targets1,source=_status.event.targets0;
 							var att=get.attitude(player,source);
-							if(get.position(card)=='e'){
-								var val=get.value(card);
+							if(get.position(button.link)=='e'){
+								var val=get.value(button.link);
 								if(att>0?val>0:val<=0) return 0;
-								return get.effect(target,card,player,player);
+								return get.effect(target,button.link,player,player);
 							}
-							var cardx={name:card.viewAs||card.name};
+							var cardx={name:button.link.viewAs||button.link.name};
 							if(get.effect(source,cardx,player,player)>=0) return 0;
 							return get.effect(target,cardx,player,player)
 						});

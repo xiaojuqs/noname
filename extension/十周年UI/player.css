@@ -179,10 +179,6 @@
 	display: block !important;
 }
 
-.player.connect>div:not(.avatar):not(.name):not(.nameol):not(.hp):not(.room):not(.gaming):not(.identity).primary-avatar {
-	display: block !important;
-}
-
 .player>.camp-wrap div {
 	transition: none;
 }
@@ -462,7 +458,7 @@
 	opacity: 1 !important;
 }
 
-.player>.hp-wrap>.hp>div {
+.player>.hp-wrap>.hp>div:not(.shield) {
     position: static;
 	margin-top: 3px;
 	width: 12px;
@@ -492,6 +488,10 @@
 	border-radius: 8px;
 	transition-property: opacity, transform;
 	z-index: 61;
+}
+
+.player.connect>div:not(.avatar):not(.name):not(.nameol):not(.hp):not(.room):not(.gaming):not(.identity).primary-avatar {
+	display: block !important;
 }
 
 .player.fullskin2>.primary-avatar {
