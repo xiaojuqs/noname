@@ -18517,7 +18517,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			guofengyupao_info:'锁定技，你不是其他角色使用普通锦囊牌的合法目标。',
 			shufazijinguan:'束发紫金冠',
 			shufazijinguan_skill:"束发紫金冠",
-			shufazijinguan_skill_info:"准备阶段，你可以对一名其他角色造成1点伤害。",
+			shufazijinguan_info:"准备阶段，你可以对一名其他角色造成1点伤害。",
 			sanlve:'三略',
 			sanlve_skill:'三略',
 			sanlve_info:'锁定技。你的攻击范围+1。你的手牌上限+1。你使用【杀】的次数上限+1。',
