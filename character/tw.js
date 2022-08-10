@@ -12,7 +12,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 		},
 		character:{
-			tw_puyangxing:['male','wu',3,['twzhengjian','twzhongchi']],
+			tw_puyangxing:['male','wu',4,['twzhengjian','twzhongchi']],
 			tw_tianyu:['male','wei',4,['twzhenxi','twyangshi']],
 			old_quancong:['male','wu',4,['zhenshan']],
 			tw_wujing:['male','wu',4,['twfenghan','twcongji']],
@@ -1190,7 +1190,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					'step 0'
 					player.changeZhuanhuanji('twfeifu');
-					trigger.target.chooseCard('he',true,'交给'+get.translation(trigger.player)+'一张牌','若选择装备牌，则其可以使用此牌');
+					trigger.target.chooseCard('he',true,'非服：交给'+get.translation(trigger.player)+'一张牌','若选择装备牌，则其可以使用此牌');
 					'step 1'
 					if(result.bool){
 						var card=result.cards[0];
