@@ -2350,17 +2350,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target:function(card,player,target,current){
 							if(get.tag(card,'damage')){
 								if(player.hasSkillTag('jueqing',false,target)) return [1,-2];
-								if(get.attitude(player,target)>0) return [0,0];
-								var eff=get.damageEffect(target.storage.shichou_target,player,target);
-								if(eff>0){
-									return [0,1];
-								}
-								else if(eff<0){
-									return [0,-2];
-								}
-								else{
-									return [0,0];
-								}
+								if(get.attitude(player,target.storage.shichou_target)>0&&target.storage.shichou_target.hp<3&&player.countCards('h','tao')<=0) return [0,0];
 							}
 						}
 					}
