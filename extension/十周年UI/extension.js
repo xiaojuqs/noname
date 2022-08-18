@@ -3254,7 +3254,8 @@ content:function(config, pack){
 					gain: [],
 					sourceDamage: [],
 					damage: [],
-					custom: []
+					custom: [],
+					useSkill:[]
 				}],
 				tempSkills: {},
 				storage: {},
