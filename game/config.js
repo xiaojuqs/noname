@@ -134,7 +134,7 @@ window.config={
 	sort:'type_sort',
 
 	cards:["standard","ex","extra","classic","basic","zhulu","sp","yunchou","yingbian",'yongjian'],
-	characters:["standard","shenhua","sp","sp2","yijiang","refresh","xinghuoliaoyuan","mobile","extra","yingbian","tw","old","offline"],
+	characters:["standard","shenhua","sp","sp2","yijiang","refresh","xinghuoliaoyuan","mobile","extra","yingbian","tw","old","offline","sb"],
 	connect_characters:['diy'],
 	connect_cards:['huanlekapai','guozhan','sp','zhulu','yingbian','yongjian'],
 	plays:[],
