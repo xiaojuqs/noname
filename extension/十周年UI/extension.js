@@ -391,7 +391,7 @@ content:function(config, pack){
 						}
 
 						while (hpMax > hpNode.childNodes.length) ui.create.div(hpNode);
-						while (hpMax < hpNode.childNodes.length) hpNode.lastChild.remove();
+						while (hpNode.childNodes.length && hpMax < hpNode.childNodes.length) hpNode.lastChild.remove();
 
 						for (var i = 0; i < hpMax; i++) {
 							if (i < hp) {
@@ -1824,26 +1824,31 @@ content:function(config, pack){
 							item = item.name;
 						} else {
 							mark = ui.create.div('.card.mark');
-							if(lib.skill[item]&&lib.skill[item].markimage){
-								mark.text = decadeUI.element.create('mark-text', mark);
-								mark.text.innerHTML = " ";
+							var markText = lib.translate[item + '_bg'];
+							if (!markText || markText[0] == '+' || markText[0] == '-') {
+								markText = get.translation(item).substr(0, 2);
+								if (decadeUI.config.playerMarkStyle != 'decade') {
+									markText = markText[0];
+								}
+							}
+							mark.text = decadeUI.element.create('mark-text', mark);
+							if (lib.skill[item] && lib.skill[item].markimage) {
+								markText = '　';
+								mark.text.style.animation = 'none';
 								mark.text.setBackgroundImage(lib.skill[item].markimage);
-								mark.text.style['box-shadow']='none';
+								mark.text.style['box-shadow'] = 'none';
 								mark.text.style.backgroundPosition = 'center';
 								mark.text.style.backgroundSize = 'contain';
 								mark.text.style.backgroundRepeat = 'no-repeat';
-							}else{
-								var markText = lib.translate[item + '_bg'];
-								if (!markText || markText[0] == '+' || markText[0] == '-') {
-									markText = get.translation(item).substr(0, 2);
-									if (decadeUI.config.playerMarkStyle != 'decade') {
-										markText = markText[0];
-									}
-								}
-								mark.text = decadeUI.element.create('mark-text', mark);
+								mark.text.classList.add('before-hidden');
+							} else {
 								if (markText.length == 2) mark.text.classList.add('small-text');
-								mark.text.innerHTML = markText;
 							}
+							if (lib.skill[item] && lib.skill[item].zhuanhuanji) {
+								mark.text.style.animation = 'none';
+								mark.text.classList.add('before-hidden');
+							}
+							mark.text.innerHTML = markText;
 						}
 
 						mark.name = item;
@@ -2065,7 +2070,7 @@ content:function(config, pack){
 
 						var mark = this.marks[name];
 						if (storage && this.storage[name]) this.syncStorage(name);
-						if (lib.skill[name] && lib.skill[name].intro && !lib.skill[name].intro.nocount && (this.storage[name] || lib.skill[name].intro.markcount || name == 'ghujia')) {
+						if (name == 'ghujia' || (lib.skill[name] && lib.skill[name].intro && !lib.skill[name].intro.nocount && (this.storage[name] || lib.skill[name].intro.markcount))) {
 							var num = 0;
 							if (typeof lib.skill[name].intro.markcount == 'function') {
 								num = lib.skill[name].intro.markcount(this.storage[name], this);
@@ -2079,8 +2084,6 @@ content:function(config, pack){
 								num = this.storage[name];
 							} else if (Array.isArray(this.storage[name])) {
 								num = this.storage[name].length;
-							} else if (typeof this.storage[name] == 'boolean') {
-								num = this.storage[name] ? '+' : '-';
 							}
 
 							if (num) {
@@ -2345,9 +2348,9 @@ content:function(config, pack){
 							node.node.name.dataset.nature = get.groupnature(infoitem[1]);
 							node.node.group.dataset.nature = get.groupnature(infoitem[1], 'raw');
 							node.classList.add('newstyle');
-							if(double&&double.length){
-								node.node.name.dataset.nature=get.groupnature(double[0]);
-								node.node.group.dataset.nature=get.groupnature(double[double.length==2?1:0]);
+							if (doubleCamp && doubleCamp.length) {
+								node.node.name.dataset.nature = get.groupnature(doubleCamp[0]);
+								node.node.group.dataset.nature = get.groupnature(doubleCamp[doubleCamp.length == 2 ? 1 : 0]);
 							}
 							ui.create.div(node.node.hp);
 							var hp=get.infoHp(infoitem[2]),maxHp=get.infoMaxHp(infoitem[2]),hujia=get.infoHujia(infoitem[2]);
@@ -2658,7 +2661,7 @@ content:function(config, pack){
 						this.classList.add('selected');
 						this.updateTransform(true);
 					}
-					if (game.chess && get.config('show_range') && !_status.event.skill && this.classList.contains('selected') && _status.event.isMine() && _status.event.name == 'chooseToUse') {
+					if (game.chess && get.config('show_range') && !_status.event.skill && this.classList.contains('selected') && (typeof _status.event.isMine == 'function') && _status.event.isMine() && _status.event.name == 'chooseToUse') {
 						var player = _status.event.player;
 						var range = get.info(this).range;
 						if (range) {
@@ -3315,97 +3318,107 @@ content:function(config, pack){
 						var checked;
 						var identity = this.parentNode.dataset.color;
 						var gameMode = get.mode();
-						switch (value) {
-							case '猜':
-							fileName = 'cai';
-							if (_status.mode == 'purple' && identity == 'cai') {
-								fileName += '_blue';
-								checked = true;
-							}
-							break;
-							case '友':
-							fileName = 'friend';
-							break;
-							case '敌':
-							fileName = 'enemy';
-							break;
-							case '反':
-							fileName = 'fan';
-							if (get.mode() == 'doudizhu') {
-								fileName = 'nongmin';
-								checked = true;
-							}
-							break;
-							case '主':
-							fileName = 'zhu';
-							if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
-								fileName += '_blue';
-								this.player.classList.add('opposite-camp');
-								checked = true;
-							} else if (get.mode() == 'doudizhu') {
-								fileName = 'dizhu';
-								checked = true;
-							}
-							break;
-							case '忠':
-							fileName = 'zhong';
-							if (gameMode == 'identity' && _status.mode == 'purple') {
-								fileName = 'qianfeng';
-							} else if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
-								fileName += '_blue';
-								this.player.classList.add('opposite-camp');
-								checked = true;
-							}
-							break;
-							case '内':
-							if (_status.mode == 'purple') {
-								fileName = identity == 'rNei' ? 'xizuo' : 'xizuo_blue';
-								checked = true;
+						var isExt = false;
+						if (lib.decade_extIdentity && (lib.decade_extIdentity[this.player.identity] || lib.decade_extIdentity[value]) && value != '猜') {
+							if (lib.decade_extIdentity[value]) {
+								filename = lib.decade_extIdentity[value];
 							} else {
-								fileName = 'nei';
+								filename = lib.decade_extIdentity[this.player.identity];
 							}
-							break;
-							case '野':
-							fileName = 'ye';
-							break;
-							case '首':
-							fileName = 'zeishou';
-							break;
-							case '帅':
-							fileName = 'zhushuai';
-							break;
-							case '将':
-							fileName = 'dajiang';
-							if (_status.mode == 'three' || get.translation(player.side + 'Color') == 'wei') {
-								fileName = 'zhushuai_blue';
+						isExt = true;
+						} else {
+							switch (value) {
+								case '猜':
+								fileName = 'cai';
+								if (_status.mode == 'purple' && identity == 'cai') {
+									fileName += '_blue';
+									checked = true;
+								}
+								break;
+								case '友':
+								fileName = 'friend';
+								break;
+								case '敌':
+								fileName = 'enemy';
+								break;
+								case '反':
+								fileName = 'fan';
+								if (get.mode() == 'doudizhu') {
+									fileName = 'nongmin';
+									checked = true;
+								}
+								break;
+								case '主':
+								fileName = 'zhu';
+								if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
+									fileName += '_blue';
+									this.player.classList.add('opposite-camp');
+									checked = true;
+								} else if (get.mode() == 'doudizhu') {
+									fileName = 'dizhu';
+									checked = true;
+								}
+								break;
+								case '忠':
+								fileName = 'zhong';
+								if (gameMode == 'identity' && _status.mode == 'purple') {
+									fileName = 'qianfeng';
+								} else if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
+									fileName += '_blue';
+									this.player.classList.add('opposite-camp');
+									checked = true;
+								}
+								break;
+								case '内':
+								if (_status.mode == 'purple') {
+									fileName = identity == 'rNei' ? 'xizuo' : 'xizuo_blue';
+									checked = true;
+								} else {
+									fileName = 'nei';
+								}
+								break;
+								case '野':
+								fileName = 'ye';
+								break;
+								case '首':
+								fileName = 'zeishou';
+								break;
+								case '帅':
+								fileName = 'zhushuai';
+								break;
+								case '将':
+								fileName = 'dajiang';
+								if (_status.mode == 'three' || get.translation(player.side + 'Color') == 'wei') {
+									fileName = 'zhushuai_blue';
+									checked = true;
+								}
+								break;
+								case '兵':
+								case '卒':
+								fileName = this.player.side === false ? 'qianfeng_blue' : 'qianfeng';
 								checked = true;
+								break;
+								case '师':
+								fileName = 'junshi';
+								break;
+								case '盟':
+								fileName = 'mengjun';
+								break;
+								case '神':
+								fileName = 'boss';
+								break;
+								case '从':
+								fileName = 'suicong';
+								break;
+								default:
+								this.innerText = value;
+								this.style.visibility = '';
+								this.parentNode.style.backgroundImage = '';
+								return;
 							}
-							break;
-							case '兵':
-							case '卒':
-							fileName = this.player.side === false ? 'qianfeng_blue' : 'qianfeng';
-							checked = true;
-							break;
-							case '师':
-							fileName = 'junshi';
-							break;
-							case '盟':
-							fileName = 'mengjun';
-							break;
-							case '神':
-							fileName = 'boss';
-							break;
-							case '从':
-							fileName = 'suicong';
-							break;
-							default:
-							this.innerText = value;
-							this.style.visibility = '';
-							this.parentNode.style.backgroundImage = '';
-							return;
 						}
 
-						if (!checked && this.parentNode.dataset.color) {
+						if (!checked && this.parentNode.dataset.color && !isExt) {
 							if (this.parentNode.dataset.color[0] == 'b') {
 								fileName += '_blue';
 								this.player.classList.add('opposite-camp');
@@ -3418,8 +3431,12 @@ content:function(config, pack){
 							var image = new Image();
 							image.node = this;
 							image.onerror = function() { this.node.style.visibility = ''; };
-
-							image.src = extensionPath + 'image/decoration/identity_' + fileName + '.png';
+							if (isExt) {
+								image.src = fileName;
+							} else {
+								image.src = extensionPath + 'image/decoration/identity_' + fileName + '.png';
+							}
+							
 							this.parentNode.style.backgroundImage = 'url("' + image.src + '")';
 						} else {
 							this.style.visibility = '';
@@ -3536,6 +3553,9 @@ content:function(config, pack){
 								var that = this;
 								var image = new Image();
 								var url = extensionPath + 'image/decoration/name_' + value + '.png';
+								if (lib.decade_extGroupImage && lib.decade_extGroupImage[value]) {
+									url = lib.decade_extGroupImage[value];
+								}
 								that._finalGroup = value;
 
 								image.onerror = function(){
@@ -4526,7 +4546,7 @@ content:function(config, pack){
 
 				event.player.wait();
 				decadeUI.game.wait();
-			} else if (!event.isMine()) {
+			} else if (!(typeof event.isMine == 'function' && event.isMine())) {
 				event.switchToAuto();
 			}
 			"step 1"
@@ -6130,7 +6150,7 @@ content:function(config, pack){
 		var translated = false;
 		if (!chinese) {
 			switch (mode) {
-				case 'identity':
+				case 'identity': case 'huanhuazhizhan': case 'th_mougong':
 				if (!player.isAlive() || player.identityShown || player == game.me) {
 					identity = (player.special_identity ? player.special_identity : identity).replace(/identity_/, '');
 				}
@@ -6182,7 +6202,7 @@ content:function(config, pack){
 			}
 		} else {
 			switch(mode){
-				case 'identity':
+				case 'identity': case 'huanhuazhizhan': case 'th_mougong':
 				if (identity.indexOf('cai') < 0) {
 					if (isMark) {
 						if (player.special_identity) identity = player.special_identity + '_bg';
