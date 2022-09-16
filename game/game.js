@@ -21755,6 +21755,7 @@
 						node.classList.add('damageadded');
 					}
 					node.innerHTML=str;
+					if(window.decadeUI) node.dataset.text = str;
 					node.dataset.nature=nature||'soil';
 				},
 				prompt_old:function(name2,className){

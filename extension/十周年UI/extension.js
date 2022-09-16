@@ -3874,8 +3874,8 @@ content:function(config, pack){
 			if (cards){
 				var owner = get.owner(cards[0]);
 				if (owner){
-					event.relatedLose = owner.lose(cards, 'visible').set('getlx', false);
-				}
+					event.relatedLose = owner.lose(cards, 'visible', ui.special).set('getlx', false);
+				}  else if (get.position(cards[0]) == 'c') event.updatePile = true;
 			};
 			"step 1";
 			if (cards[0].destroyed){
@@ -3952,6 +3952,7 @@ content:function(config, pack){
 
 				game.addVideo('addJudge', player, [get.cardInfo(cards[0]), cards[0].viewAs]);
 			}
+			if (event.updatePile) game.updateRoundNumber();
 		};
 
 		lib.element.content.chooseToCompare = function(){
