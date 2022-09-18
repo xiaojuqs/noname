@@ -426,9 +426,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					result:{
 						keepAI:true,
 						target:function(player,target){
-							var val=0;
+							var val=2.5;
 							var card=target.getEquip(1);
-							if(card&&get.equipValue(card)<=0) return 'zerotarget';
+							if(card&&get.equipValue(card)<=0) return 0;
 							if(card) val+=get.equipValue(card);
 							return -val;
 						},
@@ -459,9 +459,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					result:{
 						keepAI:true,
 						target:function(player,target){
-							var val=0;
+							var val=2.5;
 							var card=target.getEquip(1);
-							if(card&&get.equipValue(card)<=0) return 'zerotarget';
+							if(card&&get.equipValue(card)<=0) return 0;
 							if(card) val+=get.equipValue(card);
 							return -val;
 						},
@@ -492,9 +492,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					result:{
 						keepAI:true,
 						target:function(player,target){
-							var val=0;
+							var val=2;
 							var card=target.getEquip(2);
 							if(card&&card.name=='baiyin'&&target.isDamaged()) return 0;
+							if(card&&get.equipValue(card)<=0) return 0;
 							if(card) val+=get.equipValue(card);
 							return -val;
 						},
