@@ -371,8 +371,6 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							for(var i=0;i<cards.length;i++){
 								val+=get.equipValue(cards[i]);
 							}
-							var baiyin_card=target.getEquip(2);
-							if(baiyin_card&&cards.length==1&&baiyin_card.name=='baiyin'&&target.isDamaged()) return 0;
 							var tianjitu_card=target.getEquip(5);
 							if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
 							return -val;
@@ -494,7 +492,6 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						target:function(player,target){
 							var val=2;
 							var card=target.getEquip(2);
-							if(card&&card.name=='baiyin'&&target.isDamaged()) return 0;
 							if(card&&get.equipValue(card)<=0) return 0;
 							if(card) val+=get.equipValue(card);
 							return -val;
@@ -565,7 +562,6 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								if(num>0) val+=4/num;
 								if((target.countCards('e',function(card){return get.equipValue(card)<=0;})>0)&&val<=0) val=0;
 							}
-							if(card&&card.name=='baiyin'&&target.isDamaged()) val=0;
 							return -val;
 						},
 					},

@@ -15886,6 +15886,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				distance:{attackFrom:-1},
 				skills:['pyzhuren_club'],
 				ai:{
+					equipValue:function(card,player){
+						if(get.position(card)=='e'&&player.isDamaged()) return -1;
+						if(player.hp==player.maxHp) return 5;
+						return 0;
+					},
 					basic:{
 						equipValue:5
 					}

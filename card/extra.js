@@ -478,6 +478,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:9.5,
 					equipValue:function(card,player){
+						if(get.position(card)=='e'&&player.isDamaged()) return -1;
 						if(player.hp==player.maxHp) return 5;
 						if(player.countCards('h','baiyin')) return 6;
 						return 0;
