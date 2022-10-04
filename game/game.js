@@ -12334,7 +12334,7 @@
 					else{
 						var next=game.createEvent(name);
 						next.setContent(lib.card[name].effect);
-						next._result=result;					
+						next._result=result;
 						next.cards=[event.card];
 						if(!event.card.viewAs) next.card=get.autoViewAs(event.card);
 						//修浮雷報錯
