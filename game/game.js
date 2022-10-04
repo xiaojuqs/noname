@@ -12325,17 +12325,21 @@
 							next.setContent(lib.card[name].cancel);
 							next.cards=[event.card];
 							if(!event.card.viewAs) next.card=get.autoViewAs(event.card);
-							else next.card=get.autoViewAs({name:name},next.cards);
+							//修浮雷報錯
+							//else next.card=get.autoViewAs({name:name},next.cards);
+							else next.card=get.autoViewAs(event.card,next.cards);
 							next.player=player;
 						}
 					}
 					else{
 						var next=game.createEvent(name);
 						next.setContent(lib.card[name].effect);
-						next._result=result;
+						next._result=result;					
 						next.cards=[event.card];
 						if(!event.card.viewAs) next.card=get.autoViewAs(event.card);
-						else next.card=get.autoViewAs({name:name},next.cards);
+						//修浮雷報錯
+						//else next.card=get.autoViewAs({name:name},next.cards);
+						else next.card=get.autoViewAs(event.card,next.cards);
 						next.player=player;
 					}
 					ui.clear();
