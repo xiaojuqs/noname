@@ -8282,6 +8282,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					useShan:true,
 					effect:{
 						target:function(card,player,target,current){
+							var unequip_check=false;
+							if(target.hasSkillTag('unequip2')) unequip_check=true;
+							if(player.hasSkillTag('unequip',false,{
+								name:card?card.name:null,
+								target:target,
+								card:card
+							})||player.hasSkillTag('unequip_ai',false,{
+								name:card?card.name:null,
+								target:target,
+								card:card
+							})) unequip_check=true;
 							if(get.tag(card,'respondShan')&&!player.hasSkillTag('directHit_ai',true,{
 								target:target,
 								card:card,
@@ -8290,13 +8301,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									return get.attitude(target,current)<0;
 								});
 								var be=target.countCards('e',{color:'black'});
-								if(target.countCards('h','shan')&&be){
+								if((target.countCards('h','shan')||target.hasSkillTag('respondShan'))&&be){
 									if(!target.hasSkill('xinguidao')) return 0;
 									return [0,hastarget?target.countCards('he')/2:0];
 								}
-								if(target.countCards('h','shan')&&target.countCards('h')>2){
+								if((target.countCards('h','shan')||target.hasSkillTag('respondShan'))&&target.countCards('h')>2){
 									if(!target.hasSkill('xinguidao')) return 0;
 									return [0,hastarget?target.countCards('h')/4:0];
+								}
+								var judge_equip_linglongshimandai=target.getEquip(2)&&target.getEquip(2).name=='linglongshimandai'&&!unequip_check;
+								var judge_equip_serafuku=target.getEquip(2)&&target.getEquip(2).name=='serafuku'&&target.hasSex('male')&&!unequip_check;
+								if(target.countCards('he')>2&&(judge_equip_linglongshimandai||judge_equip_serafuku)){
+									return [1,1.5];
 								}
 								if(target.countCards('h')>3||(be&&target.countCards('h')>=2)){
 									return [0,0];
@@ -8310,9 +8326,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								if(!target.hasSkill('xinguidao')) return [1,0.05];
 								return [1,Math.min(0.5,(target.countCards('h')+be)/4)];
 							}
-							if (get.type(card)=='delay'){
-								return 'zerotarget';
-							}
+							if(target.getEquip(2)&&target.getEquip(2).name=='linglongshimandai'&&target.countCards('he')>2&&!get.tag(card,'loseCard')&&!unequip_check) return [1,1.5];
+							if(get.type(card)=='delay') return 'zerotarget';
 						}
 					}
 				}

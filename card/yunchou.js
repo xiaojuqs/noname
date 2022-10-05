@@ -569,7 +569,16 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					useful:6,
 					value:6,
 					result:{
-						target:-1
+						target:function(player,target){
+							if(target.getCards('e').length==1&&get.equipValue(target.getCards('e')[0])<=0) return 0;
+							if (game.players.length>2){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
+							return -1;
+						}
 					},
 					tag:{
 						loseCard:1

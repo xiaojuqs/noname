@@ -3391,6 +3391,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target:function(card,player,target,current){
 							if(!target.hasFriend()&&!player.hasUnknown()) return;
 							if(_status.currentPhase==target) return;
+							if(player.hasSkillTag('directHit_ai',true,{
+								target:target,
+								card:card,
+							},true)) return;
 							if(card.name!='shuiyanqijunx'&&get.tag(card,'loseCard')&&target.countCards('he')){
 								if(target.hasSkill('ziliang')) return 0.7;
 								return [0.5,Math.max(2,target.countCards('h'))];

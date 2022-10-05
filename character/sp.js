@@ -1628,6 +1628,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					trigger.cancel();
 				},
 				ai:{
+					respondShan:true,
 					effect:{
 						target:function(card,player,target){
 							if(card.name!='sha') return;
