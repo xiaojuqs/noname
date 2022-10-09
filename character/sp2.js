@@ -419,7 +419,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var num=lib.skill.dcpingxi.getNum()+ui.selected.cards.length;
 					if(num<game.countPlayer(function(current){
 						if(current==player||current.countCards('he')==0) return false;
-						return get.effect(target,{name:'guohe_copy2'},player,player)+get.effect(target,{name:'shanduan'},player,player)>0;
+						return get.effect(current,{name:'guohe_copy2'},player,player)>0&&get.effect(current,{name:'sha'},player,player)>0;
 					})){
 						if(get.position(card)=='h'&&player.needsToDiscard()>ui.selected.cards.length) return 7+1/Math.max(1,get.value(card));
 						return 7-get.value(card);
