@@ -1359,13 +1359,8 @@ content:function(config, pack){
 						var cardnum = card[1] || '';
 						var cardsuit = get.translation(card[0]);
 						if (parseInt(cardnum) == cardnum) cardnum = parseInt(cardnum);
-						if ([1, 11, 12, 13].contains(cardnum)) {
-							cardnum = {
-								'1': 'A',
-								'11': 'J',
-								'12': 'Q',
-								'13': 'K'
-							} [cardnum];
+						if (cardnum > 0 && cardnum < 14) {
+							cardnum = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'][cardnum - 1];
 						}
 						if (!lib.card[card[2]]) lib.card[card[2]] = {};
 						var info = lib.card[card[2]];
@@ -3165,10 +3160,13 @@ content:function(config, pack){
 			ui.mebg = ui.create.div('#mebg', ui.arena);
 			ui.me = ui.create.div('.hand-wrap', ui.arena);
 			ui.handcards1Container = decadeUI.element.create('hand-cards', ui.me);
-			ui.handcards1Container.onmousewheel = decadeUI.handler.handMousewheel;
-
 			ui.handcards2Container = ui.create.div('#handcards2');
 			ui.arena.classList.remove('nome');
+			
+			if (lib.config.mousewheel && !lib.config.touchscreen) {
+				ui.handcards1Container.onmousewheel = decadeUI.handler.handMousewheel;
+				ui.handcards2Container.onmousewheel = ui.click.mousewheel;
+			}
 
 			var equipSolts  = ui.equipSolts = decadeUI.element.create('equips-wrap');
 			equipSolts.back = decadeUI.element.create('equips-back', equipSolts);
@@ -3185,8 +3183,8 @@ content:function(config, pack){
 
 			ui.handcards1Container.ontouchstart = ui.click.touchStart;
 			ui.handcards2Container.ontouchstart = ui.click.touchStart;
-			ui.handcards1Container.ontouchmove = ui.click.touchScroll;
-			ui.handcards2Container.ontouchmove = ui.click.touchScroll;
+			ui.handcards1Container.ontouchmove = decadeUI.handler.touchScroll;
+			ui.handcards2Container.ontouchmove = decadeUI.handler.touchScroll;
 			ui.handcards1Container.style.WebkitOverflowScrolling = 'touch';
 			ui.handcards2Container.style.WebkitOverflowScrolling = 'touch';
 
@@ -5660,6 +5658,24 @@ content:function(config, pack){
 
 			if (hand.frameId == void 0) {
 				hand.frameId = requestAnimationFrame(handScroll);
+			}
+		},
+		touchScroll: function (e) {
+			if (_status.mousedragging) return;
+			if (_status.draggingtouchdialog) return;
+			if (!_status.dragged) {
+				if (Math.abs(e.touches[0].clientX / game.documentZoom - this.startX) > 10 ||
+					Math.abs(e.touches[0].clientY / game.documentZoom - this.startY) > 10) {
+					_status.dragged = true;
+				}
+			}
+			if ((this == ui.handcards1Container || this == ui.handcards2Container) && !this.style.overflowX == 'scroll') {
+				e.preventDefault();
+			} else if (lib.device == 'ios' && this.scrollHeight <= this.offsetHeight + 5 && this.scrollWidth <= this.offsetWidth + 5) {
+				e.preventDefault();
+			} else {
+				delete _status._swipeorigin;
+				e.stopPropagation();
 			}
 		},
 	},
