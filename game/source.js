@@ -38,6 +38,7 @@
 	'character/yijiang.js',
 	'character/yingbian.js',
 	'character/yxs.js',
+	'font/suits.ttf',
 	'game/asset.js',
 	'game/codemirror.js',
 	'game/config.js',

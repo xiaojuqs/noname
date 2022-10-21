@@ -1,6 +1,5 @@
 window.config={
 	extension_sources:{
-		Coding:'https://nakamurayuri.coding.net/p/noname-extension/d/noname-extension/git/raw/master/',
 		GitHub:'https://raw.githubusercontent.com/libccy/noname-extension/master/',
 	},
 	extension_source:'Coding',
@@ -133,8 +132,8 @@ window.config={
 	right_click:'pause',
 	sort:'type_sort',
 
-	cards:["standard","ex","extra","classic","basic","zhulu","sp","yunchou","yingbian",'yongjian'],
-	characters:["standard","shenhua","sp","sp2","yijiang","refresh","xinghuoliaoyuan","mobile","extra","yingbian","tw","old","offline","sb"],
+	cards:['standard','extra'],
+	characters:['standard','shenhua','sp','sp2','yijiang','refresh','xinghuoliaoyuan','mobile','extra','yingbian','sb','tw','offline'],
 	connect_characters:['diy'],
 	connect_cards:['huanlekapai','guozhan','sp','zhulu','yingbian','yongjian'],
 	plays:[],
