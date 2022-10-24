@@ -3729,6 +3729,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					player.markAuto('gx_chongyingshenfu_effect',[trigger.card.name]);
 				},
+				ai:{
+					effect:{
+						target:function(card,player,target){
+							if(target.hasSkillTag('unequip2')) return;
+							if(player.hasSkillTag('unequip',false,{
+								name:card?card.name:null,
+								target:target,
+								card:card
+							})||player.hasSkillTag('unequip_ai',false,{
+								name:card?card.name:null,
+								target:target,
+								card:card
+							})) return;
+							if(target.storage.gx_chongyingshenfu_effect&&target.getStorage('gx_chongyingshenfu_effect').contains(card.name)) return 'zerotarget';
+						},
+					},
+				},
 				group:'gx_chongyingshenfu_effect',
 				subSkill:{
 					effect:{
