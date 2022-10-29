@@ -266,6 +266,20 @@ content:function(config, pack){
 							console.error('player.init: ' + avatars[i] + ' 没有设置动皮参数');
 							continue;
 						}
+						
+						var skin;
+						if (lib && lib.config && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && lib.config.extensions && lib.config.extensions.contains('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
+							skin = null;
+							var namex = i == 0 ? character : character2;
+							var value = game.qhly_getSkin(namex);
+							if (value) value = value.substring(0, value.lastIndexOf('.'));
+							else value = '经典形象';
+							if (lib.config.qhly_skinset.djtoggle && lib.config.qhly_skinset.djtoggle[namex] && lib.config.qhly_skinset.djtoggle[namex][value]) continue;
+							for (var j of Object.keys(skins)) {
+								if (j == value) skin = skins[value];
+							}
+						} else skin = skins[Object.keys(skins)[0]];
+						if (skin == null) continue;
 
 						var skin = skins[Object.keys(skins)[0]];
 						if (skin.speed == undefined)
@@ -291,12 +305,13 @@ content:function(config, pack){
 							clipSlots: skin.clipSlots,	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
 						}, i == 1);
 
-						this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
+						if (i == 0) this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
 						if (!increased) {
 							increased = true;
 							decadeUI.CUR_DYNAMIC++;
 						}
 					}
+					this.qhly_replaceDynamic = true;
 				}
 
 				var jie;
@@ -1959,7 +1974,7 @@ content:function(config, pack){
 							if (deputy && dynamic.deputy) {
 								dynamic.stop(dynamic.deputy);
 								dynamic.deputy = null;
-							} else if (dynamic.primary) {
+							} else if (!deputy&&dynamic.primary) {
 								dynamic.stop(dynamic.primary);
 								dynamic.primary = null;
 							}
@@ -3039,6 +3054,7 @@ content:function(config, pack){
 						wu: '吴',
 						qun: '群',
 						jin: '晋',
+						ye: '野',
 					};
 					if (_status.forceKey) identityList.key = '键';
 				}
@@ -7336,6 +7352,7 @@ config:{
 			skin_luxun_谋定天下: 				'陆　逊-谋定天下',
 			skin_luxunlvmeng_清雨踏春: 			'陆逊吕蒙-清雨踏春',
 			skin_mayunlu_战场绝版: 				'马云騄-战场绝版',
+			skin_simashi_桀骜睥睨:				'司马师-桀骜睥睨',
 			skin_sundengzhoufei_鹊星夕情: 		'孙登周妃-鹊星夕情',
 			skin_sunluban_宵靥谜君: 			'孙鲁班-宵靥谜君',
 			skin_sunluyu_娇俏伶俐: 				'孙鲁育-娇俏伶俐',

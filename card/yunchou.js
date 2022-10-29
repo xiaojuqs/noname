@@ -416,7 +416,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				callback:function(){
-					if(event.card1.number>event.card2.number){
+					if(event.num1>event.num2){
 						event.parent.parent.num++;
 					}
 					else{

@@ -116,7 +116,7 @@
 .card>.gaintag.info,
 .card.button>.gaintag.info {
     left: 4px;
-    top: calc(50% - 16px);
+    top: calc(50% + 38px);
 	bottom: auto;
     right: 4px;
     width: auto;
@@ -132,7 +132,6 @@
     border-radius: 2px;
     border: 1px solid black;
 	pointer-events: none;
-	z-index: 2;
 }
 
 .card>.gaintag.info:empty,
@@ -148,6 +147,7 @@
 	top: auto;
 	bottom: 5px;
 	line-height: 16px;
+	background: rgba(230, 210, 166, 0.8);
 	color: black;
 	font-size: 16px;
 	font-weight: bold;
@@ -156,10 +156,6 @@
 	border: 1px solid black;
 	border-radius: 2px;
 	z-index: 1;
-}
-
-.card.decade-card:not(*[data-card-type='basic'])>.name {
-    bottom: 20px;
 }
 
 #window[data-card-alternate-name-visible='off'] .card>.name,

@@ -19617,8 +19617,8 @@
 							var source=_status.event.source;
 							var player=_status.event.player;
 							var getn=function(card){
-								if(player.hasSkill('tianbian')&&get.suit(card)=='heart') return 13*(event.small?-1:1);
-								return get.number(card)*(event.small?-1:1);
+								if(player.hasSkill('tianbian')&&get.suit(card)=='heart') return 13*(event&&event.small?-1:1);
+								return get.number(card)*(event&&event.small?-1:1);
 							}
 							if(source&&source!=player&&get.attitude(player,source)>1){
 								return -getn(card)-get.value(card)/2+addi;
@@ -19637,15 +19637,15 @@
 							}
 							var player=get.owner(card);
 							var getn=function(card){
-								if(player.hasSkill('tianbian')&&get.suit(card)=='heart') return 13*(event.small?-1:1);
-								return get.number(card)*(event.small?-1:1);
+								if(player.hasSkill('tianbian')&&get.suit(card)=='heart') return 13*(event&&event.small?-1:1);
+								return get.number(card)*(event&&event.small?-1:1);
 							}
 							var event=_status.event.getParent();
 							var to=(player==event.player?event.target:event.player);
 							var addi=(get.value(card)>=8&&get.type(card)!='equip')?-6:0;
 							if(card.name=='du') addi-=5;
 							if(player==event.player){
-								if(get.attitude(player,to)>0&&event.small){
+								if(get.attitude(player,to)>0&&event&&event.small){
 									return -getn(card)-get.value(card)/2+addi;
 								}
 								return getn(card)-get.value(card)/2+addi;
