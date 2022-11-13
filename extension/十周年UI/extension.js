@@ -281,7 +281,6 @@ content:function(config, pack){
 						} else skin = skins[Object.keys(skins)[0]];
 						if (skin == null) continue;
 
-						var skin = skins[Object.keys(skins)[0]];
 						if (skin.speed == undefined)
 						skin.speed = 1;
 						this.playDynamic({
@@ -1835,7 +1834,7 @@ content:function(config, pack){
 						} else {
 							mark = ui.create.div('.card.mark');
 							var markText = lib.translate[item + '_bg'];
-							if (!markText || markText[0] == '+' || markText[0] == '-') {
+							if (!markText) {
 								markText = get.translation(item).substr(0, 2);
 								if (decadeUI.config.playerMarkStyle != 'decade') {
 									markText = markText[0];
@@ -3642,8 +3641,10 @@ content:function(config, pack){
 
 
 			card.$suitnum.$num = decadeUI.element.create(null, card.$suitnum, 'span');
+			card.$suitnum.$num.style.fontFamily = '"STHeiti","SimHei","Microsoft JhengHei","Microsoft YaHei","WenQuanYi Micro Hei",Helvetica,Arial,sans-serif';
 			card.$suitnum.$br  = decadeUI.element.create(null, card.$suitnum, 'br');
 			card.$suitnum.$suit = decadeUI.element.create('suit', card.$suitnum, 'span');
+			card.$suitnum.$suit.style.fontFamily = '"STHeiti","SimHei","Microsoft JhengHei","Microsoft YaHei","WenQuanYi Micro Hei",Helvetica,Arial,sans-serif';
 			card.$equip.$suitnum = decadeUI.element.create(null, card.$equip, 'span');
 			card.$equip.$name = decadeUI.element.create(null, card.$equip, 'span');
 
@@ -3681,8 +3682,7 @@ content:function(config, pack){
 				if(get.is.phoneLayout()){
 					ui.css.phone.href = lib.assetURL + 'layout/default/phone.css';
 					ui.arena.classList.add('phone');
-				}
-				else{
+				} else {
 					ui.css.phone.href = '';
 					ui.arena.classList.remove('phone');
 				}
@@ -5594,10 +5594,14 @@ content:function(config, pack){
 			}, timestamp);
 		},
 		resize:function(){
-			if (decadeUI.isMobile())
-			ui.arena.classList.add('dui-mobile');
-			else
-			ui.arena.classList.remove('dui-mobile');
+			if (decadeUI.isMobile()) {
+				ui.arena.classList.add('dui-mobile');
+				ui.window.classList.add('dui-mobile');
+			}
+			else {
+				ui.arena.classList.remove('dui-mobile');
+				ui.window.classList.remove('dui-mobile');
+			}
 
 			var set = decadeUI.dataset;
 			set.animSizeUpdated = false;

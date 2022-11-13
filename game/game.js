@@ -21848,6 +21848,7 @@
 					node.innerHTML=str;
 					if(window.decadeUI) node.dataset.text = str;
 					node.dataset.nature=nature||'soil';
+					if(window.decadeUI) node.style.animation = 'open-fade-in 0.6s';
 				},
 				prompt_old:function(name2,className){
 					var node;
