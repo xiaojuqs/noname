@@ -971,7 +971,7 @@ content:function(config, pack){
 				var pe = event.getParent();
 				var pename = pe.name;
 
-				if((be==undefined&&pename!='discard'&&event.type!='discard')&&(pename!='loseToDiscardpile'&&event.type!='loseToDiscardpile')){
+				if((be==undefined&&(pename!='discard'||event.type!='discard'))&&(pename!='loseToDiscardpile'||event.type!='loseToDiscardpile')){
 					event.animate = false;
 					event.delay = false;
 				} else {
