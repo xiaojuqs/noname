@@ -256,14 +256,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							cardUsable:function(card,player,target){
 								if(card.name!='sha'||!card.cards) return;
 								for(var i of card.cards){
-									if(i.hasGaintag('kousheng')) return Infinity;
+									if(get.itemtype(card)=='card'&&i.hasGaintag('kousheng')) return Infinity;
 								}
 							},
 							cardname:function(card){
-								if(card.hasGaintag('kousheng')) return 'sha';
+								if(get.itemtype(card)=='card'&&card.hasGaintag('kousheng')) return 'sha';
 							},
 							cardnature:function(card){
-								if(card.hasGaintag('kousheng')) return false;
+								if(get.itemtype(card)=='card'&&card.hasGaintag('kousheng')) return false;
 							},
 						},
 						group:'kousheng_damage',
