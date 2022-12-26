@@ -10669,7 +10669,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
 					if(event.player&&event.player!=player.storage.jinglve2) return false;
 					if(event.name=='phase') return event.player.getCards('hej').contains(player.storage.jinglve3);
-					if(!event.cards.contains(player.storage.jinglve3)) return false;
+					if(event.cards&&!event.cards.contains(player.storage.jinglve3)) return false;
 					if(event.name=='lose'&&event.getlx===false) return false;
 					else if(event.name=='loseAsync'&&event.position==ui.discardPile){
 						var evt=event.getl(player.storage.jinglve2);
