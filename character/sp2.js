@@ -18127,7 +18127,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:1,
 					result:{
-						target:0,
+						target:function(player,target,card,isLink){
+							if(player.storage.xinfu_lveming&&player.storage.xinfu_lveming>1&&get.attitude(player,target)>0&&target.countCards('e')<5){
+								return target.countCards('e')+player.storage.xinfu_lveming;
+							}
+							return 0;
+						},
 					},
 				},
 				mark:true,

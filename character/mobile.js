@@ -3585,7 +3585,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						trigger:{player:'phaseDrawBegin1'},
 						prompt2:'摸牌阶段开始时，若你的“兵”数小于势力数，则你可以改为将牌堆顶的两张牌置于你的武将牌上，称为“兵”。',
 						filter:function(event,player){
-							return !event.numFixed&&player.getStorage('jibing').length<game.countGroup();
+							return !event.numFixed&&player.getExpansions('jibing').length<game.countGroup();
 						},
 						content:function(){
 							trigger.changeToZero();
@@ -3623,7 +3623,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					mingzhi:false,
 					effect:{
 						target:function(card,player,target,current){
-							if((get.tag(card,'respondShan')||get.tag(card,'respondSha'))&&target.getStorage('jibing').length>0&&player.isMaxHp()){
+							if((get.tag(card,'respondShan')||get.tag(card,'respondSha'))&&target.getExpansions('jibing').length>0&&player.isMaxHp()){
 								if(get.attitude(target,player)<=0){
 									return [0,0,1,0.3];
 								}
