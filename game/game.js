@@ -26610,6 +26610,26 @@
 					else{
 						var buttons=ui.create.div('.buttons',this.content);
 						if(zoom) buttons.classList.add('smallzoom');
+						if(window.decadeUI){
+							if (item[1] && item[1].indexOf('character') != -1) {
+								if (this.intersection == undefined && self.IntersectionObserver) {
+									this.intersection = new IntersectionObserver(function(entries){
+										for (var i = 0; i < entries.length; i++) {
+											if (entries[i].intersectionRatio > 0) {
+												var target = entries[i].target;
+												target.setBackground(target.awaitItem, 'character');
+												this.unobserve(target);
+											}
+										}
+									},{
+										root: this,
+										rootMargin: '0px',
+										thresholds: 0.01,
+									});
+								}
+								buttons.intersection = this.intersection;
+							}
+						}
 						this.buttons=this.buttons.concat(ui.create.buttons(item[0],item[1],buttons,noclick));
 					}
 					if(this.buttons.length) {
@@ -26622,6 +26642,11 @@
 						}
 					}
 					ui.update();
+					if(window.decadeUI){
+						if (!this.classList.contains('prompt')) {
+							this.style.animation = 'open-dialog 0.5s';
+						}
+					}
 					return item;
 				},
 				addText:function(str,center){
