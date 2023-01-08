@@ -132,7 +132,7 @@ window.config={
 	right_click:'pause',
 	sort:'type_sort',
 
-	cards:['standard','extra'],
+	cards:['standard','extra','sp','guozhan','zhulu','yingbian','yongjian'],
 	characters:['standard','shenhua','sp','sp2','yijiang','refresh','xinghuoliaoyuan','mobile','extra','yingbian','sb','tw','offline'],
 	connect_characters:['diy'],
 	connect_cards:['huanlekapai','guozhan','sp','zhulu','yingbian','yongjian'],
