@@ -11396,6 +11396,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					next.set('list',list);
 					next.set('processAI',function(list){
+						if(list.length==1) return;
 						var allcards=list[0][1].concat(list[1][1]),canchoose=allcards.slice(0),cards=[];
 						var player=_status.event.player;
 						var getv=function(button){
