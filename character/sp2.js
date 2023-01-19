@@ -16261,8 +16261,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(!cards.length) return false;
 					var suit=get.suit(cards[0]);
 					var num=get.number(cards[0]);
-					for(var i=0;i<event.cards.length;i++){
-						if(get.suit(event.cards[i])==suit&&get.number(event.cards[i])==num) return true;
+					if(event.cards){
+						for(var i=0;i<event.cards.length;i++){
+							if(get.suit(event.cards[i])==suit&&get.number(event.cards[i])==num) return true;
+						}
 					}
 					return false;
 				},
