@@ -14,6 +14,7 @@
 	'card/yunchou.js',
 	'card/zhenfa.js',
 	'card/zhulu.js',
+	'character/clan.js',
 	'character/diy.js',
 	'character/extra.js',
 	'character/gujian.js',
