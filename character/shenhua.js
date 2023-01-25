@@ -2420,7 +2420,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							});
 							"step 1"
 							if(result.bool){
-								player.give(result.cards,trigger.song);
+								player.give(result.cards,trigger.source);
 								trigger.source.storage.nzry_shenshi1=result.cards[0];
 								trigger.source.storage.nzry_shenshi2=player;
 								trigger.source.addSkill('nzry_shenshi1');

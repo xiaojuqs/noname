@@ -3648,43 +3648,6 @@ content:function(config, pack){
 			}
 		};
 
-		lib.skill._discard = {
-			trigger: { global: ['discardAfter'] },
-			forced: true,
-			popup: false,
-			priority: -100,
-			filter:function(event){
-				return ui.todiscard[event.discardid] ? true : false;
-			},
-			content:function(){
-				game.broadcastAll(function(id){
-					if (window.decadeUI){
-						ui.todiscard = [];
-						ui.clear();
-						return;
-					}
-
-					var todiscard = ui.todiscard[id];
-					delete ui.todiscard[id];
-					if (todiscard){
-						var time = 1000;
-						if (typeof todiscard._discardtime == 'number'){
-							time += todiscard._discardtime - get.time();
-						}
-						if (time < 0){
-							time = 0;
-						}
-						setTimeout(function(){
-							for (var i = 0; i < todiscard.length; i++){
-								todiscard[i].delete();
-							}
-						},
-						time);
-					}
-				}, trigger.discardid);
-			}
-		};
-
 		lib.skill._decadeUI_dieKillEffect = {
 			trigger:{ source:['dieBegin'] },
 			forced: true,
