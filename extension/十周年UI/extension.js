@@ -1197,6 +1197,7 @@ content:function(config, pack){
 				"step 4"
 				var evt = event.getParent();
 				if((evt.name!='discard'&&event.type!='discard')&&(evt.name!='loseToDiscardpile'&&event.type!='loseToDiscardpile')) return;
+				if(event.animate===false||event.delay===false) return;
 				if (evt.delay != false) {
 					if (evt.waitingForTransition) {
 						_status.waitingForTransition = evt.waitingForTransition;
