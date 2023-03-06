@@ -267,7 +267,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									var val=0;
 									if(judges.length&&!next.hasWuxie()){
 										var att=get.attitude(player,next);
-										for(var i=0;;i++){
+										for(var i=0;i<judges.length;i++){
 											var judge=get.judge(judges[i]),card=event.cards[i];
 											if(!judge||!card) break;
 											val+=judge(card)*att;
