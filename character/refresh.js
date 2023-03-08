@@ -6826,8 +6826,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
 					if(event.preserve) return false;
 					var list=[];
-					if(event.name=='compareMultiple') list.addArray([event.card1,event.card2]);
-					else if(!event.compareMultiple) list.addArray(event.cards);
+					if(event.name=='compareMultiple') list.addArray(event.cards);
+					else if(!event.compareMultiple) list.addArray([event.card1,event.card2]);
 					return list.filter(function(card){
 						return card.name=='sha'&&get.position(card,true)=='o';
 					}).length>0;
@@ -6835,8 +6835,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				frequent:true,
 				prompt2:function(trigger,player){
 					var list=[];
-					if(trigger.name=='compareMultiple') list.addArray([trigger.card1,trigger.card2]);
-					else if(!trigger.compareMultiple) list.addArray(trigger.cards);
+					if(trigger.name=='compareMultiple') list.addArray(trigger.cards);
+					else if(!trigger.compareMultiple) list.addArray([trigger.card1,trigger.card2]);
 					var cards=list.filter(function(card){
 						return card.name=='sha'&&get.position(card,true)=='o';
 					});
@@ -6848,8 +6848,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					var list=[];
-					if(trigger.name=='compareMultiple') list.addArray([trigger.card1,trigger.card2]);
-					else if(!trigger.compareMultiple) list.addArray(trigger.cards);
+					if(trigger.name=='compareMultiple') list.addArray(trigger.cards);
+					else if(!trigger.compareMultiple) list.addArray([trigger.card1,trigger.card2]);
 					var cards=list.filter(function(card){
 						return card.name=='sha'&&get.position(card,true)=='o';
 					});
