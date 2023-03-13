@@ -230,7 +230,7 @@ content:function(config, pack){
 		})({});
 
 		var Player = (function(Player){
-			Player.init = function (character, character2, skill) {
+			Player.init = function (character, character2, skill, update) {
 				this.doubleAvatar = (character2 && lib.character[character2]) != undefined;
 
 				var CUR_DYNAMIC = decadeUI.CUR_DYNAMIC;
@@ -323,7 +323,7 @@ content:function(config, pack){
 					}
 
 					if (jie != null) {
-						jie = lib.translate[character][0];
+						jie = lib.translate[character] && lib.translate[character][0];
 						if (jie == '界') {
 							if (this.$jieMark == undefined)
 							this.$jieMark = dui.element.create('jie-mark', this);
@@ -1477,6 +1477,9 @@ content:function(config, pack){
 								name = '刺' + name;
 								filename = 'cisha';
 							}
+						} else if (card[3]) {
+							if (['fire', 'thunder', 'kami', 'ice'].contains(card[3])) this.node.image.classList.add(card[3]);
+							if (lib.card[filename] && lib.card[filename].nature && lib.card[filename].nature.contains(card[3])) filename += '_' + card[3];
 						}
 
 						for (var i = 0; i < cardname.length; i++) vertname += cardname[i] + '\n';
@@ -1566,13 +1569,21 @@ content:function(config, pack){
 								var res = dui.statics.cards;
 								var asset = res[filename];
 								if (res.READ_OK) {
+									if (asset == undefined && typeof lib.decade_extCardImage == "object" && typeof lib.decade_extCardImage[filename] == "string") res[filename] = asset = {
+										url: lib.decade_extCardImage[filename],
+										name: filename,
+										loaded: true,
+									};
 									if (asset == undefined) {
 										this.classList.remove('decade-card');
 									} else {
 										this.style.background = 'url("' + asset.url + '")';
+										if (this.node.avatar) this.node.avatar.remove();
+										if (this.node.framebg) this.node.framebg.remove();
 									}
 								} else {
 									var url = lib.assetURL + 'extension/' + extensionName + '/image/card/' + filename + '.' + imgFormat;
+									if (typeof lib.decade_extCardImage == "object" && typeof lib.decade_extCardImage[filename] == "string") url = lib.decade_extCardImage[filename];
 									if (!asset) {
 										res[filename] = asset = {
 											name: filename,
@@ -1598,6 +1609,8 @@ content:function(config, pack){
 												image.onerror = undefined;
 												card.style.background = asset.rawUrl;
 												card.classList.remove('decade-card');
+												if (card.node.avatar) card.insertBefore(card.node.avatar, card.firstChild);
+												if (card.node.framebg) card.insertBefore(card.node.framebg, card.firstChild);
 											}
 
 											asset.url = url;
@@ -1607,6 +1620,8 @@ content:function(config, pack){
 										}
 
 										this.style.background = 'url("' + url + '")';
+										if (this.node.avatar) this.node.avatar.remove();
+										if (this.node.framebg) this.node.framebg.remove();
 									} else {
 										this.classList.remove('decade-card');
 									}
@@ -1838,6 +1853,7 @@ content:function(config, pack){
 									id: id
 								};
 								player.marks[id].setBackground(target, 'character');
+								player.marks[id].style.backgroundSize = "cover !important";
 								game.addVideo('changeMarkCharacter', player, {
 									id: id,
 									name: name,
@@ -2483,6 +2499,7 @@ content:function(config, pack){
 					var hidden = false;
 					var notouchscroll = false;
 					var forcebutton = false;
+					var noforcebutton = false;
 					var dialog = decadeUI.element.create('dialog');
 					dialog.contentContainer = decadeUI.element.create('content-container', dialog);
 					dialog.content = decadeUI.element.create('content', dialog.contentContainer);
@@ -2493,6 +2510,7 @@ content:function(config, pack){
 						else if (arguments[i] == 'hidden') hidden = true;
 						else if (arguments[i] == 'notouchscroll') notouchscroll = true;
 						else if (arguments[i] == 'forcebutton') forcebutton = true;
+						else if (arguments[i] == 'noforcebutton') noforcebutton = true;
 						else dialog.add(arguments[i]);
 					}
 					if (!hidden) dialog.open();
@@ -2504,7 +2522,9 @@ content:function(config, pack){
 						dialog.ontouchstart = ui.click.dragtouchdialog;
 					}
 
-					if (forcebutton) {
+					if (noforcebutton) {
+						dialog.noforcebutton = true;
+					} else if (forcebutton) {
 						dialog.forcebutton = true;
 						dialog.classList.add('forcebutton');
 					}
@@ -4356,6 +4376,7 @@ content:function(config, pack){
 				next.num1 = event.num1;
 				next.num2 = event.num2;
 				next.setContent(event.callback);
+				event.compareMultiple = true;
 			}
 
 			"step 6"
@@ -7399,23 +7420,17 @@ config:{
 },
 package:{
 	character:{
-		character:{
-		},
-		translate:{
-		}
+		character:{	},
+		translate:{}
 	},
 	card:{
-		card:{
-		},
-		translate:{
-		},
+		card:{},
+		translate:{},
 		list:[]
 	},
 	skill:{
-		skill:{
-		},
-		translate:{
-		}
+		skill:{},
+		translate:{}
 	},
 	intro:(function(){
 		var log = [
