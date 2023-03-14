@@ -21196,7 +21196,7 @@
 						return map;
 					};
 					next.getg=function(player){
-						if(this.getlx===false||player!=this.player) return [];
+						if(this.getlx===false||player!=this.player||!this.cards) return [];
 						return this.cards.slice(0);
 					}
 					next.gaintag=[];
