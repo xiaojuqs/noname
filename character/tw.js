@@ -7176,6 +7176,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return Math.max.apply(Math,list);
 					}).set('yimie',function(trigger,player,target){
 						var hit=true;
+						var att=get.attitude(player,target);
+						var damageNum=trigger.getParent().baseDamage;
 						if(get.type(trigger.card)=='trick'&&trigger.player.countCards('hs',{name:'wuxie'})) hit=false;
 						if(trigger.card.name=='huogong'&&trigger.player.countCards('h',function(card){
 							var list=[];

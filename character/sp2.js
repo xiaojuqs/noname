@@ -744,8 +744,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target.insertPhase();
 						target.addTempSkill('dcwumei_wake');
 						var targets=game.filterPlayer();
-						if(!player.storage.dcwumei_wake) player.storage.dcwumei_wake=[[],[]];
 						for(var targetx of targets){
+							if(!target.storage.dcwumei_wake) target.storage.dcwumei_wake=[[],[]];
 							target.storage.dcwumei_wake[0].push(targetx);
 							target.storage.dcwumei_wake[1].push(targetx.hp);
 						}
