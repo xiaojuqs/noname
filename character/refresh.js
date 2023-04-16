@@ -7120,38 +7120,77 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:'hanzhan',
 				filter:function(event,player){
 					if(event.preserve) return false;
-					var list=[];
-					if(event.name=='compareMultiple') list.addArray(event.cards);
-					else if(!event.compareMultiple) list.addArray([event.card1,event.card2]);
-					return list.filter(function(card){
-						return card.name=='sha'&&get.position(card,true)=='o';
-					}).length>0;
+					if(player!=event.player&&player!=event.target&&(!event.targets||!event.targets.contains(player))) return false;
+					for(var i of event.lose_list){
+						if(Array.isArray(i[1])){
+							for(var j of i[1]){
+								if(get.name(j,i[0])=='sha'&&get.position(j,true)=='o') return true;
+							}
+						}
+						else{
+							var j=i[1];
+							if(get.name(j,i[0])=='sha'&&get.position(j,true)=='o') return true;
+						}
+					}
+					return false;
 				},
 				frequent:true,
-				prompt2:function(trigger,player){
-					var list=[];
-					if(trigger.name=='compareMultiple') list.addArray(trigger.cards);
-					else if(!trigger.compareMultiple) list.addArray([trigger.card1,trigger.card2]);
-					var cards=list.filter(function(card){
-						return card.name=='sha'&&get.position(card,true)=='o';
-					});
-					cards.sort(function(a,b){
-						return get.number(b)-get.number(a);
-					});
-					if(cards.length>1&&get.number(cards[0])>get.number(cards[1])) cards.splice(1);
+				prompt2:function(event,player){
+					var cards=[],max=0;
+					for(var i of event.lose_list){
+						if(Array.isArray(i[1])){
+							for(var j of i[1]){
+								if(get.name(j,i[0])=='sha'&&get.position(j,true)=='o'){
+									var num=get.number(j,i[0]);
+									if(num>max){
+										cards=[];
+										max=num;
+									}
+									if(num==max) cards.push(j);
+								}
+							}
+						}
+						else{
+							var j=i[1];
+							if(get.name(j,i[0])=='sha'&&get.position(j,true)=='o'){
+								var num=get.number(j,i[0]);
+								if(num>max){
+									cards=[];
+									max=num;
+								}
+								if(num==max) cards.push(j);
+							}
+						}
+					}
 					return '获得'+get.translation(cards);
 				},
 				content:function(){
-					var list=[];
-					if(trigger.name=='compareMultiple') list.addArray(trigger.cards);
-					else if(!trigger.compareMultiple) list.addArray([trigger.card1,trigger.card2]);
-					var cards=list.filter(function(card){
-						return card.name=='sha'&&get.position(card,true)=='o';
-					});
-					cards.sort(function(a,b){
-						return get.number(b)-get.number(a);
-					});
-					if(cards.length>1&&get.number(cards[0])>get.number(cards[1])) cards.splice(1);
+					var cards=[],max=0;
+					for(var i of trigger.lose_list){
+						if(Array.isArray(i[1])){
+							for(var j of i[1]){
+								if(get.name(j,i[0])=='sha'&&get.position(j,true)=='o'){
+									var num=get.number(j,i[0]);
+									if(num>max){
+										cards=[];
+										max=num;
+									}
+									if(num==max) cards.push(j);
+								}
+							}
+						}
+						else{
+							var j=i[1];
+							if(get.name(j,i[0])=='sha'&&get.position(j,true)=='o'){
+								var num=get.number(j,i[0]);
+								if(num>max){
+									cards=[];
+									max=num;
+								}
+								if(num==max) cards.push(j);
+							}
+						}
+					}
 					player.gain(cards,'gain2');
 				},
 			},
