@@ -22438,6 +22438,7 @@
 								id:id
 							};
 							player.marks[id].setBackground(target,'character');
+							if(window.decadeUI) player.marks[id].style.backgroundSize = "cover !important";
 							game.addVideo('changeMarkCharacter',player,{
 								id:id,
 								name:name,

@@ -1841,42 +1841,6 @@ content:function(config, pack){
 						this.seat = this.getSeatNum();
 						this.node.seat.innerHTML = get.cnNumber(this.seat, true);
 					},
-					markSkillCharacter:function(id, target, name, content){
-						if (typeof target == 'object') target = target.name;
-						game.broadcastAll(function(player, target, name, content, id) {
-							if (player.marks[id] && !window.decadeUI) {
-								player.marks[id].name = name + '_charactermark';
-								player.marks[id]._name = target;
-								player.marks[id].info = {
-									name: name,
-									content: content,
-									id: id
-								};
-								player.marks[id].setBackground(target, 'character');
-								player.marks[id].style.backgroundSize = "cover !important";
-								game.addVideo('changeMarkCharacter', player, {
-									id: id,
-									name: name,
-									content: content,
-									target: target
-								});
-							} else {
-								player.marks[id] = player.markCharacter(target, {
-									name: name,
-									content: content,
-									id: id
-								});
-								player.marks[id]._name = target;
-								game.addVideo('markCharacter', player, {
-									name: name,
-									content: content,
-									id: id,
-									target: target
-								});
-							}
-						}, this, target, name, content, id);
-						return this;
-					},
 
 					playDynamic:function(animation, deputy){
 						deputy = deputy === true;
