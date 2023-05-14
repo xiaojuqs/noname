@@ -10438,6 +10438,9 @@
 				emptyEvent:function(){
 					event.trigger(event.name);
 				},
+				delay:function(){
+					game[event.name].apply(game,event._args)
+				},
 				chooseCooperationFor:function(){
 					'step 0'
 					var next=player.chooseButton([
@@ -12534,9 +12537,11 @@
 					event.num=player.needsToDiscard();
 					if(event.num<=0) event.finish();
 					else{
-						if(lib.config.show_phase_prompt){
-							player.popup('弃牌阶段');
-						}
+						game.broadcastAll(function(player){
+							if(lib.config.show_phase_prompt){
+								player.popup('弃牌阶段',null,false);
+							}
+						},player);
 					}
 					event.trigger('phaseDiscard');
 					"step 1"
@@ -12672,8 +12677,8 @@
 						if(ok){
 							ui.click.ok();
 						}
-						else if(ai.basic.chooseCard(event.ai1)){
-							if(ai.basic.chooseTarget(event.ai2)&&(!event.filterOk||event.filterOk())){
+						else if(ai.basic.chooseCard(event.ai1)||forced){
+							if((ai.basic.chooseTarget(event.ai2)||forced)&&(!event.filterOk||event.filterOk())){
 								ui.click.ok();
 								event._aiexcludeclear=true;
 							}
@@ -12857,8 +12862,8 @@
 						if(ok){
 							ui.click.ok();
 						}
-						else if(ai.basic.chooseCard(event.ai1||event.ai)){
-							if(ai.basic.chooseTarget(event.ai2)&&(!event.filterOk||event.filterOk())){
+						else if(ai.basic.chooseCard(event.ai1||event.ai)||forced){
+							if((ai.basic.chooseTarget(event.ai2)||forced)&&(!event.filterOk||event.filterOk())){
 								ui.click.ok();
 								event._aiexcludeclear=true;
 							}
@@ -14143,8 +14148,8 @@
 					"step 1"
 					if(event.result=='ai'){
 						game.check();
-						if(ai.basic.chooseCard(event.ai1)){
-							if(ai.basic.chooseTarget(event.ai2)&&(!event.filterOk||event.filterOk())){
+						if(ai.basic.chooseCard(event.ai1)||forced){
+							if((ai.basic.chooseTarget(event.ai2)||forced)&&(!event.filterOk||event.filterOk())){
 								ui.click.ok();
 								_status.event._aiexclude.length=0;
 							}
@@ -16078,14 +16083,18 @@
 							var owner=get.owner(i,'judge');
 							if(owner&&(owner!=player||get.position(i)!='h')){
 								var id=owner.playerid;
-								if(!map[id]) map[id]=[];
-								map[id].push(i);
+								if(!map[id]) map[id]=[[],[],[]];
+								map[id][0].push(i);
+								var position=get.position(i);
+								if(position=='h') map[id][1].push(i);
+								else map[id][2].push(i);
 							}
 							else if(!event.updatePile&&get.position(i)=='c') event.updatePile=true;
 						}
+						event.losing_map=map;
 						for(var i in map){
 							var owner=(_status.connectMode?lib.playerOL:game.playerMap)[i];
-							var next=owner.lose(map[i],ui.special).set('type','gain').set('forceDie',true).set('getlx',false);
+							var next=owner.lose(map[i][0],ui.special).set('type','gain').set('forceDie',true).set('getlx',false);
 							if(event.visible==true) next.visible=true;
 							event.relatedLose=next;
 						}
@@ -16201,22 +16210,20 @@
 							game.resume();
 						},get.delayx(gain2t,gain2t));
 					}
-					else if(event.source&&(event.animate=='give'||event.animate=='giveAuto')){
-						var evtmap=event.relatedLose;
+					else if(event.animate=='give'||event.animate=='giveAuto'){
+						var evtmap=event.losing_map;
 						if(event.animate=='give'){
-							if(evtmap&&evtmap.cards&&evtmap.cards.length>0) event.source.$give(evtmap.cards,player);
-							else event.source.$give(cards,player);
+							for(var i in evtmap){
+								var source=(_status.connectMode?lib.playerOL:game.playerMap)[i];
+								source.$give(evtmap[i][0],player)
+							}
 						}
 						else{
-							var givemap={hs:[],ots:[]};
-							if(evtmap&&evtmap.hs&&evtmap.cards){
-								for(var i=0;i<cards.length;i++){
-									if(evtmap.hs.contains(cards[i])) givemap.hs.push(cards[i]);
-									else if(evtmap.cards.contains(cards[i])) givemap.ots.push(cards[i]);
-								}
+							for(var i in evtmap){
+								var source=(_status.connectMode?lib.playerOL:game.playerMap)[i];
+								if(evtmap[i][1].length) source.$giveAuto(evtmap[i][1],player);
+								if(evtmap[i][2].length) source.$give(evtmap[i][2],player);
 							}
-							if(givemap.hs.length) event.source.$giveAuto(givemap.hs,player);
-							if(givemap.ots.length) event.source.$give(givemap.ots,player);
 						}
 						game.pause();
 						setTimeout(function(){
@@ -16228,6 +16235,19 @@
 							broadcast();
 							game.resume();
 						},get.delayx(500,500));
+					}
+					else if(typeof event.animate=='function'){
+						var time=event.animate(event);
+						game.pause();
+						setTimeout(function(){
+							addv();
+							player.node.handcards1.insertBefore(frag1,player.node.handcards1.firstChild);
+							player.node.handcards2.insertBefore(frag2,player.node.handcards2.firstChild);
+							player.update();
+							if(player==game.me) ui.updatehl();
+							broadcast();
+							game.resume();
+						},get.delayx(time,time));
 					}
 					else{
 						addv();
@@ -16252,16 +16272,20 @@
 						var map={};
 						for(var i of cards){
 							var owner=get.owner(i,'judge');
-							if(owner&&get.position(i)!='x'){
+							if(owner&&(owner!=player||get.position(i)!='x')){
 								var id=owner.playerid;
-								if(!map[id]) map[id]=[];
-								map[id].push(i);
+								if(!map[id]) map[id]=[[],[],[]];
+								map[id][0].push(i);
+								var position=get.position(i);
+								if(position=='h') map[id][1].push(i);
+								else map[id][2].push(i);
 							}
 							else if(!event.updatePile&&get.position(i)=='c') event.updatePile=true;
 						}
+						event.losing_map=map;
 						for(var i in map){
 							var owner=(_status.connectMode?lib.playerOL:game.playerMap)[i];
-							var next=owner.lose(map[i],ui.special).set('type','loseToExpansion').set('forceDie',true).set('getlx',false);
+							var next=owner.lose(map[i][0],ui.special).set('type','loseToExpansion').set('forceDie',true).set('getlx',false);
 							if(event.visible==true) next.visible=true;
 							event.relatedLose=next;
 						}
@@ -16332,20 +16356,26 @@
 							game.resume();
 						},get.delayx(gain2t,gain2t));
 					}
-					else if(event.source&&(event.animate=='give'||event.animate=='giveAuto')){
-						if(event.animate=='give') event.source['$'+event.animate](cards,player,false);
+					else if(event.animate=='give'||event.animate=='giveAuto'){
+						var evtmap=event.losing_map;
+						if(event.animate=='give'){
+							for(var i in evtmap){
+								var source=(_status.connectMode?lib.playerOL:game.playerMap)[i];
+								source.$give(evtmap[i][0],player);
+								game.log(player,'将',get.cnNumber(evtmap[i][0]),'置于了武将牌上');
+							}
+						}
 						else{
-							var givemap={hs:[],ots:[]};
-							for(var i=0;i<cards.length;i++){
-								givemap[event.relatedLose&&event.relatedLose.hs&&event.relatedLose.hs.contains(cards[i])?'hs':'ots'].push(cards[i]);
-							}
-							if(givemap.hs.length){
-								event.source.$giveAuto(givemap.hs,player,false);
-								game.log(player,'将',get.cnNumber(givemap.hs.length),'张牌置于了武将牌上');
-							}
-							if(givemap.ots.length){
-								event.source.$give(givemap.ots,player,false);
-								game.log(player,'将',givemap.ots,'置于了武将牌上');
+							for(var i in evtmap){
+								var source=(_status.connectMode?lib.playerOL:game.playerMap)[i];
+								if(evtmap[i][1].length){
+									source.$giveAuto(evtmap[i][1],player,false);
+									game.log(player,'将',get.cnNumber(evtmap[i][1].length),'张牌置于了武将牌上');
+								}
+								if(evtmap[i][2].length){
+									source.$give(evtmap[i][2],player,false);
+									game.log(player,'将',get.cnNumber(evtmap[i][2]),'置于了武将牌上');
+								}
 							}
 						}
 						game.pause();
@@ -16354,6 +16384,15 @@
 							for(var i of event.gaintag) player.markSkill(i);
 							game.resume();
 						},get.delayx(500,500));
+					}
+					else if(typeof event.animate=='function'){
+						var time=event.animate(event);
+						game.pause();
+						setTimeout(function(){
+							player.$addToExpansion(cards,null,event.gaintag);
+							for(var i of event.gaintag) player.markSkill(i);
+							game.resume();
+						},get.delayx(time,time));
 					}
 					else{
 						player.$addToExpansion(cards,null,event.gaintag);
@@ -16686,7 +16725,7 @@
 						}
 					}
 					"step 5"
-					if(player.hp<=0&&player.isAlive()){
+					if(player.hp<=0&&player.isAlive()&&!event.nodying){
 						game.delayx();
 						event._dyinged=true;
 						player.dying(event);
@@ -16771,7 +16810,7 @@
 					game.log(player,'失去了'+get.cnNumber(num)+'点体力')
 					player.changeHp(-num);
 					"step 1"
-					if(player.hp<=0){
+					if(player.hp<=0&&!event.nodying){
 						game.delayx();
 						event._dyinged=true;
 						player.dying(event);
@@ -16859,7 +16898,7 @@
 					game.log(player,'濒死');
 					"step 1"
 					delete event.filterStop;
-					if(player.hp>0){
+					if(player.hp>0||event.nodying){
 						_status.dying.remove(player);
 						game.broadcast(function(list){
 							_status.dying=list;
@@ -16886,7 +16925,7 @@
 					game.broadcast(function(list){
 						_status.dying=list;
 					},_status.dying);
-					if(player.hp<=0&&!player.nodying) player.die(event.reason);
+					if(player.hp<=0&&!event.nodying&&!player.nodying) player.die(event.reason);
 				},
 				die:function(){
 					"step 0"
@@ -17640,7 +17679,7 @@
 					next.player=this;
 					next.num=num;
 					next.toShow=toShow;
-					next._args=arguments;
+					next._args=Array.from(arguments);
 					next.setContent('showCharacter');
 					var evt=_status.event;
 					evt.next.remove(next);
@@ -21656,7 +21695,7 @@
 					if(reason&&reason.source) next.source=reason.source;
 					next.setContent('dying');
 					next.filterStop=function(){
-						if(this.player.hp>0){
+						if(this.player.hp>0||this.nodying){
 							delete this.filterStop;
 							return true;
 						}
@@ -25675,8 +25714,11 @@
 					else this.gaintag.add(gaintag);
 					var str='';
 					for(var gi=0;gi<this.gaintag.length;gi++){
-						str+=get.translation(this.gaintag[gi]);
-						if(gi<this.gaintag.length-1) str+=' ';
+						var translate=get.translation(this.gaintag[gi]);
+						if(translate!='invisible'){
+							str+=translate;
+							if(gi<this.gaintag.length-1) str+=' ';
+						}
 					}
 					this.node.gaintag.innerHTML=str;
 				},
@@ -26324,7 +26366,7 @@
 					delete this._skillChoice;
 				},
 				getParent:function(level,forced){
-					var parent;
+					var parent,historys=[];
 					if(this._modparent&&game.online){
 						parent=this._modparent;
 					}
@@ -26343,10 +26385,12 @@
 						}
 					}
 					else if(typeof level=='string'){
-						for(var i=0;i<20;i++){
+						while(true){
 							if(!parent) return toreturn;
+							historys.push(parent);
 							if(parent.name==level) return parent;
 							parent=parent.parent;
+							if(historys.contains(parent)) return toreturn;
 						}
 						if(!parent) return toreturn;
 					}
@@ -28844,7 +28888,8 @@
 					}
 					"step 2"
 					if(result.bool){
-						if(trigger.player.hp<=0&&!trigger.player.nodying&&trigger.player.isAlive()&&!trigger.player.isOut()&&!trigger.player.removed) event.goto(0);
+						var player=trigger.player;
+						if(player.hp<=0&&!trigger.nodying&&!player.nodying&&player.isAlive()&&!player.isOut()&&!player.removed) event.goto(0);
 						else trigger.untrigger();
 					}
 					else{
@@ -34752,6 +34797,18 @@
 				_status.paused2=false;
 				game.loop();
 			}
+		},
+		delaye:function(){
+			var next=game.createEvent('delay',false);
+			next.setContent('delay');
+			next._args=Array.from(arguments);
+			return next;
+		},
+		delayex:function(){
+			var next=game.createEvent('delayx',false);
+			next.setContent('delay');
+			next._args=Array.from(arguments);
+			return next;
 		},
 		delay:function(time,time2){
 			if(_status.paused) return;
@@ -56054,6 +56111,9 @@
 				var iwhile=100;
 				while(iwhile--){
 					range=get.select(event.selectButton);
+					if(ui.selected.buttons.length>=range[0]){
+						ok=true;
+					}
 					if(range[1]<=-1){
 						j=0;
 						for(i=0;i<ui.selected.buttons.length;i++){

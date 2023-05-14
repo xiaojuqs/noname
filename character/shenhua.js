@@ -4457,7 +4457,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								}
 								button.classList.add('selectedx');
 								event.button=button;
-								if(event.control){
+								if(event.control&&button.link){
 									event.control.replacex(player.storage.huashen.owned[button.link]);
 								}
 							}
@@ -6980,24 +6980,25 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				onremove:function(player,skill){
 					var cards=player.getExpansions(skill);
 					if(cards.length){
-						delete player.nodying;
+						//delete player.nodying;
 						player.loseToDiscardpile(cards);
 						if(player.hp<=0) player.dying({});
 					}
 				},
 				process:function(player){
-					delete player.nodying;
+					//delete player.nodying;
 					var nums=[];
 					var cards=player.getExpansions('gzbuqu');
 					for(var i=0;i<cards.length;i++){
 						if(nums.contains(get.number(cards[i]))){
-							return;
+							return false;
 						}
 						else{
 							nums.push(get.number(cards[i]));
 						}
 					}
-					player.nodying=true;
+					return true;
+					//player.nodying=true;
 				},
 				subSkill:{
 					recover:{
@@ -7030,7 +7031,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							player.loseToDiscardpile(cards);
 							if(event.count) event.goto(1);
 							'step 3'
-							lib.skill.gzbuqu.process(player);
+							if(lib.skill.gzbuqu.process(player)){
+								if(player.isDying()){
+									var evt=event,histories=[evt];
+									while(true){
+										evt=event.getParent('dying');
+										if(!evt||evt.name!='dying'||histories.contains(evt)) break;
+										histories.push(evt);
+										if(evt.player==player) evt.nodying=true;
+									}
+								}
+							}
 						}
 					}
 				},
@@ -7041,7 +7052,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 1'
 					player.showCards(get.translation(player)+'的不屈牌',player.getExpansions('gzbuqu'));
 					'step 2'
-					lib.skill.gzbuqu.process(player);
+					if(lib.skill.gzbuqu.process(player)){
+						var evt=trigger.getParent();
+						if(evt.name=='damage'||evt.name=='loseHp') evt.nodying=true;
+					}
 				},
 				ai:{
 					mingzhi:true
@@ -7763,7 +7777,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			taishici:['re_taishici','taishici'],
 			re_yuanshao:['ol_yuanshao','re_yuanshao','xin_yuanshao'],
 			pangde:['ol_pangde','re_pangde','pangde'],
-			yanwen:['re_yanwen','yanwen'],
+			yanwen:['ol_yanwen','re_yanwen','yanwen'],
 			caopi:['caopi','re_caopi','ps_caopi'],
 			xuhuang:['ol_xuhuang','re_xuhuang','xuhuang'],
 			menghuo:['re_menghuo','menghuo'],
