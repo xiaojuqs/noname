@@ -13183,7 +13183,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						var player=_status.event.player;
 						var cards=_status.event.getParent().cards;
 						var att=get.attitude(player,target);
-						return -att;
+						return target.countCards('j',function(card){return card.name=='lebu'||card.name=='bingliang'||card.name=='caomu'})?0:-att;
 						//if(cards.length==1) return -att;
 						if(player==target) att/=2;
 						if(target.hasSkill('pingkou')) att*=1.4;

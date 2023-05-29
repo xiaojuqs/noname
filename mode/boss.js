@@ -575,9 +575,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				modeimage:'boss',
 				distance:{attackFrom:-8},
 				ai:{
-					basic:{
-						equipValue:7.5,
+					equipValue:function(card,player){
+						return get.mode()=='boss'?7.5:3;
 					},
+					basic:{
+						equipValue:3,
+					}
 				},
 				fullskin:true,
  		},

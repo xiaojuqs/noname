@@ -20240,6 +20240,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					player.draw(2+get.sgn(trigger.player.hp-player.hp));
 				},
+				ai:{
+					threaten:function(player,target){
+						return target.hp>1||target.hujia?0.8:1;
+					}
+				}
 			},
 			dushi:{
 				audio:2,

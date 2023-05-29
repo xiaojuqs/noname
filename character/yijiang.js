@@ -8962,7 +8962,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					maixie:true,
-					maixie_hp:true
+					maixie_hp:true,
+					threaten:function(player,target){
+						return target.hp>1||target.hujia?0.8:1;
+					}
 				}
 			},
 			duodao:{
