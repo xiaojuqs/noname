@@ -15606,7 +15606,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
 					if(player==event.player||!event.player.isIn()) return false;
 					if(!player.hasHistory('useSkill',function(evt){
-						return evt.skil=='huguan'&&evt.targets.contains(event.player);
+						return evt.skill=='huguan'&&evt.targets.contains(event.player);
 					})) return false;
 					var suits=[];
 					event.player.getHistory('lose',function(evt){

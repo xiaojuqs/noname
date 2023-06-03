@@ -991,55 +991,57 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					'step 2'
 					if(result.bool){event.finish();return;}
-					var targets=game.filterPlayer(current=>{
-						if(current==target) return false;
-						var hs=target.getCards('h');
-						if(hs.length) return true;
-						var js=target.getCards('j');
-						for(var i=0;i<js.length;i++){
-							if(current.canAddJudge(js[i])) return true;
-						}
-						if(current.isMin()) return false;
-						var es=target.getCards('e');
-						for(var i=0;i<es.length;i++){
-							if(current.isEmpty(get.subtype(es[i]))) return true;
-						}
-						return false;
-					});
-					if(targets.length){
-						var next=player.chooseTarget(function(card,player,target){
-							return _status.event.targets.contains(target);
+					if(target){
+						var targets=game.filterPlayer(current=>{
+							if(current==target) return false;
+							var hs=target.getCards('h');
+							if(hs.length) return true;
+							var js=target.getCards('j');
+							for(var i=0;i<js.length;i++){
+								if(current.canAddJudge(js[i])) return true;
+							}
+							if(current.isMin()) return false;
+							var es=target.getCards('e');
+							for(var i=0;i<es.length;i++){
+								if(current.isEmpty(get.subtype(es[i]))) return true;
+							}
+							return false;
 						});
-						next.set('from',target);
-						next.set('targets',targets);
-						next.set('ai',function(target){
-							var player=_status.event.player;
-							var att=get.attitude(player,target);
-							var sgnatt=get.sgn(att);
-							var from=_status.event.from;
-							var es=from.getCards('e');
-							var i;
-							var att2=get.sgn(get.attitude(player,from));
-							for(i=0;i<es.length;i++){
-								if(sgnatt!=0&&att2!=0&&sgnatt!=att2&&
-									get.sgn(get.value(es[i],from))==-att2&&
-									get.sgn(get.effect(target,es[i],player,target))==sgnatt&&
-									target.isEmpty(get.subtype(es[i]))){
-									return Math.abs(att);
+						if(targets.length){
+							var next=player.chooseTarget(function(card,player,target){
+								return _status.event.targets.contains(target);
+							});
+							next.set('from',target);
+							next.set('targets',targets);
+							next.set('ai',function(target){
+								var player=_status.event.player;
+								var att=get.attitude(player,target);
+								var sgnatt=get.sgn(att);
+								var from=_status.event.from;
+								var es=from.getCards('e');
+								var i;
+								var att2=get.sgn(get.attitude(player,from));
+								for(i=0;i<es.length;i++){
+									if(sgnatt!=0&&att2!=0&&sgnatt!=att2&&
+										get.sgn(get.value(es[i],from))==-att2&&
+										get.sgn(get.effect(target,es[i],player,target))==sgnatt&&
+										target.isEmpty(get.subtype(es[i]))){
+										return Math.abs(att);
+									}
 								}
-							}
-							if(i==es.length&&(!from.countCards('j',function(card){
-								return target.canAddJudge(card);
-							})||att2<=0)){
-								if(from.countCards('h')>0) return att;
-								return 0;
-							}
-							return -att*att2;
-						});
-						next.set('targetprompt','移动目标');
-						next.set('prompt','急召：是否移动'+get.translation(target)+'的一张牌？');
+								if(i==es.length&&(!from.countCards('j',function(card){
+									return target.canAddJudge(card);
+								})||att2<=0)){
+									if(from.countCards('h')>0) return att;
+									return 0;
+								}
+								return -att*att2;
+							});
+							next.set('targetprompt','移动目标');
+							next.set('prompt','急召：是否移动'+get.translation(target)+'的一张牌？');
+						}
+						else event.finish();
 					}
-					else event.finish();
 					'step 3'
 					if(result.bool){
 						var target2=result.targets[0];
