@@ -3139,6 +3139,7 @@ content:function(config, pack){
 				additionalSkills: {},
 				disabledSkills: {},
 				hiddenSkills: [],
+				invisibleSkills: [],
 				awakenedSkills: [],
 				forbiddenSkills: {},
 				popups: [],
