@@ -541,6 +541,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			},
 			qibaodao2:{
 				inherit:'qinggang_skill',
+				audio:true,
 			},
 			g_jinchan:{
 				cardSkill:true,
