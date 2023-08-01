@@ -239,7 +239,15 @@ window.config={
 		"old_caozhen",
 		"old_chenqun",
 		"old_quancong",
-		"old_caochun"
+		"old_caochun",
+		"lingtong",
+		"std_panfeng",
+		"re_xushu",
+		"re_lidian",
+		"new_caoren",
+		"old_re_lidian",
+		"old_guanzhang",
+		"old_caoxiu"
 	],
 	connect_identity_banned:[
 		"caocao",
@@ -328,7 +336,15 @@ window.config={
 		"old_caozhen",
 		"old_chenqun",
 		"old_quancong",
-		"old_caochun"
+		"old_caochun",
+		"lingtong",
+		"std_panfeng",
+		"re_xushu",
+		"re_lidian",
+		"new_caoren",
+		"old_re_lidian",
+		"old_guanzhang",
+		"old_caoxiu"
 	],
 
 	mode:'identity',
