@@ -3,7 +3,7 @@ window.config={
 		GitHub:'https://raw.githubusercontent.com/libccy/noname-extension/master/',
 	},
 	extension_source:'Coding',
-	forbidai:['ns_liuzhang','yuji','re_yuji'],
+	forbidai:['ns_liuzhang'],
 	forbidai_user:[],
 	forbidall:[],
 	forbidstone:['zhugedan','pal_xuanxiao','hs_malfurion','lusu','chenlin','hs_siwangzhiyi',
@@ -20,7 +20,7 @@ window.config={
 	zhinang_tricks:['guohe','wuxie','wuzhong','dongzhuxianji'],
 	connect_zhinang_tricks:['guohe','wuxie','wuzhong','dongzhuxianji'],
 	all:{
-		sgscharacters:['standard','shenhua','xinghuoliaoyuan','refresh','yijiang','sp','sp2','extra','old','mobile','tw','yingbian','offline','sb','clan','collab'],
+		sgscharacters:['standard','shenhua','xinghuoliaoyuan','refresh','yijiang','sp','sp2','extra','old','mobile','tw','yingbian','offline','sb','clan','collab','xianding','huicui','shiji'],
 		sgscards:['standard','extra','sp','guozhan','zhulu','yingbian','yongjian','yunchou'],
 		sgsmodes:['identity','guozhan','versus','doudizhu','single','brawl','connect'],
 		stockmode:['identity','guozhan','versus','boss','doudizhu','single','chess','stone','connect','brawl','tafang'],
@@ -133,8 +133,8 @@ window.config={
 	sort:'type_sort',
 
 	cards:['standard','extra','sp','zhulu','yingbian','yongjian','yunchou'],
-	characters:['standard','shenhua','sp','sp2','yijiang','refresh','xinghuoliaoyuan','mobile','extra','yingbian','sb','tw','offline','clan','collab'],
-	connect_characters:['diy'],
+	characters:['standard','shenhua','sp','sp2','yijiang','refresh','xinghuoliaoyuan','mobile','extra','yingbian','sb','tw','offline','clan','collab','xianding','huicui','shiji'],
+	connect_characters:['diy','ddd'],
 	connect_cards:['huanlekapai','guozhan','sp','zhulu','yingbian','yongjian','yunchou'],
 	plays:[],
 	extensions:[],
@@ -144,7 +144,7 @@ window.config={
 	bannedpile:{},
 	customcardpile:{},
 	addedpile:{},
-	
+
 	update_link:"github",
 	show_discardpile:true,
 	show_cardpile_number:true,
@@ -239,7 +239,15 @@ window.config={
 		"old_caozhen",
 		"old_chenqun",
 		"old_quancong",
-		"old_caochun"
+		"old_caochun",
+		"lingtong",
+		"std_panfeng",
+		"re_xushu",
+		"re_lidian",
+		"new_caoren",
+		"old_re_lidian",
+		"old_guanzhang",
+		"old_caoxiu"
 	],
 	connect_identity_banned:[
 		"caocao",
@@ -328,7 +336,15 @@ window.config={
 		"old_caozhen",
 		"old_chenqun",
 		"old_quancong",
-		"old_caochun"
+		"old_caochun",
+		"lingtong",
+		"std_panfeng",
+		"re_xushu",
+		"re_lidian",
+		"new_caoren",
+		"old_re_lidian",
+		"old_guanzhang",
+		"old_caoxiu"
 	],
 
 	mode:'identity',

@@ -678,7 +678,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					if(event.zhuzhanresult){
 						var target=event.zhuzhanresult;
 						target.line(player,'green');
-						target.discard(event.zhuzhanresult2.cards);
+						target.discard(event.zhuzhanresult2.cards).discarder=target;
 						target.popup('助战','wood');
 						game.log(target,'响应了',player,'发起的助战');
 						target.addExpose(0.2);
@@ -880,7 +880,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['spade',13,'wuxie',null,['yingbian_kongchao','yingbian_draw']],
 			['spade',13,'nanman',null,['yingbian_fujia','yingbian_remove']],
 			['spade',13,'dawan'],
-			
+
 			['heart',1,'taoyuan',null,['yingbian_fujia','yingbian_remove']],
 			['heart',1,'wanjian',null,['yingbian_fujia','yingbian_remove']],
 			['heart',1,'wuxie'],
@@ -921,7 +921,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['heart',13,'wuxie',null,['yingbian_kongchao','yingbian_gain']],
 			['heart',13,'shan'],
 			['heart',13,'zhuahuang'],
-			
+
 			['club',1,'juedou'],
 			['club',1,'zhuge'],
 			['club',1,'huxinjing'],
@@ -962,7 +962,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['club',13,'wuxie',null,['yingbian_canqu','yingbian_draw']],
 			['club',13,'tongque'],
 			['club',13,'tiesuo'],
-			
+
 			['diamond',1,'juedou'],
 			['diamond',1,'zhuge'],
 			['diamond',1,'wuxinghelingshan'],
@@ -1003,7 +1003,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['diamond',13,'sha'],
 			['diamond',13,'zixin'],
 			['diamond',13,'hualiu'],
-			
+
 			['diamond',5,'muniu'],
 		],
 		help:{

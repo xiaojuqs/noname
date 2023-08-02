@@ -94,7 +94,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			//huatuo:['male','qun',3,['qingnang','jijiu']],
 			lvbu:['male','qun',4,['wushuang']],
 			diaochan:['female','qun',3,['pianyi','biyue']],
-			
+
 			xiahouyuan:['male','wei',4,['shensu','suzi']],
 			old_caoren:['male','wei',4,['jushou']],
 			huangzhong:['male','shu',4,['liegong']],
@@ -113,11 +113,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			sunjian:['male','wu',4,['gzyinghun']],
 
 			jiangwei:['male','shu',4,['tiaoxin']],
-			
+
 			hejin:['male','qun',4,['mouzhu','yanhuo']],
 			hansui:['male','qun',4,['xiaoxi','niluan']],
 			niujin:['male','wei',4,['cuorui','liewei']],
-			
+
 			jin_zhangchunhua:['female','jin',3,['huishi','qingleng']],
 			jin_simayi:['male','jin',3,['smyyingshi','xiongzhi','quanbian']],
 			jin_wangyuanji:['female','jin',3,['yanxi']],
@@ -128,7 +128,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			duyu:['male','jin',4,['sanchen','zhaotao']],
 		},
 		startBefore:function(){
-			
+
 		},
 		onreinit:function(){
 			_status.mode=_status.connectMode?lib.configOL.single_mode:get.config('single_mode');
@@ -221,10 +221,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			if(ui.coin){
 				_status.coinCoeff=get.coinCoeff([game.me.name]);
 			}
-			
+
 			game.syncState();
 			event.trigger('gameStart');
-			
+
 			var players=get.players(lib.sort.position);
 			var info=[];
 			for(var i=0;i<players.length;i++){
@@ -350,7 +350,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					};
 					var dialog=ui.create.characterDialog('heightset',filter).open();
 					dialog.videoId=event.videoId;
-						
+
 					game.me.chooseButton(true).set('ai',function(button){
 						return Math.random();
 					}).set('dialog',event.videoId);
@@ -362,6 +362,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						return Math.random();
 					}).set('dialog',event.videoId);
 					"step 5"
+					game.broadcastAll('closeDialog',event.videoId);
 					game.me.next.init(result.links[0]);
 					_status.characterlist.remove(result.links[0]);
 					game.addRecentCharacter(result.links[0]);
@@ -1133,7 +1134,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				},
 			},
-			
+
 			_changeHandcard:{
 				trigger:{global:'gameDrawAfter'},
 				silent:true,
@@ -1186,7 +1187,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			normal2:'新1v1',
 			changban2:'血战长坂坡',
 			dianjiang2:'点将单挑',
-			
+
 			manyi:'蛮裔',
 			manyi_info:'锁定技，【南蛮入侵】对你无效。当你登场时，你可以视为使用一张【南蛮入侵】。',
 			wanrong:'婉容',

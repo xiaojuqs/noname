@@ -1,8 +1,33 @@
 "use strict";
 (function(){
-	if(!localStorage.getItem('noname_alerted')){
-		localStorage.setItem('noname_alerted',true);
-		alert('无名杀官方发布地址仅有GitHub仓库！\n其他所有的所谓“无名杀”社群（包括但不限于绝大多数“官方”QQ群、QQ频道等）均为玩家自发组织，与无名杀官方无关！');
+	if(!localStorage.getItem('gplv3_noname_alerted')){
+		if(confirm('①无名杀是一款基于GPLv3协议的开源软件！\n你可以在遵守GPLv3协议的基础上任意使用，修改并转发《无名杀》，以及所有基于《无名杀》开发的拓展。\n点击“确定”即代表您认可并接受GPLv3协议↓️\nhttps://www.gnu.org/licenses/gpl-3.0.html\n②无名杀官方发布地址仅有GitHub仓库！\n其他所有的所谓“无名杀”社群（包括但不限于绝大多数“官方”QQ群、QQ频道等）均为玩家自发组织，与无名杀官方无关！')){
+			localStorage.setItem('gplv3_noname_alerted',true);
+		}
+		else{
+			var ua=navigator.userAgent.toLowerCase();
+			var ios=ua.indexOf('iphone')!=-1||ua.indexOf('ipad')!=-1||ua.indexOf('macintosh')!=-1;
+			//electron
+			if(typeof window.process=='object'&&typeof window.require=='function'){
+				var versions=window.process.versions;
+				var electronVersion=parseFloat(versions.electron);
+				var remote;
+				if(electronVersion>=14){
+					remote=require('@electron/remote');
+				}else{
+					remote=require('electron').remote;
+				}
+				var thisWindow=remote.getCurrentWindow();
+				thisWindow.destroy();
+				window.process.exit();
+			}
+			//android-cordova环境
+			//ios-cordova环境或ios浏览器环境
+			//非ios的网页版
+			else if(!ios){
+				window.close();
+			}
+		}
 	}
 	var _status={
 		paused:false,
@@ -3625,6 +3650,12 @@
 						name:'显示分享扩展',
 						init:true,
 						unfrequent:true,
+					},
+					show_extensionimage:{
+						name:'显示扩展武将图片',
+						intro:'关闭扩展武将包仍加载扩展武将图片',
+						init:true,
+						unfrequent:true,
 					}
 				}
 			},
@@ -6736,7 +6767,7 @@
 			globalId:0,
 		},
 		help:{
-			'关于游戏':'<div style="margin:10px">关于无名杀</div><ul style="margin-top:0"><li>无名杀官方发布地址仅有GitHub仓库！<br><a href="https://github.com/libccy/noname">点击前往Github仓库</a><br><li>无名杀基于GPLv3开源协议。<br><a href="https://www.gnu.org/licenses/gpl-3.0.html">点击查看GPLv3协议</a><br><li>其他所有的所谓“无名杀”社群（包括但不限于绝大多数“官方”QQ群、QQ频道等）均为粉丝自发组织，与无名杀官方无关！',
+			'关于游戏':'<div style="margin:10px">关于无名杀</div><ul style="margin-top:0"><li>无名杀官方发布地址仅有GitHub仓库！<br><a href="https://github.com/libccy/noname">点击前往Github仓库</a><br><li>无名杀基于GPLv3开源协议。<br><a href="https://www.gnu.org/licenses/gpl-3.0.html">点击查看GPLv3协议</a><br><li>其他所有的所谓“无名杀”社群（包括但不限于绝大多数“官方”QQ群、QQ频道等）均为玩家自发组织，与无名杀官方无关！',
 			'游戏操作':'<ul><li>长按/鼠标悬停/右键单击显示信息。<li>触屏模式中，双指点击切换暂停；下划显示菜单，上划切换托管。<li>键盘快捷键<br>'+
 			'<table><tr><td>A<td>切换托管<tr><td>W<td>切换不询问无懈<tr><td>空格<td>暂停</table><li>编辑牌堆<br>在卡牌包中修改牌堆后，将自动创建一个临时牌堆，在所有模式中共用，当保存当前牌堆后，临时牌堆被清除。每个模式可设置不同的已保存牌堆，设置的牌堆优先级大于临时牌堆。</ul>',
 			'游戏命令':'<div style="margin:10px">变量名</div><ul style="margin-top:0"><li>场上角色<br>game.players<li>阵亡角色<br>game.dead'+
@@ -7104,6 +7135,10 @@
 							else if(lib.character[name]){
 								nameinfo=lib.character[name];
 							}
+							else if(lib.config.show_extensionimage){
+								var pack=Object.keys(lib.characterPack).find(pack => Object.keys(lib.characterPack[pack]).contains(name));
+								if(pack) nameinfo=lib.characterPack[pack][name];
+							}
 							else if(name.indexOf('::')!=-1){
 								name=name.split('::');
 								modeimage=name[0];
@@ -7237,109 +7272,198 @@
 						return this.childNodes[row].childNodes[col];
 					}
 				};
-				Array.prototype.filterInD=function(pos){
-					if(!pos) pos='o';
-					var list=[];
-					for(var i=0;i<this.length;i++){
-						if(pos.indexOf(get.position(this[i],true))!=-1) list.push(this[i]);
+				Object.defineProperty(Array.prototype, "filterInD", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(pos){
+						if(!pos) pos='o';
+						var list=[];
+						for(var i=0;i<this.length;i++){
+							if(pos.indexOf(get.position(this[i],true))!=-1) list.push(this[i]);
+						}
+						return list;
 					}
-					return list;
-				};
-				Array.prototype.contains=function(item){
-					return this.indexOf(item)!=-1;
-				};
-				Array.prototype.add=function(){
-					for(var i=0;i<arguments.length;i++){
-						if(this.contains(arguments[i])){
+				});
+				Object.defineProperty(Array.prototype, "contains", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(item){
+						return this.indexOf(item)!=-1;
+					}
+				});
+				Object.defineProperty(Array.prototype, "add", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(){
+						for(var i=0;i<arguments.length;i++){
+							if(this.contains(arguments[i])){
+								return false;
+							}
+							this.push(arguments[i]);
+						}
+						return this;
+					}
+				});
+				Object.defineProperty(Array.prototype, "addArray", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(arr){
+						for(var i=0;i<arr.length;i++){
+							this.add(arr[i]);
+						}
+						return this;
+					}
+				});
+				Object.defineProperty(Array.prototype, "remove", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(item){
+						if(Array.isArray(item)){
+							for(var i=0;i<item.length;i++) this.remove(item[i]);
+							return;
+						}
+						var pos=this.indexOf(item);
+						if(pos==-1){
 							return false;
 						}
-						this.push(arguments[i]);
+						this.splice(pos,1);
+						return this;
 					}
-					return this;
-				};
-				Array.prototype.addArray=function(arr){
-					for(var i=0;i<arr.length;i++){
-						this.add(arr[i]);
+				});
+				Object.defineProperty(Array.prototype, "removeArray", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(arr){
+						for(var i=0;i<arr.length;i++){
+							this.remove(arr[i]);
+						}
+						return this;
 					}
-					return this;
-				};
-				Array.prototype.remove=function(item){
-					if(Array.isArray(item)){
-						for(var i=0;i<item.length;i++) this.remove(item[i]);
-						return;
+				});
+				Object.defineProperty(Array.prototype, "randomGet", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(){
+						var arr=this.slice(0);
+						for(var i=0;i<arguments.length;i++) arr.remove(arguments[i]);
+						return arr[Math.floor(Math.random()*arr.length)];
 					}
-					var pos=this.indexOf(item);
-					if(pos==-1){
-						return false;
+				});
+				Object.defineProperty(Array.prototype, "randomRemove", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(num){
+						if(typeof num=='number'){
+							var list=[];
+							for(var i=0;i<num;i++){
+								if(this.length){
+									list.push(this.randomRemove());
+								}
+								else{
+									break;
+								}
+							}
+							return list;
+						}
+						else{
+							return this.splice(Math.floor(Math.random()*this.length),1)[0];
+						}
 					}
-					this.splice(pos,1);
-					return this;
-				};
-				Array.prototype.removeArray=function(arr){
-					for(var i=0;i<arr.length;i++){
-						this.remove(arr[i]);
+				});
+				Object.defineProperty(Array.prototype, "randomSort", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(){
+						var list=[];
+						while(this.length){
+							list.push(this.randomRemove());
+						}
+						for(var i=0;i<list.length;i++){
+							this.push(list[i]);
+						}
+						return this;
 					}
-					return this;
-				};
-				Array.prototype.randomGet=function(){
-					var arr=this.slice(0);
-					for(var i=0;i<arguments.length;i++) arr.remove(arguments[i]);
-					return arr[Math.floor(Math.random()*arr.length)];
-				};
-				Array.prototype.randomRemove=function(num){
-					if(typeof num=='number'){
+				});
+				Object.defineProperty(Array.prototype, "randomGets", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(num){
+						if(num>this.length){
+							num=this.length;
+						}
+						var arr=this.slice(0);
 						var list=[];
 						for(var i=0;i<num;i++){
-							if(this.length){
-								list.push(this.randomRemove());
-							}
-							else{
-								break;
-							}
+							list.push(arr.splice(Math.floor(Math.random()*arr.length),1)[0]);
 						}
 						return list;
 					}
-					else{
-						return this.splice(Math.floor(Math.random()*this.length),1)[0];
+				});
+				Object.defineProperty(Array.prototype, "sortBySeat", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(target){
+						lib.tempSortSeat=target;
+						this.sort(lib.sort.seat);
+						delete lib.tempSortSeat;
+						return this;
 					}
-				};
-				Array.prototype.randomSort=function(){
-					var list=[];
-					while(this.length){
-						list.push(this.randomRemove());
-					}
-					for(var i=0;i<list.length;i++){
-						this.push(list[i]);
-					}
-					return this;
-				};
-				Array.prototype.randomGets=function(num){
-					if(num>this.length){
-						num=this.length;
-					}
-					var arr=this.slice(0);
-					var list=[];
-					for(var i=0;i<num;i++){
-						list.push(arr.splice(Math.floor(Math.random()*arr.length),1)[0]);
-					}
-					return list;
-				};
-				Array.prototype.sortBySeat=function(target){
-					lib.tempSortSeat=target;
-					this.sort(lib.sort.seat);
-					delete lib.tempSortSeat;
-					return this;
-				};
+				});
+				if (!('includes' in Array.prototype)) {
+					Object.defineProperty(Array.prototype, 'includes', {
+						enumerable: false,
+						configurable: true,
+						writable: true,
+						value: function (searchElement, fromIndex) {
+							if (this == null) {
+								throw new TypeError('"this" is null or not defined');
+							}
+							var o = Object(this);
+							var len = o.length >>> 0;
+							if (len === 0) {
+								return false;
+							}
+							var n = fromIndex | 0;
+							var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+							function sameValueZero(x, y) {
+								return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
+							}
+							while (k < len) {
+								if (sameValueZero(o[k], searchElement)) {
+									return true;
+								}
+								k++;
+							}
+							return false;
+						}
+					});
+				}
 				if(!Array.from){
-					Array.from=function(args){
-						var list=[];
-						if(args&&args.length){
-							for(var i=0;i<args.length;i++){
-								list.push(args[i]);
+					Object.defineProperty(Array, "from", {
+						configurable:true,
+						enumerable:false,
+						writable:true,
+						value:function(args){
+							var list=[];
+							if(args&&args.length){
+								for(var i=0;i<args.length;i++){
+									list.push(args[i]);
+								}
 							}
+							return list;
 						}
-						return list;
-					}
+					});
 				}
 				window.onkeydown=function(e){
 					if(!ui.menuContainer||!ui.menuContainer.classList.contains('hidden')){
@@ -8339,22 +8463,6 @@
 							return null;
 						}
 					}
-					game.getFileList=function(dir,callback){
-						var files=[],folders=[];
-						fetch('http://10.21.22.100:9050/api/getFileList?path='+dir).
-							then(response => response.json()).
-							then(data =>{
-								let fileList = data.file, dirList = data.dir;
-								for(let i=0;i<fileList.length;i++){
-									files.push(fileList[i]);
-								}
-								for(let i=0;i<dirList.length.length;i++){
-									folders.push(dirList[i]);
-								}
-								callback(folders,files);
-							})
-
-					};
 				}
 
 				lib.config=window.config;
@@ -9581,6 +9689,7 @@
 					localStorage.removeItem(lib.configprefix+'background');
 				}
 			},
+			//by 诗笺
 			parsex:function(func){
 				var str=func.toString();
 				//获取第一个 { 后的所有字符
@@ -10562,6 +10671,22 @@
 				emptyEvent:function(){
 					event.trigger(event.name);
 				},
+				changeGroup:function(){
+					'step 0'
+					event.originGroup=player.group;
+					if(!event.group) event.group=player.group;
+					var group=event.group;
+					player.getHistory('custom').push(event);
+					if(event.broadcast!==false){
+						game.broadcast(function(player,group){
+							player.group=group;
+							player.node.name.dataset.nature=get.groupnature(group);
+						},player,group);
+					}
+					player.group=group;
+					player.node.name.dataset.nature=get.groupnature(group);
+					if(event.log!==false) game.log(player,'将势力变为了','#y'+get.translation(group+2));
+				},
 				chooseToDebate:function(){
 					'step 0'
 					event.targets=event.list.filter(function(i){
@@ -11523,7 +11648,7 @@
 							if(subtype=='equip6'&&['equip3','equip4'].contains(event.pos)) return true;
 							return false;
 						});
-						if(cards.length) player.discard(cards).delay=false;
+						if(cards.length) player.loseToDiscardpile(cards).delay=false;
 						game.log(player,'废除了',get.translation(event.pos),'栏');
 						player.$disableEquip(event.pos);
 					}
@@ -12061,6 +12186,7 @@
 					'step 0'
 					event.filter1=function(info){
 						if(info[1].isDead()&&!lib.skill[info[0]].forceDie) return false;
+						if(info[1].isOut()&&!lib.skill[info[0]].forceOut) return false;
 						return lib.filter.filterTrigger(trigger,info[1],event.triggername,info[0]);
 					}
 					event.filter2=function(info2){
@@ -12130,7 +12256,8 @@
 					for(var i=0;i<event.choice.length;i++){
 						controls.push(event.choice[i][0]);
 					}
-					event.current.chooseControl(controls).set('prompt','选择下一个触发的技能').set('forceDie',true).set('arrangeSkill',true);
+					event.current.chooseControl(controls)
+					.set('prompt','选择下一个触发的技能').set('forceDie',true).set('arrangeSkill',true).set('includeOut',true)
 					'step 5'
 					if(result.control){
 						for(var i=0;i<event.doing.list.length;i++){
@@ -12154,6 +12281,7 @@
 				},
 				createTrigger:function(){
 					"step 0"
+					//console.log('triggering: ' + player.name+ ' \'s skill: ' + event.skill+' in ' + event.triggername)
 					if(lib.filter.filterTrigger(trigger,player,event.triggername,event.skill)){
 						var fullskills=game.expandSkills(player.getSkills().concat(lib.skill.global));
 						if(!fullskills.contains(event.skill)){
@@ -12242,6 +12370,7 @@
 							var next=player.chooseBool(str);
 							if(event.frequentSkill) next.set('frequentSkill',event.skill);
 							next.set('forceDie',true);
+							next.set('includeOut',true);
 							next.ai=function(){
 								return !check||check(trigger,player);
 							};
@@ -12326,6 +12455,7 @@
 					next.setContent(info.content);
 					next.skillHidden=event.skillHidden;
 					if(info.forceDie) next.forceDie=true;
+					if(info.forceOut||event.skill=='_turnover') next.includeOut=true;
 					"step 4"
 					if(player._hookTrigger){
 						for(var i=0;i<player._hookTrigger.length;i++){
@@ -12967,19 +13097,55 @@
 								if(event.dialog&&typeof event.dialog=='object') event.dialog.close();
 								var dialog=info.chooseButton.dialog(event,player);
 								if(info.chooseButton.chooseControl){
-									var next=player.chooseControl(info.chooseButton.chooseControl(event,player));
-									next.dialog=dialog;
-									next.set('ai',info.chooseButton.check||function(){return 0;});
-									if(event.id) next._parent_id=event.id;
-									next.type='chooseToUse_button';
+									var choices=info.chooseButton.chooseControl(event,player);
+									var choicesx=choices.slice(0);
+									choicesx.remove('cancel2');
+									if(choicesx.length==1&&dialog.direct||dialog.forceDirect){
+										event._result={
+											bool:true,
+											control:choicesx[0],
+											index:0,
+										}
+									}
+									else{
+										var next=player.chooseControl(choices);
+										next.dialog=dialog;
+										next.set('ai',info.chooseButton.check||function(){return 0;});
+										if(event.id) next._parent_id=event.id;
+										next.type='chooseToUse_button';
+									}
 								}
 								else{
-									var next=player.chooseButton(dialog);
-									next.set('ai',info.chooseButton.check||function(){return 1;});
-									next.set('filterButton',info.chooseButton.filter||function(){return true;});
-									next.set('selectButton',info.chooseButton.select||1);
-									if(event.id) next._parent_id=event.id;
-									next.type='chooseToUse_button';
+									var ai=info.chooseButton.check||function(){return 1;};
+									var filterButton=info.chooseButton.filter||function(){return true};
+									var selectButton=info.chooseButton.select||1;
+									var chooseable=[];
+									var evt=game.createEvent('emptyEvent');
+									event.next.remove(evt);
+									evt.parent=_status.event;
+									evt.player=player;
+									var tmpevt=_status.event;
+									_status.event=evt;
+									for(var i=0;i<dialog.buttons.length;i++){
+										var btn=dialog.buttons[i];
+										if(filterButton(btn,player)) chooseable.push(btn);
+									}
+									_status.event=tmpevt;
+									if(chooseable.length==1&&dialog.direct||dialog.forceDirect){
+										event._result={
+											bool:true,
+											buttons:chooseable[0],
+											links:[chooseable[0].link],
+										}
+									}
+									else{
+										var next=player.chooseButton(dialog);
+										next.set('ai',ai);
+										next.set('filterButton',filterButton);
+										next.set('selectButton',selectButton);
+										if(event.id) next._parent_id=event.id;
+										next.type='chooseToUse_button';
+									}
 								}
 								event.buttoned=event.result.skill;
 							}
@@ -13148,15 +13314,51 @@
 								if(event.dialog&&typeof event.dialog=='object') event.dialog.close();
 								var dialog=info.chooseButton.dialog(event,player);
 								if(info.chooseButton.chooseControl){
-									var next=player.chooseControl(info.chooseButton.chooseControl(event,player));
-									next.dialog=dialog;
-									next.set('ai',info.chooseButton.check||function(){return 0;});
+									var choices=info.chooseButton.chooseControl(event,player);
+									var choicesx=choices.slice(0);
+									choicesx.remove('cancel2');
+									if(choicesx.length==1&&dialog.direct||dialog.forceDirect){
+										event._result={
+											bool:true,
+											control:choicesx[0],
+											index:0,
+										}
+									}
+									else{
+										var next=player.chooseControl(choices);
+										next.dialog=dialog;
+										next.set('ai',info.chooseButton.check||function(){return 0;});
+									}
 								}
 								else{
-									var next=player.chooseButton(dialog);
-									next.set('ai',info.chooseButton.check||function(){return 1;});
-									next.set('filterButton',info.chooseButton.filter||function(){return true;});
-									next.set('selectButton',info.chooseButton.select||1);
+									var ai=info.chooseButton.check||function(){return 1;};
+									var filterButton=info.chooseButton.filter||function(){return true};
+									var selectButton=info.chooseButton.select||1;
+									var chooseable=[];
+									var evt=game.createEvent('emptyEvent');
+									event.next.remove(evt);
+									evt.parent=_status.event;
+									evt.player=player;
+									var tmpevt=_status.event;
+									_status.event=evt;
+									for(var i=0;i<dialog.buttons.length;i++){
+										var btn=dialog.buttons[i];
+										if(filterButton(btn,player)) chooseable.push(btn);
+									}
+									_status.event=tmpevt;
+									if(chooseable.length==1&&dialog.direct||dialog.forceDirect){
+										event._result={
+											bool:true,
+											buttons:chooseable[0],
+											links:[chooseable[0].link],
+										}
+									}
+									else{
+										var next=player.chooseButton(dialog);
+										next.set('ai',ai);
+										next.set('filterButton',filterButton);
+										next.set('selectButton',selectButton);
+									}
 								}
 								event.buttoned=event.result.skill;
 							}
@@ -15664,13 +15866,17 @@
 					if(target){
 						event.triggeredTargets1.push(target);
 						var next=game.createEvent('useCardToPlayer',false);
-						if(event.triggeredTargets1.length==1) next.isFirstTarget=true;
+						if(!event.isFirstTarget1){
+							event.isFirstTarget1=true;
+							next.isFirstTarget=true;
+						}
 						next.setContent('emptyEvent');
 						next.targets=targets;
 						next.target=target;
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.excluded=event.excluded;
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
@@ -15684,13 +15890,17 @@
 					if(target){
 						event.triggeredTargets2.push(target);
 						var next=game.createEvent('useCardToTarget',false);
-						if(event.triggeredTargets2.length==1) next.isFirstTarget=true;
+						if(!event.isFirstTarget2){
+							event.isFirstTarget2=true;
+							next.isFirstTarget=true;
+						}
 						next.setContent('emptyEvent');
 						next.targets=targets;
 						next.target=target;
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.excluded=event.excluded;
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
@@ -15717,13 +15927,17 @@
 					if(target){
 						event.triggeredTargets3.push(target);
 						var next=game.createEvent('useCardToPlayered',false);
-						if(event.triggeredTargets3.length==1) next.isFirstTarget=true;
+						if(!event.isFirstTarget3){
+							event.isFirstTarget3=true;
+							next.isFirstTarget=true;
+						}
 						next.setContent('emptyEvent');
 						next.targets=targets;
 						next.target=target;
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.excluded=event.excluded;
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
@@ -15737,13 +15951,17 @@
 					if(target){
 						event.triggeredTargets4.push(target);
 						var next=game.createEvent('useCardToTargeted',false);
-						if(event.triggeredTargets4.length==1) next.isFirstTarget=true;
+						if(!event.isFirstTarget4){
+							event.isFirstTarget4=true;
+							next.isFirstTarget=true;
+						}
 						next.setContent('emptyEvent');
 						next.targets=targets;
 						next.target=target;
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.excluded=event.excluded;
 						next.directHit=event.directHit;
 						next.customArgs=event.customArgs;
@@ -15765,6 +15983,7 @@
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.type='precard';
 						if(event.forceDie) next.forceDie=true;
 					}
@@ -15775,6 +15994,7 @@
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.type='precard';
 						if(event.forceDie) next.forceDie=true;
 					}
@@ -15786,6 +16006,7 @@
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.type='precard';
 						next.addedTarget=event.addedTarget;
 						next.addedTargets=event.addedTargets;
@@ -15870,6 +16091,7 @@
 						next.card=card;
 						next.cards=cards;
 						next.player=player;
+						next.skill=event.skill;
 						next.preResult=event.preResult;
 						next.type='postcard';
 						if(event.forceDie) next.forceDie=true;
@@ -15903,6 +16125,7 @@
 					"step 0"
 					var info=get.info(event.skill);
 					if(!info.noForceDie) event.forceDie=true;
+					if(!info.noForceOut) event.includeOut=true;
 					event._skill=event.skill;
 					game.trySkillAudio(event.skill,player);
 					var checkShow=player.checkShow(event.skill);
@@ -16083,6 +16306,7 @@
 						next.cards=cards;
 						next.player=player;
 						if(event.forceDie) next.forceDie=true;
+						if(event.includeOut) next.includeOut=true;
 					}
 					"step 2"
 					if(!event.skill){
@@ -16125,6 +16349,7 @@
 					}
 					next.target=targets[num];
 					if(event.forceDie) next.forceDie=true;
+					if(event.includeOut) next.includeOut=true;
 					if(next.target&&!info.multitarget){
 						if(num==0&&targets.length>1){
 							// var ttt=next.target;
@@ -16160,6 +16385,7 @@
 						next.cards=cards;
 						next.player=player;
 						if(event.forceDie) next.forceDie=true;
+						if(event.includeOut) next.includeOut=true;
 					}
 					"step 4"
 					if(player.getStat().allSkills>200){
@@ -16238,6 +16464,7 @@
 					game.log(player,'弃置了',cards);
 					event.done=player.lose(cards,event.position,'visible');
 					event.done.type='discard';
+					if(event.discarder) event.done.discarder=event.discarder;
 					"step 1"
 					event.trigger('discard');
 				},
@@ -17391,9 +17618,9 @@
 							}
 						}
 						if(_status.characterlist){
-							if(lib.character[player.name]&&player.name.indexOf('gz_shibing')!=0) _status.characterlist.add(player.name);
-							if(lib.character[player.name1]&&player.name1.indexOf('gz_shibing')!=0) _status.characterlist.add(player.name1);
-							if(lib.character[player.name2]&&player.name2.indexOf('gz_shibing')!=0) _status.characterlist.add(player.name2);
+							if(lib.character[player.name]&&player.name.indexOf('gz_shibing')!=0&&player.name.indexOf('gz_jun_')!=0) _status.characterlist.add(player.name);
+							if(lib.character[player.name1]&&player.name1.indexOf('gz_shibing')!=0&&player.name1.indexOf('gz_jun_')!=0) _status.characterlist.add(player.name1);
+							if(lib.character[player.name2]&&player.name2.indexOf('gz_shibing')!=0&&player.name2.indexOf('gz_jun_')!=0) _status.characterlist.add(player.name2);
 						}
 						event.cards=player.getCards('hejsx');
 						if(event.cards.length){
@@ -17609,11 +17836,17 @@
 							card.classList.add('drawinghidden');
 							card.viewAs=viewAs;
 							if(viewAs&&viewAs!=card.name&&(card.classList.contains('fullskin')||card.classList.contains('fullborder'))){
-								card.classList.add('fakejudge');
-								card.node.background.innerHTML=lib.translate[viewAs+'_bg']||get.translation(viewAs)[0]
+								if(window.decadeUI){
+									card.classList.add('fakejudge');
+									card.node.judgeMark.node.judge.innerHTML = get.translation(viewAs)[0];
+								}else if (card.classList.contains('fullskin') || card.classList.contains('fullborder')){
+									card.classList.add('fakejudge');
+									card.node.background.innerHTML=lib.translate[viewAs+'_bg']||get.translation(viewAs)[0]
+								}
 							}
 							else{
 								card.classList.remove('fakejudge');
+								if(window.decadeUI) card.node.judgeMark.node.judge.innerHTML = get.translation(card.name)[0];
 							}
 							player.node.judges.insertBefore(card,player.node.judges.firstChild);
 							ui.updatej(player);
@@ -17637,12 +17870,14 @@
 						if(cards[0].viewAs&&cards[0].viewAs!=cards[0].name){
 							if(cards[0].classList.contains('fullskin')||cards[0].classList.contains('fullborder')){
 								cards[0].classList.add('fakejudge');
+								if(window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].viewAs)[0];
 								cards[0].node.background.innerHTML=lib.translate[cards[0].viewAs+'_bg']||get.translation(cards[0].viewAs)[0];
 							}
 							game.log(player,'被贴上了<span class="yellowtext">'+get.translation(cards[0].viewAs)+'</span>（',cards,'）');
 						}
 						else{
 							cards[0].classList.remove('fakejudge');
+							if(window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].name)[0];
 							game.log(player,'被贴上了',cards);
 						}
 						game.addVideo('addJudge',player,[get.cardInfo(cards[0]),cards[0].viewAs]);
@@ -18352,16 +18587,23 @@
 					return this.maxHp-Math.max(0,this.hp);
 				},
 				changeGroup:function(group,log,broadcast){
-					var player=this;
-					if(broadcast!==false){
-						game.broadcast(function(player,group){
-							player.group=group;
-							player.node.name.dataset.nature=get.groupnature(group);
-						},player,group);
+					var next=game.createEvent('changeGroup');
+					next.player=this;
+					next.log=true;
+					for(var i=0;i<arguments.length;i++){
+						var arg=arguments[i];
+						if(lib.group.contains(arg)){
+							next.group=arg;
+						}
+						else if(typeof arg==='boolean'){
+							next.log=arg;
+						}
+						else if(arg==='nobroadcast'){
+							next.broadcast=false;
+						}
 					}
-					player.group=group;
-					player.node.name.dataset.nature=get.groupnature(group);
-					if(log!==false) game.log(this,'将势力变为了','#y'+get.translation(group+2));
+					next.setContent('changeGroup');
+					return next;
 				},
 				chooseToDuiben:function(target){
 					var next=game.createEvent('chooseToDuiben');
@@ -19176,6 +19418,7 @@
 						dead:this.isDead(),
 						linked:this.isLinked(),
 						turnedover:this.isTurnedOver(),
+						out:this.isOut(),
 						phaseNumber:this.phaseNumber,
 						unseen:this.isUnseen(0),
 						unseen2:this.isUnseen(1),
@@ -22291,6 +22534,7 @@
 					}
 					if(!name) return false;
 					if(this.hasJudge(name)) return false;
+					if(this.isOut()) return false;
 					var mod=game.checkMod(card,this,this,'unchanged','targetEnabled',this);
 					if(mod!='unchanged') return mod;
 					return true;
@@ -22373,6 +22617,7 @@
 					}
 					var next=game.createEvent('turnOver');
 					next.player=this;
+					next.includeOut=true;
 					next.setContent('turnOver');
 					return next;
 				},
@@ -22634,6 +22879,7 @@
 						var next=game.createEvent('logSkill',false),evt=_status.event;
 						next.player=player;
 						next.forceDie=true;
+						next.includeOut=true;
 						evt.next.remove(next);
 						if(evt.logSkill) evt=evt.getParent();
 						for(var i in logInfo){
@@ -22648,6 +22894,7 @@
 						var next2=game.createEvent('logSkillBegin',false);
 						next2.player=player;
 						next2.forceDie=true;
+						next2.includeOut=true;
 						for(var i in logInfo){
 							if(i=='event') next2.log_event=logInfo[i];
 							else next2[i]=logInfo[i];
@@ -23006,6 +23253,7 @@
 							if(lib.skill[name]&&lib.skill[name].markimage){
 								node.setBackgroundImage(lib.skill[name].markimage);
 								node.style['box-shadow']='none';
+								node.style['background-size']='contain';
 							}
 							else{
 								var str=lib.translate[name+'_bg'];
@@ -23710,7 +23958,7 @@
 					this.addSkill(skill,checkConflict,true,true);
 
 					if(!expire){
-						expire='phaseAfter';
+						expire=['phaseAfter','phaseBefore'];
 					}
 					this.tempSkills[skill]=expire;
 
@@ -24608,11 +24856,8 @@
 					return false;
 				},
 				canEquip:function(name,replace){
-					if(get.type(name)=='card'){
-						name=get.equiptype(name);
-					}
 					var range=get.subtype(name);
-					if(this.isDisabled(range)) return false;
+					if(!range||this.isDisabled(range)) return false;
 					if(['equip3','equip4'].contains(range)&&this.getEquip(6)) return false;
 					if(!replace&&!this.isEmpty(range)) return false;
 					return true;
@@ -27113,7 +27358,7 @@
 						}
 					}
 					if(!start) return;
-					if(!game.players.contains(start)){
+					if(!game.players.contains(start)&&!game.dead.contains(start)){
 						start=game.findNext(start);
 					}
 					var list=[];
@@ -28745,7 +28990,7 @@
 				},
 			},
 			_showHiddenCharacter:{
-				trigger:{player:['changeHp','phaseBeginStart','loseMaxHpBegin']},
+				trigger:{player:['changeHp','phaseBeginStart','loseMaxHpBegin','gainMaxHpBegin']},
 				firstDo:true,
 				forced:true,
 				popup:false,
@@ -29128,6 +29373,19 @@
 				content:function(){
 					player.removeSkill('counttrigger');
 					delete player.storage.counttrigger;
+				},
+				group:'counttrigger_2',
+				subSkill:{
+					2:{
+						trigger:{global:'phaseBefore'},
+						silent:true,
+						charlotte:true,
+						priority:100,
+						content:function(){
+							player.removeSkill('counttrigger');
+							delete player.storage.counttrigger;
+						},
+					}
 				}
 			},
 			_recovercheck:{
@@ -29146,6 +29404,7 @@
 			_turnover:{
 				trigger:{player:'phaseBefore'},
 				forced:true,
+				forceOut:true,
 				priority:100,
 				popup:false,
 				firstDo:true,
@@ -29191,14 +29450,16 @@
 						useCard:[],
 						changeHp:[],
 					});
-					game.countPlayer2(function(current){
+					var players=game.players.slice(0).concat(game.dead);
+					for(var i=0;i<players.length;i++){
+						var current=players[i];
 						current.actionHistory.push({useCard:[],respond:[],skipped:[],lose:[],gain:[],sourceDamage:[],damage:[],custom:[],useSkill:[]});
 						current.stat.push({card:{},skill:{}});
 						if(isRound){
 							current.getHistory().isRound=true;
 							current.getStat().isRound=true;
 						}
-					});
+					};
 					player.getHistory().isMe=true;
 					player.getStat().isMe=true;
 					if(isRound){
@@ -29682,10 +29943,10 @@
 				giveup:function(player){
 					if(lib.node.observing.contains(this)||!player||!player._giveUp) return;
 					_status.event.next.length=0;
-					game.createEvent('giveup',false).setContent(function(){
+					game.createEvent('giveup',false).set('includeOut',true).setContent(function(){
 						game.log(player,'投降');
 						player.popup('投降');
-						player.die('nosource');
+						player.die('nosource').includeOut=true;
 					}).player=player;
 				},
 				auto:function(){
@@ -30266,6 +30527,7 @@
 							}
 							else{
 								player.init(info.name1,info.name2);
+								if(info.name&&info.name!=info.name1) player.name=info.name;
 							}
 							if(!info.unseen) player.classList.remove('unseen');
 							if(!info.unseen2) player.classList.remove('unseen2');
@@ -30275,7 +30537,7 @@
 							}
 							player.playerid=i;
 							player.nickname=info.nickname;
-							player.changeGroup(info.group,false,false);
+							player.changeGroup(info.group,false,'nobroadcast');
 							player.identity=info.identity;
 							player.identityShown=info.identityShown;
 							player.hp=info.hp;
@@ -30304,6 +30566,9 @@
 							}
 							if(info.turnedover){
 								player.classList.add('turnedover');
+							}
+							if(info.out){
+								player.classList.add('out');
 							}
 							if(info.disableJudge){
 								player.$disableJudge();
@@ -34028,13 +34293,16 @@
 			}
 		},
 		createTrigger:function(name,skill,player,event){
-			if(player.isOut()||player.removed) return;
-			if(player.isDead()&&!lib.skill[skill].forceDie) return;
+			var info=get.info(skill);
+			if(!info) return false;
+			if((player.isOut()||player.removed)&&!info.forceOut) return;
+			if(player.isDead()&&!info.forceDie) return;
 			var next=game.createEvent('trigger',false);
 			next.skill=skill;
 			next.player=player;
 			next.triggername=name;
 			next.forceDie=true;
+			next.includeOut=true;
 			next._trigger=event;
 			next.setContent('createTrigger');
 		},
@@ -38030,28 +38298,28 @@
 				}
 			}
 		},
-		hasPlayer:function(func){
+		hasPlayer:function(func,includeOut){
 			for(var i=0;i<game.players.length;i++){
-				if(game.players[i].isOut()) continue;
+				if(!includeOut&&game.players[i].isOut()) continue;
 				if(func(game.players[i])) return true;
 			}
 			return false;
 		},
-		hasPlayer2:function(func){
+		hasPlayer2:function(func,includeOut){
 			var players=game.players.slice(0).concat(game.dead);
 			for(var i=0;i<players.length;i++){
-				if(players[i].isOut()) continue;
+				if(!includeOut&&players[i].isOut()) continue;
 				if(func(players[i])) return true;
 			}
 			return false;
 		},
-		countPlayer:function(func){
+		countPlayer:function(func,includeOut){
 			var num=0;
 			if(typeof func!='function'){
 				func=lib.filter.all;
 			}
 			for(var i=0;i<game.players.length;i++){
-				if(game.players[i].isOut()) continue;
+				if(!includeOut&&game.players[i].isOut()) continue;
 				var result=func(game.players[i]);
 				if(typeof result=='number'){
 					num+=result;
@@ -38062,14 +38330,14 @@
 			}
 			return num;
 		},
-		countPlayer2:function(func){
+		countPlayer2:function(func,includeOut){
 			var num=0;
 			if(typeof func!='function'){
 				func=lib.filter.all;
 			}
 			var players=game.players.slice(0).concat(game.dead);
 			for(var i=0;i<players.length;i++){
-				if(players[i].isOut()) continue;
+				if(!includeOut&&players[i].isOut()) continue;
 				var result=func(players[i]);
 				if(typeof result=='number'){
 					num+=result;
@@ -38080,7 +38348,7 @@
 			}
 			return num;
 		},
-		filterPlayer:function(func,list){
+		filterPlayer:function(func,list,includeOut){
 			if(!Array.isArray(list)){
 				list=[];
 			}
@@ -38088,14 +38356,14 @@
 				func=lib.filter.all;
 			}
 			for(var i=0;i<game.players.length;i++){
-				if(game.players[i].isOut()) continue;
+				if(!includeOut&&game.players[i].isOut()) continue;
 				if(func(game.players[i])){
 					list.add(game.players[i]);
 				}
 			}
 			return list;
 		},
-		filterPlayer2:function(func,list){
+		filterPlayer2:function(func,list,includeOut){
 			if(!Array.isArray(list)){
 				list=[];
 			}
@@ -38104,26 +38372,26 @@
 			}
 			var players=game.players.slice(0).concat(game.dead);
 			for(var i=0;i<players.length;i++){
-				if(players[i].isOut()) continue;
+				if(!includeOut&&players[i].isOut()) continue;
 				if(func(players[i])){
 					list.add(players[i]);
 				}
 			}
 			return list;
 		},
-		findPlayer:function(func){
+		findPlayer:function(func,includeOut){
 			for(var i=0;i<game.players.length;i++){
-				if(game.players[i].isOut()) continue;
+				if(!includeOut&&game.players[i].isOut()) continue;
 				if(func(game.players[i])){
 					return game.players[i];
 				}
 			}
 			return null;
 		},
-		findPlayer2:function(func){
+		findPlayer2:function(func,includeOut){
 			var players=game.players.slice(0).concat(game.dead);
 			for(var i=0;i<players.length;i++){
-				if(players[i].isOut()) continue;
+				if(!includeOut&&players[i].isOut()) continue;
 				if(func(players[i])){
 					return players[i];
 				}
@@ -41697,31 +41965,37 @@
 								for(var i in dash2.content.image){
 									extension[i]=dash2.content.image[i];
 								}
-								if(exportext){
-									var proexport=function(){
-										game.importExtension(extension,null,page.currentExtension,{
-											intro:introExtLine.querySelector('input').value||'',
-											author:authorExtLine.querySelector('input').value||'',
-											netdisk:diskExtLine.querySelector('input').value||'',
-											forum:forumExtLine.querySelector('input').value||'',
-											version:versionExtLine.querySelector('input').value||'',
-										});
-									};
-									if(game.getFileList){
-										game.getFileList('extension/'+page.currentExtension,function(folders,files){
-											extension._filelist=files;
+								game.readFile('LICENSE',function(data){
+									extension['LICENSE']=data;
+									game.writeFile(data,'extension/'+page.currentExtension,'LICENSE',function(){})
+									if(exportext){
+										var proexport=function(){
+											game.importExtension(extension,null,page.currentExtension,{
+												intro:introExtLine.querySelector('input').value||'',
+												author:authorExtLine.querySelector('input').value||'',
+												netdisk:diskExtLine.querySelector('input').value||'',
+												forum:forumExtLine.querySelector('input').value||'',
+												version:versionExtLine.querySelector('input').value||'',
+											});
+										};
+										if(game.getFileList){
+											game.getFileList('extension/'+page.currentExtension,function(folders,files){
+												extension._filelist=files;
+												proexport();
+											});
+										}
+										else{
 											proexport();
-										});
+										}
 									}
 									else{
-										proexport();
+										game.importExtension(extension,function(){
+											exportExtLine.style.display='';
+										});
 									}
-								}
-								else{
-									game.importExtension(extension,function(){
-										exportExtLine.style.display='';
-									});
-								}
+								},function(){
+									alert('许可证文件丢失，无法导出扩展');
+								});
 							},500);
 						};
 						var buttonConfirm=document.createElement('button');
@@ -44896,7 +45170,7 @@
 							if(lib.config.mode=='identity'||lib.config.mode=='guozhan'||lib.config.mode=='doudizhu'){
 								if(game.notMe||(game.me&&(game.me._trueMe||game.hasPlayer(function(current){
 									return current._trueMe==game.me;
-								})))||!game.phaseNumber||_status.qianlidanji||_status.lunhuiqiyin){
+								})))||!game.phaseNumber||_status.qianlidanji){
 									nodereplace.classList.add('unselectable');
 								}
 								else if(_status.event.isMine()&&ui.auto.classList.contains('hidden')){
@@ -44951,6 +45225,7 @@
 						pre.style.margin=0;
 						pre.style.padding=0;
 						pre.style.position='relative';
+						pre.style.webkitUserSelect = pre.style.userSelect = 'text';
 						lib.setScroll(pre);
 						page.appendChild(text);
 
@@ -44975,6 +45250,10 @@
 						var logs=[];
 						var logindex=-1;
 						var cheat=lib.cheat;
+						//使用正则匹配绝大多数的普通obj对象，避免解析成代码块。
+						var reg=/^\{([^{}]+:\s*([^\s,]*|'[^']*'|"[^"]*"|\{[^}]*\}|\[[^\]]*\]|null|undefined|([a-zA-Z$_][a-zA-Z0-9$_]*\s*:\s*)?[a-zA-Z$_][a-zA-Z0-9$_]*\(\)))(?:,\s*([^{}]+:\s*(?:[^\s,]*|'[^']*'|"[^"]*"|\{[^}]*\}|\[[^\]]*\]|null|undefined|([a-zA-Z$_][a-zA-Z0-9$_]*\s*:\s*)?[a-zA-Z$_][a-zA-Z0-9$_]*\(\))))*\}$/;
+						//使用new Function隔绝作用域，避免在控制台可以直接访问到runCommand等变量
+						var fun=(new Function('reg','value','_status','lib','game','ui','get','ai',`"use strict";\nreturn eval(reg.test(value)?('('+value+')'):value)`));
 						var runCommand=function(e){
 							if(text2.value&&!['up','down'].contains(text2.value)){
 								logindex=-1;
@@ -45014,7 +45293,9 @@
 							else{
 								if(!game.observe&&!game.online){
 									try{
-										var result=eval(text2.value);
+										var value=text2.value.trim();
+										if(value.endsWith(";")) value=value.slice(0,-1).trim();
+										var result=fun(reg,value,_status,lib,game,ui,get,ai);
 										game.print(result);
 									}
 									catch(e){
@@ -45047,26 +45328,30 @@
 						});
 						page.appendChild(text2);
 						game.print=function(){
-							var textstr='';
-							for(var i=0;i<arguments.length;i++){
-								if(get.is.object(arguments[i])){
-									var argi=get.stringify(arguments[i]);
-									if(argi&&argi.length<5000){
-										textstr+=argi;
+							var args=[].slice.call(arguments);
+							var printResult=args.map(arg=>{
+								if(get.is.object(arg)||typeof arg=='function'){
+									var argi=get.stringify(arg);
+									if(argi/*&&argi.length<5000*/){
+										return argi.replace(/&/g, '&amp;')
+											.replace(/</g, '&lt;')
+											.replace(/>/g, '&gt;')
+											.replace(/"/g, '&quot;')
+											.replace(/'/g, '&#39;');
 									}
-									else{
-										textstr+=arguments[i].toString();
-									}
+									else return arg.toString();
+								}else{
+									var str=String(arg);
+									if (!/<[a-zA-Z]+[^>]*?\/?>.*?(?=<\/[a-zA-Z]+[^>]*?>|$)/.exec(str)) return String(arg)
+										.replace(/&/g, '&amp;')
+										.replace(/</g, '&lt;')
+										.replace(/>/g, '&gt;')
+										.replace(/"/g, '&quot;')
+										.replace(/'/g, '&#39;');
+									else return str;
 								}
-								else{
-									textstr+=arguments[i];
-								}
-								if(i<arguments.length-1){
-									textstr+=' ';
-								}
-							}
-							textstr+='<br>';
-							pre.innerHTML+=textstr;
+							}).join(' ');
+							pre.innerHTML+=printResult+'<br>';
 							text.scrollTop=text.scrollHeight;
 						}
 						if(_status.toprint){
@@ -45447,10 +45732,10 @@
 					}
 					else{
 						_status.event.next.length=0;
-						game.createEvent('giveup',false).setContent(function(){
+						game.createEvent('giveup',false).set('includeOut',true).setContent(function(){
 							game.log(player,'投降');
 							player.popup('投降');
-							player.die('nosource');
+							player.die('nosource').includeOut=true;
 						}).player=player;
 					}
 					if(_status.paused&&_status.imchoosing&&!_status.auto){
@@ -45906,7 +46191,7 @@
 							bool2=true;
 						}
 						if(!bool4&&get.is.double(i)) bool4=true;
-						if(bool1&&bool2&&bool4) break;
+						if(bool1&&bool2&&bool4&&bool5) break;
 					}
 					if(bool1) groups.add('shen');
 					if(bool2&&!bool3) groups.add('key');
@@ -47205,7 +47490,6 @@
 				var addtional_extention_names=[
 					['十周年UI', true],
 					['挑战卡牌', true],
-					['AI优化',true],
 				];
 				var need_reload=false;
 				for(var i=0;i<addtional_extention_names.length;i++){
@@ -47269,14 +47553,6 @@
 						node.firstChild.innerHTML='正在测试';
 						node.removeEventListener('click',ui.click.resume);
 					},500);
-				}
-				if(!localStorage.getItem('gplv3_alerted')){
-					if(confirm('无名杀是一款基于GPLv3协议的开源软件！\n你可以在遵守GPLv3协议的基础上任意使用，修改并转发《无名杀》，以及所有基于《无名杀》开发的拓展。\n点击“确定”即代表您认可并接受GPLv3协议↓️\nhttps://www.gnu.org/licenses/gpl-3.0.html')){
-						localStorage.setItem('gplv3_alerted',true);
-					}
-					else{
-						game.exit();
-					}
 				}
 			},
 			system:function(str,func,right,before){
@@ -50533,7 +50809,7 @@
 				}
 				// ui.click.skin(this,player.name);
 				game.pause2();
-				ui.click.charactercard(player.name,null,null,true,this);
+				ui.click.charactercard(player.name1||player.name,null,null,true,this);
 			},
 			avatar2:function(){
 				if(!lib.config.doubleclick_intro) return;
@@ -50779,7 +51055,7 @@
 				}
 				game.uncheck();
 				game.check();
-				if(event.skillDialog){
+				if(event.skillDialog===true){
 					var str=get.translation(skill);
 					if(info.prompt){
 						var str2;
@@ -53404,17 +53680,23 @@
 					threaten=info.ai.threaten(player,player);
 				}
 			}
-			if(type=='in'){
+			if(type.indexOf('in')!=-1){
 				if(info.enable=='phaseUse') num+=0.5;
 				if(info.trigger&&info.trigger.player){
 					var list=Array.isArray(info.trigger.player)?info.trigger.player:[info.trigger.player];
 					var add=false;
 					for(var i of list){
-						for(var j of lib.phaseName){
-							if(i.indexOf[j]==0){
-								num+=0.5;
-								add=true;
-								break;
+						if(i.indexOf('phase')==0){
+							num+=0.5;
+							add=true;
+						}
+						else{
+							for(var j of lib.phaseName){
+								if(i.indexOf[j]==0){
+									num+=0.5;
+									add=true;
+									break;
+								}
 							}
 						}
 						if(add) break;
@@ -53427,12 +53709,22 @@
 					num+=Math.sqrt(threaten)-1;
 				}
 			}
-			else if(type=='out'){
+			if(type.indexOf('out')!=-1){
 				if(threaten<1){
-					num=1/Math.sqrt(threaten);
+					num*=1/Math.sqrt(threaten);
 				}
-				if(info.trigger&&(info.trigger.global||info.trigger.target||(typeof info.trigger.player=='string'&&
-				(info.trigger.player.indexOf('damage')==0||info.trigger.player.indexOf('lose')==0)))) num+=0.1;
+				if(info.trigger){
+					if(info.trigger.global){
+						var list=Array.isArray(info.trigger.global)?info.trigger.global:[info.trigger.global];
+						num+=Math.min(3,list.length)/10;
+						for(var i of list){
+							if(i.indexOf('lose')==0||i.indexOf('use')==0) num+=0.3;
+							if(i.indexOf('cardsDiscard')==0) num+=0.4;
+						}
+					}
+					if(info.trigger.target||(typeof info.trigger.player=='string'&&
+					(info.trigger.player.indexOf('damage')==0||info.trigger.player.indexOf('lose')==0))) num+=0.1;
+				}
 				if(info.ai){
 					if(info.ai.maixie||info.ai.maixie_hp||info.ai.maixie_defend){
 						num+=0.5;

@@ -65,7 +65,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			xin_yujin:['male','wei',4,['jieyue']],
 			//lusu:['male','wu',3,['haoshi','dimeng']],
 			//yuanshao:['male','qun',4,['luanji','xueyi'],['zhu']],
-			old_zhonghui:['male','wei',3,['zzhenggong','zquanji','zbaijiang']],
+			old_zhonghui:['male','wei',3,['zzhenggong','zquanji','zbaijiang'],['clan:颍川钟氏']],
 			old_xusheng:['male','wu',4,['pojun']],
 			old_zhuran:['male','wu',4,['olddanshou']],
 			old_lingtong:['male','wu',4,['oldxuanfeng']],
@@ -75,7 +75,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			old_chenqun:['male','wei',3,['dingpin','oldfaen']],
 			old_zhuhuan:['male','wu',4,['youdi']],
 			old_zhuzhi:['male','wu',4,['anguo']],
-			
+
 			old_machao:['male','qun',4,['zhuiji','oldcihuai']],
 			old_zhugezhan:["male","shu",3,["old_zuilun","old_fuyin"]],
 			zhangliang:["male","qun",4,["old_jijun","old_fangtong"]],
@@ -1029,7 +1029,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			old_re_lidian:'旧李典',
 			old_liyan:'旧李严',
 			old_chendao:'旧陈到',
-			
+
 			old_standard:'标准包',
 			old_shenhua:'神话再临',
 			old_refresh:'界限突破',
