@@ -17831,11 +17831,17 @@
 							card.classList.add('drawinghidden');
 							card.viewAs=viewAs;
 							if(viewAs&&viewAs!=card.name&&(card.classList.contains('fullskin')||card.classList.contains('fullborder'))){
-								card.classList.add('fakejudge');
-								card.node.background.innerHTML=lib.translate[viewAs+'_bg']||get.translation(viewAs)[0]
+								if(window.decadeUI){
+									card.classList.add('fakejudge');
+									card.node.judgeMark.node.judge.innerHTML = get.translation(viewAs)[0];
+								}else if (card.classList.contains('fullskin') || card.classList.contains('fullborder')){
+									card.classList.add('fakejudge');
+									card.node.background.innerHTML=lib.translate[viewAs+'_bg']||get.translation(viewAs)[0]
+								}
 							}
 							else{
 								card.classList.remove('fakejudge');
+								if(window.decadeUI) card.node.judgeMark.node.judge.innerHTML = get.translation(card.name)[0];
 							}
 							player.node.judges.insertBefore(card,player.node.judges.firstChild);
 							ui.updatej(player);
@@ -17859,12 +17865,14 @@
 						if(cards[0].viewAs&&cards[0].viewAs!=cards[0].name){
 							if(cards[0].classList.contains('fullskin')||cards[0].classList.contains('fullborder')){
 								cards[0].classList.add('fakejudge');
+								if(window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].viewAs)[0];
 								cards[0].node.background.innerHTML=lib.translate[cards[0].viewAs+'_bg']||get.translation(cards[0].viewAs)[0];
 							}
 							game.log(player,'被贴上了<span class="yellowtext">'+get.translation(cards[0].viewAs)+'</span>（',cards,'）');
 						}
 						else{
 							cards[0].classList.remove('fakejudge');
+							if(window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].name)[0];
 							game.log(player,'被贴上了',cards);
 						}
 						game.addVideo('addJudge',player,[get.cardInfo(cards[0]),cards[0].viewAs]);

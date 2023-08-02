@@ -266,21 +266,8 @@ content:function(config, pack){
 							console.error('player.init: ' + avatars[i] + ' 没有设置动皮参数');
 							continue;
 						}
-						
-						var skin;
-						if (lib && lib.config && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && lib.config.extensions && lib.config.extensions.contains('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
-							skin = null;
-							var namex = i == 0 ? character : character2;
-							var value = game.qhly_getSkin(namex);
-							if (value) value = value.substring(0, value.lastIndexOf('.'));
-							else value = '经典形象';
-							if (lib.config.qhly_skinset.djtoggle && lib.config.qhly_skinset.djtoggle[namex] && lib.config.qhly_skinset.djtoggle[namex][value]) continue;
-							for (var j of Object.keys(skins)) {
-								if (j == value) skin = skins[value];
-							}
-						} else skin = skins[Object.keys(skins)[0]];
-						if (skin == null) continue;
 
+						var skin = skins[Object.keys(skins)[0]];
 						if (skin.speed == undefined)
 						skin.speed = 1;
 						this.playDynamic({
@@ -304,13 +291,12 @@ content:function(config, pack){
 							clipSlots: skin.clipSlots,	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
 						}, i == 1);
 
-						if (i == 0) this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
+						this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
 						if (!increased) {
 							increased = true;
 							decadeUI.CUR_DYNAMIC++;
 						}
 					}
-					this.qhly_replaceDynamic = true;
 				}
 
 				var jie;
@@ -3228,93 +3214,99 @@ content:function(config, pack){
 						isExt = true;
 						} else {
 							switch (value) {
+								case '先':
+									filename = 'xianshou';
+									break;
+								case '后':
+									filename = 'houshou';
+									break;
 								case '猜':
-								fileName = 'cai';
-								if (_status.mode == 'purple' && identity == 'cai') {
-									fileName += '_blue';
-									checked = true;
-								}
-								break;
+									fileName = 'cai';
+									if (_status.mode == 'purple' && identity == 'cai') {
+										fileName += '_blue';
+										checked = true;
+									}
+									break;
 								case '友':
-								fileName = 'friend';
-								break;
+									fileName = 'friend';
+									break;
 								case '敌':
-								fileName = 'enemy';
-								break;
+									fileName = 'enemy';
+									break;
 								case '反':
-								fileName = 'fan';
-								if (get.mode() == 'doudizhu') {
-									fileName = 'nongmin';
-									checked = true;
-								}
-								break;
+									fileName = 'fan';
+									if (get.mode() == 'doudizhu') {
+										fileName = 'nongmin';
+										checked = true;
+									}
+									break;
 								case '主':
-								fileName = 'zhu';
-								if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
-									fileName += '_blue';
-									this.player.classList.add('opposite-camp');
-									checked = true;
-								} else if (get.mode() == 'doudizhu') {
-									fileName = 'dizhu';
-									checked = true;
-								}
-								break;
+									fileName = 'zhu';
+									if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
+										fileName += '_blue';
+										this.player.classList.add('opposite-camp');
+										checked = true;
+									} else if (get.mode() == 'doudizhu') {
+										fileName = 'dizhu';
+										checked = true;
+									}
+									break;
 								case '忠':
-								fileName = 'zhong';
-								if (gameMode == 'identity' && _status.mode == 'purple') {
-									fileName = 'qianfeng';
-								} else if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
-									fileName += '_blue';
-									this.player.classList.add('opposite-camp');
-									checked = true;
-								}
-								break;
+									fileName = 'zhong';
+									if (gameMode == 'identity' && _status.mode == 'purple') {
+										fileName = 'qianfeng';
+									} else if (get.mode() == 'versus' && get.translation(player.side + 'Color') == 'wei') {
+										fileName += '_blue';
+										this.player.classList.add('opposite-camp');
+										checked = true;
+									}
+									break;
 								case '内':
-								if (_status.mode == 'purple') {
-									fileName = identity == 'rNei' ? 'xizuo' : 'xizuo_blue';
-									checked = true;
-								} else {
-									fileName = 'nei';
-								}
-								break;
+									if (_status.mode == 'purple') {
+										fileName = identity == 'rNei' ? 'xizuo' : 'xizuo_blue';
+										checked = true;
+									} else {
+										fileName = 'nei';
+									}
+									break;
 								case '野':
-								fileName = 'ye';
-								break;
+									fileName = 'ye';
+									break;
 								case '首':
-								fileName = 'zeishou';
-								break;
+									fileName = 'zeishou';
+									break;
 								case '帅':
-								fileName = 'zhushuai';
-								break;
+									fileName = 'zhushuai';
+									break;
 								case '将':
-								fileName = 'dajiang';
-								if (_status.mode == 'three' || get.translation(player.side + 'Color') == 'wei') {
-									fileName = 'zhushuai_blue';
-									checked = true;
-								}
-								break;
+									fileName = 'dajiang';
+									if (_status.mode == 'three' || get.translation(player.side + 'Color') == 'wei') {
+										fileName = 'zhushuai_blue';
+										checked = true;
+									}
+									break;
 								case '兵':
 								case '卒':
-								fileName = this.player.side === false ? 'qianfeng_blue' : 'qianfeng';
-								checked = true;
-								break;
+									fileName = this.player.side === false ? 'qianfeng_blue' : 'qianfeng';
+									checked = true;
+									break;
 								case '师':
-								fileName = 'junshi';
-								break;
+									fileName = 'junshi';
+									break;
 								case '盟':
-								fileName = 'mengjun';
-								break;
+									fileName = 'mengjun';
+									break;
 								case '神':
-								fileName = 'boss';
-								break;
+									fileName = 'boss';
+									break;
 								case '从':
-								fileName = 'suicong';
-								break;
+									fileName = 'suicong';
+									break;
 								default:
-								this.innerText = value;
-								this.style.visibility = '';
-								this.parentNode.style.backgroundImage = '';
-								return;
+									this.innerText = value;
+									this.style.visibility = '';
+									this.parentNode.style.backgroundImage = '';
+									return;
 							}
 						}
 
@@ -3731,92 +3723,6 @@ content:function(config, pack){
 					},
 				}
 			}
-		};
-
-		lib.element.content.addJudge = function(){
-			"step 0";
-			if (cards){
-				var owner = get.owner(cards[0]);
-				if (owner){
-					event.relatedLose = owner.lose(cards, 'visible', ui.special).set('getlx', false);
-				}  else if (get.position(cards[0]) == 'c') event.updatePile = true;
-			};
-			"step 1";
-			if (cards[0].destroyed){
-				if (player.hasSkill(cards[0].destroyed)){
-					delete cards[0].destroyed;
-				} else {
-					event.finish();
-					return;
-				}
-			}
-			cards[0].fix();
-			cards[0].style.transform = '';
-			cards[0].classList.remove('drawinghidden');
-			cards[0]._transform = null;
-
-			var viewAs = typeof card == 'string' ? card: card.name;
-			if (!lib.card[viewAs] || !lib.card[viewAs].effect){
-				game.cardsDiscard(cards[0]);
-			} else {
-				cards[0].style.transform = '';
-				player.node.judges.insertBefore(cards[0], player.node.judges.firstChild);
-				if (_status.discarded){
-					_status.discarded.remove(cards[0]);
-				}
-				ui.updatej(player);
-				game.broadcast(function(player, card, viewAs){
-					card.fix();
-					card.style.transform = '';
-					card.classList.add('drawinghidden');
-					card.viewAs = viewAs;
-					if (viewAs && viewAs != card.name){
-						if (window.decadeUI){
-							card.classList.add('fakejudge');
-							card.node.judgeMark.node.judge.innerHTML = get.translation(viewAs)[0];
-
-						}else if (card.classList.contains('fullskin') || card.classList.contains('fullborder')){
-							card.classList.add('fakejudge');
-							card.node.background.innerHTML = lib.translate[viewAs+'_bg'] || get.translation(viewAs)[0];
-						}
-					} else {
-						card.classList.remove('fakejudge');
-						if (window.decadeUI) card.node.judgeMark.node.judge.innerHTML = get.translation(card.name)[0];
-					}
-
-					player.node.judges.insertBefore(card, player.node.judges.firstChild);
-					ui.updatej(player);
-					if (card.clone && (card.clone.parentNode == player.parentNode || card.clone.parentNode == ui.arena)){
-						card.clone.moveDelete(player);
-						game.addVideo('gain2', player, get.cardsInfo([card]));
-					}
-				}, player, cards[0], viewAs);
-
-				if (cards[0].clone && (cards[0].clone.parentNode == player.parentNode || cards[0].clone.parentNode == ui.arena)){
-					cards[0].clone.moveDelete(player);
-					game.addVideo('gain2', player, get.cardsInfo(cards));
-				}
-
-				if (get.itemtype(card) != 'card'){
-					if (typeof card == 'string') cards[0].viewAs = card;
-					else cards[0].viewAs = card.name;
-				} else {
-					cards[0].viewAs = null;
-				}
-
-				if (cards[0].viewAs && cards[0].viewAs != cards[0].name){
-					cards[0].classList.add('fakejudge');
-					cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].viewAs)[0];
-					game.log(player, '被贴上了<span class="yellowtext">' + get.translation(cards[0].viewAs) + '</span>（', cards, '）');
-				} else {
-					cards[0].classList.remove('fakejudge');
-					cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].name)[0];
-					game.log(player, '被贴上了', cards);
-				}
-
-				game.addVideo('addJudge', player, [get.cardInfo(cards[0]), cards[0].viewAs]);
-			}
-			if (event.updatePile) game.updateRoundNumber();
 		};
 
 		lib.element.content.chooseToCompare = function(){
@@ -4521,8 +4427,8 @@ content:function(config, pack){
 					node.popupNumber = null;
 				}
 
-				node.textContent = num;
-				node.dataset.text = num;
+				node.innerHTML = num;
+				node.dataset.text = node.textContent || node.innerText;
 				node.nature = nature || 'soil';
 				this.damagepopups.push(node);
 			}
