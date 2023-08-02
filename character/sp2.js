@@ -7977,7 +7977,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var name2=event.triggername;
 					for(var i=0;i<allList.length;i++){
 						var name=allList[i];
-						if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1) continue;
+						if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
 						var skills2=lib.character[name][3];
 						for(var j=0;j<skills2.length;j++){
 							if(player.getStorage('pingjian').contains(skills2[j])) continue;
@@ -8053,7 +8053,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					allList.randomSort();
 					for(var i=0;i<allList.length;i++){
 						var name=allList[i];
-						if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1) continue;
+						if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
 						var skills2=lib.character[name][3];
 						for(var j=0;j<skills2.length;j++){
 							if(player.getStorage('pingjian').contains(skills2[j])) continue;
