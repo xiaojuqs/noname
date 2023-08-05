@@ -9913,7 +9913,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       // 定制武将喵
       //神许劭
       shenpingjian:{
-				audio:2,
+				audio:4,
 				trigger:{
 					player:['damageBefore','phaseJieshuBefore','phaseBefore'],
 				},
@@ -10739,7 +10739,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 				},
 			},
-
 		},
 		card:{
 		},
@@ -11411,6 +11410,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       shenxushao:'神许劭',
       shenpingjian:'评荐',
 			shenpingjian_info:'①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以令系统随机从剩余武将牌堆中检索出三张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌。然后你可以选择获取其中一个技能。②出牌阶段限一次，你可以令系统随机从剩余武将牌堆中检索出三张武将牌。然后你可以选择获取其中一个技能',
+      shenpingjian_append:'<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
 			shenpingjian_use:'评荐',
       oldwu_zhugeliang:'旧武诸葛亮',
       oldwu_zhugeliang_ab:'武诸葛亮',
