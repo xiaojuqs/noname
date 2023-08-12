@@ -29,6 +29,7 @@ window.noname_package={
 		swd:'轩辕剑',
 		gujian:'古剑奇谭',
 		xianjian:'仙剑奇侠传',
+    taffy:'永雏塔菲',
 	},
 	card:{
 		standard:'标准',

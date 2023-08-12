@@ -100,4 +100,3 @@ window.noname_update={
 		//'theme/style/hp/image/xinround4.png',
 	]
 };
->>>>>>> d56739f7cf7c4b11500f1875ef656944e0187c5c
