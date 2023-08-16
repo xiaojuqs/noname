@@ -1332,7 +1332,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					expose:0.2,
-					order:5,
+					order:10,
 					result:{
 						target:function(player,target){
 							return get.damageEffect(target,player,target,'fire')/10;

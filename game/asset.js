@@ -9502,6 +9502,8 @@ window.noname_asset_list=[
   'audio/die/shiguanning.mp3',
   'audio/skill/shidunshi1.mp3',
 	'audio/skill/shidunshi2.mp3',
+  'image/character/acetaffy.jpg',
+  'image/character/minitaffy.jpg',
 ];
 window.noname_skin_list={
 	baosanniang:2,

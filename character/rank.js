@@ -1693,6 +1693,8 @@ window.noname_character_rank={
       'shenxushao',
       'shiguanning',
       'oldwu_zhugeliang',
+      'acetaffy',
+      'minitaffy',
 		],
 		epic:[
 			'pal_yueqi',

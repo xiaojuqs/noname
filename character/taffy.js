@@ -8,12 +8,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       shenxushao:['male','shen',4,['shenpingjian']],
       oldwu_zhugeliang:['male','shu','4/7',['olddcjincui','olddcqingshi','olddczhizhe']],
       shiguanning:['male','qun','3/7',['shidunshi']],
+      acetaffy:['female','shen',3,['taffybaomi','taffyfeizhu','taffyzuoai','taffychusheng']],
+      minitaffy:['female','qun',1,['taffytangshi','taffyzisha']],
 		},
     characterSort:{
       taffy:{
         taffy_old:["oldwu_zhugeliang"],
         taffy_origin:["shiguanning"],
-        taffy_diy:["shenxushao"],
+        taffy_diy:["shenxushao",'acetaffy','minitaffy'],
       }
     },
 		skill:{
@@ -846,6 +848,231 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 				},
 			},
+      // 永雏塔菲
+      taffybaomi:{
+				trigger:{source:'damageBefore'},
+				logTarget:'player',
+        usable:1,
+				check:function(event,player){
+					var target=event.player;
+					if(get.damageEffect(target,player,player)>0&&
+						get.attitude(player,target)>=0){
+						return 1;
+					}
+					return false;
+				},
+				content:function(){
+          'step 0'
+					var h=trigger.player.getCards('h');
+					if(h.length>0){
+						if(h.length>1) trigger.player.chooseCard('h',true,[1,Infinity],'选择交给'+get.translation(player)+'任意张牌').set('ai',(card)=>-get.value(card));
+						else event._result={bool:true,cards:h};
+					}
+					else {
+            trigger.cancel();
+            event.finish();
+          }
+					'step 1'
+          if(result.bool){
+						event.source=player;
+						trigger.player.give(result.cards,player);
+						event.num=result.cards.length;
+					}
+          player.line(trigger.player,'green');
+					trigger.cancel();
+				},
+				ai:{
+					jueqing:true,
+					skillTagFilter:function(player,tag,arg){
+						if(!arg) return false;
+						if(get.attitude(player,arg)<=0) return false;
+						var evt=_status.event.getParent('phaseUse');
+						if(evt&&evt.player==player) return true;
+						return false;
+					},
+					effect:{
+						player:function(card,player,target){
+							if(get.tag(card,'damage')&&get.attitude(player,target)>=0){
+								return 1;
+							}
+						}
+					}
+				}
+      },
+      taffyfeizhu:{
+        trigger:{player:'damageBegin4'},
+        forced:true,
+        content: () => {
+          if(player.isTurnedOver()){
+            trigger.num = Math.floor(trigger.num * 2);
+          } else {
+            trigger.num = Math.floor(trigger.num / 2);
+          }
+        }
+      },
+      taffyzuoai:{
+        audio:2,
+        enable:'phaseUse',
+        usable:1,
+        filterCard:true,
+				selectCard:[0,Infinity],
+				discard:false,
+				lose:false,
+				delay:0,
+        filterTarget:function(card,player,target){
+					return player!=target&&get.distance(player,target)<=1;
+				},
+        check:function(card){
+          return 0;
+				},
+        content: () => {
+					player.give(cards,target);
+          if(!player.isTurnedOver()){
+            player.turnOver();
+          }
+          if(!target.isTurnedOver()){
+            target.turnOver();
+          }
+					var evt2=event.getParent(3);
+          target.loseHp();
+          target.addMark('taffyzuoai',1);
+          if (!target.storage['taffyzuoai_times']) target.storage['taffyzuoai_times']=0;
+					player.recover();
+        },
+        marktext:'💘',
+        intro:{
+          name:'卓艾',
+          content: (storage,player) => {
+            return `你已经跟Taffy卓艾了${player.countMark('taffyzuoai')}次喵❤~`;
+          }
+        },
+        group:'taffyzuoai_control',
+				ai:{
+					expose:0.2,
+					order:7,
+					result:{
+						target:function(player,target){
+							return get.damageEffect(target,player,target,'fire')/10;
+						}
+					}
+				},
+      },
+      taffyzuoai_control:{
+				audio:'taffyzuoai',
+				forced:true,
+				trigger:{global:'phaseBeginStart'},
+				filter:function(event,player){
+					return player!=event.player&&!event.player._trueMe&&event.player.countMark('taffyzuoai')>0&&event.player.countMark('taffyzuoai')>event.player.storage['taffyzuoai_times'];
+				},
+				logTarget:'player',
+				skillAnimation:true,
+				animationColor:'key',
+				content:function(){
+					trigger.player._trueMe=player;
+					game.addGlobalSkill('autoswap');
+					if(trigger.player==game.me){
+						game.notMe=true;
+						if(!_status.auto) ui.click.auto();
+					}
+					trigger.player.addSkill('taffyzuoai2');
+				},
+      },
+      taffyzuoai2:{
+        trigger:{
+					player:['phaseAfter','dieAfter'],
+					global:'phaseBefore',
+				},
+				lastDo:true,
+				charlotte:true,
+				forceDie:true,
+				forced:true,
+				silent:true,
+				content:function(){
+					player.removeSkill('taffyzuoai2');
+				},
+				onremove:function(player){
+          player.storage['taffyzuoai_times']++;
+          if(player.countCards('h')>0){
+            player.give(player.getCards('h'),player._trueMe);
+          }
+					if(player==game.me){
+						if(!game.notMe) game.swapPlayerAuto(player._trueMe)
+						else delete game.notMe;
+						if(_status.auto) ui.click.auto();
+					}
+					delete player._trueMe;
+				},
+      },
+      taffychusheng:{
+        enable:'phaseUse',
+        usable:1,
+        // limited:true,
+				// skillAnimation:true,
+				// animationColor:'fire',
+        filterTarget:function(card,player,current){
+          return current!=player&&current.hasSex('male')&&current.countMark('taffyzuoai')>2;
+        },
+        onremove:true,
+        prompt:'选择一名“❤”标记数大于等于3的其他男性角色将其武将牌替换为“小菲”',
+        content:function(){
+          'step 0'
+          player.loseMaxHp();
+					event.target=target;
+					player.line(target,'fire');
+          if(target.name2!=undefined){
+            target.chooseControl(target.name1,target.name2).set('prompt','请选择要更换的武将牌');
+          }
+          else event._result={control:target.name1};
+          'step 1'
+          target.reinit(result.control,'minitaffy');
+					if(target.name=='minitaffy'&&target.group!='qun') target.changeGroup('qun');
+					if(_status.characterlist){
+						_status.characterlist.add(result.control);
+						_status.characterlist.remove('minitaffy');
+					}
+				},
+        ai:{
+
+        },
+      },
+      // 小菲
+      taffytangshi:{
+        audio:6,
+        enable:'phaseUse',
+        content:() => {
+
+        },
+        ai:{
+          order:7,
+          result:{
+            player:(player) => {
+              if(!player.storage.taffytangshicount) {
+                player.storage.taffytangshicount={
+                  count: 2,
+                  isEnd: false,
+                };
+              }
+              if(player.storage.taffytangshicount.isEnd) {
+                player.storage.taffytangshicount.count = 2;
+                player.storage.taffytangshicount.isEnd = false;
+              }
+              player.storage.taffytangshicount.count--;
+              if(player.storage.taffytangshicount.count === 0) {
+                player.storage.taffytangshicount.isEnd = true;
+              }
+              return player.storage.taffytangshicount.count;
+            },
+          },
+        }
+      },
+      taffyzisha:{
+        audio:1,
+        enable:'phaseUse',
+        usable:1,
+        content: () => {
+          player.die();
+        }
+      }
 		},
     card:{
 		},
@@ -853,18 +1080,22 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       // 定制武将喵
       shenxushao:'许劭（shào）（150年—195年），字子将。汝南平舆（今河南平舆县射桥镇）人。东汉末年著名人物评论家。据说他每月都要对当时人物进行一次品评，人称为“月旦评”。曾任汝南郡功曹，后南渡投靠扬州刺史刘繇。刘繇被孙策击败后，许劭随其逃往豫章郡，并在豫章去世。',
       shiguanning:'管宁（158年—241年），字幼安。北海郡朱虚县（今山东省安丘、临朐东南）人。汉末三国时期著名隐士。管宁与华歆、邴原并称为“一龙”。汉末天下大乱时，与邴原及王烈等人避于辽。在当地只谈经典而不问世事，做讲解《诗经》《书经》，谈祭礼、整治威仪、陈明礼让等教化工作，人们都很乐于接受他的教导。直到魏文帝黄初四年（公元223年）才返乡，辽东太守公孙恭亲自送别。此后曹魏几代帝王数次征召管宁，他都没有应命。正始二年（公元241年），管宁逝世，年八十四。著有《氏姓论》。',
+      acetaffy:'永雏塔菲是一名经营着侦探事务所的少女王牌侦探发明家。她来自1885年，乘着自己发明的时光机试图穿越到100年后的时空，却因迟到36年来到了现代，并被现代的电子游戏吸引，不想返回过去。',
+      minitaffy:'呃呃，唐完了喵。',
     },
     characterTitle:{
       shenxushao:'永雏塔菲限定武将',
       oldwu_zhugeliang:'永雏塔菲限定武将',
       shiguanning:'永雏塔菲限定武将',
+      acetaffy:'永雏塔菲限定武将',
+      minitaffy:'永雏塔菲限定武将',
 		},
     perfectPair:{},
 		characterFilter:{
 		},
 		dynamicTranslate:{
 			shidunshi:function(player){
-				var info=player.storage.dunshi;
+				var info=player.storage.shidunshi;
 				var str='每回合限一次。你可以视为使用或打出一张';
 				var list=['sha','shan','tao','jiu'];
 				for(var i of list){
@@ -884,7 +1115,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       // 定制武将喵
       shenxushao:'神许劭',
       shenpingjian:'评荐',
-			shenpingjian_info:'①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以令系统随机从剩余武将牌堆中检索出三张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌。然后你可以选择获取其中一个技能。②出牌阶段限一次，你可以令系统随机从剩余武将牌堆中检索出三张武将牌。然后你可以选择获取其中一个技能',
+			shenpingjian_info:'①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以令系统随机从剩余武将牌堆中检索出三张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌。然后你可以选择获取其中一个技能。②出牌阶段限一次，你可以令系统随机从剩余武将牌堆中检索出三张武将牌。然后你可以选择获取其中一个技能。',
       shenpingjian_append:'<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
 			shenpingjian_use:'评荐',
       oldwu_zhugeliang:'旧武诸葛亮',
@@ -900,6 +1131,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       shiguanning_ab:'管宁',
 			shidunshi:'遁世',
 			shidunshi_info:'每回合限一次。你可以视为使用或打出一张【杀】/【闪】/【桃】/【酒】，然后当前回合角色于本回合内下一次造成伤害时，你选择两项：⒈防止此伤害。系统从技能名中包含“仁/义/礼/智/信”字样的技能中随机选择三个其未拥有的技能，然后你令当前回合角色获得其中一个技能。⒉从〖遁世〗中删除你本次使用或打出的牌并获得一个“席”。⒊减1点体力上限并摸X张牌（X为你的“席”数）。',
+      acetaffy:'永雏塔菲',
+      taffybaomi:'爆米',
+      taffybaomi_info:'出牌阶段限一次，当你即将对一名角色造成伤害时，你可以防止此伤害；若该角色有手牌，则你令该角色交给你任意张牌。',
+      taffyfeizhu:'菲柱',
+      taffyfeizhu_info:'锁定技，当你受到伤害时，若你的武将牌正面朝上，此伤害减半（向下取整）；若你的武将牌背面朝上，此伤害加倍（向下取整）。',
+      taffyzuoai:'卓艾',
+      taffyzuoai_info:'出牌阶段限一次，你可以将任意张手牌交给一名距离为1以内的其他角色，然后你与该角色的武将牌一同翻至背面，该角色失去一点体力并获得一个“❤”标记且你回复一点体力；该角色的回合即将开始时，此回合改为由你操控；该角色的回合结束时，你获得其所有手牌。',
+      taffychusheng:'雏生',
+      taffychusheng_info:'出牌阶段限一次，你可以减一点体力上限，然后令一名“❤”标记数大于等于3的男性角色将一张武将牌替换为“小菲”。',
+      taffychusheng_append:'<span style="font-family: yuanli">灌注永雏塔菲喵，灌注永雏塔菲谢谢喵！</span>',
+      minitaffy:'小菲',
+      taffytangshi:'糖氏',
+      taffytangshi_info:'出牌阶段，你可以随机播放一条小菲的糖氏语音。',
+      taffyzisha:'紫砂',
+      taffyzisha_info:'出牌阶段限一次，你可以死亡',
 
       taffy_old:"圣经·塔约",
       taffy_origin:"江山如故·塔",
