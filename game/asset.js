@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 window.noname_asset_list=[
 	'v1.9.125',
 	'audio/background/aozhan_chaoming.mp3',
@@ -9879,4 +9878,3 @@ window.noname_skin_list={
   // 自制武将喵
   acetaffy:45,
 };
->>>>>>> 0fcbb0527ed94ec1fcde2943ac520f724b1948e3
