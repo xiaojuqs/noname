@@ -8147,6 +8147,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					damage:true,
 					order:1,
+					nokeep:true,
 					effect:{
 						player:function(card,player,target){
 							if(_status.event.skill=='zhanjue'){
@@ -12329,6 +12330,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					threaten:1.6,
+					nokeep:true,
 				}
 			},
 			qice_backup:{audio:2},

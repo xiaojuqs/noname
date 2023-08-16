@@ -342,6 +342,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					player.draw();
 				},
 				ai:{
+					nokeep:true,
 					effect:{
 						target:function(card,player,target){
 							if(card.name=='sha'&&get.color(card)=='red') return [1,0.6];
@@ -3485,6 +3486,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:1,
+					nokeep:true,
 					result:{
 						player:1
 					},

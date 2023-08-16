@@ -1032,11 +1032,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:13,
 					result:{
 						player:function(player){
-							if(!player.hasEnabledSlot('equip2')&&(!player.getEquip(2)||(player.getEquip(2)&&get.equipValue(player.getEquip(2))<=0))) return 1;
-							if(!player.hasEnabledSlot('equip1')&&(!player.getEquip(1)||(player.getEquip(1)&&get.equipValue(player.getEquip(1))<=0))&&(player.countCards('h',function(card){
+							if(!player.hasSkill('drlt_poshi')) return -1;
+							if(player.hasEnabledSlot('equip2')&&(!player.getEquip(2)||(player.getEquip(2)&&get.equipValue(player.getEquip(2))<=0))) return 1;
+							if(player.hasEnabledSlot('equip1')&&(!player.getEquip(1)||(player.getEquip(1)&&get.equipValue(player.getEquip(1))<=0))&&(player.countCards('h',function(card){
 								return get.name(card,player)=='sha'&&player.hasValueTarget(card);
 							})-player.getCardUsable('sha'))>1) return 1;
-							if(!player.hasEnabledSlot('equip5')&&(!player.getEquip(5)||(player.getEquip(5)&&get.equipValue(player.getEquip(5))<=0))&&player.countCards('h',function(card){
+							if(player.hasEnabledSlot('equip5')&&(!player.getEquip(5)||(player.getEquip(5)&&get.equipValue(player.getEquip(5))<=0))&&player.countCards('h',function(card){
 								return get.type2(card,player)=='trick'&&player.hasUseTarget(card);
 							})>1) return 1;
 							return -1;

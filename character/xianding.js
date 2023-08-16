@@ -9380,7 +9380,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					return true;
 				},
 				viewAs:{name:'nanman'},
-				ai:{order:0.1},
+				ai:{
+					nokeep:true,
+					order:0.1,
+				},
 			},
 			souying:{
 				audio:2,

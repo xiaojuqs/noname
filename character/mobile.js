@@ -1633,6 +1633,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:1,
+					nokeep:true,
 					threaten:1.14,
 					unequip:true,
 					unequip_ai:true,

@@ -143,9 +143,14 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target){
-							if(get.attitude(player,target)<=0) return ((target.countCards('he',function(card){
-								return get.value(card,target)>0&&card!=target.getEquip('jinhe');
-							})>0)?-0.3:0.3)*Math.sqrt(player.countCards('h'));
+							if(get.attitude(player,target)<=0){
+								if(target.getCards('h')<=0&&target.countCards('e',function(card){
+									return get.equipValue(card)<=0;
+								})>0) return 0;
+								return ((target.countCards('he',function(card){
+									return get.value(card,target)>0&&card!=target.getEquip('jinhe');
+								})>0)?-0.3:0.3)*Math.sqrt(player.countCards('h'));
+							}
 							return ((target.countCards('ej',function(card){
 								if(get.position(card)=='e') return get.value(card,target)<=0;
 								var cardj=card.viewAs?{name:card.viewAs}:card;

@@ -10896,7 +10896,7 @@
 					if(get.itemtype(result)=='cards'){
 						player.lose(result,false,'visible').set('type','equip').set('getlx',false).swapEquip=true;
 						if(info.loseThrow){
-							player.$throw(current);
+							player.$throw(result);
 						}
 						event.swapped=true;
 					}

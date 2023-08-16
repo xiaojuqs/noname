@@ -1555,6 +1555,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					threaten:1.7,
+					nokeep:true,
 				},
 				subSkill:{
 					bakcup:{},
@@ -2262,6 +2263,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:1,
+					nokeep:true,
 					tag:{
 						respond:2,
 						respondSha:2,
@@ -11882,6 +11884,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:1,
+					nokeep:true,
 					result:{
 						player:1
 					},

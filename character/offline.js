@@ -6213,6 +6213,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					respondSha:true,
 					respondShan:true,
+					nokeep:true,
 					skillTagFilter:function(player){
 						return player.countCards('h')>0;
 					},

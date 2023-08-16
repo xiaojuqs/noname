@@ -467,7 +467,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							
 							if(target.hasFriend()){
 								if(target.hp>=2&&game.hasPlayer(function(current){
-									if(target!=current&&get.attitude(target,current)>=3&&current.hp<=2&&target.countCards('h','tao')<=nd&&target.countCards('h','tao')<=2) return true;
+									if(target!=current&&get.attitude(target,current)>=3&&current.hp<=2&&target.getHandcardLimit()>=target.countCards('h','tao')&&target.countCards('h','tao')<=2) return true;
 								})) return 0;
 							}
 							

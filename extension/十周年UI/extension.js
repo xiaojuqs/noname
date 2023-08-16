@@ -7283,6 +7283,7 @@ config:{
 			red:'红色',
 			yellow:'黄色',
 			decade: '十周年',
+			normal:'原版',
 		},
 		update:function(){
 			if (window.decadeUI) ui.arena.dataset.playerMarkStyle = lib.config['extension_十周年UI_playerMarkStyle'];
