@@ -81,7 +81,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					var equips=[];
 					for(var i=0;i<event.dialog.buttons.length;i++){
 						var card=event.dialog.buttons[i].link;
-						if(!target.isDisabled(get.subtype(card))) equips.push(card);
+						if(target.canEquip(card,true)) equips.push(card);
 					}
 					if(equips.length>1){
 						var next=target.chooseButton(true,function(button){
@@ -289,7 +289,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target){
-							var e5=target.getEquip(5);
+							var e5=target.getEquip('muniu');
 							if(e5&&e5.name=='muniu'&&e5.cards&&e5.cards.length>1) return -1;
 							if(e5&&e5.name=='shanrangzhaoshu') return -1;
 							if(e5&&e5.name=='shufazijinguan') return -2;
@@ -342,7 +342,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				type:'equip',
 				subtype:'equip4',
-				filterTarget:lib.filter.notMe,
+				filterTarget:function(card,player,target){
+					if(player==target) return false;
+					return target.canEquip(card,true)
+				},
 				selectTarget:1,
 				toself:false,
 				loseThrow:true,
@@ -352,7 +355,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:9,
 					value:function(card,player){
-						if(player.getEquip(4)==card) return 0;
+						if(player.getEquips(4).contains(card)) return 0;
 						return 4;
 					},
 					equipValue:function(card,player){
@@ -404,7 +407,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				type:'equip',
 				subtype:'equip1',
-				filterTarget:lib.filter.notMe,
+				filterTarget:function(card,player,target){
+					if(player==target) return false;
+					return target.canEquip(card,true)
+				},
 				selectTarget:1,
 				toself:false,
 				skills:['wufengjian_skill'],
@@ -415,7 +421,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						return 2;
 					},
 					value:function(card,player){
-						if(player.getEquip(1)==card) return -1.5;
+						if(player.getEquips(1).contains(card)) return -1.5;
 						return 1.5;
 					},
 					basic:{
@@ -437,7 +443,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				type:'equip',
 				subtype:'equip1',
-				filterTarget:lib.filter.notMe,
+				filterTarget:function(card,player,target){
+					if(player==target) return false;
+					return target.canEquip(card,true)
+				},
 				selectTarget:1,
 				toself:false,
 				distance:{attackFrom:1},
@@ -448,7 +457,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						return 2;
 					},
 					value:function(card,player){
-						if(player.getEquip(1)==card) return -3;
+						if(player.getEquips(1).contains(card)) return -3;
 						return 3;
 					},
 					basic:{
@@ -470,7 +479,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				type:'equip',
 				subtype:'equip2',
-				filterTarget:lib.filter.notMe,
+				filterTarget:function(card,player,target){
+					if(player==target) return false;
+					return target.canEquip(card,true)
+				},
 				selectTarget:1,
 				toself:false,
 				skills:['yinfengjia_skill'],
@@ -481,7 +493,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						return 1;
 					},
 					value:function(card,player){
-						if(player.getEquip(2)==card) return -2.5;
+						if(player.getEquips(2).contains(card)) return -2.5;
 						return 2.5;
 					},
 					basic:{
@@ -503,7 +515,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				type:'equip',
 				subtype:'equip2',
-				filterTarget:lib.filter.notMe,
+				filterTarget:function(card,player,target){
+					if(player==target) return false;
+					return target.canEquip(card,true)
+				},
 				selectTarget:1,
 				toself:false,
 				loseDelay:false,
@@ -532,7 +547,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:9.5,
 					equipValue:function(card,player){
-						if(card==player.getEquip(2)){
+						if(player.getEquips(2).contains(card)){
 							if(player.sex!='male') return 0;
 							var num=player.countCards('he',function(cardx){
 								return cardx!=card;
@@ -583,7 +598,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				type:'equip',
 				subtype:'equip5',
-				filterTarget:lib.filter.notMe,
+				filterTarget:function(card,player,target){
+					if(player==target) return false;
+					return target.canEquip(card,true)
+				},
 				selectTarget:1,
 				toself:false,
 				skills:['jinhe_skill'],
@@ -724,11 +742,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				enable:'phaseUse',
 				filter:function(event,player){
 					if(!_status.jinhe) return false;
-					var card=player.getEquip(5);
+					var card=player.getEquip('jinhe');
 					return card&&card.name=='jinhe'&&_status.jinhe[card.cardid]!=undefined;
 				},
 				prepare:function(cards,player){
-					var card=player.getEquip(5);
+					var card=player.getEquip('jinhe');
 					if(card&&card.name=='jinhe'&&_status.jinhe[card.cardid]){
 						var tothrow=_status.jinhe[card.cardid].card;
 						player.$throw(tothrow);
@@ -737,7 +755,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					"step 0"
-					var card=player.getEquip(5);
+					var card=player.getEquip('jinhe');
 					if(card&&card.name=='jinhe'&&_status.jinhe[card.cardid]){
 						game.cardsDiscard(_status.jinhe[card.cardid].card);
 						event.suit=get.suit(_status.jinhe[card.cardid].card);
@@ -778,10 +796,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				mod:{
 					targetEnabled:function(card,player,target){
 						if(get.color(card)=='black'&&get.type(card,'trick')=='trick'&&!target.hasSkillTag('unequip2')&&!player.hasSkillTag('unequip',false,{
- 						name:card?card.name:null,
- 						target:target,
- 						card:card
- 					})) return false;
+							name:card?card.name:null,
+							target:target,
+							card:card
+						})) return false;
 					},
 				},
 			},
@@ -817,16 +835,16 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				forced:true,
 				filter:function(event,player){
 					if(event.card.name!='sha') return false;
-					var card=player.getEquip('wufengjian');
-					return player.countCards('he',function(cardx){
-						return cardx!=card;
-					})>0;
+					var cards=player.getEquips('wufengjian');
+					return player.hasCard(function(card){
+						return !cards.contains(card);
+					},'he');
 				},
 				content:function(){
 					if(player!=game.me&&!player.isUnderControl()&&!player.isOnline()) game.delayx();
 					player.chooseToDiscard(true,'he',function(card){
-						return card!=_status.event.card;
-					}).set('card',player.getEquip('wufengjian'));
+						return !_status.event.cards.contains(card);
+					}).set('cards',player.getEquips('wufengjian'));
 				},
 			},
 			yajiaoqiang_skill:{
