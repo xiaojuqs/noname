@@ -9858,4 +9858,7 @@ window.noname_skin_list={
 	key_hiroto:1,
 	key_komari:1,
 	key_saya:4,
+
+  // 自制武将喵
+  acetaffy:45,
 };
