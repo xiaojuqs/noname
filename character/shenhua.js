@@ -2634,7 +2634,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 										})) return true;
 										if(target.countCards('e',function(card){
 											return get.equipValue(card)<0&&game.hasPlayer(function(current){
-												return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
+												return current!=target&&get.attitude(player,current)<0&&current.canEquip(card))&&get.effect(target,card,player,player)<0;
 											});
 										})>0) return true;
 									}
@@ -2643,7 +2643,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 											if(current!=target&&get.attitude(player,current)>0){
 												var es=target.getCards('e');
 												for(var i=0;i<es.length;i++){
-													if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
+													if(get.equipValue(es[i])>0&&current.canEquip(es[i])&&get.effect(current,es[i],player,player)>0) return true;
 												}
 											}
 										})){
@@ -3603,7 +3603,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								})) return true;
 								if(target.countCards('e',function(card){
 									return get.equipValue(card)<0&&game.hasPlayer(function(current){
-										return current!=target&&get.attitude(player,current)<0&&current.isEmpty(get.subtype(card));
+										return current!=target&&get.attitude(player,current)<0&&current.canEquip(card))&&get.effect(target,card,player,player)<0;
 									});
 								})>0) return true;
 							}
@@ -3612,7 +3612,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									if(current!=target&&get.attitude(player,current)>0){
 										var es=target.getCards('e');
 										for(var i=0;i<es.length;i++){
-											if(get.equipValue(es[i])>0&&current.isEmpty(get.subtype(es[i]))&&get.effect(current,es[i],player,player)>0) return true;
+											if(get.equipValue(es[i])>0&&current.canEquip(es[i])&&get.effect(current,es[i],player,player)>0) return true;
 										}
 									}
 								})){
