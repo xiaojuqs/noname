@@ -15817,7 +15817,7 @@
 								})) return 14;
 								if(target.countCards('e',function(card){
 									return get.equipValue(card)<0&&game.hasPlayer(function(current){
-										return current!=target&&get.attitude(player,current)<0&&current.canEquip(card))&&get.effect(target,card,player,player)<0;
+										return current!=target&&get.attitude(player,current)<0&&current.canEquip(card)&&get.effect(target,card,player,player)<0;
 									});
 								})>0) return 9;
 							}

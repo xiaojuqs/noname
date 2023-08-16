@@ -1691,19 +1691,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									target.canEquip(es[i])){
 									return Math.abs(att);
 								}
-								if(i==es.length&&(!from.countCards('j',function(card){
-									return target.canAddJudge(card);
-								})||att2<=0)){
-									if(from.countCards('h')>0) return att;
-									return 0;
-								}
-								return -att*att2;
-							});
-							next.set('targetprompt','移动目标');
-							next.set('prompt','急召：是否移动'+get.translation(target)+'的一张牌？');
-						}
-						else event.finish();
+							}
+							if(i==es.length&&(!from.countCards('j',function(card){
+								return target.canAddJudge(card);
+							})||att2<=0)){
+								if(from.countCards('h')>0) return att;
+								return 0;
+							}
+							return -att*att2;
+						});
+						next.set('targetprompt','移动目标');
+						next.set('prompt','急召：是否移动'+get.translation(target)+'的一张牌？');
 					}
+					else event.finish();
 					'step 3'
 					if(result.bool){
 						var target2=result.targets[0];
