@@ -152,7 +152,6 @@ content:function(config, pack){
 						uninit: lib.element.player.uninit,
 						setModeState: lib.element.player.setModeState,
 						$compare: lib.element.player.$compare,
-						$disableEquip: lib.element.player.$disableEquip,
 						$damage: lib.element.player.$damage,
 						$damagepop: lib.element.player.$damagepop,
 						$dieAfter: lib.element.player.$dieAfter,
@@ -1468,9 +1467,8 @@ content:function(config, pack){
 							if (lib.card[filename] && lib.card[filename].nature && lib.card[filename].nature.contains(card[3])) filename += '_' + card[3];
 						}
 
-						for (var i = 0; i < cardname.length; i++) vertname += cardname[i] + '\n';
 						this.$name.innerText = cardname;
-						this.$vertname.innerText = vertname;
+						this.$vertname.innerText = cardname;
 						this.$equip.$suitnum.textContent = cardsuit + cardnum;
 						this.$equip.$name.textContent = ' ' + cardname;
 
@@ -3058,11 +3056,9 @@ content:function(config, pack){
 			var equipSolts  = ui.equipSolts = decadeUI.element.create('equips-wrap');
 			equipSolts.back = decadeUI.element.create('equips-back', equipSolts);
 
-			decadeUI.element.create('icon icon-treasure', decadeUI.element.create('equip0', equipSolts.back));
-			decadeUI.element.create('icon icon-saber', decadeUI.element.create('equip1', equipSolts.back));
-			decadeUI.element.create('icon icon-shield', decadeUI.element.create('equip2', equipSolts.back));
-			decadeUI.element.create('icon icon-mount', decadeUI.element.create('equip3', equipSolts.back));
-			decadeUI.element.create('icon icon-mount', decadeUI.element.create('equip4', equipSolts.back));
+			for (let repetition = 0; repetition < 5; repetition++) {
+				decadeUI.element.create(null, equipSolts.back);
+			}
 
 			ui.arena.insertBefore(equipSolts, ui.me);
 			decadeUI.bodySensor.addListener(decadeUI.layout.resize);
@@ -3149,6 +3145,8 @@ content:function(config, pack){
 				tempSkills: {},
 				storage: {},
 				marks: {},
+				expandedSlots: {},
+				disabledSlots: {},
 				ai: {
 					friend: [],
 					enemy: [],
@@ -3384,7 +3382,7 @@ content:function(config, pack){
 
 			campWrap.appendChild(player.node.name);
 			campWrap.node.avatarName.className = 'avatar-name';
-			campWrap.node.avatarDefaultName.innerHTML = '主<br>将';
+			campWrap.node.avatarDefaultName.innerHTML = '主将';
 
 			var node = {
 				mask: player.insertBefore(decadeUI.element.create('mask'), player.node.identity),
@@ -4513,61 +4511,6 @@ content:function(config, pack){
 			var player = this;
 			target.$throwordered2(card2.copy(false));
 			player.$throwordered2(card1.copy(false));
-		};
-
-		lib.element.player.$disableEquip = function(skill){
-			game.broadcast(function(player, skill) {
-				player.$disableEquip(skill);
-			}, this, skill);
-			var player = this;
-			if (!player.storage.disableEquip) player.storage.disableEquip = [];
-			player.storage.disableEquip.add(skill);
-			player.storage.disableEquip.sort();
-			var pos = {
-				equip1: '武器栏',
-				equip2: '防具栏',
-				equip3: '+1马栏',
-				equip4: '-1马栏',
-				equip5: '宝物栏'
-			} [skill];
-			if (!pos) return;
-			var card = game.createCard('feichu_' + skill, pos, '');
-			card.fix();
-			card.style.transform = '';
-			card.classList.remove('drawinghidden');
-			card.classList.add('feichu');
-			delete card._transform;
-
-
-			var iconName = {
-				equip1: 'icon feichu icon-saber',
-				equip2: 'icon feichu icon-shield',
-				equip3: 'icon feichu icon-mount',
-				equip4: 'icon feichu icon-mount',
-				equip5: 'icon feichu icon-treasure'
-			}[skill];
-
-			if (iconName) {
-				var icon = decadeUI.element.create(iconName, card);
-				icon.style.zIndex = '1';
-			}
-
-			var equipNum = get.equipNum(card);
-			var equipped = false;
-			for (var i = 0; i < player.node.equips.childNodes.length; i++) {
-				if (get.equipNum(player.node.equips.childNodes[i]) >= equipNum) {
-					player.node.equips.insertBefore(card, player.node.equips.childNodes[i]);
-					equipped = true;
-					break;
-				}
-			}
-			if (!equipped) {
-				player.node.equips.appendChild(card);
-				if (_status.discarded) {
-					_status.discarded.remove(card);
-				}
-			}
-			return player;
 		};
 
 		lib.element.card.copy = function(){
@@ -7282,7 +7225,7 @@ config:{
 		item:{
 			red:'红色',
 			yellow:'黄色',
-			decade: '十周年',
+			decade:'十周年',
 			normal:'原版',
 		},
 		update:function(){
