@@ -6516,7 +6516,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var cards=source.getEquips(1);
 					return cards.length&&cards.some(card=>lib.filter.canBeGained(card,player,source));
 				},
-				prompt2:function(event){
+				prompt2:function(event,player){
 					var source=event.source;
 					var cards=source.getEquips(1).filter(card=>lib.filter.canBeGained(card,player,source));
 					return '获得其装备区中的'+get.translation(cards);
