@@ -32,15 +32,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					else{
 						var list=[];
 						for(var i in lib.character){
-							if(lib.filter.characterDisabled2(i)||lib.filter.characterDisabled(i)) continue;
-							list.push(i);
+              if(!lib.filter.characterDisabled2(i)&&!lib.filter.characterDisabled(i)) list.push(i);
 						}
 					}
 					game.countPlayer2(function(current){
 						list.remove(current.name);
 						list.remove(current.name1);
 						list.remove(current.name2);
-						if(current.storage.rehuashen&&current.storage.rehuashen.character) list.removeArray(current.storage.rehuashen.character)
 					});
 					_status.characterlist=list;
 				},
@@ -48,191 +46,195 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					'step 0'
 					if(!player.storage.shenpingjian) player.storage.shenpingjian=[];
-					event._result={bool:true};
-					'step 1'
-					if(result.bool){
-						if(!_status.characterlist){
-							lib.skill.shenpingjian.initList();
-						}
-						var list=[];
-						var skills=[];
-						var map=[];
-						_status.characterlist.randomSort();
-						var name2=event.triggername;
-            function hasCommonElement(array1, array2) {
-              for (let i = 0; i < array1.length; i++) {
-                if (array2.includes(array1[i])) {
-                  return true;
+          if(!_status.characterlist){
+            lib.skill.shenpingjian.initList();
+          }
+          var list=[];
+          var skills=[];
+          var map=[];
+          var allList=_status.characterlist.slice(0);
+          game.countPlayer(function(current){
+            if(current.name&&lib.character[current.name]&&current.name.indexOf('gz_shibing')!=0&&current.name.indexOf('gz_jun_')!=0) allList.add(current.name);
+            if(current.name1&&lib.character[current.name1]&&current.name1.indexOf('gz_shibing')!=0&&current.name1.indexOf('gz_jun_')!=0) allList.add(current.name1);
+            if(current.name2&&lib.character[current.name2]&&current.name2.indexOf('gz_shibing')!=0&&current.name2.indexOf('gz_jun_')!=0) allList.add(current.name2);
+          });
+          allList.randomSort();
+          var name2=event.triggername;
+          function hasCommonElement(array1, array2) {
+            for (let i = 0; i < array1.length; i++) {
+              if (array2.includes(array1[i])) {
+                return true;
+              }
+            }
+            return false;
+          }
+          for(var i=0;i<allList.length;i++){
+            var name=allList[i];
+            if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
+            var skills2=lib.character[name][3];
+            for(var j=0;j<skills2.length;j++){
+              if(player.storage.shenpingjian.contains(skills2[j])) continue;
+              if(skills.contains(skills2[j])){
+                list.add(name);
+                if(!map[name]) map[name]=[];
+                map[name].push(skills2[j]);
+                skills.add(skills2[j]);
+                continue;
+              }
+              var list2=[skills2[j]];
+              game.expandSkills(list2);
+              for(var k=0;k<list2.length;k++){
+                var info=lib.skill[list2[k]];
+                if(!info||!info.trigger||!info.trigger.player) continue;
+                if(name2 === 'phaseBefore') {
+                  name2 = ['phaseBefore','phaseBeginStart','phaseBegin','phaseZhunbeiBefore','phaseZhunbeiBegin','phaseZhunbei','phaseZhunbeiEnd','phaseZhunbeiAfter','phaseJudgeBefore','phaseJudgeBegin','phaseJudgeEnd','phaseJudgeAfter','phaseDrawBefore','phaseDrawBegin','phaseDrawBegin1','phaseDrawBegin2','phaseDrawEnd','phaseDrawAfter','phaseUseBefore','phaseUseBegin']
+                } else if (name2 === 'damageBefore') {
+                  name2 = ['damageBefore','damageBegin','damageBegin2','damageBegin3','damageBegin4','damage','damageSource','damageEnd','damageAfter']
+                } else if (name2 === 'phaseJieshuBefore') {
+                  name2 = ['phaseJieshuBefore','phaseJieshuBegin','phaseJieshu','phaseJieshuEnd','phaseJieshuAfter','phaseEnd','phaseAfter']
+                }
+                if(name2.includes(info.trigger.player)||Array.isArray(info.trigger.player)&&hasCommonElement(info.trigger.player,name2)){
+                  list.add(name);
+                  if(!map[name]) map[name]=[];
+                  map[name].push(skills2[j]);
+                  skills.add(skills2[j]);
+                  break;
                 }
               }
-              return false;
             }
-						for(var i=0;i<_status.characterlist.length;i++){
-							var name=_status.characterlist[i];
-							if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
-							var skills2=lib.character[name][3];
-							for(var j=0;j<skills2.length;j++){
-								if(player.storage.shenpingjian.contains(skills2[j])) continue;
-								if(skills.contains(skills2[j])){
-									list.add(name);
-									if(!map[name]) map[name]=[];
-									map[name].push(skills2[j]);
-									skills.add(skills2[j]);
-									continue;
-								}
-								var list2=[skills2[j]];
-								game.expandSkills(list2);
-								for(var k=0;k<list2.length;k++){
-									var info=lib.skill[list2[k]];
-									if(!info||!info.trigger||!info.trigger.player) continue;
-                  if(name2 === 'phaseBefore') {
-                    name2 = ['phaseBefore','phaseBeginStart','phaseBegin','phaseZhunbeiBefore','phaseZhunbeiBegin','phaseZhunbei','phaseZhunbeiEnd','phaseZhunbeiAfter','phaseJudgeBefore','phaseJudgeBegin','phaseJudgeEnd','phaseJudgeAfter','phaseDrawBefore','phaseDrawBegin','phaseDrawBegin1','phaseDrawBegin2','phaseDrawEnd','phaseDrawAfter','phaseUseBefore','phaseUseBegin']
-                  } else if (name2 === 'damageBefore') {
-                    name2 = ['damageBefore','damageBegin','damageBegin2','damageBegin3','damageBegin4','damage','damageSource','damageEnd','damageAfter']
-                  } else if (name2 === 'phaseJieshuBefore') {
-                    name2 = ['phaseJieshuBefore','phaseJieshuBegin','phaseJieshu','phaseJieshuEnd','phaseJieshuAfter','phaseEnd','phaseAfter']
-                  }
-									// if(info.trigger.player==name2||Array.isArray(info.trigger.player)&&info.trigger.player.contains(name2)){
-                  if(name2.includes(info.trigger.player)||Array.isArray(info.trigger.player)&&hasCommonElement(info.trigger.player,name2)){
-										// if(info.init||info.ai&&(info.ai.combo||info.ai.notemp||info.ai.neg)) continue;
-										// if(info.filter){
-										// 	try{
-										// 		var bool=info.filter(trigger,player,name2);
-										// 		if(!bool) continue;
-										// 	}
-										// 	catch(e){
-										// 		continue;
-										// 	}
-										// }
-										list.add(name);
-										if(!map[name]) map[name]=[];
-										map[name].push(skills2[j]);
-										skills.add(skills2[j]);
-										break;
-									}
-								}
-							}
-							if(list.length>2) break;
-						}
-						if(!skills.length){
-							//player.draw();
-							event.finish();
-						}
-						else{
-							//skills.unshift('摸一张牌');
-							player.chooseControl(skills).set('dialog',['请选择要获取的技能',[list,'character']]).set('ai',function(){return 0});
-						}
-					}
-					else event.finish();
-					'step 2'
-					if(result.control=='摸一张牌'){
-						player.draw();
-						return;
-					}
+            if(list.length>2) break;
+          }
+          if(skills.length) player.chooseControl(skills).set('dialog',['评荐：请选择获得一个技能',[list,'character']]);
+          else event.finish();
+					'step 1'
 					player.storage.shenpingjian.add(result.control);
-					player.addSkill(result.control,event.triggername=='damageBegin1'?'damageAfter':'phaseJieshu');
+					player.addSkill(result.control);
+          game.log(player,'获得了技能','#g【'+get.translation(result.control)+'】');
 				},
 				group:'shenpingjian_use',
-				phaseUse_special:['xinfu_lingren'],
+				phaseUse_special:[],
+        ai:{threaten:5},
 			},
 			shenpingjian_use:{
 				audio:'shenpingjian',
 				enable:'phaseUse',
 				usable:1,
-				position:'he',
+        prompt:()=>lib.translate.shenpingjian_info,
 				content:function(){
 					'step 0'
 					if(!player.storage.shenpingjian) player.storage.shenpingjian=[];
-					event._result={bool:true};
-					'step 1'
+          player.chooseBool('评荐：是否失去一个技能，然后令系统随机检索出五张武将牌并获得其中一张武将牌上的所有技能？').ai= () => {
+            return false;
+          };
+          'step 1'
+          // 失去技能
+          if(result.bool){
+            var skills=player.getSkills(null,false,false).filter(skill=>{
+							var info=get.info(skill);
+							if(!info||get.is.empty(info)||get.skillInfoTranslation(skill,player) === "") return false;
+							return true;
+						});
+            player.chooseButton(true,[
+              '评荐：请选择失去一个技能',
+              [skills.map(i=>[
+                i,
+                '<div class="popup text" style="width:calc(100% - 10px);display:inline-block"><div class="skill">【'+get.translation(lib.translate[i+'_ab']||get.translation(i).slice(0,2))+'】</div><div>'+get.skillInfoTranslation(i,player)+'</div></div>',
+              ]),'textbutton'],
+            ])
+          }
+					'step 2'
 					if(result.bool){
-						var list=[];
-						var skills=[];
-						var map=[];
-						if(!_status.characterlist){
+            player.removeSkill(result.links[0]);
+            player.popup(result.links[0]);
+            player.storage.shenpingjian.remove(result.links[0]);
+            game.log(player,'失去了技能','#g【'+get.translation(result.links[0])+'】');
+            if(!_status.characterlist){
 							lib.skill.shenpingjian.initList();
 						}
-						_status.characterlist.randomSort();
-						for(var i=0;i<_status.characterlist.length;i++){
-							var name=_status.characterlist[i];
-							if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
-							var skills2=lib.character[name][3];
-							for(var j=0;j<skills2.length;j++){
-								if(player.storage.shenpingjian.contains(skills2[j])) continue;
-								if(skills.contains(skills2[j])||lib.skill.shenpingjian.phaseUse_special.contains(skills2[j])){
-									list.add(name);
-									if(!map[name]) map[name]=[];
-									map[name].push(skills2[j]);
-									skills.add(skills2[j]);
-									continue;
-								}
-								var list2=[skills2[j]];
-								game.expandSkills(list2);
-								for(var k=0;k<list2.length;k++){
-									var info=lib.skill[list2[k]];
-									// if(!info||!info.enable||info.viewAs||info.limited||info.juexingji||info.zhuanhuanji||info.hiddenSkill||info.dutySkill) continue;
-									// if(info.enable=='phaseUse'||Array.isArray(info.enable)&&info.enable.contains('phaseUse')){
-									// 	if(info.init||info.onChooseToUse||info.ai&&(info.ai.combo||info.ai.notemp||info.ai.neg)) continue;
-										// if(info.filter){
-										// 	try{
-										// 		var bool=info.filter(event.getParent(2),player);
-										// 		if(!bool) continue;
-										// 	}
-										// 	catch(e){
-										// 		continue;
-										// 	}
-										// }
-										list.add(name);
-										if(!map[name]) map[name]=[];
-										map[name].push(skills2[j]);
-										skills.add(skills2[j]);
-										break;
-									// }
-								}
-							}
-							if(list.length>2) break;
-						}
-						if(!skills.length){
-							//player.draw();
-							event.finish();
-						}
-						else{
-							//skills.unshift('摸一张牌');
-							player.chooseControl(skills).set('dialog',['请选择要获取的技能',[list,'character']]).set('ai',function(){return 0});
-						}
+            var list=[];
+            var allList=_status.characterlist.slice(0);
+            game.countPlayer(function(current){
+              if(current.name&&lib.character[current.name]&&current.name.indexOf('gz_shibing')!=0&&current.name.indexOf('gz_jun_')!=0) allList.add(current.name);
+              if(current.name1&&lib.character[current.name1]&&current.name1.indexOf('gz_shibing')!=0&&current.name1.indexOf('gz_jun_')!=0) allList.add(current.name1);
+              if(current.name2&&lib.character[current.name2]&&current.name2.indexOf('gz_shibing')!=0&&current.name2.indexOf('gz_jun_')!=0) allList.add(current.name2);
+            });
+            allList.randomSort();
+            for(var i=0;i<allList.length;i++){
+              var name=allList[i];
+              if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
+              list.add(name);
+              if(list.length>=5) break;
+            }
+            if(!list.length) event.finish();
+            else {
+              var num = 1;
+              player.chooseButton([
+                '评荐：选择至多'+get.cnNumber(num)+'张武将牌并获得其所有技能',
+                [list,'character'],
+              ],[0,num],true);
+            }
 					}
-					else event.finish();
-					'step 2'
-					if(result.control=='摸一张牌'){
-						player.draw();
-						return;
-					}
+					'step 3'
+          if(result.bool){
+            if(result.links.length !== 0) {
+              var skills=lib.character[result.links[0]][3];
+              for(var i=0;i<skills.length;i++){
+                player.storage.shenpingjian.add(skills[i]);
+                player.addSkill(skills[i]);
+                game.log(player,'获得了技能','#g【'+get.translation(skills[i])+'】');
+              }
+            }
+            event.finish();
+          }
+          'step 4'
+          var list=[];
+          var skills=[];
+          var map=[];
+          if(!_status.characterlist){
+            lib.skill.shenpingjian.initList();
+          }
+          var allList=_status.characterlist.slice(0);
+          game.countPlayer(function(current){
+            if(current.name&&lib.character[current.name]&&current.name.indexOf('gz_shibing')!=0&&current.name.indexOf('gz_jun_')!=0) allList.add(current.name);
+            if(current.name1&&lib.character[current.name1]&&current.name1.indexOf('gz_shibing')!=0&&current.name1.indexOf('gz_jun_')!=0) allList.add(current.name1);
+            if(current.name2&&lib.character[current.name2]&&current.name2.indexOf('gz_shibing')!=0&&current.name2.indexOf('gz_jun_')!=0) allList.add(current.name2);
+          });
+          allList.randomSort();
+          for(var i=0;i<allList.length;i++){
+            var name=allList[i];
+            if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
+            var skills2=lib.character[name][3];
+            for(var j=0;j<skills2.length;j++){
+              if(player.storage.shenpingjian.contains(skills2[j])) continue;
+              if(skills.contains(skills2[j])||lib.skill.shenpingjian.phaseUse_special.contains(skills2[j])){
+                list.add(name);
+                if(!map[name]) map[name]=[];
+                map[name].push(skills2[j]);
+                skills.add(skills2[j]);
+                continue;
+              }
+              var list2=[skills2[j]];
+              game.expandSkills(list2);
+              for(var k=0;k<list2.length;k++){
+                var info=lib.skill[list2[k]];
+                  list.add(name);
+                  if(!map[name]) map[name]=[];
+                  map[name].push(skills2[j]);
+                  skills.add(skills2[j]);
+                  break;
+              }
+            }
+            if(list.length>2) break;
+          }
+          if(skills.length) player.chooseControl(skills).set('dialog',['评荐：请选择获得一个技能',[list,'character']]);
+          else event.finish();
+					'step 5'
 					player.storage.shenpingjian.add(result.control);
-					player.addSkill(result.control,'phaseUseEnd');
-					// player.addTempSkill('shenpingjian_temp','phaseUseEnd');
-					// player.storage.shenpingjian_temp=result.control;
-					//event.getParent(2).goto(0);
+					player.addSkill(result.control);
+          game.log(player,'获得了技能','#g【'+get.translation(result.control)+'】');
 				},
-				ai:{order:10,result:{player:1}},
+				ai:{order:12,result:{player:1}},
 			},
-			// shenpingjian_temp:{
-			// 	onremove:true,
-			// 	trigger:{player:['useSkillBegin','useCard1']},
-			// 	silent:true,
-			// 	firstDo:true,
-			// 	filter:function(event,player){
-			// 		var info=lib.skill[event.skill];
-			// 		if(!info) return false;
-			// 		if(event.skill==player.storage.shenpingjian_temp) return true;
-			// 		if(info.sourceSkill==player.storage.shenpingjian_temp||info.group==player.storage.shenpingjian_temp) return true;
-			// 		if(Array.isArray(info.group)&&info.group.contains(player.storage.shenpingjian_temp)) return true;
-			// 		return false;
-			// 	},
-			// 	content:function(){
-			// 		player.removeSkill(player.storage.shenpingjian_temp);
-			// 		player.removeSkill('shenpingjian_temp');
-			// 	},
-			// },
       //旧武诸葛
 			olddcjincui:{
 				audio:2,
@@ -1115,7 +1117,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       // 定制武将喵
       shenxushao:'神许劭',
       shenpingjian:'评荐',
-			shenpingjian_info:'①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以令系统随机从剩余武将牌堆中检索出三张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌。然后你可以选择获取其中一个技能。②出牌阶段限一次，你可以令系统随机从剩余武将牌堆中检索出三张武将牌。然后你可以选择获取其中一个技能。',
+			shenpingjian_info:'①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以令系统随机检索出三张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌。然后你可以选择获得其中一个技能。②出牌阶段限一次，你可以选择一项：⒈失去一个技能并令系统随机检索出五张武将牌，然后你可以获得其中一张武将牌上的所有技能。⒉令系统随机检索出三张武将牌。然后你可以选择获得其中一个技能。',
       shenpingjian_append:'<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
 			shenpingjian_use:'评荐',
       oldwu_zhugeliang:'旧武诸葛亮',
@@ -1133,7 +1135,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			shidunshi_info:'每回合限一次。你可以视为使用或打出一张【杀】/【闪】/【桃】/【酒】，然后当前回合角色于本回合内下一次造成伤害时，你选择两项：⒈防止此伤害。系统从技能名中包含“仁/义/礼/智/信”字样的技能中随机选择三个其未拥有的技能，然后你令当前回合角色获得其中一个技能。⒉从〖遁世〗中删除你本次使用或打出的牌并获得一个“席”。⒊减1点体力上限并摸X张牌（X为你的“席”数）。',
       acetaffy:'永雏塔菲',
       taffybaomi:'爆米',
-      taffybaomi_info:'出牌阶段限一次，当你即将对一名角色造成伤害时，你可以防止此伤害；若该角色有手牌，则你令该角色交给你任意张牌。',
+      taffybaomi_info:'每回合限一次，当你即将对一名角色造成伤害时，你可以防止此伤害；若该角色有手牌，则你令该角色选择交给你任意张手牌。',
       taffyfeizhu:'菲柱',
       taffyfeizhu_info:'锁定技，当你受到伤害时，若你的武将牌正面朝上，此伤害减半（向下取整）；若你的武将牌背面朝上，此伤害加倍（向下取整）。',
       taffyzuoai:'卓艾',
