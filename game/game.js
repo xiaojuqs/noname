@@ -26254,8 +26254,12 @@
 					var player=this;
 					var equipNum=get.equipNum(card);
 					var equipped=false;
+					var sort_equip_num=function(old_equip_num){
+						if(old_equip_num==5) return -1;
+						return old_equip_num;
+					}
 					for(var i=0;i<player.node.equips.childNodes.length;i++){
-						if(get.equipNum(player.node.equips.childNodes[i])>=equipNum){
+						if(sort_equip_num(get.equipNum(player.node.equips.childNodes[i]))>=sort_equip_num(equipNum)){
 							player.node.equips.insertBefore(card,player.node.equips.childNodes[i]);
 							equipped=true;
 							break;
