@@ -5566,7 +5566,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var evt=trigger.getl(player);
 							var num=0;
 							player.getHistory('lose',function(evt){
-								if(!goon||evt.type!='discard') return false;
+								if(evt.type!='discard') return false;
 								num+=evt.cards2.length;
 							});
 							var cards=[];
