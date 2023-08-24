@@ -18555,6 +18555,24 @@
 					next.setContent('expandEquip');
 					return next;
 				},
+				SortEquipNodes:function(){
+					var player=this;
+					if(!player.node.equips.childNodes) return;
+					var childnodes_Array=[];
+					for(var i in player.node.equips.childNodes){
+						if(player.node.equips.childNodes[i].nodeType==1) childnodes_Array.push(player.node.equips.childNodes[i]);
+					}
+					childnodes_Array.sort(function(a,b){
+						var sort_equip_num=function(old_equip_num){
+							if(old_equip_num==5) return -1;
+							return old_equip_num;
+						}
+						return sort_equip_num(get.equipNum(a))>sort_equip_num(get.equipNum(b));
+					});
+					for(i=0;i<childnodes_Array.length;++i){
+						player.node.equips.appendChild(childnodes_Array[i]);
+					}
+				},
 				//判断判定区是否被废除
 				isDisabledJudge:function(){
 					return Boolean(this.storage._disableJudge);
@@ -18631,6 +18649,7 @@
 							}
 						}
 					}
+					player.SortEquipNodes();
 				},
 				//以下函数涉及到本次更新内容而进行修改
 				canEquip:function(name,replace){
@@ -26249,23 +26268,9 @@
 					delete card._transform;
 					var player=this;
 					var equipNum=get.equipNum(card);
-					var equipped=false;
-					var sort_equip_num=function(old_equip_num){
-						if(old_equip_num==5) return -1;
-						return old_equip_num;
-					}
-					for(var i=0;i<player.node.equips.childNodes.length;i++){
-						if(sort_equip_num(get.equipNum(player.node.equips.childNodes[i]))>=sort_equip_num(equipNum)){
-							player.node.equips.insertBefore(card,player.node.equips.childNodes[i]);
-							equipped=true;
-							break;
-						}
-					}
-					if(!equipped){
-						player.node.equips.appendChild(card);
-						if(_status.discarded){
-							_status.discarded.remove(card);
-						}
+					player.node.equips.appendChild(card);
+					if(_status.discarded){
+						_status.discarded.remove(card);
 					}
 					var info=get.info(card);
 					if(info.skills){
@@ -26273,6 +26278,7 @@
 							player.addSkillTrigger(info.skills[i]);
 						}
 					}
+					player.SortEquipNodes();
 					return player;
 				},
 				$gain:function(card,log,init){
