@@ -1086,11 +1086,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       minitaffy:'呃呃，唐完了喵。',
     },
     characterTitle:{
-      shenxushao:'永雏塔菲限定武将',
-      oldwu_zhugeliang:'永雏塔菲限定武将',
-      shiguanning:'永雏塔菲限定武将',
-      acetaffy:'永雏塔菲限定武将',
-      minitaffy:'永雏塔菲限定武将',
+      shenxushao:'#gViridian',
+      oldwu_zhugeliang:'#gViridian',
+      shiguanning:'#gViridian',
+      acetaffy:'#gViridian',
+      minitaffy:'#gViridian',
 		},
     perfectPair:{},
 		characterFilter:{
