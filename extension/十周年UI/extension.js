@@ -1436,7 +1436,6 @@ content:function(config, pack){
 						this.node.image.className = 'image';
 
 						var filename = card[2];
-						var vertname = '';
 						var cardname = get.translation(card[2]);
 						this.dataset.suit = card[0];
 						this.$suitnum.$num.textContent = cardnum;
@@ -2139,7 +2138,7 @@ content:function(config, pack){
 					intro.style.backgroundImage = 'url("' + decadeUIPath + 'assets/image/rarity_' + rarity + '.png")';
 
 
-					if ((button.link == 'xushu' || button.link == 'xin_xushu') && button.node && button.node.name && button.node.group){
+					if ((button.link == 'xushu' || button.link == 'xin_xushu' || button.link == 'jsrg_guanyu') && button.node && button.node.name && button.node.group){
 						if (button.classList.contains('newstyle')) {
 							button.node.name.dataset.nature = 'watermm';
 							button.node.group.dataset.nature = 'water';
@@ -6724,6 +6723,7 @@ content:function(config, pack){
 				} else {
 					next.parent = event;
 					_status.event = next;
+					game.getGlobalHistory('everything').push(next);
 				}
 			} else if (event.finished) {
 				if (event._triggered == 1) {

@@ -10,7 +10,6 @@ html {
 	background: rgb(60, 60, 60);
 }
 
-
 /* #arena>.dialog { */
 /* display: none; */
 /* } */
@@ -64,7 +63,6 @@ body>.background {
 	height: 100%;
 	pointer-events: none;
 }
-
 
 #arena {
 	left: 22px;
@@ -127,7 +125,6 @@ body>.background {
 	font-family: xinwei;
 	text-shadow: 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black;
 }
-
 
 #arena>.hand-wrap,
 #arena>.hand-back {
@@ -209,7 +206,6 @@ body>.background {
 	cursor: pointer;
 }
 
-
 .hand-special {
 	left: auto;
 	right: calc(-1% + 3px);
@@ -245,7 +241,6 @@ body>.background {
 	transition: opacity 0.5s;
 }
 
-
 #arena>.card,
 #arena.oblongcard:not(.chess)>.card,
 #arena.oblongcard:not(.chess) .handcards>.card {
@@ -258,7 +253,6 @@ body>.background {
 	height: 150px;
 	background-size: 100% 100%;
 }
-
 
 .card,
 #window:not(*[data-radius_size='']) .card {
@@ -337,7 +331,6 @@ body>.background {
 	background-position-x: 0;
 }
 
-
 .card>.suit-num {
 	font-size: 25px;
 	color: black;
@@ -395,6 +388,12 @@ body>.background {
 	background: rgba(230, 210, 166, 0.8);
 }
 
+.card.fullborder>.range.card-tag,
+.card.fullimage>.range.card-tag {
+	background-color: rgba(0, 0, 0, 0.8);
+	border-color: white;
+}
+
 .card>.card-mask {
 	opacity: 0;
 	position: absolute;
@@ -415,7 +414,6 @@ body>.background {
 #arena.thrownhighlight>.card.thrown:not(.thrownhighlight):not(.drawingcard)>.card-mask {
 	opacity: 1;
 }
-
 
 .transition-none {
 	transition: none !important;
@@ -450,7 +448,6 @@ body>.background {
 #arena>.dialog {
 	z-index: 7;
 }
-
 
 /*界面操作按钮*/
 #arena>#dui-controls {
@@ -559,7 +556,6 @@ body>.background {
 .pausedbg>#sidebar {
 	width: auto;
 }
-
 
 .dialog .buttons>.button.character.decadeUI,
 .button.character.longcharacter.decadeUI {
