@@ -9629,20 +9629,6 @@ window.noname_asset_list=[
 	'extension/十周年UI/image/decoration/name_yao.png',
 	'extension/十周年UI/image/decoration/name_ye.png',
 	'extension/十周年UI/image/decoration/vs.png',
-  // 定制武将喵
-  'image/character/shenxushao.jpg',
-  'audio/die/shenxushao.mp3',
-  'audio/skill/shenpingjian1.mp3',
-	'audio/skill/shenpingjian2.mp3',
-  'image/character/oldwu_zhugeliang.jpg',
-  'audio/die/oldwu_zhugeliang.mp3',
-	'audio/die/oldwu_zhutiexiong.mp3',
-  'image/character/shiguanning.jpg',
-  'audio/die/shiguanning.mp3',
-  'audio/skill/shidunshi1.mp3',
-	'audio/skill/shidunshi2.mp3',
-  'image/character/acetaffy.jpg',
-  'image/character/minitaffy.jpg',
 ];
 window.noname_skin_list={
 	baosanniang:2,
@@ -9998,6 +9984,6 @@ window.noname_skin_list={
 	key_komari:1,
 	key_saya:4,
 
-  // 自制武将喵
+  // 永雏塔菲限定武将喵
   acetaffy:45,
 };

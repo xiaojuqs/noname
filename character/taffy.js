@@ -4,22 +4,21 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		name:'taffy',
     connect:true,
 		character:{
-      // 定制武将喵
       shenxushao:['male','shen',4,['shenpingjian']],
       oldwu_zhugeliang:['male','shu','4/7',['olddcjincui','olddcqingshi','olddczhizhe']],
       shiguanning:['male','qun','3/7',['shidunshi']],
       acetaffy:['female','shen',3,['taffybaomi','taffyfeizhu','taffyzuoai','taffychusheng']],
       minitaffy:['female','qun',1,['taffytangshi','taffyzisha']],
+      shixushao:['male','qun',4,['shipingjian']],
 		},
     characterSort:{
       taffy:{
-        taffy_old:["oldwu_zhugeliang"],
-        taffy_origin:["shiguanning"],
+        taffy_old:['oldwu_zhugeliang'],
+        taffy_origin:['shiguanning','shixushao'],
         taffy_diy:["shenxushao",'acetaffy','minitaffy'],
       }
     },
 		skill:{
-      // 定制武将喵
       //神许劭
       shenpingjian:{
 				audio:4,
@@ -70,7 +69,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
           }
           for(var i=0;i<allList.length;i++){
             var name=allList[i];
-            if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
+            if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1||name.indexOf('shixushao')!=-1) continue;
             var skills2=lib.character[name][3];
             for(var j=0;j<skills2.length;j++){
               if(player.storage.shenpingjian.contains(skills2[j])) continue;
@@ -161,7 +160,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
             allList.randomSort();
             for(var i=0;i<allList.length;i++){
               var name=allList[i];
-              if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
+              if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1||name.indexOf('shixushao')!=-1) continue;
               list.add(name);
               if(list.length>=5) break;
             }
@@ -202,7 +201,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
           allList.randomSort();
           for(var i=0;i<allList.length;i++){
             var name=allList[i];
-            if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1) continue;
+            if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1||name.indexOf('shenxushao')!=-1||name.indexOf('shixushao')!=-1) continue;
             var skills2=lib.character[name][3];
             for(var j=0;j<skills2.length;j++){
               if(player.storage.shenpingjian.contains(skills2[j])) continue;
@@ -587,7 +586,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 				}
 			},
-      //十周年管宁
+      // 新杀管宁
 			shidunshi:{
 				audio:2,
 				enable:['chooseToUse','chooseToRespond'],
@@ -1074,16 +1073,414 @@ game.import('character',function(lib,game,ui,get,ai,_status){
         content: () => {
           player.die();
         }
-      }
+      },
+      // 新杀许劭
+      shipingjian:{
+				initList:function(){
+					var list=[];
+					if(_status.connectMode) list=get.charactersOL();
+					else{
+						var list=[];
+						for(var i in lib.character){
+							if(!lib.filter.characterDisabled2(i)&&!lib.filter.characterDisabled(i)) list.push(i);
+						}
+					}
+					game.countPlayer2(function(current){
+						list.remove(current.name);
+						list.remove(current.name1);
+						list.remove(current.name2);
+					});
+					_status.characterlist=list;
+				},
+				init:function(player){
+					player.addSkill('shipingjian_check');
+					if(!player.storage.shipingjian_check) player.storage.shipingjian_check={};
+				},
+				onremove:function(player){
+					player.removeSkill('shipingjian_check');
+				},
+				audio:2,
+				trigger:{player:['damageEnd','phaseJieshuBegin']},
+				frequent:true,
+				content:function(){
+					'step 0'
+					if(!_status.characterlist){
+						lib.skill.shipingjian.initList();
+					}
+					var allList=[
+            // 结束阶段
+            'simalang',
+            'xin_yufan',
+            'sp_liuqi',
+            're_diaochan',
+            're_guohuai',
+            'zhanggong',  // 镇行只有结束阶段
+            'sp_caiwenji',
+            'zhugezhan',
+            'caoying',
+            'sp_jiangwei',
+            'caoren',
+            'haozhao',
+            're_guyong',
+            're_wangyi',
+            'xin_liru',
+            'caojie',
+            'zhoufang',
+            're_kanze',
+            'hanfu',
+            'zhangxun',
+            'yujin_yujin',
+            'xin_xushu',
+            'wuxian',
+            // 受到伤害
+            're_quancong',
+            'guohuanghou',
+            'shen_caocao',
+            'chengyu',
+            'simayi',
+            're_xiahoudun',
+            're_guojia',
+            're_caocao',
+            're_fazheng',
+            'wangrong',
+            'xizhicai',
+            'xunyu',
+            'caopi',
+            'caozhi',
+            'caochong',
+            'caorui',
+            // 'gz_re_lidian',
+            'old_re_lidian',
+            'manchong',
+            'chengong',
+            'xunyou',
+            'heyan',
+            'huaxin',
+            'caomao',
+            'ol_yangyi',  // 结束阶段没有狷狭
+          ]
+					var list=[];
+					var skills=[];
+					var map=[];
+					allList.randomSort();
+					var name2=event.triggername;
+					for(var i=0;i<allList.length;i++){
+						var name=allList[i];
+						if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1) continue;
+            var skills2;
+            if(name === 'old_re_lidian') {
+              skills2=['wangxi'];
+            } else {
+              skills2=lib.character[name][3];
+            }
+						for(var j=0;j<skills2.length;j++){
+							if(player.getStorage('shipingjian').contains(skills2[j])) continue;
+							if(skills.contains(skills2[j])){
+								list.add(name);
+								if(!map[name]) map[name]=[];
+								map[name].push(skills2[j]);
+								skills.add(skills2[j]);
+								continue;
+							}
+              if(name2==='damageEnd') {
+                if (skills2[j]==='xinyaoming') {
+                  list.add(name);
+                  if(!map[name]) map[name]=[];
+                  map[name].push(skills2[j]);
+                  skills.add(skills2[j]);
+                  continue;
+                } else if (skills2[j]==='xinfu_zhenxing') {
+                  continue;
+                }
+              } else if (name2==='phaseJieshuBegin') {
+                if (skills2[j]==='daiyan') {
+                  list.add(name);
+                  if(!map[name]) map[name]=[];
+                  map[name].push(skills2[j]);
+                  skills.add(skills2[j]);
+                  continue;
+                } else if (skills2[j]==='oljuanxia') {
+                  continue;
+                }
+              }
+							var list2=[skills2[j]];
+							game.expandSkills(list2);
+							for(var k=0;k<list2.length;k++){
+								var info=lib.skill[list2[k]];
+								if(!info||!info.trigger||!info.trigger.player||info.silent||info.limited||info.juexingji||info.zhuanhuanji||info.hiddenSkill||info.dutySkill) continue;
+								if(info.trigger.player==name2||Array.isArray(info.trigger.player)&&info.trigger.player.contains(name2)){
+									if(info.ai&&(info.ai.combo||info.ai.notemp||info.ai.neg)) continue;
+									if(info.init) continue;
+									if(info.filter){
+										try{
+											var bool=info.filter(trigger,player,name2);
+											if(!bool) continue;
+										}
+										catch(e){
+											continue;
+										}
+									}
+									list.add(name);
+									if(!map[name]) map[name]=[];
+									map[name].push(skills2[j]);
+									skills.add(skills2[j]);
+									break;
+								}
+							}
+						}
+						if(list.length>2) break;
+					}
+					if(skills.length) player.chooseControl(skills).set('dialog',['评鉴：请选择尝试发动的技能',[list,'character']]);
+					else event.finish();
+					'step 1'
+					player.markAuto('shipingjian',[result.control]);
+					player.addTempSkill(result.control);
+					player.storage.shipingjian_check[result.control]=(trigger.name=='damage'?trigger:'phaseJieshu');
+				},
+				group:'shipingjian_use',
+				phaseUse_special:[],
+				ai:{threaten:5},
+			},
+			shipingjian_use:{
+				audio:'shipingjian',
+				enable:'phaseUse',
+				usable:1,
+				prompt:()=>lib.translate.shipingjian_info,
+				content:function(){
+					'step 0'
+					var list=[];
+					var skills=[];
+					var map=[];
+					var evt=event.getParent(2);
+					if(!_status.characterlist){
+						lib.skill.shipingjian.initList();
+					}
+          var allList=[
+            'caoying',
+            'zhangxingcai',
+            'dianwei',
+            're_yuanshao',
+            're_masu',
+            'guanyinping',
+            'huangfusong',
+            're_guanyu',
+            'jianggan',
+            'xin_gaoshun',
+            'taishici',
+            'liuchen',
+            'huaman',
+            'dc_wangyun',
+            're_zhangyi',
+            'dingfeng',
+            'pangtong',
+            'dongzhuo',
+            're_sunluban',
+            'zhugeke',
+            're_dongcheng',
+            'huanggai',
+            're_xushu', // 衍生技：荐言（'jianyan'）
+            'xin_liru',
+            're_sunquan',
+            're_daqiao',
+            're_guyong',
+            'chenlin',
+            're_jsp_pangtong',
+            'liyan',
+            'shen_lvmeng',
+            'zhangji',
+            'xf_yiji',
+            'guanlu',
+            'wangrong',
+            're_dongbai',
+            're_zhouyu',
+            'guosi',
+            're_zoushi',
+            'zhaoyan',
+            'zongyu',
+            're_dengzhi',
+            'zhangwen',
+            'shen_ganning',
+            'xin_wuguotai',
+            'ganning',
+            're_panfeng',
+            'xunyou',
+            'xin_handang',
+            're_gongsunyuan',
+            'buzhi',
+            'heqi',
+            'zhanghu',
+            'jiangwei',
+            'huatuo',
+            'simalang',
+            'zhuzhi',
+            'liuyan',
+            're_sunshangxiang',
+            'dc_bulianshi',
+            'chengong',
+            'mizhu',
+            'diaochan',
+            'caorui',
+            're_liubei',
+            'liuxie',
+            'zhangchangpu',
+            're_lusu',
+            'zhangzhang',
+            'xunyu',
+            'lvkai',
+            'dc_jsp_guanyu', // 衍生技：怒嗔（'dcnuchen'）
+            'xianglang',
+            're_xuhuang',
+            'sp_zhugeliang',
+            'wangping',
+            'chenqun',
+            'tongyuan',
+            're_chendeng',
+          ]
+					allList.randomSort();
+					for(var i=0;i<allList.length;i++){
+						var name=allList[i];
+						if(name.indexOf('zuoci')!=-1||name.indexOf('xushao')!=-1) continue;
+						var skills2=lib.character[name][3];
+						for(var j=0;j<skills2.length;j++){
+							if(player.getStorage('shipingjian').contains(skills2[j])) continue;
+              if(skills2[j]==='qianxin') {
+                list.add(name);
+								if(!map[name]) map[name]=[];
+								map[name].push('jianyan');
+								skills.add('jianyan');
+								continue;
+              }
+							if(get.is.locked(skills2[j],player)) continue;
+							var info=lib.translate[skills2[j]+'_info'];
+							if(skills.contains(skills2[j])
+                ||(info&&info.indexOf('当你于出牌阶段')!=-1&&info.indexOf('当你于出牌阶段外')==-1)
+                ||skills2[j]==='lijian'
+                ||skills2[j]==='xinmieji'
+                ||skills2[j]==='songci'
+                ||skills2[j]==='quji'
+                ||skills2[j]==='rechanhui'
+                ||skills2[j]==='xinkuangfu'
+                ||skills2[j]==='zhijian'
+                ||skills2[j]==='chaofeng'
+                ||skills2[j]==='quhu'
+                ||skills2[j]==='xinfu_lveming'){
+								list.add(name);
+								if(!map[name]) map[name]=[];
+								map[name].push(skills2[j]);
+								skills.add(skills2[j]);
+								continue;
+							}
+              if(skills2[j]==='olshanxi') {
+                list.add(name);
+								if(!map[name]) map[name]=[];
+								map[name].push('shanxi');
+								skills.add('shanxi');
+								continue;
+              }
+              if(skills2[j]==='new_rewusheng') {
+                if (name==='dc_jsp_guanyu') {
+                  list.add(name);
+                  if(!map[name]) map[name]=[];
+                  map[name].push('dcnuchen');
+                  skills.add('dcnuchen');
+                  continue;
+                } else {
+                  continue;
+                }
+              }
+							var list2=[skills2[j]];
+							game.expandSkills(list2);
+							for(var k=0;k<list2.length;k++){
+								var info=lib.skill[list2[k]];
+								if(!info||!info.enable||info.charlotte||info.limited||info.juexingji||info.zhuanhuanji||info.hiddenSkill||info.dutySkill) continue;
+								if((info.enable=='phaseUse'||(Array.isArray(info.enable)&&info.enable.contains('phaseUse')))||(info.enable=='chooseToUse'||(Array.isArray(info.enable)&&info.enable.contains('chooseToUse')))){
+									if(info.ai&&(info.ai.combo||info.ai.notemp||info.ai.neg)) continue;
+									if(info.init||info.onChooseToUse) continue;
+									if(info.filter){
+										try{
+											var bool=info.filter(evt,player);
+											if(!bool) continue;
+										}
+										catch(e){
+											continue;
+										}
+									}
+									else if(info.viewAs&&typeof info.viewAs!='function'){
+										try{
+											if(evt.filterCard&&!evt.filterCard(info.viewAs,player,evt)) continue;
+											if(info.viewAsFilter&&info.viewAsFilter(player)==false) continue;
+										}
+										catch(e){
+											continue;
+										}
+									}
+									list.add(name);
+									if(!map[name]) map[name]=[];
+									map[name].push(skills2[j]);
+									skills.add(skills2[j]);
+									break;
+								}
+							}
+						}
+						if(list.length>2) break;
+					}
+					if(skills.length) player.chooseControl(skills).set('dialog',['评鉴：请选择尝试发动的技能',[list,'character']]);
+					else event.finish();
+					'step 1'
+					player.markAuto('shipingjian',[result.control]);
+					player.addTempSkill(result.control);
+					player.storage.shipingjian_check[result.control]='phaseUse';
+				},
+				ai:{order:12,result:{player:1}},
+			},
+			shipingjian_check:{
+				charlotte:true,
+				trigger:{player:['useSkill','logSkillBegin']},
+				filter:function(event,player){
+					if(get.info(event.skill).charlotte) return false;
+					var skill=event.sourceSkill||event.skill;
+					return player.storage.shipingjian_check[skill];
+				},
+				direct:true,
+				firstDo:true,
+				priority:Infinity,
+				content:function(){
+					var skill=trigger.sourceSkill||trigger.skill;
+					player.removeSkill(skill);
+					delete player.storage.shipingjian_check[skill];
+				},
+				group:'shipingjian_check2',
+			},
+			shipingjian_check2:{
+				charlotte:true,
+				trigger:{player:['phaseUseEnd','damageEnd','phaseJieshuBegin']},
+				filter:function(event,player){
+					return Object.keys(player.storage.shipingjian_check).find(function(skill){
+						if(event.name!='damage') return player.storage.shipingjian_check[skill]==event.name;
+						return player.storage.shipingjian_check[skill]==event;
+					});
+				},
+				direct:true,
+				lastDo:true,
+				priority:-Infinity,
+				content:function(){
+					var skills=Object.keys(player.storage.shipingjian_check).filter(function(skill){
+						if(trigger.name!='damage') return player.storage.shipingjian_check[skill]==trigger.name;
+						return player.storage.shipingjian_check[skill]==trigger;
+					});
+					player.removeSkill(skills);
+					for(var skill of skills) delete player.storage.shipingjian_check[skill];
+				},
+			},
 		},
     card:{
 		},
     characterIntro:{
-      // 定制武将喵
       shenxushao:'许劭（shào）（150年—195年），字子将。汝南平舆（今河南平舆县射桥镇）人。东汉末年著名人物评论家。据说他每月都要对当时人物进行一次品评，人称为“月旦评”。曾任汝南郡功曹，后南渡投靠扬州刺史刘繇。刘繇被孙策击败后，许劭随其逃往豫章郡，并在豫章去世。',
       shiguanning:'管宁（158年—241年），字幼安。北海郡朱虚县（今山东省安丘、临朐东南）人。汉末三国时期著名隐士。管宁与华歆、邴原并称为“一龙”。汉末天下大乱时，与邴原及王烈等人避于辽。在当地只谈经典而不问世事，做讲解《诗经》《书经》，谈祭礼、整治威仪、陈明礼让等教化工作，人们都很乐于接受他的教导。直到魏文帝黄初四年（公元223年）才返乡，辽东太守公孙恭亲自送别。此后曹魏几代帝王数次征召管宁，他都没有应命。正始二年（公元241年），管宁逝世，年八十四。著有《氏姓论》。',
       acetaffy:'永雏塔菲是一名经营着侦探事务所的少女王牌侦探发明家。她来自1885年，乘着自己发明的时光机试图穿越到100年后的时空，却因迟到36年来到了现代，并被现代的电子游戏吸引，不想返回过去。',
       minitaffy:'呃呃，唐完了喵。',
+      shixushao:'许劭（shào）（150年—195年），字子将。汝南平舆（今河南平舆县射桥镇）人。东汉末年著名人物评论家。据说他每月都要对当时人物进行一次品评，人称为“月旦评”。曾任汝南郡功曹，后南渡投靠扬州刺史刘繇。刘繇被孙策击败后，许劭随其逃往豫章郡，并在豫章去世。',
     },
     characterTitle:{
       shenxushao:'#gViridian',
@@ -1091,6 +1488,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       shiguanning:'#gViridian',
       acetaffy:'#gViridian',
       minitaffy:'#gViridian',
+      shixushao:'#gViridian',
 		},
     perfectPair:{},
 		characterFilter:{
@@ -1114,7 +1512,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
     characterReplace:{
     },
 		translate:{
-      // 定制武将喵
       shenxushao:'神许劭',
       shenpingjian:'评荐',
 			shenpingjian_info:'①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以令系统随机检索出三张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌。然后你可以选择获得其中一个技能。②出牌阶段限一次，你可以选择一项：⒈失去一个技能并令系统随机检索出五张武将牌，然后你可以获得其中一张武将牌上的所有技能。⒉令系统随机检索出三张武将牌。然后你可以选择获得其中一个技能。',
@@ -1129,7 +1526,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			olddczhizhe:'智哲',
 			olddczhizhe_clear:'invisible',
 			olddczhizhe_info:'限定技。出牌阶段，你可以选择一张手牌并复制之。该复制牌不计入你的手牌上限，且当你使用或打出此牌结算结束后，你获得之，然后你本回合不能再使用或打出此牌。',
-      shiguanning:'十周年管宁',
+      shiguanning:'新杀管宁',
       shiguanning_ab:'管宁',
 			shidunshi:'遁世',
 			shidunshi_info:'每回合限一次。你可以视为使用或打出一张【杀】/【闪】/【桃】/【酒】，然后当前回合角色于本回合内下一次造成伤害时，你选择两项：⒈防止此伤害。系统从技能名中包含“仁/义/礼/智/信”字样的技能中随机选择三个其未拥有的技能，然后你令当前回合角色获得其中一个技能。⒉从〖遁世〗中删除你本次使用或打出的牌并获得一个“席”。⒊减1点体力上限并摸X张牌（X为你的“席”数）。',
@@ -1148,6 +1545,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
       taffytangshi_info:'出牌阶段，你可以随机播放一条小菲的糖氏语音。',
       taffyzisha:'紫砂',
       taffyzisha_info:'出牌阶段限一次，你可以死亡',
+      shixushao:'新杀许劭',
+      shixushao_ab:'许劭',
+      shipingjian:'评荐',
+			shipingjian_use:'评荐',
+			shipingjian_info:'结束阶段开始时/当你受到伤害后/出牌阶段限一次，你可以令系统随机检索出三张拥有发动时机为结束阶段开始时/当你受到伤害后/出牌阶段的技能的武将牌。然后你可以选择尝试发动其中一个技能。每个技能每局游戏只能选择一次。',
 
       taffy_old:"圣经·塔约",
       taffy_origin:"江山如故·塔",

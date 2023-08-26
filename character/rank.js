@@ -1716,12 +1716,14 @@ window.noname_character_rank={
 			'key_minagi',
 			'key_michiru',
 			'noname',
-      // 新增定制武将喵
+
+      // 永雏塔菲限定武将喵
       'shenxushao',
       'shiguanning',
       'oldwu_zhugeliang',
       'acetaffy',
       'minitaffy',
+      'shixushao',
 		],
 		epic:[
 			'pal_yueqi',
