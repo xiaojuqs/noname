@@ -3211,12 +3211,12 @@ content:function(config, pack){
 						isExt = true;
 						} else {
 							switch (value) {
-								// case '先':
-								// 	filename = 'xianshou';
-								// 	break;
-								// case '后':
-								// 	filename = 'houshou';
-								// 	break;
+								case '先':
+									fileName = 'xianshou';
+									break;
+								case '后':
+									fileName = 'houshou';
+									break;
 								case '猜':
 									fileName = 'cai';
 									if (_status.mode == 'purple' && identity == 'cai') {

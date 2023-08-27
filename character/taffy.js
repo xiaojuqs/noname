@@ -137,7 +137,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
               '评荐：请选择失去一个技能',
               [skills.map(i=>[
                 i,
-                '<div class="popup text" style="width:calc(100% - 10px);display:inline-block"><div class="skill">【'+get.translation(lib.translate[i+'_ab']||get.translation(i).slice(0,2))+'】</div><div>'+get.skillInfoTranslation(i,player)+'</div></div>',
+                '<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【'+get.translation(lib.translate[i+'_ab']||get.translation(i).slice(0,2))+'】</div><div>'+get.skillInfoTranslation(i,player)+'</div></div>',
               ]),'textbutton'],
             ])
           }
