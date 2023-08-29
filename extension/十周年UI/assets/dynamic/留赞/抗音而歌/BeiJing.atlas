@@ -1,0 +1,251 @@
+
+BeiJing.png
+size: 1226,544
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijing
+  rotate: true
+  xy: 1, 5
+  size: 538, 761
+  orig: 538, 761
+  offset: 0, 0
+  index: -1
+chutu/lizi/1_00000
+  rotate: false
+  xy: 911, 152
+  size: 84, 91
+  orig: 93, 105
+  offset: 4, 7
+  index: -1
+chutu/lizi/1_00002
+  rotate: false
+  xy: 997, 453
+  size: 88, 90
+  orig: 93, 105
+  offset: 1, 8
+  index: -1
+chutu/lizi/1_00004
+  rotate: false
+  xy: 1086, 453
+  size: 88, 90
+  orig: 93, 105
+  offset: 1, 9
+  index: -1
+chutu/lizi/1_00006
+  rotate: false
+  xy: 911, 63
+  size: 88, 88
+  orig: 93, 105
+  offset: 2, 11
+  index: -1
+chutu/lizi/1_00008
+  rotate: false
+  xy: 1086, 365
+  size: 87, 87
+  orig: 93, 105
+  offset: 3, 12
+  index: -1
+chutu/lizi/1_00010
+  rotate: true
+  xy: 997, 366
+  size: 86, 88
+  orig: 93, 105
+  offset: 4, 13
+  index: -1
+chutu/lizi/1_00012
+  rotate: true
+  xy: 995, 280
+  size: 85, 88
+  orig: 93, 105
+  offset: 5, 14
+  index: -1
+chutu/lizi/1_00014
+  rotate: false
+  xy: 911, 442
+  size: 85, 101
+  orig: 93, 105
+  offset: 5, 2
+  index: -1
+chutu/lizi/1_00016
+  rotate: false
+  xy: 911, 342
+  size: 83, 99
+  orig: 93, 105
+  offset: 5, 4
+  index: -1
+chutu/lizi/1_00018
+  rotate: false
+  xy: 911, 244
+  size: 81, 97
+  orig: 93, 105
+  offset: 7, 6
+  index: -1
+chutu/lizi2/lizi2_00000
+  rotate: false
+  xy: 1126, 10
+  size: 25, 72
+  orig: 28, 80
+  offset: 1, 3
+  index: -1
+chutu/lizi2/lizi2_00002
+  rotate: false
+  xy: 1152, 10
+  size: 25, 72
+  orig: 28, 80
+  offset: 1, 3
+  index: -1
+chutu/lizi2/lizi2_00004
+  rotate: false
+  xy: 1174, 128
+  size: 25, 71
+  orig: 28, 80
+  offset: 1, 3
+  index: -1
+chutu/lizi2/lizi2_00006
+  rotate: false
+  xy: 1100, 2
+  size: 25, 68
+  orig: 28, 80
+  offset: 1, 4
+  index: -1
+chutu/lizi2/lizi2_00008
+  rotate: false
+  xy: 1200, 406
+  size: 25, 68
+  orig: 28, 80
+  offset: 1, 6
+  index: -1
+chutu/lizi2/lizi2_00010
+  rotate: false
+  xy: 1073, 1
+  size: 26, 69
+  orig: 28, 80
+  offset: 1, 7
+  index: -1
+chutu/lizi2/lizi2_00012
+  rotate: false
+  xy: 1184, 218
+  size: 26, 68
+  orig: 28, 80
+  offset: 1, 8
+  index: -1
+chutu/lizi2/lizi2_00014
+  rotate: false
+  xy: 1178, 59
+  size: 27, 68
+  orig: 28, 80
+  offset: 1, 9
+  index: -1
+chutu/lizi2/lizi2_00016
+  rotate: false
+  xy: 1188, 337
+  size: 27, 68
+  orig: 28, 80
+  offset: 1, 10
+  index: -1
+chutu/lizi2/lizi2_00018
+  rotate: false
+  xy: 1160, 287
+  size: 27, 77
+  orig: 28, 80
+  offset: 1, 1
+  index: -1
+chutu/lizi3/lizi3_00024
+  rotate: false
+  xy: 1125, 83
+  size: 44, 43
+  orig: 104, 96
+  offset: 8, 40
+  index: -1
+chutu/lizi3/lizi3_00026
+  rotate: false
+  xy: 1000, 69
+  size: 63, 82
+  orig: 104, 96
+  offset: 2, 3
+  index: -1
+chutu/lizi3/lizi3_00028
+  rotate: false
+  xy: 996, 201
+  size: 75, 78
+  orig: 104, 96
+  offset: 3, 7
+  index: -1
+chutu/lizi3/lizi3_00030
+  rotate: false
+  xy: 1084, 282
+  size: 75, 82
+  orig: 104, 96
+  offset: 10, 3
+  index: -1
+chutu/lizi3/lizi3_00032
+  rotate: false
+  xy: 1131, 200
+  size: 52, 81
+  orig: 104, 96
+  offset: 13, 3
+  index: -1
+chutu/lizi3/lizi3_00034
+  rotate: false
+  xy: 1072, 201
+  size: 58, 78
+  orig: 104, 96
+  offset: 16, 4
+  index: -1
+chutu/lizi3/lizi3_00036
+  rotate: false
+  xy: 1003, 6
+  size: 69, 62
+  orig: 104, 96
+  offset: 18, 3
+  index: -1
+chutu/lizi3/lizi3_00038
+  rotate: false
+  xy: 1078, 127
+  size: 47, 73
+  orig: 104, 96
+  offset: 10, 7
+  index: -1
+chutu/lizi3/lizi3_00040
+  rotate: false
+  xy: 1126, 127
+  size: 47, 72
+  orig: 104, 96
+  offset: 19, 8
+  index: -1
+chutu/lizi3/lizi3_00042
+  rotate: false
+  xy: 1175, 475
+  size: 50, 68
+  orig: 104, 96
+  offset: 24, 10
+  index: -1
+chutu/lizi3/lizi3_00044
+  rotate: true
+  xy: 1064, 71
+  size: 55, 60
+  orig: 104, 96
+  offset: 26, 12
+  index: -1
+chutu/yun2_00000
+  rotate: true
+  xy: 911, 7
+  size: 55, 91
+  orig: 57, 91
+  offset: 1, 0
+  index: -1
+chutu/yun_00000
+  rotate: false
+  xy: 996, 152
+  size: 81, 48
+  orig: 83, 50
+  offset: 1, 1
+  index: -1
+shidunzi
+  rotate: true
+  xy: 763, 6
+  size: 537, 147
+  orig: 537, 147
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,517 @@
+
+daiji2.png
+size: 1000,1000
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Effect/daiji/huaban/001
+  rotate: true
+  xy: 959, 230
+  size: 29, 25
+  orig: 29, 25
+  offset: 0, 0
+  index: -1
+Effect/daiji/huaban/002
+  rotate: true
+  xy: 971, 304
+  size: 15, 27
+  orig: 16, 27
+  offset: 1, 0
+  index: -1
+Effect/daiji/huaban/003
+  rotate: true
+  xy: 366, 2
+  size: 16, 22
+  orig: 16, 23
+  offset: 0, 1
+  index: -1
+Effect/daiji/huaban/004
+  rotate: false
+  xy: 971, 374
+  size: 27, 22
+  orig: 27, 22
+  offset: 0, 0
+  index: -1
+Effect/daiji/huaban/005
+  rotate: true
+  xy: 338, 2
+  size: 16, 26
+  orig: 17, 27
+  offset: 0, 0
+  index: -1
+Effect/daiji/huaban/006
+  rotate: false
+  xy: 692, 43
+  size: 26, 43
+  orig: 26, 43
+  offset: 0, 0
+  index: -1
+Effect/daiji/huaban_002/00000
+  rotate: true
+  xy: 744, 322
+  size: 97, 126
+  orig: 130, 158
+  offset: 11, 9
+  index: -1
+Effect/daiji/huaban_002/00020
+  rotate: true
+  xy: 744, 322
+  size: 97, 126
+  orig: 130, 158
+  offset: 11, 9
+  index: -1
+Effect/daiji/huaban_002/00002
+  rotate: false
+  xy: 708, 98
+  size: 115, 108
+  orig: 130, 158
+  offset: 1, 8
+  index: -1
+Effect/daiji/huaban_002/00004
+  rotate: false
+  xy: 584, 88
+  size: 122, 120
+  orig: 130, 158
+  offset: 0, 7
+  index: -1
+Effect/daiji/huaban_002/00006
+  rotate: true
+  xy: 502, 489
+  size: 118, 110
+  orig: 130, 158
+  offset: 0, 11
+  index: -1
+Effect/daiji/huaban_002/00008
+  rotate: false
+  xy: 448, 340
+  size: 126, 134
+  orig: 130, 158
+  offset: 1, 2
+  index: -1
+Effect/daiji/huaban_002/00010
+  rotate: true
+  xy: 434, 89
+  size: 82, 148
+  orig: 130, 158
+  offset: 2, 0
+  index: -1
+Effect/daiji/huaban_002/00012
+  rotate: false
+  xy: 532, 609
+  size: 87, 157
+  orig: 130, 158
+  offset: 5, 1
+  index: -1
+Effect/daiji/huaban_002/00014
+  rotate: false
+  xy: 872, 305
+  size: 97, 114
+  orig: 130, 158
+  offset: 7, 5
+  index: -1
+Effect/daiji/huaban_002/00016
+  rotate: true
+  xy: 844, 198
+  size: 105, 113
+  orig: 130, 158
+  offset: 9, 5
+  index: -1
+Effect/daiji/huaban_002/00018
+  rotate: true
+  xy: 726, 208
+  size: 112, 116
+  orig: 130, 158
+  offset: 8, 11
+  index: -1
+Effect/daiji/wuqi_glow_001/00000
+  rotate: true
+  xy: 2, 28
+  size: 41, 340
+  orig: 41, 340
+  offset: 0, 0
+  index: -1
+Effect/daiji/wuqi_glow_002/00000
+  rotate: false
+  xy: 744, 421
+  size: 23, 38
+  orig: 33, 58
+  offset: 7, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00001
+  rotate: true
+  xy: 958, 573
+  size: 23, 40
+  orig: 33, 58
+  offset: 7, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00002
+  rotate: false
+  xy: 959, 261
+  size: 25, 41
+  orig: 33, 58
+  offset: 6, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00003
+  rotate: true
+  xy: 757, 70
+  size: 26, 43
+  orig: 33, 58
+  offset: 5, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00004
+  rotate: false
+  xy: 662, 41
+  size: 28, 45
+  orig: 33, 58
+  offset: 4, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00005
+  rotate: false
+  xy: 598, 40
+  size: 30, 46
+  orig: 33, 58
+  offset: 2, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00006
+  rotate: true
+  xy: 951, 483
+  size: 30, 47
+  orig: 33, 58
+  offset: 2, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00007
+  rotate: true
+  xy: 951, 454
+  size: 27, 47
+  orig: 33, 58
+  offset: 4, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00008
+  rotate: false
+  xy: 969, 81
+  size: 29, 49
+  orig: 33, 58
+  offset: 3, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00009
+  rotate: false
+  xy: 568, 36
+  size: 28, 50
+  orig: 33, 58
+  offset: 4, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00010
+  rotate: true
+  xy: 110, 4
+  size: 22, 50
+  orig: 33, 58
+  offset: 4, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00011
+  rotate: true
+  xy: 162, 5
+  size: 21, 48
+  orig: 33, 58
+  offset: 4, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00012
+  rotate: false
+  xy: 971, 321
+  size: 21, 51
+  orig: 33, 58
+  offset: 4, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00013
+  rotate: true
+  xy: 2, 2
+  size: 24, 52
+  orig: 33, 58
+  offset: 2, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00014
+  rotate: false
+  xy: 971, 398
+  size: 27, 54
+  orig: 33, 58
+  offset: 1, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00015
+  rotate: false
+  xy: 971, 515
+  size: 27, 56
+  orig: 33, 58
+  offset: 1, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00016
+  rotate: true
+  xy: 790, 679
+  size: 28, 57
+  orig: 33, 58
+  offset: 1, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00017
+  rotate: true
+  xy: 56, 2
+  size: 24, 52
+  orig: 33, 58
+  offset: 5, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00018
+  rotate: true
+  xy: 212, 3
+  size: 23, 42
+  orig: 33, 58
+  offset: 5, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00019
+  rotate: true
+  xy: 256, 3
+  size: 23, 39
+  orig: 33, 58
+  offset: 6, 1
+  index: -1
+Effect/daiji/wuqi_glow_002/00020
+  rotate: true
+  xy: 297, 3
+  size: 23, 39
+  orig: 33, 58
+  offset: 7, 1
+  index: -1
+Effect/daiji/wuqi_glow_004/00000
+  rotate: true
+  xy: 267, 91
+  size: 125, 165
+  orig: 131, 235
+  offset: 2, 5
+  index: -1
+Effect/daiji/wuqi_glow_004/00002
+  rotate: false
+  xy: 447, 173
+  size: 125, 165
+  orig: 131, 235
+  offset: 1, 4
+  index: -1
+Effect/daiji/wuqi_glow_004/00004
+  rotate: true
+  xy: 279, 218
+  size: 127, 166
+  orig: 131, 235
+  offset: 0, 4
+  index: -1
+Effect/daiji/wuqi_glow_004/00006
+  rotate: false
+  xy: 873, 832
+  size: 125, 166
+  orig: 131, 235
+  offset: 0, 3
+  index: -1
+Effect/daiji/wuqi_glow_004/00008
+  rotate: true
+  xy: 790, 545
+  size: 124, 166
+  orig: 131, 235
+  offset: 0, 4
+  index: -1
+Effect/daiji/wuqi_glow_004/00010
+  rotate: true
+  xy: 621, 583
+  size: 124, 167
+  orig: 131, 235
+  offset: 0, 3
+  index: -1
+Effect/daiji/wuqi_glow_004/00012
+  rotate: true
+  xy: 622, 709
+  size: 122, 231
+  orig: 131, 235
+  offset: 0, 4
+  index: -1
+Effect/daiji/wuqi_glow_004/00014
+  rotate: true
+  xy: 614, 461
+  size: 120, 167
+  orig: 131, 235
+  offset: 1, 4
+  index: -1
+Effect/daiji/wuqi_glow_004/00016
+  rotate: true
+  xy: 783, 421
+  size: 122, 166
+  orig: 131, 235
+  offset: 1, 4
+  index: -1
+Effect/daiji/wuqi_glow_004/00018
+  rotate: true
+  xy: 279, 347
+  size: 127, 167
+  orig: 131, 235
+  offset: 1, 3
+  index: -1
+Effect/daiji/wuqi_glow_004/00020
+  rotate: true
+  xy: 576, 335
+  size: 124, 166
+  orig: 131, 235
+  offset: 2, 4
+  index: -1
+Effect/daiji/wuqi_glow_005/00000
+  rotate: false
+  xy: 2, 71
+  size: 263, 243
+  orig: 267, 251
+  offset: 2, 4
+  index: -1
+fa1
+  rotate: true
+  xy: 942, 132
+  size: 64, 30
+  orig: 64, 30
+  offset: 0, 0
+  index: -1
+fa2_2
+  rotate: true
+  xy: 855, 671
+  size: 159, 141
+  orig: 159, 141
+  offset: 0, 0
+  index: -1
+fa3_2
+  rotate: true
+  xy: 825, 121
+  size: 75, 115
+  orig: 75, 115
+  offset: 0, 0
+  index: -1
+fa4_2
+  rotate: true
+  xy: 622, 833
+  size: 165, 249
+  orig: 165, 249
+  offset: 0, 0
+  index: -1
+fa5_2
+  rotate: false
+  xy: 574, 210
+  size: 150, 123
+  orig: 150, 123
+  offset: 0, 0
+  index: -1
+fa6
+  rotate: true
+  xy: 969, 51
+  size: 28, 29
+  orig: 28, 29
+  offset: 0, 0
+  index: -1
+fa7
+  rotate: true
+  xy: 958, 598
+  size: 71, 33
+  orig: 71, 33
+  offset: 0, 0
+  index: -1
+qun1
+  rotate: false
+  xy: 630, 41
+  size: 30, 45
+  orig: 30, 45
+  offset: 0, 0
+  index: -1
+qun2
+  rotate: false
+  xy: 417, 6
+  size: 97, 81
+  orig: 97, 81
+  offset: 0, 0
+  index: -1
+shenti
+  rotate: true
+  xy: 2, 316
+  size: 288, 275
+  orig: 288, 275
+  offset: 0, 0
+  index: -1
+wuqi
+  rotate: false
+  xy: 2, 606
+  size: 285, 392
+  orig: 285, 392
+  offset: 0, 0
+  index: -1
+xiongpiao
+  rotate: false
+  xy: 825, 64
+  size: 142, 55
+  orig: 142, 55
+  offset: 0, 0
+  index: -1
+yaoguazhui
+  rotate: true
+  xy: 516, 14
+  size: 73, 50
+  orig: 73, 50
+  offset: 0, 0
+  index: -1
+youdabi
+  rotate: false
+  xy: 344, 20
+  size: 71, 69
+  orig: 71, 69
+  offset: 0, 0
+  index: -1
+youerhuan
+  rotate: false
+  xy: 844, 305
+  size: 13, 15
+  orig: 13, 15
+  offset: 0, 0
+  index: -1
+youshou
+  rotate: false
+  xy: 720, 61
+  size: 35, 35
+  orig: 35, 35
+  offset: 0, 0
+  index: -1
+youshou2
+  rotate: true
+  xy: 576, 461
+  size: 26, 22
+  orig: 26, 22
+  offset: 0, 0
+  index: -1
+zuodapiao
+  rotate: false
+  xy: 289, 768
+  size: 331, 230
+  orig: 332, 230
+  offset: 1, 0
+  index: -1
+zuodatui
+  rotate: true
+  xy: 289, 476
+  size: 153, 211
+  orig: 153, 211
+  offset: 0, 0
+  index: -1
+zuoerzhui
+  rotate: false
+  xy: 434, 196
+  size: 11, 20
+  orig: 11, 20
+  offset: 0, 0
+  index: -1
+zuoguazhu
+  rotate: true
+  xy: 267, 74
+  size: 15, 35
+  orig: 15, 35
+  offset: 0, 0
+  index: -1
+zuoshou
+  rotate: true
+  xy: 289, 631
+  size: 135, 241
+  orig: 136, 241
+  offset: 1, 0
+  index: -1

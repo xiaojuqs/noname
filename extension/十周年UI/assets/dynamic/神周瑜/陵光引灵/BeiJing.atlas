@@ -1,0 +1,27 @@
+
+BeiJing.png
+size: 761,761
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+eff/03-xian_00
+  rotate: false
+  xy: 544, 747
+  size: 88, 12
+  orig: 122, 29
+  offset: 18, 7
+  index: -1
+eff/04-xing_00
+  rotate: false
+  xy: 544, 712
+  size: 33, 33
+  orig: 36, 36
+  offset: 1, 1
+  index: -1
+szy-beijing
+  rotate: false
+  xy: 2, 2
+  size: 540, 757
+  orig: 540, 757
+  offset: 0, 0
+  index: -1

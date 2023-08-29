@@ -1,0 +1,370 @@
+
+beijing.png
+size: 1295,1295
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+fx/beijing/beijing_00000
+  rotate: false
+  xy: 1130, 593
+  size: 163, 134
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00001
+  rotate: true
+  xy: 648, 47
+  size: 164, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00002
+  rotate: false
+  xy: 909, 486
+  size: 162, 132
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00003
+  rotate: false
+  xy: 909, 351
+  size: 161, 133
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00004
+  rotate: false
+  xy: 1124, 456
+  size: 161, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00005
+  rotate: false
+  xy: 1122, 319
+  size: 160, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00006
+  rotate: false
+  xy: 905, 214
+  size: 160, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00007
+  rotate: true
+  xy: 656, 257
+  size: 164, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00008
+  rotate: true
+  xy: 772, 427
+  size: 164, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00009
+  rotate: true
+  xy: 635, 423
+  size: 168, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00010
+  rotate: true
+  xy: 383, 209
+  size: 190, 134
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00011
+  rotate: false
+  xy: 99, 14
+  size: 190, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00012
+  rotate: true
+  xy: 109, 168
+  size: 190, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00013
+  rotate: true
+  xy: 224, 401
+  size: 190, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00014
+  rotate: true
+  xy: 246, 209
+  size: 190, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00015
+  rotate: true
+  xy: 361, 401
+  size: 190, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00016
+  rotate: false
+  xy: 291, 16
+  size: 189, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00017
+  rotate: true
+  xy: 498, 402
+  size: 189, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00018
+  rotate: true
+  xy: 511, 19
+  size: 188, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/beijing/beijing_00019
+  rotate: true
+  xy: 519, 213
+  size: 187, 135
+  orig: 190, 135
+  offset: 0, 0
+  index: -1
+fx/smoke1/smoke1_00000
+  rotate: false
+  xy: 1072, 234
+  size: 45, 123
+  orig: 76, 158
+  offset: 16, 8
+  index: -1
+fx/smoke1/smoke1_00001
+  rotate: false
+  xy: 1073, 487
+  size: 49, 131
+  orig: 76, 158
+  offset: 14, 5
+  index: -1
+fx/smoke1/smoke1_00002
+  rotate: true
+  xy: 246, 153
+  size: 54, 129
+  orig: 76, 158
+  offset: 9, 5
+  index: -1
+fx/smoke1/smoke1_00003
+  rotate: true
+  xy: 633, 606
+  size: 57, 127
+  orig: 76, 158
+  offset: 9, 9
+  index: -1
+fx/smoke1/smoke1_00004
+  rotate: true
+  xy: 234, 604
+  size: 59, 131
+  orig: 76, 158
+  offset: 9, 10
+  index: -1
+fx/smoke1/smoke1_00005
+  rotate: true
+  xy: 90, 597
+  size: 66, 142
+  orig: 76, 158
+  offset: 0, 8
+  index: -1
+fx/smoke1/smoke1_00006
+  rotate: true
+  xy: 496, 606
+  size: 57, 135
+  orig: 76, 158
+  offset: 10, 6
+  index: -1
+fx/smoke1/smoke1_00007
+  rotate: true
+  xy: 367, 605
+  size: 58, 127
+  orig: 76, 158
+  offset: 11, 7
+  index: -1
+fx/smoke1/smoke1_00008
+  rotate: false
+  xy: 785, 51
+  size: 57, 123
+  orig: 76, 158
+  offset: 13, 7
+  index: -1
+fx/smoke1/smoke1_00009
+  rotate: false
+  xy: 1073, 359
+  size: 47, 126
+  orig: 76, 158
+  offset: 19, 10
+  index: -1
+fx/smoke1/smoke1_00010
+  rotate: true
+  xy: 762, 615
+  size: 48, 126
+  orig: 76, 158
+  offset: 16, 13
+  index: -1
+fx/smoke1/smoke1_00011
+  rotate: true
+  xy: 377, 158
+  size: 49, 132
+  orig: 76, 158
+  offset: 16, 12
+  index: -1
+fx/smoke2/smoke2_00000
+  rotate: false
+  xy: 2, 593
+  size: 86, 70
+  orig: 122, 95
+  offset: 17, 9
+  index: -1
+fx/smoke2/smoke2_00001
+  rotate: false
+  xy: 793, 258
+  size: 108, 79
+  orig: 122, 95
+  offset: 12, 1
+  index: -1
+fx/smoke2/smoke2_00002
+  rotate: false
+  xy: 793, 176
+  size: 105, 80
+  orig: 122, 95
+  offset: 13, 2
+  index: -1
+fx/smoke2/smoke2_00003
+  rotate: false
+  xy: 1119, 234
+  size: 103, 83
+  orig: 122, 95
+  offset: 13, 3
+  index: -1
+fx/smoke2/smoke2_00004
+  rotate: false
+  xy: 793, 339
+  size: 110, 86
+  orig: 122, 95
+  offset: 5, 4
+  index: -1
+fx/smoke2/smoke2_00005
+  rotate: true
+  xy: 844, 55
+  size: 119, 86
+  orig: 122, 95
+  offset: 0, 2
+  index: -1
+fx/smoke2/smoke2_00006
+  rotate: true
+  xy: 1098, 26
+  size: 91, 79
+  orig: 122, 95
+  offset: 28, 2
+  index: -1
+fx/smoke2/smoke2_00007
+  rotate: true
+  xy: 1013, 119
+  size: 93, 84
+  orig: 122, 95
+  offset: 24, 1
+  index: -1
+fx/smoke2/smoke2_00008
+  rotate: true
+  xy: 1015, 24
+  size: 93, 81
+  orig: 122, 95
+  offset: 24, 3
+  index: -1
+fx/smoke2/smoke2_00009
+  rotate: true
+  xy: 932, 19
+  size: 94, 81
+  orig: 122, 95
+  offset: 20, 4
+  index: -1
+fx/smoke2/smoke2_00010
+  rotate: true
+  xy: 932, 115
+  size: 97, 79
+  orig: 122, 95
+  offset: 16, 4
+  index: -1
+fx/smoke2/smoke2_00011
+  rotate: true
+  xy: 1099, 143
+  size: 89, 81
+  orig: 122, 95
+  offset: 14, 8
+  index: -1
+xiahoushi_bg
+  rotate: false
+  xy: 2, 665
+  size: 886, 628
+  orig: 886, 628
+  offset: 0, 0
+  index: -1
+xiahoushi_denglongshen
+  rotate: true
+  xy: 1250, 1139
+  size: 154, 43
+  orig: 154, 43
+  offset: 0, 0
+  index: -1
+xiahoushi_houhua
+  rotate: true
+  xy: 890, 620
+  size: 107, 238
+  orig: 107, 238
+  offset: 0, 0
+  index: -1
+xiahoushi_houzhuo
+  rotate: false
+  xy: 890, 729
+  size: 358, 564
+  orig: 358, 564
+  offset: 0, 0
+  index: -1
+xiahoushi_lingdang
+  rotate: true
+  xy: 1250, 1112
+  size: 25, 38
+  orig: 25, 38
+  offset: 0, 0
+  index: -1
+xiahoushi_zhangfeishou
+  rotate: true
+  xy: 2, 5
+  size: 144, 95
+  orig: 144, 95
+  offset: 0, 0
+  index: -1
+xiahoushi_zhangshen
+  rotate: true
+  xy: 2, 360
+  size: 231, 220
+  orig: 231, 220
+  offset: 0, 0
+  index: -1
+xiahoushi_zhangwu
+  rotate: false
+  xy: 2, 151
+  size: 105, 207
+  orig: 105, 208
+  offset: 0, 1
+  index: -1

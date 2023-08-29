@@ -1,0 +1,244 @@
+
+beijing.png
+size: 1771,1771
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Effect/bj/huaban/00000
+  rotate: false
+  xy: 1439, 437
+  size: 255, 237
+  orig: 335, 277
+  offset: 46, 9
+  index: -1
+Effect/bj/huaban/00020
+  rotate: false
+  xy: 1439, 437
+  size: 255, 237
+  orig: 335, 277
+  offset: 46, 9
+  index: -1
+Effect/bj/huaban/00001
+  rotate: false
+  xy: 614, 834
+  size: 286, 249
+  orig: 335, 277
+  offset: 28, 0
+  index: -1
+Effect/bj/huaban/00002
+  rotate: false
+  xy: 1177, 667
+  size: 260, 203
+  orig: 335, 277
+  offset: 67, 1
+  index: -1
+Effect/bj/huaban/00003
+  rotate: true
+  xy: 827, 15
+  size: 240, 204
+  orig: 335, 277
+  offset: 95, 2
+  index: -1
+Effect/bj/huaban/00004
+  rotate: true
+  xy: 1563, 676
+  size: 245, 205
+  orig: 335, 277
+  offset: 83, 3
+  index: -1
+Effect/bj/huaban/00005
+  rotate: false
+  xy: 888, 472
+  size: 258, 207
+  orig: 335, 277
+  offset: 71, 4
+  index: -1
+Effect/bj/huaban/00006
+  rotate: false
+  xy: 614, 392
+  size: 256, 207
+  orig: 335, 277
+  offset: 59, 6
+  index: -1
+Effect/bj/huaban/00007
+  rotate: false
+  xy: 902, 681
+  size: 273, 208
+  orig: 335, 277
+  offset: 47, 7
+  index: -1
+Effect/bj/huaban/00008
+  rotate: false
+  xy: 1269, 872
+  size: 292, 209
+  orig: 335, 277
+  offset: 35, 8
+  index: -1
+Effect/bj/huaban/00009
+  rotate: false
+  xy: 971, 1342
+  size: 309, 211
+  orig: 335, 277
+  offset: 24, 9
+  index: -1
+Effect/bj/huaban/00010
+  rotate: false
+  xy: 1295, 1557
+  size: 320, 212
+  orig: 335, 277
+  offset: 12, 10
+  index: -1
+Effect/bj/huaban/00011
+  rotate: false
+  xy: 971, 1555
+  size: 322, 214
+  orig: 335, 277
+  offset: 0, 11
+  index: -1
+Effect/bj/huaban/00012
+  rotate: false
+  xy: 971, 1126
+  size: 307, 214
+  orig: 335, 277
+  offset: 6, 13
+  index: -1
+Effect/bj/huaban/00013
+  rotate: true
+  xy: 614, 12
+  size: 243, 211
+  orig: 335, 277
+  offset: 81, 18
+  index: -1
+Effect/bj/huaban/00014
+  rotate: false
+  xy: 872, 257
+  size: 246, 213
+  orig: 335, 277
+  offset: 69, 19
+  index: -1
+Effect/bj/huaban/00015
+  rotate: false
+  xy: 1148, 450
+  size: 250, 215
+  orig: 335, 277
+  offset: 57, 19
+  index: -1
+Effect/bj/huaban/00016
+  rotate: false
+  xy: 614, 601
+  size: 272, 231
+  orig: 335, 277
+  offset: 45, 5
+  index: -1
+Effect/bj/huaban/00017
+  rotate: false
+  xy: 971, 891
+  size: 296, 233
+  orig: 335, 277
+  offset: 33, 6
+  index: -1
+Effect/bj/huaban/00018
+  rotate: false
+  xy: 1280, 1083
+  size: 296, 234
+  orig: 335, 277
+  offset: 21, 7
+  index: -1
+Effect/bj/huaban/00019
+  rotate: false
+  xy: 1295, 1319
+  size: 309, 236
+  orig: 335, 277
+  offset: 9, 8
+  index: -1
+Effect/daiji/huaban_002/00000
+  rotate: true
+  xy: 1120, 267
+  size: 168, 219
+  orig: 224, 273
+  offset: 19, 15
+  index: -1
+Effect/daiji/huaban_002/00020
+  rotate: true
+  xy: 1120, 267
+  size: 168, 219
+  orig: 224, 273
+  offset: 19, 15
+  index: -1
+Effect/daiji/huaban_002/00002
+  rotate: true
+  xy: 1578, 1119
+  size: 198, 186
+  orig: 224, 273
+  offset: 1, 14
+  index: -1
+Effect/daiji/huaban_002/00004
+  rotate: true
+  xy: 1253, 54
+  size: 211, 207
+  orig: 224, 273
+  offset: 0, 12
+  index: -1
+Effect/daiji/huaban_002/00006
+  rotate: false
+  xy: 1540, 243
+  size: 204, 192
+  orig: 224, 273
+  offset: 0, 18
+  index: -1
+Effect/daiji/huaban_002/00008
+  rotate: false
+  xy: 1033, 25
+  size: 218, 230
+  orig: 224, 273
+  offset: 1, 4
+  index: -1
+Effect/daiji/huaban_002/00010
+  rotate: true
+  xy: 275, 12
+  size: 140, 256
+  orig: 224, 273
+  offset: 4, 0
+  index: -1
+Effect/daiji/huaban_002/00012
+  rotate: true
+  xy: 2, 2
+  size: 150, 271
+  orig: 224, 273
+  offset: 8, 2
+  index: -1
+Effect/daiji/huaban_002/00014
+  rotate: true
+  xy: 1341, 268
+  size: 167, 197
+  orig: 224, 273
+  offset: 12, 8
+  index: -1
+Effect/daiji/huaban_002/00016
+  rotate: false
+  xy: 1578, 923
+  size: 181, 194
+  orig: 224, 273
+  offset: 15, 9
+  index: -1
+Effect/daiji/huaban_002/00018
+  rotate: false
+  xy: 1462, 40
+  size: 193, 201
+  orig: 224, 273
+  offset: 14, 19
+  index: -1
+beijing
+  rotate: false
+  xy: 2, 1085
+  size: 967, 684
+  orig: 967, 684
+  offset: 0, 0
+  index: -1
+bjhua
+  rotate: true
+  xy: 2, 154
+  size: 929, 610
+  orig: 929, 610
+  offset: 0, 0
+  index: -1
