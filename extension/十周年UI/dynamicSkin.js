@@ -1357,7 +1357,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					action: ['jineng'],
 					scale: 0.6,
         },
-        play2: 'play2'
+        play2: 'play2',
 				shan: 'play3',
 				x: [0, 0.8],
 				y: [0, 0.4],
@@ -2360,7 +2360,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					action: ['jineng'],
 					scale: 0.8,
         },
-        play2: 'play2'
+        play2: 'play2',
 				shan: 'play3',
 				x: [0, 0.42],
 				y: [0, 0.5],
@@ -2503,7 +2503,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     action: ['jineng'],
     scale: 0.85,
   },
-  play2: 'play2'
+  play2: 'play2',
   shan: 'play3',
   x: [0, 0.4],
   y: [0, 0.34],
