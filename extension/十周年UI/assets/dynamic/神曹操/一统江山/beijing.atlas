@@ -1,0 +1,118 @@
+
+beijing.png
+size: 1763,1763
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+chutu/fire/1_00000
+  rotate: false
+  xy: 1557, 614
+  size: 171, 350
+  orig: 211, 446
+  offset: 25, 8
+  index: -1
+chutu/fire/1_00002
+  rotate: false
+  xy: 1388, 600
+  size: 167, 364
+  orig: 211, 446
+  offset: 22, 8
+  index: -1
+chutu/fire/1_00004
+  rotate: false
+  xy: 1385, 966
+  size: 177, 385
+  orig: 211, 446
+  offset: 11, 8
+  index: -1
+chutu/fire/1_00006
+  rotate: false
+  xy: 1570, 1371
+  size: 181, 390
+  orig: 211, 446
+  offset: 8, 8
+  index: -1
+chutu/fire/1_00008
+  rotate: false
+  xy: 1386, 1364
+  size: 182, 397
+  orig: 211, 446
+  offset: 7, 8
+  index: -1
+chutu/fire/1_00010
+  rotate: false
+  xy: 1212, 133
+  size: 168, 403
+  orig: 211, 446
+  offset: 20, 8
+  index: -1
+chutu/fire/1_00012
+  rotate: false
+  xy: 1212, 943
+  size: 171, 408
+  orig: 211, 446
+  offset: 20, 8
+  index: -1
+chutu/fire/1_00014
+  rotate: false
+  xy: 1212, 1353
+  size: 172, 408
+  orig: 211, 446
+  offset: 22, 8
+  index: -1
+chutu/fire/1_00016
+  rotate: false
+  xy: 1212, 538
+  size: 174, 403
+  orig: 211, 446
+  offset: 22, 8
+  index: -1
+chutu/fire/1_00018
+  rotate: false
+  xy: 1382, 149
+  size: 178, 387
+  orig: 211, 446
+  offset: 18, 8
+  index: -1
+chutu/fire/1_00020
+  rotate: false
+  xy: 1562, 272
+  size: 176, 340
+  orig: 211, 446
+  offset: 20, 8
+  index: -1
+chutu/lizi_00061
+  rotate: false
+  xy: 1388, 546
+  size: 33, 52
+  orig: 39, 56
+  offset: 4, 2
+  index: -1
+chutu/yanwu_00036
+  rotate: true
+  xy: 1564, 1126
+  size: 236, 159
+  orig: 244, 168
+  offset: 4, 4
+  index: -1
+chutu/yun2_00054
+  rotate: true
+  xy: 1562, 40
+  size: 230, 199
+  orig: 235, 206
+  offset: 3, 3
+  index: -1
+chutu/yun_00059
+  rotate: false
+  xy: 1564, 1030
+  size: 136, 94
+  orig: 139, 101
+  offset: 2, 0
+  index: -1
+shencaocao_47
+  rotate: false
+  xy: 2, 82
+  size: 1208, 1679
+  orig: 1208, 1679
+  offset: 0, 0
+  index: -1

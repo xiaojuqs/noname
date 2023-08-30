@@ -1,0 +1,167 @@
+
+BeiJing.png
+size: 1257,1257
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijing
+  rotate: false
+  xy: 2, 493
+  size: 1242, 762
+  orig: 1242, 762
+  offset: 0, 0
+  index: -1
+effect/lingsan/guang1_00
+  rotate: false
+  xy: 2, 123
+  size: 84, 86
+  orig: 92, 92
+  offset: 4, 3
+  index: -1
+effect/shandian/shandian_00
+  rotate: false
+  xy: 517, 418
+  size: 59, 73
+  orig: 92, 92
+  offset: 0, 19
+  index: -1
+effect/shandian/shandian_01
+  rotate: false
+  xy: 622, 429
+  size: 52, 62
+  orig: 92, 92
+  offset: 0, 30
+  index: -1
+effect/shandian/shandian_02
+  rotate: false
+  xy: 735, 441
+  size: 44, 50
+  orig: 92, 92
+  offset: 4, 42
+  index: -1
+effect/shandian/shandian_03
+  rotate: false
+  xy: 2, 399
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_04
+  rotate: false
+  xy: 2, 305
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_05
+  rotate: false
+  xy: 281, 428
+  size: 87, 63
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_06
+  rotate: false
+  xy: 455, 438
+  size: 60, 53
+  orig: 92, 92
+  offset: 12, 9
+  index: -1
+effect/shandian/shandian_07
+  rotate: false
+  xy: 96, 308
+  size: 92, 89
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_08
+  rotate: false
+  xy: 190, 324
+  size: 79, 78
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_09
+  rotate: false
+  xy: 2, 51
+  size: 66, 70
+  orig: 92, 92
+  offset: 1, 0
+  index: -1
+effect/shandian/shandian_10
+  rotate: false
+  xy: 96, 399
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_11
+  rotate: false
+  xy: 96, 224
+  size: 84, 82
+  orig: 92, 92
+  offset: 8, 10
+  index: -1
+effect/shandian/shandian_12
+  rotate: false
+  xy: 578, 414
+  size: 42, 77
+  orig: 92, 92
+  offset: 50, 15
+  index: -1
+effect/shandian/shandian_13
+  rotate: false
+  xy: 2, 211
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_14
+  rotate: false
+  xy: 370, 441
+  size: 83, 50
+  orig: 92, 92
+  offset: 0, 0
+  index: -1
+effect/shandian/shandian_15
+  rotate: false
+  xy: 781, 445
+  size: 45, 46
+  orig: 92, 92
+  offset: 0, 1
+  index: -1
+effect/yan/shitou_00
+  rotate: false
+  xy: 676, 442
+  size: 57, 49
+  orig: 68, 65
+  offset: 7, 6
+  index: -1
+effect/yan/shitou_01
+  rotate: false
+  xy: 2, 2
+  size: 64, 47
+  orig: 68, 65
+  offset: 3, 10
+  index: -1
+effect/yan/shitou_02
+  rotate: false
+  xy: 828, 465
+  size: 47, 26
+  orig: 68, 65
+  offset: 2, 25
+  index: -1
+effect/yan/shitou_03
+  rotate: false
+  xy: 281, 409
+  size: 35, 17
+  orig: 68, 65
+  offset: 17, 25
+  index: -1
+effect/yan/yanwu21
+  rotate: false
+  xy: 190, 404
+  size: 89, 87
+  orig: 92, 92
+  offset: 3, 4
+  index: -1

@@ -1,0 +1,622 @@
+
+daiji2.png
+size: 681,681
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Effect/daiji/jiezi_lan/00000
+  rotate: false
+  xy: 372, 516
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
+Effect/daiji/jiezi_lv/00000
+  rotate: false
+  xy: 384, 516
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
+Effect/daiji/jiezi_star/00000
+  rotate: false
+  xy: 475, 96
+  size: 23, 23
+  orig: 23, 23
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00000
+  rotate: true
+  xy: 158, 131
+  size: 5, 11
+  orig: 30, 55
+  offset: 25, 44
+  index: -1
+Effect/daiji/liugaung_001/00001
+  rotate: true
+  xy: 278, 5
+  size: 12, 17
+  orig: 30, 55
+  offset: 18, 38
+  index: -1
+Effect/daiji/liugaung_001/00002
+  rotate: false
+  xy: 649, 48
+  size: 30, 25
+  orig: 30, 55
+  offset: 0, 30
+  index: -1
+Effect/daiji/liugaung_001/00003
+  rotate: false
+  xy: 649, 75
+  size: 30, 29
+  orig: 30, 55
+  offset: 0, 26
+  index: -1
+Effect/daiji/liugaung_001/00004
+  rotate: false
+  xy: 649, 106
+  size: 30, 32
+  orig: 30, 55
+  offset: 0, 23
+  index: -1
+Effect/daiji/liugaung_001/00005
+  rotate: true
+  xy: 645, 271
+  size: 30, 34
+  orig: 30, 55
+  offset: 0, 20
+  index: -1
+Effect/daiji/liugaung_001/00006
+  rotate: false
+  xy: 622, 516
+  size: 30, 36
+  orig: 30, 55
+  offset: 0, 16
+  index: -1
+Effect/daiji/liugaung_001/00007
+  rotate: true
+  xy: 480, 228
+  size: 26, 33
+  orig: 30, 55
+  offset: 0, 13
+  index: -1
+Effect/daiji/liugaung_001/00008
+  rotate: true
+  xy: 480, 200
+  size: 26, 33
+  orig: 30, 55
+  offset: 0, 10
+  index: -1
+Effect/daiji/liugaung_001/00009
+  rotate: false
+  xy: 654, 519
+  size: 25, 33
+  orig: 30, 55
+  offset: 0, 7
+  index: -1
+Effect/daiji/liugaung_001/00010
+  rotate: false
+  xy: 417, 139
+  size: 25, 33
+  orig: 30, 55
+  offset: 0, 3
+  index: -1
+Effect/daiji/liugaung_001/00011
+  rotate: true
+  xy: 457, 174
+  size: 24, 30
+  orig: 30, 55
+  offset: 0, 1
+  index: -1
+Effect/daiji/liugaung_001/00012
+  rotate: false
+  xy: 450, 115
+  size: 23, 28
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00013
+  rotate: false
+  xy: 491, 147
+  size: 22, 24
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00014
+  rotate: false
+  xy: 491, 44
+  size: 21, 21
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00015
+  rotate: false
+  xy: 497, 78
+  size: 16, 16
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00016
+  rotate: false
+  xy: 500, 133
+  size: 13, 12
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00017
+  rotate: true
+  xy: 396, 516
+  size: 11, 10
+  orig: 30, 55
+  offset: 1, 0
+  index: -1
+Effect/daiji/liugaung_001/00018
+  rotate: false
+  xy: 408, 517
+  size: 12, 10
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00019
+  rotate: false
+  xy: 408, 517
+  size: 12, 10
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00020
+  rotate: false
+  xy: 408, 517
+  size: 12, 10
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00021
+  rotate: false
+  xy: 408, 517
+  size: 12, 10
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_001/00022
+  rotate: false
+  xy: 408, 517
+  size: 12, 10
+  orig: 30, 55
+  offset: 0, 0
+  index: -1
+Effect/daiji/liugaung_002/00000
+  rotate: true
+  xy: 372, 384
+  size: 4, 3
+  orig: 34, 65
+  offset: 3, 62
+  index: -1
+Effect/daiji/liugaung_002/00001
+  rotate: false
+  xy: 270, 138
+  size: 6, 10
+  orig: 34, 65
+  offset: 1, 55
+  index: -1
+Effect/daiji/liugaung_002/00002
+  rotate: true
+  xy: 497, 67
+  size: 9, 16
+  orig: 34, 65
+  offset: 0, 49
+  index: -1
+Effect/daiji/liugaung_002/00003
+  rotate: true
+  xy: 417, 29
+  size: 13, 21
+  orig: 34, 65
+  offset: 0, 44
+  index: -1
+Effect/daiji/liugaung_002/00004
+  rotate: false
+  xy: 491, 173
+  size: 22, 25
+  orig: 34, 65
+  offset: 0, 39
+  index: -1
+Effect/daiji/liugaung_002/00005
+  rotate: true
+  xy: 457, 200
+  size: 24, 21
+  orig: 34, 65
+  offset: 1, 34
+  index: -1
+Effect/daiji/liugaung_002/00006
+  rotate: false
+  xy: 475, 121
+  size: 23, 24
+  orig: 34, 65
+  offset: 3, 28
+  index: -1
+Effect/daiji/liugaung_002/00007
+  rotate: true
+  xy: 450, 64
+  size: 21, 24
+  orig: 34, 65
+  offset: 6, 23
+  index: -1
+Effect/daiji/liugaung_002/00008
+  rotate: false
+  xy: 444, 145
+  size: 25, 27
+  orig: 34, 65
+  offset: 8, 18
+  index: -1
+Effect/daiji/liugaung_002/00009
+  rotate: false
+  xy: 450, 87
+  size: 23, 26
+  orig: 34, 65
+  offset: 10, 12
+  index: -1
+Effect/daiji/liugaung_002/00010
+  rotate: false
+  xy: 457, 226
+  size: 21, 25
+  orig: 34, 65
+  offset: 12, 8
+  index: -1
+Effect/daiji/liugaung_002/00011
+  rotate: false
+  xy: 476, 70
+  size: 19, 24
+  orig: 34, 65
+  offset: 14, 4
+  index: -1
+Effect/daiji/liugaung_002/00012
+  rotate: false
+  xy: 471, 147
+  size: 18, 25
+  orig: 34, 65
+  offset: 16, 1
+  index: -1
+Effect/daiji/liugaung_002/00013
+  rotate: true
+  xy: 620, 412
+  size: 16, 20
+  orig: 34, 65
+  offset: 18, 0
+  index: -1
+Effect/daiji/liugaung_002/00014
+  rotate: true
+  xy: 500, 117
+  size: 14, 12
+  orig: 34, 65
+  offset: 20, 0
+  index: -1
+Effect/daiji/liugaung_002/00015
+  rotate: false
+  xy: 158, 384
+  size: 8, 7
+  orig: 34, 65
+  offset: 25, 0
+  index: -1
+Effect/daiji/liugaung_002/00016
+  rotate: false
+  xy: 168, 384
+  size: 8, 7
+  orig: 34, 65
+  offset: 25, 1
+  index: -1
+Effect/daiji/liugaung_002/00017
+  rotate: false
+  xy: 440, 35
+  size: 8, 7
+  orig: 34, 65
+  offset: 25, 1
+  index: -1
+Effect/daiji/sha_003/00000
+  rotate: true
+  xy: 395, 29
+  size: 119, 20
+  orig: 139, 33
+  offset: 5, 7
+  index: -1
+Effect/daiji/sha_003/00001
+  rotate: false
+  xy: 515, 139
+  size: 125, 20
+  orig: 139, 33
+  offset: 5, 7
+  index: -1
+Effect/daiji/sha_003/00002
+  rotate: true
+  xy: 619, 277
+  size: 131, 24
+  orig: 139, 33
+  offset: 5, 2
+  index: -1
+Effect/daiji/sha_003/00003
+  rotate: true
+  xy: 410, 250
+  size: 138, 33
+  orig: 139, 33
+  offset: 0, 0
+  index: -1
+Effect/daiji/sha_003/00004
+  rotate: false
+  xy: 270, 150
+  size: 129, 32
+  orig: 139, 33
+  offset: 1, 0
+  index: -1
+Effect/daiji/sha_003/00005
+  rotate: true
+  xy: 645, 303
+  size: 125, 32
+  orig: 139, 33
+  offset: 4, 1
+  index: -1
+Effect/daiji/sha_003/00006
+  rotate: true
+  xy: 515, 277
+  size: 131, 33
+  orig: 139, 33
+  offset: 3, 0
+  index: -1
+Effect/daiji/sha_003/00007
+  rotate: true
+  xy: 550, 277
+  size: 131, 32
+  orig: 139, 33
+  offset: 4, 1
+  index: -1
+Effect/daiji/sha_003/00008
+  rotate: true
+  xy: 584, 278
+  size: 130, 33
+  orig: 139, 33
+  offset: 3, 0
+  index: -1
+Effect/daiji/sha_003/00009
+  rotate: true
+  xy: 445, 253
+  size: 135, 33
+  orig: 139, 33
+  offset: 3, 0
+  index: -1
+Effect/daiji/sha_003/00010
+  rotate: true
+  xy: 480, 256
+  size: 132, 33
+  orig: 139, 33
+  offset: 3, 0
+  index: -1
+Effect/daiji/sha_003/00011
+  rotate: true
+  xy: 278, 19
+  size: 129, 32
+  orig: 139, 33
+  offset: 3, 1
+  index: -1
+Effect/daiji/sha_003/00012
+  rotate: true
+  xy: 244, 4
+  size: 132, 32
+  orig: 139, 33
+  offset: 3, 0
+  index: -1
+Effect/daiji/sha_003/00013
+  rotate: true
+  xy: 179, 2
+  size: 134, 32
+  orig: 139, 33
+  offset: 3, 1
+  index: -1
+Effect/daiji/sha_003/00014
+  rotate: false
+  xy: 270, 184
+  size: 130, 32
+  orig: 139, 33
+  offset: 3, 0
+  index: -1
+Effect/daiji/sha_003/00015
+  rotate: false
+  xy: 515, 248
+  size: 127, 27
+  orig: 139, 33
+  offset: 4, 2
+  index: -1
+Effect/daiji/sha_003/00016
+  rotate: true
+  xy: 213, 2
+  size: 134, 29
+  orig: 139, 33
+  offset: 2, 1
+  index: -1
+Effect/daiji/sha_003/00017
+  rotate: false
+  xy: 515, 216
+  size: 127, 30
+  orig: 139, 33
+  offset: 4, 0
+  index: -1
+Effect/daiji/sha_003/00018
+  rotate: false
+  xy: 515, 185
+  size: 127, 29
+  orig: 139, 33
+  offset: 4, 4
+  index: -1
+Effect/daiji/sha_003/00019
+  rotate: false
+  xy: 389, 2
+  size: 124, 25
+  orig: 139, 33
+  offset: 5, 7
+  index: -1
+Effect/daiji/sha_003/00020
+  rotate: false
+  xy: 515, 161
+  size: 126, 22
+  orig: 139, 33
+  offset: 6, 6
+  index: -1
+fadai1
+  rotate: false
+  xy: 184, 529
+  size: 247, 150
+  orig: 247, 150
+  offset: 0, 0
+  index: -1
+fadai2
+  rotate: true
+  xy: 300, 218
+  size: 164, 108
+  orig: 164, 108
+  offset: 0, 0
+  index: -1
+fazan
+  rotate: true
+  xy: 417, 44
+  size: 93, 31
+  orig: 93, 31
+  offset: 0, 0
+  index: -1
+kuapi
+  rotate: false
+  xy: 158, 226
+  size: 140, 156
+  orig: 140, 156
+  offset: 0, 0
+  index: -1
+kuasheng1
+  rotate: true
+  xy: 602, 63
+  size: 74, 45
+  orig: 75, 45
+  offset: 0, 0
+  index: -1
+kuasheng2
+  rotate: false
+  xy: 410, 191
+  size: 45, 57
+  orig: 45, 57
+  offset: 0, 0
+  index: -1
+shenti
+  rotate: true
+  xy: 372, 390
+  size: 124, 141
+  orig: 124, 141
+  offset: 0, 0
+  index: -1
+tou
+  rotate: true
+  xy: 158, 138
+  size: 86, 110
+  orig: 86, 110
+  offset: 0, 0
+  index: -1
+touguan
+  rotate: false
+  xy: 620, 430
+  size: 59, 84
+  orig: 59, 84
+  offset: 0, 0
+  index: -1
+tui
+  rotate: true
+  xy: 433, 516
+  size: 163, 187
+  orig: 163, 187
+  offset: 0, 0
+  index: -1
+yaodai
+  rotate: true
+  xy: 644, 190
+  size: 79, 32
+  orig: 79, 32
+  offset: 0, 0
+  index: -1
+yaoshengyy
+  rotate: true
+  xy: 312, 45
+  size: 103, 55
+  orig: 104, 57
+  offset: 0, 1
+  index: -1
+youdabi
+  rotate: false
+  xy: 622, 554
+  size: 54, 125
+  orig: 54, 125
+  offset: 0, 0
+  index: -1
+youfa1
+  rotate: false
+  xy: 649, 140
+  size: 30, 48
+  orig: 30, 48
+  offset: 0, 0
+  index: -1
+youjian
+  rotate: true
+  xy: 515, 75
+  size: 62, 85
+  orig: 62, 85
+  offset: 0, 0
+  index: -1
+youkuapi
+  rotate: true
+  xy: 312, 2
+  size: 41, 75
+  orig: 41, 75
+  offset: 0, 0
+  index: -1
+youpi
+  rotate: false
+  xy: 369, 46
+  size: 24, 102
+  orig: 24, 102
+  offset: 0, 0
+  index: -1
+youxiaobi
+  rotate: false
+  xy: 2, 4
+  size: 175, 125
+  orig: 175, 125
+  offset: 0, 0
+  index: -1
+zuobi
+  rotate: false
+  xy: 2, 393
+  size: 180, 286
+  orig: 180, 286
+  offset: 0, 0
+  index: -1
+zuofa1
+  rotate: true
+  xy: 450, 29
+  size: 32, 39
+  orig: 32, 39
+  offset: 0, 0
+  index: -1
+zuojian
+  rotate: false
+  xy: 515, 410
+  size: 103, 104
+  orig: 103, 104
+  offset: 0, 0
+  index: -1
+zuokuapi
+  rotate: true
+  xy: 2, 131
+  size: 260, 154
+  orig: 260, 154
+  offset: 0, 0
+  index: -1
+zuopi
+  rotate: false
+  xy: 184, 384
+  size: 186, 143
+  orig: 186, 143
+  offset: 0, 0
+  index: -1

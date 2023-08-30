@@ -1,0 +1,20 @@
+
+BeiJing.png
+size: 788,788
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/08-yun_00
+  rotate: false
+  xy: 539, 540
+  size: 247, 246
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+sq-beijing
+  rotate: false
+  xy: 2, 27
+  size: 535, 759
+  orig: 535, 759
+  offset: 0, 0
+  index: -1

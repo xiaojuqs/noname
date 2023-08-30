@@ -1,0 +1,598 @@
+
+BeiJing-1.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: false
+  xy: 2, 1103
+  size: 1935, 942
+  orig: 1942, 942
+  offset: 7, 0
+  index: -1
+bgjianj2
+  rotate: true
+  xy: 278, 242
+  size: 47, 409
+  orig: 47, 409
+  offset: 0, 0
+  index: -1
+bgjianj4
+  rotate: false
+  xy: 1100, 290
+  size: 69, 603
+  orig: 69, 603
+  offset: 0, 0
+  index: -1
+bgjianji1
+  rotate: true
+  xy: 689, 242
+  size: 47, 409
+  orig: 47, 409
+  offset: 0, 0
+  index: -1
+bgoiaodai
+  rotate: false
+  xy: 1939, 240
+  size: 99, 903
+  orig: 99, 904
+  offset: 0, 1
+  index: -1
+bgqizi8piaodai
+  rotate: false
+  xy: 1171, 241
+  size: 58, 507
+  orig: 58, 507
+  offset: 0, 0
+  index: -1
+bgxb1-1
+  rotate: true
+  xy: 1820, 158
+  size: 80, 223
+  orig: 80, 223
+  offset: 0, 0
+  index: -1
+bgxb1-17
+  rotate: false
+  xy: 1939, 1596
+  size: 103, 449
+  orig: 104, 449
+  offset: 0, 0
+  index: -1
+bgxb1-2
+  rotate: true
+  xy: 1765, 246
+  size: 69, 96
+  orig: 69, 96
+  offset: 0, 0
+  index: -1
+bgxb1-20
+  rotate: false
+  xy: 1820, 3
+  size: 199, 153
+  orig: 199, 153
+  offset: 0, 0
+  index: -1
+bgxb1-4
+  rotate: false
+  xy: 2021, 103
+  size: 21, 53
+  orig: 21, 53
+  offset: 0, 0
+  index: -1
+bgxb1-8
+  rotate: true
+  xy: 968, 471
+  size: 153, 130
+  orig: 153, 130
+  offset: 0, 0
+  index: -1
+bgxb1-9
+  rotate: false
+  xy: 968, 292
+  size: 78, 112
+  orig: 78, 112
+  offset: 0, 0
+  index: -1
+bgxb2-12
+  rotate: false
+  xy: 968, 406
+  size: 127, 63
+  orig: 127, 63
+  offset: 0, 0
+  index: -1
+bgxb2-14
+  rotate: false
+  xy: 1482, 277
+  size: 281, 471
+  orig: 298, 471
+  offset: 0, 0
+  index: -1
+bgxb2-17
+  rotate: false
+  xy: 1939, 1145
+  size: 103, 449
+  orig: 104, 449
+  offset: 0, 0
+  index: -1
+bgxb2-4
+  rotate: false
+  xy: 2021, 47
+  size: 20, 54
+  orig: 20, 54
+  offset: 0, 0
+  index: -1
+bgxb2-8
+  rotate: true
+  xy: 1765, 317
+  size: 112, 147
+  orig: 112, 147
+  offset: 0, 0
+  index: -1
+bgyun10
+  rotate: true
+  xy: 1137, 9
+  size: 229, 681
+  orig: 229, 682
+  offset: 0, 0
+  index: -1
+bgyun2
+  rotate: true
+  xy: 807, 895
+  size: 206, 1123
+  orig: 206, 1123
+  offset: 0, 0
+  index: -1
+bgyun4
+  rotate: false
+  xy: 2, 267
+  size: 274, 834
+  orig: 280, 837
+  offset: 3, 0
+  index: -1
+bgyun6
+  rotate: true
+  xy: 278, 291
+  size: 810, 527
+  orig: 824, 562
+  offset: 14, 19
+  index: -1
+bgyun8
+  rotate: true
+  xy: 1171, 750
+  size: 143, 710
+  orig: 143, 710
+  offset: 0, 0
+  index: -1
+bgyun9
+  rotate: true
+  xy: 149, 4
+  size: 234, 986
+  orig: 234, 986
+  offset: 0, 0
+  index: -1
+effect/teshu/dian2_04
+  rotate: false
+  xy: 807, 305
+  size: 159, 319
+  orig: 180, 383
+  offset: 19, 11
+  index: -1
+effect/teshu/dian2_06
+  rotate: false
+  xy: 1765, 431
+  size: 170, 317
+  orig: 180, 383
+  offset: 0, 13
+  index: -1
+effect/teshu/dian2_11
+  rotate: false
+  xy: 2, 2
+  size: 145, 236
+  orig: 180, 383
+  offset: 28, 83
+  index: -1
+effect/teshu/dian2_12
+  rotate: false
+  xy: 2044, 2044
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+shash4
+  rotate: false
+  xy: 807, 626
+  size: 289, 267
+  orig: 289, 267
+  offset: 0, 0
+  index: -1
+yanwu1
+  rotate: true
+  xy: 1231, 256
+  size: 492, 249
+  orig: 492, 250
+  offset: 0, 0
+  index: -1
+
+BeiJing2-1.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bgjianj3
+  rotate: false
+  xy: 1769, 224
+  size: 63, 412
+  orig: 63, 413
+  offset: 0, 1
+  index: -1
+bgqizi3
+  rotate: false
+  xy: 1338, 194
+  size: 429, 1851
+  orig: 429, 1851
+  offset: 0, 0
+  index: -1
+bgqizi5
+  rotate: false
+  xy: 2, 174
+  size: 398, 1871
+  orig: 398, 1873
+  offset: 0, 2
+  index: -1
+bgqizi6
+  rotate: false
+  xy: 588, 190
+  size: 748, 1855
+  orig: 752, 1855
+  offset: 4, 0
+  index: -1
+bgxb2-19
+  rotate: true
+  xy: 402, 524
+  size: 199, 153
+  orig: 199, 153
+  offset: 0, 0
+  index: -1
+bgxb2-3
+  rotate: true
+  xy: 860, 150
+  size: 38, 1183
+  orig: 38, 1183
+  offset: 0, 0
+  index: -1
+bgxb2-5
+  rotate: true
+  xy: 1834, 194
+  size: 80, 191
+  orig: 81, 191
+  offset: 0, 0
+  index: -1
+bgyun1
+  rotate: true
+  xy: 1769, 1008
+  size: 1037, 273
+  orig: 1060, 273
+  offset: 0, 0
+  index: -1
+effect/gongji/baiguang_00
+  rotate: true
+  xy: 588, 8
+  size: 180, 270
+  orig: 180, 270
+  offset: 0, 0
+  index: -1
+effect/teshu/dian2_00
+  rotate: true
+  xy: 244, 3
+  size: 169, 342
+  orig: 180, 383
+  offset: 0, 3
+  index: -1
+effect/teshu/dian2_01
+  rotate: true
+  xy: 2, 2
+  size: 170, 240
+  orig: 180, 383
+  offset: 0, 4
+  index: -1
+effect/teshu/dian2_02
+  rotate: false
+  xy: 402, 725
+  size: 174, 340
+  orig: 180, 383
+  offset: 0, 9
+  index: -1
+effect/teshu/dian2_03
+  rotate: false
+  xy: 402, 1734
+  size: 178, 311
+  orig: 180, 383
+  offset: 0, 22
+  index: -1
+effect/teshu/dian2_05
+  rotate: false
+  xy: 402, 1425
+  size: 178, 307
+  orig: 180, 383
+  offset: 0, 16
+  index: -1
+effect/teshu/dian2_07
+  rotate: false
+  xy: 402, 209
+  size: 133, 313
+  orig: 180, 383
+  offset: 45, 16
+  index: -1
+effect/teshu/dian2_08
+  rotate: true
+  xy: 1526, 4
+  size: 144, 199
+  orig: 180, 383
+  offset: 23, 19
+  index: -1
+effect/teshu/dian2_09
+  rotate: true
+  xy: 1727, 6
+  size: 142, 307
+  orig: 180, 383
+  offset: 24, 20
+  index: -1
+effect/teshu/dian2_10
+  rotate: true
+  xy: 860, 3
+  size: 145, 306
+  orig: 180, 383
+  offset: 25, 22
+  index: -1
+effect/teshu/dianmang_02
+  rotate: false
+  xy: 1769, 638
+  size: 239, 368
+  orig: 270, 383
+  offset: 31, 8
+  index: -1
+effect/teshu/dianmang_05
+  rotate: false
+  xy: 1834, 276
+  size: 212, 360
+  orig: 270, 383
+  offset: 23, 13
+  index: -1
+effect/teshu/dianmang_07
+  rotate: false
+  xy: 402, 1067
+  size: 176, 356
+  orig: 270, 383
+  offset: 40, 13
+  index: -1
+shash3
+  rotate: false
+  xy: 1168, 4
+  size: 356, 144
+  orig: 358, 144
+  offset: 2, 0
+  index: -1
+
+BeiJing3-1.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bgqizi7
+  rotate: true
+  xy: 2, 71
+  size: 996, 1411
+  orig: 999, 1411
+  offset: 3, 0
+  index: -1
+bgxb1-10
+  rotate: false
+  xy: 1926, 693
+  size: 99, 145
+  orig: 99, 145
+  offset: 0, 0
+  index: -1
+bgxb1-11
+  rotate: false
+  xy: 1415, 774
+  size: 126, 62
+  orig: 126, 62
+  offset: 0, 0
+  index: -1
+bgxb1-15
+  rotate: false
+  xy: 1415, 200
+  size: 280, 470
+  orig: 280, 470
+  offset: 0, 0
+  index: -1
+bgxb1-16
+  rotate: true
+  xy: 1921, 326
+  size: 228, 59
+  orig: 228, 59
+  offset: 0, 0
+  index: -1
+bgxb1-3
+  rotate: false
+  xy: 1988, 840
+  size: 38, 1206
+  orig: 38, 1206
+  offset: 0, 0
+  index: -1
+bgxb1-5
+  rotate: true
+  xy: 1661, 2
+  size: 59, 228
+  orig: 59, 228
+  offset: 0, 0
+  index: -1
+bgxb1-7
+  rotate: true
+  xy: 1415, 106
+  size: 92, 248
+  orig: 92, 248
+  offset: 0, 0
+  index: -1
+bgxb2-1
+  rotate: true
+  xy: 1697, 612
+  size: 58, 192
+  orig: 58, 192
+  offset: 0, 0
+  index: -1
+bgxb2-10
+  rotate: false
+  xy: 1926, 556
+  size: 93, 135
+  orig: 93, 135
+  offset: 0, 0
+  index: -1
+bgxb2-15
+  rotate: true
+  xy: 1921, 96
+  size: 228, 59
+  orig: 228, 59
+  offset: 0, 0
+  index: -1
+bgxb2-2
+  rotate: false
+  xy: 1529, 677
+  size: 69, 95
+  orig: 69, 95
+  offset: 0, 0
+  index: -1
+bgxb2-6
+  rotate: false
+  xy: 1926, 911
+  size: 60, 229
+  orig: 60, 229
+  offset: 0, 0
+  index: -1
+bgxb2-7
+  rotate: true
+  xy: 1415, 15
+  size: 89, 244
+  orig: 89, 244
+  offset: 0, 0
+  index: -1
+bgxb2-9
+  rotate: true
+  xy: 1415, 694
+  size: 78, 112
+  orig: 78, 112
+  offset: 0, 0
+  index: -1
+bgyun5
+  rotate: false
+  xy: 1605, 1142
+  size: 381, 904
+  orig: 446, 909
+  offset: 36, 0
+  index: -1
+effect/teshu/dian2_13
+  rotate: false
+  xy: 1415, 838
+  size: 140, 229
+  orig: 180, 383
+  offset: 32, 89
+  index: -1
+effect/teshu/dian2_14
+  rotate: true
+  xy: 1665, 63
+  size: 132, 218
+  orig: 180, 383
+  offset: 39, 96
+  index: -1
+effect/teshu/dianmang_04
+  rotate: false
+  xy: 1697, 197
+  size: 222, 357
+  orig: 270, 383
+  offset: 28, 15
+  index: -1
+houchengtu
+  rotate: false
+  xy: 2, 1069
+  size: 1601, 977
+  orig: 1602, 981
+  offset: 0, 0
+  index: -1
+yanwu2
+  rotate: true
+  xy: 1605, 672
+  size: 468, 319
+  orig: 475, 325
+  offset: 7, 4
+  index: -1
+
+BeiJing4-1.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bgqizi1
+  rotate: false
+  xy: 827, 627
+  size: 317, 1328
+  orig: 318, 1330
+  offset: 0, 0
+  index: -1
+bgqizi2
+  rotate: false
+  xy: 2, 365
+  size: 324, 1590
+  orig: 325, 1596
+  offset: 0, 6
+  index: -1
+bgqizi4
+  rotate: false
+  xy: 1395, 982
+  size: 207, 973
+  orig: 207, 973
+  offset: 0, 0
+  index: -1
+bgqizi8
+  rotate: false
+  xy: 328, 746
+  size: 497, 1209
+  orig: 497, 1210
+  offset: 0, 0
+  index: -1
+bgyun3
+  rotate: false
+  xy: 1146, 667
+  size: 247, 1288
+  orig: 247, 1294
+  offset: 0, 6
+  index: -1
+effect/teshu/dianmang_00
+  rotate: false
+  xy: 533, 527
+  size: 270, 217
+  orig: 270, 383
+  offset: 0, 162
+  index: -1
+effect/teshu/dianmang_01
+  rotate: false
+  xy: 328, 381
+  size: 203, 363
+  orig: 270, 383
+  offset: 43, 9
+  index: -1
+effect/teshu/dianmang_03
+  rotate: false
+  xy: 2, 2
+  size: 206, 361
+  orig: 270, 383
+  offset: 31, 8
+  index: -1
+effect/teshu/dianmang_06
+  rotate: false
+  xy: 1604, 1595
+  size: 203, 360
+  orig: 270, 383
+  offset: 30, 13
+  index: -1
