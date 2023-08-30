@@ -156,7 +156,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     caochun: {//曹纯
       虎啸龙渊: {
         name: '曹纯/虎啸龙渊/daiji2',
-        teshu: 'play2',
+        teshu: {
+          name: '曹纯/虎啸龙渊/chuchang2',
+          action: ['jineng'],
+          scale: 0.8,
+        },
+        play2: 'play2',
         shan: 'play3',
         x: [0, 0.5],
         y: [0, 0.45],
@@ -171,7 +176,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
         gongji: {
           name: '曹纯/虎啸龙渊/chuchang2',
-          action: ['gongji', 'jineng'],
+          action: ['gongji'],
           scale: 0.8,
         },
         audio: {
@@ -210,7 +215,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
       },
       虎啸龙渊2: {
         name: '曹纯/虎啸龙渊2/daiji2',
-        teshu: 'play2',
+        teshu: {
+          name: '曹纯/虎啸龙渊2/chuchang2',
+          action: ['jineng'],
+          scale: 0.8,
+        },
+        play2: 'play2',
         shan: 'play3',
         x: [0, 0.5],
         y: [0, 0.35],
@@ -225,7 +235,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
         gongji: {
           name: '曹纯/虎啸龙渊2/chuchang2',
-          action: ['gongji', 'jineng'],
+          action: ['gongji'],
           scale: 0.8,
         },
         audio: {
@@ -269,7 +279,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     caohua: {//曹华
 			彩蝶恋花: {
 				name: '曹华/彩蝶恋花/daiji2',
-				teshu: 'play2',
+				teshu: {
+          name: '曹华/彩蝶恋花/chuchang2',
+					action: ['jineng'],
+					scale: 0.6,
+        },
+        play2: 'play2',
 				shan: 'play3',
 				x: [0, 0.52],
 				y: [0, 0.41],
@@ -284,7 +299,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 				gongji: {
 					name: '曹华/彩蝶恋花/chuchang2',
-					action: ['gongji', 'jineng'],
+					action: ['gongji'],
 					scale: 0.6,
 				},
 				beijing: {
@@ -310,7 +325,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     caojinyu: {//曹金玉
       瓷语青花: {
         name: '曹金玉/瓷语青花/daiji2',
-        teshu: 'play2',
+        teshu: {
+          name: '曹金玉/瓷语青花/chuchang2',
+          action: ['jineng'],
+          scale: 0.8,
+        },
+        play2: 'play2',
         shan: 'play3',
         x: [0, 0.35],
         y: [0, 0.3],
@@ -325,7 +345,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
         gongji: {
           name: '曹金玉/瓷语青花/chuchang2',
-          action: ['gongji', 'jineng'],
+          action: ['gongji'],
           scale: 0.8,
         },
         beijing: {
@@ -774,7 +794,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
                     },
                     兔娇春浓: {
                       name: '关索/兔娇春浓/daiji2',
-                      teshu: 'play2',
+                      teshu: {
+                        name: '关索/兔娇春浓/chuchang2',
+                        action: ['jineng'],
+                        scale: 0.9,
+                      },
+                      play2: 'play2',
                       shan: 'play3',
                       x: [0, 0.4],
                       y: [0, 0.3],
@@ -789,7 +814,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
                       },
                       gongji: {
                         name: '关索/兔娇春浓/chuchang2',
-                        action: ['gongji', 'jineng'],
+                        action: ['gongji'],
                         scale: 0.9,
                       },
                       beijing: {
@@ -1104,7 +1129,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
                           liuyan: {//刘焉
                             秋霜金枫: {
                         name: '刘焉/秋霜金枫/daiji2',
-                        teshu: 'play2',
+                        teshu: {
+                          name: '刘焉/秋霜金枫/chuchang2',
+                          action: ['jineng'],
+                          scale: 0.65,
+                        },
+                        play2: 'play2',
                         shan: 'play3',
                         x: [0, 0.31],
                         y: [0, 0.37],
@@ -1119,7 +1149,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
                         },
                         gongji: {
                           name: '刘焉/秋霜金枫/chuchang2',
-                          action: ['gongji', 'jineng'],
+                          action: ['gongji'],
                           scale: 0.65,
                         },
                         beijing: {
@@ -1322,7 +1352,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
                                               nanhualaoxian: {//南华老仙
 			丰年映雪: {
 				name: '南华老仙/丰年映雪/daiji2',
-				teshu: 'play2',
+				teshu: {
+          name: '南华老仙/丰年映雪/chuchang2',
+					action: ['jineng'],
+					scale: 0.6,
+        },
+        play2: 'play2'
 				shan: 'play3',
 				x: [0, 0.8],
 				y: [0, 0.4],
@@ -1337,7 +1372,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 				gongji: {
 					name: '南华老仙/丰年映雪/chuchang2',
-					action: ['gongji', 'jineng'],
+					action: ['gongji'],
 					scale: 0.6,
 				},
 				beijing: {
@@ -1441,7 +1476,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
             puyuan: {//蒲元
               战场绝版: {
                 name: '蒲元/战场绝版/daiji2',
-                teshu: 'play2',
+                teshu: {
+                  name: '蒲元/战场绝版/chuchang2',
+                  action: ['jineng'],
+                  scale: 0.8,
+                },
+                play2: 'play2',
                 shan: 'play3',
                 x: [0, 0.41],
                 y: [0, 0.34],
@@ -1456,7 +1496,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
                 },
                 gongji: {
                   name: '蒲元/战场绝版/chuchang2',
-                  action: ['gongji', 'jineng'],
+                  action: ['gongji'],
                   scale: 0.8,
                 },
                 beijing: {
@@ -1672,7 +1712,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     shen_machao: {//神马超
 			迅骛惊雷: {
 				name: '神马超/迅骛惊雷/daiji2',
-				teshu: 'play2',
+				teshu: {
+          name: '神马超/迅骛惊雷/chuchang2',
+					action: ['jineng'],
+					scale: 0.8,
+        },
+        play2: 'play2',
 				shan: 'play3',
 				x: [0, 0.46],
 				y: [0, 0.38],
@@ -1687,7 +1732,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 				gongji: {
 					name: '神马超/迅骛惊雷/chuchang2',
-					action: ['gongji', 'jineng'],
+					action: ['gongji'],
 					scale: 0.8,
 				},
 				beijing: {
@@ -2064,7 +2109,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 			月兔琼香: {
 				name: '孙茹/月兔琼香/daiji2',
-				teshu: 'play2',
+				teshu: {
+          name: '孙茹/月兔琼香/chuchang2',
+					action: ['jineng'],
+					scale: 0.8,
+        },
+        play2: 'play2',
 				shan: 'play3',
 				x: [0, 0.25],
 				y: [0, 0.3],
@@ -2079,7 +2129,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 				gongji: {
 					name: '孙茹/月兔琼香/chuchang2',
-					action: ['gongji', 'jineng'],
+					action: ['gongji'],
 					scale: 0.8,
 				},
 				beijing: {
@@ -2200,7 +2250,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
             tenggongzhu: {//滕公主
                 菡萏慕卿: {
             name: '滕公主/菡萏慕卿/daiji2',
-            teshu: 'play2',
+            teshu: {
+              name: '滕公主/菡萏慕卿/chuchang2',
+              action: ['jineng'],
+              scale: 0.7,
+            },
+            play2: 'play2',
             shan: 'play3',
             x: [0, 0.53],
             y: [0, 0.32],
@@ -2215,7 +2270,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
             },
             gongji: {
               name: '滕公主/菡萏慕卿/chuchang2',
-              action: ['gongji', 'jineng'],
+              action: ['gongji'],
               scale: 0.7,
             },
             beijing: {
@@ -2300,7 +2355,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     wenyang: {//文鸯
             骁勇金衔: {
 				name: '文鸯/骁勇金衔/daiji2',
-				teshu: 'play2',
+				teshu: {
+          name: '文鸯/骁勇金衔/chuchang2',
+					action: ['jineng'],
+					scale: 0.8,
+        },
+        play2: 'play2'
 				shan: 'play3',
 				x: [0, 0.42],
 				y: [0, 0.5],
@@ -2315,7 +2375,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 				gongji: {
 					name: '文鸯/骁勇金衔/chuchang2',
-					action: ['gongji', 'jineng'],
+					action: ['gongji'],
 					scale: 0.8,
 				},
 				beijing: {
@@ -2438,7 +2498,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     xushi: {//徐氏
       巾帼花武: {
   name: '徐氏/巾帼花武/daiji2',
-  teshu: 'play2',
+  teshu: {
+    name: '徐氏/巾帼花武/chuchang2',
+    action: ['jineng'],
+    scale: 0.85,
+  },
+  play2: 'play2'
   shan: 'play3',
   x: [0, 0.4],
   y: [0, 0.34],
@@ -2453,7 +2518,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
   },
   gongji: {
     name: '徐氏/巾帼花武/chuchang2',
-    action: ['gongji', 'jineng'],
+    action: ['gongji'],
     scale: 0.85,
   },
   beijing: {
@@ -2941,7 +3006,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     zhangyao: {//张媱
 			双姝绰约: {
 				name: '张媱/双姝绰约/daiji2',
-				teshu: 'play2',
+				teshu: {
+          name: '张媱/双姝绰约/chuchang2',
+					action: ['jineng'],
+					scale: 0.7,
+        },
+        play2: 'play2',
 				shan: 'play3',
 				x: [0, 0.45],
 				y: [0, 0.31],
@@ -2956,7 +3026,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 				gongji: {
 					name: '张媱/双姝绰约/chuchang2',
-					action: ['gongji', 'jineng'],
+					action: ['gongji'],
 					scale: 0.7,
 				},
 				beijing: {
