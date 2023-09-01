@@ -368,6 +368,31 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           },
         },
       },
+      瑞雪纷华: {
+        name: '曹金玉/瑞雪纷华/daiji2',
+        x: [0, 0.4],
+        y: [0, 0.43],
+        scale: 1,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '曹金玉/瑞雪纷华/chuchang',
+          scale: 0.7,
+          action: 'play',
+        },
+        gongji: {
+          name: '曹金玉/瑞雪纷华/chuchang',
+          scale: 0.85,
+          action: 'play',
+        },
+        beijing: {
+          name: '曹金玉/瑞雪纷华/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+      },
     },
     caoshuang: { //曹爽
       受诏专权: {
@@ -638,6 +663,21 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           scale: 0.6,
           speed: 0.7,
           delay: 0.4,
+        },
+      },
+      龙吟破竹: {
+        name: '杜预/龙吟破竹/XingXiang',
+        x: [0, 0.82],
+        y: [0, 0.24],
+        scale: 0.55,
+        angle: 10,
+        //speed: 1,
+        //action: 'DaiJi',
+        beijing: {
+          name: '杜预/龙吟破竹/BeiJing',
+          scale: 0.3,
+          x: [0, 0.5],
+          y: [0, 0.5]
         },
       },
     },
@@ -1271,6 +1311,31 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           scale: 0.3,
         },
       },
+      繁华彩鸢: {
+        name: '吕玲绮/繁华彩鸢/daiji2',
+        x: [0, 0.42],
+        y: [0, 0.35],
+        scale: 1.15,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '吕玲绮/繁华彩鸢/chuchang',
+          scale: 0.7,
+          action: 'play',
+        },
+        gongji: {
+          name: '吕玲绮/繁华彩鸢/chuchang',
+          scale: 0.9,
+          action: 'play',
+        },
+        beijing: {
+          name: '吕玲绮/繁华彩鸢/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+      },
       战场绝版: {
         name: '吕玲绮/战场绝版/daiji2',
         teshu: {
@@ -1629,6 +1694,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           x: [0, 0.42],
           y: [0, 0.48],
           scale: 0.25,
+        },
+      },
+    },
+    shen_dengai: { //神邓艾
+      遏川制泽: {
+        name: '神邓艾/遏川制泽/daiji2',
+        x: [0, 0.36],
+        y: [0, 0.48],
+        scale: 1.1,
+        angle: 5,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '神邓艾/遏川制泽/chuchang',
+          scale: 0.7,
+          action: 'play',
+        },
+        gongji: {
+          name: '神邓艾/遏川制泽/chuchang',
+          scale: 0.9,
+          action: 'play',
+        },
+        beijing: {
+          name: '神邓艾/遏川制泽/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
         },
       },
     },
@@ -2293,6 +2385,31 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           },
         },
       },
+      莲心姝影: {
+        name: '滕公主/莲心姝影/daiji2',
+        x: [0, 0.38],
+        y: [0, 0.4],
+        scale: 1.05,
+        angle: -5,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '滕公主/莲心姝影/chuchang',
+          scale: 0.6,
+          action: 'play',
+        },
+        gongji: {
+          name: '滕公主/莲心姝影/chuchang',
+          scale: 0.8,
+          action: 'play',
+        },
+        beijing: {
+          name: '滕公主/莲心姝影/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+      },
     },
     wanglang: { //王朗
       骧龙御宇: {
@@ -2624,7 +2741,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           name: '许劭/评世雕龙/chuchang2',
           action: ['jineng'],
           scale: 0.7,
-          whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use'],
+          whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use'],
         },
         play2: 'play2',
         shan: 'play3',
@@ -2672,7 +2789,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           name: '许劭/声名鹊起/chuchang',
           scale: 1,
           action: 'play',
-          whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use'],
+          whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use'],
         },
         x: [0, 0.42],
         y: [0, 0.5],
@@ -3338,6 +3455,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     // 许劭
     shenxushao: decadeUI.dynamicSkin.xushao,
     shixushao: decadeUI.dynamicSkin.xushao,
+    spshenxushao: decadeUI.dynamicSkin.xushao,
 
     //荀彧
     ol_xunyu: decadeUI.dynamicSkin.xunyu,

@@ -9984,6 +9984,6 @@ window.noname_skin_list={
 	key_komari:1,
 	key_saya:4,
 
-  // 永雏塔菲限定武将喵
+  // taffy: 永雏塔菲限定武将喵
   acetaffy:45,
 };

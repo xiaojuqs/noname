@@ -1717,13 +1717,14 @@ window.noname_character_rank={
 			'key_michiru',
 			'noname',
 
-      // 永雏塔菲限定武将喵
+      // taffy: 永雏塔菲限定武将喵
       'shenxushao',
       'shiguanning',
       'oldwu_zhugeliang',
       'acetaffy',
       'minitaffy',
       'shixushao',
+      'spshenxushao',
 		],
 		epic:[
 			'pal_yueqi',
