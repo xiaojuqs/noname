@@ -18719,9 +18719,16 @@
 				//赠予AI相关
 				getGiftAIResultTarget:function(card,target){
 					if(!card||target.refuseGifts(card,this)) return 0;
-					if(get.type(card,false)=='equip') return get.effect(target,card,target,target);
+					if(get.type(card,false)=='equip'){
+						var target_equip_card=target.getEquip(get.equiptype(card))
+						if(target_equip_card&&get.equipValue(target_equip_card)>0&&get.equipValue(card)<=0) return -1+get.equipValue(card);
+						return get.effect(target,card,target,target);
+					}
 					if(card.name=='du') return this.hp>target.hp?-1:0;
 					if(target.hasSkillTag('nogain')) return 0;
+					if(game.hasPlayer(function(current){
+						return current.getEquip(5)&&current.getEquip(5).name=='shanrangzhaoshu'&&get.attitude(target,current)<0;
+					})) return 0;
 					return Math.max(1,get.value(card,this)-get.value(card,target));
 				},
 				getGiftEffect:function(card,target){
