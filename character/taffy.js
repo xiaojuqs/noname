@@ -4,19 +4,25 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     name: 'taffy',
     connect: true,
     character: {
-      shenxushao: ['male', 'shen', 4, ['shenpingjian'], ['qun']],
+      shenxushao: ['male', 'shen', 4, ['shenpingjian'],
+        ['qun']
+      ],
       oldwu_zhugeliang: ['male', 'shu', '4/7', ['olddcjincui', 'olddcqingshi', 'olddczhizhe']],
       shiguanning: ['male', 'qun', '3/7', ['shidunshi']],
-      acetaffy: ['female', 'shen', 3, ['taffybaomi', 'taffyfeizhu', 'taffyzuoai', 'taffychusheng'], ['qun']],
+      acetaffy: ['female', 'shen', 3, ['taffybaomi', 'taffyfeizhu', 'taffyzuoai', 'taffychusheng'],
+        ['qun']
+      ],
       minitaffy: ['female', 'qun', 1, ['taffytangshi', 'taffyzisha']],
       shixushao: ['male', 'qun', 4, ['shipingjian']],
-      spshenxushao: ['male', 'shen', 4, ['spshenpingjian'], ['qun']],
+      spshenxushao: ['male', 'shen', 4, ['spshenpingjian'],
+        ['qun']
+      ],
     },
     characterSort: {
       taffy: {
         taffy_old: ['oldwu_zhugeliang'],
         taffy_origin: ['shiguanning', 'shixushao'],
-        taffy_diy: ["shenxushao", 'acetaffy', 'minitaffy','spshenxushao'],
+        taffy_diy: ["shenxushao", 'acetaffy', 'minitaffy', 'spshenxushao'],
       }
     },
     skill: {
@@ -60,7 +66,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           ]);
           next.set('selectButton', [0, skills.length]);
           next.set('ai', function (button) {
-            return 0;
+            if (button.link == 'shenpingjian') return -1;
+            return Math.random();
           });
           'step 1'
           if (result.bool) {
@@ -236,7 +243,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           'step 0'
           if (!player.storage.shenpingjian) player.storage.shenpingjian = [];
           player.chooseBool('评荐：是否选择失去Y个技能并令系统随机检索出2Y+3张武将牌，然后你选择其中至多Y张武将牌并获得其所有技能？（Y至少为1）').ai = () => {
-            return false;
+            var skills = player.getSkills(null, false, false).filter(skill => {
+              var info = get.info(skill);
+              if (!info || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+              return true;
+            });
+            if (skills.length > 1) {
+              return true;
+            } else {
+              return false;
+            }
           };
           'step 1'
           // 失去技能
@@ -254,6 +270,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
               ]), 'textbutton'],
             ]);
             next.set('selectButton', [1, skills.length]);
+            next.set('ai', function (button) {
+              if (button.link == 'shenpingjian') return -1;
+              return Math.random();
+            });
           }
           'step 2'
           if (result.bool) {
@@ -1644,7 +1664,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       spshenpingjian: {
         audio: 'shenpingjian',
         trigger: {
-          player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore','enterGame'],
+          player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore', 'enterGame'],
         },
         initList: function () {
           var list = [];
@@ -1680,7 +1700,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           ]);
           next.set('selectButton', [0, skills.length]);
           next.set('ai', function (button) {
-            return 0;
+            if (button.link == 'spshenpingjian') return -1;
+            return Math.random();
           });
           'step 1'
           if (result.bool) {
@@ -1760,7 +1781,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   _status.imchoosing = false;
                   event._result = {
                     bool: true,
-                    skills: skills.randomGets(result.links.length + 1),
+                    skills: skills.randomGets(result.links.length),
                   };
                   if (event.dialog) event.dialog.close();
                   if (event.control) event.control.close();
@@ -1873,7 +1894,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           ]);
           next.set('selectButton', [0, skills.length]);
           next.set('ai', function (button) {
-            return 0;
+            if (button.link == 'spshenpingjian') return -1;
+            return Math.random();
           });
           'step 1'
           if (result.bool) {

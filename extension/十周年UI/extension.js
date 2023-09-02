@@ -3726,6 +3726,46 @@ content:function(config, pack){
 			}
 		};
 
+    lib.skill._taffy_onCause3Damage = {
+      trigger: {
+          source: 'damageBegin4',
+      },
+      forced: true,
+      popup: false,
+      priority: -100,
+      lastDo: true,
+      filter: function(event, player) {
+          return event.num == 3;
+      },
+      content: function() {
+          if (!(trigger.source && trigger.player)) return;
+          game.broadcastAll(function(source) {
+            if (!window.decadeUI) return;
+            source.$fullscreenpop('癫狂屠戮','fire');
+            game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/diankuangtulu.mp3');
+          }, trigger.source);
+      },
+    };
+    lib.skill._taffy_onCause4Damage = {
+        trigger: {
+            source: 'damageBegin4',
+        },
+        forced: true,
+        priority: -100,
+        lastDo: true,
+        filter: function(event, player) {
+            return event.num >= 4;
+        },
+        content: function() {
+            if (!(trigger.source && trigger.player)) return;
+            game.broadcastAll(function(source) {
+              if (!window.decadeUI) return;
+              source.$fullscreenpop('无双  万军取首','fire');
+              game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha7.mp3');
+            }, trigger.source);
+        },
+    };
+
 		lib.element.content.chooseToCompare = function(){
 			"step 0"
 			if (((!event.fixedResult || !event.fixedResult[player.playerid])
