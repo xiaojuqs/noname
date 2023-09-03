@@ -157,6 +157,7 @@ content:function(config, pack){
 						$dieAfter: lib.element.player.$dieAfter,
 						$skill: lib.element.player.$skill,
 						setSeatNum:lib.element.player.setSeatNum,
+						$syncExpand: lib.element.player.$syncExpand
 					},
 					event:{
 						send: lib.element.event.send,
@@ -1338,7 +1339,7 @@ content:function(config, pack){
 							if (img) {
 								if (img.indexOf('ext:') == 0) {
 									this.setBackgroundImage(img.replace(/ext:/, 'extension/'));
-									this.style.backgroundSize = 'cover';
+									this.style.backgroundSize = 'cover !important';
 								} else {
 									this.setBackgroundDB(img);
 								}
@@ -1375,7 +1376,7 @@ content:function(config, pack){
 							if (img) {
 								if (img.indexOf('ext:') == 0) {
 									this.node.avatar.setBackgroundImage(img.replace(/ext:/, 'extension/'));
-									this.node.avatar.style.backgroundSize = 'cover';
+									this.node.avatar.style.backgroundSize = 'cover !important';
 								} else {
 									this.node.avatar.setBackgroundDB(img);
 								}
@@ -1400,7 +1401,7 @@ content:function(config, pack){
 							if (img) {
 								if (img.indexOf('ext:') == 0) {
 									this.setBackgroundImage(img.replace(/ext:/, 'extension/'));
-									this.style.backgroundSize = 'cover';
+									this.style.backgroundSize = 'cover !important';
 								} else {
 									this.setBackgroundDB(img);
 								}
@@ -2030,8 +2031,12 @@ content:function(config, pack){
 							if (name) decadeUI.effect.skill(player, name, avatar);
 						}, _this, type, name, color, avatar);
 					},
-				},
+					$syncExpand:function(map){
+						if(base.lib.element.player.$syncExpand) base.lib.element.player.$syncExpand.apply(this, arguments);
+						ui.equipSolts.back.innerHTML = new Array(5 + Object.values(this.expandedSlots).reduce((previousValue, currentValue) => previousValue + currentValue, 0)).fill('<div></div>').join('');
+					}
 
+				},
 			}
 		};
 
@@ -2136,16 +2141,6 @@ content:function(config, pack){
 					intro.innerText = '';
 
 					intro.style.backgroundImage = 'url("' + decadeUIPath + 'assets/image/rarity_' + rarity + '.png")';
-
-
-					if ((button.link == 'xushu' || button.link == 'xin_xushu' || button.link == 'jsrg_guanyu') && button.node && button.node.name && button.node.group){
-						if (button.classList.contains('newstyle')) {
-							button.node.name.dataset.nature = 'watermm';
-							button.node.group.dataset.nature = 'water';
-						} else {
-							button.node.group.style.backgroundColor = get.translation('weiColor');
-						}
-					}
 				},
 
 				button:function(item, type, position, noclick, node){
@@ -2169,7 +2164,7 @@ content:function(config, pack){
 						if (_status.noReplaceCharacter) {
 							type = 'character';
 						} else if (lib.characterReplace[item] && lib.characterReplace[item].length) {
-							item = lib.characterReplace[item][0];
+							item = lib.characterReplace[item].randomGet();
 						}
 					}
 
@@ -2219,13 +2214,9 @@ content:function(config, pack){
 							if (lib.config.buttoncharacter_style == 'simple') {
 								node.node.group.style.display = 'none';
 							}
-							node.node.name.dataset.nature = get.groupnature(infoitem[1]);
-							node.node.group.dataset.nature = get.groupnature(infoitem[1], 'raw');
 							node.classList.add('newstyle');
-							if (doubleCamp && doubleCamp.length) {
-								node.node.name.dataset.nature = get.groupnature(doubleCamp[0]);
-								node.node.group.dataset.nature = get.groupnature(doubleCamp[doubleCamp.length == 2 ? 1 : 0]);
-							}
+							node.node.name.dataset.nature = get.groupnature(get.bordergroup(infoitem));
+							node.node.group.dataset.nature = get.groupnature(get.bordergroup(infoitem), 'raw');
 							ui.create.div(node.node.hp);
 							var hp=get.infoHp(infoitem[2]),maxHp=get.infoMaxHp(infoitem[2]),hujia=get.infoHujia(infoitem[2]);
 							var str=get.numStr(hp);
@@ -2279,16 +2270,11 @@ content:function(config, pack){
 						if (infoitem[1]) {
 							if (doubleCamp) {
 								var text = '';
-								if (doubleCamp.length == 2) {
-									for (var i = 0; i < doubleCamp.length; i++) text += get.translation(doubleCamp[i]);
-								} else {
-									text = get.translation(doubleCamp[0]);
-								}
-								node.node.group.innerText = text;
-							} else {
-								node.node.group.innerText = get.translation(infoitem[1]);
-							}
-							node.node.group.style.backgroundColor = get.translation(infoitem[1] + 'Color');
+								node.node.group.innerHTML = doubleCamp.reduce((previousValue, currentValue) => `${previousValue}<div data-nature="${get.groupnature(currentValue)}">${get.translation(currentValue)}</div>`, '');
+								if (doubleCamp.length > 4) if (new Set([5, 6, 9]).has(doubleCamp.length)) node.node.group.style.height = '48px';
+								else node.node.group.style.height = '64px';
+							} else node.node.group.innerHTML = `<div>${get.translation(infoitem[1])}</div>`;
+							node.node.group.style.backgroundColor = get.translation(`${get.bordergroup(infoitem)}Color`);
 						} else {
 							node.node.group.style.display = 'none';
 						}
@@ -2745,7 +2731,7 @@ content:function(config, pack){
 			}
 
 			return 0;
-		},
+		};
 
 		get.skillState = function(player){
 			var skills = base.get.skillState.apply(this, arguments);
@@ -3432,10 +3418,11 @@ content:function(config, pack){
 				group: {
 					configurable: true,
 					get:function(){
-						return this.node.campWrap.dataset.camp;
+						return this._group;
 					},
 					set:function(value){
-						this.node.campWrap.dataset.camp = value;
+						this._group = value;
+						this.node.campWrap.dataset.camp = get.bordergroup(this.name)=='shen'?value:get.bordergroup(this.name);
 
 						if (value){
 							if (decadeUI.config.campIdentityImageMode){
@@ -3608,7 +3595,7 @@ content:function(config, pack){
 					ui.clear();
 				});
 			}
-		},
+		};
 
 		lib.skill._decadeUI_usecardBegin = {
 			trigger:{ global:'useCardBegin' },
@@ -3948,8 +3935,10 @@ content:function(config, pack){
 					lose_list: event.lose_list,
 				}).setContent('chooseToCompareLose');
 			}
-
 			"step 5"
+			event.trigger('compareCardShowBefore');
+			
+			"step 6"
 			// 更新拼点框
 			game.broadcastAll(function(eventName, player, target, playerCard, targetCard){
 				if (!window.decadeUI) {
@@ -3977,7 +3966,7 @@ content:function(config, pack){
 			event.trigger('compare');
 			decadeUI.delay(400);
 
-			"step 6"
+			"step 7"
 			event.result = {
 				player: event.card1,
 				target: event.card2,
@@ -4032,7 +4021,7 @@ content:function(config, pack){
 			}, str, event.compareName, event.result.bool);
 			decadeUI.delay(1800);
 
-			"step 7"
+			"step 8"
 			if (typeof event.target.ai.shown == 'number' && event.target.ai.shown <= 0.85 && event.addToAI) {
 				event.target.ai.shown += 0.1;
 			}
@@ -4179,6 +4168,9 @@ content:function(config, pack){
 				num1: [],
 				num2: [],
 			};
+			"step 3"
+			event.trigger('compareCardShowBefore');
+			"step 4"
 			game.log(player, '的拼点牌为', event.card1);
 
 			// 更新拼点框
@@ -4189,7 +4181,7 @@ content:function(config, pack){
 				dialog.playerCard = playerCard.copy();
 			}, event.compareName, event.card1);
 
-			"step 3"
+			"step 5"
 			if (event.iwhile < targets.length) {
 				event.target = targets[event.iwhile];
 				event.card2 = event.cardlist[event.iwhile];
@@ -4223,9 +4215,9 @@ content:function(config, pack){
 					}, 110, dialog);
 
 				}, event.compareName);
-				event.goto(7);
+				event.goto(9);
 			}
-			"step 4"
+			"step 6"
 			event.result.num1[event.iwhile] = event.num1;
 			event.result.num2[event.iwhile] = event.num2;
 
@@ -4272,7 +4264,7 @@ content:function(config, pack){
 			}, str, event.compareName, result);
 			decadeUI.delay(1800);
 
-			"step 5"
+			"step 7"
 			if (event.callback) {
 				game.broadcastAll(function(card1, card2) {
 					if (!window.decadeUI) {
@@ -4291,10 +4283,10 @@ content:function(config, pack){
 				event.compareMultiple = true;
 			}
 
-			"step 6"
+			"step 8"
 			event.iwhile++;
-			event.goto(3);
-			"step 7"
+			event.goto(5);
+			"step 9"
 			game.broadcastAll(ui.clear);
 			event.cards.add(event.card1);
 		};
