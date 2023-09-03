@@ -2463,7 +2463,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         //speed: 1,
         //action: 'DaiJi',
         beijing: {
-          name: '王元姬/鼠年冬至/Beijing',
+          name: '王元姬/鼠年冬至/BeiJing',
           scale: 0.3,
           x: [0, 0.1],
           y: [0, 0.5]
