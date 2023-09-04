@@ -222,4 +222,6 @@ window.noname_source_list=[
 	'extension/十周年UI/skill.js',
 	'extension/十周年UI/spine.js',
 	'extension/挑战卡牌/extension.js',
+	'extension/MVP扩展/extension.css',
+	'extension/MVP扩展/extension.js',
 ];

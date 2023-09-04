@@ -364,32 +364,13 @@ content:function(config, pack){
 				var hpNode = this.node.hp;
 				if (!this.storage.nohp) {
 					if (hpMax > 5) {
-						var hpText = (isNaN(hp) ? '×' : (hp == Infinity ? '∞' : hp));
-						var hpMaxText = (isNaN(hpMax) ? '×' : (hpMax == Infinity ? '∞' : hpMax));
-						if (!hpNode.textstyle) {
-							hpNode.innerHTML = '';
-							hpNode.textstyle = true;
-							hpNode.classList.add('textstyle');
-							hpNode.$hpText = hpNode.appendChild(document.createTextNode(hpText));
-							hpNode.$br1 = hpNode.appendChild(document.createElement('br'));
-							hpNode.$slash = hpNode.appendChild(document.createTextNode('/'));
-							hpNode.$br2 = hpNode.appendChild(document.createElement('br'));
-							hpNode.$hpMaxText = hpNode.appendChild(document.createTextNode(hpMaxText));
-							hpNode.$div = hpNode.appendChild(document.createElement('div'));
-						} else {
-							hpNode.$hpText.textContent = hpText;
-							hpNode.$hpMaxText.textContent = hpMaxText;
-						}
-
+						hpNode.innerHTML = (isNaN(hp) ? '×' : (hp == Infinity ? '∞' : hp)) + '<br>/<br>'
+						+ (isNaN(hpMax) ? '×' : (hpMax == Infinity ? '∞' : hpMax)) + '<div></div>';
 						if (hp == 0) hpNode.lastChild.classList.add('lost');
-						if (hp > 0) hpNode.lastChild.classList.remove('lost');
+						hpNode.classList.add('textstyle');
 					} else {
-						if (hpNode.textstyle) {
-							hpNode.innerHTML = '';
-							hpNode.textstyle = false;
-							hpNode.classList.remove('textstyle');
-						}
-
+						hpNode.innerHTML = '';
+						hpNode.classList.remove('textstyle');
 						while (hpMax > hpNode.childNodes.length) ui.create.div(hpNode);
 						while (hpNode.childNodes.length && hpMax < hpNode.childNodes.length) hpNode.lastChild.remove();
 

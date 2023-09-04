@@ -45983,7 +45983,7 @@
 							var logindex=-1;
 							var cheat=lib.cheat;
 							//使用正则匹配绝大多数的普通obj对象，避免解析成代码块。
-							var reg=/^\{([^{}]+:\s*([^\s,]*|'[^']*'|"[^"]*"|\{[^}]*\}|\[[^\]]*\]|null|undefined|([a-zA-Z$_][a-zA-Z0-9$_]*\s*:\s*)?[a-zA-Z$_][a-zA-Z0-9$_]*\(\)))(?:,\s*([^{}]+:\s*(?:[^\s,]*|'[^']*'|"[^"]*"|\{[^}]*\}|\[[^\]]*\]|null|undefined|([a-zA-Z$_][a-zA-Z0-9$_]*\s*:\s*)?[a-zA-Z$_][a-zA-Z0-9$_]*\(\))))*\}$/;
+							var reg=new RegExp(/^\{([^{}]+:\s*([^\s,]*|'[^']*'|"[^"]*"|\{[^}]*\}|\[[^\]]*\]|null|undefined|([a-zA-Z$_][a-zA-Z0-9$_]*\s*:\s*)?[a-zA-Z$_][a-zA-Z0-9$_]*\(\)))(?:,\s*([^{}]+:\s*(?:[^\s,]*|'[^']*'|"[^"]*"|\{[^}]*\}|\[[^\]]*\]|null|undefined|([a-zA-Z$_][a-zA-Z0-9$_]*\s*:\s*)?[a-zA-Z$_][a-zA-Z0-9$_]*\(\))))*\}$/);
 							//使用new Function隔绝作用域，避免在控制台可以直接访问到runCommand等变量
 							var fun=(new Function('reg','value','_status','lib','game','ui','get','ai',`"use strict";\nreturn eval(reg.test(value)?('('+value+')'):value)`));
 							var runCommand=function(e){
@@ -48235,6 +48235,7 @@
 				var addtional_extention_names=[
 					['十周年UI', true],
 					['挑战卡牌', true],
+					['MVP扩展', true],
 				];
 				var need_reload=false;
 				for(var i=0;i<addtional_extention_names.length;i++){
