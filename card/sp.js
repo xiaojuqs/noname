@@ -337,10 +337,16 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								if(target.hasSkillTag('nogain')) return 0;
 								return 2;
 							}
-							if (game.players.length>2){
+							if(game.players.length>2){
 								var list=player.getEnemies();
 								for (var i=0;i<list.length;i++){
 									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
+							var target_equips=target.getCards('e');
+							if(target_equips.length>0){
+								for (var i=0;i<target_equips.length;i++){
+									if(get.equipValue(target_equips[i])<=0) return 1;
 								}
 							}
 							if(target.countCards('he')==0) return 0;

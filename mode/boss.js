@@ -720,6 +720,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					result:{
 						target:function(player,target){
 							if(target.hasSha()&&_status.event.getRand()<0.5) return 1;
+							if(target.getCards('h').length>4) return 1;
+							var target_equips=target.getCards('e');
+							if(target_equips.length>0){
+								for (var i=0;i<target_equips.length;i++){
+									if(get.equipValue(target_equips[i])<=0) return 1;
+								}
+							}
 							return -2;
 						}
 					}
