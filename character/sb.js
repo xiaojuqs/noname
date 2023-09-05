@@ -4276,7 +4276,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var storage=player.getStorage('sbliegong');
 							if(storage.length<3||!storage.contains('heart')||!storage.contains('diamond')) return false;
 							var target=arg.target;
-							if(target&&(target.hasSkill('bagua_skill')||target.hasSkill('bazhen')||target.hasSkill('rw_bagua_skill'))) return false;
+							if(target.hasSkill('bagua_skill')||target.hasSkill('bazhen')||target.hasSkill('rw_bagua_skill')) return false;
 							return true;
 						}
 						return false;

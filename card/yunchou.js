@@ -230,6 +230,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						target:function(player,target){
 							if(target.hasSkillTag('directHit_ai',true,{
 								player:target,
+								target:player,
 								card:{name:'sha'},
 							},true)){
 								return 0;
