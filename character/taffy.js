@@ -119,7 +119,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 game.expandSkills(list2);
                 for (var k = 0; k < list2.length; k++) {
                   var info = lib.skill[list2[k]];
-                  if (!info || !info.trigger || !info.trigger.player) continue;
+                  if (!info || !info.trigger) continue;
                   if (name2 === 'phaseBefore') {
                     name2 = ['phaseBefore', 'phaseBeginStart', 'phaseBegin', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
                   } else if (name2 === 'damageBefore') {
@@ -127,12 +127,23 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   } else if (name2 === 'phaseJieshuBefore') {
                     name2 = ['phaseJieshuBefore', 'phaseJieshuBegin', 'phaseJieshu', 'phaseJieshuEnd', 'phaseJieshuAfter', 'phaseEnd', 'phaseAfter']
                   }
-                  if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
-                    list.add(name);
-                    if (!map[name]) map[name] = [];
-                    map[name].push(skills2[j]);
-                    skills.add(skills2[j]);
-                    break;
+                  if (info.trigger.player) {
+                    if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
+                      list.add(name);
+                      if (!map[name]) map[name] = [];
+                      map[name].push(skills2[j]);
+                      skills.add(skills2[j]);
+                      break;
+                    }
+                  }
+                  if (info.trigger.global) {
+                    if (name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
+                      list.add(name);
+                      if (!map[name]) map[name] = [];
+                      map[name].push(skills2[j]);
+                      skills.add(skills2[j]);
+                      break;
+                    }
                   }
                 }
               }
@@ -1759,7 +1770,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   game.expandSkills(list2);
                   for (var k = 0; k < list2.length; k++) {
                     var info = lib.skill[list2[k]];
-                    if (!info || !info.trigger || !info.trigger.player) continue;
+                    if (!info || !info.trigger) continue;
                     if (name2 === 'phaseBefore') {
                       name2 = ['phaseBefore', 'phaseBeginStart', 'phaseBegin', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
                     } else if (name2 === 'damageBefore') {
@@ -1767,12 +1778,23 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     } else if (name2 === 'phaseJieshuBefore') {
                       name2 = ['phaseJieshuBefore', 'phaseJieshuBegin', 'phaseJieshu', 'phaseJieshuEnd', 'phaseJieshuAfter', 'phaseEnd', 'phaseAfter']
                     }
-                    if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
-                      list.add(name);
-                      if (!map[name]) map[name] = [];
-                      map[name].push(skills2[j]);
-                      skills.add(skills2[j]);
-                      break;
+                    if (info.trigger.player) {
+                      if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
+                        list.add(name);
+                        if (!map[name]) map[name] = [];
+                        map[name].push(skills2[j]);
+                        skills.add(skills2[j]);
+                        break;
+                      }
+                    }
+                    if (info.trigger.global) {
+                      if (name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
+                        list.add(name);
+                        if (!map[name]) map[name] = [];
+                        map[name].push(skills2[j]);
+                        skills.add(skills2[j]);
+                        break;
+                      }
                     }
                   }
                 }
