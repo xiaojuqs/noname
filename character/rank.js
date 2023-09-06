@@ -1725,6 +1725,8 @@ window.noname_character_rank={
       'minitaffy',
       'shixushao',
       'spshenxushao',
+      'oldtw_niufudongxie',
+      'oldtw_zhangmancheng',
 		],
 		epic:[
 			'pal_yueqi',

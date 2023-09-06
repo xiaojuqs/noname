@@ -17,10 +17,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       spshenxushao: ['male', 'shen', 4, ['spshenpingjian'],
         ['qun']
       ],
+      oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
+      oldtw_zhangmancheng: ['male', 'qun', 4, ['oldtwfengji', 'oldtwyiju', 'oldtwbudao']],
     },
     characterSort: {
       taffy: {
-        taffy_old: ['oldwu_zhugeliang'],
+        taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng'],
         taffy_origin: ['shiguanning', 'shixushao'],
         taffy_diy: ["shenxushao", 'acetaffy', 'minitaffy', 'spshenxushao'],
       }
@@ -485,19 +487,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           },
           threaten: 0.6,
         },
-        // subSkill:{
-        // 	advent:{
-        // 		audio:'olddcjincui',
-        // 		trigger:{global:'phaseBefore',player:'enterGame'},
-        // 		forced:true,
-        // 		filter:function(event,player){
-        // 			return (event.name!='phase'||game.phaseNumber==0)&&player.countCards('h')<7;
-        // 		},
-        // 		content:function(){
-        // 			player.drawTo(7);
-        // 		}
-        // 	}
-        // },
+        subSkill: {
+          advent: {
+            audio: 'olddcjincui',
+            trigger: {
+              global: 'phaseBefore',
+              player: 'enterGame'
+            },
+            forced: true,
+            filter: function (event, player) {
+              return (event.name != 'phase' || game.phaseNumber == 0) && player.countCards('h') < 7;
+            },
+            content: function () {
+              player.drawTo(7);
+            }
+          }
+        },
       },
       olddcqingshi: {
         audio: 2,
@@ -2043,6 +2048,450 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           }
         },
       },
+      // 旧牛董
+      oldtwjuntun: {
+        audio: 'twjuntun',
+        trigger: {
+          global: ['phaseBefore', 'dyingAfter'],
+          player: 'enterGame',
+        },
+        init: function (player) {
+          lib.skill.oldbaonvezhi.change(player, 0)
+        },
+        direct: true,
+        derivation: ['oldtwxiongjun', 'oldbaonvezhi_faq'],
+        group: 'oldtwjuntun_extra',
+        filter: function (event, player) {
+          return (event.name != 'phase' || game.phaseNumber == 0) && game.hasPlayer(current => {
+            return !current.hasSkill('oldtwxiongjun');
+          });
+        },
+        content: function () {
+          'step 0'
+          player.chooseTarget(get.prompt('oldtwjuntun'), '令一名角色获得〖凶军〗', (card, player, target) => {
+            return !target.hasSkill('oldtwxiongjun');
+          }).set('ai', target => get.attitude(player, target) - 2);
+          'step 1'
+          if (result.bool) {
+            var target = result.targets[0];
+            player.logSkill('oldtwjuntun', target);
+            target.addSkillLog('oldtwxiongjun');
+            if (target != player) player.addExpose(0.25);
+          }
+        },
+        subSkill: {
+          extra: {
+            audio: 2,
+            trigger: {
+              global: 'damageSource'
+            },
+            forced: true,
+            locked: false,
+            filter: function (event, player) {
+              return event.source && event.source.hasSkill('oldtwxiongjun') && event.source != player;
+            },
+            logTarget: 'source',
+            content: function () {
+              lib.skill.oldbaonvezhi.change(player, trigger.num);
+            }
+          },
+        },
+      },
+      oldbaonvezhi: {
+        audio: 'baonvezhi',
+        trigger: {
+          player: 'damageEnd',
+          source: 'damageSource',
+        },
+        silent: true,
+        forced: true,
+        charlotte: true,
+        oldbaonvezhi_max: 5,
+        change: function (player, num) {
+          var oldbaonvezhi_max = lib.skill.oldbaonvezhi.oldbaonvezhi_max;
+          player.addSkill('oldbaonvezhi');
+          var tmp = player.countMark('oldbaonvezhi');
+          if (tmp + num > oldbaonvezhi_max) num = oldbaonvezhi_max - tmp;
+          else if (tmp + num < 0) num = -tmp;
+          if (num === 0) return;
+          player[num > 0 ? 'addMark' : 'removeMark']('oldbaonvezhi', Math.abs(num), false);
+          game.log(player, num >= 0 ? '获得了' : '失去了', get.cnNumber(Math.abs(num)) + '点<span class="firetext">暴虐值</span>');
+          player[player.countMark('oldbaonvezhi') > 0 ? 'markSkill' : 'unmarkSkill']('oldbaonvezhi');
+        },
+        filter: function (event, player) {
+          return player.countMark('oldbaonvezhi') < lib.skill.oldbaonvezhi.oldbaonvezhi_max;
+        },
+        content: function () {
+          lib.skill.oldbaonvezhi.change(player, trigger.num);
+        },
+        marktext: '暴',
+        intro: {
+          name: '暴虐值',
+          content: function (storage, player) {
+            return get.translation(player) + '的暴虐值为' + (player.storage.oldbaonvezhi || 0);
+          }
+        }
+      },
+      oldbaonvezhi_faq: {},
+      oldtwxiongjun: {
+        init: function (player) {
+          lib.skill.oldbaonvezhi.change(player, 0)
+        },
+        trigger: {
+          source: 'damageSource'
+        },
+        forced: true,
+        // usable: 1,
+        content: function () {
+          var targets = game.filterPlayer(current => current.hasSkill('oldtwxiongjun')).sortBySeat();
+          player.line(targets, 'green');
+          game.asyncDraw(targets);
+        },
+      },
+      oldtwxiongxi: {
+        audio: 'twxiongxi',
+        enable: 'phaseUse',
+        // usable: 1,
+        init: function (player) {
+          lib.skill.oldbaonvezhi.change(player, 0)
+        },
+        filterCard: () => true,
+        selectCard: function () {
+          return (lib.skill.oldbaonvezhi.oldbaonvezhi_max || 5) - _status.event.player.countMark('oldbaonvezhi');
+        },
+        check: function (card) {
+          return 6 - get.value(card);
+        },
+        position: 'he',
+        filterTarget: function (card, player, target) {
+          return player != target && !player.getStorage('oldtwxiongxi_target').contains(target);
+        },
+        content: function () {
+          player.addTempSkill('oldtwxiongxi_clear',['phaseUseAfter','phaseAfter']);
+          player.markAuto('oldtwxiongxi_target', [target]);
+          player.syncStorage();
+          target.damage();
+        },
+        subSkill: {
+          clear: {
+            trigger: {
+              player: 'phaseAfter'
+            },
+            charlotte: true,
+            silent: true,
+            onremove: function (player) {
+              delete player.storage.oldtwxiongxi_target;
+            }
+          }
+        },
+        ai: {
+          expose: 0.25,
+          order: 8,
+          result: {
+            target: function (player, target) {
+              return get.damageEffect(target, player, player);
+            }
+          }
+        }
+      },
+      oldtwxiafeng: {
+        audio: 'twxiafeng',
+        trigger: {
+          player: 'phaseUseBegin'
+        },
+        filter: function (event, player) {
+          return player.countMark('oldbaonvezhi') > 0;
+        },
+        init: function (player) {
+          lib.skill.oldbaonvezhi.change(player, 0)
+        },
+        direct: true,
+        content: function () {
+          'step 0'
+          player.chooseButton(['黠凤：选择要消耗的暴虐值', [
+            ['oldtw_bn_1', 'oldtw_bn_2', 'oldtw_bn_3'], 'vcard'
+          ]], (button) => {
+            var num = player.countCards('hs', card => get.tag(card, 'damage') && game.hasPlayer(current => get.effect(current, card, player, player) > 0));
+            if (num <= 0) return 0;
+            if (num >= 3) num = 3;
+            if (button.link[2] == 'oldtw_bn_' + num) return 10;
+            return 1;
+          }).set('filterButton', (button) => {
+            var player = _status.event.player;
+            var link = button.link[2];
+            if (link[link.length - 1] * 1 > player.storage.oldbaonvezhi) return false;
+            return true;
+          });
+          'step 1'
+          if (result.bool) {
+            player.logSkill('oldtwxiafeng');
+            var link = result.links[0][2],
+              num = link[link.length - 1] * 1;
+            player.addTempSkill('oldtwxiafeng_effect');
+            player.storage.oldtwxiafeng_effect = num;
+            lib.skill.oldbaonvezhi.change(player, -num);
+          }
+        },
+        subSkill: {
+          effect: {
+            trigger: {
+              player: 'useCard'
+            },
+            filter: function (event, player) {
+              return !player.storage.oldtwxiafeng_effect2;
+            },
+            forced: true,
+            content: function () {
+              var count = player.getHistory('useCard', evt => evt.getParent('phaseUse').player == player).length;
+              if (count == player.storage.oldtwxiafeng_effect) {
+                player.storage.oldtwxiafeng_effect2 = true;
+              }
+              if (count <= player.storage.oldtwxiafeng_effect) {
+                trigger.directHit.addArray(game.players);
+                if (trigger.addCount !== false) {
+                  trigger.addCount = false;
+                  var stat = player.getStat().card,
+                    name = trigger.card.name;
+                  if (typeof stat[name] == 'number') stat[name]--;
+                }
+              }
+            },
+            onremove: function (player) {
+              delete player.storage.oldtwxiafeng_effect;
+              delete player.storage.oldtwxiafeng_effect2;
+            },
+            mod: {
+              targetInRange: function (card, player, target, now) {
+                if (!player.storage.oldtwxiafeng_effect2) return true;
+              },
+              cardUsableTarget: function (card, player, target) {
+                if (!player.storage.oldtwxiafeng_effect2) return true;
+              },
+              maxHandcard: function (player, num) {
+                return num + (player.storage.oldtwxiafeng_effect || 0);
+              }
+            },
+          }
+        }
+      },
+      // 旧张曼成
+      oldtwfengji: {
+        audio: 'twfengji',
+        mahouSkill: true,
+        trigger: {
+          player: 'phaseUseBegin'
+        },
+        filter: function (event, player) {
+          return !player.getExpansions('oldtwfengji').length && !player.hasSkill('oldtwfengji_mahou') && player.countCards('he');
+        },
+        direct: true,
+        content: function () {
+          'step 0'
+          player.chooseCard('he', get.prompt2('oldtwfengji')).set('ai', function (card) {
+            var name = card.name,
+              num = 0;
+            for (var i = 0; i < ui.cardPile.childNodes.length; i++) {
+              if (ui.cardPile.childNodes[i].name == name) num++;
+            }
+            if (num < 2) return false;
+            return 8 - get.value(card);
+          });
+          'step 1'
+          if (result.bool) {
+            player.logSkill('oldtwfengji');
+            player.addToExpansion(result.cards, player, 'giveAuto').gaintag.add('oldtwfengji');
+            player.chooseControl('1回合', '2回合', '3回合').set('prompt', '请选择施法时长').set('ai', function () {
+              var player = _status.event.player;
+              var safe = Math.min(player.getHandcardLimit(), player.countCards('h', 'shan'));
+              if (safe < Math.min(3, game.countPlayer())) {
+                var next = player.next;
+                while (next != player && get.attitude(next, player) > 0) {
+                  safe++;
+                  next = next.next;
+                }
+              }
+              return Math.max(2, Math.min(safe, 3, game.countPlayer())) - 1;
+            });
+          } else event.finish();
+          'step 2'
+          player.storage.oldtwfengji_mahou = [result.index + 1, result.index + 1];
+          player.addTempSkill('oldtwfengji_mahou', {
+            player: 'die'
+          });
+        },
+        marktext: '示',
+        onremove: function (player, skill) {
+          var cards = player.getExpansions(skill);
+          if (cards.length) player.loseToDiscardpile(cards);
+        },
+        intro: {
+          content: 'expansion',
+          markcount: 'expansion',
+        },
+        subSkill: {
+          mahou: {
+            trigger: {
+              global: 'phaseEnd'
+            },
+            forced: true,
+            popup: false,
+            charlotte: true,
+            content: function () {
+              var list = player.storage.oldtwfengji_mahou;
+              list[1]--;
+              if (list[1] == 0) {
+                game.log(player, '的“蜂集”魔法生效');
+                player.logSkill('oldtwfengji');
+                var cards = player.getExpansions('oldtwfengji');
+                if (cards.length) {
+                  var cards2 = [],
+                    num = list[0];
+                  for (var card of cards) {
+                    for (var i = 0; i < num; i++) {
+                      var card2 = get.cardPile2(function (cardx) {
+                        return cardx.name == card.name && !cards2.contains(cardx);
+                      });
+                      if (card2) cards2.push(card2);
+                      else break;
+                    }
+                  }
+                  game.delayx();
+                  if (cards2.length) player.gain(cards2, 'gain2');
+                  player.loseToDiscardpile(cards);
+                }
+                player.removeSkill('oldtwfengji_mahou');
+              } else {
+                game.log(player, '的“蜂集”魔法剩余', '#g' + (list[1]) + '回合');
+                player.markSkill('oldtwfengji_mahou');
+              }
+            },
+            ai: {
+              threaten: 2.5
+            },
+            mark: true,
+            onremove: true,
+            //该图标为灵魂宝石
+            marktext: '♗',
+            intro: {
+              name: '施法：蜂集',
+              markcount: function (storage) {
+                if (storage) return storage[1];
+                return 0;
+              },
+              content: function (storage) {
+                if (storage) {
+                  return '经过' + storage[1] + '个“回合结束时”后，若有“示”，则从牌堆中获得' + storage[0] + '张和“示”名称相同的牌';
+                }
+                return '未指定施法效果';
+              },
+            },
+          },
+        },
+      },
+      oldtwyiju: {
+        audio: 'twyiju',
+        locked: false,
+        mod: {
+          attackRangeBase: function (player, num) {
+            if (player.getExpansions('oldtwfengji').length) return player.hp;
+          },
+          cardUsable: function (card, player, num) {
+            if (card.name == 'sha' && player.getExpansions('oldtwfengji').length) return num - 1 + player.hp;
+          },
+        },
+        trigger: {
+          player: 'damageBegin3'
+        },
+        filter: function (event, player) {
+          return player.getExpansions('oldtwfengji').length > 0;
+        },
+        forced: true,
+        content: function () {
+          trigger.num++;
+          var cards = player.getExpansions('oldtwfengji');
+          if (cards.length) player.loseToDiscardpile(cards);
+        },
+        ai: {
+          halfneg: true,
+          combo: 'oldtwfengji',
+        },
+      },
+      oldtwbudao: {
+        audio: 'twbudao',
+        trigger: {
+          player: 'phaseZhunbeiBegin'
+        },
+        derivation: ['twzhouhu', 'twharvestinori', 'twzuhuo'],
+        limited: true,
+        skillAnimation: true,
+        animationColor: 'metal',
+        check: function (event, player) {
+          return !player.hasUnknown() || !player.hasFriend();
+        },
+        skillValue: {
+          twzhouhu: (target) => 1,
+          twzuhuo: (target, player) => 1,
+          twharvestinori: (target) => 1,
+          // twhuangjin:(target)=>Math.random()/5,
+          // twguimen:(target)=>Math.sqrt(Math.min(3,target.countCards('he',{suit:'spade'})))*0.09,
+          // twzhouzu:(target)=>{
+          // 	var rand=Math.random();
+          // 	if(rand<0.8) return 1-Math.sqrt(0.8-rand);
+          // 	return 1;
+          // },
+          // twdidao:(target,player)=>{
+          // 	if([target,player].some(current=>current.getSkills().some(skill=>{
+          // 		var info=get.info(skill);
+          // 		if(!info||!info.ai||!info.ai.rejudge) return false;
+          // 		return true;
+          // 	}))){
+          // 		return 0.05;
+          // 	}
+          // 	return 0.85+Math.random()/5;
+          // }
+        },
+        content: function () {
+          'step 0'
+          player.awakenSkill('oldtwbudao');
+          player.loseMaxHp();
+          player.recover();
+          var skills = lib.skill.oldtwbudao.derivation,
+            map = lib.skill.oldtwbudao.skillValue;
+          skills = skills.randomGets(3);
+          var target = game.filterPlayer().sort((a, b) => get.attitude(player, b) - get.attitude(player, a))[0];
+          if (player.identity == 'nei' || get.attitude(player, target) < 6) target = player;
+          player.chooseControl(skills).set('choiceList', skills.map(function (i) {
+            return '<div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div>';
+          })).set('displayIndex', false).set('prompt', '布道：选择获得一个技能').set('ai', () => {
+            return _status.event.choice;
+          }).set('choice', skills.sort((a, b) => (map[b](target, player) || 0.5) - (map[a](target, player) || 0.5))[0]);
+          'step 1'
+          var skill = result.control;
+          player.addSkillLog(skill);
+          event.oldtwbudao_skill = skill;
+          player.chooseTarget(lib.filter.notMe, '是否令一名其他角色也获得【' + get.translation(skill) + '】？').set('ai', function (target) {
+            var player = _status.event.player;
+            if (player.identity == 'nei') return 0;
+            return get.attitude(player, target) - 6;
+          });
+          'step 2'
+          if (result.bool) {
+            var target = result.targets[0];
+            event.target = target;
+            player.line(target, 'green');
+            target.addSkillLog(event.oldtwbudao_skill);
+            var cards = target.getCards('he');
+            if (!cards.length) event.finish();
+            else if (cards.length == 1) event._result = {
+              bool: true,
+              cards: cards
+            };
+            else target.chooseCard('he', true, '交给' + get.translation(player) + '一张牌作为学费');
+          } else event.finish();
+          'step 3'
+          if (result.bool) target.give(result.cards, player);
+        },
+      },
     },
     card: {},
     characterIntro: {
@@ -2061,6 +2510,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       minitaffy: '#gViridian',
       shixushao: '#gViridian',
       spshenxushao: '#gViridian',
+      oldtw_niufudongxie: '#gViridian',
+      oldtw_zhangmancheng: '#gViridian',
     },
     perfectPair: {},
     characterFilter: {},
@@ -2090,7 +2541,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldwu_zhugeliang: '旧武诸葛亮',
       oldwu_zhugeliang_ab: '武诸葛亮',
       olddcjincui: '尽瘁',
-      olddcjincui_info: '锁定技。准备阶段，你将体力值回复或失去至等同于牌堆中点数为7的牌数（你的体力值最低因此调整至1）。然后你观看牌堆顶X张牌，将这些牌以任意顺序置于牌堆顶或牌堆底（X为你的体力值）。',
+      olddcjincui_info: '锁定技。①游戏开始时，你将手牌摸至七张。②准备阶段，你将体力值回复或失去至等同于牌堆中点数为7的牌数（你的体力值最低因此调整至1）。然后你观看牌堆顶X张牌，将这些牌以任意顺序置于牌堆顶或牌堆底（X为你的体力值）。',
       olddcqingshi: '情势',
       olddcqingshi_info: '当你于出牌阶段使用牌时，若你手牌中有同名牌，你可以选择一项：1.令此牌对其中一个目标角色造成的伤害+1；2.令任意名其他角色各摸一张牌；3.摸X张牌，然后〖情势〗于本回合无效（X为你的体力值）。',
       olddczhizhe: '智哲',
@@ -2124,6 +2575,32 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       spshenpingjian: '评荐',
       spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2X+1张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多X个技能（X至少为1）。②出牌阶段限一次，你可以选择失去Y个技能并令系统随机检索出2Y+3张武将牌，然后你可以选择获得其中至多Y+1个技能（Y至少为0）。',
       spshenpingjian_use: '评荐',
+      oldtw_niufudongxie: '旧牛辅董翓',
+      oldtw_niufudongxie_ab: '牛辅董翓',
+      oldbaonvezhi_faq: '关于暴虐值',
+      oldbaonvezhi_faq_info: '<br><li>当你造成或受到伤害后，你获得等量的暴虐值；<li>暴虐值的上限为5。',
+      oldtwjuntun: '军屯',
+      oldtwjuntun_info: '①游戏开始时或一名角色的濒死结算后，你可令一名角色获得〖凶军〗。②当其他角色造成伤害后，若其拥有〖凶军〗，你获得等同于此次伤害值的暴虐值。',
+      oldtwxiongxi: '凶袭',
+      oldtwxiongxi_info: '出牌阶段每名角色限一次，你可以弃置X张牌对一名其他角色造成1点伤害（X为你的暴虐值与暴虐值上限之差）。',
+      oldtwxiafeng: '黠凤',
+      oldtwxiafeng_info: '出牌阶段开始时，你可消耗至多3点暴虐值并获得如下效果直到回合结束：你使用的前X张牌没有距离和次数限制且不可被响应，你的手牌上限+X（X为你以此法消耗的暴虐值）。',
+      oldtw_bn_1: '一点',
+      oldtw_bn_2: '两点',
+      oldtw_bn_3: '三点',
+      oldtw_bn_1_bg: '一',
+      oldtw_bn_2_bg: '二',
+      oldtw_bn_3_bg: '三',
+      oldtwxiongjun: '凶军',
+      oldtwxiongjun_info: '锁定技，当你造成伤害后，所有拥有〖凶军〗的角色摸一张牌。',
+      oldtw_zhangmancheng: '旧张曼成',
+      oldtw_zhangmancheng_ab: '张曼成',
+      oldtwfengji: '蜂集',
+      oldtwfengji_info: '出牌阶段开始时，若你没有“示”，则你可以将一张牌作为“示”置于武将牌上并施法：从牌堆中获得X张与“示”牌名相同的牌，然后移去“示”。',
+      oldtwyiju: '蚁聚',
+      oldtwyiju_info: '非锁定技。若你的武将牌上有“示”，则：①你使用【杀】的次数上限和攻击范围的基数改为你的体力值。②当你受到伤害时，你移去“示”，且令此伤害+1。',
+      oldtwbudao: '布道',
+      oldtwbudao_info: '限定技。准备阶段，你可减1点体力上限，回复1点体力并选择获得一个〖布道〗技能池里的技能（三选一）。然后你可以令一名其他角色也获得此技能并交给你一张牌。',
 
       taffy_old: "圣经·塔约",
       taffy_origin: "江山如故·塔",
