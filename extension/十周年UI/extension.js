@@ -3445,7 +3445,7 @@ content:function(config, pack){
 					},
 					set:function(value){
 						this._group = value;
-						this.node.campWrap.dataset.camp = get.bordergroup(this.name)=='shen'?value:get.bordergroup(this.name);
+						this.node.campWrap.dataset.camp = get.bordergroup(this.name, true) || value;
 
 						if (value){
 							if (decadeUI.config.campIdentityImageMode){

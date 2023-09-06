@@ -432,7 +432,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 									}
 								}
 							}
-							if(target.hp<0&&target!=player&&target.identity!='zhu') return 0;
+							if(target.hp<0&&target!=player&&target.identity!='zhu'&&target.hp+player.countCards('h','tao')<=0) return 0;
 							var att=get.attitude(player,target);
 							if(att<3&&att>=0&&player!=target) return 0;
 							var tri=_status.event.getTrigger();

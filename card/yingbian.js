@@ -228,7 +228,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				subtype:'equip5',
 				ai:{
 					basic:{
-						equipValue:6.5
+						equipValue:3
 					}
 				},
 				skills:['tongque_skill']
