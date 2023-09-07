@@ -215,7 +215,6 @@ window.noname_source_list=[
 	'extension/十周年UI/effect.js',
 	'extension/十周年UI/equip.css',
 	'extension/十周年UI/extension.js',
-	'extension/十周年UI/font.css',
 	'extension/十周年UI/icon.css',
 	'extension/十周年UI/layout.css',
 	'extension/十周年UI/player.css',

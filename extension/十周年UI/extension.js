@@ -6875,11 +6875,7 @@ precontent:function(){
 			ui.css.layout.href = lib.assetURL + 'layout/long2/layout.css';
 		}
 
-		if (ui.css.fontsheet)
-		ui.css.fontsheet.remove();
-
 		decadeModule.init = function () {
-			this.css(decadeUIPath + 'font.css');
 			this.css(decadeUIPath + 'layout.css');
 			this.css(decadeUIPath + 'decadeLayout.css');
 			this.css(decadeUIPath + 'player.css');
