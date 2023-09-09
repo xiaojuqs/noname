@@ -1218,7 +1218,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         x: [0, -0.2],
         y: [0, 0.0],
         scale: 0.5,
-        angle: 0,
+        angle: 15,
         //speed: 1,
         //action: 'DaiJi',
         beijing: {
