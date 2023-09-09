@@ -399,7 +399,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           return true;
         },
         forced: true,
-        // group:'olddcjincui_advent',
+        group:'olddcjincui_advent',
         content: function () {
           'step 0'
           var num = 0;
