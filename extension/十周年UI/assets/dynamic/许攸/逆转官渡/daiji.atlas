@@ -1,0 +1,1098 @@
+
+daiji.png
+size: 1857,1857
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+daizi01
+  rotate: false
+  xy: 725, 1150
+  size: 46, 195
+  orig: 47, 195
+  offset: 1, 0
+  index: -1
+daizi02
+  rotate: false
+  xy: 1319, 1741
+  size: 343, 114
+  orig: 344, 172
+  offset: 0, 14
+  index: -1
+daizi03
+  rotate: false
+  xy: 809, 1352
+  size: 196, 43
+  orig: 196, 44
+  offset: 0, 1
+  index: -1
+daizi04
+  rotate: true
+  xy: 1827, 1547
+  size: 54, 28
+  orig: 55, 29
+  offset: 1, 1
+  index: -1
+daizi05
+  rotate: false
+  xy: 1827, 1475
+  size: 25, 70
+  orig: 26, 70
+  offset: 0, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_00
+  rotate: false
+  xy: 1440, 1332
+  size: 171, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_01
+  rotate: false
+  xy: 410, 945
+  size: 162, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_02
+  rotate: true
+  xy: 325, 211
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_03
+  rotate: true
+  xy: 1297, 1169
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_04
+  rotate: false
+  xy: 1292, 1026
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_05
+  rotate: false
+  xy: 1613, 1110
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_06
+  rotate: false
+  xy: 1378, 569
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_07
+  rotate: false
+  xy: 1543, 562
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_08
+  rotate: true
+  xy: 1708, 540
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_09
+  rotate: true
+  xy: 1020, 1345
+  size: 169, 142
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_10
+  rotate: true
+  xy: 1457, 1018
+  size: 169, 142
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_11
+  rotate: true
+  xy: 1457, 853
+  size: 163, 142
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_12
+  rotate: false
+  xy: 881, 486
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_13
+  rotate: false
+  xy: 1046, 483
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_14
+  rotate: false
+  xy: 881, 629
+  size: 163, 142
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_15
+  rotate: false
+  xy: 1211, 465
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_16
+  rotate: true
+  xy: 1706, 213
+  size: 161, 141
+  orig: 225, 160
+  offset: 22, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_17
+  rotate: true
+  xy: 1082, 62
+  size: 161, 141
+  orig: 225, 160
+  offset: 22, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_18
+  rotate: true
+  xy: 1225, 162
+  size: 161, 141
+  orig: 225, 160
+  offset: 22, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_19
+  rotate: true
+  xy: 775, 116
+  size: 162, 141
+  orig: 225, 160
+  offset: 21, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_20
+  rotate: false
+  xy: 1376, 426
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_21
+  rotate: false
+  xy: 1541, 419
+  size: 163, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_22
+  rotate: false
+  xy: 925, 773
+  size: 164, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_23
+  rotate: false
+  xy: 759, 778
+  size: 164, 140
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_24
+  rotate: false
+  xy: 1258, 746
+  size: 164, 135
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_25
+  rotate: false
+  xy: 2, 2
+  size: 164, 137
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_26
+  rotate: false
+  xy: 168, 2
+  size: 164, 137
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_27
+  rotate: true
+  xy: 740, 445
+  size: 163, 139
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_28
+  rotate: false
+  xy: 1046, 626
+  size: 164, 139
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_29
+  rotate: false
+  xy: 334, 2
+  size: 163, 137
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_30
+  rotate: false
+  xy: 1046, 343
+  size: 163, 138
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_31
+  rotate: false
+  xy: 1211, 325
+  size: 163, 138
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_32
+  rotate: true
+  xy: 740, 280
+  size: 163, 139
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_33
+  rotate: false
+  xy: 1376, 285
+  size: 163, 139
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_34
+  rotate: false
+  xy: 1424, 712
+  size: 164, 139
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_35
+  rotate: false
+  xy: 606, 920
+  size: 165, 140
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_36
+  rotate: true
+  xy: 598, 609
+  size: 167, 140
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_37
+  rotate: true
+  xy: 1613, 1253
+  size: 169, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_38
+  rotate: false
+  xy: 1440, 1189
+  size: 171, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_39
+  rotate: false
+  xy: 1123, 1191
+  size: 172, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_40
+  rotate: false
+  xy: 773, 1209
+  size: 173, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_41
+  rotate: true
+  xy: 499, 59
+  size: 174, 134
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_42
+  rotate: true
+  xy: 467, 412
+  size: 175, 135
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_43
+  rotate: true
+  xy: 468, 235
+  size: 175, 136
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_44
+  rotate: true
+  xy: 325, 555
+  size: 177, 138
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_45
+  rotate: false
+  xy: 1261, 1334
+  size: 177, 139
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_46
+  rotate: true
+  xy: 325, 376
+  size: 177, 140
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_47
+  rotate: true
+  xy: 325, 734
+  size: 178, 130
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_48
+  rotate: true
+  xy: 457, 767
+  size: 176, 130
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_49
+  rotate: true
+  xy: 465, 589
+  size: 176, 131
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_50
+  rotate: false
+  xy: 1601, 841
+  size: 168, 131
+  orig: 225, 160
+  offset: 21, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_51
+  rotate: true
+  xy: 606, 271
+  size: 167, 132
+  orig: 225, 160
+  offset: 21, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_52
+  rotate: true
+  xy: 604, 440
+  size: 167, 133
+  orig: 225, 160
+  offset: 21, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_53
+  rotate: false
+  xy: 773, 931
+  size: 169, 133
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_54
+  rotate: false
+  xy: 1601, 974
+  size: 170, 134
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_55
+  rotate: false
+  xy: 1590, 705
+  size: 164, 134
+  orig: 225, 160
+  offset: 26, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_56
+  rotate: false
+  xy: 1091, 767
+  size: 165, 135
+  orig: 225, 160
+  offset: 25, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_57
+  rotate: false
+  xy: 1541, 281
+  size: 163, 136
+  orig: 225, 160
+  offset: 25, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_58
+  rotate: false
+  xy: 1212, 608
+  size: 164, 136
+  orig: 225, 160
+  offset: 24, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_59
+  rotate: true
+  xy: 635, 103
+  size: 166, 138
+  orig: 225, 160
+  offset: 23, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_60
+  rotate: true
+  xy: 740, 610
+  size: 166, 139
+  orig: 225, 160
+  offset: 23, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_61
+  rotate: false
+  xy: 589, 778
+  size: 168, 140
+  orig: 225, 160
+  offset: 22, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_62
+  rotate: false
+  xy: 944, 916
+  size: 169, 141
+  orig: 225, 160
+  offset: 21, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_63
+  rotate: false
+  xy: 773, 1066
+  size: 171, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_64
+  rotate: false
+  xy: 946, 1059
+  size: 171, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_65
+  rotate: false
+  xy: 948, 1202
+  size: 173, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_66
+  rotate: false
+  xy: 1115, 904
+  size: 169, 142
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_67
+  rotate: false
+  xy: 1286, 883
+  size: 169, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_68
+  rotate: false
+  xy: 918, 200
+  size: 162, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_69
+  rotate: false
+  xy: 1368, 142
+  size: 161, 141
+  orig: 225, 160
+  offset: 20, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_70
+  rotate: true
+  xy: 1706, 376
+  size: 162, 142
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_71
+  rotate: false
+  xy: 918, 57
+  size: 162, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_72
+  rotate: false
+  xy: 1119, 1048
+  size: 171, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_73
+  rotate: false
+  xy: 881, 343
+  size: 163, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+eft/beijing/qian_huo/qian_huo_74
+  rotate: true
+  xy: 1613, 1424
+  size: 171, 141
+  orig: 225, 160
+  offset: 19, 0
+  index: -1
+huan01
+  rotate: false
+  xy: 295, 891
+  size: 20, 21
+  orig: 20, 21
+  offset: 0, 0
+  index: -1
+huan02
+  rotate: false
+  xy: 1601, 1176
+  size: 10, 11
+  orig: 10, 11
+  offset: 0, 0
+  index: -1
+huzi01
+  rotate: false
+  xy: 1164, 1493
+  size: 13, 21
+  orig: 13, 21
+  offset: 0, 0
+  index: -1
+huzi02
+  rotate: true
+  xy: 768, 1601
+  size: 15, 21
+  orig: 15, 21
+  offset: 0, 0
+  index: -1
+qiandai
+  rotate: true
+  xy: 775, 2
+  size: 41, 63
+  orig: 41, 63
+  offset: 0, 0
+  index: -1
+qianfa01
+  rotate: false
+  xy: 1531, 236
+  size: 105, 43
+  orig: 107, 45
+  offset: 1, 1
+  index: -1
+qianfa02
+  rotate: false
+  xy: 410, 918
+  size: 23, 25
+  orig: 23, 25
+  offset: 0, 0
+  index: -1
+qugan
+  rotate: false
+  xy: 384, 1347
+  size: 196, 183
+  orig: 196, 183
+  offset: 0, 0
+  index: -1
+shoubi
+  rotate: false
+  xy: 1531, 154
+  size: 94, 36
+  orig: 94, 36
+  offset: 0, 0
+  index: -1
+shoubiguashhou
+  rotate: false
+  xy: 141, 847
+  size: 13, 42
+  orig: 13, 43
+  offset: 0, 0
+  index: -1
+shoubiguashi01
+  rotate: true
+  xy: 1212, 746
+  size: 19, 36
+  orig: 20, 36
+  offset: 1, 0
+  index: -1
+shoubiguashi02
+  rotate: false
+  xy: 687, 1117
+  size: 24, 16
+  orig: 26, 16
+  offset: 0, 0
+  index: -1
+shoubiguashi03
+  rotate: false
+  xy: 775, 71
+  size: 124, 43
+  orig: 129, 43
+  offset: 0, 0
+  index: -1
+shouzhang
+  rotate: false
+  xy: 881, 280
+  size: 21, 61
+  orig: 21, 61
+  offset: 0, 0
+  index: -1
+shouzhi01
+  rotate: true
+  xy: 606, 240
+  size: 29, 27
+  orig: 29, 27
+  offset: 0, 0
+  index: -1
+shouzhi02
+  rotate: false
+  xy: 1756, 1288
+  size: 30, 17
+  orig: 30, 17
+  offset: 0, 0
+  index: -1
+shouzhi03
+  rotate: false
+  xy: 1569, 1583
+  size: 29, 12
+  orig: 29, 12
+  offset: 0, 0
+  index: -1
+shouzhi04
+  rotate: false
+  xy: 831, 1674
+  size: 18, 42
+  orig: 18, 42
+  offset: 0, 0
+  index: -1
+tou
+  rotate: true
+  xy: 198, 141
+  size: 84, 104
+  orig: 84, 104
+  offset: 0, 0
+  index: -1
+toufa01
+  rotate: true
+  xy: 729, 1347
+  size: 20, 23
+  orig: 20, 23
+  offset: 0, 0
+  index: -1
+toufa02
+  rotate: false
+  xy: 1424, 859
+  size: 22, 22
+  orig: 22, 22
+  offset: 0, 0
+  index: -1
+toufa03
+  rotate: false
+  xy: 384, 1316
+  size: 24, 29
+  orig: 25, 29
+  offset: 1, 0
+  index: -1
+toufa04
+  rotate: true
+  xy: 831, 1636
+  size: 36, 18
+  orig: 36, 18
+  offset: 0, 0
+  index: -1
+touguan01
+  rotate: true
+  xy: 1153, 246
+  size: 95, 54
+  orig: 95, 54
+  offset: 0, 0
+  index: -1
+touguan02
+  rotate: false
+  xy: 1225, 126
+  size: 119, 34
+  orig: 119, 36
+  offset: 0, 1
+  index: -1
+touguan03
+  rotate: true
+  xy: 295, 974
+  size: 337, 113
+  orig: 341, 135
+  offset: 1, 21
+  index: -1
+touguan04
+  rotate: false
+  xy: 304, 141
+  size: 193, 68
+  orig: 193, 68
+  offset: 0, 0
+  index: -1
+waitaohou01
+  rotate: false
+  xy: 851, 1516
+  size: 327, 234
+  orig: 329, 235
+  offset: 1, 1
+  index: -1
+waitaohou02
+  rotate: true
+  xy: 851, 1752
+  size: 103, 466
+  orig: 106, 468
+  offset: 2, 2
+  index: -1
+xiabai01
+  rotate: true
+  xy: 1164, 1334
+  size: 152, 95
+  orig: 152, 95
+  offset: 0, 0
+  index: -1
+xiabai02
+  rotate: false
+  xy: 198, 559
+  size: 125, 330
+  orig: 135, 330
+  offset: 5, 0
+  index: -1
+xiabai02_1
+  rotate: false
+  xy: 198, 227
+  size: 125, 330
+  orig: 135, 330
+  offset: 5, 0
+  index: -1
+xiabai03
+  rotate: true
+  xy: 141, 891
+  size: 420, 152
+  orig: 420, 152
+  offset: 0, 0
+  index: -1
+xiabai04
+  rotate: true
+  xy: 385, 1532
+  size: 67, 280
+  orig: 68, 282
+  offset: 1, 2
+  index: -1
+xiabai05
+  rotate: false
+  xy: 518, 1093
+  size: 58, 252
+  orig: 58, 252
+  offset: 0, 0
+  index: -1
+xiabai05_1
+  rotate: false
+  xy: 669, 1347
+  size: 58, 252
+  orig: 58, 252
+  offset: 0, 0
+  index: -1
+xiabai06
+  rotate: false
+  xy: 385, 1601
+  size: 381, 115
+  orig: 381, 116
+  offset: 0, 0
+  index: -1
+xiabai07
+  rotate: false
+  xy: 385, 1718
+  size: 464, 137
+  orig: 464, 137
+  offset: 0, 0
+  index: -1
+xiabai07_1
+  rotate: true
+  xy: 2, 847
+  size: 464, 137
+  orig: 464, 137
+  offset: 0, 0
+  index: -1
+xiabai09
+  rotate: true
+  xy: 1552, 1475
+  size: 106, 59
+  orig: 106, 59
+  offset: 0, 0
+  index: -1
+xiabai10
+  rotate: true
+  xy: 582, 1338
+  size: 192, 85
+  orig: 192, 90
+  offset: 0, 0
+  index: -1
+xiabai11
+  rotate: false
+  xy: 1664, 1680
+  size: 185, 175
+  orig: 185, 175
+  offset: 0, 0
+  index: -1
+xiabai12
+  rotate: false
+  xy: 2, 494
+  size: 194, 351
+  orig: 194, 351
+  offset: 0, 0
+  index: -1
+xiabai12_1
+  rotate: false
+  xy: 2, 141
+  size: 194, 351
+  orig: 194, 351
+  offset: 0, 0
+  index: -1
+xiabai13
+  rotate: false
+  xy: 2, 1313
+  size: 380, 270
+  orig: 381, 270
+  offset: 0, 0
+  index: -1
+xiabai13_1
+  rotate: false
+  xy: 2, 1585
+  size: 381, 270
+  orig: 381, 270
+  offset: 0, 0
+  index: -1
+xiabai14
+  rotate: false
+  xy: 1180, 1488
+  size: 106, 262
+  orig: 108, 262
+  offset: 2, 0
+  index: -1
+xiabai14_1
+  rotate: true
+  xy: 1288, 1475
+  size: 106, 262
+  orig: 108, 262
+  offset: 2, 0
+  index: -1
+yaodai001
+  rotate: false
+  xy: 1661, 1603
+  size: 189, 75
+  orig: 189, 75
+  offset: 0, 0
+  index: -1
+yaodai002
+  rotate: true
+  xy: 1569, 1597
+  size: 142, 90
+  orig: 142, 90
+  offset: 0, 0
+  index: -1
+yaodai003
+  rotate: true
+  xy: 1531, 192
+  size: 42, 97
+  orig: 42, 97
+  offset: 0, 0
+  index: -1
+yaodai01
+  rotate: true
+  xy: 578, 1115
+  size: 221, 107
+  orig: 221, 108
+  offset: 0, 1
+  index: -1
+yaodai02
+  rotate: true
+  xy: 1225, 79
+  size: 45, 104
+  orig: 45, 104
+  offset: 0, 0
+  index: -1
+yaodai03
+  rotate: false
+  xy: 1756, 1253
+  size: 13, 33
+  orig: 13, 34
+  offset: 0, 1
+  index: -1
+yaodai04
+  rotate: true
+  xy: 1756, 1442
+  size: 159, 69
+  orig: 159, 69
+  offset: 0, 0
+  index: -1
+yaodai05
+  rotate: true
+  xy: 468, 211
+  size: 22, 29
+  orig: 23, 29
+  offset: 0, 0
+  index: -1
+youjianmailin
+  rotate: true
+  xy: 1756, 1307
+  size: 133, 66
+  orig: 135, 66
+  offset: 1, 0
+  index: -1
+youshouhou01
+  rotate: false
+  xy: 410, 1088
+  size: 106, 257
+  orig: 106, 257
+  offset: 0, 0
+  index: -1
+youshouhou02
+  rotate: false
+  xy: 729, 1369
+  size: 78, 230
+  orig: 78, 230
+  offset: 0, 0
+  index: -1
+youshouhou05
+  rotate: true
+  xy: 499, 4
+  size: 53, 134
+  orig: 57, 135
+  offset: 4, 1
+  index: -1
+youshouhou06
+  rotate: false
+  xy: 635, 2
+  size: 91, 39
+  orig: 93, 40
+  offset: 1, 0
+  index: -1
+youwaitao01
+  rotate: true
+  xy: 635, 43
+  size: 58, 138
+  orig: 59, 138
+  offset: 1, 0
+  index: -1
+youwaitao03
+  rotate: false
+  xy: 687, 1135
+  size: 36, 210
+  orig: 36, 211
+  offset: 0, 1
+  index: -1
+youyanbai
+  rotate: false
+  xy: 1007, 1387
+  size: 11, 8
+  orig: 11, 8
+  offset: 0, 0
+  index: -1
+youyantongkong
+  rotate: false
+  xy: 1543, 705
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+zhuzihou
+  rotate: false
+  xy: 1261, 1475
+  size: 18, 11
+  orig: 18, 13
+  offset: 0, 1
+  index: -1
+zhuziqian
+  rotate: false
+  xy: 904, 293
+  size: 12, 48
+  orig: 14, 49
+  offset: 1, 1
+  index: -1
+zuojianmaohou
+  rotate: true
+  xy: 725, 1062
+  size: 86, 46
+  orig: 92, 47
+  offset: 5, 0
+  index: -1
+zuojianmaoqian
+  rotate: false
+  xy: 1082, 225
+  size: 69, 116
+  orig: 71, 117
+  offset: 1, 1
+  index: -1
+zuoshoubi
+  rotate: true
+  xy: 809, 1397
+  size: 117, 209
+  orig: 130, 209
+  offset: 0, 0
+  index: -1
+zuowaitao01
+  rotate: false
+  xy: 775, 45
+  size: 82, 24
+  orig: 83, 27
+  offset: 0, 0
+  index: -1
+zuowaitao02
+  rotate: false
+  xy: 768, 1618
+  size: 61, 98
+  orig: 61, 98
+  offset: 0, 0
+  index: -1
+zuowaitao03
+  rotate: true
+  xy: 1288, 1583
+  size: 156, 279
+  orig: 157, 279
+  offset: 0, 0
+  index: -1
+zuowaitao04
+  rotate: false
+  xy: 295, 914
+  size: 113, 58
+  orig: 114, 59
+  offset: 0, 1
+  index: -1
+zuoyanbai
+  rotate: false
+  xy: 1288, 1741
+  size: 11, 9
+  orig: 11, 9
+  offset: 0, 0
+  index: -1
+zuoyantongkong
+  rotate: false
+  xy: 948, 1345
+  size: 6, 5
+  orig: 6, 5
+  offset: 0, 0
+  index: -1
