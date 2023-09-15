@@ -3655,36 +3655,36 @@ content:function(config, pack){
 						if(source.stat[i].kill!=undefined) kill_count+=source.stat[i].kill;
 					}
 					if (kill_count+1==1){
-						source.$fullscreenpop('一血  卧龙出山','fire');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha1.mp3');
+						source.$fullscreenpop('一破  卧龙出山','fire');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/01【播报】一破 卧龙出山.mp3');
 					}
 					if (kill_count+1==2){
-						source.$fullscreenpop('双杀  一战成名','water');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha2.mp3');
+						source.$fullscreenpop('双连  一战成名','water');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/02【播报】双连 一战成名.mp3');
 					}
 					if (kill_count+1==3){
-						source.$fullscreenpop('三杀  举世皆惊','thunder');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha3.mp3');
+						source.$fullscreenpop('三连  举世皆惊','thunder');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/03【播报】三连 举世皆惊.mp3');
 					}
 					if (kill_count+1==4){
-						source.$fullscreenpop('四杀  天下无敌','fire');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha4.mp3');
+						source.$fullscreenpop('四连  天下无敌','fire');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/04【播报】四连 天下无敌.mp3');
 					}
 					if (kill_count+1==5){
-						source.$fullscreenpop('五杀  诛天灭地','thunder');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha5.mp3');
+						source.$fullscreenpop('五连  诛天灭地','thunder');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/05【播报】五连 诛天灭地.mp3');
 					}
 					if (kill_count+1==6){
-						source.$fullscreenpop('六杀  癫狂杀戮','water');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha6.mp3');
+						source.$fullscreenpop('六连  诛天灭地','water');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/06【播报】六连 诛天灭地.mp3');
 					}
 					if (kill_count+1==7){
-						source.$fullscreenpop('无双  万军取首','fire');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha7.mp3');
+						source.$fullscreenpop('七连  诛天灭地','fire');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/07【播报】七连 诛天灭地.mp3');
 					}
           if (kill_count+1>7){
-						source.$fullscreenpop('无双  万军取首','fire');
-						game.playAudio('../extension', decadeUI.extensionName, 'audio/jstx_audio/jstx_jisha7.mp3');
+						source.$fullscreenpop('七连  诛天灭地','fire');
+						game.playAudio('../extension', decadeUI.extensionName, 'audio/shousha_audio/07【播报】七连 诛天灭地.mp3');
 					}
 				}, trigger.source);
 			}
