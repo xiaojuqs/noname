@@ -56,7 +56,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           if (!player.storage.shenpingjian) player.storage.shenpingjian = [];
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
-            if (!info || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+            if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
             return true;
           });
           var next = player.chooseButton(true, [
@@ -73,9 +73,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           });
           'step 1'
           if (result.bool) {
+            let rSkillInfo;
             for (let i = 0; i < result.links.length; i++) {
+              rSkillInfo = get.info(result.links[i]);
+              if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
+                player.restoreSkill(result.links[i]);
+              }
               player.removeSkill(result.links[i]);
-              player.popup(result.links[i]);
               player.storage.shenpingjian.remove(result.links[i]);
               game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
             }
@@ -258,7 +262,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           player.chooseBool('评荐：是否选择失去Y个技能并令系统随机检索出2Y+3张武将牌，然后你选择其中至多Y张武将牌并获得其所有技能？（Y至少为1）').ai = () => {
             var skills = player.getSkills(null, false, false).filter(skill => {
               var info = get.info(skill);
-              if (!info || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+              if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
               return true;
             });
             if (skills.length > 1) {
@@ -272,7 +276,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           if (result.bool) {
             var skills = player.getSkills(null, false, false).filter(skill => {
               var info = get.info(skill);
-              if (!info || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+              if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
               return true;
             });
             var next = player.chooseButton(true, [
@@ -290,9 +294,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           }
           'step 2'
           if (result.bool) {
+            let rSkillInfo;
             for (let i = 0; i < result.links.length; i++) {
+              rSkillInfo = get.info(result.links[i]);
+              if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
+                player.restoreSkill(result.links[i]);
+              }
               player.removeSkill(result.links[i]);
-              player.popup(result.links[i]);
               player.storage.shenpingjian.remove(result.links[i]);
               game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
             }
@@ -1704,7 +1712,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           if (!player.storage.spshenpingjian) player.storage.spshenpingjian = [];
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
-            if (!info || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+            if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
             return true;
           });
           var next = player.chooseButton(true, [
@@ -1724,9 +1732,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             if (result.links.length === 0) {
               event.finish();
             } else {
+              let rSkillInfo;
               for (let i = 0; i < result.links.length; i++) {
+                rSkillInfo = get.info(result.links[i]);
+                if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
+                  player.restoreSkill(result.links[i]);
+                }
                 player.removeSkill(result.links[i]);
-                player.popup(result.links[i]);
                 player.storage.spshenpingjian.remove(result.links[i]);
                 game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
               }
@@ -1909,7 +1921,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           if (!player.storage.spshenpingjian) player.storage.spshenpingjian = [];
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
-            if (!info || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+            if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
             return true;
           });
           var next = player.chooseButton(true, [
@@ -1926,9 +1938,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           });
           'step 1'
           if (result.bool) {
+            let rSkillInfo;
             for (let i = 0; i < result.links.length; i++) {
+              rSkillInfo = get.info(result.links[i]);
+              if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
+                player.restoreSkill(result.links[i]);
+              }
               player.removeSkill(result.links[i]);
-              player.popup(result.links[i]);
               player.storage.spshenpingjian.remove(result.links[i]);
               game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
             }
