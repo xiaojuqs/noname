@@ -48374,6 +48374,7 @@
 					['挑战卡牌', true],
           ['皮肤切换', true],
 					['MVP扩展', true],
+          ['全能搜索', true],
 				];
 				var need_reload=false;
 				for(var i=0;i<addtional_extention_names.length;i++){

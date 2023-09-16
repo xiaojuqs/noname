@@ -917,6 +917,52 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
       },
     },
+    guozhao: { //郭照
+      瓷语青花: {
+        name: '郭照/瓷语青花/daiji2',
+        play2: 'play2',
+        shan: 'play3',
+        x: [0, 0.45],
+        y: [0, 0.5],
+        scale: 0.75,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '郭照/瓷语青花/chuchang',
+          action: 'play',
+          scale: 0.7,
+        },
+        gongji: {
+          name: '郭照/瓷语青花/chuchang2',
+          action: 'gongji',
+          scale: 0.7,
+        },
+        teshu: {
+          name: '郭照/瓷语青花/chuchang2',
+          action: 'jineng',
+          scale: 0.7,
+        },
+        beijing: {
+          name: '郭照/瓷语青花/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+        zhishixian: {
+          name: '郭照/瓷语青花/shouji2',
+          scale: 0.5,
+          speed: 1.5,
+          delay: 0.3,
+          effect: {
+            name: '郭照/瓷语青花/shouji',
+            scale: 0.5,
+            speed: 0.9,
+            delay: 0.6,
+          },
+        },
+      },
+    },
     heyan: { //何晏
       忆梦慕蝶: {
         name: '何晏/忆梦慕蝶/daiji2',
@@ -1246,6 +1292,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           scale: 0.3,
           x: [0, 0.4],
           y: [0, 0.5]
+        },
+      },
+    },
+    luyi: { //卢弈
+      瑶颜如玉: {
+        name: '卢弈/瑶颜如玉/daiji2',
+        x: [0, 0.5],
+        y: [0, 0.5],
+        scale: 0.8,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '卢弈/瑶颜如玉/chuchang',
+          scale: 0.8,
+          action: 'play',
+        },
+        gongji: {
+          name: '卢弈/瑶颜如玉/chuchang',
+          scale: 1,
+          action: 'play',
+        },
+        beijing: {
+          name: '卢弈/瑶颜如玉/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
         },
       },
     },
@@ -1988,6 +2061,34 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
       },
     },
+    sunlingluan: { //孙翎鸾
+      鸾心初动: {
+        name: '孙翎鸾/鸾心初动/daiji2',
+        x: [0, 0.5],
+        y: [0, 0.5],
+        scale: 0.75,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '孙翎鸾/鸾心初动/chuchang',
+          scale: 0.7,
+          action: 'play',
+        },
+        gongji: {
+          name: '孙翎鸾/鸾心初动/chuchang',
+          scale: 0.9,
+          action: 'play',
+        },
+        beijing: {
+          name: '孙翎鸾/鸾心初动/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+      },
+    },
+
     sunluyu: { //孙鲁育
       娇巧伶俐: {
         name: '孙鲁育/娇巧伶俐/daiji2',
@@ -2221,31 +2322,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
       },
     },
     tengfanglan: { //滕芳兰
-      拈花靛情: {
-        name: '滕芳兰/拈花靛情/daiji2',
-        x: [0, 0.5],
-        y: [0, 0.5],
-        scale: 0.7,
-        angle: 0,
-        //speed: 1,
-        shizhounian: true,
-        chuchang: {
-          name: '滕芳兰/拈花靛情/chuchang',
-          scale: 0.7,
-          action: 'play',
-        },
-        gongji: {
-          name: '滕芳兰/拈花靛情/chuchang',
-          scale: 0.9,
-          action: 'play',
-        },
-        beijing: {
-          name: '滕芳兰/拈花靛情/beijing',
-          x: [0, 0.5],
-          y: [0, 0.5],
-          scale: 0.3,
-        },
-      },
       脂车香姝: {
         name: '滕芳兰/脂车香姝/xingxiang',
         version: "4.0",
@@ -2285,6 +2361,50 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           scale: 0.8,
           speed: 0.9,
           delay: 0.3,
+        },
+      },
+      皓露沁兰: {
+        name: '滕芳兰/皓露沁兰/daiji2',
+        play2: 'play2',
+        shan: 'play3',
+        x: [0, 0.5],
+        y: [0, 0.5],
+        scale: 0.7,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '滕芳兰/皓露沁兰/chuchang',
+          action: 'play',
+          scale: 0.65,
+        },
+        gongji: {
+          name: '滕芳兰/皓露沁兰/chuchang2',
+          action: 'gongji',
+          scale: 0.65,
+        },
+        teshu: {
+          name: '滕芳兰/皓露沁兰/chuchang2',
+          action: 'jineng',
+          scale: 0.65,
+        },
+        beijing: {
+          name: '滕芳兰/皓露沁兰/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+        zhishixian: {
+          name: '滕芳兰/皓露沁兰/shouji2',
+          scale: 0.5,
+          speed: 0.8,
+          delay: 0.5,
+          effect: {
+            name: '滕芳兰/皓露沁兰/shouji',
+            scale: 0.5,
+            speed: 0.8,
+            delay: 0.4,
+          },
         },
       },
     },
