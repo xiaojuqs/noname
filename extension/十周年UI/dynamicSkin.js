@@ -1472,7 +1472,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         shizhounian: true,
         x: [0, 0.4],
         y: [0, 0.5],
-        scale: 0.6,
+        scale: 0.65,
         angle: 0,
         //speed: 1,
         chuchang: {

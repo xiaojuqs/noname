@@ -53,7 +53,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         frequent: true,
         content: function () {
           'step 0'
-          if (!player.storage.shenpingjian) player.storage.shenpingjian = [];
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
             if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -80,7 +79,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 player.restoreSkill(result.links[i]);
               }
               player.removeSkill(result.links[i]);
-              player.storage.shenpingjian.remove(result.links[i]);
               game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
             }
             if (!_status.characterlist) {
@@ -111,7 +109,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
               if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1) continue;
               var skills2 = lib.character[name][3];
               for (var j = 0; j < skills2.length; j++) {
-                if (player.storage.shenpingjian.contains(skills2[j])) continue;
+                var playerSkills = player.getSkills(null, false, false).filter(skill => {
+                  var info = get.info(skill);
+                  if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+                  return true;
+                });
+                if (playerSkills.contains(skills2[j])) continue;
                 if (skills.contains(skills2[j])) {
                   list.add(name);
                   if (!map[name]) map[name] = [];
@@ -239,7 +242,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           var map = event.result || result;
           if (map && map.skills && map.skills.length) {
             for (var i of map.skills) {
-              player.storage.shenpingjian.add(i);
               player.addSkill(i);
               game.log(player, '获得了技能', '#g【' + get.translation(i) + '】');
             }
@@ -258,7 +260,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         prompt: () => lib.translate.shenpingjian_info,
         content: function () {
           'step 0'
-          if (!player.storage.shenpingjian) player.storage.shenpingjian = [];
           player.chooseBool('评荐：是否选择失去Y个技能并令系统随机检索出2Y+3张武将牌，然后你选择其中至多Y张武将牌并获得其所有技能？（Y至少为1）').ai = () => {
             var skills = player.getSkills(null, false, false).filter(skill => {
               var info = get.info(skill);
@@ -272,7 +273,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
           };
           'step 1'
-          // 失去技能
           if (result.bool) {
             var skills = player.getSkills(null, false, false).filter(skill => {
               var info = get.info(skill);
@@ -301,7 +301,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 player.restoreSkill(result.links[i]);
               }
               player.removeSkill(result.links[i]);
-              player.storage.shenpingjian.remove(result.links[i]);
               game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
             }
             if (!_status.characterlist) {
@@ -335,7 +334,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
               for (let i = 0; i < result.links.length; i++) {
                 var skills = lib.character[result.links[i]][3];
                 for (let j = 0; j < skills.length; j++) {
-                  player.storage.shenpingjian.add(skills[j]);
                   player.addSkill(skills[j]);
                   game.log(player, '获得了技能', '#g【' + get.translation(skills[j]) + '】');
                 }
@@ -362,7 +360,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1) continue;
             var skills2 = lib.character[name][3];
             for (var j = 0; j < skills2.length; j++) {
-              if (player.storage.shenpingjian.contains(skills2[j])) continue;
+              var playerSkills = player.getSkills(null, false, false).filter(skill => {
+                var info = get.info(skill);
+                if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+                return true;
+              });
+              if (playerSkills.contains(skills2[j])) continue;
               if (skills.contains(skills2[j]) || lib.skill.shenpingjian.phaseUse_special.contains(skills2[j])) {
                 list.add(name);
                 if (!map[name]) map[name] = [];
@@ -386,7 +389,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           if (skills.length) player.chooseControl(skills).set('dialog', ['评荐：请选择获得一个技能', [list, 'character']]);
           else event.finish();
           'step 5'
-          player.storage.shenpingjian.add(result.control);
           player.addSkill(result.control);
           game.log(player, '获得了技能', '#g【' + get.translation(result.control) + '】');
         },
@@ -1709,7 +1711,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         frequent: true,
         content: function () {
           'step 0'
-          if (!player.storage.spshenpingjian) player.storage.spshenpingjian = [];
           if (!player.storage.spshenpingjianX) player.storage.spshenpingjianX = 0;
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
@@ -1740,7 +1741,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   player.restoreSkill(result.links[i]);
                 }
                 player.removeSkill(result.links[i]);
-                player.storage.spshenpingjian.remove(result.links[i]);
                 game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
               }
               if (!_status.characterlist) {
@@ -1771,7 +1771,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1) continue;
                 var skills2 = lib.character[name][3];
                 for (var j = 0; j < skills2.length; j++) {
-                  if (player.storage.spshenpingjian.contains(skills2[j])) continue;
+                  var playerSkills = player.getSkills(null, false, false).filter(skill => {
+                    var info = get.info(skill);
+                    if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+                    return true;
+                  });
+                  if (playerSkills.contains(skills2[j])) continue;
                   if (skills.contains(skills2[j])) {
                     list.add(name);
                     if (!map[name]) map[name] = [];
@@ -1900,7 +1905,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           var map = event.result || result;
           if (map && map.skills && map.skills.length) {
             for (var i of map.skills) {
-              player.storage.spshenpingjian.add(i);
               player.addSkill(i);
               game.log(player, '获得了技能', '#g【' + get.translation(i) + '】');
             }
@@ -1920,7 +1924,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         prompt: () => lib.translate.spshenpingjian_info,
         content: function () {
           'step 0'
-          if (!player.storage.spshenpingjian) player.storage.spshenpingjian = [];
           if (!player.storage.spshenpingjianX) player.storage.spshenpingjianX = 0;
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
@@ -1951,7 +1954,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   player.restoreSkill(result.links[i]);
                 }
                 player.removeSkill(result.links[i]);
-                player.storage.spshenpingjian.remove(result.links[i]);
                 game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
               }
               var list = [];
@@ -1972,7 +1974,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1) continue;
                 var skills2 = lib.character[name][3];
                 for (var j = 0; j < skills2.length; j++) {
-                  if (player.storage.spshenpingjian.contains(skills2[j])) continue;
+                  var playerSkills = player.getSkills(null, false, false).filter(skill => {
+                    var info = get.info(skill);
+                    if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+                    return true;
+                  });
+                  if (playerSkills.contains(skills2[j])) continue;
                   if (skills.contains(skills2[j]) || lib.skill.spshenpingjian.phaseUse_special.contains(skills2[j])) {
                     list.add(name);
                     if (!map[name]) map[name] = [];
@@ -2080,7 +2087,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           var map = event.result || result;
           if (map && map.skills && map.skills.length) {
             for (var i of map.skills) {
-              player.storage.spshenpingjian.add(i);
               player.addSkill(i);
               game.log(player, '获得了技能', '#g【' + get.translation(i) + '】');
             }
