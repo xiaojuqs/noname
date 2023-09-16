@@ -787,7 +787,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
       韶颜雅容: {
         name: '冯妤/韶颜雅容/daiji2',
         x: [0, 0.5],
-        y: [0, 0.55],
+        y: [0, 0.6],
         scale: 0.6,
         angle: 0,
         //speed: 1,
@@ -1553,7 +1553,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
       墨卷浩瀚: {
         name: '阮瑀/墨卷浩瀚/daiji2',
         x: [0, 0.41],
-        y: [0, 0.43],
+        y: [0, 0.5],
         scale: 0.8,
         angle: 0,
         //speed: 1,
@@ -2336,7 +2336,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
       莲心姝影: {
         name: '滕公主/莲心姝影/daiji2',
         x: [0, 0.5],
-        y: [0, 0.5],
+        y: [0, 0.55],
         scale: 0.7,
         angle: -5,
         //speed: 1,
