@@ -2641,7 +2641,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shipingjian_info: '结束阶段开始时/当你受到伤害后/出牌阶段限一次，你可以令系统随机检索出三张拥有发动时机为结束阶段开始时/当你受到伤害后/出牌阶段的技能的武将牌。然后你可以选择尝试发动其中一个技能。每个技能每局游戏只能选择一次。',
       spshenxushao: '神许劭',
       spshenpingjian: '评荐',
-      spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为1）。②出牌阶段限一次，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为1）。③锁定技。每两轮限一次，当你发动〖评荐①〗或〖评荐②〗前，你令本次〖评荐〗中的具有颜色的X+1。',
+      spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。②出牌阶段限一次，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。③锁定技。每两轮限一次，当你发动〖评荐①〗或〖评荐②〗前，你令本次〖评荐〗中的具有颜色的X+1。',
       spshenpingjian_use: '评荐',
       spshenpingjian_check: '评荐',
       oldtw_niufudongxie: '旧牛辅董翓',
