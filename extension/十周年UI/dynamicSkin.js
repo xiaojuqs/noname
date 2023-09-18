@@ -3645,6 +3645,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     // 芮姬
     dc_ruiji: decadeUI.dynamicSkin.ruiji,
 
+    // 神曹操
+    old_caocao: decadeUI.dynamicSkin.shen_caocao,
+
     //神吕蒙
     tw_shen_lvmeng: decadeUI.dynamicSkin.shen_lvmeng,
 
