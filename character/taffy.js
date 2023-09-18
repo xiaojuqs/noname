@@ -4,7 +4,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     name: 'taffy',
     connect: true,
     character: {
-      shenxushao: ['male', 'shen', 4, ['shenpingjian'],
+      shenxushao: ['male', 'shen', 3, ['shenpingjian'],
         ['qun']
       ],
       oldwu_zhugeliang: ['male', 'shu', '4/7', ['olddcjincui', 'olddcqingshi', 'olddczhizhe']],
@@ -14,7 +14,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       ],
       minitaffy: ['female', 'qun', 1, ['taffytangshi', 'taffyzisha']],
       shixushao: ['male', 'qun', 4, ['shipingjian']],
-      spshenxushao: ['male', 'shen', 4, ['spshenpingjian'],
+      spshenxushao: ['male', 'shen', 3, ['spshenpingjian'],
         ['qun']
       ],
       oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
@@ -401,7 +401,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       },
       //旧武诸葛
       olddcjincui: {
-        audio: 2,
+        audio: 'dcjincui',
         trigger: {
           player: 'phaseZhunbeiBegin'
         },
@@ -526,7 +526,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
       },
       olddcqingshi: {
-        audio: 2,
+        audio: 'dcqingshi',
         trigger: {
           player: 'useCard'
         },
@@ -653,7 +653,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         }
       },
       olddczhizhe: {
-        audio: 2,
+        audio: 'dczhizhe',
         enable: 'phaseUse',
         limited: true,
         filterCard: true,
@@ -1711,7 +1711,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         frequent: true,
         content: function () {
           'step 0'
-          if (!player.storage.spshenpingjianX) player.storage.spshenpingjianX = 0;
+          if (!player.storage.spshenpingjianX && player.storage.spshenpingjianX !== 0) player.storage.spshenpingjianX = 1;
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
             if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -1911,7 +1911,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             player.storage.spshenpingjianX = 0;
           }
         },
-        group: ['spshenpingjian_use', 'spshenpingjian_check'],
+        group: ['spshenpingjian_use'],
         phaseUse_special: [],
         ai: {
           threaten: 5
@@ -1924,7 +1924,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         prompt: () => lib.translate.spshenpingjian_info,
         content: function () {
           'step 0'
-          if (!player.storage.spshenpingjianX) player.storage.spshenpingjianX = 0;
+          if (!player.storage.spshenpingjianX && player.storage.spshenpingjianX !== 0) player.storage.spshenpingjianX = 1;
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
             if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -2098,22 +2098,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           result: {
             player: 1
           }
-        },
-      },
-      spshenpingjian_check: {
-        round: 2,
-        trigger: {
-          player: ['spshenpingjianBefore', 'spshenpingjian_useBefore']
-        },
-        // direct: true,
-        charlotte: true,
-        // silent: true,
-        forced: true,
-        firstDo: true,
-        priority: Infinity,
-        content: function () {
-          if (!player.storage.spshenpingjianX) player.storage.spshenpingjianX = 0;
-          player.storage.spshenpingjianX = 1;
         },
       },
       // 旧牛董
@@ -2604,7 +2588,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shenxushao: '评世雕龙',
       shenpingjian: '评荐',
       shenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2X+3张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多X+1个技能（X至少为0）。②出牌阶段限一次，你可以选择一项：⒈选择失去Y个技能并令系统随机检索出2Y+3张武将牌，然后你可以选择其中至多Y张武将牌并获得其所有技能（Y至少为1）。⒉令系统随机检索出三张武将牌。然后你可以选择获得其中一个技能。',
-      shenpingjian_append: '<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
       shenpingjian_use: '评荐',
       oldwu_zhugeliang: '旧武诸葛亮',
       oldwu_zhugeliang_ab: '武诸葛亮',
@@ -2641,9 +2624,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shipingjian_info: '结束阶段开始时/当你受到伤害后/出牌阶段限一次，你可以令系统随机检索出三张拥有发动时机为结束阶段开始时/当你受到伤害后/出牌阶段的技能的武将牌。然后你可以选择尝试发动其中一个技能。每个技能每局游戏只能选择一次。',
       spshenxushao: '神许劭',
       spshenpingjian: '评荐',
-      spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。②出牌阶段限一次，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。③锁定技。每两轮限一次，当你发动〖评荐①〗或〖评荐②〗前，你令本次〖评荐〗中的具有颜色的X+1。',
+      spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。②出牌阶段限一次，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。③当你首次发动〖评荐〗时，你令本次〖评荐〗中的具有颜色的X+1。',
       spshenpingjian_use: '评荐',
-      spshenpingjian_check: '评荐',
+      spshenpingjian_append: '<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
       oldtw_niufudongxie: '旧牛辅董翓',
       oldtw_niufudongxie_ab: '牛辅董翓',
       oldbaonvezhi_faq: '关于暴虐值',
