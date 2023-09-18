@@ -2160,7 +2160,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				check:function(event,player){
 					if(get.type(event.card)=='equip'){
 						if(get.subtype(event.card)=='equip6') return true;
-						if(get.equipResult(player,event.target,event.card.name)<=0) return true;
+						if(get.equipResult(player,event.targets[0],event.card.name)<=0) return true;
 						var eff1=player.getUseValue(event.card);
 						var subtype=get.subtype(event.card);
 						return player.countCards('h',function(card){

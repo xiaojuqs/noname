@@ -6903,7 +6903,7 @@ precontent:function(){
 				console.error(this.src + 'not found');
 			};
 
-			script.src = path + '?v=' + decadePack.package.version;
+			script.src = path;
 
 			document.head.appendChild(script);
 			return script;
@@ -6912,7 +6912,7 @@ precontent:function(){
 			if (!path) return console.error('path');
 			var link = document.createElement('link');
 			link.rel = 'stylesheet';
-			link.href = path + '?v=' + decadePack.package.version;
+			link.href = path;
 			document.head.appendChild(link);
 			return link;
 		};
