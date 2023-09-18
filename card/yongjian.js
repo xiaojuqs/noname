@@ -627,7 +627,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					player.showCards(cards,`${get.translation(player)}对${(targets=>{
 						if(get.itemtype(targets)=='player') targets=[targets];
 						if(targets[0]!=player) return get.translation(targets);
-						const selfTargets=targets.slice();
+						var selfTargets=targets.slice();
 						selfTargets[0]='自己';
 						return get.translation(selfTargets);
 					})(logs)}发动了【${get.skillTranslation(event.name,player)}】`);
@@ -662,7 +662,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					player.gift(cards,target);
 				},
 				ai:{
-					order:(item,player)=>player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0),'h')?7:0.51,
+					order:(item,player)=>player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0),'h')?1:0.51,
 					result:{
 						target:(player,target)=>{
 							const result=ui.selected.cards.map(value=>player.getGiftAIResultTarget(value,target));
