@@ -215,7 +215,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                       } else {
                           // 拦截原来的logSkill函数, 加上如果使用非攻击技能,就播放特殊动画
                           // 本体1.9.117.2, 由于logSkill的trigger没有使用前就可以触发的, 所以仍然复制一份进行处理.
-                          if (lib.version >= '1.9.117.2') {
+                          if (lib.version >= '1.9.117.2' || lib.version >= '1.10.1') {
                               console.log('======== version >= 1.9.117.2===========')
                               if (!lib.element.player._pfqh_replace_logSkill) {
                                   // 保存原始的logSkill
