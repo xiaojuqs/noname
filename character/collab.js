@@ -248,6 +248,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:1,
+					nokeep:true,
 					result:{
 						player:1
 					},
@@ -1606,7 +1607,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			dc_sunquan_ab:'孙权',
 			dczhiheng:'制衡',
 			dczhiheng_info:'①出牌阶段限一次。你可以弃置任意张牌并摸等量的牌，若你在发动〖制衡〗时弃置了所有手牌，则你多摸一张牌。②每回合每名角色限一次。当你对其他角色造成伤害后，你令〖制衡①〗于此回合发动次数上限+1。',
-			
+
 			collab_olympic:'OL·伦敦奥运会',
 			collab_tongque:'OL·铜雀台',
 			collab_duanwu:'新服·端午畅玩',

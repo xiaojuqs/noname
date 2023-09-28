@@ -109,17 +109,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			caiyang:['male','qun',1,['yinka','zhuixi'],['forbidai','unseen']],
 			panfeng:['male','qun',4,['kuangfu']],
 			sunshao:['male','wu',3,['bizheng','yidian']],
-			
+
 			huangfusong:['male','qun',4,['fenyue']],
 			yuantanyuanshang:['male','qun',4,['neifa']],
 			xujing:['male','shu',3,['yuxu','xjshijian']],
-			
+
 			jianggan:["male","wei",3,["weicheng","daoshu"]],
-			
+
 			caoying:["female","wei",4,["xinfu_lingren","xinfu_fujian"],[]],
 			simahui:["male","qun",3,["xinfu_jianjie","xinfu_chenghao","xinfu_yinshi"],[]],
 			baosanniang:["female","shu",4,["olwuniang","olxushen"],[]],
-			
+
 			yangxiu:['male','wei',3,['jilei','danlao']],
 			chenlin:['male','wei',3,['bifa','songci']],
 			caohong:['male','wei',4,['yuanhu']],
@@ -149,9 +149,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			wutugu:['male','qun',15,['ranshang','hanyong']],
 			sp_caiwenji:['female','wei',3,['chenqing','mozhi']],
 			zhugeguo:['female','shu',3,['qirang','yuhua']],
-			
+
 			lingju:['female','qun',3,['jieyuan','fenxin']],
-			
+
 			cuiyan:['male','wei',3,['yawang','xunzhi']],
 			jsp_guanyu:['male','wei',4,['new_rewusheng','danji']],
 			jsp_huangyueying:['female','qun',3,['jiqiao','linglong']],
@@ -174,7 +174,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			buzhi:['male','wu',3,['hongde','dingpan']],
 
 			caochun:['male','wei',4,['xinshanjia']],
-			
+
 			dongbai:['female','qun',3,['lianzhu','xiehui']],
 
 			zhaoxiang:['female','shu',4,['fanghun','fuhan']],
@@ -259,17 +259,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			hansui:'韩遂（？－215年），字文约。凉州金城郡人。东汉末年军阀、将领，汉末群雄之一。原名韩约，后改名遂。韩遂最初闻名于西州，被羌胡叛军劫持并推举为首领，以诛宦官为名举兵造反，聚众十万，先后败皇甫嵩、张温、董卓、孙坚等名将，使得天下骚动。后受朝廷招安，拥兵割据一方长达三十余年。韩遂曾与马腾结为异姓兄弟，后二人关系破裂。袁绍、曹操相争之际，马腾、韩遂被钟繇说服，依附于曹操。马腾入京后，留其子马超统领部队。马超推举韩遂为都督起兵反叛曹操，为曹操所败，韩遂逃奔凉州，后又为夏侯渊所败，病死（一说被杀），享年七十余岁。',
 			niujin:'牛金（生卒年不详），初为曹仁部曲将，周瑜军数万人来攻，前锋数千人始至，曹仁登城望，乃募得三百人，遣牛金迎战。但对方兵力较多，牛金遂被围困。曹仁亲自杀入阵中救出牛金。司马懿使牛金轻骑饵诱蜀军，刚交战诸葛亮就退兵，追至祁山。蜀将马岱入寇，司马懿遣将军牛金击退，斩千余级。公孙渊反，司马懿帅牛金、胡遵等步骑四万发自洛阳，后平定辽东。牛金官至后将军。',
 			jianggan:"蒋干，字子翼，汉末三国时期的人物，九江（治今安徽寿县）人。历史上的蒋干是当时的名士、辩论家。而罗贯中在历史小说《三国演义》中则将蒋干刻画成了被周瑜所愚弄的小丑形象。",
-			
+
 			caoying:"曹婴是在电影《三国志之见龙卸甲》中登场的虚拟人物，由李美琪饰演。曹婴是曹操的孙女，弓马娴熟，文武双全，深得曹操的用兵之道及心术。于凤鸣山一战中担任魏军大都督阻止诸葛亮北伐并因罗平安的告密而全歼关兴、张苞、赵云率领的蜀军部队。",
 			simahui:"司马徽（约145—208年），字德操，颍川阳翟（今河南禹州）人。东汉末年名士，精通道学、奇门、兵法、经学。有“水镜先生”之称。 司马徽为人清雅，学识广博，有知人之明，并向刘备推荐了诸葛亮、庞统等人，受到世人的敬重。",
 			baosanniang:"鲍三娘是中国民间传说中的人物，事迹多见于《花关索传》。相传她是鲍家庄鲍员外的小女儿。后来与关索成亲，关羽自传授其武艺，因此也造就了鲍三娘的文武双全。荆州失守之后鲍三娘就跟随关索一同投奔蜀汉，并随诸葛亮征讨南蛮。平定了南蛮之后，夫妻二人就此一直替诸葛亮镇守着南中，他们也的确留下了许多脍炙人口的行侠仗义故事，在民间广为流传。",
-			
+
 			pangdegong:"庞德公，字尚长，荆州襄阳人，东汉末年名士、隐士。 庞德公与当时徐庶、司马徽、诸葛亮、庞统等人交往密切。庞德公曾称诸葛亮为\"卧龙\"，庞统为\"凤雏\"，司马徽为\"水镜\"，被誉为知人。对诸葛亮、庞统等人早年影响较大，并得到诸葛亮的敬重。庞德公最后隐居于鹿门山，采药而终。",
 			zhaotongzhaoguang:"赵统，赵云长子，生卒年不详。常山真定（今为河北正定）人，陈寿在正史《三国志》中记载赵云去世后，赵统袭爵永昌亭侯，官至蜀汉虎贲中郎督，加行领军。赵广（？—263年），三国时期蜀汉牙门将，赵云的次子，赵统之弟。随姜维前往沓中，官拜牙门将。曹魏司马氏派五路大军伐蜀时，随大将军姜维与魏兵战于疆川口，姜维败绩还守剑阁，赵广于沓中战死。",
 			majun:"马钧，字德衡，扶风（今陕西扶风）人，生活在汉朝末期，是中国古代科技史上最负盛名的机械发明家之一。马钧年幼时家境贫寒，自己又有口吃的毛病，所以不擅言谈却精于巧思，后来在魏国担任给事中的官职。马钧最突出的表现有还原指南车；改进当时操作笨重的织绫机；发明一种由低处向高地引水的龙骨水车；制作出一种轮转式发石机，能连续发射石块，远至数百步；把木制原动轮装于木偶下面，叫做“水转百戏”。此后，马钧还改制了诸葛连弩，对科学发展和技术进步做出了贡献。",
 			simazhao:"司马昭（211年—265年9月6日），字子上（小说《三国演义》为子尚），河内温县（今属河南）人。三国时期曹魏权臣，西晋王朝的奠基人之一。为晋宣帝司马懿与宣穆皇后张春华次子、晋景帝司马师之弟、晋武帝司马炎之父。 司马昭早年随父抗击蜀汉，多有战功。累官洛阳典农中郎将，封新城乡侯。正元二年（255年），继兄司马师为大将军，专揽国政。甘露五年（260年），魏帝曹髦被弑杀，司马昭立曹奂为帝。景元四年（263年），分兵遣钟会、邓艾、诸葛绪三路灭亡蜀汉，受封晋公。次年，进爵晋王。 咸熙二年（265年），司马昭病逝，年五十四，葬于崇阳陵。数月后，其子司马炎代魏称帝，建立晋朝，追尊司马昭为文帝，庙号太祖。",
 			wangyuanji:"王元姬（217年—268年4月20日），东海郯县（今山东郯城西北）人。三国时期曹魏经学家王朗之孙女、王肃之女，晋文帝司马昭妻子，晋武帝司马炎与齐王司马攸的生母。 王元姬幼时便通《诗经》、《论语》，嫁司马昭后竭尽妇道、谦虚谨慎。其人颇有远见，曾预言钟会谋反之事。泰始元年（265年），司马炎建立西晋，尊王元姬为皇太后，宫号曰崇化宫。王元姬身处太后之位，提倡节俭，身体力行，作为众妃子的表率。在其治理之下，后宫井井有条，众人和睦相处。 泰始四年（268年），王元姬崩逝，终年五十二岁。谥号文明皇后，与司马昭合葬于崇阳陵。",
-			
+
 			liuye:'刘晔（？－234年），字子扬，淮南成德人，是光武帝刘秀之子阜陵王刘延的后代，三国时期魏国著名的战略家。刘晔年少知名，人称有佐世之才，是曹操手下举足轻重的谋士，他屡献妙计，对天下形势的发展往往一语中的。刘晔历仕数朝，是曹魏的三朝元老。',
 			luzhi:'鲁芝（190年—273年），字世英。扶风郡郿县（今陕西眉县）人。魏晋时期名臣。官至光禄大夫，位特进，封阴平侯。泰始九年（273年）卒，时年八十四。谥号“贞”。',
 			xizhicai:'戏志才（生卒年不详），或志才为字，名不详（一说名忠），东汉颍川郡（今河南禹州）人。经张邈推荐，成为曹操手下谋士。为人多谋略，曹操十分器重，不幸早卒。三国演义中并无此人，三国志中只有寥寥数语。由荀彧推荐给曹操，被称为有“负俗之讥”。死后，荀彧又举荐了郭嘉。<br>陈寿《三国志》记载：太祖与荀彧书曰：自志才亡后，莫可与计事者。汝、颍固多奇士，谁可以继之？彧荐嘉。',
@@ -283,7 +283,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			lvfan:'吕范（？－228年），字子衡。汝南郡细阳县（今安徽太和）人。汉末至三国时期吴国重臣。吕范年轻为汝南县吏，后避难寿春，结识孙策。此后随孙策、孙权征伐四方，对稳固孙氏在江东的统治做出了杰出的贡献，孙权将其比之于东汉开国元勋吴汉。吴国建立后，吕范累官至前将军、假节、扬州牧，封南昌侯。黄武七年（228年），吕范被拜为大司马，未得授官，便已病逝。孙权悲痛不已，遣使赠其大司马印绶。孙权还都建业后，以太牢礼祭祀吕范。',
 			liqueguosi:"请分别参考武将【李傕】和【郭汜】各自的介绍。",
 			maojie:"毛玠（？—216年），字孝先，陈留平丘（今河南封丘）人。东汉末年大臣。年少时为县吏，以清廉公正著称。因战乱而打算到荆州避乱，但中途知道刘表政令不严明，因而改往鲁阳。后来投靠曹操，提出“奉天子以令不臣，脩耕植，畜军资”的战略规划，得到曹操的欣赏。<br>毛玠与崔琰主持选举，所举用的都是清廉正直之士。而毛玠为人廉洁，激起天下廉洁之风，一改朝中奢华风气。曹操大为赞赏，曹丕也亲自去拜访他。<br>曹操获封魏公后，毛玠改任尚书仆射，再典选举。又密谏曹操应该立嫡长子曹丕为魏国太子。崔琰被杀后，毛玠十分不快。后来有人诬告毛玠，曹操大怒，将毛玠收于狱中。及后在桓阶、和洽营救下，只被免职，不久逝世于家中。曹操在他死后赐他棺材和钱帛。",
-			
+
 			huangfusong:'字义真。安定郡朝那县（今宁夏彭阳）人。于黄巾起义时，以中郎将身份讨伐黄巾，用火攻大破张梁、张宝。后接替董卓进攻张梁，连胜七阵。掘张角墓，拜左车骑将军、冀州牧，因拒绝贿赂宦官而被免职。 董卓死，王允命其与吕布等共至郿坞抄籍董卓家产、人口，皇甫嵩将坞中所藏良家子女，尽行释放。',
 			zangba:'其父臧戒，有二子臧艾与臧舜。年少时曾召集数人将获罪的父亲救出，此后四处流亡。后来成为陶谦麾下的骑都尉，负责募兵抵抗黄巾军。与孙观、尹礼等人拥兵驻屯于开阳，自成一股独立势力，后跟随吕布。吕布战败后，投降了曹操。后与袁绍、孙权等的战役里战功赫赫，官至镇东将军。',
 			zhangren:'刘璋的属下，以忠勇著称。刘备入蜀时，张任曾劝刘璋提防刘备，但刘璋没有听从。魏延舞剑想趁机除掉刘璋时，张任出面对舞，解救刘璋。后在刘备进攻时于落凤坡射死了庞统。',
@@ -7535,7 +7535,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						dialog.classList.add('fullheight');
 						ui.arena.classList.add('choose-to-move');
 						dialog.buttonss=[];
-						
+
 						var list=['协力锻造的玩家','妨碍锻造的玩家']
 						for(var i=0;i<list.length;i++){
 							dialog.add('<div class="text center">'+list[i]+'</div>');
@@ -7944,6 +7944,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					trigger.cancel();
 				},
 				ai:{
+					respondShan:true,
 					effect:{
 						target:function(card,player,target){
 							if(card.name!='sha') return;
@@ -13307,7 +13308,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var prompt='即将失去'+get.translation(trigger.result.cards)+'，是否发动【挽危】？';
 					var next=player.choosePlayerCard(player,prompt,trigger.position);
 					next.set('ai',function(button){
-						return 20-get.value(button.link);
+						return get.effect(player,button.link,player,player)<0?20-get.effect(player,button.link,player,player):20-get.value(button.link);
 					});
 					next.filterButton=trigger.filterButton;
 					next.selectButton=trigger.result.cards.length;
@@ -13609,7 +13610,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					player.chooseCard('he',get.prompt('new_xingwu'),'将一张牌置于武将牌上作为“舞”').set('ai',function(card){
 						if(_status.event.goon) return 20-get.value(card);
 						return 7-get.value(card);
-					}).set('goon',player.needsToDiscard()||player.getStorage('new_xingwu').length>1);
+					}).set('goon',player.needsToDiscard()||player.getExpansions('new_xingwu').length>1);
 					'step 1'
 					if(result.bool){
 						player.logSkill('new_xingwu');
@@ -13683,7 +13684,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			},
 			new_luoyan:{
 				init:function(player){
-					if(player.getStorage('new_xingwu').length) player.addAdditionalSkill('new_luoyan',['oltianxiang','liuli']);
+					if(player.getExpansions('new_xingwu').length) player.addAdditionalSkill('new_luoyan',['oltianxiang','liuli']);
 				},
 				onremove:function(player){
 					player.removeAdditionalSkill('new_luoyan');
@@ -14981,7 +14982,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					content:'不能使用或打出手牌'
 				}
 			},
-			
+
 			zfengshi:{
 				audio:2,
 				trigger:{player:'useCardToPlayered'},
@@ -15510,7 +15511,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return !trigger.targets.contains(target)&&lib.filter.targetEnabled2(trigger.card,trigger.player,target);
 						}).set('ai',function(target){
 							var trigger=_status.event.getTrigger();
-							return get.effect(target,trigger.card,trigger.player,_status.event.player);
+							var eff=-get.effect(target,trigger.card,trigger.player,_status.event.player);
+							if(eff==0&&get.tag(trigger.card,'damage')) eff=get.tag(trigger.card,'damage')*get.attitude(target,_status.event.player);
+							if(eff==0&&get.tag(trigger.card,'draw')) eff=-get.tag(trigger.card,'draw')*get.attitude(target,_status.event.player);
+							if(eff==0&&get.tag(trigger.card,'recover')) eff=-get.tag(trigger.card,'recover')*get.attitude(target,_status.event.player);
+							if(eff==0&&trigger.card.name=='tiesuo') eff=get.attitude(target,_status.event.player);
+							return -eff;
 						});
 					}
 					else{
@@ -15518,7 +15524,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return _status.event.targets.contains(target);
 						}).set('ai',function(target){
 							var trigger=_status.event.getTrigger();
-							return -get.effect(target,trigger.card,trigger.player,_status.event.player);
+							var eff=-get.effect(target,trigger.card,trigger.player,_status.event.player);
+							if(eff==0&&get.tag(trigger.card,'damage')) eff=get.tag(trigger.card,'damage')*get.attitude(target,_status.event.player);
+							if(eff==0&&get.tag(trigger.card,'draw')) eff=-get.tag(trigger.card,'draw')*get.attitude(target,_status.event.player);
+							if(eff==0&&get.tag(trigger.card,'recover')) eff=-get.tag(trigger.card,'recover')*get.attitude(target,_status.event.player);
+							if(eff==0&&trigger.card.name=='tiesuo') eff=get.attitude(target,_status.event.player);
+							return eff;
 						}).set('targets',trigger.targets);
 					}
 					'step 3'
@@ -16065,7 +16076,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						dialog.content.appendChild(table);
 						dialog.add('　　');
 						dialog.open();
-						
+
 						event.switchToAuto=function(){
 							event.dialog.close();
 							event.control.close();
@@ -16576,6 +16587,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				position:'he',
 				check:function(card){
 					var player=_status.event.player;
+					if(!game.hasPlayer(function(current){
+						return get.attitude(player,current)<0;
+					})){
+						return 0;
+					}
 					if(player.hp<3) return 0;
 					var type=get.type(card,'trick');
 					if(type=='trick'){
@@ -22358,7 +22374,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					threaten:0.7
 				}
 			},
-			
+
 			duwu:{
 				audio:2,
 				enable:'phaseUse',
@@ -23330,21 +23346,16 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:11,
 					result:{
 						target:function(player,target){
-							if((player.countMark('xionghuo')>=2||!game.hasPlayer(function(current){
+							if((player.countMark('xionghuo')>=(player.hp>1?2:0)||!game.hasPlayer(function(current){
 								return current!=player&&get.attitude(player,current)<0&&current.hasMark('xionghuo');
 							}))&&player.countCards('h',function(card){
 								return get.tag(card,'damage')&&player.canUse(card,target,null,true)
 								&&player.getUseValue(card)>0&&get.effect_use(target,card,player)>0
-								&&target.hasSkillTag('filterDamage',null,{
+								&&!target.hasSkillTag('filterDamage',null,{
 									player:player,
 									card:card,
 								});
-							})) return 3/Math.max(1,target.hp);
-							if((!player.hasUnknown()&&game.countPlayer(function(current){
-								return get.attitude(player,current)<0;
-							})<=1)||player.countMark('xionghuo')>=2){
-								return -1;
-							}
+							})) return player.hp>1?-3/Math.max(1,target.hp):-1;
 							return 0;
 						},
 					},
@@ -23510,10 +23521,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					result:{
 						target:function (player,target){
 							if(ui.selected.targets.length==0){
-								return get.attitude(player,target)<0?-999:-3;
+								if(get.attitude(player,target)<0){
+									return -999;
+								}
+								else if(get.attitude(player,target)>0){
+									if(target.hasSkill('smh_huoji')&&target.hasSkill('smh_lianhuan')) return 0;
+									return target.countCards('h')>2?-3:999;
+								}
+								return -3;
 							}
 							else{
-								return target.countCards('h')+1;
+								return target.countCards('h')>2?999:target.countCards('h')+1;
 							}
 						},
 					},
@@ -23606,7 +23624,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(trigger.player.hasSkill('smh_huoji')){
 						player.chooseTarget('请将'+get.translation(trigger.player)+'的「龙印」交给一名角色',true).set('ai',function(target){
 							var player=_status.event.player;
-							return 10+get.attitude(player,target);
+							return 10+get.attitude(player,target)*target.countCards('h');
 						});
 					}else event.goto(2);
 					"step 2"
@@ -23620,7 +23638,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(trigger.player.hasSkill('smh_lianhuan')){
 						player.chooseTarget('请将'+get.translation(trigger.player)+'的「凤印」交给一名角色',true).set('ai',function(target){
 							var player=_status.event.player;
-							return 10+get.attitude(player,target);
+							return 10+get.attitude(player,target)*target.countCards('h');
 						});
 					}else event.finish();
 					"step 4"
@@ -23739,18 +23757,17 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return "3点";
 					}).set('forceDie',true);
 					"step 5"
-					targets[0].damage('fire',result.control=="2点"?2:3,'nocard'); 
+					targets[0].damage('fire',result.control=="2点"?2:3,'nocard');
 				},
 				ai:{
 					order:1,
 					result:{
-						target:0,
-						/*target:function (player,target){
+						target:function (player,target){
 							if(target.hasSkillTag('nofire')) return 0;
 							if(lib.config.mode=='versus') return -1;
 							if(player.hasUnknown()) return 0;
 							return get.damageEffect(target,player);
-						},*/
+						},
 					},
 				},
 			},
@@ -23774,6 +23791,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					notrick:true,
 					nofire:true,
 					nothunder:true,
+					skillTagFilter:function(player,tag){
+						if(tag=='notrick'||tag=='nofire'||tag=='nothunder'){
+							if(player.hasSkill('smh_huoji')||player.hasSkill('smh_lianhuan')) return false;
+							if(!player.isEmpty(2)) return false;
+						}
+					},
 					effect:{
 						target:function (card,player,target,current){
 							if(target.hasSkill('smh_huoji')||target.hasSkill('smh_lianhuan')) return;
@@ -23964,7 +23987,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					content:"limited",
 				},
 			},
-			
+
 			"xinfu_falu":{
 				subSkill:{
 					spade:{
@@ -24559,8 +24582,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			lvfan:'吕范',
 			liqueguosi:'李傕郭汜',
 			cuimao:'崔琰毛玠',
-			
-			
+
+
 			caoying:"曹婴",
 			simahui:"司马徽",
 			baosanniang:"鲍三娘",
@@ -24569,14 +24592,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			majun:"马钧",
 			simazhao:"司马昭",
 			wangyuanji:"王元姬",
-			
+
 			jianggan:"蒋干",
 			hejin:'何进',
 			hansui:'韩遂',
 			niujin:'牛金',
 			xujing:'OL许靖',
 			yuantanyuanshang:'袁谭袁尚',
-			
+
 			xinfenyue:'奋钺',
 			xinfenyue_info:'出牌阶段限X次（X为与你不同阵营的存活角色数），你可以与一名其他角色拼点，若你赢，根据你拼点牌的点数依次执行以下效果：不大于5，你获得其一张牌；不大于9，你获得牌堆里的一张【杀】; 不大于K，视为你对其使用一张雷【杀】。',
 			neifa:'内伐',
@@ -24630,7 +24653,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			"zhenwei_three_info":"锁定技，敌方角色至己方其他角色的距离+1。",
 			"huanshi_three":"缓释",
 			"huanshi_three_info":"一名友方角色的判定牌生效前，你可打出一张牌代替之。",
-			
+
 			yizan:"翊赞",
 			yizan_info:"你可以将两张牌（其中至少一张是基本牌）当任意基本牌牌使用",
 			yizan0:"翊赞",
@@ -24653,7 +24676,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			zhennan_info:"当你成为【南蛮入侵】的目标时，你可令一名其他角色随机受到一至三点伤害",
 			xushen:"许身",
 			xushen_info:"当其他男性角色令你脱离濒死状态时，若“关索”不在场，其可以选择是否用“关索”替换其武将牌，然后你回复一点体力并获得技能【镇南】",
-			
+
 			wanwei:'挽危',
 			wanwei_info:'当你因被其他角色获得或弃置而失去牌时，你可以改为自己选择失去的牌。',
 			gzjili:'蒺藜',
@@ -24668,7 +24691,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			zhengbi_info:'出牌阶段开始时，你可以选择一项：选择一名未受伤的其他角色，你对其使用的牌无距离限制且不计入使用次数直到回合结束；或将一张基本牌交给一名其他角色，然后其交给你一张非基本牌或两张基本牌。',
 			fengying:'奉迎',
 			fengying_info:'限定技，出牌阶段，你可以弃置所有手牌。若如此做，你可以令等量的角色将手牌摸至X张(X为其体力上限且至多为5)。然后，你结束出牌阶段，并在当前回合结束后进行一个新的回合。',
-			
+
 			qingzhong:'清忠',
 			qingzhong_info:'出牌阶段开始时，你可以摸两张牌，若如此做，此阶段结束时，你与手牌数最少的角色交换手牌。',
 			weijing:'卫境',
@@ -24715,7 +24738,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			fenyue2:'奋钺',
 			fenyue2_bg:'钺',
 			fenyue_info:'出牌阶段限X次，你可以与一名角色拼点，若你赢，你选择一项：1.令其不能使用或打出手牌直到回合结束；2.视为对其使用一张【杀】（不计入次数）。若你没赢，你结束出牌阶段。（X为存活的忠臣数）',
-			
+
 			zfengshi:'锋矢',
 			zfengshi_info:'当你使用【杀】指定目标后，你可以令目标弃置装备区内的一张牌。',
 			chuanxin:'穿心',
@@ -25559,7 +25582,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			ol_lvboshe:'吕伯奢',
 			skill_lvboshe:'技能',
 			skill_lvboshe_info:'农民的回合结束时：阴，你可以令地主进行一个额外回合；阳，你可以令其进行一个额外回合。',
-			
+
 
 			sp_tianji:'天极·皇室宗亲',
 			sp_sibi:'四弼·辅国文曲',

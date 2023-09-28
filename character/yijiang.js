@@ -107,9 +107,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			jikang:['male','wei',3,['qingxian','juexiang']],
 			qinmi:['male','shu',3,['jianzheng','zhuandui','tianbian']],
 			xuezong:['male','wu',3,['funan','xinjiexun']],
-			
+
 			old_huaxiong:['male','qun',6,['shiyong']],
-			
+
 			yujin:["male","wei",4,["rezhenjun"],[]],
 		},
 		characterIntro:{
@@ -1379,14 +1379,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							cardUsable:function(card,player,target){
 								if(card.name!='sha'||!card.cards) return;
 								for(var i of card.cards){
-									if(i.hasGaintag('kousheng')) return Infinity;
+									if(get.itemtype(card)=='card'&&i.hasGaintag('kousheng')) return Infinity;
 								}
 							},
 							cardname:function(card){
-								if(card.hasGaintag('kousheng')) return 'sha';
+								if(get.itemtype(card)=='card'&&card.hasGaintag('kousheng')) return 'sha';
 							},
 							cardnature:function(card){
-								if(card.hasGaintag('kousheng')) return false;
+								if(get.itemtype(card)=='card'&&card.hasGaintag('kousheng')) return false;
 							},
 						},
 						group:'kousheng_damage',
@@ -1736,8 +1736,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:1,
 					result:{
 						target:function(player,target){
-							if(get.attitude(player,target)>0){
-								return Math.sqrt(target.countCards('he'));
+							if(get.attitude(player,target)>0&&target.countCards('h')>2&&target.hp>2){
+								return 2+Math.sqrt(target.countCards('he'));
+							}
+							else if(get.attitude(player,target)<0){
+								return -Math.sqrt(target.countCards('he'));
 							}
 							return 0;
 						},
@@ -2573,6 +2576,19 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var num=4-target.countCards('h');
 					if(num) target.draw(num);
 				},
+				ai:{
+					order:2,
+					expose:0.3,
+					threaten:1.8,
+					result:{
+						target:function(player,target){
+							if(target.hasSkillTag('noturn')) return 0;
+							if(target.countCards('h')<3) return 0;
+							if(target.isTurnedOver()) return 2;
+							return -1/(target.countCards('h')+1);
+						}
+					}
+				},
 			},
 			xinzhige:{
 				enable:'phaseUse',
@@ -3253,7 +3269,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					'step 0'
 					player.chooseTarget(get.prompt2('zhenjun'),function(card,player,target){
-						return target.countCards('h')>target.hp; 
+						return target.countCards('h')>target.hp;
 					}).set('ai',function(target){
 						return -get.attitude(_status.event.player,target)*(target.countCards('e')+1);
 					});
@@ -3601,6 +3617,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					else return event.cards.filterInD('od').length>0;
 				},
 				logTarget:'player',
+				check:function(event,player){
+					if(get.attitude(player,event.player)>=0) return true;
+					if(player.hasSkill('funan_jiexun')) return true;
+					if(event.cards.length>1) return true;
+					return event.cards.length>0&&event.respondTo.length>1&&get.value(event.cards[0])>get.value(event.respondTo[1]);
+				},
 				content:function(){
 					'step 0'
 					if(!player.hasSkill('funan_jiexun')){
@@ -5127,13 +5149,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(player.isHealthy()){
 						event.type=0;
 						player.chooseBool(get.prompt('caishi'),'令自己的手牌上限+1',function(){
-							return true;
+							return player.skipList.contains('phaseUse')||player.needsToDiscard()>0||player.getHandcardLimit()<=0;
 						});
 					}
 					else{
 						event.type=1;
 						player.chooseControlList(get.prompt('caishi'),'令自己的手牌上限+1','回复1点体力，然后本回合你的牌不能对自己使用',function(){
-							return 1;
+							if(player.hp<=2){
+								if(player.countCards('h','tao')>=2) return;
+								return 1;
+							} else {
+								return (player.skipList.contains('phaseUse')||player.needsToDiscard()>0||player.getHandcardLimit()<=0)?0:1;
+							}
 						});
 					}
 					'step 1'
@@ -6241,12 +6268,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:1,
 					result:{
 						target:function(player,target){
-							if(get.attitude(player,target)>0){
-								return Math.sqrt(target.countCards('he'));
+							if(get.attitude(player,target)>0&&target.countCards('h')>2&&target.hp>2){
+								return 2+Math.sqrt(target.countCards('he'));
+							}
+							else if(get.attitude(player,target)<0){
+								return -Math.sqrt(target.countCards('he'));
 							}
 							return 0;
 						},
-						player:1
 					}
 				},
 				subSkill:{
@@ -8480,6 +8509,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					damage:true,
 					order:1,
+					nokeep:true,
 					effect:{
 						player:function(card,player,target){
 							if(_status.event.skill=='zhanjue'){
@@ -9307,7 +9337,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					maixie:true,
-					maixie_hp:true
+					maixie_hp:true,
+					threaten:function(player,target){
+						return target.hp>1||target.hujia?0.8:1;
+					}
 				}
 			},
 			duodao:{
@@ -12664,6 +12697,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 					},
 					threaten:1.6,
+					nokeep:true,
 				}
 			},
 			qice_backup:{audio:2},
@@ -13054,11 +13088,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var num=player.maxHp-player.hp;
 							var players=game.filterPlayer();
 							for(var i=0;i<players.length;i++){
+								var has_bad_equip=players[i].countCards('e',function(card){return get.equipValue(card)<=0;})>0;
 								if(get.attitude(player,players[i])>0) list1.push(players[i]);
-								else if(get.attitude(player,players[i])<0) list2.push(players[i]);
+								else if(get.attitude(player,players[i])<0&&!has_bad_equip) list2.push(players[i]);
 							}
 							list1.sort(function(a,b){
-								return a.countCards('e')-b.countCards('e');
+								if(a.countCards('e',function(card){return get.equipValue(card)<=0;})>0) return -1;
+								if(b.countCards('e',function(card){return get.equipValue(card)<=0;})>0) return -1;
+								return a.countCards('e',function(card){return get.equipValue(card)>0;})-b.countCards('e',function(card){return get.equipValue(card)>0;});
 							});
 							list2.sort(function(a,b){
 								return b.countCards('e')-a.countCards('e');
@@ -14604,7 +14641,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			feiyao:'费曜',
 			zhenfeng:'镇锋',
 			zhenfeng_info:'每回合限一次。当其他角色于其回合内使用牌时，若其手牌数不大于其体力值，你可以猜测其手牌中与此牌类别相同的牌数。若你猜对，你摸X张牌并视为对其使用一张【杀】（X为你连续猜对的次数且至多为5）；若你猜错且差值大于1，其视为对你使用一张【杀】。',
-			
+
 			yijiang_2011:'一将成名2011',
 			yijiang_2012:'一将成名2012',
 			yijiang_2013:'一将成名2013',

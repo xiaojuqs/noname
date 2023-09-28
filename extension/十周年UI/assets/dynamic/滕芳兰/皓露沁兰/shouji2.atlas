@@ -1,0 +1,181 @@
+
+shouji2.png
+size: 1495,1495
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effects/chusa/shenbo/paodan/00048
+  rotate: true
+  xy: 898, 126
+  size: 442, 138
+  orig: 1053, 259
+  offset: 611, 59
+  index: -1
+effects/chusa/shenbo/paodan/00049
+  rotate: true
+  xy: 1219, 104
+  size: 506, 138
+  orig: 1053, 259
+  offset: 531, 59
+  index: -1
+effects/chusa/shenbo/paodan/00050
+  rotate: true
+  xy: 1082, 51
+  size: 559, 137
+  orig: 1053, 259
+  offset: 452, 60
+  index: -1
+effects/chusa/shenbo/paodan/00051
+  rotate: true
+  xy: 1357, 125
+  size: 644, 138
+  orig: 1053, 259
+  offset: 372, 60
+  index: -1
+effects/chusa/shenbo/paodan/00052
+  rotate: true
+  xy: 1345, 769
+  size: 726, 138
+  orig: 1053, 259
+  offset: 292, 60
+  index: -1
+effects/chusa/shenbo/paodan/00053
+  rotate: false
+  xy: 0, 302
+  size: 806, 137
+  orig: 1053, 259
+  offset: 212, 61
+  index: -1
+effects/chusa/shenbo/paodan/00054
+  rotate: true
+  xy: 1082, 610
+  size: 885, 138
+  orig: 1053, 259
+  offset: 133, 61
+  index: -1
+effects/chusa/shenbo/paodan/00055
+  rotate: true
+  xy: 944, 568
+  size: 927, 138
+  orig: 1053, 259
+  offset: 88, 61
+  index: -1
+effects/chusa/shenbo/paodan/00056
+  rotate: false
+  xy: 0, 1358
+  size: 944, 137
+  orig: 1053, 259
+  offset: 44, 62
+  index: -1
+effects/chusa/shenbo/paodan/00057
+  rotate: false
+  xy: 0, 439
+  size: 898, 129
+  orig: 1053, 259
+  offset: 56, 65
+  index: -1
+effects/chusa/shenbo/paodan/00058
+  rotate: true
+  xy: 1220, 640
+  size: 855, 125
+  orig: 1053, 259
+  offset: 68, 65
+  index: -1
+effects/chusa/shenbo/paodan/00059
+  rotate: false
+  xy: 0, 11
+  size: 811, 115
+  orig: 1053, 259
+  offset: 81, 72
+  index: -1
+effects/chusa/shenbo/paodan/00060
+  rotate: false
+  xy: 0, 184
+  size: 708, 118
+  orig: 1053, 259
+  offset: 184, 71
+  index: -1
+effects/chusa/shenbo/paodan/00061
+  rotate: true
+  xy: 801, 652
+  size: 706, 117
+  orig: 1053, 259
+  offset: 185, 70
+  index: -1
+effects/chusa/shenbo/paodan/00062
+  rotate: false
+  xy: 0, 975
+  size: 703, 115
+  orig: 1053, 259
+  offset: 188, 71
+  index: -1
+effects/chusa/shenbo/paodan/00063
+  rotate: false
+  xy: 0, 569
+  size: 697, 77
+  orig: 1053, 259
+  offset: 195, 90
+  index: -1
+effects/chusa/shenbo/paodan/00064
+  rotate: false
+  xy: 0, 809
+  size: 697, 81
+  orig: 1053, 259
+  offset: 198, 89
+  index: -1
+effects/chusa/shenbo/paodan/00065
+  rotate: false
+  xy: 0, 1273
+  size: 714, 85
+  orig: 1053, 259
+  offset: 185, 87
+  index: -1
+effects/chusa/shenbo/paodan/00066
+  rotate: false
+  xy: 0, 1183
+  size: 710, 90
+  orig: 1053, 259
+  offset: 193, 83
+  index: -1
+effects/chusa/shenbo/paodan/00067
+  rotate: false
+  xy: 0, 1090
+  size: 708, 93
+  orig: 1053, 259
+  offset: 197, 81
+  index: -1
+effects/chusa/shenbo/paodan/00068
+  rotate: true
+  xy: 714, 646
+  size: 712, 87
+  orig: 1053, 259
+  offset: 195, 88
+  index: -1
+effects/chusa/shenbo/paodan/00069
+  rotate: false
+  xy: 0, 890
+  size: 699, 85
+  orig: 1053, 259
+  offset: 209, 89
+  index: -1
+effects/chusa/shenbo/paodan/00070
+  rotate: false
+  xy: 0, 743
+  size: 694, 66
+  orig: 1053, 259
+  offset: 213, 92
+  index: -1
+effects/chusa/shenbo/paodan/00071
+  rotate: false
+  xy: 0, 691
+  size: 688, 52
+  orig: 1053, 259
+  offset: 219, 106
+  index: -1
+effects/chusa/shenbo/paodan/00072
+  rotate: false
+  xy: 0, 130
+  size: 684, 54
+  orig: 1053, 259
+  offset: 222, 106
+  index: -1

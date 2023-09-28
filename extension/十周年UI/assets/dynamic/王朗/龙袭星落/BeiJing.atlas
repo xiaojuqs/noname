@@ -1,0 +1,13 @@
+
+BeiJing.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijing
+  rotate: false
+  xy: 1, 1
+  size: 1067, 754
+  orig: 1067, 754
+  offset: 0, 0
+  index: -1

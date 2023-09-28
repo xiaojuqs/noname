@@ -1743,6 +1743,17 @@ window.noname_character_rank={
 			'ol_wanglang',
 			'xin_guozhao',
 			'shichangshi',
+
+      // taffy: 永雏塔菲限定武将喵
+      'shenxushao',
+      'shiguanning',
+      'oldwu_zhugeliang',
+      'acetaffy',
+      'minitaffy',
+      'shixushao',
+      'spshenxushao',
+      'oldtw_niufudongxie',
+      'oldtw_zhangmancheng',
 		],
 		epic:[
 			'ol_pengyang',

@@ -1,0 +1,48 @@
+
+BeiJing.png
+size: 2034,1056
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijing
+  rotate: false
+  xy: 2, 208
+  size: 1186, 846
+  orig: 1186, 846
+  offset: 0, 0
+  index: -1
+huzi
+  rotate: false
+  xy: 2, 168
+  size: 408, 38
+  orig: 408, 38
+  offset: 0, 0
+  index: -1
+kouqiang
+  rotate: false
+  xy: 221, 21
+  size: 230, 145
+  orig: 230, 145
+  offset: 0, 0
+  index: -1
+shandian2_00
+  rotate: true
+  xy: 2, 2
+  size: 164, 217
+  orig: 181, 228
+  offset: 3, 11
+  index: -1
+shandian_00
+  rotate: true
+  xy: 453, 5
+  size: 201, 202
+  orig: 205, 205
+  offset: 4, 1
+  index: -1
+shenshou
+  rotate: true
+  xy: 1190, 157
+  size: 897, 842
+  orig: 897, 842
+  offset: 0, 0
+  index: -1

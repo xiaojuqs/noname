@@ -2,6 +2,7 @@
 game.import('card',function(lib,game,ui,get,ai,_status){
 	return {
 		name:'yunchou',
+		connect:true,
 		card:{
 			diaobingqianjiang:{
 				fullskin:true,
@@ -64,6 +65,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						event.dialog.setCaption('选择一张牌并用一张手牌替换之');
 					}
 					var next=target.chooseButton(function(button){
+						var list=target.getEnemies();
+						for (var i=0;i<list.length;i++){
+							if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+						}
 						return get.value(button.link,_status.event.player)-minValue;
 					});
 					next.set('dialog',event.preResult);
@@ -149,9 +154,23 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						value:[5,1]
 					},
 					result:{
-						player:1,
+						player:function(player,target){
+							if (game.players.length>2&&player.hasFriend()){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
+							return 1;
+						},
 						target:function(player,target){
 							if(target.countCards('h')==0) return 0;
+							if (game.players.length>2&&player.hasFriend()){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
 							return (Math.sqrt(target.countCards('h'))-get.distance(player,target,'absolute')/game.countPlayer()/3)/2;
 						}
 					},
@@ -192,7 +211,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							else{
 								game.log(target,'展示了',target.getCards('h'));
 							}
-							player.discardPlayerCard(target,'h',true,'visible');
+							player.discardPlayerCard(target,'h',true,'visible').set('ai',(card)=>get.value(card));
 						}
 						event.finish();
 					}
@@ -209,6 +228,13 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					value:[5,1],
 					result:{
 						target:function(player,target){
+							if(target.hasSkillTag('directHit_ai',true,{
+								player:target,
+								target:player,
+								card:{name:'sha'},
+							},true)){
+								return 0;
+							}
 							if(player.hasShan()) return -1;
 							return 0;
 						}
@@ -357,7 +383,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							var dutag=player.hasSkillTag('nodu');
 							for(var i=0;i<hs.length;i++){
 								var value=get.value(hs[i],player);
-								if(hs[i].name=='du'&&dutag) continue;
+								if(hs[i].name=='du') continue;
+								//if(hs[i].name=='du'&&dutag) continue;
 								if(value<0) return true;
 								if(!_status.event.hasTarget){
 									if(hs[i].number>=8&&value<=7) return true;
@@ -396,7 +423,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				callback:function(){
-					if(event.card1.number>event.card2.number){
+					if(event.num1>event.num2){
 						event.parent.parent.num++;
 					}
 					else{
@@ -549,7 +576,16 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					useful:6,
 					value:6,
 					result:{
-						target:-1
+						target:function(player,target){
+							if(target.getCards('e').length==1&&get.equipValue(target.getCards('e')[0])<=0) return 0;
+							if (game.players.length>2){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
+							return -1;
+						}
 					},
 					tag:{
 						loseCard:1
@@ -613,7 +649,34 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					order:9,
 					result:{
 						target:function(player,target){
-							if(target.countCards('e')) return -1;
+							if (game.players.length>2){
+								var list=target.getFriends(true);
+								for (var i=0;i<list.length;i++){
+									if (list[i].hasSkill('sphuangen')&&list[i].hp>1) return 0;
+								}
+							}
+							var do_not_use=false;
+							var friend_list=player.getFriends(true);
+							for (var i=0;i<friend_list.length;i++){
+								var treasure=friend_list[i].getEquip(5)
+								if (friend_list[i].getCards('e').length==1&&treasure){
+									if (treasure.name=='muniu'&&treasure.cards&&treasure.cards.length>0){
+										do_not_use=true;
+										break;
+									}
+									if (friend_list[i].getCards('h').length>0&&_status.jinhe&&_status.jinhe[treasure.cardid]){
+										do_not_use=true;
+										break;
+									}
+								}
+							}
+							if (do_not_use) return 0;
+							var card=target.getCards('e');
+							var val=0;
+							for(var i=0;i<card.length;i++){
+								val+=get.equipValue(card[i]);
+							}
+							if(val>0) return -val;
 							return 0;
 						}
 					},
@@ -760,6 +823,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						// damage:1,
 						// natureDamage:1,
 						// fireDamage:1,
+						expose:0.2,
 					}
 				}
 			},

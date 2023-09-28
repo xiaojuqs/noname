@@ -1,0 +1,48 @@
+
+beijing.png
+size: 1376,1376
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1.chutu/smoke_18
+  rotate: true
+  xy: 1088, 604
+  size: 99, 100
+  orig: 102, 102
+  offset: 2, 0
+  index: -1
+zhonghui_ditu
+  rotate: false
+  xy: 2, 705
+  size: 1365, 669
+  orig: 1365, 669
+  offset: 0, 0
+  index: -1
+zhonghui_hua1
+  rotate: false
+  xy: 508, 576
+  size: 578, 127
+  orig: 578, 127
+  offset: 0, 0
+  index: -1
+zhonghui_shu1
+  rotate: true
+  xy: 948, 2
+  size: 572, 319
+  orig: 572, 319
+  offset: 0, 0
+  index: -1
+zhonghui_shu2
+  rotate: false
+  xy: 508, 187
+  size: 438, 387
+  orig: 438, 387
+  offset: 0, 0
+  index: -1
+zhonghui_shu3
+  rotate: false
+  xy: 2, 222
+  size: 504, 481
+  orig: 504, 481
+  offset: 0, 0
+  index: -1

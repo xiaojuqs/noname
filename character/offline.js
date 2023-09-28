@@ -1222,7 +1222,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(get.name(card)!='sha') return false;
 						return lib.filter.filterCard.apply(this,arguments);
 					},trigger.target,-1).set('addCount',false).logSkill='pshuiqiang';
-				} 
+				}
 			},
 			pshuntu:{
 				audio:2,
@@ -3958,6 +3958,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					respondSha:true,
 					respondShan:true,
+					nokeep:true,
 					skillTagFilter:function(player){
 						return player.countCards('h')>0;
 					},
@@ -4874,7 +4875,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						[1,Math.min(player.hp,trigger.targets.length)],function(card,player,target){
 						return _status.event.targets.contains(target);
 					}).set('ai',function(target){
-						return -get.effect(target,trigger.card,trigger.player,_status.event.player);
+						var eff=-get.effect(target,trigger.card,trigger.player,_status.event.player);
+						if(eff==0&&get.tag(trigger.card,'damage')) eff=get.tag(trigger.card,'damage')*get.attitude(target,_status.event.player);
+						if(eff==0&&get.tag(trigger.card,'draw')) eff=-get.tag(trigger.card,'draw')*get.attitude(target,_status.event.player);
+						if(eff==0&&get.tag(trigger.card,'recover')) eff=-get.tag(trigger.card,'recover')*get.attitude(target,_status.event.player);
+						if(eff==0&&trigger.card.name=='tiesuo') eff=get.attitude(target,_status.event.player);
+						return eff;
 					}).set('targets',trigger.targets);
 					"step 1"
 					if(result.bool){
@@ -4882,6 +4888,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						trigger.excluded.addArray(result.targets);
 						player.draw();
 					}
+				},
+				ai:{
+					expose:0.2,
+					threaten:1.5
 				},
 			},
 			spyicong:{
@@ -6071,17 +6081,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target:function(card,player,target,current){
 							if(get.tag(card,'damage')){
 								if(player.hasSkillTag('jueqing',false,target)) return [1,-2];
-								if(get.attitude(player,target)>0) return [0,0];
-								var eff=get.damageEffect(target.storage.shichou_target,player,target);
-								if(eff>0){
-									return [0,1];
-								}
-								else if(eff<0){
-									return [0,-2];
-								}
-								else{
-									return [0,0];
-								}
+								if(get.attitude(player,target.storage.shichou_target)>0&&target.storage.shichou_target.hp<3&&player.countCards('h','tao')<=0) return [0,0];
 							}
 						}
 					}

@@ -1,0 +1,153 @@
+
+BeiJing.png
+size: 1544,1544
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: false
+  xy: 2, 789
+  size: 1540, 753
+  orig: 1540, 753
+  offset: 0, 0
+  index: -1
+qjyan_00
+  rotate: false
+  xy: 2, 679
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_01
+  rotate: false
+  xy: 2, 569
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_02
+  rotate: false
+  xy: 256, 679
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_03
+  rotate: false
+  xy: 2, 459
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_04
+  rotate: false
+  xy: 256, 569
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_05
+  rotate: false
+  xy: 510, 679
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_06
+  rotate: false
+  xy: 2, 349
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_07
+  rotate: false
+  xy: 256, 459
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_08
+  rotate: false
+  xy: 510, 569
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_09
+  rotate: false
+  xy: 764, 679
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_10
+  rotate: false
+  xy: 2, 239
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_11
+  rotate: false
+  xy: 256, 349
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_12
+  rotate: false
+  xy: 510, 459
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_13
+  rotate: false
+  xy: 764, 569
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_14
+  rotate: false
+  xy: 1018, 679
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_15
+  rotate: false
+  xy: 2, 129
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_16
+  rotate: false
+  xy: 256, 239
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_17
+  rotate: false
+  xy: 510, 349
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_18
+  rotate: false
+  xy: 764, 459
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1
+qjyan_19
+  rotate: false
+  xy: 1018, 569
+  size: 252, 108
+  orig: 252, 108
+  offset: 0, 0
+  index: -1

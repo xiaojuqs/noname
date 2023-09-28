@@ -3,7 +3,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 	return {
 		name:'old',
 		connect:true,
-		connectBanned:['zhangliang'],
 		characterSort:{
 			old:{
 				old_standard:['ol_yuanshu'],
@@ -76,7 +75,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			old_chenqun:['male','wei',3,['dingpin','oldfaen']],
 			old_zhuhuan:['male','wu',4,['youdi']],
 			old_zhuzhi:['male','wu',4,['anguo']],
-			
+
 			old_machao:['male','qun',4,['zhuiji','oldcihuai']],
 			old_zhugezhan:["male","shu",3,["old_zuilun","old_fuyin"]],
 			zhangliang:["male","qun",4,["old_jijun","old_fangtong"]],
@@ -820,6 +819,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if((card.name=='juedou'||card.name=='sha'||card.name=='huogong')&&player!=target&&player.countCards('h')>=target.countCards('h')&&target.hasEmptySlot(2)) return false;
 					},
 				},
+				ai:{
+					effect:{
+						player:function(card,player,target,current){
+							if(player.isEmpty(2)&&get.type(card)=='equip'&&get.subtype(card)=='equip2') return 'zeroplayertarget';
+						}
+					}
+				},
 			},
 			old_jijun:{
 				marktext:"方",
@@ -1106,7 +1112,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			old_caocao_ab:'魏武帝',
 			junkguixin:'归心',
 			junkguixin_info:'回合结束时，你可以选择一项：①获得剩余武将牌堆的所有主公技的其中一个技能；②更改一名其他角色的势力。',
-			
+
 			old_standard:'标准包',
 			old_shenhua:'神话再临',
 			old_refresh:'界限突破',

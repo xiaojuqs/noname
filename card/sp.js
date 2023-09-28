@@ -22,6 +22,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					player.draw(2);
 				},
 				ai:{
+					wuxie:function(target,card,player,current,state){
+						return -state*get.attitude(player,current);
+					},
 					useful:function(){
 						var player=_status.event.player;
 						var nj=player.countCards('h','jinchan');
@@ -197,6 +200,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							return lib.card.shandian.ai.result.target(player,target);
 						}
 					},
+					tag:{
+						expose:0.2,
+					}
 				}
 			},
 			qibaodao:{
@@ -228,7 +234,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				skills:['zhungangshuo'],
 				distance:{attackFrom:-2},
 				ai:{
-					equipValue:4
+					basic:{
+						equipValue:4
+					}
 				},
 			},
 			lanyinjia:{
@@ -237,8 +245,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				subtype:'equip2',
 				skills:['lanyinjia','lanyinjia2'],
 				ai:{
-					equipValue:6
-				}
+					basic:{
+						equipValue:6
+					}
+				},
 			},
 			yinyueqiang:{
 				audio:true,
@@ -326,6 +336,18 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							if(ui.selected.targets.length==1){
 								if(target.hasSkillTag('nogain')) return 0;
 								return 2;
+							}
+							if(game.players.length>2){
+								var list=player.getEnemies();
+								for (var i=0;i<list.length;i++){
+									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								}
+							}
+							var target_equips=target.getCards('e');
+							if(target_equips.length>0){
+								for (var i=0;i<target_equips.length;i++){
+									if(get.equipValue(target_equips[i])<=0) return 1;
+								}
 							}
 							if(target.countCards('he')==0) return 0;
 							if(player.hasFriend()) return -1;

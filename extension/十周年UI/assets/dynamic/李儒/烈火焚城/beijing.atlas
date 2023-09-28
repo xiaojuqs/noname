@@ -1,0 +1,27 @@
+
+beijing.png
+size: 799,799
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+liru_bg
+  rotate: false
+  xy: 2, 5
+  size: 612, 792
+  orig: 612, 792
+  offset: 0, 0
+  index: -1
+tx/liru_Smoke
+  rotate: true
+  xy: 616, 367
+  size: 430, 181
+  orig: 457, 214
+  offset: 20, 4
+  index: -1
+tx/liru_huo1
+  rotate: false
+  xy: 616, 321
+  size: 159, 44
+  orig: 167, 60
+  offset: 4, 9
+  index: -1

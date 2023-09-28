@@ -1,0 +1,307 @@
+
+beijing.png
+size: 1925,1925
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ditu
+  rotate: false
+  xy: 2, 1421
+  size: 1026, 502
+  orig: 1026, 502
+  offset: 0, 0
+  index: -1
+r30
+  rotate: false
+  xy: 2, 423
+  size: 505, 523
+  orig: 521, 524
+  offset: 14, 1
+  index: -1
+r31
+  rotate: false
+  xy: 2, 948
+  size: 573, 471
+  orig: 576, 472
+  offset: 2, 1
+  index: -1
+r32
+  rotate: false
+  xy: 1676, 1489
+  size: 91, 89
+  orig: 97, 92
+  offset: 3, 2
+  index: -1
+r33
+  rotate: false
+  xy: 1766, 138
+  size: 143, 151
+  orig: 147, 157
+  offset: 3, 2
+  index: -1
+r34
+  rotate: false
+  xy: 107, 23
+  size: 81, 79
+  orig: 84, 82
+  offset: 2, 1
+  index: -1
+r35
+  rotate: true
+  xy: 2, 5
+  size: 97, 103
+  orig: 101, 108
+  offset: 2, 3
+  index: -1
+r36
+  rotate: false
+  xy: 1766, 34
+  size: 113, 102
+  orig: 134, 123
+  offset: 9, 10
+  index: -1
+r37
+  rotate: true
+  xy: 333, 84
+  size: 337, 229
+  orig: 339, 230
+  offset: 0, 0
+  index: -1
+shan4
+  rotate: false
+  xy: 1224, 164
+  size: 195, 140
+  orig: 196, 141
+  offset: 1, 0
+  index: -1
+tx/chuchang/chuchang_tx3_00
+  rotate: true
+  xy: 1361, 1485
+  size: 326, 313
+  orig: 390, 390
+  offset: 33, 34
+  index: -1
+tx/chuchang/chuchang_tx3_01
+  rotate: true
+  xy: 564, 137
+  size: 326, 313
+  orig: 390, 390
+  offset: 34, 34
+  index: -1
+tx/chuchang/chuchang_tx3_02
+  rotate: true
+  xy: 909, 1094
+  size: 325, 314
+  orig: 390, 390
+  offset: 36, 34
+  index: -1
+tx/chuchang/chuchang_tx3_03
+  rotate: false
+  xy: 907, 776
+  size: 321, 316
+  orig: 390, 390
+  offset: 41, 34
+  index: -1
+tx/chuchang/chuchang_tx3_04
+  rotate: false
+  xy: 1225, 1167
+  size: 322, 316
+  orig: 390, 390
+  offset: 41, 35
+  index: -1
+tx/chuchang/chuchang_tx3_05
+  rotate: false
+  xy: 2, 104
+  size: 329, 317
+  orig: 390, 390
+  offset: 34, 35
+  index: -1
+tx/chuchang/chuchang_tx3_06
+  rotate: false
+  xy: 577, 783
+  size: 328, 317
+  orig: 390, 390
+  offset: 35, 36
+  index: -1
+tx/chuchang/chuchang_tx3_07
+  rotate: false
+  xy: 577, 1102
+  size: 330, 317
+  orig: 390, 390
+  offset: 35, 36
+  index: -1
+tx/chuchang/chuchang_tx3_08
+  rotate: false
+  xy: 1030, 1494
+  size: 329, 317
+  orig: 390, 390
+  offset: 36, 35
+  index: -1
+tx/chuchang/chuchang_tx3_09
+  rotate: false
+  xy: 509, 465
+  size: 326, 316
+  orig: 390, 390
+  offset: 37, 35
+  index: -1
+tx/chuchang/chuchang_tx3_10
+  rotate: true
+  xy: 1230, 842
+  size: 323, 315
+  orig: 390, 390
+  offset: 36, 35
+  index: -1
+tx/chuchang/chuchang_tx3_11
+  rotate: true
+  xy: 1549, 1160
+  size: 323, 314
+  orig: 390, 390
+  offset: 35, 35
+  index: -1
+tx/chuchang/chuchang_tx3_12
+  rotate: false
+  xy: 1547, 846
+  size: 325, 312
+  orig: 390, 390
+  offset: 33, 35
+  index: -1
+tx/chuchang/chuchang_tx3_13
+  rotate: false
+  xy: 1230, 529
+  size: 325, 311
+  orig: 390, 390
+  offset: 33, 35
+  index: -1
+tx/chuchang/chuchang_tx3_14
+  rotate: true
+  xy: 879, 225
+  size: 326, 312
+  orig: 390, 390
+  offset: 32, 34
+  index: -1
+tx/glow6
+  rotate: true
+  xy: 1376, 2
+  size: 70, 69
+  orig: 77, 77
+  offset: 4, 4
+  index: -1
+tx/glow7
+  rotate: false
+  xy: 1224, 19
+  size: 150, 143
+  orig: 150, 150
+  offset: 0, 1
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00000
+  rotate: false
+  xy: 879, 115
+  size: 343, 108
+  orig: 392, 149
+  offset: 11, 20
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00001
+  rotate: false
+  xy: 564, 6
+  size: 342, 107
+  orig: 392, 149
+  offset: 13, 20
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00002
+  rotate: false
+  xy: 1193, 306
+  size: 343, 109
+  orig: 392, 149
+  offset: 13, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00003
+  rotate: false
+  xy: 1538, 402
+  size: 343, 109
+  orig: 392, 149
+  offset: 13, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00004
+  rotate: false
+  xy: 837, 553
+  size: 344, 110
+  orig: 392, 149
+  offset: 11, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00005
+  rotate: false
+  xy: 1557, 734
+  size: 344, 110
+  orig: 392, 149
+  offset: 11, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00006
+  rotate: false
+  xy: 837, 665
+  size: 346, 109
+  orig: 392, 149
+  offset: 9, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00007
+  rotate: false
+  xy: 1557, 623
+  size: 344, 109
+  orig: 392, 149
+  offset: 9, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00008
+  rotate: false
+  xy: 1193, 417
+  size: 343, 110
+  orig: 392, 149
+  offset: 11, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00009
+  rotate: false
+  xy: 1538, 291
+  size: 343, 109
+  orig: 392, 149
+  offset: 12, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00010
+  rotate: true
+  xy: 1676, 1580
+  size: 343, 109
+  orig: 392, 149
+  offset: 13, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00011
+  rotate: false
+  xy: 1421, 74
+  size: 343, 106
+  orig: 392, 149
+  offset: 14, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00012
+  rotate: false
+  xy: 1421, 182
+  size: 343, 107
+  orig: 392, 149
+  offset: 15, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00013
+  rotate: false
+  xy: 1557, 513
+  size: 344, 108
+  orig: 392, 149
+  offset: 14, 19
+  index: -1
+tx/huoyan/tx_beihouhuoyan02_00014
+  rotate: true
+  xy: 1787, 1580
+  size: 343, 108
+  orig: 392, 149
+  offset: 11, 19
+  index: -1
+tx/yan1
+  rotate: false
+  xy: 1030, 1813
+  size: 614, 110
+  orig: 614, 154
+  offset: 0, 0
+  index: -1

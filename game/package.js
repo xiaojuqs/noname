@@ -11,7 +11,7 @@ window.noname_package={
 		huicui:'群英荟萃',
 		xianding:'限定专属',
 		sp2:'系列专属',
-		extra:'神将',		
+		extra:'神将',
 		mobile:'移动版',
 		shiji:'始计篇',
 		sb:'谋攻篇',
@@ -30,6 +30,7 @@ window.noname_package={
 		swd:'轩辕剑',
 		gujian:'古剑奇谭',
 		xianjian:'仙剑奇侠传',
+    taffy:'永雏塔菲',
 	},
 	card:{
 		standard:'标准',
@@ -118,6 +119,20 @@ window.noname_package={
 		wangshi_bg:'往事',
 		xiongxin_bg:'雄心',
 		xinsha_bg:'新杀',
+
+    // taffy: 永雏塔菲限定背景喵
+    兵荒马乱:'兵荒马乱',
+    兵临城下:'兵临城下',
+    朝堂之上:'朝堂之上',
+    汉室当兴:'汉室当兴',
+    华灯初上:'华灯初上',
+    人间安乐:'人间安乐',
+    三国开黑节:'三国开黑节',
+    十周年:'十周年',
+    桃园风格:'桃园风格',
+    天书乱斗:'天书乱斗',
+    校园行:'校园行',
+    游卡桌游:'游卡桌游',
 	},
 	music:{
 		music_phliosophy:'Philosophy of ours',

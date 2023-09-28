@@ -7360,7 +7360,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				logTarget:'player',
 				content:function(){
 					trigger.cancel();
-					player.damage(trigger.source?trigger.source:'nosource',trigger.nature,trigger.num).set('card',trigger.card).set('cards',trigger.cards).twgonghuan=true;
+					event.player.damage(trigger.source?trigger.source:'nosource',trigger.nature,trigger.num).set('card',trigger.card).set('cards',trigger.cards).twgonghuan=true;
 				},
 			},
 			//桥蕤
@@ -8608,6 +8608,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}).set('yimie',function(trigger,player,target,damageNum){
 						var hit=true;
 						var att=get.attitude(player,target);
+						var damageNum=trigger.getParent().baseDamage;
 						if(get.type(trigger.card)=='trick'&&trigger.player.countCards('hs',{name:'wuxie'})) hit=false;
 						if(trigger.card.name=='huogong'&&trigger.player.countCards('h',function(card){
 							var list=[];
@@ -9333,7 +9334,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var target=trigger.player;
 							event.target=target;
 							if(player.storage.twzhengjian){
-								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？').set('ai',()=>_status.event.goon).set('goon',get.damageEffect(target,player,player)>0);
+								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？').set('ai',()=>_status.event.goon).set('goon',get.damageEffect(target,player,player)>0&&get.attitude(target,player)<0);
 							}
 							else{
 								target.chooseCard('he',true,'交给'+get.translation(player)+'一张牌');
@@ -9381,7 +9382,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var target=trigger.player;
 							event.target=target;
 							if(player.storage.twzhengjian){
-								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？');
+								player.chooseBool('征建：是否对'+get.translation(target)+'造成1点伤害？').set('ai',()=>_status.event.goon).set('goon',get.damageEffect(target,player,player)>0&&get.attitude(target,player)<0);;
 							}
 							else{
 								target.chooseCard('he',true,'交给'+get.translation(player)+'一张牌');
@@ -9627,9 +9628,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(get.position(card)=='e'){
 								var val=get.value(card);
 								if(att>0?val>0:val<=0) return 0;
-								return get.effect(target,card,player,player);
+								return get.effect(target,button.link,player,player);
 							}
-							var cardx={name:card.viewAs||card.name};
+							var cardx={name:button.link.viewAs||button.link.name};
 							if(get.effect(source,cardx,player,player)>=0) return 0;
 							return get.effect(target,cardx,player,player)
 						});
@@ -13141,6 +13142,23 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				content:function(){
 					player.markAuto('gx_chongyingshenfu_effect',[trigger.card.name]);
 				},
+				ai:{
+					effect:{
+						target:function(card,player,target){
+							if(target.hasSkillTag('unequip2')) return;
+							if(player.hasSkillTag('unequip',false,{
+								name:card?card.name:null,
+								target:target,
+								card:card
+							})||player.hasSkillTag('unequip_ai',false,{
+								name:card?card.name:null,
+								target:target,
+								card:card
+							})) return;
+							if(target.storage.gx_chongyingshenfu_effect&&target.getStorage('gx_chongyingshenfu_effect').contains(card.name)) return 'zerotarget';
+						},
+					},
+				},
 				group:'gx_chongyingshenfu_effect',
 				subSkill:{
 					effect:{
@@ -13538,7 +13556,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 3'
 					if(target.isDamaged()&&target.hp<=player.hp){
 						player.chooseBool('是否令'+get.translation(target)+'回复1点体力？').set('ai',function(){
-							return get.recoverEffect(target,player,player);
+							return get.recoverEffect(target,player,player)&&get.attitude(target,player)>0;
 						});
 					}
 					'step 4'
@@ -13548,7 +13566,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:8,
 					result:{
 						target:function(player,target){
-							var eff=(target.isDamaged()&&target.hp<=player.hp)?get.recoverEffect(target,player,target):0;
+							var eff=(target.isDamaged()&&get.attitude(target,player)>0)?get.recoverEffect(target,player,player):0;
 							if(eff<=0&&!player.countGainableCards(target,'e')) return -1;
 							return eff;
 						},
@@ -13639,7 +13657,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 				},
 				check:function(card){
-					return 7-get.value(card);
+					return 10-get.value(card);
 				},
 				ai:{
 					order:function(){
@@ -13647,7 +13665,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target){
-							return get.effect(target,{name:'sha'},player,player);
+							if(get.attitude(player,target)<0&&get.effect(target,{name:'sha'},player,player)>0) return -1;
 						},
 					},
 				},
@@ -14044,7 +14062,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			tw_dingfeng:'TW丁奉',
 			tw_caohong:'TW曹洪',
 			tw_maliang:'TW马良',
-			
+
 			twyanqin:'姻亲',
 			twyanqin_info:'准备阶段，你可以将势力变更为魏或蜀。',
 			twbaobian:'豹变',

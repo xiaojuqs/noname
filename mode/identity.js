@@ -779,7 +779,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 						}
 					},result);
-					
+
 					var list=[];
 					var players=game.players.slice(0);
 					players.removeArray([game.rZhu,game.bZhu]);
@@ -1979,7 +1979,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							zhu.update();
 						}
 					},game.zhu,result.links[0],result.links[1],game.players.length>4);
-					
+
 					if(game.zhu.group=='shen'&&!game.zhu.isUnseen(0)){
 						var list=['wei','shu','wu','qun','jin','key'];
 						for(var i=0;i<list.length;i++){
@@ -2136,14 +2136,14 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							ui.arena.classList.remove('choose-character');
 						},500);
 					},result2,result);
-					
+
 					for(var i in result2){
 						if(!lib.playerOL[i].name){
 							lib.playerOL[i].init(result2[i][0],result2[i][1]);
 						}
 						if(result[i]&&result[i].length) lib.playerOL[i].changeGroup(result[i],false,false);
 					}
-					
+
 					if(event.special_identity){
 						for(var i in event.special_identity){
 							game.zhu.addSkill(i);
@@ -2636,17 +2636,44 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(!game.zhu.isZhu){
 					zhongmode=true;
 				}
+				//fix auto identity mark will cause Zhu and Zhong ai do nothing when all of the Fan are dead:
+				//condition: ai.identity_mark=='finished' and ai.shown==1
+				var mark_bug=false;
+				for(var i=0;i<game.players.length;i++){
+					if(game.players[i].ai.identity_mark=='finished'&&get.population('fan')==0){
+						if(game.players[i].identity=='nei'&&game.players[i].ai.shown>=1){
+							mark_bug=true;break;
+						}
+					}
+				}
+				if(mark_bug&&from.identity!='nei'&&from!=to&&get.population('fan')==0&&identity2=='zhong'){
+					for(var i=0;i<game.players.length;i++){
+						identity2='nei';break;
+					}
+				}
+				var max_hp_exclude_zhu_and_self=0;
+				for(var i=0;i<game.players.length;i++){
+					if(game.players[i]!=from&&game.players[i].identity!='zhu'){
+						max_hp_exclude_zhu_and_self=Math.max(max_hp_exclude_zhu_and_self,game.players[i].hp);
+					}
+				}
 				switch(identity){
 					case 'zhu':
 						switch(identity2){
 							case 'zhu': return 10;
-							case 'zhong':case 'mingzhong': return 6;
+							case 'zhong':
+								if (get.population('zhong')==0&&get.population('fan')==1) return -0.5;
+								return 6;
+							case 'mingzhong': return 6;
 							case 'nei':
 								if(game.players.length==2) return -10;
-								if(to.identity=='zhong') return 0;
+								if(to.identity=='zhong'&&get.population('fan')>0) return 0;
 								if(get.population('fan')==0){
+									if(to.hp>=3&&!from.hasSkill('yimie')){
+										return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
+									}
 									if(to.ai.identity_mark=='zhong'&&to.ai.shown<1) return 0;
-									return -0.5;
+									return 0;
 								}
 								if(zhongmode&&to.ai.sizhong&&to.ai.shown<1) return 6;
 								if(get.population('fan')==1&&get.population('nei')==1&&game.players.length==3){
@@ -2688,7 +2715,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							case 'zhu': return 10;
 							case 'zhong':case 'mingzhong': return 4;
 							case 'nei':
-								if(get.population('fan')==0) return -2;
+								if(get.population('fan')==0){
+									return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
+								}
 								if(zhongmode&&to.ai.sizhong&&to.ai.shown<1) return 6;
 								return Math.min(3,-situation);
 							case 'fan': return -8;

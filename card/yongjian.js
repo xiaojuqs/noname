@@ -10,8 +10,24 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				global:['g_du','g_du_give'],
 				content:function(){},
 				ai:{
-					value:-5,
-					useful:6,
+					value:function(card,player,i){
+						if(player.hp<=1&&_status.currentPhase==player&&_status.event.getParent('phaseUse').name=='phaseUse'
+						&&_status.event.name!='chooseButton'&&_status.event.name!='chooseCard'){
+							return 100;
+						}
+						for(var i=0;i<10;i++){
+							if(_status.event.getParent(i)&&_status.event.getParent(i).name=='chooseToCompare') return 100;
+						}
+						if(_status.currentPhase==player&&_status.event.name=='chooseCard') return 100;
+						return -5;
+					},
+					useful:function(card,i){
+						var player=_status.event.player
+						if(player.hp<=1&&_status.currentPhase==player&&_status.event.getParent('phaseDiscard').name=='phaseDiscard'&&player.countCards('h','tao')+player.countCards('h','jiu')<=0){
+							return 11;
+						}
+						return 6;
+					},
 					result:{
 						player:function(player,target){
 							if(player.hasSkillTag('usedu')) return 5;
@@ -38,6 +54,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:2,
+					value:7,
 					tag:{
 						recover:1,
 					},
@@ -128,9 +145,14 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target){
-							if(get.attitude(player,target)<=0) return ((target.countCards('he',function(card){
-								return get.value(card,target)>0&&card!=target.getEquip('jinhe');
-							})>0)?-0.3:0.3)*Math.sqrt(player.countCards('h'));
+							if(get.attitude(player,target)<=0){
+								if(target.getCards('h')<=0&&target.countCards('e',function(card){
+									return get.equipValue(card)<=0;
+								})>0) return 0;
+								return ((target.countCards('he',function(card){
+									return get.value(card,target)>0&&card!=target.getEquip('jinhe');
+								})>0)?-0.3:0.3)*Math.sqrt(player.countCards('h'));
+							}
 							return ((target.countCards('ej',function(card){
 								if(get.position(card)=='e') return get.value(card,target)<=0;
 								var cardj=card.viewAs?{name:card.viewAs}:card;
@@ -176,8 +198,13 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var cards=target.getCards('e'),js=target.getCards('j');
-							var val=get.value(cards,target);
-							for(var card of js) val-=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,player);
+							var val=0;
+							for(var i=0;i<cards.length;i++){
+								val+=get.equipValue(cards[i]);
+							}
+							var tianjitu_card=target.getEquip(5);
+							if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
+							for(var card of js) val+=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,target)*get.attitude(player,target)*10;
 							return -val;
 						},
 					},
@@ -206,13 +233,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2.5;
-							var val2=0;
 							var card=target.getEquip(1);
-							if(card){
-								val2=get.value(card,target);
-								if(val2<0) return 0;
-							}
-							return -val-val2;
+							if(card&&get.equipValue(card)<=0) return 0;
+							if(card) val+=get.equipValue(card);
+							return -val;
 						},
 					},
 				},
@@ -241,11 +265,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						target:function(player,target){
 							var val=(target.hasSex('male')?2.5:0);
 							var val2=0;
-							var card=target.getEquip(1);
-							if(card){
-								val2=get.value(card,target);
-								if(val2<0) return 0;
-							}
+							var card=target.getEquip(2);
+							if(card) val2=get.equipValue(card);
+							if(card&&get.equipValue(card)<=0) return 0;
 							return -val-val2;
 						},
 					},
@@ -274,13 +296,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2;
-							var val2=0;
 							var card=target.getEquip(2);
-							if(card){
-								val2=get.value(card,target);
-								if(val2<0) return 0;
-							}
-							return -val-val2;
+							if(card&&get.equipValue(card)<=0) return 0;
+							if(card) val+=get.equipValue(card);
+							return -val;
 						},
 					},
 				},
@@ -296,13 +315,23 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					order:9,
-					equipValue:0,
+					equipValue:-1,
 					value:function(card,player){
-						if(player.getEquips(2).contains(card)) return 0;
+						if(player.getEquips(4).contains(card)) return 0;
 						return 0.5;
 					},
 					basic:{
-						equipValue:0,
+						equipValue:-1,
+					},
+					result:{
+						keepAI:true,
+						target:function(player,target){
+							var val=2.5;
+							var card=target.getEquip(4);
+							if(card&&get.equipValue(card)<=0) return 0;
+							if(card) val+=get.equipValue(card);
+							return -val;
+						},
 					},
 				},
 			},
@@ -325,9 +354,9 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				fullskin:true,
 				skills:['xinge'],
 				ai:{
-					equipValue:2,
+					equipValue:0,
 					basic:{
-						equipValue:2,
+						equipValue:0,
 					},
 				}
 			},
@@ -634,7 +663,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					player.gift(cards,target);
 				},
 				ai:{
-					order:(item,player)=>player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0),'h')?7:0.51,
+					order:(item,player)=>player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0),'h')?1:0.51,
 					result:{
 						target:(player,target)=>{
 							const result=ui.selected.cards.map(value=>player.getGiftAIResultTarget(value,target));
@@ -724,7 +753,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			xinge:'信鸽',
 			xinge_info:'出牌阶段限一次。你可以将一张手牌交给一名其他角色。',
 			xinge_append:'<span class="text" style="font-family: yuanli">咕咕咕。</span>',
-			
+
 			_gifting:'赠予',
 			_gifting_info:'出牌阶段，你可将一张拥有“赠”标签的手牌区装备牌置于一名其他角色的装备区内，或将一张拥有“赠”标签的手牌区非装备牌正面朝上交给一名其他角色。',
 		},
@@ -742,7 +771,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['spade',11,'wuxie'],
 			['spade',12,'chenghuodajie'],
 			['spade',13,'chenghuodajie'],
-			
+
 			['heart',1,'guaguliaodu'],
 			['heart',2,'shan',null,['gifts']],
 			['heart',3,'wugu',null,['gifts']],
@@ -756,11 +785,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['heart',11,'sha',null,['gifts']],
 			['heart',12,'sha',null,['gifts']],
 			['heart',13,'zhanxiang',null,['gifts']],
-			
+
 			['club',1,'duanjian',null,['gifts']],
 			['club',2,'sha','stab'],
 			['club',3,'yinfengyi',null,['gifts']],
-			['club',4,'du'],
+			['club',4,'du',null,['gifts']],
 			['club',5,'yitianjian'],
 			['club',6,'sha','stab'],
 			['club',7,'sha','stab'],
@@ -770,7 +799,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 			['club',11,'wuxie'],
 			['club',12,'wuxie'],
 			['club',13,'yonglv',null,['gifts']],
-			
+
 			['diamond',1,'juedou',null,['gifts']],
 			['diamond',2,'shan'],
 			['diamond',3,'kaihua',null,['gifts']],
