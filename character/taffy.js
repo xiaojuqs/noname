@@ -4,7 +4,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     name: 'taffy',
     connect: true,
     character: {
-      shenxushao: ['male', 'shen', 3, ['shenpingjian'],
+      shenxushao: ['male', 'shen', 1, ['shenpingjian'],
         ['qun']
       ],
       oldwu_zhugeliang: ['male', 'shu', '4/7', ['olddcjincui', 'olddcqingshi', 'olddczhizhe']],
