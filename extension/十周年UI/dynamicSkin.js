@@ -3711,8 +3711,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     old_zhangqiying: decadeUI.dynamicSkin.zhangqiying,
 
     //赵襄
-    decade_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
-    old_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
+    dc_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
+    zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
 
     //钟会
     re_zhonghui: decadeUI.dynamicSkin.zhonghui,
