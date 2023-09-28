@@ -1497,7 +1497,7 @@ game.import("extension", (lib, game, ui, get, ai, _status) => {
 								this.name = card[2];
 								this.classList.add('card');
 								if (card[3]) {
-									if (lib.nature.contains(card[3])) this.nature = card[3];
+									if (lib.nature.has(card[3])) this.nature = card[3];
 									this.classList.add(card[3]);
 								} else if (this.nature) {
 									this.classList.remove(this.nature);
