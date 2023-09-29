@@ -29056,6 +29056,11 @@
 						card=[card.suit,card.number,card.name,card.nature];
 					}
 					var cardnum=card[1]||'';
+					
+					if(window.decadeUI){
+						var cardsuit=get.translation(card[0]);
+					}
+					
 					if(parseInt(cardnum)==cardnum) cardnum=parseInt(cardnum);
 					if(cardnum>0&&cardnum<14){
 						cardnum=['A','2','3','4','5','6','7','8','9','10','J','Q','K'][cardnum-1];
@@ -29291,6 +29296,15 @@
 						this.node.info.classList.add('red');
 					}
 					this.node.image.className='image';
+					
+					if(window.decadeUI){
+						var filename = card[2];
+						var cardname = get.translation(card[2]);
+						this.dataset.suit = card[0];
+						this.$suitnum.$num.textContent = cardnum;
+						this.$suitnum.$suit.textContent = cardsuit;
+					}
+					
 					var name=get.translation(card[2]);
 					if(card[2]=='sha'){
 						name='';
@@ -29313,6 +29327,14 @@
 						}
 					}
 					this.node.name2.innerHTML=get.translation(card[0])+cardnum+' '+name;
+					
+					if(window.decadeUI){
+						this.$name.innerText = cardname;
+						this.$vertname.innerText = cardname;
+						this.$equip.$suitnum.textContent = cardsuit + cardnum;
+						this.$equip.$name.textContent = ' ' + cardname;
+					}
+					
 					this.suit=card[0];
 					this.number=parseInt(card[1])||0;
 					this.name=card[2];
@@ -29396,6 +29418,77 @@
 							this.node.range.innerHTML+=tagstr;
 						}
 					}
+					
+					if(window.decadeUI){
+						var imgFormat = decadeUI.config.cardPrettify;
+						if (imgFormat != 'off'){
+							this.classList.add('decade-card');
+							if (!this.classList.contains('infohidden')) {
+								var res = dui.statics.cards;
+								var asset = res[filename];
+								if (res.READ_OK) {
+									if (asset == undefined && typeof lib.decade_extCardImage == "object" && typeof lib.decade_extCardImage[filename] == "string") res[filename] = asset = {
+										url: lib.decade_extCardImage[filename],
+										name: filename,
+										loaded: true,
+									};
+									if (asset == undefined) {
+										this.classList.remove('decade-card');
+									} else {
+										this.style.background = 'url("' + asset.url + '")';
+										if (this.node.avatar) this.node.avatar.remove();
+										if (this.node.framebg) this.node.framebg.remove();
+									}
+								} else {
+									var url = lib.assetURL + 'extension/' + window.decadeUIName + '/image/card/' + filename + '.' + imgFormat;
+									if (typeof lib.decade_extCardImage == "object" && typeof lib.decade_extCardImage[filename] == "string") url = lib.decade_extCardImage[filename];
+									if (!asset) {
+										res[filename] = asset = {
+											name: filename,
+											url: undefined,			// 图片路径
+											loaded: undefined, 		// 是否加载
+											rawUrl: undefined, 		// 原图片地址
+										};
+									}
+									
+									if (asset.loaded !== false) {
+										if (asset.loaded == undefined) {
+											var image = new Image();
+											
+											image.onload = function(){
+												asset.loaded = true;
+												image.onload = undefined;
+											};
+											
+											var card = this;
+											image.onerror = function(){
+												asset.loaded = false;
+												image.onerror = undefined;
+												card.style.background = asset.rawUrl;
+												card.classList.remove('decade-card');
+												if (card.node.avatar) card.insertBefore(card.node.avatar, card.firstChild);
+												if (card.node.framebg) card.insertBefore(card.node.framebg, card.firstChild);
+											}
+											
+											asset.url = url;
+											asset.rawUrl = this.style.background || this.style.backgroundImage;
+											asset.image = image;
+											image.src = url;
+										}
+										
+										this.style.background = 'url("' + url + '")';
+										if (this.node.avatar) this.node.avatar.remove();
+										if (this.node.framebg) this.node.framebg.remove();
+									} else {
+										this.classList.remove('decade-card');
+									}
+								}
+							}
+						} else {
+							this.classList.remove('decade-card');
+						}
+					}
+					
 					return this;
 				},
 				updateTransform:function(bool,delay){
