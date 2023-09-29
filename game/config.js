@@ -443,5 +443,6 @@ window.config={
 		['akane_quanqing','lianying'],
 		['akane_quanqing','relianying'],
 		['akane_quanqing','shangshi'],
+		['dcruyi','cxliushi'],
 	]
 };

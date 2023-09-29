@@ -2040,7 +2040,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					game.log(trigger.card,'被改为神属性');
-					trigger.card.nature='kami';
+					game.setNature(trigger.card,'kami');
 				}
 			},
 			shanrangzhaoshu:{
@@ -2669,7 +2669,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(!player.hasEmptySlot('equip2')) return false;
 					if(event.card.name=='nanman') return true;
 					if(event.card.name=='wanjian') return true;
-					return event.card.name=='sha'&&!get.nature(event.card);
+					return event.card.name=='sha'&&event.card.hasNature();
 				},
 				content:function(){
 					trigger.cancel();
@@ -2682,7 +2682,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							if(card.name=='sha'){
 								var equip1=player.getEquip(1);
 								if(equip1&&equip1.name=='zhuque') return 1.9;
-								if(!card.nature) return 'zerotarget';
+								if(!card.hasNature()) return 'zerotarget';
 							}
 						}
 					}
@@ -3707,12 +3707,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				},
 				forced:true,
 				filter:function(event,player){
-					if(player==event.player) return event.nature=='fire'||player==event.source;
+					if(player==event.player) return event.hasNature('fire')||player==event.source;
 					return true;
 				},
 				content:function(){
 					if(player==trigger.player) trigger.cancel();
-					else trigger.nature='fire';
+					else game.setNature(trigger,'fire');
 				},
 				ai:{
 					unequip:true,
@@ -4079,7 +4079,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					thunder:{
 						trigger:{player:'damageBegin4'},
 						filter:function(event){
-							return event.nature=='thunder'&&game.roundNumber<7;
+							return event.hasNature('thunder')&&game.roundNumber<7;
 						},
 						forced:true,
 						content:function(){
@@ -4509,7 +4509,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						trigger:{player:'damageBegin1'},
 						forced:true,
 						filter:function(event,player){
-							return _status.currentPhase!=player&&event.nature=='fire';
+							return _status.currentPhase!=player&&event.hasNature('fire');
 						},
 						content:function(){
 							trigger.num++;
@@ -4686,21 +4686,21 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				trigger:{source:'damageBegin1'},
 				forced:true,
 				content:function(){
-					trigger.nature='fire';
+					game.setNature(trigger,'fire');
 				}
 			},
 			longfenghemingjian:{
 				equipSkill:true,
 				inherit:'cixiong_skill',
 				filter:function(event,player){
-					return lib.linked.contains(event.card.nature);
+					return event.card.hasNature('linked');
 				},
 			},
 			qicaishenlu:{
 				trigger:{source:'damageBegin1'},
 				forced:true,
 				filter:function(event,player){
-					return lib.linked.contains(event.nature);
+					return event.card.hasNature('linked');
 				},
 				content:function(){
 					trigger.num++;
@@ -5499,10 +5499,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				trigger:{source:'damageBegin1'},
 				forced:true,
 				filter:function(event){
-					return event.nature!='fire';
+					return !event.hasNature('fire');
 				},
 				content:function(){
-					trigger.nature='fire';
+					trigger.hasNature('fire');
 				},
 				mod:{
 					cardUsable:function(card){
@@ -6283,10 +6283,10 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						return player.countCards('h')==0;
 					},
 					x6:function(player,event){
-						return event.nature=='fire';
+						return event.hasNature('fire');
 					},
 					x5:function(player,event){
-						return event.nature=='thunder';
+						return event.hasNature('thunder');
 					},
 					x4:function(player,event){
 						return event.name=='loseHp';
@@ -7363,7 +7363,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				trigger:{player:'damageBegin3'},
 				filter:function(event,player){
 					if(player.getEquip(2)) return false;
-					if(event.nature=='fire') return true;
+					if(event.hasNature('fire')) return true;
 				},
 				forced:true,
 				check:function(){
@@ -8017,7 +8017,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				forced:true,
 				unique:true,
 				filter:function(event){
-					return event.nature=='fire';
+					return event.hasNature('fire');
 				},
 				content:function(){
 					trigger.cancel();
