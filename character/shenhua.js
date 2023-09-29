@@ -3567,7 +3567,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				direct:true,
 				content:function(){
 					"step 0"
-					var check=false;
+					var check;
 					if(!player.canMoveCard(true)){
 						check=false;
 					}
@@ -3606,6 +3606,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							}
 							else if(player.countCards('h',{name:['wuzhong']})){
 								check=false;
+							}
+							else{
+								check=true;
 							}
 						}
 					}
