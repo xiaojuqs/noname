@@ -923,7 +923,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 						return 0;
 					}
-				
+
 					for(var i=0;i<targets.length;i++){
 						if(lib.skill.dcpandi.pandi_canUse(player,card,targets[i],null,true)){
 							var eff=lib.skill.dcpandi.pandi_effect(targets[i],card,player,viewer);
@@ -2566,7 +2566,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var suit=get.suit(card);
 					if(get.position(card)!='h'&&player.countCards('h',{suit:suit})==1) return 0.1;
 					if(!player.hasCard(cardx=>cardx!=card&&get.suit(cardx)==suit)) return 7.5-get.value(card);
-					return 6-get.value(card);	
+					return 6-get.value(card);
 				},
 				content:function(){
 					'step 0'
@@ -3801,9 +3801,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						var num=ui.selected.buttons.filter(i=>get.owner(i.link)==target).length;
 						var val=get.buttonValue(button);
 						if(num>2) val/=Math.sqrt(num);
-						if(get.attitude(player,owner)>0) return -val;
+						if(get.attitude(player,target)>0) return -val;
 						return val;
-						//return -(get.position(card)!='h'?get.value(card,target):(4.5+Math.random()-0.2*(num>2?1:0)))*get.attitude(player,target);
+						// return -(get.position(card)!='h'?get.value(card,target):(4.5+Math.random()-0.2*(num>2?1:0)))*get.attitude(player,target);
 					});
 					'step 1'
 					if(result.bool){
@@ -4511,7 +4511,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							trigger._triggered=5;
 							var evt=player.insertPhase();
 							delete evt.skill;
-						} 
+						}
 					}
 				},
 				subSkill:{
@@ -6469,7 +6469,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							dialog.content.appendChild(table2);
 							dialog.add('　　');
 							event.dialog.open();
-							
+
 							event.switchToAuto=function(){
 								event._result={
 									bool:true,
@@ -6638,7 +6638,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						dialog.content.appendChild(table);
 						dialog.add('　　');
 						dialog.open();
-						
+
 						event.switchToAuto=function(){
 							event.dialog.close();
 							event.control.close();
@@ -8649,7 +8649,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								player.draw(2);
 							}
 							player.removeSkill('wfyuyan_damage');
-						},	
+						},
 					},
 				},
 			},
@@ -10476,7 +10476,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				locked:true,
 				ai:{combo:'shiyuan'},
 			},
-			
+
 			//新岩泽(划掉)留赞
 			refenyin:{
 				audio:2,
@@ -11824,7 +11824,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							var target=trigger.player;
 							event.target=target;
 							target.removeMark('zhafu_hf',1);
-							if(target.countCards('h')<=1) event.finish()	
+							if(target.countCards('h')<=1) event.finish()
 							'step 1'
 							target.chooseCard('h',true,'选择保留一张手牌，将其余的手牌交给'+get.translation(player)).set('ai',get.value);
 							'step 2'
@@ -11839,7 +11839,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 				},
 			},
-			
+
 			tuiyan:{
 				audio:2,
 				trigger:{player:'phaseUseBegin'},
@@ -12670,7 +12670,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			dczhangcai_info:'当你使用或打出点数为8的牌时，你可以摸X张牌（X为你手牌区里点数为8的牌数且至少为1）。',
 			dcruxian:'儒贤',
 			dcruxian_info:'限定技。出牌阶段，你可以令你〖彰才〗的点数限制取消，且摸牌数改为等同于你手牌区内与此牌点数相同的牌数且至少为1，直到你的下回合开始。',
-			
+
 			sp2_yinyu:'隐山之玉',
 			sp2_huben:'百战虎贲',
 			sp2_shengun:'奇人异士',
