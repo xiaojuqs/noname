@@ -20230,14 +20230,16 @@
 				getGiftAIResultTarget:function(card,target){
 					if(!card||target.refuseGifts(card,this)) return 0;
 					if(get.type(card,false)=='equip'){
-						var target_equip_card=target.getEquip(get.equiptype(card))
-						if(target_equip_card&&get.equipValue(target_equip_card)>0&&get.equipValue(card)<=0) return -1+get.equipValue(card);
+						var target_equip_cards=target.getEquips(get.equiptype(card));
+						for(var target_equip_card of target_equip_cards){
+							if(target_equip_card&&get.equipValue(target_equip_card)>0&&get.equipValue(card)<=0) return -1+get.equipValue(card);
+						}
 						return get.effect(target,card,target,target);
 					}
 					if(card.name=='du') return this.hp>target.hp?-1:0;
 					if(target.hasSkillTag('nogain')) return 0;
 					if(game.hasPlayer(function(current){
-						return current.getEquip(5)&&current.getEquip(5).name=='shanrangzhaoshu'&&get.attitude(target,current)<0;
+						return current.getEquip('shanrangzhaoshu')&&get.attitude(target,current)<0;
 					})) return 0;
 					return Math.max(1,get.value(card,this)-get.value(card,target));
 				},
@@ -29056,11 +29058,6 @@
 						card=[card.suit,card.number,card.name,card.nature];
 					}
 					var cardnum=card[1]||'';
-					
-					if(window.decadeUI){
-						var cardsuit=get.translation(card[0]);
-					}
-					
 					if(parseInt(cardnum)==cardnum) cardnum=parseInt(cardnum);
 					if(cardnum>0&&cardnum<14){
 						cardnum=['A','2','3','4','5','6','7','8','9','10','J','Q','K'][cardnum-1];
@@ -29296,15 +29293,6 @@
 						this.node.info.classList.add('red');
 					}
 					this.node.image.className='image';
-					
-					if(window.decadeUI){
-						var filename = card[2];
-						var cardname = get.translation(card[2]);
-						this.dataset.suit = card[0];
-						this.$suitnum.$num.textContent = cardnum;
-						this.$suitnum.$suit.textContent = cardsuit;
-					}
-					
 					var name=get.translation(card[2]);
 					if(card[2]=='sha'){
 						name='';
@@ -29319,6 +29307,26 @@
 						}
 						name+='杀';
 					}
+					
+					if(window.decadeUI){
+						var cardsuit=get.translation(card[0]);
+						var fileName = card[2];
+						this.dataset.suit = card[0];
+						this.$suitnum.$num.textContent = cardnum;
+						this.$suitnum.$suit.textContent = cardsuit;
+						
+						if (card[3]) {
+							const natures = get.natureList(card[3]).sort(lib.sort.nature);
+							this.node.image.classList.add(...natures.filter(nature => nature != 'stab'));
+							fileName += natures.reduce((suffix, nature) => `${suffix}_${nature}`, '');
+						}
+						
+						this.$name.innerText = name;
+						this.$vertname.innerText = name;
+						this.$equip.$suitnum.textContent = cardsuit + cardnum;
+						this.$equip.$name.textContent = ' ' + name;
+					}
+					
 					this.node.name.innerHTML=name;
 					if(name.length>=5){
 						this.node.name.classList.add('long');
@@ -29327,14 +29335,6 @@
 						}
 					}
 					this.node.name2.innerHTML=get.translation(card[0])+cardnum+' '+name;
-					
-					if(window.decadeUI){
-						this.$name.innerText = cardname;
-						this.$vertname.innerText = cardname;
-						this.$equip.$suitnum.textContent = cardsuit + cardnum;
-						this.$equip.$name.textContent = ' ' + cardname;
-					}
-					
 					this.suit=card[0];
 					this.number=parseInt(card[1])||0;
 					this.name=card[2];
@@ -29404,7 +29404,11 @@
 							}
 						}
 						if(tags.length){
-							var tagstr=' <span class="cardtag">';
+							if(window.decadeUI){
+								var tagstr='';
+							} else {
+								var tagstr=' <span class="cardtag">';
+							}
 							for(var i=0;i<tags.length;i++){
 								var tag=tags[i];
 								if(!_status.cardtag[tag]){
@@ -29414,78 +29418,39 @@
 								tagstr+=lib.translate[tag+'_tag'];
 								//if(i<tags.length-1) tagstr+=' ';
 							}
-							tagstr+='</span>';
-							this.node.range.innerHTML+=tagstr;
+							if(window.decadeUI){
+								this.$range.textContent = tagstr;
+								this.$range.classList.add('card-tag');
+							} else {
+								tagstr+='</span>';
+								this.node.range.innerHTML+=tagstr;
+							}
 						}
 					}
 					
 					if(window.decadeUI){
-						var imgFormat = decadeUI.config.cardPrettify;
-						if (imgFormat != 'off'){
-							this.classList.add('decade-card');
-							if (!this.classList.contains('infohidden')) {
-								var res = dui.statics.cards;
-								var asset = res[filename];
-								if (res.READ_OK) {
-									if (asset == undefined && typeof lib.decade_extCardImage == "object" && typeof lib.decade_extCardImage[filename] == "string") res[filename] = asset = {
-										url: lib.decade_extCardImage[filename],
-										name: filename,
-										loaded: true,
-									};
-									if (asset == undefined) {
-										this.classList.remove('decade-card');
-									} else {
-										this.style.background = 'url("' + asset.url + '")';
-										if (this.node.avatar) this.node.avatar.remove();
-										if (this.node.framebg) this.node.framebg.remove();
-									}
-								} else {
-									var url = lib.assetURL + 'extension/' + window.decadeUIName + '/image/card/' + filename + '.' + imgFormat;
-									if (typeof lib.decade_extCardImage == "object" && typeof lib.decade_extCardImage[filename] == "string") url = lib.decade_extCardImage[filename];
-									if (!asset) {
-										res[filename] = asset = {
-											name: filename,
-											url: undefined,			// 图片路径
-											loaded: undefined, 		// 是否加载
-											rawUrl: undefined, 		// 原图片地址
-										};
-									}
-									
-									if (asset.loaded !== false) {
-										if (asset.loaded == undefined) {
-											var image = new Image();
-											
-											image.onload = function(){
-												asset.loaded = true;
-												image.onload = undefined;
-											};
-											
-											var card = this;
-											image.onerror = function(){
-												asset.loaded = false;
-												image.onerror = undefined;
-												card.style.background = asset.rawUrl;
-												card.classList.remove('decade-card');
-												if (card.node.avatar) card.insertBefore(card.node.avatar, card.firstChild);
-												if (card.node.framebg) card.insertBefore(card.node.framebg, card.firstChild);
-											}
-											
-											asset.url = url;
-											asset.rawUrl = this.style.background || this.style.backgroundImage;
-											asset.image = image;
-											image.src = url;
-										}
-										
-										this.style.background = 'url("' + url + '")';
-										if (this.node.avatar) this.node.avatar.remove();
-										if (this.node.framebg) this.node.framebg.remove();
-									} else {
-										this.classList.remove('decade-card');
-									}
+						const imgFormat = decadeUI.config.cardPrettify;
+						if (imgFormat != 'off' && !this.classList.contains('infohidden')) {
+							const decadeCardImage = new Image(), decadeExtCardImage = lib.decade_extCardImage || {};
+							var not_load_card_names=['sha_stab','sha_kami'];
+							new Promise((resolve, reject) => {
+								decadeCardImage.onerror = reject;
+								decadeCardImage.onload = resolve;
+								if(!not_load_card_names.contains(fileName)){
+									decadeCardImage.src = decadeExtCardImage[fileName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${fileName}.${imgFormat}`;
 								}
-							}
-						} else {
-							this.classList.remove('decade-card');
+							}).catch(event => new Promise((resolve, reject) => {
+								const cardName = card[2];
+								if (cardName == fileName) reject(event);
+								decadeCardImage.onerror = reject;
+								decadeCardImage.onload = resolve;
+								decadeCardImage.src = decadeExtCardImage[cardName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${cardName}.${imgFormat}`;
+							})).then(event => {
+								this.classList.add('decade-card');
+								this.style.background = `url('${event.target.src}')`;
+								if (this.node.avatar) this.node.avatar.remove();
+								if (this.node.framebg) this.node.framebg.remove();
+							});
 						}
 					}
 					

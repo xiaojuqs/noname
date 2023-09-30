@@ -202,8 +202,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							for(var i=0;i<cards.length;i++){
 								val+=get.equipValue(cards[i]);
 							}
-							var tianjitu_card=target.getEquip(5);
-							if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
+							var tianjitu_cards=target.getEquips(5);
+							for(var tianjitu_card of tianjitu_cards){
+								if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
+							}
 							for(var card of js) val+=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,target)*get.attitude(player,target)*10;
 							return -val;
 						},
@@ -233,9 +235,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2.5;
-							var card=target.getEquip(1);
-							if(card&&get.equipValue(card)<=0) return 0;
-							if(card) val+=get.equipValue(card);
+							var cards=target.getEquips(1);
+							for(var card of cards){
+								if(card&&get.equipValue(card)<=0) return 0;
+								if(card) val+=get.equipValue(card);
+							}
 							return -val;
 						},
 					},
@@ -265,9 +269,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						target:function(player,target){
 							var val=(target.hasSex('male')?2.5:0);
 							var val2=0;
-							var card=target.getEquip(2);
-							if(card) val2=get.equipValue(card);
-							if(card&&get.equipValue(card)<=0) return 0;
+							var cards=target.getEquips(2);
+							for(var card of cards){
+								if(card) val2=get.equipValue(card);
+								if(card&&get.equipValue(card)<=0) return 0;
+							}
 							return -val-val2;
 						},
 					},
@@ -296,9 +302,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2;
-							var card=target.getEquip(2);
-							if(card&&get.equipValue(card)<=0) return 0;
-							if(card) val+=get.equipValue(card);
+							var cards=target.getEquips(2);
+							for(var card of cards){
+								if(card&&get.equipValue(card)<=0) return 0;
+								if(card) val+=get.equipValue(card);
+							}
 							return -val;
 						},
 					},
@@ -327,9 +335,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2.5;
-							var card=target.getEquip(4);
-							if(card&&get.equipValue(card)<=0) return 0;
-							if(card) val+=get.equipValue(card);
+							var cards=target.getEquips(4);
+							for(var card of cards){
+								if(card&&get.equipValue(card)<=0) return 0;
+								if(card) val+=get.equipValue(card);
+							}
 							return -val;
 						},
 					},
@@ -663,7 +673,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					player.gift(cards,target);
 				},
 				ai:{
-					order:(item,player)=>player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0),'h')?1:0.51,
+					order:function(item,player){
+						if(player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0&&get.type(card,false)=='equip'),'h')) return 7;
+						if(player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0),'h')) return 1;
+						return 0.51;
+					},
 					result:{
 						target:(player,target)=>{
 							const result=ui.selected.cards.map(value=>player.getGiftAIResultTarget(value,target));

@@ -243,7 +243,6 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				onLose:function(){
 					player.addTempSkill('tianjitu_skill_lose')
 				},
-				loseDelay:false,
 				ai:{
 					value:function(card,player){
 						if(player.countCards('h')>3||get.position(card)!='e') return 0.5;
@@ -381,7 +380,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				trigger:{player:'equipAfter'},
 				forced:true,
 				equipSkill:true,
-				filter:(event,player)=>event.card.name=='tianjitu'&&player.hasCard(card=>card!=event.card),
+				filter:(event,player)=>event.card.name=='tianjitu'&&player.hasCard(card=>card!=event.card,'he'),
 				content:()=>{
 					player.chooseToDiscard(true,card=>card!=_status.event.getTrigger().card,'he');
 				},

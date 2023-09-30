@@ -834,11 +834,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							if(player.hasUnknown(2)){
 								return 0;
 							}
-							if (game.players.length>2){
+							if(game.players.length>2){
 								var list=target.getEnemies();
-								for (var i=0;i<list.length;i++){
-									if (list[i].hasSkill('sphuangen')&&list[i].hp>1) return 0;
-									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								for(var i=0;i<list.length;i++){
+									if(list[i].hasSkill('sphuangen')&&list[i].hp>1) return 0;
+									if(list[i].getEquip('shanrangzhaoshu')) return 0;
 								}
 							}
 							return (1-get.distance(sorter,target,'absolute')/game.countPlayer())*get.attitude(player,target)>0?0.5:0.7;
@@ -1648,17 +1648,21 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target){
-							var target_weapon=target.getEquip(1);
-							if(target_weapon&&get.equipValue(target_weapon)<=0){
-								return 'zeroplayertarget';
+							var target_weapons=target.getEquips(1);
+							for(var target_weapon of target_weapons){
+								if(get.equipValue(target_weapon)<=0){
+									return 'zeroplayertarget';
+								}
 							}
 							return -1.5;
 						},
 						player:function(player,target){
 							if(player.getCards('he',{subtype:'equip1'}).length) return 0;
-							var target_weapon=target.getEquip(1);
-							if(target_weapon&&get.equipValue(target_weapon)<=0){
-								return 'zeroplayertarget';
+							var target_weapons=target.getEquips(1);
+							for(var target_weapon of target_weapons){
+								if(get.equipValue(target_weapon)<=0){
+									return 'zeroplayertarget';
+								}
 							}
 							return 1.5;
 						},

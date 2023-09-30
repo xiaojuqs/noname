@@ -125,8 +125,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				},
 				audio:true,
 				filter:function (event,player){
-					var card=player.getEquip(5);
-					if(card){
+					var cards=player.getEquips(5);
+					for(var card of cards){
 						var name=card.name;
 						if(name&&name.indexOf('monkey')!=-1&&event.name=='tao'&&event.player!=player&&event.cards.filterInD().length>0) return true;
 					}
@@ -141,7 +141,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					trigger.untrigger();
 					trigger.finish();
 					"step 1"
-					player.discard(player.getEquip(5));
+					player.discard(player.getEquips(5));
 					"step 2"
 					player.gain(trigger.cards.filterInD(),'gain2','log');
 				},

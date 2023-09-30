@@ -289,20 +289,26 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target){
-							var e5=target.getEquip('muniu');
-							if(e5&&e5.name=='muniu'&&e5.cards&&e5.cards.length>1) return -1;
-							if(e5&&e5.name=='shanrangzhaoshu') return -1;
-							if(e5&&e5.name=='shufazijinguan') return -2;
-							if(e5&&e5.name=='xuwangzhimian') return -1.5;
-							var e2=target.getEquip(2);
-							if(e2&&player.countCards('h','sha')>0&&(e2.name=='bagua'||(e2.name=='lanyinjia'&&target.countCards('h')>0))&&player.inRange(target)) return -1;
-							if(e2&&e2.name=='baiyin'&&target.isDamaged()) return 2;
-							var e3=target.getEquip(3);
-							if(e3&&player.countCards('h','sha')>0&&get.distance(player,target)==2&&!player.inRange(target)) return -1;
 							if(target.countCards('e',function(card){
 								return get.equipValue(card)<=0;
 							})||target.hasSkillTag('noe')) return 1;
 							if(target.countCards('he')>target.getHandcardLimit()&&target.hasJudge('lebu')) return -1;
+							var e5s=target.getEquips(5);
+							for(var e5 of e5s){
+								if(e5&&e5.name=='muniu'&&e5.cards&&e5.cards.length>1) return -1;
+								if(e5&&e5.name=='shanrangzhaoshu') return -1;
+								if(e5&&e5.name=='shufazijinguan') return -2;
+								if(e5&&e5.name=='xuwangzhimian') return -1.5;
+							}
+							var e2s=target.getEquips(2);
+							for(var e2 of e2s){
+								if(e2&&player.countCards('h','sha')>0&&(e2.name=='bagua'||(e2.name=='lanyinjia'&&target.countCards('h')>0))&&player.inRange(target)) return -1;
+								if(e2&&e2.name=='baiyin'&&target.isDamaged()) return 2;
+							}
+							var e3s=target.getEquips(3);
+							for(var e3 of e3s){
+								if(e3&&player.countCards('h','sha')>0&&get.distance(player,target)==2&&!player.inRange(target)) return -1;
+							}
 							return 0;
 						},
 					},
@@ -374,8 +380,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							for(var i=0;i<cards.length;i++){
 								val+=get.equipValue(cards[i]);
 							}
-							var tianjitu_card=target.getEquip(5);
-							if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
+							var tianjitu_cards=target.getEquips(5);
+							for(var tianjitu_card of tianjitu_cards){
+								if(tianjitu_card&&tianjitu_card.name=='tianjitu'&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
+							}
 							return -val;
 						},
 					},
@@ -431,9 +439,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2.5;
-							var card=target.getEquip(1);
-							if(card&&get.equipValue(card)<=0) return 0;
-							if(card) val+=get.equipValue(card);
+							var cards=target.getEquips(1);
+							for(var card of cards){
+								if(card&&get.equipValue(card)<=0) return 0;
+								if(card) val+=get.equipValue(card);
+							}
 							return -val;
 						},
 					},
@@ -467,9 +477,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2.5;
-							var card=target.getEquip(1);
-							if(card&&get.equipValue(card)<=0) return 0;
-							if(card) val+=get.equipValue(card);
+							var cards=target.getEquips(1);
+							for(var card of cards){
+								if(card&&get.equipValue(card)<=0) return 0;
+								if(card) val+=get.equipValue(card);
+							}
 							return -val;
 						},
 					},
@@ -503,9 +515,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=2;
-							var card=target.getEquip(2);
-							if(card&&get.equipValue(card)<=0) return 0;
-							if(card) val+=get.equipValue(card);
+							var cards=target.getEquips(2);
+							for(var card of cards){
+								if(card&&get.equipValue(card)<=0) return 0;
+								if(card) val+=get.equipValue(card);
+							}
 							return -val;
 						},
 					},
@@ -568,14 +582,16 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target){
 							var val=0;
-							var card=target.getEquip(2);
-							if(card) val=get.equipValue(card);
-							if(target.sex=='male'){
-								var num=target.countCards('he',function(cardx){
-									return cardx!=card;
-								});
-								if(num>0) val+=4/num;
-								if((target.countCards('e',function(card){return get.equipValue(card)<=0;})>0)&&val<=0) val=0;
+							var cards=target.getEquips(2);
+							for(var card of cards){
+								if(card) val=get.equipValue(card);
+								if(target.sex=='male'){
+									var num=target.countCards('he',function(cardx){
+										return cardx!=card;
+									});
+									if(num>0) val+=4/num;
+									if((target.countCards('e',function(card){return get.equipValue(card)<=0;})>0)&&val<=0) val=0;
+								}
 							}
 							return -val;
 						},
@@ -656,7 +672,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:9.5,
 					equipValue:function(card,player){
-						if(card!=player.getEquip(5)) return 5;
+						var e5s=player.getEquips(5);
+						for(var e5 of e5s){
+							if(card!=e5) return 5;
+						}
 						if(_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+3*player.countCards('h');
 						return 0;
 					},
@@ -674,9 +693,12 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target,cardx){
 							if(_status.jinhe&&_status.jinhe[cardx.cardid]) return -0.5-2*target.countCards('h');
-							var card=target.getEquip(5);
-							if(!card) return 0;
-							return -get.value(card,target);
+							var card=target.getEquips(5);
+							for(var card of cards){
+								if(!card) return 0;
+								return -get.value(card,target);
+							}
+							return 0;
 						},
 						target_use:function(player,target){
 							return -0.5-2*target.countCards('h');

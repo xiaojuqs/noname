@@ -233,6 +233,7 @@ window.noname_source_list=[
 	'extension/十周年UI/extension.js',
 	'extension/十周年UI/icon.css',
 	'extension/十周年UI/layout.css',
+	'extension/十周年UI/menu.js',
 	'extension/十周年UI/player.css',
 	'extension/十周年UI/skill.js',
 	'extension/十周年UI/spine.js',

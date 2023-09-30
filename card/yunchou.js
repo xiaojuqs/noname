@@ -66,8 +66,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					}
 					var next=target.chooseButton(function(button){
 						var list=target.getEnemies();
-						for (var i=0;i<list.length;i++){
-							if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+						for(var i=0;i<list.length;i++){
+							if(list[i].getEquip('shanrangzhaoshu')) return 0;
 						}
 						return get.value(button.link,_status.event.player)-minValue;
 					});
@@ -155,20 +155,20 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						player:function(player,target){
-							if (game.players.length>2&&player.hasFriend()){
+							if(game.players.length>2&&player.hasFriend()){
 								var list=player.getEnemies();
-								for (var i=0;i<list.length;i++){
-									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								for(var i=0;i<list.length;i++){
+									if(list[i].getEquip('shanrangzhaoshu')) return 0;
 								}
 							}
 							return 1;
 						},
 						target:function(player,target){
 							if(target.countCards('h')==0) return 0;
-							if (game.players.length>2&&player.hasFriend()){
+							if(game.players.length>2&&player.hasFriend()){
 								var list=player.getEnemies();
-								for (var i=0;i<list.length;i++){
-									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								for(var i=0;i<list.length;i++){
+									if(list[i].getEquip('shanrangzhaoshu')) return 0;
 								}
 							}
 							return (Math.sqrt(target.countCards('h'))-get.distance(player,target,'absolute')/game.countPlayer()/3)/2;
@@ -578,10 +578,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					result:{
 						target:function(player,target){
 							if(target.getCards('e').length==1&&get.equipValue(target.getCards('e')[0])<=0) return 0;
-							if (game.players.length>2){
+							if(game.players.length>2){
 								var list=player.getEnemies();
-								for (var i=0;i<list.length;i++){
-									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								for(var i=0;i<list.length;i++){
+									if(list[i].getEquip('shanrangzhaoshu')) return 0;
 								}
 							}
 							return -1;
@@ -657,16 +657,18 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 							var do_not_use=false;
 							var friend_list=player.getFriends(true);
-							for (var i=0;i<friend_list.length;i++){
-								var treasure=friend_list[i].getEquip(5)
-								if (friend_list[i].getCards('e').length==1&&treasure){
-									if (treasure.name=='muniu'&&treasure.cards&&treasure.cards.length>0){
-										do_not_use=true;
-										break;
-									}
-									if (friend_list[i].getCards('h').length>0&&_status.jinhe&&_status.jinhe[treasure.cardid]){
-										do_not_use=true;
-										break;
+							for(var i=0;i<friend_list.length;i++){
+								var treasures=friend_list[i].getEquips(5)
+								for(var treasure of treasures){
+									if(friend_list[i].getCards('e').length==1){
+										if(treasure.name=='muniu'&&treasure.cards&&treasure.cards.length>0){
+											do_not_use=true;
+											break;
+										}
+										if(friend_list[i].getCards('h').length>0&&_status.jinhe&&_status.jinhe[treasure.cardid]){
+											do_not_use=true;
+											break;
+										}
 									}
 								}
 							}
