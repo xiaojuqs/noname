@@ -106,8 +106,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						target:function(player,target){
 							var num1=0,num2=0;
 							for(var i=1;i<=4;i++){
-								var card=target.getEquip(i);
-								if(card){
+								var cards=target.getEquips(i);
+								for(var card of cards){
 									if(i==1||i==4){
 										num1+=get.equipValue(card);
 									}
@@ -339,8 +339,8 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 							if(game.players.length>2){
 								var list=player.getEnemies();
-								for (var i=0;i<list.length;i++){
-									if (list[i].getEquip(5)&&list[i].getEquip(5).name=='shanrangzhaoshu') return 0;
+								for(var i=0;i<list.length;i++){
+									if(list[i].getEquip('shanrangzhaoshu')) return 0;
 								}
 							}
 							var target_equips=target.getCards('e');
