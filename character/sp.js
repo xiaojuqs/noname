@@ -16455,12 +16455,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
 					if(event.name=='loseAsync'){
 						if(event.type!='gain') return false;
-						var hs=current.getCards('h'),cards=event.getl(player).cards2;
+						var cards=event.getl(player).cards2;
 						return game.hasPlayer(function(current){
 							if(current==player) return false;
 							var cardsx=event.getg(current);
 							for(var i of cardsx){
-								if(cards.contains(i)&&hs.contains(card)&&cards.contains(card)&&get.color(card,player)=='black') return true;
+								if(cards.contains(i)&&current.getCards('h').contains(i)&&get.color(i,player)=='black') return true;
 							}
 							return false;
 						});
