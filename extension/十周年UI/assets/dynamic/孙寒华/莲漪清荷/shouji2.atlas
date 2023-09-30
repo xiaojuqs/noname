@@ -1,0 +1,279 @@
+
+shouji2.png
+size: 1464,1464
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vfx/Mask_1
+  rotate: true
+  xy: 0, 13
+  size: 82, 238
+  orig: 90, 307
+  offset: 4, 34
+  index: -1
+vfx/shouji2_tx1_00
+  rotate: true
+  xy: 0, 95
+  size: 602, 155
+  orig: 697, 212
+  offset: 23, 25
+  index: -1
+vfx/shouji2_tx1_01
+  rotate: true
+  xy: 0, 697
+  size: 604, 160
+  orig: 697, 212
+  offset: 22, 24
+  index: -1
+vfx/shouji2_tx1_02
+  rotate: false
+  xy: 0, 1301
+  size: 602, 163
+  orig: 697, 212
+  offset: 23, 21
+  index: -1
+vfx/shouji2_tx1_03
+  rotate: true
+  xy: 160, 701
+  size: 600, 164
+  orig: 697, 212
+  offset: 25, 21
+  index: -1
+vfx/shouji2_tx1_04
+  rotate: true
+  xy: 324, 703
+  size: 598, 165
+  orig: 697, 212
+  offset: 23, 21
+  index: -1
+vfx/shouji2_tx1_05
+  rotate: false
+  xy: 489, 964
+  size: 594, 165
+  orig: 697, 212
+  offset: 23, 21
+  index: -1
+vfx/shouji2_tx1_06
+  rotate: false
+  xy: 489, 797
+  size: 588, 167
+  orig: 697, 212
+  offset: 25, 20
+  index: -1
+vfx/shouji2_tx1_07
+  rotate: false
+  xy: 489, 631
+  size: 588, 166
+  orig: 697, 212
+  offset: 22, 21
+  index: -1
+vfx/shouji2_tx1_08
+  rotate: true
+  xy: 155, 109
+  size: 588, 160
+  orig: 697, 212
+  offset: 20, 26
+  index: -1
+vfx/shouji2_tx1_09
+  rotate: false
+  xy: 480, 467
+  size: 586, 164
+  orig: 697, 212
+  offset: 18, 22
+  index: -1
+vfx/shouji2_tx1_10
+  rotate: true
+  xy: 315, 114
+  size: 587, 165
+  orig: 697, 212
+  offset: 17, 22
+  index: -1
+vfx/shouji2_tx1_11
+  rotate: false
+  xy: 489, 1129
+  size: 594, 169
+  orig: 697, 212
+  offset: 14, 17
+  index: -1
+vfx/shouji2_tx1_12
+  rotate: false
+  xy: 602, 1298
+  size: 596, 166
+  orig: 697, 212
+  offset: 14, 21
+  index: -1
+vfx/shouji2_tx2_00
+  rotate: false
+  xy: 1198, 1381
+  size: 266, 83
+  orig: 632, 155
+  offset: 366, 35
+  index: -1
+vfx/shouji2_tx2_01
+  rotate: true
+  xy: 1077, 512
+  size: 303, 83
+  orig: 632, 155
+  offset: 319, 35
+  index: -1
+vfx/shouji2_tx2_02
+  rotate: true
+  xy: 1160, 477
+  size: 335, 82
+  orig: 632, 155
+  offset: 271, 36
+  index: -1
+vfx/shouji2_tx2_03
+  rotate: true
+  xy: 1066, 132
+  size: 380, 82
+  orig: 632, 155
+  offset: 223, 36
+  index: -1
+vfx/shouji2_tx2_04
+  rotate: true
+  xy: 1235, 945
+  size: 436, 82
+  orig: 632, 155
+  offset: 175, 36
+  index: -1
+vfx/shouji2_tx2_05
+  rotate: true
+  xy: 1083, 815
+  size: 483, 83
+  orig: 632, 155
+  offset: 127, 36
+  index: -1
+vfx/shouji2_tx2_06
+  rotate: false
+  xy: 480, 146
+  size: 528, 83
+  orig: 632, 155
+  offset: 80, 36
+  index: -1
+vfx/shouji2_tx2_07
+  rotate: false
+  xy: 480, 303
+  size: 555, 82
+  orig: 632, 155
+  offset: 53, 37
+  index: -1
+vfx/shouji2_tx2_08
+  rotate: false
+  xy: 480, 385
+  size: 563, 82
+  orig: 632, 155
+  offset: 26, 37
+  index: -1
+vfx/shouji2_tx2_09
+  rotate: false
+  xy: 480, 229
+  size: 539, 74
+  orig: 632, 155
+  offset: 33, 39
+  index: -1
+vfx/shouji2_tx2_10
+  rotate: false
+  xy: 480, 74
+  size: 513, 72
+  orig: 632, 155
+  offset: 41, 39
+  index: -1
+vfx/shouji2_tx2_11
+  rotate: true
+  xy: 1166, 812
+  size: 486, 69
+  orig: 632, 155
+  offset: 49, 43
+  index: -1
+vfx/shouji2_tx2_12
+  rotate: true
+  xy: 1317, 956
+  size: 425, 71
+  orig: 632, 155
+  offset: 110, 42
+  index: -1
+vfx/shouji2_tx2_13
+  rotate: true
+  xy: 1388, 957
+  size: 424, 67
+  orig: 632, 155
+  offset: 111, 42
+  index: -1
+vfx/shouji2_tx2_14
+  rotate: true
+  xy: 1242, 523
+  size: 422, 64
+  orig: 632, 155
+  offset: 113, 42
+  index: -1
+vfx/shouji2_tx2_15
+  rotate: true
+  xy: 1197, 59
+  size: 418, 46
+  orig: 632, 155
+  offset: 117, 54
+  index: -1
+vfx/shouji2_tx2_16
+  rotate: true
+  xy: 1148, 59
+  size: 418, 49
+  orig: 632, 155
+  offset: 119, 53
+  index: -1
+vfx/shouji2_tx2_17
+  rotate: true
+  xy: 1306, 516
+  size: 429, 51
+  orig: 632, 155
+  offset: 111, 52
+  index: -1
+vfx/shouji2_tx2_18
+  rotate: true
+  xy: 1409, 531
+  size: 426, 54
+  orig: 632, 155
+  offset: 116, 50
+  index: -1
+vfx/shouji2_tx2_19
+  rotate: false
+  xy: 238, 18
+  size: 424, 56
+  orig: 632, 155
+  offset: 119, 48
+  index: -1
+vfx/shouji2_tx2_20
+  rotate: true
+  xy: 1357, 529
+  size: 427, 52
+  orig: 632, 155
+  offset: 117, 53
+  index: -1
+vfx/shouji2_tx2_21
+  rotate: false
+  xy: 662, 23
+  size: 420, 51
+  orig: 632, 155
+  offset: 125, 53
+  index: -1
+vfx/shouji2_tx2_22
+  rotate: true
+  xy: 1243, 107
+  size: 416, 40
+  orig: 632, 155
+  offset: 128, 55
+  index: -1
+vfx/shouji2_tx2_23
+  rotate: true
+  xy: 1283, 103
+  size: 413, 32
+  orig: 632, 155
+  offset: 131, 63
+  index: -1
+vfx/shouji2_tx2_24
+  rotate: true
+  xy: 1315, 105
+  size: 411, 32
+  orig: 632, 155
+  offset: 133, 63
+  index: -1

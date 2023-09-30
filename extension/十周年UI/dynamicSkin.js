@@ -1322,6 +1322,52 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
       },
     },
+    luyusheng: { //陆郁生
+      战场绝版: {
+        name: '陆郁生/战场绝版/daiji2',
+        play2: 'play2',
+        shan: 'play3',
+        x: [0, 0.5],
+        y: [0, 0.55],
+        scale: 0.75,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '陆郁生/战场绝版/chuchang',
+          action: 'play',
+          scale: 0.9,
+        },
+        gongji: {
+          name: '陆郁生/战场绝版/chuchang2',
+          action: 'gongji',
+          scale: 0.7,
+        },
+        teshu: {
+          name: '陆郁生/战场绝版/chuchang2',
+          action: 'jineng',
+          scale: 0.7,
+        },
+        beijing: {
+          name: '陆郁生/战场绝版/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+        zhishixian: {
+          name: '陆郁生/战场绝版/shouji2',
+          scale: 0.5,
+          speed: 1.2,
+          delay: 0.3,
+          effect: {
+            name: '陆郁生/战场绝版/shouji',
+            scale: 0.6,
+            speed: 0.6,
+            delay: 0.7,
+          },
+        },
+      },
+    },
     lvlingqi: { //吕玲绮
       炽焱流金: {
         name: '吕玲绮/炽焱流金/daiji2',
@@ -2058,6 +2104,50 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           scale: 0.3,
           x: [0, 0.4],
           y: [0, 0.5]
+        },
+      },
+      莲漪清荷: {
+        name: '孙寒华/莲漪清荷/daiji2',
+        play2: 'play2',
+        shan: 'play3',
+        x: [0, 0.5],
+        y: [0, 0.5],
+        scale: 0.75,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '孙寒华/莲漪清荷/chuchang',
+          action: 'play',
+          scale: 0.55,
+        },
+        gongji: {
+          name: '孙寒华/莲漪清荷/chuchang2',
+          action: 'gongji',
+          scale: 0.6,
+        },
+        teshu: {
+          name: '孙寒华/莲漪清荷/chuchang2',
+          action: 'jineng',
+          scale: 0.6,
+        },
+        beijing: {
+          name: '孙寒华/莲漪清荷/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+        zhishixian: {
+          name: '孙寒华/莲漪清荷/shouji2',
+          scale: 0.5,
+          speed: 0.8,
+          delay: 0.5,
+          effect: {
+            name: '孙寒华/莲漪清荷/shouji',
+            scale: 0.5,
+            speed: 0.8,
+            delay: 0.35,
+          },
         },
       },
     },
@@ -3596,6 +3686,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     //关索
     ol_guansuo: decadeUI.dynamicSkin.guansuo,
 
+    //郭照
+    xin_guozhao: decadeUI.dynamicSkin.guozhao,
+
     //黄承彦
     dc_huangchengyan: decadeUI.dynamicSkin.huangchengyan,
     ns_huangchengyan: decadeUI.dynamicSkin.huangchengyan,
@@ -3626,6 +3719,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
     //留赞
     re_liuzan: decadeUI.dynamicSkin.liuzan,
+
+    //陆郁生
+    ol_luyusheng: decadeUI.dynamicSkin.luyusheng,
 
     //马钧
     old_majun: decadeUI.dynamicSkin.majun,
