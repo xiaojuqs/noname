@@ -202,7 +202,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							for(var i=0;i<cards.length;i++){
 								val+=get.equipValue(cards[i]);
 							}
-							if(target.getEquips('tianjitu')&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
+							if(target.getEquip('tianjitu')&&target.getCards('h').length<=5&&cards.length<=3) return 2-target.getCards('h').length;
 							for(var card of js) val+=get.effect(target,card.viewAs?{name:card.viewAs}:card,target,target)*get.attitude(player,target)*10;
 							return -val;
 						},
