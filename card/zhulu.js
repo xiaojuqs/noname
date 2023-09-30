@@ -693,7 +693,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 						keepAI:true,
 						target:function(player,target,cardx){
 							if(_status.jinhe&&_status.jinhe[cardx.cardid]) return -0.5-2*target.countCards('h');
-							var card=target.getEquips(5);
+							var cards=target.getEquips(5);
 							for(var card of cards){
 								if(!card) return 0;
 								return -get.value(card,target);

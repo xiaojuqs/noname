@@ -4700,7 +4700,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				trigger:{source:'damageBegin1'},
 				forced:true,
 				filter:function(event,player){
-					return event.card.hasNature('linked');
+					return lib.linked.contains(event.nature);
 				},
 				content:function(){
 					trigger.num++;

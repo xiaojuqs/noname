@@ -30299,7 +30299,7 @@
 						var buttons=ui.create.div('.buttons',this.content);
 						if(zoom) buttons.classList.add('smallzoom');
 						if(window.decadeUI){
-							if (item[1] && item[1].indexOf('character') != -1) {
+							if (item[1] && typeof(item[1])=='string' && item[1].indexOf('character') != -1) {
 								if (this.intersection == undefined && self.IntersectionObserver) {
 									this.intersection = new IntersectionObserver(function(entries){
 										for (var i = 0; i < entries.length; i++) {
