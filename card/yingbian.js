@@ -243,7 +243,6 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				onLose:function(){
 					player.addTempSkill('tianjitu_skill_lose')
 				},
-				loseDelay:false,
 				ai:{
 					value:function(card,player){
 						if(player.countCards('h')>3||get.position(card)!='e') return 0.5;
