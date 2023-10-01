@@ -1046,6 +1046,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					if(togain.length) player.gain(togain,trigger.source,'giveAuto','bySelf');
 				},
+				ai:{
+					effect:{
+						target:function(card,player,target){
+							if(player.hasSkillTag('jueqing',false,target)) return [1,-1];
+							if(get.tag(card,'damage')&&player!=target&&get.attitude(player,target)<0){
+								var cards=player.getCards('h',function(cardx){
+									return card!=cardx&&(!card.cards||!card.cards.contains(cardx))&&get.suit(cardx)=='heart';
+								});
+								if(!cards.length) return 'zeroplayertarget';
+								for(var i of cards){
+									if(get.name(i,target)=='tao') return 'zeroplayertarget';
+								}
+								if(get.value(cards,target)>=(6+target.getDamagedHp())) return 'zeroplayertarget';
+								return [1,0.6];
+							}
+						},
+					},
+				},
 			},
 			xinfu_yingshi:{
 				audio:2,
