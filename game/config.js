@@ -270,7 +270,9 @@ window.config={
 		"guanping",
 		"guanzhang",
 		"guohuanghou",
-		"jsp_huangyueying"
+		"jsp_huangyueying",
+		"old_xiaoqiao",
+		"old_gaoshun"
 	],
 	connect_identity_banned:[
 		"caocao",
@@ -389,7 +391,9 @@ window.config={
 		"guanping",
 		"guanzhang",
 		"guohuanghou",
-		"jsp_huangyueying"
+		"jsp_huangyueying",
+		"old_xiaoqiao",
+		"old_gaoshun"
 	],
 
 	mode:'identity',

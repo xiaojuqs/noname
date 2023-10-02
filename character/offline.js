@@ -1805,15 +1805,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						logTarget:'player',
 						content:function(){
 							trigger.cancel();
-						},
-						ai:{
-							effect:{
-								target:function (card,player,target,current){
-									if(player.getStorage('psliushang_prevent').contains(target)&&get.tag(card,'damage')){
-										return 'zeroplayertarget';
-									}
-								},
-							},
+						}
+					}
+				},
+				ai:{
+					effect:{
+						target:function(card,player,target,current){
+							if(player.getStorage('psliushang_prevent').contains(target)&&get.tag(card,'damage')){
+								return 'zeroplayertarget';
+							}
 						}
 					}
 				}
