@@ -26821,6 +26821,7 @@
 				getAttackRange:function(raw){
 					const player=this;
 					let range=0;
+					var NoRange=false;
 					if(raw){
 						range=game.checkMod(player,player,range,'globalFrom',player);
 						range=game.checkMod(player,player,range,'attackFrom',player);
@@ -26829,12 +26830,11 @@
 						});
 						equips.forEach(card=>{
 							const info=get.info(card,false).distance;
-							if(ininfo&&info.globalFrom){
+							if(info&&info.globalFrom){
 								range+=info.globalFrom;
 							}
 						})
-						return (equips.reduce((range,card,index)=>{
-							if(index==0) range--;
+						var output_result=(equips.reduce((range,card,index)=>{
 							let newRange=1;
 							const info=get.info(card,false);
 							if(info.distance){
@@ -26844,11 +26844,14 @@
 								}
 								//否则采用祖宗之法
 								else if(typeof info.distance.attackFrom=='number'){
+									if(info.distance.attackFrom==1) NoRange=true;
 									newRange-=info.distance.attackFrom;
 								}
 							}
-							return Math.max(range,newRange)
+							return Math.max(range,newRange);
 						},range)-range);
+						if(NoRange) return 0;
+						return output_result;
 					}
 					let base=game.checkMod(player,'unchanged','attackRangeBase',player);
 					if(base!='unchanged'){
@@ -26858,8 +26861,8 @@
 						const equips=player.getCards('e',function(card){
 							return !ui.selected.cards||!ui.selected.cards.contains(card);
 						});
+						var NoRange=false;
 						range=equips.reduce((range,card,index)=>{
-							if(index==0) range--;
 							let newRange=1;
 							const info=get.info(card,false);
 							if(info.distance){
@@ -26869,12 +26872,14 @@
 								}
 								//否则采用祖宗之法
 								else if(typeof info.distance.attackFrom=='number'){
+									if(info.distance.attackFrom==1) NoRange=true;
 									newRange-=info.distance.attackFrom;
 								}
 							}
 							return Math.max(range,newRange);
 						},1);
 					}
+					if(NoRange) range=0;
 					range=game.checkMod(player,range,'attackRange',player);
 					return range;
 				},
@@ -57743,9 +57748,8 @@
 				let m=n;
 				m=game.checkMod(from,to,m,'attackFrom',from);
 				m=game.checkMod(from,to,m,'attackTo',to);
-				return m;
-				const attakRange=equips1.reduce((range,card,index)=>{
-					if(index==0) range--;
+				var NoRange=false;
+				const attakRange=equips1.reduce((m,card,index)=>{
 					let newRange=1;
 					const info=get.info(card,false);
 					if(info.distance){
@@ -57755,10 +57759,11 @@
 						}
 						//否则采用祖宗之法
 						else if(typeof info.distance.attackFrom=='number'){
+							if(info.distance.attackFrom==1) NoRange=true;
 							newRange-=info.distance.attackFrom;
 						}
 					}
-					return Math.max(range,newRange)
+					return Math.max(m,newRange);
 				},1);
 				m+=(1-attakRange);
 				for(let i=0;i<equips2.length;i++){
@@ -57768,7 +57773,8 @@
 						m+=info.attaclTo;
 					}
 				}
-				return n;
+				if(NoRange) return 0;
+				return m;
 			}
 			else if(method=='unchecked') return n;
 			return Math.max(1,n);

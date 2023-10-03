@@ -3115,6 +3115,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:2,
 					result:{
 						player:function(player){
+							if(get.mode()=='identity'&&player.hasUnknown(2)) return 0;
 							if(player.hp==1) return 0;
 							var shas=player.getCards('h','sha');
 							if(!shas.length) return 0;

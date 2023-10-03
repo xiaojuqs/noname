@@ -9476,7 +9476,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var hs=event.player.getCards('h');
 					var cs=player.storage.xinfu_qianxin;
 					var bool=false;
-					var history=event.player.getHistory('gain')
+					var history=event.player.getHistory('gain');
 					for(var i=0;i<history.length;i++){
 						for(var j=0;j<history[i].cards.length;j++){
 							var card=history[i].cards[j];

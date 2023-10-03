@@ -22769,6 +22769,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return 0;
 						},
 						target:function(player,target){
+							if(get.mode()=='identity'&&player.hasUnknown(2)) return 0;
 							if(target.countCards('h')>target.hp) return target.hp-target.countCards('h');
 							return 0;
 						}

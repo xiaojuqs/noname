@@ -479,6 +479,12 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					result:{
 						target:function(player,target){
 							if(!ui.selected.cards.length) return 0;
+							if(game.players.length>2){
+								var list=player.getEnemies();
+								for(var i=0;i<list.length;i++){
+									if(list[i].getEquip('shanrangzhaoshu')) return 0;
+								}
+							}
 							if(get.value(ui.selected.cards[0],false,'raw')<0) return -1;
 							return 1;
 						}
