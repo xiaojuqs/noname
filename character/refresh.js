@@ -9265,7 +9265,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					order:14,
 					result:{
 						player:function(player){
-							if(player.hp<3) return false;
+							if(get.mode()=='identity'&&player.hasUnknown(2)) return 0;
+							if(player.hp<3) return 0;
 							var mindist=player.hp;
 							if(player.countCards('hs',card=>player.canSave(card,player))) mindist++;
 							if(game.hasPlayer(function(current){
