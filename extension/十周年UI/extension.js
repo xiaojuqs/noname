@@ -2,6 +2,20 @@
 'use strict';
 game.import('extension', (lib, game, ui, get, ai, _status) => {
 	const decadeUIName = '十周年UI', decadeUIPath = window.decadeUIPath = `${lib.assetURL}extension/${decadeUIName}/`;
+	const Mixin = window.Mixin = {
+		/**
+		 * @param {string} method
+		 * @param {RegExp} at
+		 * @param {Function?} callback
+		 */
+		redirect(method, at, callback) {
+			/**
+			 * @type {string}
+			 */
+			const redirectingMethod = eval(`${method}.toString();`);
+			eval(`${method} = ${redirectingMethod.replace(at, callback && `\n${callback.toString().replace(/^\W*(function[^{]+\{([\s\S]*)\}|[^=]+=>[^{]*\{([\s\S]*)\}|[^=]+=>\s*([\s\S]*))/i, '$2$3$4').trim()}` || '')}`);
+		}
+	};
 	const version = '1.2.0.220114.34';
 	return {
 		name: "十周年UI",
@@ -1957,43 +1971,6 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 								ui.control.insertBefore(control, _status.createControl || ui.confirm);
 								control.addEventListener(lib.config.touchscreen ? 'touchend': 'click', ui.click.control2);
 								return control;
-							},
-
-							dialog:function(){
-								var i;
-								var hidden = false;
-								var notouchscroll = false;
-								var forcebutton = false;
-								var noforcebutton = false;
-								var dialog = decadeUI.element.create('dialog');
-								dialog.contentContainer = decadeUI.element.create('content-container', dialog);
-								dialog.content = decadeUI.element.create('content', dialog.contentContainer);
-								dialog.buttons = [];
-								for (i in lib.element.dialog) dialog[i] = lib.element.dialog[i];
-								for (i = 0; i < arguments.length; i++) {
-									if (typeof arguments[i] == 'boolean') dialog.static = arguments[i];
-									else if (arguments[i] == 'hidden') hidden = true;
-									else if (arguments[i] == 'notouchscroll') notouchscroll = true;
-									else if (arguments[i] == 'forcebutton') forcebutton = true;
-									else if (arguments[i] == 'noforcebutton') noforcebutton = true;
-									else dialog.add(arguments[i]);
-								}
-								if (!hidden) dialog.open();
-								if (!lib.config.touchscreen) dialog.contentContainer.onscroll = ui.update;
-								if (!notouchscroll) {
-									dialog.contentContainer.ontouchstart = ui.click.dialogtouchStart;
-									dialog.contentContainer.ontouchmove = ui.click.touchScroll;
-									dialog.contentContainer.style.WebkitOverflowScrolling = 'touch';
-									dialog.ontouchstart = ui.click.dragtouchdialog;
-								}
-
-								if (noforcebutton) {
-									dialog.noforcebutton = true;
-								} else if (forcebutton) {
-									dialog.forcebutton = true;
-									dialog.classList.add('forcebutton');
-								}
-								return dialog;
 							},
 
 							selectlist:function(list, init, position, onchange){
@@ -4026,6 +4003,37 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						target.$throwordered2(card2.copy(false));
 						player.$throwordered2(card1.copy(false));
 					};
+
+					Mixin.redirect(
+						'lib.element.card.copy',
+						/(?=\s*node\s*\.\s*classList\s*\.\s*remove\s*\(\s*\Whidden\W\s*\)\s*)/,
+						function (node) {
+							node.nature = this.nature;
+						}
+					);
+					Mixin.redirect(
+						'lib.element.dialog.add',
+						/(?=\s*this\s*\.\s*buttons\s*=\s*this\s*\.\s*buttons\s*\.\s*concat\s*\(\s*ui\s*\.\s*create\s*\.\s*buttons\s*\(\s*item\s*\[\s*0\s*\]\s*,\s*item\[\s*1\s*\]\s*,\s*buttons\s*,\s*noclick\s*\)\s*\)\s*;)/,
+						function (item, buttons) {
+							if (typeof item[1] == 'string' && item[1].includes('character')) {
+								if (this.intersection == undefined && self.IntersectionObserver) this.intersection = new IntersectionObserver((intersectionObserverEntries, intersectionObserver) => intersectionObserverEntries.forEach(intersectionObserverEntry => {
+									if (intersectionObserverEntry.intersectionRatio <= 0) return;
+									const target = intersectionObserverEntry.target;
+									target.setBackground(target.awaitItem, 'character');
+									intersectionObserver.unobserve(target);
+								}), {
+									root: this,
+									rootMargin: '0px',
+									thresholds: 0.01,
+								});
+								buttons.intersection = this.intersection;
+							}
+						}
+					);
+					Mixin.redirect(
+						'ui.create.dialog',
+						/\s*dialog\s*\.\s*bar\d*\s*=\s*ui\s*\.\s*create\s*\.\s*div\s*\([\s\S]*?\)\s*;/g
+					);
 				},
 				dialog:{
 					create:function(className, parentNode, tagName){
@@ -5129,7 +5137,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 
 						var cardname = event.card.name;
 						var cardnature = event.card.nature;
-						if ((lib.config.cardtempname != 'off') && ((card.name != cardname) || (card.nature != cardnature))) {
+						if ((lib.config.cardtempname != 'off') && (card.name != cardname || !get.is.sameNature(card.nature, cardnature, true))) {
 							if (!card._tempName) card._tempName = ui.create.div('.temp-name', card);
 
 							var tempname = get.translation(cardname);
