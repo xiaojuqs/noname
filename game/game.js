@@ -26821,7 +26821,6 @@
 				getAttackRange:function(raw){
 					const player=this;
 					let range=0;
-					var NoRange=false;
 					if(raw){
 						range=game.checkMod(player,player,range,'globalFrom',player);
 						range=game.checkMod(player,player,range,'attackFrom',player);
@@ -26834,54 +26833,42 @@
 								range+=info.globalFrom;
 							}
 						})
-						var output_result=(equips.reduce((range,card,index)=>{
-							let newRange=1;
-							const info=get.info(card,false);
-							if(info.distance){
-								//如果存在attackRange 则通过attackRange动态获取攻击范围
-								if(typeof info.distance.attackRange=='function'){
-									newRange=info.distance.attackRange(card,player);
-								}
-								//否则采用祖宗之法
-								else if(typeof info.distance.attackFrom=='number'){
-									if(info.distance.attackFrom==1) NoRange=true;
-									newRange-=info.distance.attackFrom;
-								}
-							}
-							return Math.max(range,newRange);
-						},range)-range);
-						if(NoRange) return 0;
-						return output_result;
+						return (player.getEquipRange()-range);
 					}
 					let base=game.checkMod(player,'unchanged','attackRangeBase',player);
 					if(base!='unchanged'){
 						range=base;
 					}
 					else{
-						const equips=player.getCards('e',function(card){
-							return !ui.selected.cards||!ui.selected.cards.contains(card);
-						});
-						var NoRange=false;
-						range=equips.reduce((range,card,index)=>{
-							let newRange=1;
-							const info=get.info(card,false);
-							if(info.distance){
-								//如果存在attackRange 则通过attackRange动态获取攻击范围
-								if(typeof info.distance.attackRange=='function'){
-									newRange=info.distance.attackRange(card,player);
-								}
-								//否则采用祖宗之法
-								else if(typeof info.distance.attackFrom=='number'){
-									if(info.distance.attackFrom==1) NoRange=true;
-									newRange-=info.distance.attackFrom;
-								}
-							}
-							return Math.max(range,newRange);
-						},1);
+						range=player.getEquipRange();
 					}
-					if(NoRange) range=0;
 					range=game.checkMod(player,range,'attackRange',player);
 					return range;
+				},
+				getEquipRange:function(cards){
+					const player=this;
+					if(!cards) cards=player.getCards('e',function(card){
+						return !ui.selected.cards||!ui.selected.cards.contains(card);
+					});
+					const range=cards.reduce((range,card)=>{
+						let newRange=false;
+						const info=get.info(card,false);
+						if(info.distance){
+							//如果存在attackRange 则通过attackRange动态获取攻击范围
+							if(typeof info.distance.attackRange=='function'){
+								newRange=info.distance.attackRange(card,player);
+							}
+							//否则采用祖宗之法
+							else if(typeof info.distance.attackFrom=='number'){
+								newRange=(1-info.distance.attackFrom);
+							}
+						}
+						let isN1=(typeof range=='number');
+						let isN2=(typeof newRange=='number');
+						if(isN1&&isN2) return Math.max(range,newRange);
+						else return (isN1?range:newRange);
+					},false);
+					return (typeof range=='number')?range:1;
 				},
 				getGlobalFrom:function(){
 					var player=this;
@@ -30303,26 +30290,6 @@
 					else{
 						var buttons=ui.create.div('.buttons',this.content);
 						if(zoom) buttons.classList.add('smallzoom');
-						if(window.decadeUI){
-							if (item[1] && typeof(item[1])=='string' && item[1].indexOf('character') != -1) {
-								if (this.intersection == undefined && self.IntersectionObserver) {
-									this.intersection = new IntersectionObserver(function(entries){
-										for (var i = 0; i < entries.length; i++) {
-											if (entries[i].intersectionRatio > 0) {
-												var target = entries[i].target;
-												target.setBackground(target.awaitItem, 'character');
-												this.unobserve(target);
-											}
-										}
-									},{
-										root: this,
-										rootMargin: '0px',
-										thresholds: 0.01,
-									});
-								}
-								buttons.intersection = this.intersection;
-							}
-						}
 						this.buttons=this.buttons.concat(ui.create.buttons(item[0],item[1],buttons,noclick));
 					}
 					if(this.buttons.length) {
@@ -30335,11 +30302,6 @@
 						}
 					}
 					ui.update();
-					if(window.decadeUI){
-						if (!this.classList.contains('prompt')) {
-							this.style.animation = 'open-dialog 0.5s';
-						}
-					}
 					return item;
 				},
 				addText:function(str,center){
@@ -57748,23 +57710,7 @@
 				let m=n;
 				m=game.checkMod(from,to,m,'attackFrom',from);
 				m=game.checkMod(from,to,m,'attackTo',to);
-				var NoRange=false;
-				const attakRange=equips1.reduce((m,card,index)=>{
-					let newRange=1;
-					const info=get.info(card,false);
-					if(info.distance){
-						//如果存在attackRange 则通过attackRange动态获取攻击范围
-						if(typeof info.distance.attackRange=='function'){
-							newRange=info.distance.attackRange(card,player);
-						}
-						//否则采用祖宗之法
-						else if(typeof info.distance.attackFrom=='number'){
-							if(info.distance.attackFrom==1) NoRange=true;
-							newRange-=info.distance.attackFrom;
-						}
-					}
-					return Math.max(m,newRange);
-				},1);
+				const attakRange=from.getEquipRange();
 				m+=(1-attakRange);
 				for(let i=0;i<equips2.length;i++){
 					let info=get.info(equips2[i]).distance;
@@ -57773,7 +57719,6 @@
 						m+=info.attaclTo;
 					}
 				}
-				if(NoRange) return 0;
 				return m;
 			}
 			else if(method=='unchecked') return n;
