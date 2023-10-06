@@ -5,22 +5,39 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 	const Mixin = window.Mixin = {
 		/**
 		 * @param {string} method
-		 * @param {RegExp} at
-		 * @param {Function?} callback
+		 * @param {string | RegExp} at
+		 * @param {string | Function?} callback
 		 */
-		redirect(method, at, callback) {
+		redirect(method) {
+			/**
+			 * @type {(string | RegExp)[]}
+			 */
+			const ats = [];
+			/**
+			 * @type {(string | Function?)[]}
+			 */
+			const callbacks = [];
+			Array.from(arguments).forEach((argument, index) => {
+				if (!index) return;
+				if (index % 2) ats.push(argument);
+				else callbacks.push(argument);
+			});
 			/**
 			 * @type {string}
 			 */
-			const redirectingMethod = eval(`${method}.toString();`);
-			eval(`${method} = ${redirectingMethod.replace(at, callback && `\n${callback.toString().replace(/^\W*(function[^{]+\{([\s\S]*)\}|[^=]+=>[^{]*\{([\s\S]*)\}|[^=]+=>\s*([\s\S]*))/i, '$2$3$4').trim()}` || '')}`);
+			let redirectingMethod = eval(`${method}.toString();`);
+			ats.forEach((at, index) => {
+				const callback = callbacks[index];
+				redirectingMethod = redirectingMethod.replace(at, callback ? `\n${callback.toString().replace(/^\W*(function[^{]+\{([\s\S]*)\}|[^=]+=>[^{]*\{([\s\S]*)\}|[^=]+=>\s*([\s\S]*))/i, '$2$3$4').trim()}` : '');
+			});
+			eval(`${method} = ${redirectingMethod}`);
 		}
 	};
 	const version = '1.2.0.220114.34';
 	return {
 		name: "十周年UI",
 		content:config=>{
-			const extensionName = decadeUIName, extension = lib.extensionMenu[`extension_${extensionName}`], extensionPath = `${lib.assetURL}extension/${extensionName}/`;
+			const extension = lib.extensionMenu[`extension_${decadeUIName}`];
 
 			if (!(extension && extension.enable && extension.enable.init)) return;
 
@@ -37,11 +54,11 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 				break;
 			}
 
-			console.time(extensionName);
+			console.time(decadeUIName);
 			window.duicfg = config;
 			window.dui = window.decadeUI = {
 				init:function(){
-					this.extensionName = extensionName;
+					this.extensionName = decadeUIName;
 
 					var sensor = decadeUI.element.create('sensor', document.body);
 					sensor.id = 'decadeUI-body-sensor';
@@ -142,10 +159,6 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						},
 						lib:{
 							element:{
-								card:{
-									init: lib.element.card.init,
-								},
-
 								content:{
 									chooseButton: lib.element.content.chooseButton,
 									turnOver: lib.element.content.turnOver,
@@ -302,7 +315,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										clipSlots: skin.clipSlots,	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
 									}, i == 1);
 
-									this.$dynamicWrap.style.backgroundImage = 'url("' + extensionPath + 'assets/dynamic/' + skin.background + '")';
+									this.$dynamicWrap.style.backgroundImage = 'url("' + decadeUIPath + 'assets/dynamic/' + skin.background + '")';
 									if (!increased) {
 										increased = true;
 										decadeUI.CUR_DYNAMIC++;
@@ -1606,7 +1619,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 									var that = this;
 									var image = new Image();
 									var identity = decadeUI.getPlayerIdentity(this);
-									var url = extensionPath + 'image/decoration/dead_' + identity + '.png';
+									var url = decadeUIPath + 'image/decoration/dead_' + identity + '.png';
 									image.onerror = function(){
 										that.node.dieidentity.innerHTML = decadeUI.getPlayerIdentity(that, that.identity, true) + '<br>阵亡';
 									};
@@ -2816,7 +2829,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										if (isExt) {
 											image.src = fileName;
 										} else {
-											image.src = extensionPath + 'image/decoration/identity_' + fileName + '.png';
+											image.src = decadeUIPath + 'image/decoration/identity_' + fileName + '.png';
 										}
 										
 										this.parentNode.style.backgroundImage = 'url("' + image.src + '")';
@@ -2935,7 +2948,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										if (decadeUI.config.campIdentityImageMode){
 											var that = this;
 											var image = new Image();
-											var url = extensionPath + 'image/decoration/name_' + value + '.png';
+											var url = decadeUIPath + 'image/decoration/name_' + value + '.png';
 											if (lib.decade_extGroupImage && lib.decade_extGroupImage[value]) {
 												url = lib.decade_extGroupImage[value];
 											}
@@ -3917,7 +3930,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							}
 
 							node.innerHTML = num;
-							node.dataset.text = node.textContent || node.innerText;
+							node.dataset.text = node.innerText;
 							node.nature = nature || 'soil';
 							this.damagepopups.push(node);
 						}
@@ -4003,12 +4016,136 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						target.$throwordered2(card2.copy(false));
 						player.$throwordered2(card1.copy(false));
 					};
+					Mixin.redirect(
+						'lib.element.content.gain',
+						/\s*var\s*sort\s*;[\s\S]*=\s*document\s*\.\s*createDocumentFragment\s*\(\s*\)\s*;/,
+						player => {
+							var handcards = player.node.handcards1;
+							var fragment = document.createDocumentFragment();
+						},
+						/\s*sort\s*=\s*lib\s*\.\s*config\s*\.\s*sort_card\s*\(\s*cards\s*\[\s*num\s*\]\s*\)\s*;\s*if\s*\(\s*lib\s*\.\s*config\s*\.\s*reverse_sort\s*\)\s*sort\s*=-\s*sort\s*;/,
+						'',
+						/\s*cards\s*\[\s*num\s*\]\s*\.\s*style\s*\.\s*transform\s*=\s*''\s*;/,
+						'',
+						/(?=\s*if\s*\(\s*_status\s*\.\s*discarded\s*\)\s*{)/,
+						(fragment, cards, num) => {
+							fragment.insertBefore(cards[num], fragment.firstChild);
+						},
+						/\s*if\s*\(\s*player\s*==\s*game\s*\.\s*me\s*\)\s*{[\s\S]*else\s*frag2\s*\.\s*appendChild\s*\(\s*cards\s*\[\s*num\s*\]\s*\)\s*;/,
+						'',
+						/\s*var\s*addv\s*=\s*function\s*\(\s*\)\s*{[\s\S]*?}\s*;/,
+						'',
+						/(?=\s*if\s*\(\s*event\s*\.\s*animate\s*==\s*'draw'\s*\)\s*{)/,
+						(event, player, dui, fragment, handcards, broadcast) => {
+							var gainTo = function (cards, nodelay) {
+								cards.duiMod = event.source;
+								if (player == game.me) {
+									dui.layoutHandDraws(cards.reverse());
+									dui.queueNextFrameTick(dui.layoutHand, dui);
+									game.addVideo('gain12', player, [get.cardsInfo(fragment.childNodes), event.gaintag]);
+								}
 
+								var s = player.getCards('s');
+								if (s.length)
+									handcards.insertBefore(fragment, s[0]);
+								else
+									handcards.appendChild(fragment);
+
+								broadcast();
+
+								if (nodelay !== true) {
+									setTimeout(function (player) {
+										player.update();
+										game.resume();
+									}, get.delayx(400, 400) + 66, player);
+								} else {
+									player.update();
+								}
+							};
+						},
+						/\s*setTimeout\s*\(\s*function\s*\(\s*\)\s*{[\s\S]*?}\s*,\s*get\s*\.\s*delayx\s*\([\s\S]*?,\s*[\s\S]*?\s*\)\s*\)\s*;/g,
+						(gainTo, cards) => {
+							gainTo(cards);
+						},
+						/\s*addv\s*\(\s*\)\s*;[\s\S]*?broadcast\s*\(\s*\)\s*;/,
+						(gainTo, cards) => {
+							gainTo(cards, true);
+						},
+						/\s*game\s*\.\s*delayx\s*\(\s*\)\s*;(?=\s*if\s*\(\s*event\s*\.\s*updatePile\s*\)\s*game\s*\.\s*updateRoundNumber\s*\(\s*\)\s*;)/
+					);
+					Mixin.redirect(
+						'lib.element.card.init',
+						/\s*else\s*if\s*\(\s*lib\s*\.\s*card\s*\[\s*bg\s*\]\s*\.\s*image\s*==\s*'background'\s*\)\s*{[\s\S]*?}/,
+						'',
+						/\s*if\s*\(\s*this\s*\.\s*node\s*\.\s*background\s*\.innerHTML\s*\.\s*length\s*>\s*1\s*\)\s*this\s*\.\s*node\s*\.\s*background\s*\.classList\s*\.[\s\S]*\('tight'\)\s*;/,
+						'',
+						/\s*if\s*\(\s*info\s*\.\s*color\s*\)\s*{[\s\S]*?else\s*{[\s\S]*?}/,
+						'',
+						/(?=\s*if\s*\(\s*card\s*\[\s*2\]\s*==\s*'sha'\s*\)\s*{)/,
+						function (card, cardnum) {
+							this.dataset.suit = card[0];
+							this.$suitnum.$num.textContent = cardnum;
+							this.$suitnum.$suit.textContent = get.translation(card[0]);
+						},
+						/\s*this\s*\.\s*node\s*\.\s*name\s*\.\s*innerHTML\s*=[\s\S]*name\s*;/,
+						function (name, card, cardnum) {
+							this.$name.innerHTML = name;
+							this.$vertname.innerHTML = name;
+							this.$equip.$suitnum.innerHTML = `${get.translation(card[0])}${cardnum}`;
+							this.$equip.$name.innerHTML = ` ${name}`;
+						},
+						/\s*this\s*\.\s*node\s*\.\s*range\s*\.\s*innerHTML\s*=\s*''\s*;[\s\S]*break\s*;\s*}/,
+						'',
+						' <span class="cardtag">',
+						'',
+						/\s*tagstr\s*\+=\s*'<\/span>'\s*;\s*this\s*\.\s*node\s*\.\s*range\s*\.\s*innerHTML\s*\+=\s*tagstr\s*;/,
+						function (tagstr) {
+							this.$range.innerHTML = tagstr;
+							this.$range.classList.add('card-tag');
+						},
+						/(?=\s*return\s*this\s*;)/,
+						function (card) {
+							if (decadeUI.config.cardPrettify) {
+								const decadeExtCardImage = lib.decade_extCardImage || (lib.decade_extCardImage = {}), fileName = card[3] ? `${card[2]}_${get.natureList(card[3]).sort(lib.sort.nature).join('_')}` : card[2];
+								let decadeCardSource = decadeExtCardImage[fileName];
+								var not_load_card_names=['sha_stab','sha_kami'];
+								if (!decadeCardSource && card[2] != fileName && !not_load_card_names.contains(fileName)) decadeCardSource = decadeExtCardImage[card[2]];
+								if (decadeCardSource) {
+									this.classList.add('decade-card');
+									if (!this.classList.contains('infohidden')) this.style.backgroundImage = `url('${this.decadeCardSource = decadeCardSource}')`;
+									if (this.node.avatar) this.node.avatar.remove();
+									if (this.node.framebg) this.node.framebg.remove();
+									new MutationObserver(mutationRecords => mutationRecords.forEach(mutationRecord => {
+										const target = mutationRecord.target, informationHidden = target.classList.contains('infohidden');
+										if (informationHidden == mutationRecord.oldValue.split(' ').includes('infohidden')) return;
+										if (informationHidden) target.style.removeProperty('background-image');
+										else target.style.backgroundImage = `url('${target.decadeCardSource}')`;
+									})).observe(this, {
+										attributeFilter: ['class'],
+										attributeOldValue: true
+									});
+								}
+							}
+						}
+					);
 					Mixin.redirect(
 						'lib.element.card.copy',
-						/(?=\s*node\s*\.\s*classList\s*\.\s*remove\s*\(\s*\Whidden\W\s*\)\s*)/,
+						/(?=\s*node\s*\.\s*classList\s*\.\s*remove\s*\(\s*'hidden'\s*\)\s*;)/,
 						function (node) {
 							node.nature = this.nature;
+							node.decadeCardSource = this.decadeCardSource;
+						},
+						/(?=\s*return\s*node\s*;)/,
+						function (clone, node) {
+							if (clone && node.classList.contains('decade-card')) new MutationObserver(mutationRecords => mutationRecords.forEach(mutationRecord => {
+								const target = mutationRecord.target, informationHidden = target.classList.contains('infohidden');
+								if (informationHidden == mutationRecord.oldValue.split(' ').includes('infohidden')) return;
+								if (informationHidden) target.style.removeProperty('background-image');
+								else target.style.backgroundImage = `url('${target.decadeCardSource}')`;
+							})).observe(node, {
+								attributeFilter: ['class'],
+								attributeOldValue: true
+							});
 						}
 					);
 					Mixin.redirect(
@@ -4027,6 +4164,17 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 									thresholds: 0.01,
 								});
 								buttons.intersection = this.intersection;
+							}
+						}
+					);
+					Mixin.redirect(
+						'lib.skill._discard.content',
+						/(?=\s*var\s*todiscard\s*=\s*ui\s*\.\s*todiscard\s*\[\s*id\s*\]\s*;)/,
+						() => {
+							if (window.decadeUI) {
+								ui.todiscard = [];
+								ui.clear();
+								return;
 							}
 						}
 					);
@@ -4463,7 +4611,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						if (!this.sheetList){
 							this.sheetList = [];
 							for (var i = 0; i < document.styleSheets.length; i++){
-								if (document.styleSheets[i].href && document.styleSheets[i].href.indexOf('extension/' + encodeURI(extensionName)) != -1){
+								if (document.styleSheets[i].href && document.styleSheets[i].href.indexOf('extension/' + encodeURI(decadeUIName)) != -1){
 									this.sheetList.push(document.styleSheets[i]);
 								}
 							}
@@ -5636,7 +5784,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										this.$player.firstChild.style.backgroundImage = (value.isUnseen(0) ? value.node.avatar2 : value.node.avatar).style.backgroundImage;
 									}
 
-									if (value) this.$playerCard.dataset.text = get.translation(value) + '发起';
+									if (value) this.$playerCard.dataset.text = `${get.translation(value).replace(/<br>/g, '\n')}发起`;
 								},
 							},
 							target: {
@@ -5653,7 +5801,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										this.$target.firstChild.style.backgroundImage = (value.isUnseen(0) ? value.node.avatar2 : value.node.avatar).style.backgroundImage;
 									}
 
-									if (value) this.$targetCard.dataset.text = get.translation(value);
+									if (value) this.$targetCard.dataset.text = get.translation(value).replace(/<br>/g, '\n');
 								},
 							},
 							playerCard: {
@@ -6302,12 +6450,12 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 
 
 			decadeUI.config = config;
-			duicfg.update = () => Object.values(lib.extensionMenu[`extension_${extensionName}`]).forEach(value => {
+			duicfg.update = () => Object.values(lib.extensionMenu[`extension_${decadeUIName}`]).forEach(value => {
 				if (value && typeof value == 'object' && typeof value.update == 'function') value.update();
 			});
 
 			decadeUI.init();
-			console.timeEnd(extensionName);
+			console.timeEnd(decadeUIName);
 		},
 		precontent:()=>{
 			if (lib.config[`extension_${decadeUIName}_eruda`]) {
@@ -6351,6 +6499,22 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 					this.js(`${decadeUIPath}menu.js`);
 					this.js(`${decadeUIPath}skill.js`);
 					this.js(`${decadeUIPath}spine.js`);
+					const decadeExtCardImage = lib.decade_extCardImage || (lib.decade_extCardImage = {});
+					if (window.fs) new Promise((resolve, reject) => fs.readdir(`${__dirname}/${decadeUIPath}image/card/`, (errnoException, files) => {
+						if (errnoException) reject(errnoException);
+						else resolve(files);
+					})).then(files => files.forEach(file => {
+						const fileName = lib.path.parse(file).name;
+						if (!decadeExtCardImage[fileName]) decadeExtCardImage[fileName] = `${decadeUIPath}image/card/${file}`;
+					}));
+					else if (typeof resolveLocalFileSystemURL == 'function') new Promise((resolve, reject) => {
+						resolveLocalFileSystemURL(`${decadeUIPath}image/card/`, resolve, reject);
+					}).then(directoryEntry => new Promise((resolve, reject) => {
+						directoryEntry.createReader().readEntries(resolve, reject);
+					})).then(entries => entries.forEach(entry => {
+						const entryName = entry.name, fileName = lib.path.parse(entryName).name;
+						if (!decadeExtCardImage[fileName]) decadeExtCardImage[fileName] = `${decadeUIPath}image/card/${entryName}`;
+					}));
 					return this;
 				};
 				decadeModule.js = function (path) {
@@ -6438,12 +6602,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 			},
 			cardPrettify:{
 				name: '卡牌美化(需重启)',
-				init: 'webp',
-				item: {
-					off: '关闭',
-					webp: 'WEBP素材',
-					png:  'PNG 素材',
-				}
+				init: true,
 			},
 			dynamicBackground:{
 				name: '动态背景',
