@@ -1418,7 +1418,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 									if (!info.name) info.name = get.translation(name);
 									if (!info.content) info.content = get.skillintro(name, learn, learn2);
 
-									if (name.indexOf('unknown') == 0) {
+									if (name.startsWith('unknown')) {
 										nodeMarkText.innerHTML = get.translation(name)[0];
 									} else {
 										if (!lib.character[name]) return console.error(name);
