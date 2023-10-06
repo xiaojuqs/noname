@@ -2683,7 +2683,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					if(!player.hasEmptySlot('equip2')) return false;
 					if(event.card.name=='nanman') return true;
 					if(event.card.name=='wanjian') return true;
-					return event.card.name=='sha'&&event.card.hasNature();
+					return event.card.name=='sha'&&game.hasNature(event.card);
 				},
 				content:function(){
 					trigger.cancel();
@@ -2696,7 +2696,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							if(card.name=='sha'){
 								var equip1=player.getEquip(1);
 								if(equip1&&equip1.name=='zhuque') return 1.9;
-								if(!card.hasNature()) return 'zerotarget';
+								if(!game.hasNature(card)) return 'zerotarget';
 							}
 						}
 					}
@@ -4707,7 +4707,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				equipSkill:true,
 				inherit:'cixiong_skill',
 				filter:function(event,player){
-					return event.card.hasNature('linked');
+					return game.hasNature(event.card,'linked');
 				},
 			},
 			qicaishenlu:{

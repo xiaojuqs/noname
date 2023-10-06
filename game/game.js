@@ -5,19 +5,19 @@
 			localStorage.setItem('gplv3_noname_alerted',true);
 		}
 		else{
-			var ua=navigator.userAgent.toLowerCase();
-			var ios=ua.indexOf('iphone')!=-1||ua.indexOf('ipad')!=-1||ua.indexOf('macintosh')!=-1;
+			const ua=navigator.userAgent.toLowerCase();
+			const ios=ua.includes('iphone')||ua.includes('ipad')||ua.includes('macintosh');
 			//electron
 			if(typeof window.process=='object'&&typeof window.require=='function'){
-				var versions=window.process.versions;
-				var electronVersion=parseFloat(versions.electron);
-				var remote;
+				const versions=window.process.versions;
+				const electronVersion=parseFloat(versions.electron);
+				let remote;
 				if(electronVersion>=14){
 					remote=require('@electron/remote');
 				}else{
 					remote=require('electron').remote;
 				}
-				var thisWindow=remote.getCurrentWindow();
+				const thisWindow=remote.getCurrentWindow();
 				thisWindow.destroy();
 				window.process.exit();
 			}
@@ -29,6 +29,7 @@
 			}
 		}
 	}
+	const nonameInitialized=localStorage.getItem('noname_inited');
 	const GeneratorFunction=(function*(){}).constructor;
 	// gnc: GeNCoroutine
 	const gnc={
@@ -115,7 +116,8 @@
 		updateURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
 		mirrorURL:'https://raw.githubusercontent.com/adeFuLoDgu/noname',
 		hallURL:'127.0.0.1',
-		assetURL:'',
+		assetURL:typeof nonameInitialized!='string'||nonameInitialized=='nodejs'?'':nonameInitialized,
+		compatibleEdition:Boolean(typeof nonameInitialized=='string'&&nonameInitialized.match(/\/(?:com\.widget|yuri\.nakamura)\.noname\//)),
 		changeLog:[],
 		updates:[],
 		canvasUpdates:[],
@@ -171,9 +173,9 @@
 				if("color" in config&&config.color!=null){
 					let color1,color2,color3,color4;
 					if (typeof config.color=="string"&&/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(config.color)){
-						let c1=parseInt(`0x${item[1].slice(1, 3)}`);
-						let c2=parseInt(`0x${item[1].slice(3, 5)}`);
-						let c3=parseInt(`0x${item[1].slice(5, 7)}`);
+						let c1=parseInt(`0x${config.color.slice(1, 3)}`);
+						let c2=parseInt(`0x${config.color.slice(3, 5)}`);
+						let c3=parseInt(`0x${config.color.slice(5, 7)}`);
 						color1=color2=color3=color4=[c1,c2,c3,1];
 					}
 					else if(Array.isArray(config.color)&&config.color.length==4){
@@ -273,7 +275,7 @@
 				if(typeof order!='number') order=0;
 				if(typeof background!='string') background='';
 				if(!Array.isArray(lineColor)||lineColor.length!=3) lineColor=[];
-				else if(background.indexOf('ext:')==0){
+				else if(background.startsWith('ext:')){
 					background=background.replace(/^ext:/,'extension/');
 				}
 				if(linked) lib.linked.add(nature);
@@ -318,9 +320,69 @@
 						),
 					};
 					game.dynamicStyle.addObject(result);
+
+					const g2=cs.group(
+						cs.of(
+							cs.class("tempname",`${nature}`),
+							':not([data-nature])>',
+							cs.class("span")
+						)
+					)
+					let result2={};
+					result2[g2]={
+						color:`rgba(${color1.join()})`,
+					};
+					game.dynamicStyle.addObject(result2);
 				}
 			}],
 		},
+		announce:{
+			init(){
+				_status._announce=document.createElement("Announce");
+				_status._announce_cache=new Map();
+				delete lib.announce.init;
+			},
+			//推送一个对象给所有监听了name的订阅者。
+			publish(name,values){
+				if(_status._announce) _status._announce.dispatchEvent(new CustomEvent(name,{
+					detail:values
+				}));
+				return values;
+			},
+			//订阅name相关的事件。
+			subscribe(name,method){
+				if(_status._announce&&_status._announce_cache) {
+					let subscribeFunction;
+					if(_status._announce_cache.has(method)){
+						let records=_status._announce_cache.get(method);
+						subscribeFunction=records.get("Listener");
+						records.get("EventTargets").add(name);
+					}
+					else{
+						subscribeFunction=event=>method(event.detail);
+						let records=new Map();
+						records.set("Listener",subscribeFunction);
+						records.set("EventTargets",[name]);
+						_status._announce_cache.set(method,records);
+					}
+					_status._announce.addEventListener(name,subscribeFunction);
+				}
+				return method;
+			},
+			//取消对事件name的订阅
+			unsubscribe(name,method){
+				if(_status._announce&&_status._announce_cache&&_status._announce_cache.has(method)){
+					let records=_status._announce_cache.get(method);
+					const listener=records.get("Listener");
+					let eventTargets=records.get("EventTargets");
+					eventTargets.remove(name);
+					if(eventTargets.length<=0) _status._announce_cache.remove(method);
+					_status._announce.removeEventListener(name,listener);
+				}
+				return method;
+			}
+		},
+		objectURL:new Map(),
 		hookmap:{},
 		imported:{},
 		layoutfixed:['chess','tafang','stone'],
@@ -987,7 +1049,7 @@
 						init:'github',
 						unfrequent:true,
 						item:{
-							coding:'Github Proxy',
+							coding:'FastGit',
 							github:'GitHub',
 						},
 						onclick:function(item){
@@ -997,15 +1059,10 @@
 					},
 					extension_source:{
 						name:'获取扩展地址',
-						init:'Coding',
+						init:'GitHub Proxy',
 						unfrequent:true,
 						item:{},
-						intro:function(){
-							return '获取在线扩展时的地址。当前地址：<br>'+lib.config.extension_sources[lib.config.extension_source];
-						},
-						onclick:function(item){
-							game.saveConfig('extension_source',item);
-						},
+						intro:()=>`获取在线扩展时的地址。当前地址：${document.createElement('br').outerHTML}${lib.config.extension_sources[lib.config.extension_source]}`
 					},
 					extension_create:{
 						name:'添加获取扩展地址',
@@ -1558,7 +1615,7 @@
 							ui.create.filediv('.menubutton','添加背景',node,function(file){
 								if(file){
 									var name=file.name;
-									if(name.indexOf('.')!=-1){
+									if(name.includes('.')){
 										name=name.slice(0,name.indexOf('.'));
 									}
 									var link=(game.writeFile?'cdv_':'custom_')+name;
@@ -1596,7 +1653,7 @@
 										if(link&&link!='default'){
 											var str;
 											if(this.classList.contains('active')){
-												if(link.indexOf('custom_')==0||link.indexOf('cdv_')==0){
+												if(link.startsWith('custom_')||link.startsWith('cdv_')){
 													str='删除';
 												}
 												else{
@@ -1620,10 +1677,10 @@
 							if(node.firstChild){
 								node.firstChild.innerHTML=get.verticalStr(name);
 							}
-							if(link=='default'||link.indexOf('custom_')==0){
+							if(link=='default'||link.startsWith('custom_')){
 								node.style.backgroundImage='none';
 								node.classList.add('dashedmenubutton');
-								if(link.indexOf('custom_')==0){
+								if(link.startsWith('custom_')){
 									game.getDB('image',link,function(fileToLoad){
 										if(!fileToLoad) return;
 										var fileReader = new FileReader();
@@ -1676,7 +1733,7 @@
 										menu.updateBr();
 										lib.config.customBackgroundPack.remove(background);
 										game.saveConfig('customBackgroundPack',lib.config.customBackgroundPack);
-										if(background.indexOf('cdv_')==0){
+										if(background.startsWith('cdv_')){
 											game.removeFile('image/background/'+background+'.jpg');
 										}
 										else{
@@ -2415,7 +2472,7 @@
 								node.className='button character dashedmenubutton';
 							}
 							else{
-								if(link.indexOf('dragon_')==0){
+								if(link.startsWith('dragon_')){
 									link=link.slice(7);
 									node.dataset.decoration=link;
 								}
@@ -2463,7 +2520,7 @@
 							}
 							else if(layout!='default'&&layout!='auto'){
 								ui.css.border_stylesheet=lib.init.sheet();
-								if(layout.indexOf('dragon_')==0){
+								if(layout.startsWith('dragon_')){
 									layout=layout.slice(7);
 									ui.arena.dataset.framedecoration=layout;
 								}
@@ -3183,6 +3240,16 @@
 							default:'默认',
 							simple:'精简',
 							old:'旧版'
+						},
+						unfrequent:true,
+					},
+					buttoncharacter_prefix:{
+						name:'武将前缀',
+						init:'default',
+						item:{
+							default:'默认',
+							simple:'不显示颜色',
+							off:'不显示前缀'
 						},
 						unfrequent:true,
 					},
@@ -4041,6 +4108,7 @@
 							showPinyin:'拼音(样式一)',
 							showCodeIdentifier:'代码ID(样式一)',
 							showPinyin2:'拼音(样式二)',
+							showCodeIdentifier2:'代码ID(样式二)',
 						},
 						visualMenu:(node,link,name)=>{
 							node.classList.add('button','character');
@@ -4052,23 +4120,28 @@
 							style.display='flex';
 							style.height='60px';
 							style.justifyContent='center';
-							style.width='200px';
+							style.width='180px';
 							const firstChild=node.firstChild;
 							firstChild.removeAttribute('class');
 							firstChild.style.position='initial';
-							if(link=='false') return;
+							if(link=='doNotShow') return;
 							const ruby=document.createElement('ruby');
 							ruby.textContent=name;
-							const leftParenthesisRP=document.createElement('rp');
-							leftParenthesisRP.textContent='（';
-							ruby.appendChild(leftParenthesisRP);
 							const rt=document.createElement('rt');
 							rt.style.fontSize='smaller';
-							rt.textContent=link=='showCodeIdentifier'?link:get.pinyin(name).join(' ');
-							ruby.appendChild(rt);
-							const rightParenthesisRP=document.createElement('rp');
-							rightParenthesisRP.textContent='）';
-							ruby.appendChild(rightParenthesisRP);
+							if(link=='showPinyin2'||link=='showCodeIdentifier2'){
+								rt.textContent=link=='showCodeIdentifier2'?'['+link+']':'['+get.pinyin(name)+']';
+								ruby.appendChild(rt);
+							}else{
+								const leftParenthesisRP=document.createElement('rp');
+								leftParenthesisRP.textContent='（';
+								ruby.appendChild(leftParenthesisRP);
+								rt.textContent=link=='showCodeIdentifier'?link:get.pinyin(name).join(' ');
+								ruby.appendChild(rt);
+								const rightParenthesisRP=document.createElement('rp');
+								rightParenthesisRP.textContent='）';
+								ruby.appendChild(rightParenthesisRP);
+							}
 							firstChild.innerHTML=ruby.outerHTML;
 						}
 					},
@@ -4188,7 +4261,7 @@
 							if(confirm('是否清除已导入的所有自定义背景音乐？（该操作不可撤销！）')){
 								for(var i in lib.config.customBackgroundMusic){
 									lib.config.all.background_music.remove(i);
-									if(i.indexOf('cdv_')==0){
+									if(i.startsWith('cdv_')){
 										game.removeFile('audio/background/'+i+'.mp3');
 									}
 									else{
@@ -4352,7 +4425,7 @@
 							if(!lib.db){
 								data={};
 								for(var i in localStorage){
-									if(i.indexOf(lib.configprefix)==0){
+									if(i.startsWith(lib.configprefix)){
 										data[i]=localStorage[i];
 									}
 								}
@@ -5141,7 +5214,7 @@
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
 							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
 							else if(ui.cheat2&&!get.config('free_choose')){
 								ui.cheat2.close();
@@ -5591,7 +5664,7 @@
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
-							if(get.mode()!='guozhan'||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
 							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
 							else if(ui.cheat2&&!get.config('free_choose')){
 								ui.cheat2.close();
@@ -5965,7 +6038,7 @@
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
 							if(!ui.create.cheat2) return;
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
 							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
 							else if(ui.cheat2&&!get.config('free_choose')){
 								ui.cheat2.close();
@@ -6340,7 +6413,7 @@
 						frequent:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
 							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
 							else if(ui.cheat2&&!get.config('free_choose')){
 								ui.cheat2.close();
@@ -6511,7 +6584,7 @@
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
 							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
 							else if(ui.cheat2&&!get.config('free_choose')){
 								ui.cheat2.close();
@@ -6940,7 +7013,7 @@
 						init:true,
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
 							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
 							else if(ui.cheat2&&!get.config('free_choose')){
 								ui.cheat2.close();
@@ -7233,7 +7306,7 @@
 						onclick:function(bool){
 							game.saveConfig('free_choose',bool,this._link.config.mode);
 							if(_status.connectMode) return;
-							if(!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
+							if(get.mode()!=this._link.config.mode||!_status.event.getParent().showConfig&&!_status.event.showConfig) return;
 							if(!ui.cheat2&&get.config('free_choose')) ui.create.cheat2();
 							else if(ui.cheat2&&!get.config('free_choose')){
 								ui.cheat2.close();
@@ -7495,10 +7568,25 @@
 			});
 			//防止每次输出字符都创建以下元素
 			const event=_status.event;
+			const trigger=_status.event;
 			const player=ui.create.player().init('sunce');
+			const target=player;
+			const targets=[player];
+			const source=player;
 			const card=game.createCard();
-			//覆盖原本的javascript提示
-			CodeMirror.registerHelper('hint','javascript',(editor,options)=>{
+			const cards=[card];
+			const result={bool:true};
+			function forEach(arr,f) {
+				Array.from(arr).forEach(v=>f(v));
+			}
+			function forAllProps(obj,callback){
+				if(!Object.getOwnPropertyNames||!Object.getPrototypeOf){
+					for(let name in obj) callback(name);
+				}else{
+					for(let o=obj;o;o=Object.getPrototypeOf(o)) Object.getOwnPropertyNames(o).forEach(callback);
+				}
+			}
+			function scriptHint(editor,keywords,getToken,options){
 				//Find the token at the cursor
 				let cur=editor.getCursor(),token=editor.getTokenAt(cur);
 				if(/\b(?:string|comment)\b/.test(token.type)) return;
@@ -7528,37 +7616,132 @@
 					context.push(tprop);
 				}
 				const list=[];
+				let obj;
 				if(Array.isArray(context)){
 					try {
 						const code=context.length==1?context[0].string:context.reduceRight((pre,cur)=>(pre.string||pre)+'.'+cur.string);
-						const obj=eval(code);
+						obj=eval(code);
 						if(![null,undefined].includes(obj)){
 							const keys=Object.getOwnPropertyNames(obj).concat(Object.getOwnPropertyNames(Object.getPrototypeOf(obj))).filter(key=>key.startsWith(token.string));
 							list.addArray(keys);
 						}
 					}catch(_){ return;}
 				}else if(token&&typeof token.string=='string'){
-					const javascriptKeywords=("break case catch class const continue debugger default delete do else export extends from false finally for function " +
-						"if in import instanceof let new null return super switch this throw true try typeof var void while with yield").split(" ");
-					const coffeescriptKeywords=("and break catch class continue delete do else extends false finally for " +
-						"if in instanceof isnt new no not null of off on or return switch then throw true try typeof until void while with yes").split(" ");
-					const keys=['player','card','lib','game','ui','get','ai','_status'].concat(javascriptKeywords).concat(coffeescriptKeywords).concat(Object.getOwnPropertyNames(window));
-					const start=token.string;
-					function maybeAdd(str){
-						if(str.lastIndexOf(start,0)==0&&!list.includes(str)) list.push(str);
+					//非开发者模式下，提示这些单词
+					list.addArray(['player','card','cards','result','trigger','source','target','targets','lib','game','ui','get','ai','_status']);
+				}
+				return {
+					list:[...new Set(getCompletions(token,context,keywords,options).concat(list))]
+						.filter(key=>key.startsWith(token.string))
+						.sort((a,b)=>(a+'').localeCompare(b+''))
+						.map(text=>{
+							return {
+								render(elt,data,cur) {
+									var icon=document.createElement("span");
+									var className="cm-completionIcon cm-completionIcon-";
+									if(obj){
+										const type=typeof obj[text];
+										if(type== 'function') {
+											className+='function';
+										}
+										else if(type== 'string') {
+											className+='text';
+										}
+										else if(type== 'boolean') {
+											className+='variable';
+										}
+										else{
+											className+='namespace';
+										}
+									}else{
+										if(javascriptKeywords.includes(text)){
+											className+='keyword';
+										}
+										else if(window[text]) {
+											const type=typeof window[text];
+											if(type=='function'){
+											className+='function';
+											}
+											else if(type=='string'){
+												className+='text';
+											}
+											else if(text=='window'||type=='boolean'){
+												className+='variable';
+											}
+											else{
+												className+='namespace';
+											}
+										}else{
+											className+='namespace';
+										}
+									}
+									icon.className=className;
+									elt.appendChild(icon);
+									elt.appendChild(document.createTextNode(text));
+								},
+								displayText: text,
+								text: text,
+							}
+						}),
+					from:CodeMirror.Pos(cur.line,token.start),
+					to:CodeMirror.Pos(cur.line,token.end)
+				};
+			}
+			function javascriptHint(editor,options){
+				return scriptHint(editor,javascriptKeywords,function(e,cur){return e.getTokenAt(cur);},options);
+			};
+			//覆盖原本的javascript提示
+			CodeMirror.registerHelper("hint","javascript",javascriptHint);
+			const stringProps=Object.getOwnPropertyNames(String.prototype);
+			const arrayProps=Object.getOwnPropertyNames(Array.prototype);
+			const funcProps=Object.getOwnPropertyNames(Array.prototype);
+			const javascriptKeywords=("break case catch class const continue debugger default delete do else export extends from false finally for function " +
+				"if in import instanceof let new null return super switch this throw true try typeof var void while with yield").split(" ");
+			function getCompletions(token,context,keywords,options){
+				let found=[],start=token.string,global=options&&options.globalScope||window;
+				function maybeAdd(str){
+					if(str.lastIndexOf(start,0)==0&&!found.includes(str)) found.push(str);
+				}
+				function gatherCompletions(obj){
+					if(typeof obj=="string") forEach(stringProps,maybeAdd);
+					else if(obj instanceof Array) forEach(arrayProps,maybeAdd);
+					else if(obj instanceof Function) forEach(funcProps,maybeAdd);
+					forAllProps(obj, maybeAdd);
+				}
+				if(context&&context.length){
+					//If this is a property, see if it belongs to some object we can
+					//find in the current environment.
+					let obj=context.pop(),base;
+					if (obj.type&&obj.type.indexOf("variable")=== 0){
+						if(options&&options.additionalContext)
+							base=options.additionalContext[obj.string];
+						if(!options||options.useGlobalScope!==false)
+							base=base||global[obj.string];
+					}else if(obj.type=="string"){
+						base="";
+					}else if(obj.type == "atom"){
+						base=1;
+					}else if(obj.type == "function"){
+						if(global.jQuery!=null&&(obj.string=='$'||obj.string=='jQuery')&&(typeof global.jQuery=='function'))
+							base=global.jQuery();
+						else if(global._!=null&&(obj.string=='_')&&(typeof global._=='function'))
+							base=global._();
 					}
+					while(base!=null&&context.length)
+						base=base[context.pop().string];
+					if (base!=null) gatherCompletions(base);
+				}else{
+					//If not, just look in the global object, any local scope, and optional additional-context
+					//(reading into JS mode internals to get at the local and global variables)
 					for(let v=token.state.localVars;v;v=v.next) maybeAdd(v.name);
 					for(let c=token.state.context;c;c=c.prev) for(let v=c.vars;v;v=v.next) maybeAdd(v.name)
 					for(let v=token.state.globalVars;v;v=v.next) maybeAdd(v.name);
 					if(options&&options.additionalContext!=null) for(let key in options.additionalContext) maybeAdd(key);
-					list.addArray(keys);
+					if(!options||options.useGlobalScope!==false) gatherCompletions(global);
+					forEach(keywords,maybeAdd);
 				}
-				return {
-					list:list.filter(key=>key.startsWith(token.string)).sort((a,b)=>(a+'').localeCompare(b+'')),
-					from:CodeMirror.Pos(cur.line,token.start),
-					to:CodeMirror.Pos(cur.line,token.end),
-				};
-			});
+				return found.sort((a,b)=>(a+'').localeCompare(b+''));
+			}
 		},
 		setIntro:function(node,func,left){
 			if(lib.config.touchscreen){
@@ -7573,7 +7756,7 @@
 				if(left){
 					node.listen(ui.click.intro);
 				}
-				if(lib.config.hover_all){
+				if(lib.config.hover_all&&!lib.device){
 					lib.setHover(node,ui.click.hoverplayer);
 				}
 				if(lib.config.right_info){
@@ -7810,7 +7993,7 @@
 					//处理id和class
 					if(options.identity){
 						for(const item of options.identity){
-							if (item.indexOf("#")==0) element.id = item.slice(1);
+							if (item.startsWith("#")) element.id = item.slice(1);
 							else element.classList.add(item);
 						}
 					}
@@ -7905,7 +8088,7 @@
 				}
 				var links=document.head.querySelectorAll('link');
 				for(var i=0;i<links.length;i++){
-					if(links[i].href.indexOf('app/color.css')!=-1){
+					if(links[i].href.includes('app/color.css')){
 						links[i].remove();
 						break;
 					}
@@ -7929,7 +8112,7 @@
 						try{
 							htmlbg=JSON.parse(htmlbg);
 							htmlbg=htmlbg[get.rand(htmlbg.length)];
-							if(htmlbg.indexOf('custom_')==0){
+							if(htmlbg.startsWith('custom_')){
 								throw('err');
 							}
 							_status.htmlbg=htmlbg;
@@ -7949,6 +8132,9 @@
 				lib.ui=ui;
 				lib.ai=ai;
 				lib.game=game;
+				for(let i in lib.element.event){
+					_status.event[i]=lib.element.event[i];
+				}
 
 				HTMLDivElement.prototype.animate=function(name,time){
 					var that;
@@ -8046,7 +8232,7 @@
 								if(lib.characterPack[`mode_${mode}`]&&lib.characterPack[`mode_${mode}`][name]){
 									if(mode=='guozhan'){
 										nameinfo=lib.character[name];
-										if(name.indexOf('gz_shibing')==0) name=name.slice(3,11);
+										if(name.startsWith('gz_shibing')) name=name.slice(3,11);
 										else{
 											if(lib.config.mode_config.guozhan.guozhanSkin&&lib.character[name]&&lib.character[name][4].contains('gzskin')) gzbool=true;
 											name=name.slice(3);
@@ -8054,7 +8240,7 @@
 									}
 									else modeimage=mode;
 								}
-								else if(name.indexOf('::')!=-1){
+								else if(name.includes('::')){
 									name=name.split('::');
 									modeimage=name[0];
 									name=name[1];
@@ -8064,19 +8250,19 @@
 								}
 							}
 							if(!modeimage&&nameinfo&&nameinfo[4]) for(const value of nameinfo[4]){
-								if(value.indexOf('ext:')==0){
+								if(value.startsWith('ext:')){
 									extimage=value;
 									break;
 								}
-								else if(value.indexOf('db:')==0){
+								else if(value.startsWith('db:')){
 									dbimage=value;
 									break;
 								}
-								else if(value.indexOf('mode:')==0){
+								else if(value.startsWith('mode:')){
 									modeimage=value.slice(5);
 									break;
 								}
-								else if(value.indexOf('character:')==0){
+								else if(value.startsWith('character:')){
 									name=value.slice(10);
 									break;
 								}
@@ -8099,14 +8285,15 @@
 					}
 				});
 				HTMLDivElement.prototype.setBackgroundDB=function(img){
-					var node=this;
-					game.getDB('image',img,function(src){
-						node.style.backgroundImage="url('"+src+"')";
-						node.style.backgroundSize="cover";
+					return game.getDB('image',img).then(src=>{
+						this.style.backgroundImage=`url('${src}')`;
+						this.style.backgroundSize="cover";
+						return this;
 					});
 				};
 				HTMLDivElement.prototype.setBackgroundImage=function(img){
-					this.style.backgroundImage='url("'+lib.assetURL+img+'")';
+					this.style.backgroundImage=`url("${lib.assetURL}${img}")`;
+					return this;
 				},
 				HTMLDivElement.prototype.listen=function(func){
 					if(lib.config.touchscreen){
@@ -8131,13 +8318,17 @@
 					return this;
 				};
 				HTMLDivElement.prototype.listenTransition=function(func,time){
+					let done=false;
 					const callback=()=>{
-						func.call(this);
+						if(!done){
+							done=true;
+							func.call(this);
+						}
 						clearTimeout(timer);
 						this.removeEventListener('webkitTransitionEnd',callback);
 					};
 					const timer=setTimeout(callback,time||1000);
-					this.addEventListener('webkitTransitionEnd',callback,{once:true});
+					this.addEventListener('webkitTransitionEnd',callback);
 					return timer;
 				};
 				HTMLDivElement.prototype.setPosition=function(){
@@ -8178,6 +8369,59 @@
 						return this.childNodes[row].childNodes[col];
 					}
 				};
+				/*处理lib.nature的兼容性问题*/
+				const mapHasFunc=function(item){
+					return this.has(item)
+				};
+				Object.defineProperty(Map.prototype, "contains",{
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:mapHasFunc
+				});
+				Object.defineProperty(Map.prototype, "includes",{
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:mapHasFunc
+				});
+				const mapAddFunc=function(item){
+					this.set(item,0);
+					return this;
+				}
+				Object.defineProperty(Map.prototype, "add", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:mapAddFunc
+				});
+				Object.defineProperty(Map.prototype, "push", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:mapAddFunc
+				});
+				Object.defineProperty(Map.prototype, "addArray", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(arr){
+						for(var i=0;i<arr.length;i++){
+							this.add(arr[i]);
+						}
+						return this;
+					}
+				});
+				Object.defineProperty(Map.prototype, "remove", {
+					configurable:true,
+					enumerable:false,
+					writable:true,
+					value:function(item){
+						this.delete(item);
+						return this;
+					}
+				});
+				/*Map prototype end*/
 				Object.defineProperty(Array.prototype, "filterInD", {
 					configurable:true,
 					enumerable:false,
@@ -8196,13 +8440,14 @@
 						return this.some(card=>pos.includes(get.position(card,true)));
 					}
 				});
+				/**
+				 * @legacy Use `Array.prototype.includes(searchElement)` instead.
+				 */
 				Object.defineProperty(Array.prototype, "contains", {
 					configurable:true,
 					enumerable:false,
 					writable:true,
-					value:function(item){
-						return this.indexOf(item)!=-1;
-					}
+					value:Array.prototype.includes
 				});
 				Object.defineProperty(Array.prototype, "add", {
 					configurable:true,
@@ -8234,10 +8479,10 @@
 					enumerable:false,
 					writable:true,
 					value:function(item){
-						if(Array.isArray(item)){
+						/*if(Array.isArray(item)){
 							for(var i=0;i<item.length;i++) this.remove(item[i]);
 							return;
-						}
+						}*/
 						var pos=this.indexOf(item);
 						if(pos==-1){
 							return false;
@@ -8331,6 +8576,8 @@
 						return this;
 					}
 				});
+				//!!!WARNING!!!
+				//Will be deprecated in next verision
 				Object.defineProperty(Object.prototype,'hasNature',{
 					configurable:true,
 					enumerable:false,
@@ -8342,112 +8589,6 @@
 						return get.is.sameNature(natures,nature);
 					}
 				});
-				if (!('includes' in Array.prototype)) {
-					Object.defineProperty(Array.prototype, 'includes', {
-						enumerable: false,
-						configurable: true,
-						writable: true,
-						value: function (searchElement, fromIndex) {
-							if (this == null) {
-								throw new TypeError('"this" is null or not defined');
-							}
-							var o = Object(this);
-							var len = o.length >>> 0;
-							if (len === 0) {
-								return false;
-							}
-							var n = fromIndex | 0;
-							var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-							function sameValueZero(x, y) {
-								return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
-							}
-							while (k < len) {
-								if (sameValueZero(o[k], searchElement)) {
-									return true;
-								}
-								k++;
-							}
-							return false;
-						}
-					});
-				}
-				if(!('flat' in Array.prototype)){
-					Object.defineProperty(Array.prototype, "flat", {
-						configurable:true,
-						enumerable:false,
-						writable:true,
-						value:function(depth){
-							if(typeof depth!='number') depth=1;
-							const arr=[];
-							for(let i=0;i<this.length;i++){
-								let obj=this[i];
-								if(depth>0&&Array.isArray(obj)){
-									obj.flat(depth-1).forEach(function(item){
-										arr.push(item)
-									});
-								}
-								else{
-									arr.push(obj);
-								}
-							}
-							return arr;
-						}
-					});
-				}
-				if (!("allSettled" in Promise)){
-					Object.defineProperty(Promise, "allSettled", {
-						configurable:true,
-						enumerable:false,
-						writable:true,
-						value:function allSettled(ary){
-							const Promise = this;
-							return new Promise((resolve, reject) => {
-								// if (Object.prototype.toString.call(arr) != "[object Array]")
-								if (!Array.isArray(ary))
-								return reject(new TypeError(`${typeof arr} ${ary} is not iterable(cannot read property Symbol(Symbol.iterator))`));
-								let args = Array.prototype.slice.call(ary);
-								if (args.length == 0) return resolve([]);
-								let arrCount = args.length;
-								function resolvePromise(index, value) {
-									if (typeof value == "object") {
-										var then = value.then;
-										if (typeof then == "function") {
-											then.call(value, (val) => {
-												args[index] = { status: "fulfilled", value: val };
-												if (--arrCount == 0) resolve(args);
-											}, (e) => {
-												args[index] = { status: "rejected", reason: e };
-												if (--arrCount == 0) resolve(args);
-											});
-										}
-									}
-								}
-
-								for (let i = 0; i < args.length; ++i)
-									resolvePromise(i, args[i]);
-							});
-						}
-					});
-				}
-				if(!Object.values){
-					Object.defineProperty(Object, 'values', {
-						configurable:true,
-						enumerable:false,
-						writable:true,
-						value:function(obj){
-							if(obj!== Object(obj)) {
-								throw new TypeError('Object.values called on a non-object');
-							}
-							var values=[];
-							for(var key in obj) {
-								if(obj.hasOwnProperty(key)){
-									values.push(obj[key]);
-								}
-							}
-							return values;
-						}
-					});
-				}
 				window.onkeydown=function(e){
 					if(!ui.menuContainer||!ui.menuContainer.classList.contains('hidden')){
 						if(e.keyCode==116||((e.ctrlKey||e.metaKey)&&e.keyCode==82)){
@@ -8614,39 +8755,39 @@
 					if(typeof line=='number'&&(typeof game.readFile=='function'||location.origin!='file://')){
 						function createShowCode(lines){
 							let showCode='';
-                            if(lines.length>=10){
-                                if(line>4){
-                                    for(let i=line-5;i<line+6&&i<lines.length;i++){
-                                        showCode+=`${i+1}| ${line==i+1?'⚠️':''}${lines[i]}\n`;
-                                    }
-                                }else{
-                                    for(let i=0;i<line+6&&i<lines.length;i++){
-                                        showCode+=`${i+1}| ${line==i+1?'⚠️':''}${lines[i]}\n`;
-                                    }
-                                }
-                            }else{
-                                showCode=lines.map((_line,i)=>`${i+1}| ${line==i+1?'⚠️':''}${_line}\n`).toString();
+							if(lines.length>=10){
+								if(line>4){
+									for(let i=line-5;i<line+6&&i<lines.length;i++){
+										showCode+=`${i+1}| ${line==i+1?'⚠️':''}${lines[i]}\n`;
+									}
+								}else{
+									for(let i=0;i<line+6&&i<lines.length;i++){
+										showCode+=`${i+1}| ${line==i+1?'⚠️':''}${lines[i]}\n`;
+									}
+								}
+							}else{
+								showCode=lines.map((_line,i)=>`${i+1}| ${line==i+1?'⚠️':''}${_line}\n`).toString();
 							}
 							return showCode;
 						}
 						//协议名须和html一致(网页端防跨域)，且文件是js
 						if (typeof src=='string'&&src.startsWith(location.protocol)&&src.endsWith('.js')){
-                            //获取代码
-                            const codes=lib.init.reqSync('local:'+decodeURI(src).replace(lib.assetURL,'').replace(winPath,''));
-                            const lines=codes.split("\n");
-                            str+='\n'+createShowCode(lines);
-                            str+='\n-------------';
+							//获取代码
+							const codes=lib.init.reqSync('local:'+decodeURI(src).replace(lib.assetURL,'').replace(winPath,''));
+							const lines=codes.split("\n");
+							str+='\n'+createShowCode(lines);
+							str+='\n-------------';
 						}
 						//解析parsex里的content fun内容(通常是技能content)
 						else if(err&&err.stack&&err.stack.split('\n')[1].trim().startsWith('at Object.eval [as content]')){
-                            const codes=_status.event.content;
-                            if(typeof codes=='function'){
-                                const lines=codes.toString().split("\n");
-                                str+='\n'+createShowCode(lines);
-                                str+='\n-------------';
-                            }
-                        }
-                    }
+							const codes=_status.event.content;
+							if(typeof codes=='function'){
+								const lines=codes.toString().split("\n");
+								str+='\n'+createShowCode(lines);
+								str+='\n-------------';
+							}
+						}
+					}
 					if(err&&err.stack) str+='\n'+decodeURI(err.stack).replace(new RegExp(lib.assetURL,'g'),'').replace(new RegExp(winPath,'g'),'');
 					alert(str);
 					window.ea=Array.from(arguments);
@@ -8675,16 +8816,15 @@
 				var noname_inited=localStorage.getItem('noname_inited');
 				if(noname_inited&&noname_inited!=='nodejs'){
 					var ua=navigator.userAgent.toLowerCase();
-					if(ua.indexOf('android')!=-1){
+					if(ua.includes('android')){
 						lib.device='android';
 					}
-					else if(ua.indexOf('iphone')!=-1||ua.indexOf('ipad')!=-1||ua.indexOf('macintosh')!=-1){
+					else if(ua.includes('iphone')||ua.includes('ipad')||ua.includes('macintosh')){
 						lib.device='ios';
 					}
-					lib.assetURL=noname_inited;
 				}
 
-				if(lib.assetURL.indexOf('com.widget.noname.qingyao')!='-1'){
+				if(lib.assetURL.includes('com.widget.noname.qingyao')){
 					alert('您正在一个不受信任的闭源客户端上运行《无名杀》。建议您更换为其他开源的无名杀客户端，避免给您带来不必要的损失。');
 				}
 
@@ -8708,7 +8848,7 @@
 						lib.config.defaultcards=lib.config.cards.slice(0);
 					}
 					for(var i in config2){
-						if(i.indexOf('_mode_config')!=-1){
+						if(i.includes('_mode_config')){
 							var thismode=i.substr(i.indexOf('_mode_config')+13);
 							if(!lib.config.mode_config[thismode]){
 								lib.config.mode_config[thismode]={};
@@ -8834,7 +8974,9 @@
 							fontSheet.insertRule(`@font-face {font-family: '${value}'; src: local('${font}'), url('${lib.assetURL}font/${value}.woff2');}`,0);
 							if(suitsFont) fontSheet.insertRule(`@font-face {font-family: '${value}'; src: local('${font}'), url('${lib.assetURL}font/suits.woff2');}`,0);
 						});
-						if(suitsFont) fontSheet.insertRule(`@font-face {font-family: 'Suits'; src: local('Noname Suit'), url('${lib.assetURL}font/suits.woff2');}`,0);
+						if(suitsFont) fontSheet.insertRule(`@font-face {font-family: 'Suits'; src: url('${lib.assetURL}font/suits.woff2');}`,0);
+						fontSheet.insertRule(`@font-face {font-family: 'NonameSuits'; src: url('${lib.assetURL}font/suits.woff2');}`,0);
+						fontSheet.insertRule(`@font-face {font-family: 'MotoyaLMaru'; src: url('${lib.assetURL}font/motoyamaru.woff2');}`,0)
 						appearenceConfig.cardtext_font.item.default='默认';
 						appearenceConfig.global_font.item.default='默认';
 					}
@@ -8857,7 +8999,7 @@
 							}
 							else if(confirm('是否切换到触屏模式？（触屏模式可提高触屏设备的响应速度，但无法使用鼠标）')){
 								game.saveConfig('touchscreen',true);
-								if(ua.indexOf('iphone')!=-1||ua.indexOf('android')!=-1){
+								if(ua.includes('iphone')||ua.includes('android')){
 									game.saveConfig('phonelayout',true);
 								}
 								game.reload();
@@ -8867,7 +9009,7 @@
 					else if(lib.config.touchscreen){
 						game.saveConfig('touchscreen',false);
 					}
-					if(!lib.config.toscrolled&&ua.indexOf('macintosh')!=-1){
+					if(!lib.config.toscrolled&&ua.includes('macintosh')){
 						game.saveConfig('toscrolled',true);
 						game.saveConfig('mousewheel',false);
 					}
@@ -8893,7 +9035,7 @@
 							}
 						}
 						for(var i=0;i<lib.config.plays.length;i++){
-							if(lib.config.all.plays.indexOf(lib.config.plays[i])!=-1){
+							if(lib.config.all.plays.includes(lib.config.plays[i])){
 								extensionlist.push(lib.config.plays[i]);
 							}
 						}
@@ -8971,7 +9113,7 @@
 							toLoad++;
 							lib.init.js(`${lib.assetURL}mode`,lib.config.mode,packLoaded,packLoaded);
 						}
-						else if((localStorage.getItem(`${lib.configprefix}directstart`)||!show_splash)&&lib.config.all.mode.indexOf(lib.config.mode)!=-1){
+						else if((localStorage.getItem(`${lib.configprefix}directstart`)||!show_splash)&&lib.config.all.mode.includes(lib.config.mode)){
 							toLoad++;
 							lib.init.js(`${lib.assetURL}mode`,lib.config.mode,packLoaded,packLoaded);
 						}
@@ -9047,8 +9189,9 @@
 
 					window.game=game;
 					game.dynamicStyle.init();
+					lib.announce.init();
 					// node:path library alternative
-					if (typeof module!="object"||typeof module.exports!="object") lib.init.js(`${lib.assetURL}game`,"path.min",()=>{
+					if (typeof module!="object"||typeof module.exports!="object") lib.init.js(`${lib.assetURL}game`,"path",()=>{
 						lib.path=window._noname_path;
 						delete window._noname_path;
 					},e=>{
@@ -9128,7 +9271,7 @@
 					if(lib.config.border_style&&lib.config.border_style!='default'&&lib.config.border_style!='custom'&&lib.config.border_style!='auto'){
 						ui.css.border_stylesheet=lib.init.sheet();
 						var bstyle=lib.config.border_style;
-						if(bstyle.indexOf('dragon_')==0){
+						if(bstyle.startsWith('dragon_')){
 							bstyle=bstyle.slice(7);
 						}
 						ui.css.border_stylesheet.sheet.insertRule('#window .player>.framebg,#window #arena.long.mobile:not(.fewplayer) .player[data-position="0"]>.framebg{display:block;background-image:url("'+lib.assetURL+'theme/style/player/'+bstyle+'1.png")}',0);
@@ -9201,7 +9344,7 @@
 								}
 							});
 							document.addEventListener("resume", ()=>{
-								if(ui.backgroundMusic) Promise.resolve(ui.backgroundMusic.play()).catch(()=>void 0);
+								if(ui.backgroundMusic) ui.backgroundMusic.play();
 							});
 							document.addEventListener("backbutton", function(){
 								if(ui.arena&&ui.arena.classList.contains('menupaused')){
@@ -9231,7 +9374,7 @@
 							});
 						}
 						game.download=function(url,folder,onsuccess,onerror,dev,onprogress){
-							if(url.indexOf('http')!=0){
+							if(!url.startsWith('http')){
 								url=get.url(dev)+url;
 							}
 							var fileTransfer = new FileTransfer();
@@ -9402,7 +9545,7 @@
 					};
 					lib.path=lib.node.path;
 					game.download=function(url,folder,onsuccess,onerror,dev,onprogress){
-						if(url.indexOf('http')!=0){
+						if(!url.startsWith('http')){
 							url=get.url(dev)+url;
 						}
 						game.ensureDirectory(folder,function(){
@@ -9418,7 +9561,7 @@
 							if(!lib.node.https) lib.node.https=require('https');
 							var opts = require('url').parse(encodeURI(url));
 							opts.headers={'User-Agent': 'AppleWebkit'};
-							var request = (url.indexOf('https')==0?lib.node.https:lib.node.http).get(opts, function(response) {
+							(url.startsWith('https')?lib.node.https:lib.node.http).get(opts, function(response) {
 								var stream=response.pipe(file);
 								stream.on('finish',function(){
 									lib.config.brokenFile.remove(folder);
@@ -9696,7 +9839,7 @@
 				ui.background=ui.create.div('.background');
 				ui.background.style.backgroundSize="cover";
 				ui.background.style.backgroundPosition='50% 50%';
-				if(lib.config.image_background&&lib.config.image_background!='default'&&lib.config.image_background.indexOf('custom_')!=0){
+				if(lib.config.image_background&&lib.config.image_background!='default'&&!lib.config.image_background.startsWith('custom_')){
 					ui.background.setBackgroundImage('image/background/'+lib.config.image_background+'.jpg');
 					if(lib.config.image_background_blur){
 						ui.background.style.filter='blur(8px)';
@@ -9724,7 +9867,7 @@
 					});
 				}
 
-				if(lib.config.image_background.indexOf('custom_')==0){
+				if(lib.config.image_background.startsWith('custom_')){
 					ui.background.style.backgroundImage="none";
 					game.getDB('image',lib.config.image_background,function(fileToLoad){
 						if(!fileToLoad) return;
@@ -10286,7 +10429,7 @@
 					delete lib.imported.mode;
 					delete lib.imported.play;
 					for(var i in lib.init){
-						if(i.indexOf('setMode_')==0){
+						if(i.startsWith('setMode_')){
 							delete lib.init[i];
 						}
 					}
@@ -10425,7 +10568,7 @@
 						var node=ui.create.div('.hidden',splash,clickNode);
 						node.link=lib.config.all.mode[i];
 						ui.create.div(node,'.splashtext',get.verticalStr(get.translation(lib.config.all.mode[i])));
-						if(lib.config.all.stockmode.indexOf(lib.config.all.mode[i])!=-1){
+						if(lib.config.all.stockmode.includes(lib.config.all.mode[i])){
 							// 初始启动页设置
 							if(lib.config.splash_style==undefined) game.saveConfig('splash_style','style1');
 							splash.dataset.splash_style=lib.config.splash_style;
@@ -10440,7 +10583,7 @@
 						else{
 							var avatarnode=ui.create.div(node,'.avatar');
 							var avatarbg=lib.mode[lib.config.all.mode[i]].splash;
-							if(avatarbg.indexOf('ext:')==0){
+							if(avatarbg.startsWith('ext:')){
 								avatarnode.setBackgroundImage(avatarbg.replace(/^ext:/,'extension/'));
 							}
 							else{
@@ -10570,7 +10713,7 @@
 				if(path){
 					if(path[path.length-1]=='/') path=path.slice(0,path.length-1);
 					if(file) path=`${path}${/^db:extension-[^:]*$/.test(path)?':':'/'}${file}.css`;
-					(path.indexOf('db:')==0?game.getDB('image',path.slice(3)).then(get.objectURL):new Promise(resolve=>resolve(path))).then(resolvedPath=>{
+					(path.startsWith('db:')?game.getDB('image',path.slice(3)).then(get.objectURL):new Promise(resolve=>resolve(path))).then(resolvedPath=>{
 						style.href=resolvedPath;
 						if(typeof before=='function'){
 							style.addEventListener('load',before);
@@ -10605,8 +10748,8 @@
 					return;
 				}
 				let scriptSource=file?`${path}${/^db:extension-[^:]*$/.test(path)?':':'/'}${file}.js`:path;
-				if(path.indexOf('http')==0) scriptSource+=`?rand=${get.id()}`;
-				else if(lib.config.fuck_sojson&&scriptSource.includes('extension')!=-1&&scriptSource.indexOf(lib.assetURL)==0){
+				if(path.startsWith('http')) scriptSource+=`?rand=${get.id()}`;
+				else if(lib.config.fuck_sojson&&scriptSource.includes('extension')!=-1&&scriptSource.startsWith(lib.assetURL)){
 					const pathToRead=scriptSource.slice(lib.assetURL.length);
 					const alertMessage=`检测到您安装了使用免费版sojson进行加密的扩展。请谨慎使用这些扩展，避免游戏数据遭到破坏。\n扩展文件：${pathToRead}`;
 					if(typeof game.readFileAsText=='function') game.readFileAsText(pathToRead,result=>{
@@ -10618,9 +10761,9 @@
 					},()=>void 0);
 				}
 				const script=document.createElement('script');
-				(scriptSource.indexOf('db:')==0?game.getDB('image',scriptSource.slice(3)).then(get.objectURL):new Promise(resolve=>resolve(scriptSource))).then(resolvedScriptSource=>{
+				(scriptSource.startsWith('db:')?game.getDB('image',scriptSource.slice(3)).then(get.objectURL):new Promise(resolve=>resolve(scriptSource))).then(resolvedScriptSource=>{
 					script.src=resolvedScriptSource;
-					if(path.indexOf('http')==0) script.addEventListener('load',()=>script.remove());
+					if(path.startsWith('http')) script.addEventListener('load',()=>script.remove());
 					document.head.appendChild(script);
 					if(typeof onLoad=='function') script.addEventListener('load',onLoad);
 					if(typeof onError=='function') script.addEventListener('error',onError);
@@ -10649,7 +10792,7 @@
 				let scriptSource;
 				if(!file) scriptSource=path;
 				else scriptSource=`${path}/${file}.js`;
-				if(path.indexOf('http')==0) scriptSource+=`?rand=${get.id()}`;
+				if(path.startsWith('http')) scriptSource+=`?rand=${get.id()}`;
 				const xmlHttpRequest=new XMLHttpRequest();
 				let data;
 				xmlHttpRequest.addEventListener("load",()=>{
@@ -10658,7 +10801,7 @@
 						if(typeof onError=='function') onError(new Error(`${scriptSource}加载失败！`));
 						return;
 					}
-					if(lib.config.fuck_sojson&&scriptSource.includes('extension')!=-1&&scriptSource.indexOf(lib.assetURL)==0){
+					if(lib.config.fuck_sojson&&scriptSource.includes('extension')!=-1&&scriptSource.startsWith(lib.assetURL)){
 						const pathToRead=scriptSource.slice(lib.assetURL.length);
 						if(data.includes('sojson')||data.includes('jsjiami')||data.includes('var _0x')) alert(`检测到您安装了使用免费版sojson进行加密的扩展。请谨慎使用这些扩展，避免游戏数据遭到破坏。\n扩展文件：${pathToRead}`);
 					}
@@ -10676,7 +10819,7 @@
 			},
 			req:(str,onload,onerror,master)=>{
 				let sScriptURL;
-				if(str.indexOf('http')==0) sScriptURL=str;
+				if(str.startsWith('http')) sScriptURL=str;
 				else if(str.startsWith('local:')){
 					if(lib.assetURL.length==0&&location.origin=='file://'&&typeof game.readFile=='undefined'){
 						const e=new Error('浏览器file协议下无法使用此api，请在http/https协议下使用此api');
@@ -10702,7 +10845,7 @@
 			 */
 			reqSync:(str,onload,onerror,master)=>{
 				let sScriptURL;
-				if(str.indexOf('http')==0) sScriptURL=str;
+				if(str.startsWith('http')) sScriptURL=str;
 				else if(str.startsWith('local:')){
 					if(lib.assetURL.length==0&&location.origin=='file://'&&typeof game.readFile=='undefined'){
 						const e=new Error('浏览器file协议下无法使用此api，请在http/https协议下使用此api');
@@ -10775,6 +10918,7 @@
 				}
 				ui.css.styles=lib.init.sheet();
 				ui.css.styles.sheet.insertRule('#arena .player>.name,#arena .button.character>.name {font-family: '+(lib.config.name_font||'xinwei')+',xinwei}',0);
+				ui.css.styles.sheet.insertRule('#arena .player>.name,.button.character>.name {font-family: '+(lib.config.name_font||'xinwei')+',xinwei}',0);
 				ui.css.styles.sheet.insertRule('#arena .player .identity>div {font-family: '+(lib.config.identity_font||'huangcao')+',xinwei}',0);
 				ui.css.styles.sheet.insertRule('.button.character.newstyle>.identity {font-family: '+(lib.config.identity_font||'huangcao')+',xinwei}',0);
 				if(lib.config.cardtext_font&&lib.config.cardtext_font!='default'){
@@ -10912,7 +11056,7 @@
 					list.remove(lib.config.image_background);
 					localStorage.setItem(lib.configprefix+'background',JSON.stringify(list));
 				}
-				else if(lib.config.image_background&&lib.config.image_background!='default'&&lib.config.image_background.indexOf('custom_')!=0){
+				else if(lib.config.image_background&&lib.config.image_background!='default'&&!lib.config.image_background.startsWith('custom_')){
 					localStorage.setItem(lib.configprefix+'background',lib.config.image_background);
 				}
 				else if(lib.config.image_background=='default'&&lib.config.theme=='simple'){
@@ -11159,7 +11303,7 @@
 								gl(str,function(folders,files){
 									if(files.length>1){
 										for(var i=0;i<files.length;i++){
-											if(files[i].indexOf('extension.js')!=-1){
+											if(files[i].includes('extension.js')){
 												files.splice(i--,1);
 											}
 											else{
@@ -11566,10 +11710,9 @@
 
 				var list=lib.rank.s.concat(lib.rank.ap).concat(lib.rank.a).concat(lib.rank.am).
 					concat(lib.rank.bp).concat(lib.rank.b).concat(lib.rank.bm).concat(lib.rank.c).concat(lib.rank.d);
-				for(var i in lib.character){
-					if(lib.config.forbidai.contains(i)) continue;
-					if(i.indexOf('boss_')!=0&&i.indexOf('tafang_')!=0&&!list.contains(i)) console.log(get.translation(i),i);
-				}
+				Object.keys(lib.character).forEach(key=>{
+					if(!lib.config.forbidai.includes(key)&&!key.startsWith('boss_')&&!key.startsWith('tafang_')&&!list.includes(key)) console.log(get.translation(key),key);
+				});
 			},
 			h:function(player){
 				console.log(get.translation(player.getCards('h')));
@@ -11617,17 +11760,17 @@
 				var suit=null;
 				var suits=['club','spade','diamond','heart'];
 				for(var i=0;i<suits.length;i++){
-					if(name.indexOf(suits[i])==0){
+					if(name.startsWith(suits[i])){
 						suit=suits[i];
 						name=name.slice(suits[i].length);
 						break;
 					}
 				}
-				if(name.indexOf('red')==0){
+				if(name.startsWith('red')){
 					name=name.slice(3);
 					suit=['diamond','heart'].randomGet();
 				}
-				if(name.indexOf('black')==0){
+				if(name.startsWith('black')){
 					name=name.slice(5);
 					suit=['spade','club'].randomGet();
 				}
@@ -11973,47 +12116,35 @@
 					event.trigger(event.name);
 				},
 				//增加明置手牌
-				addShownCards:function(){
-					var hs=player.getCards('h'),cards=event._cards.filter(card=>hs.includes(card));
-					var shown=player.getShownCards();
-					for(var tag of event.gaintag) player.addGaintag(cards,tag);
-					event.cards=cards.filter(card=>!shown.includes(card));
-					if(event.cards.length>0){
-						game.log(player,'明置了',event.cards);
-						event.trigger('addShownCardsAfter')
-					}
+				addShownCards:()=>{
+					var hs=player.getCards('h'),showingCards=event._cards.filter(showingCard=>hs.includes(showingCard)),shown=player.getShownCards();
+					event.gaintag.forEach(tag=>player.addGaintag(showingCards,tag));
+					if(!(event.cards=showingCards.filter(showingCard=>!shown.includes(showingCard))).length) return;
+					game.log(player,'明置了',event.cards);
+					if(event.animate!=false) player.$give(event.cards,player,false);
+					event.trigger('addShownCardsAfter');
 				},
 				//隐藏明置手牌
-				hideShownCards:function(){
-					var shown=player.getShownCards(),cards=event._cards.filter(card=>shown.includes(card));
-					if(cards.length>0){
-						if(!event.gaintag.length){
-							var map={};
-							cards.forEach(card=>{
-								var tags=card.gaintag.filter(tag=>tag.indexOf('visible_')==0)
-								if(tags.length){
-									tags.forEach(tag=>{
-										if(!map[tag]) map[tag]=[];
-										map[tag].push(card);
-									})
-								}
+				hideShownCards:()=>{
+					var shown=player.getShownCards(),hidingCards=event._cards.filter(hidingCard=>shown.includes(hidingCard));
+					if(!hidingCards.length) return;
+					if(event.gaintag.length) event.gaintag.forEach(tag=>player.removeGaintag(tag,hidingCards));
+					else {
+						var map=hidingCards.reduce((constructingMap,hidingCard)=>{
+							hidingCard.gaintag.forEach(tag=>{
+								if(!tag.startsWith('visible_')) return;
+								if(!constructingMap[tag]) constructingMap[tag]=[];
+								constructingMap[tag].push(hidingCard);
 							});
-							for(var i in map){
-								player.removeGaintag(i,map[i])
-							}
-						}
-						else{
-							event.gaintag.forEach(tag=>{
-								player.removeGaintag(tag,cards);
-							})
-						}
-						cards.removeArray(player.getShownCards());
-						if(cards.length>0){
-							event.cards=cards;
-							game.log(player,'取消明置了',cards);
-							event.trigger('hideShownCardsAfter');
-						}
+							return constructingMap;
+						},{});
+						Object.keys(map).forEach(key=>player.removeGaintag(key,map[key]));
 					}
+					hidingCards.removeArray(player.getShownCards());
+					if(!hidingCards.length) return;
+					game.log(player,'取消明置了',event.cards=hidingCards);
+					if(event.animate!=false) player.$give(hidingCards,player,false);
+					event.trigger('hideShownCardsAfter');
 				},
 				//Execute the delay card effect
 				//执行延时锦囊牌效果
@@ -12514,7 +12645,7 @@
 						ui.create.dialog(str).videoId=id;
 						if(ui.backgroundMusic) ui.backgroundMusic.pause();
 						if(lib.config.background_audio){
-							if(beatmap.filename.indexOf('ext:')==0) game.playAudio(beatmap.filename);
+							if(beatmap.filename.startsWith('ext:')) game.playAudio(beatmap.filename);
 							else game.playAudio('effect',beatmap.filename);
 						}
 					},player,event.videoId,event.beatmap);
@@ -12537,7 +12668,7 @@
 						var custom_mapping=Array.isArray(beatmap.mapping);
 						var mapping=custom_mapping?beatmap.mapping.slice():beatmap.mapping;
 						var hitsound=beatmap.hitsound||'hitsound.wav';
-						if(hitsound.indexOf('ext:')==0) hitsound=lib.assetURL+'extension/'+hitsound.slice(4);
+						if(hitsound.startsWith('ext:')) hitsound=lib.assetURL+'extension/'+hitsound.slice(4);
 						else hitsound=lib.assetURL+'audio/effect/'+hitsound;
 						var hitsound_audio=new Audio(hitsound);
 						hitsound_audio.volume=0.25;
@@ -12604,7 +12735,7 @@
 								game.resume();
 								_status.imchoosing=false;
 								if(roundmenu) ui.roundmenu.style.display='';
-								if(ui.backgroundMusic) Promise.resolve(ui.backgroundMusic.play()).catch(()=>void 0);
+								if(ui.backgroundMusic) ui.backgroundMusic.play();
 								hitsound_audio.remove();
 							},1000);
 						};
@@ -12729,7 +12860,7 @@
 						game.countChoose();
 						setTimeout(()=>{
 							if(!lib.config.background_audio) return;
-							if(beatmap.filename.indexOf('ext:')==0) game.playAudio(beatmap.filename);
+							if(beatmap.filename.startsWith('ext:')) game.playAudio(beatmap.filename);
 							else game.playAudio('effect',beatmap.filename);
 						},Math.floor(speed*100*(0.9+beatmap.judgebar_height))+beatmap.current);
 						setTimeout(function(){
@@ -12774,8 +12905,8 @@
 							var skip_timeout;
 							var skip=()=>{
 								settle();
-								Array.from(ui.window.getElementsByTagName('audio')).forEach(value=>{
-									if(value.currentSrc.indexOf(beatmap.filename.indexOf('ext:')==0?beatmap.name:beatmap.filename)>-1) value.remove();
+								Array.from(ui.window.getElementsByTagName('audio')).forEach(audio=>{
+									if(audio.currentSrc.includes(beatmap.filename.startsWith('ext:')?beatmap.name:beatmap.filename)) audio.remove();
 								});
 								document.removeEventListener(lib.config.touchscreen?'touchend':'click',skip);
 								clearTimeout(settle_timeout);
@@ -12792,7 +12923,7 @@
 						if(dialog){
 							dialog.close();
 						}
-						if(ui.backgroundMusic) Promise.resolve(ui.backgroundMusic.play()).catch(()=>void 0);
+						if(ui.backgroundMusic) ui.backgroundMusic.play();
 					},event.videoId,event.time);
 					var result=event.result||result;
 					event.result=result;
@@ -12980,12 +13111,8 @@
 					var range;
 					if(!info.notarget){
 						var select=get.copy(info.selectTarget);
-						if(select==undefined){
-							range=[1,1];
-						}
-						else if(typeof select=='number') range=[select,select];
-						else if(get.itemtype(select)=='select') range=select;
-						else if(typeof select=='function') range=select(card,player);
+						range=get.select(select);
+						if(event.selectTarget) range=get.select(event.selectTarget);
 						game.checkMod(card,player,range,'selectTarget',player);
 					}
 					if(info.notarget||range[1]<=-1){
@@ -13802,10 +13929,12 @@
 						lib.onphase[i]();
 					}
 					player.phase();
-					event.player=player.next;
 					"step 2"
 					if(!game.players.contains(event.player.next)){
 						event.player=game.findNext(event.player.next);
+					}
+					else{
+						event.player=event.player.next;
 					}
 					event.goto(1);
 				},
@@ -14064,7 +14193,7 @@
 							else{
 								var keep=false;
 								for(var i in player.additionalSkills){
-									if(i.indexOf('hidden:')==0&&game.expandSkills(player.additionalSkills[i]).contains(event.skill)){
+									if(i.startsWith('hidden:')&&game.expandSkills(player.additionalSkills[i]).contains(event.skill)){
 										keep=true;break;
 									}
 								}
@@ -14117,7 +14246,7 @@
 								}
 								else if(typeof info.logTarget=='function'){
 									var logTarget=info.logTarget(trigger,player);
-									if(get.itemtype(logTarget).indexOf('player')==0) str=get.prompt(event.skill,logTarget,player);
+									if(get.itemtype(logTarget).startsWith('player')) str=get.prompt(event.skill,logTarget,player);
 								}
 								else{
 									str=get.prompt(event.skill,null,player);
@@ -14660,7 +14789,8 @@
 					}
 					event.trigger('phaseDiscard');
 					"step 1"
-					player.chooseToDiscard(num,true);
+					player.chooseToDiscard(num,true)
+					.set('useCache',true);
 					"step 2"
 					event.cards=result.cards;
 				},
@@ -16122,7 +16252,11 @@
 						}
 					}
 					if(event.isMine()){
-						if(event.direct&&num==selectButton[0]||event.forceDirect){
+						if(event.hsskill&&!event.forced&&_status.prehidden_skills.contains(event.hsskill)){
+							ui.click.cancel();
+							return;
+						}
+						else if(event.direct&&num==selectButton[0]||event.forceDirect){
 							var buttons=buttonsx.slice(0,num);
 							event.result={
 								bool:true,
@@ -16134,10 +16268,6 @@
 						else{
 							game.check();
 							game.pause();
-						}
-						if(event.hsskill&&!event.forced&&_status.prehidden_skills.contains(event.hsskill)){
-							ui.click.cancel();
-							return;
 						}
 					}
 					else if(event.isOnline()){
@@ -17636,8 +17766,8 @@
 						const audio=lib.card[card.name].audio;
 						if(typeof audio=='string'){
 							const audioInfo=audio.split(':');
-							if(audio.indexOf('db:')==0) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,audioInfo[2],`${card.name}_${sex}.${audioInfo[3]||'mp3'}`);
-							else if(audio.indexOf('ext:')==0) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,`${card.name}_${sex}.${audioInfo[2]||'mp3'}`);
+							if(audio.startsWith('db:')) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,audioInfo[2],`${card.name}_${sex}.${audioInfo[3]||'mp3'}`);
+							else if(audio.startsWith('ext:')) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,`${card.name}_${sex}.${audioInfo[2]||'mp3'}`);
 							else game.playAudio('card',sex,`${audioInfo[0]}.${audioInfo[1]||'mp3'}`);
 						}
 						else game.playAudio('card',sex,card.name);
@@ -17693,9 +17823,9 @@
 						}
 					}
 					event.id=get.id();
-					event.excluded=[];
-					event.directHit=[];
-					event.customArgs={default:{}};
+					if(!Array.isArray(event.excluded)) event.excluded=[];
+					if(!Array.isArray(event.directHit)) event.directHit=[];
+					if(typeof event.customArgs!='object'||typeof event.customArgs.default!='object') event.customArgs={default:{}};
 					if(typeof event.baseDamage!='number') event.baseDamage=get.info(card,false).baseDamage||1;
 					if(typeof event.effectCount!='number') event.effectCount=get.info(card,false).effectCount||1;
 					event.effectedCount=0;
@@ -18454,8 +18584,8 @@
 						const sex=player.sex=='female'?'female':'male',audio=lib.card[card.name].audio;
 						if(typeof audio=='string'){
 							const audioInfo=audio.split(':');
-							if(audio.indexOf('db:')==0) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,audioInfo[2],`${card.name}_${sex}.${audioInfo[3]||'mp3'}`);
-							else if(audio.indexOf('ext:')==0) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,`${card.name}_${sex}.${audioInfo[2]||'mp3'}`);
+							if(audio.startsWith('db:')) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,audioInfo[2],`${card.name}_${sex}.${audioInfo[3]||'mp3'}`);
+							else if(audio.startsWith('ext:')) game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,`${card.name}_${sex}.${audioInfo[2]||'mp3'}`);
 							else game.playAudio('card',sex,`${audioInfo[0]}.${audioInfo[1]||'mp3'}`);
 						}
 						else game.playAudio('card',sex,card.name);
@@ -19596,9 +19726,9 @@
 							}
 						}
 						if(_status.characterlist){
-							if(lib.character[player.name]&&player.name.indexOf('gz_shibing')!=0&&player.name.indexOf('gz_jun_')!=0) _status.characterlist.add(player.name);
-							if(lib.character[player.name1]&&player.name1.indexOf('gz_shibing')!=0&&player.name1.indexOf('gz_jun_')!=0) _status.characterlist.add(player.name1);
-							if(lib.character[player.name2]&&player.name2.indexOf('gz_shibing')!=0&&player.name2.indexOf('gz_jun_')!=0) _status.characterlist.add(player.name2);
+							if(lib.character[player.name]&&!player.name.startsWith('gz_shibing')&&!player.name.startsWith('gz_jun_')) _status.characterlist.add(player.name);
+							if(lib.character[player.name1]&&!player.name1.startsWith('gz_shibing')&&!player.name1.startsWith('gz_jun_')) _status.characterlist.add(player.name1);
+							if(lib.character[player.name2]&&!player.name2.startsWith('gz_shibing')&&!player.name2.startsWith('gz_jun_')) _status.characterlist.add(player.name2);
 						}
 						event.cards=player.getCards('hejsx');
 						if(event.cards.length){
@@ -20134,52 +20264,36 @@
 				},
 				//让一名角色明置一些手牌
 				addShownCards:function(){
-					const cards=[];
-					const tags=[];
-					for(let i=0;i<arguments.length;i++){
-						let type=get.itemtype(arguments[i]);
-						if(type=='cards'){
-							cards.addArray(arguments[i])
-						}
-						else if(type=='card'){
-							card.add(arguments[i])
-						}
-						else if(typeof arguments[i]=='string'&&arguments[i].indexOf('visible_')==0){
-							tags.add(arguments[i])
-						}
+					const cards=[],tags=[];
+					for(const argument of arguments){
+						const type=get.itemtype(argument);
+						if(type=='cards') cards.addArray(argument);
+						else if(type=='card') cards.add(argument);
+						else if(typeof argument=='string'&&argument.startsWith('visible_')) tags.add(argument);
 					}
-					if(cards.length&&tags.length){
-						const next=game.createEvent('addShownCards',false);
-						next.player=this;
-						next._cards=cards;
-						next.gaintag=tags;
-						next.setContent('addShownCards');
-						return next;
-					}
+					if(!cards.length||!tags.length) return;
+					const next=game.createEvent('addShownCards',false);
+					next.player=this;
+					next._cards=cards;
+					next.gaintag=tags;
+					next.setContent('addShownCards');
+					return next;
 				},
 				hideShownCards:function(){
-					const cards=[];
-					const tags=[];
-					for(let i=0;i<arguments.length;i++){
-						let type=get.itemtype(arguments[i]);
-						if(type=='cards'){
-							cards.addArray(arguments[i])
-						}
-						else if(type=='card'){
-							cards.add(arguments[i])
-						}
-						else if(typeof arguments[i]=='string'&&arguments[i].indexOf('visible_')==0){
-							tags.add(arguments[i])
-						}
+					const cards=[],tags=[];
+					for(const argument of arguments){
+						const type=get.itemtype(argument);
+						if(type=='cards') cards.addArray(argument);
+						else if(type=='card') cards.add(argument);
+						else if(typeof argument=='string'&&argument.startsWith('visible_')) tags.add(argument);
 					}
-					if(cards.length){
-						const next=game.createEvent('hideShownCards',false);
-						next.player=this;
-						next._cards=cards;
-						next.gaintag=tags;
-						next.setContent('hideShownCards');
-						return next;
-					}
+					if(!cards.length) return;
+					const next=game.createEvent('hideShownCards',false);
+					next.player=this;
+					next._cards=cards;
+					next.gaintag=tags;
+					next.setContent('hideShownCards');
+					return next;
 				},
 				//获取角色所有的明置手牌
 				getShownCards:function(){
@@ -20380,7 +20494,7 @@
 					var type=(typeof subtype);
 					switch(type){
 						case 'string':
-							if(subtype.indexOf('equip')==0&&parseInt(subtype.slice(5))>0){
+							if(subtype.startsWith('equip')&&parseInt(subtype.slice(5))>0){
 								break;
 							}
 							else if(lib.card[subtype]){
@@ -20414,7 +20528,7 @@
 						else if(Array.isArray(arguments[i])){
 							for(var arg of arguments[i]){
 								if(typeof arg=='string'){
-									if(arg.indexOf('equip')==0&&parseInt(arg.slice(5))>0) next.slots.push(arg);
+									if(arg.startsWith('equip')&&parseInt(arg.slice(5))>0) next.slots.push(arg);
 								}
 								else if(typeof arg=='number'){
 									next.slots.push('equip'+arg);
@@ -20422,7 +20536,7 @@
 							}
 						}
 						else if(typeof arguments[i]=='string'){
-							if(arguments[i].indexOf('equip')==0&&parseInt(arguments[i].slice(5))>0) next.slots.push(arguments[i]);
+							if(arguments[i].startsWith('equip')&&parseInt(arguments[i].slice(5))>0) next.slots.push(arguments[i]);
 						}
 						else if(typeof arguments[i]=='number'){
 							next.slots.push('equip'+arguments[i]);
@@ -20446,7 +20560,7 @@
 						else if(Array.isArray(arguments[i])){
 							for(var arg of arguments[i]){
 								if(typeof arg=='string'){
-									if(arg.indexOf('equip')==0&&parseInt(arg.slice(5))>0) next.slots.push(arg);
+									if(arg.startsWith('equip')&&parseInt(arg.slice(5))>0) next.slots.push(arg);
 								}
 								else if(typeof arg=='number'){
 									next.slots.push('equip'+arg);
@@ -20454,7 +20568,7 @@
 							}
 						}
 						else if(typeof arguments[i]=='string'){
-							if(arguments[i].indexOf('equip')==0&&parseInt(arguments[i].slice(5))>0) next.slots.push(arguments[i]);
+							if(arguments[i].startsWith('equip')&&parseInt(arguments[i].slice(5))>0) next.slots.push(arguments[i]);
 						}
 						else if(typeof arguments[i]=='number'){
 							next.slots.push('equip'+arguments[i]);
@@ -20478,7 +20592,7 @@
 						else if(Array.isArray(arguments[i])){
 							for(var arg of arguments[i]){
 								if(typeof arg=='string'){
-									if(arg.indexOf('equip')==0&&parseInt(arg.slice(5))>0) next.slots.push(arg);
+									if(arg.startsWith('equip')&&parseInt(arg.slice(5))>0) next.slots.push(arg);
 								}
 								else if(typeof arg=='number'){
 									next.slots.push('equip'+arg);
@@ -20486,7 +20600,7 @@
 							}
 						}
 						else if(typeof arguments[i]=='string'){
-							if(arguments[i].indexOf('equip')==0&&parseInt(arguments[i].slice(5))>0) next.slots.push(arguments[i]);
+							if(arguments[i].startsWith('equip')&&parseInt(arguments[i].slice(5))>0) next.slots.push(arguments[i]);
 						}
 						else if(typeof arguments[i]=='number'){
 							next.slots.push('equip'+arguments[i]);
@@ -20549,14 +20663,14 @@
 					var map2=get.copy(map);
 					var cards=Array.from(player.node.equips.childNodes);
 					for(var card of cards){
-						if(card.name.indexOf('feichu_')==0){
+						if(card.name.startsWith('feichu_')){
 							var index=card.name.slice(7);
 							if(!map2[index]) map2[index]=0;
 							map2[index]--;
 						}
 					}
 					for(var index in map2){
-						if(index.indexOf('equip')!=0||!(parseInt(index.slice(5))>0)) continue;
+						if(!index.startsWith('equip')||!(parseInt(index.slice(5))>0)) continue;
 						var num=map2[index];
 						if(num>0){
 							for(var i=0;i<num;i++){
@@ -20701,7 +20815,7 @@
 						var info=lib.character[this.name1];
 						if(info&&info[4]){
 							for(var i of info[4]){
-								if(typeof i=='string'&&i.indexOf('clan:')==0&&i.slice(5)==clan) return true;
+								if(typeof i=='string'&&i.startsWith('clan:')&&i.slice(5)==clan) return true;
 							}
 						}
 					}
@@ -20709,7 +20823,7 @@
 						var info=lib.character[this.name2];
 						if(info&&info[4]){
 							for(var i of info[4]){
-								if(typeof i=='string'&&i.indexOf('clan:')==0&&i.slice(5)==clan) return true;
+								if(typeof i=='string'&&i.startsWith('clan:')&&i.slice(5)==clan) return true;
 							}
 						}
 					}
@@ -20874,7 +20988,7 @@
 						if(log!==false) game.log(this,'展示了副将','#b'+this.name2);
 						skills=lib.character[this.name2][3]||[];
 						if(this.sex=='unknown') this.sex=lib.character[this.name2][0];
-						if(this.name.indexOf('unknown')==0) this.name=this.name2;
+						if(this.name.startsWith('unknown')) this.name=this.name2;
 						this.classList.remove('unseen2');
 						break;
 						case 2:
@@ -21817,7 +21931,7 @@
 					}
 					setTimeout(function(){
 						dialog.delete();
-					},lib.quickVoice.indexOf(str)!=-1?3800:2000);
+					},lib.quickVoice.includes(str)?3800:2000);
 					var name=get.translation(this.name);
 					var info=[name?(name+'['+this.nickname+']'):this.nickname,str];
 					lib.chatHistory.push(info);
@@ -21829,7 +21943,7 @@
 							delete _status.addChatEntry;
 						}
 					}
-					if(lib.config.background_speak&&lib.quickVoice.indexOf(str)!=-1){
+					if(lib.config.background_speak&&lib.quickVoice.includes(str)){
 						game.playAudio('voice',(this.sex=='female'?'female':'male'),lib.quickVoice.indexOf(str));
 					}
 				},
@@ -22157,6 +22271,11 @@
 					}
 					this.syncStorage(i);
 					this.markSkill(i);
+				},
+				setMark:function(name,num,log){
+					const count=this.countMark(name);
+					if(count>num)this.removeMark(name,count-num,log);
+					else if(count<num)this.addMark(name,num-count,log);
 				},
 				countMark:function(i){
 					if(this.storage[i]==undefined) return 0;
@@ -22508,6 +22627,20 @@
 						skills.addArray(lib.character[this.name2][3]);
 					}
 					return skills;
+				},
+				getModableSkills:function(useCache){
+					var func = function(player){
+						var skills=player.getSkills().concat(lib.skill.global);
+						game.expandSkills(skills);
+						skills = skills.filter(function(skill){
+							var info = get.info(skill);
+							return info && info.mod;
+						});
+						skills.sort((a,b)=>get.priority(a)-get.priority(b));
+						return skills;
+					};
+					if(!useCache)return func(this);
+					return game.callFuncUseStepCache("player.getModableSkills",func,[this]);
 				},
 				getSkills:function(arg2,arg3,arg4){
 					var skills=this.skills.slice(0);
@@ -23329,6 +23462,12 @@
 						}
 						else if(get.itemtype(arguments[i])=='player'){
 							next.targets=[arguments[i]];
+						}
+						else if(get.itemtype(arguments[i])=='select'){
+							next.selectTarget=arguments[i];
+						}
+						else if(typeof arguments[i]=='number'){
+							next.selectTarget=[arguments[i],arguments[i]];
 						}
 						else if(get.is.object(arguments[i])&&arguments[i].name){
 							next.card=arguments[i];
@@ -25059,22 +25198,27 @@
 					if(mod!='unchanged') return mod;
 					return true;
 				},
-				addJudgeNext:function(card){
+				addJudgeNext:function(card,unlimited){
 					if(!card.expired){
-						var target=this.next;
-						var name=card.viewAs||card.name;
-						var bool=false;
-						for(var iwhile=0;iwhile<20;iwhile++){
+						let target=this.next;
+						const name=card.viewAs||card.name;
+						const cards=(get.itemtype(card)=='card')?[card]:card.cards;
+						if(get.itemtype(cards)!='cards') return;
+						let bool=false;
+						if(!unlimited&&cards.some(card=>{
+							const position=get.position(card,true);
+							return position!='j'&&position!='o';
+						})){
+			  				game.log(card,'已被移出处理区，无法置入判定区');
+							return;
+						}
+						for(let iwhile=0;iwhile<20;iwhile++){
 							if(target.canAddJudge(card)){
 								bool=true;break;
 							}
 							target=target.next;
 						}
-						if(!bool){
-							game.log(card,'进入了弃牌堆');
-							game.cardsDiscard(card);
-						}
-						else{
+						if(bool){
 							if(card.cards&&card.cards.length){
 								target.addJudge(name,card.cards[0]);
 							}
@@ -25574,7 +25718,7 @@
 							this[storage.length>0?'markSkill':'unmarkSkill'](name);
 						}
 						else if(typeof storage=='number'){
-							this[storage.length>0?'markSkill':'unmarkSkill'](name);
+							this[storage>0?'markSkill':'unmarkSkill'](name);
 						}
 					}
 				},
@@ -25594,8 +25738,10 @@
 				hasExpansions:function(tag){
 					return this.countExpansions(tag)>0;
 				},
-				setStorage:function(name,value){
-					return this.storage[name]=value;
+				setStorage:function(name,value,mark){
+					this.storage[name]=value;
+					if(mark) this.markAuto(name);
+					return value;
 				},
 				getStorage:function(name){
 					return this.storage[name]||[];
@@ -25605,7 +25751,7 @@
 					if(typeof value=="undefined") return true;
 					const storage=this.storage[name];
 					if(storage===value) return true;
-					return !Array.isArray(storage) || storage.contains(value);
+					return Array.isArray(storage) && storage.includes(value);
 				},
 				hasStorageAny:function(name,values){
 					const storage=this.storage[name];
@@ -25621,19 +25767,24 @@
 					if (!Array.isArray(storage)) return false;
 					return values.every(item => storage.contains(item));
 				},
-				initStorage:function(name,value){
-					return this.hasStorage(name)?this.getStorage(name):this.setStorage(name,value);
+				initStorage:function(name,value,mark){
+					return this.hasStorage(name)?this.getStorage(name):this.setStorage(name,value,mark);
 				},
-				updateStorage:function(name,operation){
-					return this.setStorage(name,operation(this.getStorage(name)));
+				updateStorage:function(name,operation,mark){
+					return this.setStorage(name,operation(this.getStorage(name)),mark);
 				},
-				updateStorageAsync:function(name,operation){
+				updateStorageAsync:function(name,operation,mark){
 					return Promise.resolve(this.getStorage(name))
 					.then(value=>operation(value))
-					.then(value=>this.setStorage(name,value))
+					.then(value=>this.setStorage(name,value,mark));
 				},
-				removeStorage:function(name){
-					return player.hasStorage(name)&&delete player.storage[name];
+				removeStorage:function(name,mark){
+					if(!this.hasStorage(name)) return false;
+					delete this.storage[name]
+					if(mark){
+						this.unmarkSkill(name);
+					}
+					return true;
 				},
 				markSkill:function(name,info,card){
 					if(info===true){
@@ -25754,7 +25905,7 @@
 						name=name.name;
 					}
 					var node;
-					if(name.indexOf('unknown')==0){
+					if(name.startsWith('unknown')){
 						node=ui.create.div('.card.mark.drawinghidden');
 						ui.create.div('.background.skillmark',node).innerHTML=get.translation(name)[0];
 					}
@@ -26125,12 +26276,14 @@
 				},
 				addInvisibleSkill:function(skill){
 					if(Array.isArray(skill)){
+						_status.event.clearStepCache();
 						for(var i=0;i<skill.length;i++){
 							this.addInvisibleSkill(skill[i]);
 						}
 					}
 					else{
 						if(this.invisibleSkills.contains(skill)) return;
+						_status.event.clearStepCache();
 						var info=lib.skill[skill];
 						if(!info) return;
 						this.invisibleSkills.add(skill);
@@ -26160,12 +26313,14 @@
 				},
 				addSkill:function(skill,checkConflict,nobroadcast,addToSkills){
 					if(Array.isArray(skill)){
+						_status.event.clearStepCache();
 						for(var i=0;i<skill.length;i++){
 							this.addSkill(skill[i]);
 						}
 					}
 					else{
 						if(this.skills.contains(skill)) return;
+						_status.event.clearStepCache();
 						var info=lib.skill[skill];
 						if(!info) return;
 						if(!addToSkills){
@@ -26250,6 +26405,7 @@
 						this.additionalSkills[skill].push(skills[i]);
 					}
 					this.checkConflict();
+					_status.event.clearStepCache();
 					return this;
 				},
 				removeAdditionalSkill:function(skill,target){
@@ -26273,6 +26429,7 @@
 							}
 						}
 					}
+					_status.event.clearStepCache();
 					return this;
 				},
 				awakenSkill:function(skill,nounmark){
@@ -26280,6 +26437,7 @@
 					this.disableSkill(skill+'_awake',skill);
 					this.awakenedSkills.add(skill);
 					if(this.storage[skill]===false) this.storage[skill]=true;
+					_status.event.clearStepCache();
 					return this;
 				},
 				restoreSkill:function(skill,nomark){
@@ -26287,6 +26445,7 @@
 					this.awakenedSkills.remove(skill);
 					this.enableSkill(skill+'_awake',skill);
 					if(!nomark) this.markSkill(skill);
+					_status.event.clearStepCache();
 					return this;
 				},
 				disableSkill:function(skill,skills){
@@ -26339,6 +26498,7 @@
 							this.disableSkill(skill,skills[i]);
 						}
 					}
+					_status.event.clearStepCache();
 					return this;
 				},
 				enableSkill:function(skill){
@@ -26348,6 +26508,7 @@
 							delete this.disabledSkills[i];
 						}
 					}
+					_status.event.clearStepCache();
 					return this;
 				},
 				checkMarks:function(){
@@ -27385,13 +27546,13 @@
 					game.expandSkills(skills);
 					for(var i=0;i<skills.length;i++){
 						var ifo=get.info(skills[i]);
-						if(ifo.viewAs&&typeof ifo.viewAs!='function'&&ifo.viewAs.name=='wuxie'){
-							if(!ifo.viewAsFilter||ifo.viewAsFilter(this)){
+						if(ifo.hiddenWuxie&&info){
+							if(typeof ifo.hiddenWuxie=='function'&&ifo.hiddenWuxie(this,info)){
 								return true;
 							}
 						}
-						else if(ifo.hiddenWuxie&&info){
-							if(typeof ifo.hiddenWuxie=='function'&&ifo.hiddenWuxie(this,info)){
+						else if(ifo.viewAs&&typeof ifo.viewAs!='function'&&ifo.viewAs.name=='wuxie'){
+							if(!ifo.viewAsFilter||ifo.viewAsFilter(this)){
 								return true;
 							}
 						}
@@ -27417,9 +27578,43 @@
 					if(this.hasSkillTag('respondShan',true,null,true)) return true;
 					return this.hasUsableCard('shan');
 				},
-				mayHaveShan:function(){
-					return this.hasShan();
-					// modify: After AngelBeats! -2nd Beat-
+				mayHaveSha:function(viewer,type){
+					if((this.hp>2||!this.isZhu&&this.hp>1)&&this.hasSkillTag('respondSha',true,type,true)) return true;
+					if(get.itemtype(viewer)!=='player') viewer=_status.event.player;
+					let cards;
+					if(this===viewer||get.itemtype(viewer)==='player'&&viewer.hasSkillTag('viewHandcard',null,this,true)) cards=this.getCards('h');
+					else cards=this.getShownCards();
+					if(cards.some(card=>{
+						let name=get.name(card,this);
+						if(name=='sha'||name=='hufu'||name=='yuchanqian'){
+							if(type==='use') return lib.filter.cardEnabled(card,this);
+							if(type==='respond') return lib.filter.cardRespondable(card,this);
+							return true;
+						}
+						return false;
+					})) return true;
+					let hs=this.getCards('hs').removeArray(cards).length;
+					if(hs===0) return false;
+					return Math.pow(hs+(this.isPhaseUsing()?6:4),2)>100*_status.event.getRand('mayHaveSha');
+				},
+				mayHaveShan:function(viewer,type){
+					if((this.hp>2||!this.isZhu&&this.hp>1)&&this.hasSkillTag('respondShan',true,type,true)) return true;
+					if(get.itemtype(viewer)!=='player') viewer=_status.event.player;
+					let cards;
+					if(this===viewer||get.itemtype(viewer)==='player'&&viewer.hasSkillTag('viewHandcard',null,this,true)) cards=this.getCards('h');
+					else cards=this.getShownCards();
+					if(cards.some(card=>{
+						let name=get.name(card,this);
+						if(name==='shan'||name==='hufu'){
+							if(type==='use') return lib.filter.cardEnabled(card,this);
+							if(type==='respond') return lib.filter.cardRespondable(card,this);
+							return true;
+						}
+						return false;
+					})) return true;
+					let hs=this.getCards('hs').removeArray(cards).length;
+					if(hs===0) return false;
+					return Math.pow(hs+(this.isPhaseUsing()?3:5),2)>100*_status.event.getRand('mayHaveShan');
 				},
 				hasCard:function(name,position){
 					if(typeof name=='function'){
@@ -27441,7 +27636,7 @@
 							name=parseInt(name[5]);
 						}
 					}
-					else if(typeof name=='string'&&name.indexOf('equip')==0&&name.length==6){
+					else if(typeof name=='string'&&name.startsWith('equip')&&name.length==6){
 						name=parseInt(name[5]);
 					}
 					if(!name){
@@ -27668,7 +27863,7 @@
 
 					node1.style.transform='perspective(600px) rotateY(180deg) translateX(0)';
 					var onEnd01=function(){
-						node1.removeEventListener('webkitTransitionEnd',onEnd01);
+						//node1.removeEventListener('webkitTransitionEnd',onEnd01);
 						setTimeout(function(){
 							node1.style.transition='all ease-in 0.3s';
 							node1.style.transform='perspective(600px) rotateY(270deg) translateX(52px)';
@@ -27681,7 +27876,7 @@
 								node1.style.transition='';
 								ui.refresh(node1);
 								node1.style.transform='';
-								node1.removeEventListener('webkitTransitionEnd',onEnd);
+								//node1.removeEventListener('webkitTransitionEnd',onEnd);
 							}
 							node1.listenTransition(onEnd);
 						},300);
@@ -27716,7 +27911,7 @@
 								}
 								node2.style.transform='perspective(600px) rotateY(180deg) translateX(0)';
 								var onEnd02=function(){
-									node2.removeEventListener('webkitTransitionEnd',onEnd02);
+									//node2.removeEventListener('webkitTransitionEnd',onEnd02);
 									setTimeout(function(){
 										node2.style.transition='all ease-in 0.3s';
 										node2.style.transform='perspective(600px) rotateY(270deg) translateX(52px)';
@@ -27729,7 +27924,7 @@
 											node2.style.transition='';
 											ui.refresh(node2);
 											node2.style.transform='';
-											node2.removeEventListener('webkitTransitionEnd',onEnd);
+											//node2.removeEventListener('webkitTransitionEnd',onEnd);
 										}
 										node2.listenTransition(onEnd);
 									},200);
@@ -27761,7 +27956,7 @@
 
 					node1.style.transform='perspective(600px) rotateY(180deg) translateX(0)';
 					var onEnd01=function(){
-						node1.removeEventListener('webkitTransitionEnd',onEnd01);
+						//node1.removeEventListener('webkitTransitionEnd',onEnd01);
 						setTimeout(function(){
 							node1.style.transition='all ease-in 0.3s';
 							node1.style.transform='perspective(600px) rotateY(270deg) translateX(52px)';
@@ -27774,7 +27969,7 @@
 								node1.style.transition='';
 								ui.refresh(node1);
 								node1.style.transform='';
-								node1.removeEventListener('webkitTransitionEnd',onEnd);
+								//node1.removeEventListener('webkitTransitionEnd',onEnd);
 							}
 							node1.listenTransition(onEnd);
 						},300);
@@ -27796,7 +27991,7 @@
 						}
 						node2.style.transform='perspective(600px) rotateY(180deg) translateX(0)';
 						var onEnd02=function(){
-							node2.removeEventListener('webkitTransitionEnd',onEnd02);
+							//node2.removeEventListener('webkitTransitionEnd',onEnd02);
 							setTimeout(function(){
 								node2.style.transition='all ease-in 0.3s';
 								node2.style.transform='perspective(600px) rotateY(270deg) translateX(52px)';
@@ -27809,7 +28004,7 @@
 									node2.style.transition='';
 									ui.refresh(node2);
 									node2.style.transform='';
-									node2.removeEventListener('webkitTransitionEnd',onEnd);
+									//node2.removeEventListener('webkitTransitionEnd',onEnd);
 								}
 								node2.listenTransition(onEnd);
 							},200);
@@ -28951,10 +29146,7 @@
 			},
 			card:{
 				hasNature:function(nature,player){
-					var natures=get.natureList(this,player);
-					if(!nature) return natures.length>0;
-					if(nature=='linked') return natures.some(n=>lib.linked.includes(n));
-					return get.is.sameNature(natures,nature);
+					return game.hasNature(this,nature,player);
 				},
 				//只针对【杀】起效果
 				addNature:function(nature){
@@ -29062,7 +29254,7 @@
 									card[3]=prefix;
 								}
 							}
-							if(card[2].indexOf('sha_')==0){
+							if(card[2].startsWith('sha_')){
 								let suffix=card[2].slice(4);
 								let natureList=suffix.split('_');
 								card[2]='sha';
@@ -29122,10 +29314,10 @@
 					}
 					var img=lib.card[bg].image;
 					if(img){
-						if(img.indexOf('db:')==0){
+						if(img.startsWith('db:')){
 							img=img.slice(3);
 						}
-						else if(img.indexOf('ext:')!=0){
+						else if(!img.startsWith('ext:')){
 							img=null;
 						}
 					}
@@ -29141,7 +29333,7 @@
 					if(!lib.config.hide_card_image&&lib.card[bg].fullskin){
 						this.classList.add('fullskin');
 						if(img){
-							if(img.indexOf('ext:')==0){
+							if(img.startsWith('ext:')){
 								this.node.image.setBackgroundImage(img.replace(/^ext:/,'extension/'));
 							}
 							else{
@@ -29176,7 +29368,7 @@
 					else if(lib.card[bg].fullimage){
 						this.classList.add('fullimage');
 						if(img){
-							if(img.indexOf('ext:')==0){
+							if(img.startsWith('ext:')){
 								this.setBackgroundImage(img.replace(/^ext:/,'extension/'));
 								this.style.backgroundSize='cover';
 							}
@@ -29185,7 +29377,7 @@
 							}
 						}
 						else if(lib.card[bg].image){
-							if(lib.card[bg].image.indexOf('character:')==0){
+							if(lib.card[bg].image.startsWith('character:')){
 								this.setBackground(lib.card[bg].image.slice(10),'character');
 							}
 							else{
@@ -29220,7 +29412,7 @@
 							this.insertBefore(this.node.framebg,this.firstChild);
 						}
 						if(img){
-							if(img.indexOf('ext:')==0){
+							if(img.startsWith('ext:')){
 								this.node.avatar.setBackgroundImage(img.replace(/^ext:/,'extension/'));
 								this.node.avatar.style.backgroundSize='cover';
 							}
@@ -29229,7 +29421,7 @@
 							}
 						}
 						else if(lib.card[bg].image){
-							if(lib.card[bg].image.indexOf('character:')==0){
+							if(lib.card[bg].image.startsWith('character:')){
 								this.node.avatar.setBackground(lib.card[bg].image.slice(10),'character');
 							}
 							else{
@@ -29252,7 +29444,7 @@
 					}
 					else if(typeof lib.card[bg].image=='string'&&!lib.card[bg].fullskin){
 						if(img){
-							if(img.indexOf('ext:')==0){
+							if(img.startsWith('ext:')){
 								this.setBackgroundImage(img.replace(/^ext:/,'extension/'));
 								this.style.backgroundSize='cover';
 							}
@@ -29323,26 +29515,26 @@
 						}
 						name+='杀';
 					}
-					
+
 					if(window.decadeUI){
 						var cardsuit=get.translation(card[0]);
 						var fileName = card[2];
 						this.dataset.suit = card[0];
 						this.$suitnum.$num.textContent = cardnum;
 						this.$suitnum.$suit.textContent = cardsuit;
-						
+
 						if (card[3]) {
 							const natures = get.natureList(card[3]).sort(lib.sort.nature);
 							this.node.image.classList.add(...natures.filter(nature => nature != 'stab'));
 							fileName += natures.reduce((suffix, nature) => `${suffix}_${nature}`, '');
 						}
-						
+
 						this.$name.innerText = name;
 						this.$vertname.innerText = name;
 						this.$equip.$suitnum.textContent = cardsuit + cardnum;
 						this.$equip.$name.textContent = ' ' + name;
 					}
-					
+
 					this.node.name.innerHTML=name;
 					if(name.length>=5){
 						this.node.name.classList.add('long');
@@ -29443,7 +29635,7 @@
 							}
 						}
 					}
-					
+
 					if(window.decadeUI){
 						const imgFormat = decadeUI.config.cardPrettify;
 						if (imgFormat != 'off' && !this.classList.contains('infohidden')) {
@@ -29469,7 +29661,7 @@
 							});
 						}
 					}
-					
+
 					return this;
 				},
 				updateTransform:function(bool,delay){
@@ -29640,6 +29832,33 @@
 				},
 				finish:function(){
 					this.finished=true;
+				},
+				putStepCache:function(key,value){
+					if(!this._stepCache){
+						this._stepCache = {};
+					}
+					this._stepCache[key] = value;
+				},
+				getStepCache:function(key){
+					if(!this._stepCache)return undefined;
+					return this._stepCache[key];
+				},
+				clearStepCache:function(key){
+					if(key !==  undefined && key !== null){
+						delete this._stepCache[key];
+					}
+					delete this._stepCache;
+				},
+				callFuncUseStepCache:function(prefix,func,params){
+					if(typeof func != 'function')return;
+					if(_status.closeStepCache)return func.apply(null,params);
+					var cacheKey = "["+prefix+"]"+get.paramToCacheKey.apply(null,params);
+					var ret = this.getStepCache(cacheKey);
+					if(ret === undefined || ret === null){
+						ret = func.apply(null,params);
+						this.putStepCache(cacheKey,ret);
+					}
+					return ret;
 				},
 				putTempCache:function(key1,key2,value){
 					if(!this._tempCache){
@@ -30041,6 +30260,7 @@
 					if((this.name==='gain'||this.name==='lose')&&!_status.gameDrawed) return;
 					if(name==='gameDrawEnd') _status.gameDrawed=true;
 					if(name==='gameStart'){
+						lib.announce.publish('gameStart',{});
 						if(_status.brawl&&_status.brawl.gameStart){
 							_status.brawl.gameStart();
 						}
@@ -30122,7 +30342,7 @@
 						listAdded={};
 						var notemp=player.skills.slice(0);
 						for(var j in player.additionalSkills){
-							if(j.indexOf('hidden:')!=0) notemp.addArray(player.additionalSkills[j]);
+							if(!j.startsWith('hidden:')) notemp.addArray(player.additionalSkills[j]);
 						}
 						for(var j in player.tempSkills){
 							if(notemp.contains(j)) continue;
@@ -30257,7 +30477,7 @@
 			dialog:{
 				add:function(item,noclick,zoom){
 					if(typeof item=='string'){
-						if(item.indexOf('###')==0){
+						if(item.startsWith('###')){
 							var items=item.slice(3).split('###');
 							this.add(items[0],noclick,zoom);
 							this.addText(items[1],items[1].length<=20,zoom);
@@ -30305,7 +30525,7 @@
 					return item;
 				},
 				addText:function(str,center){
-					if(str&&str.indexOf('<div')==0) this.add(str);
+					if(str&&str.startsWith('<div')) this.add(str);
 					else if(center!==false){
 						this.add('<div class="text center">'+str+'</div>');
 					}
@@ -31170,10 +31390,10 @@
 				const del=groupSort(a)-groupSort(b);
 				if(del!=0) return del;
 				let aa=a,bb=b;
-				if(a.indexOf('_')!=-1){
+				if(a.includes('_')){
 					a=a.slice(a.indexOf('_')+1);
 				}
-				if(b.indexOf('_')!=-1){
+				if(b.includes('_')){
 					b=b.slice(b.indexOf('_')+1);
 				}
 				if(a!=b){
@@ -31198,10 +31418,10 @@
 				var del=typeSort(a)-typeSort(b);
 				if(del!=0) return del;
 				var aa=a,bb=b;
-				if(a.indexOf('_')!=-1){
+				if(a.includes('_')){
 					a=a.slice(a.indexOf('_')+1);
 				}
-				if(b.indexOf('_')!=-1){
+				if(b.includes('_')){
 					b=b.slice(b.indexOf('_')+1);
 				}
 				if(a!=b){
@@ -31243,10 +31463,10 @@
 			},
 			capt:function(a,b){
 				var aa=a,bb=b;
-				if(aa.indexOf('_')!=-1){
+				if(aa.includes('_')){
 					aa=aa.slice(aa.indexOf('_')+1);
 				}
-				if(bb.indexOf('_')!=-1){
+				if(bb.includes('_')){
 					bb=bb.slice(bb.indexOf('_')+1);
 				}
 				if(aa!=bb){
@@ -31993,7 +32213,7 @@
 									if(info[3].contains('dualside')&&info[4]){
 										player.storage.dualside=[list[i],player.hp,player.maxHp];
 										for(var j=0;j<info[4].length;j++){
-											if(info[4][j].indexOf('dualside:')==0){
+											if(info[4][j].startsWith('dualside:')){
 												var name2=info[4][j].slice(9);
 												var info2=lib.character[name2];
 												player.storage.dualside.push(name2);
@@ -32394,7 +32614,7 @@
 					player.recast(cards,null,(player,cards)=>{
 						var numberOfCardsToDraw=cards.length;
 						cards.forEach(value=>{
-							if(lib.config.mode=='stone'&&_status.mode=='deck'&&!player.isMin()&&get.type(value).indexOf('stone')==0){
+							if(lib.config.mode=='stone'&&_status.mode=='deck'&&!player.isMin()&&get.type(value).startsWith('stone')){
 								var stonecard=get.stonecard(1,player.career);
 								if(stonecard.length){
 									numberOfCardsToDraw-=stonecard.length;
@@ -33604,12 +33824,187 @@
 			['stab','image/card/cisha.png']
 		]),
 		natureSeparator:'|',
+		namePrefix:new Map([
+			['界',{
+				color:'#fdd559',
+				nature:'soilmm',
+			}],
+			['谋',{
+				color:'#def7ca',
+				nature:'woodmm',
+			}],
+			['武',{
+				color:'#fd8359',
+				nature:'soilmm',
+			}],
+			['乐',{
+				color:'#f7f4fc',
+				nature:'keymm',
+			}],
+			['神',{
+				color:'#faecd1',
+				nature:'orangemm',
+			}],
+			['族',{
+				color:'#ee9ac7',
+				nature:'firemm',
+			}],
+			['晋',{
+				color:'#f3c5ff',
+				nature:'blackmm',
+			}],
+			['侠',{
+				color:'#eeeeee',
+				nature:'qunmm',
+			}],
+			['起',{
+				color:'#c3f9ff',
+				nature:'thundermm',
+			}],
+			['承',{
+				color:'#c3f9ff',
+				nature:'thundermm',
+			}],
+			['用间',{
+				color:'#c3f9ff',
+				nature:'thundermm',
+			}],
+			['战役篇',{
+				color:'#c3f9ff',
+				nature:'thundermm',
+				showName:'战',
+			}],
+			['武将传',{
+				color:'#c3f9ff',
+				nature:'thundermm',
+				showName:'传',
+			}],
+			['将',{
+				nature:'firemm',
+			}],
+			['新杀',{
+				color:'#fefedc',
+				nature:'metalmm',
+				showName:'新',
+			}],
+			['旧',{
+				color:'#a4a4a4',
+				nature:'black',
+			}],
+			['旧界',{
+				color:'#a4a4a4',
+				nature:'black',
+			}],
+			['节钺',{
+				color:'#a4a4a4',
+				nature:'black',
+			}],
+			['毅重',{
+				color:'#a4a4a4',
+				nature:'black',
+			}],
+			['★SP',{
+				showName:'★',
+			}],
+			['K系列',{
+				showName:'Ｋ',
+			}],
+			['经典',{
+				showName:'典',
+			}],
+			['君',{
+				color:'#fefedc',
+				nature:'shenmm',
+			}],
+			['骰子',{
+				getSpan:()=>{
+					return `<span style="font-family:NonameSuits">🎲</span>`;
+				}
+			}],
+			['SP',{
+				getSpan:(prefix,name)=>{
+					return `<span style="writing-mode:horizontal-tb;-webkit-writing-mode:horizontal-tb;font-family:MotoyaLMaru;transform:scaleY(0.85)">SP</span>`;
+				},
+			}],
+			['OL',{
+				getSpan:(prefix,name)=>{
+					return `<span style="writing-mode:horizontal-tb;-webkit-writing-mode:horizontal-tb;font-family:MotoyaLMaru;transform:scaleY(0.85)">OL</span>`;
+				},
+			}],
+			['RE',{
+				getSpan:(prefix,name)=>{
+					return `<span style="writing-mode:horizontal-tb;-webkit-writing-mode:horizontal-tb;font-family:MotoyaLMaru;transform:scaleY(0.85)">RE</span>`;
+				},
+			}],
+			['手杀',{
+				getSpan:(prefix,name)=>{
+					const simple=(lib.config.buttoncharacter_prefix=='simple');
+					if(lib.characterPack.shiji&&name in lib.characterPack.shiji){
+						for(let i in lib.characterSort.shiji){
+							if(lib.characterSort.shiji[i].includes(name)){
+								prefix=get.translation(i).slice(-1);
+								break;
+							}
+						}
+						if(simple) return `<span>${prefix}</span>`;
+						return `<span style="color:#def7ca" data-nature="watermm">${prefix}</span>`;
+					}
+					if(simple) return '<span>手杀</span>';
+					return `<span style="font-family:NonameSuits">📱</span>`;
+				},
+			}],
+			['TW',{
+				getSpan:(prefix,name)=>{
+					return `<span style="writing-mode:horizontal-tb;-webkit-writing-mode:horizontal-tb;font-family:MotoyaLMaru;transform:scaleY(0.85)">TW</span>`;
+				},
+			}],
+			['TW神',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('TW')}${get.prefixSpan('神')}`
+				},
+			}],
+			['TW将',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('TW')}${get.prefixSpan('将')}`
+				},
+			}],
+			['OL神',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('OL')}${get.prefixSpan('神')}`
+				},
+			}],
+			['旧神',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('旧')}${get.prefixSpan('神')}`
+				},
+			}],
+			['旧晋',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('旧')}${get.prefixSpan('晋')}`
+				},
+			}],
+			['新杀SP',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('新杀')}${get.prefixSpan('SP')}`
+				},
+			}],
+			['界SP',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('界')}${get.prefixSpan('SP')}`
+				},
+			}],
+			['S特神',{
+				getSpan:(prefix,name)=>{
+					return `${get.prefixSpan('★')}${get.prefixSpan('神')}`
+				},
+			}],
+		]),
 		groupnature:{
-			shen:'thunder',
+			shen:'shen',
 			wei:'water',
 			shu:'soil',
 			wu:'wood',
-			qun:'metal',
+			qun:'qun',
 			western:'thunder',
 			key:'key',
 			jin:'thunder',
@@ -33665,6 +34060,13 @@
 			if(translation&&translation.length) lib.translate['nature_'+nature]=translation;
 			game.callHook("addNature",[nature,translation,config]);
 			return nature;
+		},
+		//判断卡牌信息/事件是否有某个属性
+		hasNature:(item,nature,player)=>{
+			var natures=get.natureList(item,player);
+			if(!nature) return natures.length>0;
+			if(nature=='linked') return natures.some(n=>lib.linked.includes(n));
+			return get.is.sameNature(natures,nature);
 		},
 		//设置卡牌信息/事件的属性
 		setNature:(item,nature,addNature)=>{
@@ -33869,48 +34271,34 @@
 			const backgroundMusicSetting=ui[aozhan?'aozhan_bgm':'background_music_setting'],config=backgroundMusicSetting._link.config;
 			config.updatex.call(backgroundMusicSetting,[]);
 		},
-		updateBackground:function(){
-			var background=(_status.tempBackground||lib.config.image_background);
+		updateBackground:()=>{
+			const background=_status.tempBackground||lib.config.image_background;
 			ui.background.delete();
-			ui.background=ui.create.div('.background');
-
+			const uiBackground=ui.background=ui.create.div('.background'),style=uiBackground.style;
 			if(lib.config.image_background_blur){
-				ui.background.style.filter='blur(8px)';
-				ui.background.style.webkitFilter='blur(8px)';
-				ui.background.style.transform='scale(1.05)';
+				style.filter='blur(8px)';
+				style.webkitFilter='blur(8px)';
+				style.transform='scale(1.05)';
 			}
-			else{
-				ui.background.style.filter='';
-				ui.background.style.webkitFilter='';
-				ui.background.style.transform='';
-			}
-
-			document.body.insertBefore(ui.background,document.body.firstChild);
-			if(background.indexOf('ext:')==0){
-				ui.background.setBackgroundImage('extension/'+background.slice(4));
-			}
+			document.body.insertBefore(uiBackground,document.body.firstChild);
+			if(background.startsWith('db:')) uiBackground.setBackgroundDB(background.slice(3));
+			else if(background.startsWith('ext:')) uiBackground.setBackgroundImage(`extension/${background.slice(4)}`);
 			else if(background=='default'){
-				ui.background.animate('start');
-				ui.background.style.backgroundImage="none";
+				uiBackground.animate('start');
+				style.backgroundImage='none';
 			}
-			else if(background.indexOf('custom_')==0){
-				ui.background.style.backgroundImage="none";
-				game.getDB('image',background,function(fileToLoad){
+			else if(background.startsWith('custom_')){
+				style.backgroundImage='none';
+				game.getDB('image',background).then(fileToLoad=>{
 					if(!fileToLoad) return;
-					var fileReader = new FileReader();
-					fileReader.onload = function(fileLoadedEvent)
-					{
-						var data = fileLoadedEvent.target.result;
-						ui.background.style.backgroundImage='url('+data+')';
-					};
+					const fileReader = new FileReader();
+					fileReader.onload=fileLoadedEvent=>style.backgroundImage=`url(${fileLoadedEvent.target.result})`;
 					fileReader.readAsDataURL(fileToLoad, "UTF-8");
 				});
 			}
-			else{
-				ui.background.setBackgroundImage('image/background/'+background+'.jpg');
-			}
-			ui.background.style.backgroundSize='cover';
-			ui.background.style.backgroundPosition='50% 50%';
+			else uiBackground.setBackgroundImage(`image/background/${background}.jpg`);
+			style.backgroundSize='cover';
+			style.backgroundPosition='50% 50%';
 		},
 		//Generate a beatmap using the given BPM, beats, and offset
 		//用给定的BPM、节拍和偏移生成谱面
@@ -33981,6 +34369,17 @@
 				for(var i in arg) next[i]=arg[i];
 			}
 			return next;
+		},
+		callFuncUseStepCache:function(prefix,func,params){
+			if(typeof func != 'function')return;
+			if(_status.closeStepCache || !_status.event)return func.apply(null,params);
+			var cacheKey = "["+prefix+"]"+get.paramToCacheKey.apply(null,params);
+			var ret = _status.event.getStepCache(cacheKey);
+			if(ret === undefined || ret === null){
+				ret = func.apply(null,params);
+				_status.event.putStepCache(cacheKey,ret);
+			}
+			return ret;
 		},
 		getRarity:function(name){
 			var rank=lib.rank.rarity;
@@ -34211,7 +34610,7 @@
 			game.addVideo('changeLand',player,url);
 			const parsedPath=lib.path.parse(url);
 			delete parsedPath.base;
-			if(!parsedPath.dir) parsedPath.dir='image/card';
+			if(!parsedPath.dir) parsedPath.dir='image/card/';
 			if(!parsedPath.ext) parsedPath.ext='.jpg';
 			game.broadcastAll((formattedPath,name,skill,player)=>{
 				const node=ui.create.div('.background.upper.land');
@@ -34559,10 +34958,10 @@
 					}
 					else{
 						if(ui.confirm&&ui.confirm.str){
-							if(ui.confirm.str.indexOf('c')!=-1){
+							if(ui.confirm.str.includes('c')){
 								ui.click.cancel();
 							}
-							else if(ui.confirm.str.indexOf('o')!=-1){
+							else if(ui.confirm.str.includes('o')){
 								ui.click.ok();
 							}
 						}
@@ -34631,7 +35030,7 @@
 				}
 
 				var str='';
-				if(ip.indexOf('wss://')!=0&&ip.indexOf('ws://')!=0) str=(get.config('wss_mode','connect')?'wss://':'ws://');
+				if(!ip.startsWith('wss://')&&!ip.startsWith('ws://')) str=(get.config('wss_mode','connect')?'wss://':'ws://');
 				game.ws=new WebSocket(str+ip+'');
 			}
 			catch(e){
@@ -34713,8 +35112,8 @@
 				else if(typeof argument=='function') onError=argument;
 				if(_status.video) break;
 			}
-			if(path.indexOf('ext:')==0) path=path.replace(/^ext:/,'extension/');
-			else if(path.indexOf('db:')!=0) path=`audio/${path}`;
+			if(path.startsWith('ext:')) path=path.replace(/^ext:/,'extension/');
+			else if(!path.startsWith('db:')) path=`audio/${path}`;
 			if(!lib.config.repeat_audio&&_status.skillaudio.contains(path)) return;
 			_status.skillaudio.add(path);
 			game.addVideo('playAudio',null,path);
@@ -34724,18 +35123,13 @@
 			audio.volume=lib.config.volumn_audio/8;
 			audio.addEventListener('ended',()=>audio.remove());
 			audio.onerror=event=>{
-				if(audio._changed){
-					audio.remove();
-					if(onError) onError(event);
-					return;
-				}
-				audio.src=`${lib.assetURL}audio/${path}.ogg`;
-				audio._changed=true;
+				audio.remove();
+				if(onError) onError(event);
 			};
 			//Some browsers do not support "autoplay", so "oncanplay" listening has been added
 			audio.oncanplay=()=>Promise.resolve(audio.play()).catch(()=>void 0);
 			new Promise((resolve,reject)=>{
-				if(path.indexOf('db:')==0) game.getDB('image',path.slice(3)).then(octetStream=>resolve(get.objectURL(octetStream)),reject);
+				if(path.startsWith('db:')) game.getDB('image',path.slice(3)).then(octetStream=>resolve(get.objectURL(octetStream)),reject);
 				else if(lib.path.extname(path)) resolve(`${lib.assetURL}${path}`);
 				else resolve(`${lib.assetURL}${path}.mp3`);
 			}).then(resolvedPath=>{
@@ -34794,7 +35188,7 @@
 				else if(info.audioname.includes(player.name2)&&(!info.audioname2||!info.audioname2[player.name2])) audioName+='_'+player.name2;
 			}
 			if(typeof audioInfo=='string'){
-				if(audioInfo.indexOf('db:')==0){
+				if(audioInfo.startsWith('db:')){
 					audioInfo=audioInfo.split(':');
 					if(audioInfo.length<4) return;
 					if(audioInfo[3]=='true') game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,audioInfo[2],`${audioName}.${audioInfo[4]||'mp3'}`);
@@ -34804,7 +35198,7 @@
 						game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,audioInfo[2],`${audioName}${Math.floor(audioInfo[3]*Math.random())+1}.${audioInfo[4]||'mp3'}`);
 					}
 				}
-				else if(audioInfo.indexOf('ext:')==0){
+				else if(audioInfo.startsWith('ext:')){
 					audioInfo=audioInfo.split(':');
 					if(audioInfo.length<3) return;
 					if(audioInfo[2]=='true') game.playAudio(`${audioInfo[0]}:${audioInfo[1]}`,`${audioName}.${audioInfo[3]||'mp3'}`);
@@ -34873,39 +35267,35 @@
 			};
 			ui.window.appendChild(audio);
 		},
-		playBackgroundMusic:function(){
+		playBackgroundMusic:()=>{
 			if(lib.config.background_music=='music_off'){
 				ui.backgroundMusic.src='';
+				return;
 			}
-			else if(_status._aozhan==true&&lib.config.mode_config.guozhan.aozhan_bgm!='disabled'){
-				var aozhan=_status.tempAozhan||lib.config.mode_config.guozhan.aozhan_bgm;
-				if(Array.isArray(aozhan)){
-					aozhan=aozhan.randomGet('disabled',_status.currentAozhan)||lib.config.mode_config.guozhan.aozhan_bgm;
-				}
-				if(aozhan=='random'){
-					aozhan=Object.keys(lib.mode.guozhan.config.aozhan_bgm.item).randomGet('disabled','random',_status.currentAozhan);
-				}
+			if(_status._aozhan){
+				const aozhanBGMConfiguration=lib.config.mode_config.guozhan.aozhan_bgm;
+				if(aozhanBGMConfiguration=='disabled') return;
+				let aozhan=_status.tempAozhan||aozhanBGMConfiguration;
+				if(Array.isArray(aozhan)) aozhan=aozhan.randomGet('disabled',_status.currentAozhan)||aozhanBGMConfiguration;
+				if(aozhan=='random') aozhan=Object.keys(lib.mode.guozhan.config.aozhan_bgm.item).randomGet('disabled','random',_status.currentAozhan);
 				_status.currentAozhan=aozhan;
-				ui.backgroundMusic.src=lib.assetURL+(aozhan.indexOf('ext:')==0?'extension/'+aozhan.slice(4):'audio/background/aozhan_'+aozhan+'.mp3');
+				if(aozhan.startsWith('db:')) game.getDB('image',aozhan.slice(3)).then(result=>ui.backgroundMusic.src=result);
+				else if(aozhan.startsWith('ext:')) ui.backgroundMusic.src=`${lib.assetURL}extension/${aozhan.slice(4)}`;
+				else ui.backgroundMusic.src=`${lib.assetURL}audio/background/aozhan_${aozhan}.mp3`;
+				return;
 			}
-			else{
-				var music=_status.tempMusic||lib.config.background_music;
-				if(Array.isArray(music)){
-					music=music.randomGet('music_off',_status.currentMusic)||lib.config.background_music;
-				}
-				if(music=='music_random'){
-					music=lib.config.all.background_music.randomGet('music_off','music_random',_status.currentMusic);
-				}
-				_status.currentMusic=music;
-				if(music=='music_custom'){
-					if(lib.config.background_music_src){
-						ui.backgroundMusic.src=lib.config.background_music_src;
-					}
-				}
-				else{
-					ui.backgroundMusic.src=lib.assetURL+(music.indexOf('ext:')==0?'extension/'+music.slice(4):'audio/background/'+music+'.mp3');
-				}
+			let music=_status.tempMusic||lib.config.background_music;
+			if(Array.isArray(music)) music=music.randomGet('music_off',_status.currentMusic)||lib.config.background_music;
+			if(music=='music_random') music=lib.config.all.background_music.randomGet('music_off','music_random',_status.currentMusic);
+			_status.currentMusic=music;
+			if(music=='music_custom'){
+				const backgroundMusicSourceConfiguration=lib.config.background_music_src;
+				if(backgroundMusicSourceConfiguration) ui.backgroundMusic.src=backgroundMusicSourceConfiguration;
+				return;
 			}
+			if(music.startsWith('db:')) game.getDB('image',music.slice(3)).then(result=>ui.backgroundMusic.src=result);
+			else if(music.startsWith('ext:')) ui.backgroundMusic.src=`${lib.assetURL}extension/${music.slice(4)}`;
+			else ui.backgroundMusic.src=`${lib.assetURL}audio/background/${music}.mp3`;
 		},
 		import:function(type,content,url){
 			if(type=='extension'){
@@ -35009,7 +35399,7 @@
 			if(!object||!libConfig[`${extensionName}_enable`]) return;
 			if(!noEval) lib.init.eval(object);
 			const config=Object.keys(libConfig).reduce((constructingConfig,key)=>{
-				if(key!=extensionName&&key.indexOf(extensionName)==0) constructingConfig[key.slice(11+name.length)]=libConfig[key];
+				if(key!=extensionName&&key.startsWith(extensionName)) constructingConfig[key.slice(11+name.length)]=libConfig[key];
 				return constructingConfig;
 			},{});
 			try{
@@ -35265,10 +35655,10 @@
 					else{
 						current2=current;
 					}
-					if(current.indexOf('theme')==0){
+					if(current.startsWith('theme')){
 						game.print(current.slice(6));
 					}
-					else if(current.indexOf('image/skin')==0){
+					else if(current.startsWith('image/skin')){
 						game.print(current.slice(11));
 					}
 					else{
@@ -36712,7 +37102,7 @@
 		},
 		exit:function(){
 			var ua=navigator.userAgent.toLowerCase();
-			var ios=ua.indexOf('iphone')!=-1||ua.indexOf('ipad')!=-1||ua.indexOf('macintosh')!=-1;
+			var ios=ua.includes('iphone')||ua.includes('ipad')||ua.includes('macintosh');
 			//electron
 			if(typeof window.process=='object'&&typeof window.require=='function'){
 				var versions=window.process.versions;
@@ -36848,7 +37238,7 @@
 					noinput=true;
 				}
 				else if(typeof arguments[i]=='string'){
-					if(arguments[i].indexOf('###')==0){
+					if(arguments[i].startsWith('###')){
 						var list=arguments[i].slice(3).split('###');
 						str=list[0];
 						str2=list[1];
@@ -37635,7 +38025,7 @@
 		removeExtension:(extensionName,keepFile)=>{
 			const prefix=`extension_${extensionName}`;
 			Object.keys(lib.config).forEach(key=>{
-				if(key.indexOf(prefix)==0) game.saveConfig(key);
+				if(key.startsWith(prefix)) game.saveConfig(key);
 			});
 			localStorage.removeItem(`${lib.configprefix}${prefix}`);
 			game.deleteDB('data',prefix);
@@ -38250,7 +38640,7 @@
 				if(modecharacters){
 					if(get.mode()=='guozhan'){
 						if(modecharacters[newvid.name1]){
-							if(newvid.name1.indexOf('gz_shibing')==0){
+							if(newvid.name1.startsWith('gz_shibing')){
 								newvid.name1=newvid.name1.slice(3,11);
 							}
 							else{
@@ -38258,7 +38648,7 @@
 							}
 						}
 						if(modecharacters[newvid.name2]){
-							if(newvid.name2.indexOf('gz_shibing')==0){
+							if(newvid.name2.startsWith('gz_shibing')){
 								newvid.name2=newvid.name2.slice(3,11);
 							}
 							else{
@@ -38275,10 +38665,10 @@
 						}
 					}
 				}
-				if(newvid.name1&&newvid.name1.indexOf('subplayer_')==0){
+				if(newvid.name1&&newvid.name1.startsWith('subplayer_')){
 					newvid.name1=newvid.name1.slice(10,newvid.name1.lastIndexOf('_'));
 				}
-				if(newvid.name2&&newvid.name2.indexOf('subplayer_')==0){
+				if(newvid.name2&&newvid.name2.startsWith('subplayer_')){
 					newvid.name1=newvid.name2.slice(10,newvid.name1.lastIndexOf('_'));
 				}
 				lib.videos.unshift(newvid);
@@ -38539,6 +38929,7 @@
 									_status,lib,game,ui,get,ai);
 							}
 						}
+						event.clearStepCache();
 						event.step++;
 					}
 				}
@@ -38757,7 +39148,7 @@
 					}
 
 					if(lib.config.popequip&&get.is.phoneLayout()&&
-						typeof event.position=='string'&&event.position.indexOf('e')!=-1&&
+						typeof event.position=='string'&&event.position.includes('e')&&
 						player.node.equips.querySelector('.card.selectable')){
 						player.node.equips.classList.add('popequip');
 						auto_confirm=false;
@@ -39500,6 +39891,7 @@
 		phaseLoop:function(player){
 			var next=game.createEvent('phaseLoop');
 			next.player=player;
+			next._isStandardLoop=true;
 			next.setContent('phaseLoop');
 		},
 		gameDraw:function(player,num){
@@ -40248,17 +40640,12 @@
 		checkMod:function(){
 			const argumentArray=Array.from(arguments),name=argumentArray[argumentArray.length-2];
 			let skills=argumentArray[argumentArray.length-1];
-			if(skills.getSkills) skills=skills.getSkills();
-			skills=skills.concat(lib.skill.global);
-			game.expandSkills(skills);
-			skills=skills.filter(skill=>{
-				const info=get.info(skill);
-				return (info&&info.mod&&info.mod[name]);
-			})
-			skills.sort((a,b)=>get.priority(a)-get.priority(b));
+			if(skills.getSkills) skills=skills.getModableSkills(_status.event.useCache === true);
 			const arg=argumentArray.slice(0,-2);
 			skills.forEach(value=>{
-				const result=get.info(value).mod[name].apply(this,arg);
+				var mod = get.info(value).mod[name];
+				if(!mod)return;
+				const result=mod.apply(this,arg);
 				if(typeof arg[arg.length-1]!='object'&&result!=undefined) arg[arg.length-1]=result;
 			});
 			return arg[arg.length-1];
@@ -40760,13 +41147,13 @@
 			const caption=lib.version==lib.config.version?'扩展更新':`${lib.version}更新内容`;
 			let players=null,cards=null;
 			if(lib.version!=lib.config.version) lib.changeLog.forEach(value=>{
-				if(value.indexOf('players://')==0) try{
+				if(value.startsWith('players://')) try{
 					players=JSON.parse(value.slice(10)).filter(value=>lib.character[value]);
 				}
 				catch(e){
 					players=null;
 				}
-				else if(value.indexOf('cards://')==0) try{
+				else if(value.startsWith('cards://')) try{
 					cards=JSON.parse(value.slice(8)).filter(value=>lib.card[value]);
 				}
 				catch(e){
@@ -41116,11 +41503,13 @@
 			editor:function(container,saveInput){
 				const createList=[];
 				const containerDelete=container.delete;
+				const editorpage=ui.create.div(container);
 				//删除container的时候，删除创建的ul列表
 				container.delete=function(){
 					for (let i=createList.length-1;i>=0;i--){
 						createList[i].parentNode&&createList[i].parentNode.removeChild(createList[i]);
 					}
+					Array.from(editorpage.children).forEach(v=>{v.style.background=''});
 					containerDelete.apply(this, arguments);
 				}
 				//创建ul列表
@@ -41130,13 +41519,14 @@
 					if (parent){
 						for(let i=0;i<parent.childElementCount;i++){
 							const node=parent.childNodes[i];
-							if(node!=self&&node.createMenu) closeMenu.call(node);
+							if(node!=self&&node.ul) closeMenu.call(node);
 						}
 					}
-					if(self.createMenu){
-						createList.add(self.createMenu);
-						ui.window.appendChild(self.createMenu);
-						return self.createMenu;
+					if(self.ul){
+						self.style.background='#08f';
+						createList.add(self.ul);
+						ui.window.appendChild(self.ul);
+						return self.ul;
 					}
 					const editor=container.editor;
 					if(!editor) return false;
@@ -41150,7 +41540,7 @@
 						width:pos.width*4/game.documentZoom+'px',
 						//'font-family':'shousha',
 						'font-size':(lib.config.codeMirror_fontSize?lib.config.codeMirror_fontSize.slice(0,-2):16)/game.documentZoom+'px',
-						
+
 					});
 					const theme=editor.options.theme;
 					lib.setScroll(ul);
@@ -41200,16 +41590,15 @@
 				};
 				//关闭ul列表
 				const closeMenu=function(){
-					const ul=this.createMenu;
+					const ul=this.ul;
 					if(!ul) return false;
 					if(ul.parentNode) ul.parentNode.removeChild(ul);
 					this.style.background='';
 					//创建后不用删除了，除非以后要动态加载。
-					//delete this.createMenu;
+					//delete this.ul;
 					createList.remove(ul);
 					return ul;
 				};
-				const editorpage=ui.create.div(container);
 				const discardConfig=ui.create.div('.editbutton','取消',editorpage,function(){
 					ui.window.classList.remove('shortcutpaused');
 					ui.window.classList.remove('systempaused');
@@ -41219,12 +41608,12 @@
 				const saveConfig=ui.create.div('.editbutton','保存',editorpage,saveInput);
 				const theme=ui.create.div('.editbutton','主题',editorpage,function(){
 					if(!this||this==window) return;
-					if(this.createMenu&&this.createMenu.parentNode){
+					if(this.ul&&this.ul.parentNode){
 						return closeMenu.call(this);
 					}
 					//this
 					const self=this;
-					if(!this.createMenu){
+					if(!this.ul){
 						//主题列表
 						const list=['mdn-like','mbo'];
 						//正在使用的主题
@@ -41242,18 +41631,18 @@
 							closeMenu.call(self);
 						};
 						const ul=createMenu(pos,self,list,click);
-						self.createMenu=ul;
+						self.ul=ul;
 					}else{
 						createMenu(null,self);
 					}
 				});
 				const edit=ui.create.div('.editbutton','编辑',editorpage,function(){
 					if(!this||this==window) return;
-					if(this.createMenu&&this.createMenu.parentNode){
+					if(this.ul&&this.ul.parentNode){
 						return closeMenu.call(this);
 					}
 					const self=this;
-					if(!this.createMenu){
+					if(!this.ul){
 						const pos=this.getBoundingClientRect();
 						const list=['撤销        Ctrl+Z', '恢复撤销    Ctrl+Y'];
 						const click=function(e){
@@ -41264,30 +41653,30 @@
 							closeMenu.call(self);
 						};
 						const ul=createMenu(pos,self,list,click);
-						this.createMenu=ul;
+						this.ul=ul;
 					}else{
 						createMenu(null,self);
 					}
 				});
 				const fontSize=ui.create.div('.editbutton','字号',editorpage,function(){
 					if(!this||this==window) return;
-					if(this.createMenu&&this.createMenu.parentNode){
+					if(this.ul&&this.ul.parentNode){
 						return closeMenu.call(this);
 					}
 					const self=this;
-					if(!this.createMenu){
+					if(!this.ul){
 						const pos=this.getBoundingClientRect();
 						const list=['16px','18px','20px','22px','24px','26px'];
 						const click=function(e){
 							const size=this.innerHTML;
 							container.style.fontSize=size.slice(0,-2)/game.documentZoom+'px';
-							Array.from(self.parentElement.children).map(v=>v.createMenu).filter(Boolean).forEach(v=>{v.style.fontSize=size.slice(0,-2)/game.documentZoom+'px'});
-							container.listenTransition(()=>container.editor.refresh());
+							Array.from(self.parentElement.children).map(v=>v.ul).filter(Boolean).forEach(v=>{v.style.fontSize=size.slice(0,-2)/game.documentZoom+'px'});
+							setTimeout(()=>container.editor.refresh(),0);
 							game.saveConfig('codeMirror_fontSize',size);
 							closeMenu.call(self);
 						};
 						const ul=createMenu(pos,self,list,click);
-						this.createMenu=ul;
+						this.ul=ul;
 					}else{
 						createMenu(null,self);
 					}
@@ -41320,6 +41709,12 @@
 						}
 					}
 					if(cardTempNameConfig=='default') getApplyNode._tempName.classList.add('vertical');
+					if(datasetNature.length>0){
+						node.dataset.nature=datasetNature;
+					}else{
+						delete node.dataset.nature;
+						node.classList.add(datasetNature);
+					}
 				}else{
 					if(get.position(card)=='j'&&card.viewAs&&card.viewAs!=card.name) {
 						cardName=card.viewAs;
@@ -41340,16 +41735,16 @@
 					node.classList.add('tempimage');
 					let img=lib.card[cardName].image;
 					if(img){
-						if(img.indexOf('db:')==0){
+						if(img.startsWith('db:')){
 							img=img.slice(3);
 						}
-						else if(img.indexOf('ext:')!=0){
+						else if(!img.startsWith('ext:')){
 							img=null;
 						}
 					}
 					if(lib.card[cardName].fullskin){
 						if(img){
-							if(img.indexOf('ext:')==0){
+							if(img.startsWith('ext:')){
 								bg.setBackgroundImage(img.replace(/^ext:/,'extension/'));
 							}
 							else{
@@ -41372,7 +41767,7 @@
 					}
 					else if(lib.card[cardName].fullimage){
 						if(img){
-							if(img.indexOf('ext:')==0){
+							if(img.startsWith('ext:')){
 								bg.setBackgroundImage(img.replace(/^ext:/,'extension/'));
 								bg.style.backgroundSize='cover';
 							}
@@ -41381,7 +41776,7 @@
 							}
 						}
 						else if(lib.card[cardName].image){
-							if(lib.card[cardName].image.indexOf('character:')==0){
+							if(lib.card[cardName].image.startsWith('character:')){
 								bg.setBackground(lib.card[cardName].image.slice(10),'character');
 							}
 							else{
@@ -41404,7 +41799,7 @@
 					}
 					else if(typeof lib.card[cardName].image=='string'&&!lib.card[cardName].fullskin){
 						if(img){
-							if(img.indexOf('ext:')==0){
+							if(img.startsWith('ext:')){
 								bg.setBackgroundImage(img.replace(/^ext:/,'extension/'));
 								bg.style.backgroundSize='cover';
 							}
@@ -41419,10 +41814,9 @@
 					else{
 						console.warn('卡牌图片解析失败');
 					}
-				}
-				if(datasetNature.length>0){
-					node.dataset.nature=datasetNature;
-				}else{
+					if(datasetNature.length>0){
+						node.classList.add(datasetNature);
+					}
 					delete node.dataset.nature;
 				}
 				node.innerHTML+=`<span>${cardTempNameConfig=='default'?get.verticalStr(tempname):tempname}</span>`;
@@ -42749,10 +43143,10 @@
 										list.sort(function(a,b){
 											a=a[0];b=b[0];
 											var aa=a,bb=b;
-											if(aa.indexOf('_')!=-1){
+											if(aa.includes('_')){
 												aa=aa.slice(aa.indexOf('_')+1);
 											}
-											if(bb.indexOf('_')!=-1){
+											if(bb.includes('_')){
 												bb=bb.slice(bb.indexOf('_')+1);
 											}
 											if(aa!=bb){
@@ -42950,7 +43344,7 @@
 											if(fileToLoad){
 												if(!lib.config.customBackgroundMusic) lib.config.customBackgroundMusic={};
 												var name=fileToLoad.name;
-												if(name.indexOf('.')!=-1){
+												if(name.includes('.')){
 													name=name.slice(0,name.indexOf('.'));
 												}
 												var link=(game.writeFile?'cdv_':'custom_')+name;
@@ -43089,9 +43483,9 @@
 											var images=[],audios=[],fonts=[],directories={},directoryList=[];
 											Object.keys(zip.files).forEach(file=>{
 												const parsedPath=lib.path.parse(file),directory=parsedPath.dir,fileExtension=parsedPath.ext.toLowerCase();
-												if(directory.indexOf('audio')==0&&(fileExtension=='.mp3'||fileExtension=='.ogg')) audios.push(file);
-												else if(directory.indexOf('font')==0&&fileExtension=='.woff2') fonts.push(file);
-												else if(directory.indexOf('image')==0&&(fileExtension=='.jpg'||fileExtension=='.png')) images.push(file);
+												if(directory.startsWith('audio')&&(fileExtension=='.mp3'||fileExtension=='.ogg')) audios.push(file);
+												else if(directory.startsWith('font')&&fileExtension=='.woff2') fonts.push(file);
+												else if(directory.startsWith('image')&&(fileExtension=='.jpg'||fileExtension=='.png')) images.push(file);
 												else return;
 												if(!directories[directory]){
 													directories[directory]=[];
@@ -43634,7 +44028,7 @@
 						for(var i=0;i<start.firstChild.childNodes.length;i++){
 							var node=start.firstChild.childNodes[i];
 							if(node.mode){
-								if(node.mode.indexOf('mode_')==0) continue;
+								if(node.mode.startsWith('mode_')) continue;
 								if(node.mode=='custom') continue;
 								if(connectMenu){
 									if(!lib.config.connect_characters.contains(node.mode)){
@@ -43747,7 +44141,7 @@
 									game.saveConfig('forbidai_user',lib.config.forbidai_user);
 								},
 							});
-							if(mode.indexOf('mode_')!=0){
+							if(!mode.startsWith('mode_')){
 								cfgnodeAI.style.marginTop='0px';
 								page.appendChild(cfgnode);
 								page.appendChild(cfgnodeAI);
@@ -43777,7 +44171,7 @@
 									page.appendChild(cfgnode2);
 								}
 							}
-							else if(mode.indexOf('mode_extension')==0){
+							else if(mode.startsWith('mode_extension')){
 								page.appendChild(cfgnodeAI);
 							}
 							else{
@@ -43788,7 +44182,7 @@
 									_status.clicked=false;
 									return;
 								}
-								if(mode.indexOf('mode_')==0&&mode.indexOf('mode_extension_')!=0&&
+								if(mode.startsWith('mode_')&&!mode.startsWith('mode_extension_')&&
 									mode!='mode_favourite'&&mode!='mode_banned'){
 									if(!connectMenu&&lib.config.show_charactercard){
 										ui.click.charactercard(this.link,this,mode=='mode_guozhan'?'guozhan':true);
@@ -43876,7 +44270,7 @@
 												updateActive();
 											},
 										};
-										if(mode.indexOf('mode_')==0&&mode.indexOf('mode_extension_')!=0&&mode.indexOf('mode_guozhan')!=0){
+										if(mode.startsWith('mode_')&&!mode.startsWith('mode_extension_')&&!mode.startsWith('mode_guozhan')){
 											cfgnodeY.clear=true;
 											delete cfgnodeY.onclick;
 										}
@@ -43934,7 +44328,7 @@
 								if(lib.config.all.sgscharacters.contains(mode)){
 									ui.create.div('.config.pointerspan','<span style="opacity:0.5">该武将包不可被隐藏</span>',page);
 								}
-								else if(mode.indexOf('mode_')!=0){
+								else if(!mode.startsWith('mode_')){
 									ui.create.div('.config.pointerspan','<span>隐藏武将包</span>',page,function(){
 										if(this.firstChild.innerHTML=='隐藏武将包'){
 											if(confirm('真的要隐藏“'+get.translation(mode+'_character_config')+'”武将包吗？\n建议使用“关闭”而不是“隐藏”功能，否则将会影响其他相关武将包的正常运行！')){
@@ -43996,13 +44390,9 @@
 					for(var i=0;i<characterlist.length;i++){
 						createModeConfig(characterlist[i],start.firstChild);
 					}
-					if(!connectMenu){
-						for(var i in lib.characterPack){
-							if(i.indexOf('mode_')==0){
-								createModeConfig(i,start.firstChild);
-							}
-						}
-					}
+					if(!connectMenu) Object.keys(lib.characterPack).forEach(key=>{
+						if(key.startsWith('mode_')) createModeConfig(key,start.firstChild);
+					});
 					var active=start.firstChild.querySelector('.active');
 					if(!active){
 						active=start.firstChild.firstChild;
@@ -44082,7 +44472,7 @@
 						for(var i=0;i<start.firstChild.childNodes.length;i++){
 							var node=start.firstChild.childNodes[i];
 							if(node.mode){
-								if(node.mode.indexOf('mode_')==0) continue;
+								if(node.mode.startsWith('mode_')) continue;
 								if(node.mode=='custom') continue;
 								if(node.mode=='cardpile') continue;
 								if(connectMenu){
@@ -44207,7 +44597,7 @@
 								init:lib.config.cards.contains(mode),
 								onclick:togglePack
 							});
-							if(mode.indexOf('mode_')!=0){
+							if(!mode.startsWith('mode_')){
 								page.appendChild(cfgnode);
 							}
 							else{
@@ -44218,7 +44608,7 @@
 									_status.clicked=false;
 									return;
 								}
-								if(mode.indexOf('mode_')==0&&mode.indexOf('mode_extension_')!=0&&mode!='mode_banned'){
+								if(mode.startsWith('mode_')&&!mode.startsWith('mode_extension_')&&mode!='mode_banned'){
 									return;
 								}
 								ui.click.touchpop();
@@ -44255,7 +44645,7 @@
 							}
 							page.classList.add('menu-buttons');
 							page.classList.add('leftbutton');
-							if(!connectMenu&&!lib.config.all.sgscards.contains(mode)&&mode.indexOf('mode_')!=0){
+							if(!connectMenu&&!lib.config.all.sgscards.contains(mode)&&!mode.startsWith('mode_')){
 								ui.create.div('.config.pointerspan','<span>隐藏卡牌包</span>',page,function(){
 									if(this.firstChild.innerHTML=='隐藏卡牌包'){
 										this.firstChild.innerHTML='卡牌包将在重启后隐藏';
@@ -44272,7 +44662,7 @@
 									game.saveConfig('hiddenCardPack',lib.config.hiddenCardPack);
 								});
 							}
-							if(mode.indexOf('mode_')!=0&&lib.cardPile[mode]){
+							if(!mode.startsWith('mode_')&&lib.cardPile[mode]){
 								var cardpileNodes=[];
 								var cardpileexpanded=false;
 								if(!lib.config.bannedpile[mode]){
@@ -44447,13 +44837,9 @@
 						if(connectMenu&&!lib.connectCardPack.contains(lib.config.all.cards[i])) continue;
 						createModeConfig(lib.config.all.cards[i],start.firstChild);
 					}
-					if(!connectMenu){
-						for(var i in lib.cardPack){
-							if(i.indexOf('mode_')==0){
-								createModeConfig(i,start.firstChild);
-							}
-						}
-					}
+					if(!connectMenu) Object.keys(lib.cardPack).forEach(key=>{
+						if(key.startsWith('mode_')) createModeConfig(key,start.firstChild);
+					});
 					var active=start.firstChild.querySelector('.active');
 					if(!active){
 						active=start.firstChild.firstChild;
@@ -44644,7 +45030,7 @@
 							var node=start.firstChild.childNodes[i];
 							if(node.mode=='get') continue;
 							if(node.mode=='create') continue;
-							if(node.mode&&node.mode.indexOf('extension_')==0){
+							if(node.mode&&node.mode.startsWith('extension_')){
 								if(lib.config[node.mode+'_enable']){
 									node.classList.remove('off');
 									if(node.link) node.link.firstChild.classList.add('on');
@@ -44668,7 +45054,7 @@
 					}
 					var togglePack=function(bool){
 						var name=this._link.config._name;
-						if(name.indexOf('extension_')==0){
+						if(name.startsWith('extension_')){
 							if(bool){
 								game.saveConfig(name,true);
 							}
@@ -44696,7 +45082,7 @@
 						var page=ui.create.div('');
 						page.style.paddingBottom='10px';
 						var node;
-						if(mode.indexOf('extension_')==0){
+						if(mode.startsWith('extension_')){
 							node=ui.create.div('.menubutton.large',mode.slice(10),position,clickMode);
 						}
 						else{
@@ -44712,7 +45098,7 @@
 								if(i=='game') continue;
 								var cfg=copyObj(lib.extensionMenu[mode][i]);
 								var j;
-								if(mode.indexOf('extension_')==0){
+								if(mode.startsWith('extension_')){
 									j=mode+'_'+i;
 								}
 								else{
@@ -44949,7 +45335,25 @@
 										dash2.content.pack.list.push(dash2.pile.childNodes[i].link);
 									}
 									str+=',package:'+get.stringify({
-										character:dash1.content.pack,
+										//替换die audio，加上扩展名
+										character:(pack=>{
+											var character=pack.character;
+											for (var key in character){
+												var info=character[key];
+												if(Array.isArray(info[4])){
+													var tag=info[4].find(tag=>/^die:.+$/.test(tag));
+													if(tag){
+														info[4].remove(tag);
+														if(typeof game.readFile=='function'){
+															info[4].push('die:ext:'+page.currentExtension+'/audio/die/'+tag.slice(tag.lastIndexOf('/')+1));
+														}else{
+															info[4].push('die:db:extension-'+page.currentExtension+':audio/die/'+tag.slice(tag.lastIndexOf('/')+1));
+														}
+													}
+												}
+											}
+											return pack;
+										})(dash1.content.pack),
 										card:dash2.content.pack,
 										skill:dash3.content.pack,
 										intro:introExtLine.querySelector('input').value||'',
@@ -44958,9 +45362,12 @@
 										forumURL:forumExtLine.querySelector('input').value||'',
 										version:versionExtLine.querySelector('input').value||'',
 									});
-									var files={character:[],card:[],skill:[]};
+									var files={character:[],card:[],skill:[],audio:[]};
 									for(var i in dash1.content.image){
 										files.character.push(i);
+									}
+									for(var i in dash1.content.audio){
+										files.audio.push('audio/die/'+i);
 									}
 									for(var i in dash2.content.image){
 										files.card.push(i);
@@ -44973,6 +45380,9 @@
 									var extension={'extension.js':'game.import("extension",function(lib,game,ui,get,ai,_status){return '+str+'})'};
 									for(var i in dash1.content.image){
 										extension[i]=dash1.content.image[i];
+									}
+									for(var i in dash1.content.audio){
+										extension['audio/die/'+i]=dash1.content.audio[i];
 									}
 									for(var i in dash2.content.image){
 										extension[i]=dash2.content.image[i];
@@ -45200,7 +45610,7 @@
 									}
 									editnode.classList.remove('disabled');
 								};
-								var clickButton=function(){
+								var clickButton=lib.gnc.of(function*(){
 									if(currentButton==this){
 										resetEditor();
 										return;
@@ -45231,8 +45641,33 @@
 											}
 										}
 										for(var i=0;i<info[4].length;i++){
-											if(info[4][i].indexOf('des:')==0){
+											if(info[4][i].startsWith('des:')){
 												newCharacter.querySelector('.new_des').value=info[4][i].slice(4);
+											}
+											if(info[4][i].startsWith('die:')){
+												var dieaudionode=newCharacter.querySelector('.die_audio');
+												dieaudionode.file={
+													name:info[4][i].slice(info[4][i].lastIndexOf('/')+1)
+												};
+												yield new Promise(resolve=>{
+													if(typeof game.readFile=='function'){
+														game.readFile(info[4][i].slice(4).replace('ext:','extension/'),arraybuffer=>{
+															dieaudionode.arrayBuffer=arraybuffer;
+															resolve();
+														},()=>{
+															console.warn(`未找到${info[4][i].slice(4).replace('ext:','extension/')}阵亡配音`);
+															resolve();
+														});
+													}else{
+														game.getDB('image',info[4][i].slice(7)).then(octetStream=>{
+															dieaudionode.arrayBuffer=octetStream;
+															resolve();
+														},()=>{
+															console.warn(`未找到${info[4][i].slice(4)}阵亡配音`);
+															resolve();
+														});
+													}
+												});
 											}
 										}
 									}
@@ -45251,7 +45686,7 @@
 									editnode.classList.remove('disabled');
 									delnode.innerHTML='删除';
 									delnode.button=this;
-								}
+								});
 								var createButton=function(name,image){
 									var button=ui.create.div('.button.character');
 									button.link=name;
@@ -45335,7 +45770,8 @@
 												character:{},
 												translate:{}
 											},
-											image:{}
+											image:{},
+											audio:{}
 										};
 										toggle.classList.add('on');
 										newCharacter.style.display='';
@@ -45351,7 +45787,8 @@
 										character:{},
 										translate:{}
 									},
-									image:{}
+									image:{},
+									audio:{}
 								};
 								var newCharacter;
 								var toggle=ui.create.div('.config.more.on','创建武将 <div>&gt;</div>',page,function(){
@@ -45421,18 +45858,65 @@
 
 								ui.create.div('.indent','姓名：<input class="new_name" type="text">',newCharacter).style.paddingTop='8px';
 								ui.create.div('.indent','介绍：<input class="new_des" type="text">',newCharacter).style.paddingTop='8px';
-								ui.create.div('.indent','体力：<input class="new_hp" type="text">',newCharacter).style.paddingTop='8px';
+								ui.create.div('.indent','体力：<input class="new_hp" type="text" placeholder="体/限/甲">',newCharacter).style.paddingTop='8px';
 								newCharacter.querySelector('input.new_name').onblur=updateButton;
 								var sexes=ui.create.selectlist([
 									['male','男'],
 									['female','女'],
-									['none','无'],
+									['double','双性'],
+									['none','无']
 								],null,ui.create.div('.indent','性别：',newCharacter));
-								var grouplist=[];
-								for(var i=0;i<lib.group.length;i++){
-									grouplist.push([lib.group[i],get.translation(lib.group[i])]);
-								};
+								var grouplist=lib.group.map((group,i)=>[lib.group[i],get.translation(lib.group[i])]);
 								var groups=ui.create.selectlist(grouplist,null,ui.create.div('.indent','势力：',newCharacter));
+								var dieaudio=ui.create.div('.die_audio',newCharacter,{textAlign:'left'});
+								var dieaudiolabel=ui.create.node('label','阵亡配音:',dieaudio);
+								var dieaudioUpload=dieaudio.appendChild(document.createElement('input'));
+								dieaudioUpload.type='file';
+								dieaudioUpload.accept='audio/*';
+								dieaudioUpload.style.width='calc(100% - 100px)';
+								dieaudioUpload.onchange=function(){
+									var fileToLoad=dieaudioUpload.files[0];
+									if(fileToLoad){
+										console.log(fileToLoad);
+										var fileReader=new FileReader();
+										fileReader.onload=function(fileLoadedEvent){
+											var data=fileLoadedEvent.target.result;
+											var blob=new Blob([data]);
+											dieaudio.file=fileToLoad;
+											dieaudio.arrayBuffer=data;
+											dieaudio.blob=blob;
+											var new_name=newCharacter.querySelector('input.new_name');
+											dieaudioUpload.style.display='none';
+											dieaudiopreview.style.display=
+											dieaudiocancel.style.display='';
+											dieaudiotag.src=window.URL.createObjectURL(blob);
+										};
+										fileReader.readAsArrayBuffer(fileToLoad);
+									}
+								};
+								var dieaudiotag=ui.create.node('audio',dieaudio);
+								var dieaudiopreview=ui.create.node('button',dieaudio,()=>{
+									if(dieaudiotag.error){
+										alert('您使用的客户端不支持预览此音频！')
+									} else dieaudiotag.play();
+								});
+								dieaudiopreview.innerHTML='播放';
+								dieaudiopreview.style.display='none';
+								var dieaudiocancel=ui.create.node('button',dieaudio,()=>{
+									dieaudiopreview.style.display='none';
+									dieaudiocancel.style.display='none';
+									if(dieaudio.blob){
+										window.URL.revokeObjectURL(dieaudio.blob);
+										dieaudiotag.src=null;
+										delete dieaudio.file;
+										delete dieaudio.arrayBuffer;
+										delete dieaudio.blob;
+									}
+									dieaudioUpload.value='';
+									dieaudioUpload.style.display='';
+								});
+								dieaudiocancel.innerHTML='取消';
+								dieaudiocancel.style.display='none';
 								var options=ui.create.div('.add_skill.options','<span>主公<input type="checkbox" name="zhu"></span><span>BOSS<input type="checkbox" name="boss"></span><span>仅点将可用<input type="checkbox" name="forbidai"></span><br><span>隐匿技<input type="checkbox" name="hiddenSkill"></span><br>',newCharacter);
 								var addSkill=ui.create.div('.add_skill','添加技能<br>',newCharacter);
 								var list=[];
@@ -45444,10 +45928,10 @@
 								list.sort(function(a,b){
 									a=a[0];b=b[0];
 									var aa=a,bb=b;
-									if(aa.indexOf('_')!=-1){
+									if(aa.includes('_')){
 										aa=aa.slice(aa.indexOf('_')+1);
 									}
-									if(bb.indexOf('_')!=-1){
+									if(bb.includes('_')){
 										bb=bb.slice(bb.indexOf('_')+1);
 									}
 									if(aa!=bb){
@@ -45497,8 +45981,10 @@
 								}
 								addSkillButton.onclick=function(){
 									for(var i=0;i<skillList.firstChild.childNodes.length;i++){
-										if(skillList.firstChild.childNodes[i].skill==skillopt.value) return;
+										if(skillList.firstChild.childNodes[i].skill==skillopt.value) return alert(selectname.value=='current_extension'?'此扩展还未添加技能':'此武将没有技能可添加');
 									}
+									//无技能时
+									if(!skillopt.value||skillopt.childElementCount==0) return;
 									var node=document.createElement('button');
 									node.skill=skillopt.value;
 									node.onclick=deletenode;
@@ -45576,7 +46062,8 @@
 										}
 									}
 									var hp=page.querySelector('input.new_hp').value;
-									if(hp=='Infinity') hp=Infinity;
+									//体力支持‘Infinity,∞,无限’表示无限
+									if(['Infinity','∞','无限'].includes(hp)) hp=Infinity;
 									else if(hp.indexOf('/')==-1) hp=parseInt(hp)||1;
 									var skills=[];
 									for(var i=0;i<skillList.firstChild.childNodes.length;i++){
@@ -45594,6 +46081,12 @@
 									var des=page.querySelector('input.new_des').value;
 									if(des){
 										tags.add('des:'+des);
+									}
+									//阵亡配音
+									if(dieaudio.file&&dieaudio.arrayBuffer){
+										var audioname=name+dieaudio.file.name.slice(dieaudio.file.name.indexOf('.'));
+										tags.add(`die:${typeof game.readFile=='function'?'ext':'db'}:audio/die/${audioname}`);
+										page.content.audio[audioname]=dieaudio.arrayBuffer;
 									}
 
 									page.content.pack.translate[name]=translate;
@@ -45618,6 +46111,7 @@
 										delete dash1.content.pack.character[name];
 										delete dash1.content.pack.translate[name];
 										delete dash1.content.image[name];
+										delete dash1.content.audio[name];
 										dash1.link.classList.add('active');
 									}
 									resetEditor();
@@ -45879,7 +46373,7 @@
 									var fileToLoad=input.files[0];
 									if(fileToLoad){
 										var fileReader = new FileReader();
-										var fullimage=(fileToLoad.name.indexOf('.jpg')!=-1);
+										var fullimage=(fileToLoad.name.includes('.jpg'));
 										fileReader.onload = function(fileLoadedEvent)
 										{
 											var data = fileLoadedEvent.target.result;
@@ -45943,10 +46437,10 @@
 								list.sort(function(a,b){
 									a=a[0];b=b[0];
 									var aa=a,bb=b;
-									if(aa.indexOf('_')!=-1){
+									if(aa.includes('_')){
 										aa=aa.slice(aa.indexOf('_')+1);
 									}
-									if(bb.indexOf('_')!=-1){
+									if(bb.includes('_')){
 										bb=bb.slice(bb.indexOf('_')+1);
 									}
 									if(aa!=bb){
@@ -46523,10 +47017,10 @@
 								list.sort(function(a,b){
 									a=a[0];b=b[0];
 									var aa=a,bb=b;
-									if(aa.indexOf('_')!=-1){
+									if(aa.includes('_')){
 										aa=aa.slice(aa.indexOf('_')+1);
 									}
-									if(bb.indexOf('_')!=-1){
+									if(bb.includes('_')){
 										bb=bb.slice(bb.indexOf('_')+1);
 									}
 									if(aa!=bb){
@@ -46950,10 +47444,10 @@
 								var list=[];
 								var size=parseFloat(this.info.size)||0;
 								if(size){
-									if(this.info.size.indexOf('MB')!=-1){
+									if(this.info.size.includes('MB')){
 										size*=1024*1024;
 									}
-									else if(this.info.size.indexOf('KB')!=-1){
+									else if(this.info.size.includes('KB')){
 										size*=1024;
 									}
 								}
@@ -47122,7 +47616,7 @@
 								window.extension={};
 								fetch(`${extensionURL}catalog.js`,{
 									referrerPolicy:'no-referrer'
-								}).then(value=>value.text()).then(eval).then(loaded).catch(reason=>{
+								}).then(response=>response.text()).then(eval).then(loaded).catch(reason=>{
 									console.log(reason);
 									delete window.extension;
 									loading.innerHTML='连接失败:'+(reason instanceof Error?reason.message:String(reason));
@@ -47223,47 +47717,31 @@
 						var li1=document.createElement('li');
 						var li2=document.createElement('li');
 						var li3=document.createElement('li');
-						var trimurl=function(str){
-							if(str==lib.updateURLS.github){
-								return 'GitHub';
+						const trimURL=url=>{
+							const updateURLS=lib.updateURLS;
+							for(const key in updateURLS){
+								const updateURL=updateURLS[key];
+								if(url==updateURL) return lib.configMenu.general.config.update_link.item[key];
 							}
-							if(str==lib.updateURLS.coding){
-								return 'Coding';
+							let index=url.indexOf('://');
+							if(index!=-1) url=url.slice(index+3);
+							index=url.indexOf('/');
+							if(index!=-1) url=url.slice(0,index);
+							if(url.length>15){
+								const list=url.split('.');
+								if(list.length>1) list.shift();
+								url=list.join('.');
 							}
-							var index;
-							index=str.indexOf('://');
-							if(index!=-1){
-								str=str.slice(index+3);
+							if(url.length>15){
+								const list=url.split('.');
+								if(list.length>1) list.pop();
+								url=list.join('.');
 							}
-							index=str.indexOf('/');
-							if(index!=-1){
-								str=str.slice(0,index);
-							}
-							if(str.length>15){
-								var list=str.split('.');
-								if(list.length>1){
-									list.shift();
-								}
-								str=list[0];
-								for(var i=1;i<list.length;i++){
-									str+='.'+list[i];
-								}
-							}
-							if(str.length>15){
-								var list=str.split('.');
-								if(list.length>1){
-									list.pop();
-								}
-								str=list[0];
-								for(var i=1;i<list.length;i++){
-									str+='.'+list[i];
-								}
-							}
-							return str;
+							return url;
 						}
 						li1.innerHTML='游戏版本：'+lib.version+'<p style="margin-top:8px;white-space:nowrap"></p>';
 						li2.innerHTML='素材版本：'+(lib.config.asset_version||'无')+'<p style="margin-top:8px"></p>';
-						li3.innerHTML='更新地址：<span>'+trimurl(lib.config.updateURL||lib.updateURL)+'</span><p style="margin-top:8px"></p>';
+						li3.innerHTML='更新地址：<span>'+trimURL(lib.config.updateURL||lib.updateURL)+'</span><p style="margin-top:8px"></p>';
 						li3.style.whiteSpace='nowrap';
 						li3.style.display='none';// coding
 
@@ -47319,7 +47797,7 @@
 													str=files[i].slice(0,str);
 													files.splice(i--,1);
 													for(var j=0;j<updates.length;j++){
-														if(updates[j].indexOf(str)==0){
+														if(updates[j].startsWith(str)){
 															files2.push(updates[j]);
 														}
 													}
@@ -47328,10 +47806,10 @@
 											updates=files.concat(files2);
 										}
 										for(var i=0;i<updates.length;i++){
-											if(updates[i].indexOf('theme/')==0&&updates[i].indexOf('.css')==-1){
+											if(updates[i].startsWith('theme/')&&!updates[i].includes('.css')){
 												updates.splice(i--,1);
 											}
-											else if(updates[i].indexOf('node_modules/')==0&&!update.node){
+											else if(updates[i].startsWith('node_modules/')&&!update.node){
 												updates.splice(i--,1);
 											}
 										}
@@ -47393,7 +47871,7 @@
 									game.saveConfig('check_version',update.version);
 									var goon=true;
 									if(!dev){
-										if(update.version.indexOf('beta')!=-1||update.version==lib.version){
+										if(update.version.includes('beta')||update.version==lib.version){
 											goon=false;
 										}
 									}
@@ -47538,18 +48016,18 @@
 														updates.splice(i--,1);
 													}
 													else{
-														if(updates[i].indexOf('image/character')==0){
+														if(updates[i].startsWith('image/character')){
 															if(updates[i].indexOf('jun_')!=16&&updates[i].indexOf('gz_')!=16&&!skipcharacter.contains(updates[i].slice(16,updates[i].lastIndexOf('.')))){
 																updates.splice(i--,1);
 															}
 														}
-														else if(updates[i].indexOf('image/card')==0){
+														else if(updates[i].startsWith('image/card')){
 															let cardname=updates[i].slice(11,updates[i].lastIndexOf('.'));
 															if(lib.card[cardname]&&!skipcard.contains(cardname)){
 																updates.splice(i--,1);
 															}
 														}
-														else if(updates[i].indexOf('image/mode/stone')==0){
+														else if(updates[i].startsWith('image/mode/stone')){
 															updates.splice(i--,1);
 														}
 													}
@@ -47709,7 +48187,7 @@
 							game.prompt('设置更新地址',function(str){
 								if(str){
 									game.saveConfig('updateURL',str);
-									li3.querySelector('span').innerHTML=trimurl(str);
+									li3.querySelector('span').innerHTML=trimURL(str);
 									button5.style.display='';
 									button6.style.display='none';
 								}
@@ -47725,7 +48203,7 @@
 							game.saveConfig('updateURL',lib.mirrorURL);
 							button5.style.display='';
 							button6.style.display='none';
-							li3.querySelector('span').innerHTML=trimurl(lib.mirrorURL);
+							li3.querySelector('span').innerHTML=trimURL(lib.mirrorURL);
 						};
 						li3.lastChild.appendChild(button6);
 
@@ -47736,7 +48214,7 @@
 							game.saveConfig('updateURL');
 							button5.style.display='none';
 							button6.style.display='';
-							li3.querySelector('span').innerHTML=trimurl(lib.updateURL);
+							li3.querySelector('span').innerHTML=trimURL(lib.updateURL);
 						};
 						li3.lastChild.appendChild(button5);
 						if(!lib.config.updateURL){
@@ -48261,7 +48739,7 @@
 										text2.value='';
 									}
 								}
-								else if(text2.value.indexOf('无天使')!=-1&&(text2.value.indexOf('无神佛')!=-1||text2.value.indexOf('无神')!=-1&&text2.value.indexOf('无佛')!=-1)){
+								else if(text2.value.includes('无天使')&&(text2.value.includes('无神佛')||text2.value.includes('无神')&&text2.value.includes('无佛'))){
 									game.print('密码正确！欢迎来到死后世界战线！');
 									_status.keyVerified=true;
 									text2.value='';
@@ -48895,7 +49373,7 @@
 					else if(arguments[i]=='characterx'){
 						characterx=true;
 					}
-					else if(typeof arguments[i]=='string'&&arguments[i].indexOf('onlypack:')==0){
+					else if(typeof arguments[i]=='string'&&arguments[i].startsWith('onlypack:')){
 						onlypack=arguments[i].slice(9);
 					}
 					else if(typeof arguments[i]=='object'&&typeof arguments[i].seperate=='function'){
@@ -49379,10 +49857,10 @@
 						var del=groupSort(a)-groupSort(b);
 						if(del!=0) return del;
 						var aa=a,bb=b;
-						if(a.indexOf('_')!=-1){
+						if(a.includes('_')){
 							a=a.slice(a.lastIndexOf('_')+1);
 						}
-						if(b.indexOf('_')!=-1){
+						if(b.includes('_')){
 							b=b.slice(b.lastIndexOf('_')+1);
 						}
 						if(a!=b){
@@ -49459,7 +49937,7 @@
 							if(i=='list') continue;
 							var link='';
 							var linkcontent=seperate[i];
-							if(i.indexOf('_link:')!=-1){
+							if(i.includes('_link:')){
 								link=i.slice(i.indexOf('_link:')+6);
 								i=i.slice(0,i.indexOf('_link:'));
 							}
@@ -49973,7 +50451,7 @@
 				ui.window.appendChild(ui.backgroundMusic);
 				ui.window.addEventListener(lib.config.touchscreen?'touchend':'click', function playMusic() {
 					ui.window.removeEventListener(lib.config.touchscreen?'touchend':'click', playMusic, false);
-					if(!ui.backgroundMusic.played.length) Promise.resolve(ui.backgroundMusic.play()).catch(()=>void 0);
+					if(!ui.backgroundMusic.played.length && lib.config.background_music != 'music_off') ui.backgroundMusic.play();
 				}, false);
 				if(lib.config.cursor_style=='pointer'){
 					ui.window.classList.add('nopointer');
@@ -49990,7 +50468,7 @@
 				if(lib.config.change_skin_auto!='off'){
 					_status.skintimeout=setTimeout(ui.click.autoskin,parseInt(lib.config.change_skin_auto));
 				}
-				if(lib.config.border_style&&lib.config.border_style.indexOf('dragon_')==0){
+				if(lib.config.border_style&&lib.config.border_style.startsWith('dragon_')){
 					ui.arena.dataset.framedecoration=lib.config.border_style.slice(7);
 				}
 
@@ -50803,7 +51281,7 @@
 						name:ui.create.div('.name',node),
 						intro:ui.create.div('.intro',node)
 					}
-					if(item.name&&item.name.indexOf('unknown')==0){
+					if(item.name&&item.name.startsWith('unknown')){
 						if(item.node&&item.node.name_seat){
 							node.classList.add('cardbg');
 							ui.create.div('.avatar_name',node,get.translation(item.name));
@@ -50876,7 +51354,7 @@
 						str=item;
 						link=item;
 					}
-					if(str.indexOf('<div')!=0) str='<div class="popup text textbutton">'+str+'</div>';
+					if(!str.startsWith('<div')) str='<div class="popup text textbutton">'+str+'</div>';
 					var next=dialog.add(str);
 					if(!noclick) next.firstChild.addEventListener(lib.config.touchscreen?'touchend':'click',ui.click.button);
 					next.firstChild.link=link;
@@ -51669,7 +52147,7 @@
 			},
 			skin:function(avatar,name,callback){
 				var num=1;
-				if(name.indexOf('gz_')==0){
+				if(name.startsWith('gz_')){
 					name=name.slice(3);
 				}
 				if(lib.config.skin[name]){
@@ -54203,10 +54681,10 @@
 				var nameskin=name;
 				var nameskin2=name;
 				var gzbool=false;
-				if(nameskin.indexOf('gz_shibing')==0){
+				if(nameskin.startsWith('gz_shibing')){
 					nameskin=nameskin.slice(3,11);
 				}
-				else if(nameskin.indexOf('gz_')==0){
+				else if(nameskin.startsWith('gz_')){
 					nameskin=nameskin.slice(3);
 					gzbool=true;
 				}
@@ -54347,13 +54825,13 @@
 				else if(lib.config.favouriteCharacter.contains(name)){
 					fav.classList.add('active');
 				}
-				
+
 				// 样式二
-				if(lib.config.show_characternamepinyin=='showPinyin2'||lib.config.show_skillnamepinyin=='showPinyin2'){
+				if(lib.config.show_characternamepinyin=='showPinyin2'||lib.config.show_skillnamepinyin=='showPinyin2'||lib.config.show_characternamepinyin=='showCodeIdentifier2'||lib.config.show_skillnamepinyin=='showCodeIdentifier2'){
 					var intro=ui.create.div('.characterintro',get.characterIntro(name),uiintro);
-					if(lib.config.show_characternamepinyin=='showPinyin2'){
-						var charactername=get.rawName(name);
-						var characterpinyin=get.pinyin(charactername);
+					if(lib.config.show_characternamepinyin=='showPinyin2'||lib.config.show_characternamepinyin=='showCodeIdentifier2'){
+						var charactername=get.rawName2(name);
+						var characterpinyin=lib.config.show_characternamepinyin=='showCodeIdentifier2'?name:get.pinyin(charactername);
 						var nameinfo=get.character(name);
 						var charactersex=get.translation(nameinfo[0]);
 						const charactergroups=get.is.double(name,true);
@@ -54389,8 +54867,8 @@
 						this.classList.add('active');
 						var skillname=get.translation(this.link);
 						var skilltranslationinfo=get.skillInfoTranslation(this.link);
-						if(lib.config.show_skillnamepinyin=='showPinyin2'&&skillname!='阵亡'){
-							var skillpinyin=get.pinyin(skillname);
+						if((lib.config.show_skillnamepinyin=='showPinyin2'||lib.config.show_skillnamepinyin=='showCodeIdentifier2')&&skillname!='阵亡'){
+							var skillpinyin=lib.config.show_skillnamepinyin=='showCodeIdentifier2'?this.link:get.pinyin(skillname);
 							intro2.innerHTML='<span style="font-weight:bold;margin-right:5px">'+skillname+'</span>'+'<span style="font-size:14px;font-family:SimHei,STHeiti,sans-serif">'+'['+skillpinyin+']'+'</span>'+'  '+skilltranslationinfo;
 						}else{
 							intro2.innerHTML='<span style="font-weight:bold;margin-right:5px">'+skillname+'</span>'+skilltranslationinfo;
@@ -54407,8 +54885,8 @@
 							for(var i=0;i<derivation.length;i++){
 								var derivationname=get.translation(derivation[i]);
 								var derivationtranslationinfo=get.skillInfoTranslation(derivation[i]);
-								if(lib.config.show_skillnamepinyin=='showPinyin2'&&derivationname.length<=5&&derivation[i].indexOf('_faq')==-1){
-									var derivationpinyin=get.pinyin(derivationname);
+								if((lib.config.show_skillnamepinyin=='showPinyin2'||lib.config.show_skillnamepinyin=='showCodeIdentifier2')&&derivationname.length<=5&&derivation[i].indexOf('_faq')==-1){
+									var derivationpinyin=lib.config.show_skillnamepinyin=='showCodeIdentifier2'?derivation[i]:get.pinyin(derivationname);
 									intro2.innerHTML+='<br><br><span style="font-weight:bold;margin-right:5px">'+derivationname+'</span>'+'<span style="font-size:14px;font-family:SimHei,STHeiti,sans-serif">'+'['+derivationpinyin+']'+'</span>'+'  '+derivationtranslationinfo;
 								}else{
 									intro2.innerHTML+='<br><br><span style="font-weight:bold;margin-right:5px">'+derivationname+'</span>'+derivationtranslationinfo;
@@ -54437,7 +54915,66 @@
 								clickSkill.call(skillnode,'init');
 							});
 						}
-						if(e!=='init') game.trySkillAudio(this.link,playername);
+						// if(e!=='init') game.trySkillAudio(this.link,playername);
+						// 有bug，先用旧版
+						if(lib.config.background_speak&&e!=='init'){
+							var audioname=this.link;
+							if(info.audioname2&&info.audioname2[playername]){
+								audioname=info.audioname2[playername];
+								info=lib.skill[audioname];
+							}
+							var audioinfo=info.audio;
+							var that=this;
+							var getIndex=function(i){
+								if(typeof that.audioindex!='number'){
+									that.audioindex=i;
+								}
+								that.audioindex++;
+								if(that.audioindex>i){
+									that.audioindex=1;
+								}
+								return that.audioindex;
+							};
+							if(typeof audioinfo=='string'){
+								if(audioinfo.indexOf('ext:')==0){
+									audioinfo=audioinfo.split(':');
+									if(audioinfo.length==3){
+										if(audioinfo[2]=='true'){
+											game.playAudio('..','extension',audioinfo[1],audioname);
+										}
+										else{
+											audioinfo[2]=parseInt(audioinfo[2]);
+											if(audioinfo[2]){
+												game.playAudio('..','extension',audioinfo[1],audioname+getIndex(audioinfo[2]));
+											}
+										}
+									}
+									return;
+								}
+								else{
+									audioname=audioinfo;
+									if(lib.skill[audioinfo]){
+										audioinfo=lib.skill[audioinfo].audio;
+									}
+								}
+							}
+							else if(Array.isArray(audioinfo)){
+								audioname=audioinfo[0];
+								audioinfo=audioinfo[1];
+							}
+							if(typeof audioinfo=='number'){
+								if(Array.isArray(info.audioname)&&info.audioname.contains(playername)) audioname=audioname+'_'+playername;
+								game.playAudio('skill',audioname+getIndex(audioinfo));
+							}
+							else if(audioinfo){
+								if(Array.isArray(info.audioname)&&info.audioname.contains(playername)) audioname=audioname+'_'+playername;
+								game.playAudio('skill',audioname);
+							}
+							else if(true&&info.audio!==false){
+								if(Array.isArray(info.audioname)&&info.audioname.contains(playername)) audioname=audioname+'_'+playername;
+								game.playSkillAudio(audioname,getIndex(2));
+							}
+						}
 					}
 				}else{
 					// 样式一
@@ -54445,7 +54982,7 @@
 					if(showCharacterNamePinyin!='doNotShow'){
 						const characterIntroTable=ui.create.div('.character-intro-table',introduction),span=document.createElement('span');
 						span.style.fontWeight='bold';
-						const nameInfo=get.character(name),exInfo=nameInfo[4],characterName=exInfo&&exInfo.includes('ruby')?lib.translate[name]:get.rawName(name);
+						const nameInfo=get.character(name),exInfo=nameInfo[4],characterName=exInfo&&exInfo.includes('ruby')?lib.translate[name]:get.rawName2(name);
 						span.innerHTML=characterName;
 						const ruby=document.createElement('ruby');
 						ruby.appendChild(span);
@@ -54459,14 +54996,17 @@
 						rightParenthesisRP.textContent='）';
 						ruby.appendChild(rightParenthesisRP);
 						characterIntroTable.appendChild(ruby);
-						const characterSexDiv=ui.create.div('.character-sex',characterIntroTable),exInfoSex=exInfo&&exInfo.find(value=>value.indexOf('sex:')==0),characterSex=exInfoSex?exInfoSex.split(':').pop():nameInfo[0];
+						const characterSexDiv=ui.create.div('.character-sex',characterIntroTable),exInfoSex=exInfo&&exInfo.find(value=>value.startsWith('sex:')),characterSex=exInfoSex?exInfoSex.split(':').pop():nameInfo[0];
 						new Promise((resolve,reject)=>{
 							const imageName=`sex_${characterSex}`,information=lib.card[imageName];
-							if(!information) resolve(`${lib.assetURL}image/card/${imageName}.png`);
+							if(!information) {
+								resolve(`${lib.assetURL}image/card/${imageName}.png`)
+								return;
+							};
 							const image=information.image;
 							if(!image) resolve(`${lib.assetURL}image/card/${imageName}.png`);
-							else if(image.indexOf('db:')==0) game.getDB('image',image.slice(3)).then(resolve,reject);
-							else if(image.indexOf('ext:')==0) resolve(`${lib.assetURL}${image.replace(/^ext:/,'extension/')}`);
+							else if(image.startsWith('db:')) game.getDB('image',image.slice(3)).then(resolve,reject);
+							else if(image.startsWith('ext:')) resolve(`${lib.assetURL}${image.replace(/^ext:/,'extension/')}`);
 							else resolve(`${lib.assetURL}${image}`);
 						}).then(source=>new Promise((resolve,reject)=>{
 							const image=new Image();
@@ -54480,8 +55020,8 @@
 							if(!information) resolve(`${lib.assetURL}image/card/${imageName}.png`);
 							const image=information.image;
 							if(!image) resolve(`${lib.assetURL}image/card/${imageName}.png`);
-							else if(image.indexOf('db:')==0) game.getDB('image',image.slice(3)).then(resolve,reject);
-							else if(image.indexOf('ext:')==0) resolve(`${lib.assetURL}${image.replace(/^ext:/,'extension/')}`);
+							else if(image.startsWith('db:')) game.getDB('image',image.slice(3)).then(resolve,reject);
+							else if(image.startsWith('ext:')) resolve(`${lib.assetURL}${image.replace(/^ext:/,'extension/')}`);
 							else resolve(`${lib.assetURL}${image}`);
 						}).then(source=>new Promise((resolve,reject)=>{
 							const image=new Image();
@@ -54500,8 +55040,8 @@
 								if(!information) resolve(`${lib.assetURL}image/card/${imageName}.png`);
 								const image=information.image;
 								if(!image) resolve(`${lib.assetURL}image/card/${imageName}.png`);
-								else if(image.indexOf('db:')==0) game.getDB('image',image.slice(3)).then(resolve,reject);
-								else if(image.indexOf('ext:')==0) resolve(`${lib.assetURL}${image.replace(/^ext:/,'extension/')}`);
+								else if(image.startsWith('db:')) game.getDB('image',image.slice(3)).then(resolve,reject);
+								else if(image.startsWith('ext:')) resolve(`${lib.assetURL}${image.replace(/^ext:/,'extension/')}`);
 								else resolve(`${lib.assetURL}${image}`);
 							}).then(source=>new Promise((resolve,reject)=>{
 								const image=new Image();
@@ -54636,16 +55176,75 @@
 								clickSkill.call(skillnode,'init');
 							});
 						}
-						if(e!=='init') game.trySkillAudio(this.link,playername);
+						// if(e!=='init') game.trySkillAudio(this.link,playername);
+						// 有bug，先用旧版
+						if(lib.config.background_speak&&e!=='init'){
+							var audioname=this.link;
+							if(info.audioname2&&info.audioname2[playername]){
+								audioname=info.audioname2[playername];
+								info=lib.skill[audioname];
+							}
+							var audioinfo=info.audio;
+							var that=this;
+							var getIndex=function(i){
+								if(typeof that.audioindex!='number'){
+									that.audioindex=i;
+								}
+								that.audioindex++;
+								if(that.audioindex>i){
+									that.audioindex=1;
+								}
+								return that.audioindex;
+							};
+							if(typeof audioinfo=='string'){
+								if(audioinfo.indexOf('ext:')==0){
+									audioinfo=audioinfo.split(':');
+									if(audioinfo.length==3){
+										if(audioinfo[2]=='true'){
+											game.playAudio('..','extension',audioinfo[1],audioname);
+										}
+										else{
+											audioinfo[2]=parseInt(audioinfo[2]);
+											if(audioinfo[2]){
+												game.playAudio('..','extension',audioinfo[1],audioname+getIndex(audioinfo[2]));
+											}
+										}
+									}
+									return;
+								}
+								else{
+									audioname=audioinfo;
+									if(lib.skill[audioinfo]){
+										audioinfo=lib.skill[audioinfo].audio;
+									}
+								}
+							}
+							else if(Array.isArray(audioinfo)){
+								audioname=audioinfo[0];
+								audioinfo=audioinfo[1];
+							}
+							if(typeof audioinfo=='number'){
+								if(Array.isArray(info.audioname)&&info.audioname.contains(playername)) audioname=audioname+'_'+playername;
+								game.playAudio('skill',audioname+getIndex(audioinfo));
+							}
+							else if(audioinfo){
+								if(Array.isArray(info.audioname)&&info.audioname.contains(playername)) audioname=audioname+'_'+playername;
+								game.playAudio('skill',audioname);
+							}
+							else if(true&&info.audio!==false){
+								if(Array.isArray(info.audioname)&&info.audioname.contains(playername)) audioname=audioname+'_'+playername;
+								game.playSkillAudio(audioname,getIndex(2));
+							}
+						}
 					}
 				}
-				
+
 				var initskill=false;
 				for(var i=0;i<list.length;i++){
 					if(!get.info(list[i])||get.info(list[i]).nopop) continue;
 					if(!lib.translate[list[i]]||!lib.translate[list[i]+'_info']) continue;
 					var skilltrans=get.translation(list[i]);
-					if(skilltrans.indexOf('&nbsp;')==0){
+					if(skilltrans.startsWith('&nbsp;')){
 						skilltrans=skilltrans.slice(6);
 					}
 					var current=ui.create.div('.menubutton.large',skills,clickSkill,skilltrans);
@@ -55619,7 +56218,13 @@
 	const get={
 		//Generate an object URL from the Base64-encoded octet stream
 		//从Base64编码的八位字节流生成对象URL
-		objectURL:octetStream=>URL.createObjectURL(new Blob([Uint8Array.from(atob(octetStream.replace(/^data:[\s\S]*\/[\s\S]*;base64,/,'')),v=>v.charCodeAt())])),
+		objectURL:octetStream=>{
+			const objectURLMap=lib.objectURL;
+			if(objectURLMap.has(octetStream)) return objectURLMap.get(octetStream);
+			const objectURL=URL.createObjectURL(new Blob([Uint8Array.from(atob(octetStream.replace(/^data:[\s\S]*\/[\s\S]*;base64,/,'')),character=>character.charCodeAt())]));
+			objectURLMap.set(octetStream,objectURL);
+			return objectURL;
+		},
 		//Get the card name length
 		//获取此牌的字数
 		cardNameLength:(card,player)=>{
@@ -55700,7 +56305,7 @@
 			}
 			//排除声母
 			for(let i of lib.pinyins._metadata.shengmu){
-				if(str.indexOf(i)==0){
+				if(str.startsWith(i)){
 					str=str.slice(i.length);
 					if(str[0]=='u'&&lib.pinyins._metadata.special_shengmu.contains(i)) str='ü'+str.slice(1);
 					break;
@@ -55712,12 +56317,33 @@
 					if(str[0]==i){
 						let goon=false;
 						for(let j of lib.pinyins._metadata.feijiemu[i]){
-							if(str.indexOf(j)==0) goon=true;
+							if(str.startsWith(j)) goon=true;
 						}
 						if(!goon) str=str.slice(1);
 						break;
 					}
 				}
+			}
+			return str;
+		},
+		//用于将参数转换为字符串，作为缓存的key。
+		paramToCacheKey:function(){
+			var str = "";
+			for(var arg of arguments){
+				if(arg === null || arg === undefined){
+					str += (arg + "-");
+					continue;
+				}
+				if(arg.playerid){
+					str += "p:"+arg.playerid;
+				}else if(arg.cardid){
+					str += "c:"+arg.cardid;
+				}else if(arg.name){
+					str += "n:"+arg.name;
+				}else{
+					str += "s:"+arg;
+				}
+				str+="-";
 			}
 			return str;
 		},
@@ -55729,7 +56355,7 @@
 			}
 			else{
 				for(let i of lib.pinyins._metadata.shengmu){
-					if(str.indexOf(i)==0){
+					if(str.startsWith(i)){
 						str=str.slice(i.length);
 						if(str[0]=='u'&&lib.pinyins._metadata.special_shengmu.contains(i)) str='ü'+str.slice(1);
 						break;
@@ -55747,8 +56373,7 @@
 			if(get.is.locked(skill,player)) list.add('锁定技');
 			if(info.zhuSkill) list.add('主公技');
 			if(info.limited) list.add('限定技');
-			if(info.juexingji||info.limited) list.add('觉醒技');
-			if(info.limited) list.add('限定技');
+			if(info.juexingji) list.add('觉醒技');
 			if(info.zhuanhuanji) list.add('转换技');
 			if(info.hiddenSkill) list.add('隐匿技');
 			if(info.clanSkill) list.add('宗族技');
@@ -55800,20 +56425,20 @@
 		},
 		infoHp:function(hp){
 			if(typeof hp=='number') return hp;
-			else if(typeof hp=='string'&&hp.indexOf('/')!=-1){
+			else if(typeof hp=='string'&&hp.includes('/')){
 				return parseInt(hp.split('/')[0]);
 			}
 			return 0;
 		},
 		infoMaxHp:function(hp){
 			if(typeof hp=='number') return hp;
-			else if(typeof hp=='string'&&hp.indexOf('/')!=-1){
+			else if(typeof hp=='string'&&hp.includes('/')){
 				return parseInt(hp.split('/')[1]);
 			}
 			return 0;
 		},
 		infoHujia:function(hp){
-			if(typeof hp=='string'&&hp.indexOf('/')!=-1){
+			if(typeof hp=='string'&&hp.includes('/')){
 				var splited=hp.split('/');
 				if(splited.length>2) return parseInt(splited[2]);
 			}
@@ -55883,11 +56508,10 @@
 				});
 			},
 			//判断一张牌是否为明置手牌
-			shownCard:function(card){
-				if(card&&Array.isArray(card.gaintag)){
-					return card.gaintag.some(tag=>tag.indexOf('visible_')==0)
-				}
-				return false;
+			shownCard:card=>{
+				if(!card) return false;
+				const gaintag=card.gaintag;
+				return Array.isArray(gaintag)&&gaintag.some(tag=>tag.startsWith('visible_'));
 			},
 			//是否是虚拟牌
 			vituralCard:card=>card.isCard||(!("cards" in card)||!Array.isArray(card.cards)||card.cards.length==0),
@@ -55912,13 +56536,11 @@
 				return false;
 			},
 			double:(name,array)=>{
-				let info=get.character(name,4);
-				if(!info) return false;
-				for(let i of info){
-					if(i.indexOf('doublegroup:')==0){
-						if(!array) return true;
-						return i.split(':').slice(1);
-					}
+				const extraInformations=get.character(name,4);
+				if(!extraInformations) return false;
+				for(const extraInformation of extraInformations){
+					if(!extraInformation.startsWith('doublegroup:')) continue;
+					return array?extraInformation.split(':').slice(1):true;
 				}
 				return false;
 			},
@@ -55995,7 +56617,7 @@
 			banWords:function(str){
 				if(get.is.emoji(str)) return true;
 				for(var i of window.bannedKeyWords){
-					if(str.indexOf(i)!=-1) return true;
+					if(str.includes(i)) return true;
 				}
 				return false;
 			},
@@ -56080,7 +56702,7 @@
 						if(name.isUnseen&&name.isUnseen(0)) return false;
 						name=name.name1;
 					}
-					if(typeof name=='string'&&name.indexOf('gz_jun_')==0){
+					if(typeof name=='string'&&name.startsWith('gz_jun_')){
 						return true;
 					}
 				}
@@ -56203,7 +56825,7 @@
 				next.set('prompt2',str);
 			}
 			else{
-				if(str.indexOf('###')==0){
+				if(str.startsWith('###')){
 					var prompts=str.slice(3).split('###');
 					if(prompts[0]) next.set('prompt',prompts[0]);
 					if(prompts[1]) next.set('prompt2',prompts[1]);
@@ -56378,12 +57000,12 @@
 			var tags=get.character(name,4);
 			if(tags){
 				for(var i=0;i<tags.length;i++){
-					if(tags[i].indexOf('des:')==0){
+					if(tags[i].startsWith('des:')){
 						return tags[i].slice(4);
 					}
 				}
 			}
-			while(name.indexOf('_')!=-1&&!lib.characterIntro[name]){
+			while(name.includes('_')&&!lib.characterIntro[name]){
 				name=name.slice(name.indexOf('_')+1);
 			}
 			if(lib.characterIntro[name]) return lib.characterIntro[name];
@@ -56395,7 +57017,7 @@
 				if(!info) return '';
 			}
 			if(Array.isArray(info[4])) for(const str of info[4]){
-				if(typeof str=='string'&&str.indexOf('border:')==0) return str.slice(7);
+				if(typeof str=='string'&&str.startsWith('border:')) return str.slice(7);
 			}
 			return raw?'':info[1]||'';
 		},
@@ -56656,7 +57278,7 @@
 					}
 					else{
 						if(typeof filter=='function'&&!filter(lib.inpile[i])) continue;
-						if(type.indexOf('equip')==0&&type.length==6){
+						if(type.startsWith('equip')&&type.length==6){
 							if(get.subtype(lib.inpile[i])==type) list.push(lib.inpile[i]);
 						}
 						else{
@@ -56679,9 +57301,9 @@
 				if(typeof filter=='function'&&!filter(i)) continue;
 				if(lib.config.bannedcards.contains(i)) continue;
 				if(!lib.translate[i+'_info']) continue;
-				if((type.indexOf('equip')==0&&type.length==6)||
-					(type.indexOf('hslingjian')==0&&type.length==11)||
-					(type.indexOf('spell_')==0)){
+				if((type.startsWith('equip')&&type.length==6)||
+					(type.startsWith('hslingjian')&&type.length==11)||
+					(type.startsWith('spell_'))){
 					if(get.subtype(i)==type) list.push(i);
 				}
 				else{
@@ -56982,13 +57604,13 @@
 					threaten=info.ai.threaten(player,player);
 				}
 			}
-			if(type&&type.indexOf('in')!=-1){
+			if(type&&type.includes('in')){
 				if(info.enable=='phaseUse') num+=0.5;
 				if(info.trigger&&info.trigger.player){
 					var list=Array.isArray(info.trigger.player)?info.trigger.player:[info.trigger.player];
 					var add=false;
 					for(var i of list){
-						if(i.indexOf('phase')==0){
+						if(i.startsWith('phase')){
 							num+=0.5;
 							add=true;
 						}
@@ -57004,14 +57626,14 @@
 						if(add) break;
 					}
 				}
-				if(info.trigger&&((typeof info.trigger.player=='string'&&info.trigger.player.indexOf('use')==0)||info.trigger.source)){
+				if(info.trigger&&((typeof info.trigger.player=='string'&&info.trigger.player.startsWith('use'))||info.trigger.source)){
 					num+=0.3;
 				}
 				if(num>1&&threaten>1){
 					num+=Math.sqrt(threaten)-1;
 				}
 			}
-			if(type&&type.indexOf('out')!=-1){
+			if(type&&type.includes('out')){
 				if(threaten<1){
 					num*=1/Math.sqrt(threaten);
 				}
@@ -57020,12 +57642,12 @@
 						var list=Array.isArray(info.trigger.global)?info.trigger.global:[info.trigger.global];
 						num+=Math.min(3,list.length)/10;
 						for(var i of list){
-							if(i.indexOf('lose')==0||i.indexOf('use')==0) num+=0.3;
-							if(i.indexOf('cardsDiscard')==0) num+=0.4;
+							if(i.startsWith('lose')||i.startsWith('use')) num+=0.3;
+							if(i.startsWith('cardsDiscard')) num+=0.4;
 						}
 					}
 					if(info.trigger.target||(typeof info.trigger.player=='string'&&
-					(info.trigger.player.indexOf('damage')==0||info.trigger.player.indexOf('lose')==0))) num+=0.1;
+					(info.trigger.player.startsWith('damage')||info.trigger.player.startsWith('lose')))) num+=0.1;
 				}
 				if(info.ai){
 					if(info.ai.maixie||info.ai.maixie_hp||info.ai.maixie_defend){
@@ -57265,16 +57887,16 @@
 		parsedResult:function(item){
 			if(!item) return item;
 			if(typeof item=='string'){
-				if(item.indexOf('_noname_func:')==0){
+				if(item.startsWith('_noname_func:')){
 					return get.infoFuncOL(item);
 				}
-				else if(item.indexOf('_noname_card:')==0){
+				else if(item.startsWith('_noname_card:')){
 					return get.infoCardOL(item);
 				}
-				else if(item.indexOf('_noname_player:')==0){
+				else if(item.startsWith('_noname_player:')){
 					return get.infoPlayerOL(item);
 				}
-				else if(item.indexOf('_noname_event:')==0){
+				else if(item.startsWith('_noname_event:')){
 					return get.infoEventOL(item);
 				}
 				else if(item=='_noname_infinity'){
@@ -57315,94 +57937,54 @@
 			return num.toString();
 		},
 		rawName:function(str){
-			if(lib.translate[str+'_ab']) return lib.translate[str+'_ab'];
-			var str2=lib.translate[str];
-			if(!str2) return '';
-			if(str2.indexOf('SP')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('TW')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('OL')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('JSP')==0){
-				str2=str2.slice(3);
-			}
-			else if(str2.indexOf('☆SP')==0){
-				str2=str2.slice(3);
-			}
-			else if(str2.indexOf('手杀')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('新杀')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('界')==0&&lib.characterPack.refresh&&lib.characterPack.refresh[str]){
-				str2=str2.slice(1);
-			}
-			else if(str2.indexOf('旧')==0&&(lib.characterPack.old||lib.characterPack.mobile)&&(lib.characterPack.old[str]||lib.characterPack.mobile[str])){
-				str2=str2.slice(1);
-			}
-			else if(str2.indexOf('新')==0&&(str.indexOf('re_')==0||str.indexOf('new_')==0)){
-				str2=str2.slice(1);
-			}
-			return str2;
-		},
-		rawName2:function(str){
-			if(lib.translate[str+'_ab']) return lib.translate[str+'_ab'];
-			var str2=lib.translate[str];
-			if(!str2) return '';
-			if(str2.indexOf('SP')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('TW')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('OL')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('JSP')==0){
-				str2=str2.slice(3);
-			}
-			else if(str2.indexOf('☆SP')==0){
-				str2=str2.slice(3);
-			}
-			else if(str2.indexOf('手杀')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('新杀')==0){
-				str2=str2.slice(2);
-			}
-			return str2;
-		},
-		slimName:function(str){
-			var str2=lib.translate[str];
+			let str2=lib.translate[str];
 			if(lib.translate[str+'_ab']) str2=lib.translate[str+'_ab'];
 			if(!str2) return '';
-			if(str2.indexOf('SP')==0){
-				str2=str2.slice(2);
+			if(lib.translate[str+'_prefix']&&str2.startsWith(lib.translate[str+'_prefix'])){
+				return str2.slice(lib.translate[str+'_prefix'].length);
 			}
-			else if(str2.indexOf('TW')==0){
-				str2=str2.slice(2);
+			return str2;
+		},
+		//作用修改：只读前缀 不读_ab
+		rawName2:function(str){
+			let str2=lib.translate[str];
+			if(!str2) return '';
+			if(lib.translate[str+'_prefix']&&str2.startsWith(lib.translate[str+'_prefix'])){
+				return str2.slice(lib.translate[str+'_prefix'].length);
 			}
-			else if(str2.indexOf('OL')==0){
-				str2=str2.slice(2);
+			return str2;
+		},
+		slimNameHorizontal:str=>{
+			const slimName=lib.translate[`${str}_ab`]||lib.translate[str];
+			if(!slimName) return '';
+			const prefix=lib.translate[`${str}_prefix`];
+			if(prefix&&slimName.startsWith(prefix)){
+				//兼容版特化处理
+				if(lib.compatibleEdition) return `${get.prefixSpan(prefix,str)}<span>${slimName.slice(prefix.length)}　</span>`;
+				return `${get.prefixSpan(prefix,str)}<span>${slimName.slice(prefix.length)}</span>`;
 			}
-			else if(str2.indexOf('JSP')==0){
-				str2=str2.slice(3);
+			return slimName;
+		},
+		/**
+		 * @param {string} prefix
+		 * @param {string} name
+		 * @returns {string}
+		 */
+		prefixSpan:(prefix,name)=>{
+			let color='#ffffff',nature=false;
+			const map=lib.namePrefix.get(prefix),config=lib.config.buttoncharacter_prefix;
+			if(config=='off') return '';
+			if(map){
+				if(map.getSpan) return map.getSpan(prefix,name);
+				if(map.color) color=map.color;
+				if(map.nature) nature=map.nature;
+				if(map.showName) prefix=map.showName;
 			}
-			else if(str2.indexOf('☆SP')==0){
-				str2=str2.slice(3);
-			}
-			else if(str2.indexOf('手杀')==0){
-				str2=str2.slice(2);
-			}
-			else if(str2.indexOf('新杀')==0){
-				str2=str2.slice(2);
-			}
-			return get.verticalStr(str2,true);
+			if(config=='simple') return `<span>${prefix}</span>`
+			return `<span style="color: ${color};"${nature?(`data-nature="${nature}"`):''}>${prefix}</span>`
+		},
+		slimName:function(str){
+			return get.verticalStr(get.slimNameHorizontal(str),true);
 		},
 		time:function(){
 			if(lib.status.dateDelaying){
@@ -57435,7 +58017,7 @@
 					}
 					if(bool) return 'position';
 				}
-				if(obj.indexOf(lib.natureSeparator)!=-1&&obj.split(lib.natureSeparator).every(n=>lib.nature.has(n))) return 'natures';
+				if(obj.includes(lib.natureSeparator)&&obj.split(lib.natureSeparator).every(n=>lib.nature.has(n))) return 'natures';
 				if(lib.nature.has(obj)) return 'nature';
 			}
 			if(Array.isArray(obj)&&obj.length){
@@ -57510,7 +58092,7 @@
 		},
 		equiptype:function(card,player){
 			var subtype=get.subtype(card,player);
-			if(subtype.indexOf('equip')==0) return parseInt(subtype[5]);
+			if(subtype.startsWith('equip')) return parseInt(subtype[5]);
 			return 0;
 		},
 		name:function(card,player){
@@ -57808,7 +58390,7 @@
 		},
 		skillTranslation:function(str,player){
 			var str2;
-			if(str.indexOf('re')==0){
+			if(str.startsWith('re')){
 				str2=str.slice(2);
 				if(str2){
 					if(lib.translate[str]==lib.translate[str2]){
@@ -57818,7 +58400,7 @@
 					}
 				}
 			}
-			else if(str.indexOf('xin')==0){
+			else if(str.startsWith('xin')){
 				str2=str.slice(3);
 				if(str2){
 					if(lib.translate[str]==lib.translate[str2]){
@@ -58528,9 +59110,9 @@
 				}
 				let capt=get.translation(node.name);
 				const characterInfo=get.character(node.name),sex=node.sex||characterInfo[0];
-				if(sex&&lib.config.show_sex) capt+=`&nbsp;&nbsp;${sex=='none'?'无':get.translation(sex)}`;
-				const group=lib.group.includes(node.group)?node.group:characterInfo[1];
-				if(group&&lib.config.show_group) capt+=`&nbsp;&nbsp;${get.translation(group)}`;
+				if(sex&&sex!='unknown'&&lib.config.show_sex) capt+=`&nbsp;&nbsp;${sex=='none'?'无':get.translation(sex)}`;
+				const group=node.group;
+				if(group&&group!='unknown'&&lib.config.show_group) capt+=`&nbsp;&nbsp;${get.translation(group)}`;
 				uiintro.add(capt);
 
 				if(lib.characterTitle[node.name]){
@@ -58758,6 +59340,10 @@
 						if(cardinfo&&cardinfo.cardPrompt) uiintro.add('<div><div class="skill">'+es[i].outerHTML+'</div><div>'+cardinfo.cardPrompt(es[i])+'</div></div>');
 						else uiintro.add('<div><div class="skill">'+es[i].outerHTML+'</div><div>'+lib.translate[es[i].name+'_info']+'</div></div>');
 						uiintro.content.lastChild.querySelector('.skill>.card').style.transform='';
+
+						if(lib.translate[es[i].name+'_append']){
+							uiintro.add('<div class="text">'+lib.translate[es[i].name+'_append']+'</div>');
+						}
 					}
 					var js=node.getCards('j');
 					for(var i=0;i<js.length;i++){
@@ -58879,10 +59465,10 @@
 							var nameskin=(avatar2?node.name2:node.name1);
 							var nameskin2=nameskin;
 							var gzbool=false;
-							if(nameskin.indexOf('gz_shibing')==0){
+							if(nameskin.startsWith('gz_shibing')){
 								nameskin=nameskin.slice(3,11);
 							}
-							else if(nameskin.indexOf('gz_')==0){
+							else if(nameskin.startsWith('gz_')){
 								nameskin=nameskin.slice(3);
 								gzbool=true;
 							}
@@ -58943,10 +59529,10 @@
 							var nameskin=(avatar2?node.name2:node.name1);
 							var nameskin2=nameskin;
 							var gzbool=false;
-							if(nameskin.indexOf('gz_shibing')==0){
+							if(nameskin.startsWith('gz_shibing')){
 								nameskin=nameskin.slice(3,11);
 							}
-							else if(nameskin.indexOf('gz_')==0){
+							else if(nameskin.startsWith('gz_')){
 								nameskin=nameskin.slice(3);
 								gzbool=true;
 							}
@@ -58964,10 +59550,10 @@
 							setTimeout(function(){
 								var nameskin1=node.name1;
 								var nameskin2=node.name2;
-								if(nameskin1&&nameskin1.indexOf('gz_')==0){
+								if(nameskin1&&nameskin1.startsWith('gz_')){
 									nameskin1=nameskin1.slice(3);
 								}
-								if(nameskin2&&nameskin2.indexOf('gz_')==0){
+								if(nameskin2&&nameskin2.startsWith('gz_')){
 									nameskin2=nameskin2.slice(3);
 								}
 								if(!node.isUnseen(0)&&lib.skin[nameskin1]){
@@ -59001,7 +59587,7 @@
 				else if(info.name!==false){
 					uiintro.add(get.translation(node.skill));
 				}
-				if(typeof info.id=='string'&&info.id.indexOf('subplayer')==0&&
+				if(typeof info.id=='string'&&info.id.startsWith('subplayer')&&
 					player.isUnderControl(true)&&player.storage[info.id]&&!_status.video){
 					var storage=player.storage[info.id];
 					uiintro.addText('当前体力：'+storage.hp+'/'+storage.maxHp);
@@ -59018,7 +59604,7 @@
 					var stint=info.mark(uiintro,player.storage[node.skill],player);
 					if(stint){
 						var placetext=uiintro.add('<div class="text" style="display:inline">'+stint+'</div>');
-						if(stint.indexOf('<div class="skill"')!=0){
+						if(!stint.startsWith('<div class="skill"')){
 							uiintro._place_text=placetext;
 						}
 						// if(stint.length<=100){
@@ -59037,7 +59623,7 @@
 						}
 						else{
 							var placetext=uiintro.add('<div class="text" style="display:inline">'+stint+'</div>');
-							if(stint.indexOf('<div class="skill"')!=0){
+							if(!stint.startsWith('<div class="skill"')){
 								uiintro._place_text=placetext;
 							}
 						}
@@ -59209,13 +59795,13 @@
 						}
 						if(lib.card[name].cardPrompt){
 							var str=lib.card[name].cardPrompt(node.link||node),placetext=uiintro.add('<div class="text" style="display:inline">'+str+'</div>');
-							if(str.indexOf('<div class="skill"')!=0){
+							if(!str.startsWith('<div class="skill"')){
 								uiintro._place_text=placetext;
 							}
 						}
 						else if(lib.translate[name+'_info']){
 							var placetext=uiintro.add('<div class="text" style="display:inline">'+lib.translate[name+'_info']+'</div>');
-							if(lib.translate[name+'_info'].indexOf('<div class="skill"')!=0){
+							if(!lib.translate[name+'_info'].startsWith('<div class="skill"')){
 								uiintro._place_text=placetext;
 							}
 						}
@@ -59396,10 +59982,10 @@
 						var nameskin=node.link;
 						var nameskin2=nameskin;
 						var gzbool=false;
-						if(nameskin.indexOf('gz_shibing')==0){
+						if(nameskin.startsWith('gz_shibing')){
 							nameskin=nameskin.slice(3,11);
 						}
-						else if(nameskin.indexOf('gz_')==0){
+						else if(nameskin.startsWith('gz_')){
 							nameskin=nameskin.slice(3);
 							gzbool=true;
 						}
@@ -59462,7 +60048,7 @@
 			else if(node.classList.contains('equips')&&ui.arena.classList.contains('selecting')){
 				(function(){
 					uiintro.add('选择装备');
-					uiintro.addSmall(Array.from(node.childNodes),true);
+					uiintro.addSmall(Array.from(node.childNodes).filter(node=>!node.classList.contains('feichu')),true);
 					uiintro.clickintro=true;
 					ui.control.hide();
 					uiintro._onclose=function(){
@@ -59484,7 +60070,7 @@
 							else{
 								this.classList.remove('selected');
 							}
-							if(ui.confirm&&ui.confirm.str&&ui.confirm.str.indexOf('o')!=-1){
+							if(ui.confirm&&ui.confirm.str&&ui.confirm.str.includes('o')){
 								confirmbutton.classList.remove('disabled');
 							}
 							else{
@@ -59495,14 +60081,14 @@
 					var buttoncontainer=uiintro.add(ui.create.div());
 					buttoncontainer.style.display='block';
 					confirmbutton=ui.create.div('.menubutton.large.pointerdiv','确定',function(){
-						if(ui.confirm&&ui.confirm.str&&ui.confirm.str.indexOf('o')!=-1){
+						if(ui.confirm&&ui.confirm.str&&ui.confirm.str.includes('o')){
 							uiintro._clickintro();
 							ui.click.ok(ui.confirm.firstChild);
 						}
 					},buttoncontainer);
 					confirmbutton.style.position='relative';
 					setTimeout(function(){
-						if(ui.confirm&&ui.confirm.str&&ui.confirm.str.indexOf('o')!=-1){
+						if(ui.confirm&&ui.confirm.str&&ui.confirm.str.includes('o')){
 							confirmbutton.classList.remove('disabled');
 						}
 						else{
@@ -59573,7 +60159,7 @@
 			dialog.add('<div class="text center">已横置</div>');
 			var list=[];
 			for(var i=0;i<game.players.length;i++){
-				if(game.players[i].isLinked()&&game.players[i].name&&game.players[i].name.indexOf('unknown')!=0){
+				if(game.players[i].isLinked()&&game.players[i].name&&!game.players[i].name.startsWith('unknown')){
 					list.push(game.players[i]);
 				}
 			}
@@ -59689,7 +60275,7 @@
 		sgnAttitude:function(){
 			return get.sgn(get.attitude.apply(this,arguments));
 		},
-		useful:function(card,player){
+		useful_raw:function(card,player){
 			if(get.position(card)=='j') return -1;
 			if(get.position(card)=='e') return get.equipValue(card);
 			if(card._modUseful){
@@ -59698,7 +60284,13 @@
 			var i=0;
 			if(!player) player=_status.event.player;
 			if(player){
-				i=player.getCards('h',card.name).indexOf(card);
+				if(_status.event.useCache){
+					i = game.callFuncUseStepCache("player.getCardsInUseful",function(player,position,cardname){
+						return player.getCards(position,cardname);
+					},[player,'h',card.name]).indexOf(card);
+				}else{
+					i=player.getCards('h',card.name).indexOf(card);
+				}
 				if(i<0) i=0;
 			}
 			var aii=get.info(card).ai;
@@ -59717,6 +60309,12 @@
 			else result=useful[useful.length-1];
 			result=game.checkMod(player,card,result,'aiUseful',player);
 			return result;
+		},
+		useful:function(card,player){
+			if(_status.event.useCache){
+				return game.callFuncUseStepCache("get.useful_raw",get.useful_raw,[card,player]);
+			}
+			return get.useful_raw(card,player);
 		},
 		unuseful:function(card){
 			return -get.useful(card);
@@ -60484,5 +61082,11 @@
 		},
 		get:get
 	};
-	lib.init.init();
+	if('__core-js_shared__' in window) lib.init.init();
+	else{
+		const coreJSBundle=document.createElement('script');
+		coreJSBundle.onerror=coreJSBundle.onload=lib.init.init;
+		coreJSBundle.src=`${lib.assetURL}game/core-js-bundle.js`;
+		document.head.appendChild(coreJSBundle);
+	}
 }
