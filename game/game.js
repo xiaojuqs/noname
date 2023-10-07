@@ -25594,7 +25594,7 @@
 						node.classList.add('damageadded');
 					}
 					node.innerHTML=str;
-					if(window.decadeUI) node.dataset.text = str;
+					if(window.decadeUI) node.dataset.text = node.innerText;
 					node.dataset.nature=nature||'soil';
 					if(window.decadeUI) node.style.animation = 'open-fade-in 0.6s';
 				},
@@ -29515,26 +29515,6 @@
 						}
 						name+='杀';
 					}
-
-					if(window.decadeUI){
-						var cardsuit=get.translation(card[0]);
-						var fileName = card[2];
-						this.dataset.suit = card[0];
-						this.$suitnum.$num.textContent = cardnum;
-						this.$suitnum.$suit.textContent = cardsuit;
-
-						if (card[3]) {
-							const natures = get.natureList(card[3]).sort(lib.sort.nature);
-							this.node.image.classList.add(...natures.filter(nature => nature != 'stab'));
-							fileName += natures.reduce((suffix, nature) => `${suffix}_${nature}`, '');
-						}
-
-						this.$name.innerText = name;
-						this.$vertname.innerText = name;
-						this.$equip.$suitnum.textContent = cardsuit + cardnum;
-						this.$equip.$name.textContent = ' ' + name;
-					}
-
 					this.node.name.innerHTML=name;
 					if(name.length>=5){
 						this.node.name.classList.add('long');
@@ -29612,11 +29592,7 @@
 							}
 						}
 						if(tags.length){
-							if(window.decadeUI){
-								var tagstr='';
-							} else {
-								var tagstr=' <span class="cardtag">';
-							}
+							var tagstr=' <span class="cardtag">';
 							for(var i=0;i<tags.length;i++){
 								var tag=tags[i];
 								if(!_status.cardtag[tag]){
@@ -29626,42 +29602,10 @@
 								tagstr+=lib.translate[tag+'_tag'];
 								//if(i<tags.length-1) tagstr+=' ';
 							}
-							if(window.decadeUI){
-								this.$range.textContent = tagstr;
-								this.$range.classList.add('card-tag');
-							} else {
-								tagstr+='</span>';
-								this.node.range.innerHTML+=tagstr;
-							}
+							tagstr+='</span>';
+							this.node.range.innerHTML+=tagstr;
 						}
 					}
-
-					if(window.decadeUI){
-						const imgFormat = decadeUI.config.cardPrettify;
-						if (imgFormat != 'off' && !this.classList.contains('infohidden')) {
-							const decadeCardImage = new Image(), decadeExtCardImage = lib.decade_extCardImage || {};
-							var not_load_card_names=['sha_stab','sha_kami'];
-							new Promise((resolve, reject) => {
-								decadeCardImage.onerror = reject;
-								decadeCardImage.onload = resolve;
-								if(!not_load_card_names.contains(fileName)){
-									decadeCardImage.src = decadeExtCardImage[fileName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${fileName}.${imgFormat}`;
-								}
-							}).catch(event => new Promise((resolve, reject) => {
-								const cardName = card[2];
-								if (cardName == fileName) reject(event);
-								decadeCardImage.onerror = reject;
-								decadeCardImage.onload = resolve;
-								decadeCardImage.src = decadeExtCardImage[cardName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${cardName}.${imgFormat}`;
-							})).then(event => {
-								this.classList.add('decade-card');
-								this.style.background = `url('${event.target.src}')`;
-								if (this.node.avatar) this.node.avatar.remove();
-								if (this.node.framebg) this.node.framebg.remove();
-							});
-						}
-					}
-
 					return this;
 				},
 				updateTransform:function(bool,delay){
@@ -32476,11 +32420,6 @@
 				},
 				content:function(){
 					game.broadcastAll(function(id){
-						if (window.decadeUI){
-							ui.todiscard = [];
-							ui.clear();
-							return;
-						}
 						var todiscard=ui.todiscard[id];
 						delete ui.todiscard[id];
 						if(todiscard){
