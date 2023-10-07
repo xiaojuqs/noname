@@ -200,6 +200,10 @@
 	pointer-events: none
 }
 
+.card>.tempname {
+	font-family: shousha;
+}
+
 .card>.temp-name[data-nature='fire'] {
 	color: red;
 	text-shadow: 0 0 4px #FFF, 0 -5px 4px #ff3, 2px -10px 6px #fd3, -2px -15px 10px #f80, 2px -25px 20px #f20;
@@ -233,4 +237,11 @@
 .card.fullimage>.temp-name {
 	background-color: rgba(0, 0, 0, 0.8);
 	border-color: white;
+}
+
+.handcards.nsanruo>.card.decade-card[data-card-type='trick']:not(*[data-card-multitarget='1']),
+.handcards.nsanruo>.card.decade-card[data-card-name='sha'] {
+	background-image: url('../../image/character/ns_liuzhang.jpg') !important;
+	background-position: center;
+	background-size: cover !important;
 }
