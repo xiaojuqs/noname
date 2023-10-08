@@ -20362,7 +20362,10 @@
 					if(get.type(card,false)=='equip'){
 						var target_equip_cards=target.getEquips(get.equiptype(card));
 						for(var target_equip_card of target_equip_cards){
-							if(target_equip_card&&get.equipValue(target_equip_card)>0&&get.equipValue(card)<=0) return -1+get.equipValue(card);
+							if(target_equip_card){
+								if(get.equipValue(target_equip_card)<=0&&get.equipValue(card)<=0) return 0;
+								if(get.equipValue(target_equip_card)>0&&get.equipValue(card)<=0) return -1+get.equipValue(card);
+							}
 						}
 						return get.effect(target,card,target,target);
 					}

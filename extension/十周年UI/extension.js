@@ -4138,8 +4138,6 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							this.$equip.$suitnum.innerHTML = `${get.translation(card[0])}${cardnum}`;
 							this.$equip.$name.innerHTML = ` ${name}`;
 						},
-						/\s*this\s*\.\s*node\s*\.\s*range\s*\.\s*innerHTML\s*=\s*''\s*;[\s\S]*break\s*;\s*}/,
-						'',
 						' <span class="cardtag">',
 						'',
 						/\s*tagstr\s*\+=\s*'<\/span>'\s*;\s*this\s*\.\s*node\s*\.\s*range\s*\.\s*innerHTML\s*\+=\s*tagstr\s*;/,
