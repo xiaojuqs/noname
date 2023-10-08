@@ -584,7 +584,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             player.logSkill('olddcqingshi');
             game.log(player, '选择了', '#y' + result.control);
             var index = ['选项一', '选项二', '选项三'].indexOf(result.control) + 1;
-            player.storage.dcqingshi = index;
+            player.storage.olddcqingshi = index;
             var next = game.createEvent('olddcqingshi_after');
             next.player = player;
             next.card = trigger.card;
@@ -603,7 +603,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             var target = result.targets[0];
             player.line(target);
             player.addTempSkill('olddcqingshi_ex');
-            if (!player.storage.dcqingshi_ex) player.storage.olddcqingshi_ex = [];
+            if (!player.storage.olddcqingshi_ex) player.storage.olddcqingshi_ex = [];
             player.storage.olddcqingshi_ex.push([target, card]);
           }
         },
@@ -720,12 +720,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             },
             mod: {
               ignoredHandcard: function (card, player) {
-                if (card.hasGaintag('dczhizhe')) {
+                if (card.hasGaintag('olddczhizhe')) {
                   return true;
                 }
               },
               cardDiscardable: function (card, player, name) {
-                if (name == 'phaseDiscard' && card.hasGaintag('dczhizhe')) {
+                if (name == 'phaseDiscard' && card.hasGaintag('olddczhizhe')) {
                   return false;
                 }
               },
