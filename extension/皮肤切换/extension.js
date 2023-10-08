@@ -113,9 +113,13 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                       for (var i = 0; i < info1[3].length; i++) {
                           this.removeSkill(info1[3][i]);
                       }
-                      for (var i = 0; i < info2[3].length; i++) {
-                          this.addSkill(info2[3][i]);
+                      // taffy: 主公技修复
+                      for(var i=0;i<info2[3].length;i++){
+                        var info=get.info(info2[3][i]);
+                        if(info&&info.zhuSkill&&!this.isZhu2()) continue;
+                        this.addSkill(info2[3][i]);
                       }
+                      /* taffy分界线 */
                       if (Array.isArray(maxHp)) {
                           this.maxHp = maxHp[1];
                           this.hp = maxHp[0];
@@ -1604,12 +1608,19 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   this.maxHp=1;
                                   this.node.hp.hide();
                               }
+                              // taffy: 主公技修复
                               if(skill!=false){
-                                  for(var i=0;i<skills.length;i++){
-                                      this.addSkill(skills[i]);
-                                  }
-                                  this.checkConflict();
+                                skills=skills.filter(skill=>{
+                                  var info=get.info(skill);
+                                  if(info&&info.zhuSkill&&!this.isZhu2()) return false;
+                                  return true;
+                                });
+                                for(var i=0;i<skills.length;i++){
+                                  this.addSkill(skills[i]);
+                                }
+                                this.checkConflict();
                               }
+                              /* taffy分界线 */
                               lib.group.add(this.group);
                               if(this.inits){
                                   for(var i=0;i<lib.element.player.inits.length;i++){
