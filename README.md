@@ -2,7 +2,7 @@
 ## 简介
 
 - 本仓库为基于[adeFuLoDgu](https://github.com/adeFuLoDgu)的h5无名杀仓库自改的Web端无名杀。
-- 或者[adeFuLoDgu仓库](https://github.com/adeFuLoDgu/noname)有更新会基本保持同步更新
+- [本体仓库](https://github.com/libccy/noname)或者[adeFuLoDgu仓库](https://github.com/adeFuLoDgu/noname)有更新会基本保持同步更新
 - 除此之外自己也会随缘更一些好玩的东西~
 
 ## 项目本体版本
