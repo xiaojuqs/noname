@@ -273,7 +273,8 @@ window.config={
 		"guohuanghou",
 		"jsp_huangyueying",
 		"old_xiaoqiao",
-		"old_gaoshun"
+		"old_gaoshun",
+		"jsp_liubei"
 	],
 	connect_identity_banned:[
 		"caocao",
@@ -394,7 +395,8 @@ window.config={
 		"guohuanghou",
 		"jsp_huangyueying",
 		"old_xiaoqiao",
-		"old_gaoshun"
+		"old_gaoshun",
+		"jsp_liubei"
 	],
 
 	mode:'identity',

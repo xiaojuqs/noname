@@ -561,15 +561,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				ai:{
 					order:9.5,
 					equipValue:function(card,player){
-						if(player.getEquips(2).contains(card)){
-							if(player.sex!='male') return 0;
-							var num=player.countCards('he',function(cardx){
-								return cardx!=card;
-							});
-							if(num==0) return 0;
-							if(player.countCards('e',function(cardx){return cardx!=card&&get.equipValue(cardx)<=0;})>0) return 0;
-							return 4/num;
-						}
+						if(player.getEquips(2).contains(card)) return 0;
 						return 1;
 					},
 					value:function(){
