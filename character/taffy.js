@@ -19,12 +19,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       ],
       oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
       oldtw_zhangmancheng: ['male', 'qun', 4, ['oldtwfengji', 'oldtwyiju', 'oldtwbudao']],
+      shenyuji: ['male', 'shen', 3, ['shenguhuo']]
     },
     characterSort: {
       taffy: {
         taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng'],
         taffy_shi: ['shiguanning', 'shixushao'],
-        taffy_diy: ["shenxushao", 'spshenxushao'],
+        taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji'],
         taffy_tang: ['acetaffy', 'minitaffy'],
       }
     },
@@ -2545,6 +2546,380 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           if (result.bool) target.give(result.cards, player);
         },
       },
+      // 神于吉
+      shenguhuo: {
+        audio: 'old_guhuo',
+        group: ['shenguhuo_guess'],
+        enable: ['chooseToUse', 'chooseToRespond'],
+        hiddenCard: function (player, name) {
+          return (lib.inpile.contains(name) && player.countCards('hs') > 0);
+        },
+        filter: function (event, player) {
+          if (!player.countCards('hs')) return false;
+          for (var i of lib.inpile) {
+            var type = get.type2(i);
+            if ((type == 'basic' || type == 'trick') && event.filterCard({
+                name: i
+              }, player, event)) return true;
+            if (i == 'sha') {
+              for (var j of lib.inpile_nature) {
+                if (event.filterCard({
+                    name: i,
+                    nature: j
+                  }, player, event)) return true;
+              }
+            }
+          }
+          return false;
+        },
+        chooseButton: {
+          dialog: function (event, player) {
+            var list = [];
+            for (var i of lib.inpile) {
+              if (event.type != 'phase')
+                if (!event.filterCard({
+                    name: i
+                  }, player, event)) continue;
+              var type = get.type2(i);
+              if (type == 'basic' || type == 'trick') list.push([type, '', i]);
+              if (i == 'sha') {
+                if (event.type != 'phase')
+                  if (!event.filterCard({
+                      name: i,
+                      nature: j
+                    }, player, event)) continue;
+                for (var j of lib.inpile_nature) list.push(['基本', '', 'sha', j]);
+              }
+            }
+            return ui.create.dialog('蛊惑', [list, 'vcard']);
+          },
+          filter: function (button, player) {
+            var evt = _status.event.getParent();
+            return evt.filterCard({
+              name: button.link[2],
+              nature: button.link[3]
+            }, player, evt);
+          },
+          check: function (button) {
+            var player = _status.event.player;
+            var order = Math.max(0, get.order(card) + 1);
+            var enemyNum = game.countPlayer(function (current) {
+              return current != player && (get.realAttitude || get.attitude)(current, player) < 0 && current.hp > 0;
+            });
+            var card = {
+              name: button.link[2],
+              nature: button.link[3]
+            };
+            if (player.isDying() && !player.hasCard(function (cardx) {
+                // if(get.suit(cardx)!='heart') return false;
+                var mod2 = game.checkMod(cardx, player, 'unchanged', 'cardEnabled2', player);
+                if (mod2 != 'unchanged') return mod2;
+                var mod = game.checkMod(cardx, player, player, 'unchanged', 'cardSavable', player);
+                if (mod != 'unchanged') return mod;
+                var savable = get.info(cardx).savable;
+                if (typeof savable == 'function') savable = savable(card, player, player);
+                return savable;
+              }, 'hs')) {
+              if (!player.getStorage('shenguhuo_cheated').contains(card.name + card.nature) && Math.random() < 0.4) return 1;
+              return 0;
+            }
+            var val = _status.event.getParent().type == 'phase' ? player.getUseValue(card) : 1;
+            if (player.getStorage('shenguhuo_cheated').contains(card.name + card.nature) && !player.hasCard(function (cardx) {
+                if (card.name == cardx.name) {
+                  if (card.name != 'sha') return true;
+                  return get.is.sameNature(card, cardx);
+                }
+                return false;
+              }, 'hs') && Math.random() < 0.7) return 0;
+            if (val <= 0) return 0;
+            if (enemyNum) {
+              if (!player.hasCard(function (cardx) {
+                  if (card.name == cardx.name) {
+                    if (card.name != 'sha') return true;
+                    return get.is.sameNature(card, cardx);
+                  }
+                  return false;
+                }, 'hs')) {
+                if (get.value(card, player, 'raw') < 6) return Math.sqrt(val) * (0.25 + Math.random() / 1.5);
+                if (enemyNum <= 2) return Math.sqrt(val) / 1.5 + order * 10;
+                return 0;
+              }
+              return 3 * val + order * 10;
+            }
+            return val + order * 10;
+          },
+          backup: function (links, player) {
+            return {
+              filterCard: function (card, player, target) {
+                var result = true;
+                var suit = card.suit,
+                  number = card.number;
+                card.suit = 'none';
+                card.number = null;
+                var mod = game.checkMod(card, player, 'unchanged', 'cardEnabled2', player);
+                if (mod != 'unchanged') result = mod;
+                card.suit = suit;
+                card.number = number;
+                return result;
+              },
+              selectCard: 1,
+              position: 'hs',
+              ignoreMod: true,
+              aiUse: Math.random(),
+              viewAs: {
+                name: links[0][2],
+                nature: links[0][3],
+                suit: 'none',
+                number: null
+              },
+              ai1: function (card) {
+                var player = _status.event.player;
+                var enemyNum = game.countPlayer(function (current) {
+                  return current != player && (get.realAttitude || get.attitude)(current, player) < 0 && current.hp > 0;
+                });
+                var cardx = lib.skill.shenguhuo_backup.viewAs;
+                if (enemyNum) {
+                  if (card.name == cardx.name && (card.name != 'sha' || get.is.sameNature(card, cardx)) || player.getStorage('shenguhuo_cheated').contains(card.name + card.nature)) return 8 + Math.random() * 3;
+                  else if (lib.skill.shenguhuo_backup.aiUse < 0.5 && !player.isDying()) return 0;
+                }
+                return get.value(cardx) - get.value(card);
+              },
+              precontent: function () {
+                player.logSkill('shenguhuo');
+                var card = event.result.cards[0];
+                event.result.card.suit = get.suit(card);
+                event.result.card.number = get.number(card);
+              },
+            }
+          },
+          prompt: function (links, player) {
+            return '将一张手牌当做' + (links[0][3] ? get.translation(links[0][3]) : '') + '【' + get.translation(links[0][2]) + '】' + (_status.event.name == 'chooseToRespond' ? '打出' : '使用');
+          },
+        },
+        ai: {
+          save: true,
+          respondSha: true,
+          respondShan: true,
+          fireAttack: true,
+          skillTagFilter: function (player) {
+            if (!player.countCards('hs')) return false;
+          },
+          threaten: 1.2,
+          order: 10,
+          result: {
+            player: 1
+          },
+        },
+        subSkill: {
+          cheated: {
+            trigger: {
+              player: 'gainAfter',
+              global: 'loseAsyncAfter',
+            },
+            charlotte: true,
+            forced: true,
+            silent: true,
+            popup: false,
+            firstDo: true,
+            onremove: true,
+            filter: function (event, player) {
+              if (event.getParent().name == 'draw') return true;
+              var cards = event.getg(player);
+              if (!cards.length) return false;
+              return game.hasPlayer(current => {
+                if (current == player) return false;
+                var evt = event.getl(current);
+                if (evt && evt.cards && evt.cards.length) return true;
+                return false;
+              });
+            },
+            content: function () {
+              player.removeSkill('shenguhuo_cheated');
+            }
+          }
+        }
+      },
+      shenguhuo_guess: {
+        audio: 'old_guhuo',
+        trigger: {
+          player: ['useCardBefore', 'respondBefore'],
+        },
+        forced: true,
+        silent: true,
+        popup: false,
+        firstDo: true,
+        charlotte: true,
+        filter: function (event, player) {
+          return event.skill && event.skill.indexOf('shenguhuo_') == 0;
+        },
+        content: function () {
+          'step 0'
+          event.fake = false;
+          event.goon = true;
+          event.betrayers = [];
+          event.shenguhuoShouldChoose = false;
+          var card = trigger.cards[0];
+          if (card.name != trigger.card.name || (card.name == 'sha' && get.is.differentNature(trigger.card, card))) event.fake = true;
+          if (event.fake) {
+            player.addSkill('shenguhuo_cheated');
+            player.markAuto('shenguhuo_cheated', [trigger.card.name + trigger.card.nature]);
+          }
+          player.popup(trigger.card.name, 'metal');
+          player.lose(card, ui.ordering).relatedEvent = trigger;
+          trigger.throw = false;
+          trigger.skill = 'shenguhuo_backup';
+          game.log(player, '声明', trigger.targets && trigger.targets.length ? '对' : '', trigger.targets || '', trigger.name == 'useCard' ? '使用' : '打出', trigger.card);
+          event.prompt = get.translation(player) + '声明' + (trigger.targets && trigger.targets.length ? '对' + get.translation(trigger.targets) : '') +
+            (trigger.name == 'useCard' ? '使用' : '打出') + (get.translation(trigger.card.nature) || '') + get.translation(trigger.card.name) + '，是否质疑？';
+          event.targets = game.filterPlayer(i => i != player && i.hp > 0).sortBySeat(_status.currentPhase);
+
+          game.broadcastAll(function (card, player) {
+            _status.shenguhuoNode = card.copy('thrown');
+            if (lib.config.cardback_style != 'default') {
+              _status.shenguhuoNode.style.transitionProperty = 'none';
+              ui.refresh(_status.shenguhuoNode);
+              _status.shenguhuoNode.classList.add('infohidden');
+              ui.refresh(_status.shenguhuoNode);
+              _status.shenguhuoNode.style.transitionProperty = '';
+            } else {
+              _status.shenguhuoNode.classList.add('infohidden');
+            }
+            _status.shenguhuoNode.style.transform = 'perspective(600px) rotateY(180deg) translateX(0)';
+            player.$throwordered2(_status.shenguhuoNode);
+          }, trigger.cards[0], player);
+          event.onEnd01 = function () {
+            _status.shenguhuoNode.removeEventListener('webkitTransitionEnd', _status.event.onEnd01);
+            setTimeout(function () {
+              _status.shenguhuoNode.style.transition = 'all ease-in 0.3s';
+              _status.shenguhuoNode.style.transform = 'perspective(600px) rotateY(270deg)';
+              var onEnd = function () {
+                _status.shenguhuoNode.classList.remove('infohidden');
+                _status.shenguhuoNode.style.transition = 'all 0s';
+                ui.refresh(_status.shenguhuoNode);
+                _status.shenguhuoNode.style.transform = 'perspective(600px) rotateY(-90deg)';
+                ui.refresh(_status.shenguhuoNode);
+                _status.shenguhuoNode.style.transition = '';
+                ui.refresh(_status.shenguhuoNode);
+                _status.shenguhuoNode.style.transform = '';
+                _status.shenguhuoNode.removeEventListener('webkitTransitionEnd', onEnd);
+              }
+              _status.shenguhuoNode.listenTransition(onEnd);
+            }, 300);
+          };
+          if (!event.targets.length) event.goto(3);
+          'step 1'
+          event.target = event.targets.shift();
+          event.target.chooseButton([event.prompt, [
+            ['reguhuo_ally', 'reguhuo_betray'], 'vcard'
+          ]], true).set('ai', function (button) {
+            var player = _status.event.player;
+            var evt = _status.event.getParent('shenguhuo_guess'),
+              evtx = evt.getTrigger();
+            if (!evt) return Math.random();
+            var card = {
+              name: evtx.card.name,
+              nature: evtx.card.nature,
+              isCard: true
+            };
+            var ally = button.link[2] == 'reguhuo_ally';
+            if (ally && (player.hp <= 1 || get.attitude(player, evt.player) >= 0)) return 1.1;
+            if (!ally && get.effect(player, {
+                name: 'losehp'
+              }, player, player) >= 0) return 10;
+            if (!ally && get.attitude(player, evt.player) < 0) {
+              if (evtx.name == 'useCard') {
+                var eff = 0;
+                var targetsx = evtx.targets || [];
+                for (var target of targetsx) {
+                  var isMe = target == evt.player;
+                  eff += get.effect(target, card, evt.player, player) / (isMe ? 1.35 : 1);
+                }
+                eff /= (1.5 * targetsx.length) || 1;
+                if (eff > 0) return 0;
+                if (eff < -7) return (Math.random() + Math.pow(-(eff + 7) / 8, 2)) / Math.sqrt(evt.betrayers.length + 1) + (player.hp - 3) * 0.05 + Math.max(0, 4 - evt.player.hp) * 0.05 - (player.hp == 1 && !get.tag(card, 'damage') ? 0.2 : 0);
+                return Math.pow((get.value(card, evt.player, 'raw') - 4) / (eff == 0 ? 3.1 : 10), 2) / Math.sqrt(evt.betrayers.length || 1) + (player.hp - 3) * 0.05 + Math.max(0, 4 - evt.player.hp) * 0.05;
+              }
+              if (evt.player.getStorage('shenguhuo_cheated').contains(card.name + card.nature)) return Math.random() + 0.3;
+            }
+            return Math.random();
+          });
+          'step 2'
+          if (result.links[0][2] == 'reguhuo_betray') {
+            target.addExpose(0.2);
+            game.log(target, '#y质疑');
+            target.popup('质疑！', 'fire');
+            event.betrayers.push(target);
+          } else {
+            game.log(target, '#g不质疑');
+            target.popup('不质疑', 'wood');
+          }
+          if (targets.length) event.goto(1);
+          'step 3'
+          game.delayx();
+          game.broadcastAll(function (onEnd) {
+            _status.event.onEnd01 = onEnd;
+            if (_status.shenguhuoNode) _status.shenguhuoNode.listenTransition(onEnd, 300);
+          }, event.onEnd01);
+          'step 4'
+          game.delay(2);
+          'step 5'
+          if (!event.betrayers.length) {
+            event.goto(7);
+          }
+          'step 6'
+          if (event.fake) {
+            for (var target of event.betrayers) {
+              target.popup('质疑正确', 'wood');
+            }
+            event.goon = false;
+          } else {
+            for (var target of event.betrayers) {
+              target.popup('质疑错误', 'fire');
+              target.loseHp();
+            }
+            // if(get.suit(trigger.cards[0],player)!='heart'){
+            // 	event.goon=false;
+            // }
+            event.shenguhuoShouldChoose = true;
+          }
+          'step 7'
+          if (!event.goon) {
+            game.log(player, '声明的', trigger.card, '作废了');
+            trigger.cancel();
+            trigger.getParent().goto(0);
+            trigger.line = false;
+          }
+          'step 8'
+          game.delay();
+          'step 9'
+          if (!event.goon) {
+            if (event.fake) {
+              const drawer = event.betrayers;
+              drawer.push(player);
+              game.asyncDraw(event.betrayers);
+            }
+            game.broadcastAll(ui.clear);
+            event.shenguhuoShouldChoose = false;
+          }
+          'step 10'
+          if (event.shenguhuoShouldChoose) {
+            player.chooseBool('蛊惑：是否作废此牌，然后摸一张牌？').ai = () => {
+              return 0;
+            }
+          }
+          'step 11'
+          if (result.bool) {
+            if (event.shenguhuoShouldChoose) {
+              game.log(player, '声明的', trigger.card, '作废了');
+              trigger.cancel();
+              trigger.getParent().goto(0);
+              trigger.line = false;
+              player.draw();
+              event.shenguhuoShouldChoose = false;
+            }
+          }
+        },
+      },
     },
     card: {},
     characterIntro: {
@@ -2554,6 +2929,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       minitaffy: '呃呃，唐完了喵。',
       shixushao: '许劭（shào）（150年—195年），字子将。汝南平舆（今河南平舆县射桥镇）人。东汉末年著名人物评论家。据说他每月都要对当时人物进行一次品评，人称为“月旦评”。曾任汝南郡功曹，后南渡投靠扬州刺史刘繇。刘繇被孙策击败后，许劭随其逃往豫章郡，并在豫章去世。',
       spshenxushao: '许劭（shào）（150年—195年），字子将。汝南平舆（今河南平舆县射桥镇）人。东汉末年著名人物评论家。据说他每月都要对当时人物进行一次品评，人称为“月旦评”。曾任汝南郡功曹，后南渡投靠扬州刺史刘繇。刘繇被孙策击败后，许劭随其逃往豫章郡，并在豫章去世。',
+      shenyuji: '自号太平道人，琅琊人，在吴郡、会稽一带为百姓治病，甚得人心。孙策怒之，以惑人心为由斩之，后策常受吉咒而亡。',
     },
     characterTitle: {
       shenxushao: '#gViridian',
@@ -2565,6 +2941,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       spshenxushao: '#gViridian',
       oldtw_niufudongxie: '#gViridian',
       oldtw_zhangmancheng: '#gViridian',
+      shenyuji: '#gViridian',
     },
     perfectPair: {},
     characterFilter: {},
@@ -2589,6 +2966,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shenxushao: '评世雕龙',
       shenpingjian: '评荐',
       shenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2X+3张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多X+1个技能（X至少为0）。②出牌阶段限一次，你可以选择一项：⒈选择失去Y个技能并令系统随机检索出2Y+3张武将牌，然后你可以选择其中至多Y张武将牌并获得其所有技能（Y至少为1）。⒉令系统随机检索出三张武将牌。然后你可以选择获得其中一个技能。',
+      shenpingjian_append: '<span style="font-family: yuanli">玩这么阴间的武将，你良心不会痛吗？</span>',
       shenpingjian_use: '评荐',
       oldwu_zhugeliang: '旧武诸葛亮',
       oldwu_zhugeliang_prefix: '旧武',
@@ -2655,6 +3033,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtwyiju_info: '非锁定技。若你的武将牌上有“示”，则：①你使用【杀】的次数上限和攻击范围的基数改为你的体力值。②当你受到伤害时，你移去“示”，且令此伤害+1。',
       oldtwbudao: '布道',
       oldtwbudao_info: '限定技。准备阶段，你可减1点体力上限，回复1点体力并选择获得一个〖布道〗技能池里的技能（三选一）。然后你可以令一名其他角色也获得此技能并交给你一张牌。',
+      shenyuji: '神于吉',
+      shenyuji_prefix: '神',
+      shenguhuo: '蛊惑',
+      shenguhuo_guess: "蛊惑",
+      shenguhuo_info: "你可以扣置一张手牌当作一张基本牌或锦囊牌使用或打出。其他角色同时选择是否质疑。然后，你展示此牌。若有质疑的角色：若此牌为假，则此牌作废，且你与所有质疑者各摸一张牌；为真，则所有质疑角色失去1点体力，然后你可以令此牌作废并摸一张牌。",
+      shenguhuo_append: '<span style="font-family: yuanli">拥有洞察人心的直觉，就有改变乱世的力量！</span>',
 
       taffy_old: "圣经·塔约",
       taffy_shi: "江山如故·塔",

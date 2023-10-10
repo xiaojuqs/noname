@@ -1754,6 +1754,7 @@ window.noname_character_rank={
       'spshenxushao',
       'oldtw_niufudongxie',
       'oldtw_zhangmancheng',
+      'shenyuji',
 		],
 		epic:[
 			'ol_pengyang',

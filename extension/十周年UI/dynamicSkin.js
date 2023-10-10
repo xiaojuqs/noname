@@ -1114,19 +1114,48 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
       },
     },
     lingtong: { //凌统
-      长风破浪: {
-        name: '凌统/长风破浪/XingXiang',
-        x: [0, 0],
-        y: [0, 0],
-        scale: 0.5,
-        angle: 12,
+      战场荣耀: {
+        name: '凌统/战场荣耀/daiji2',
+        play2: 'play2',
+        shan: 'play3',
+        x: [0, 0.5],
+        y: [0, 0.5],
+        angle: 0,
+        scale: 0.7,
         //speed: 1,
-        //action: 'DaiJi',
+        shizhounian: true,
+        chuchang: {
+          name: '凌统/战场荣耀/chuchang',
+          action: 'play',
+          scale: 0.6,
+        },
+        gongji: {
+          name: '凌统/战场荣耀/chuchang2',
+          action: 'gongji',
+          scale: 0.7,
+        },
+        teshu: {
+          name: '凌统/战场荣耀/chuchang2',
+          action: 'jineng',
+          scale: 0.7,
+        },
         beijing: {
-          name: '凌统/长风破浪/BeiJing',
+          name: '凌统/战场荣耀/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
           scale: 0.3,
-          x: [0, 0.4],
-          y: [0, 0.5]
+        },
+        zhishixian: {
+          name: '凌统/战场荣耀/shouji2',
+          scale: 0.5,
+          speed: 0.9,
+          delay: 0.7,
+          effect: {
+            name: '凌统/战场荣耀/shouji',
+            scale: 0.5,
+            speed: 0.8,
+            delay: 0.7,
+          },
         },
       },
     },
@@ -3130,6 +3159,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
       },
     },
+    yuji: { //于吉
+      虚拟天团: {
+        name: '于吉/虚拟天团/daiji2',
+        x: [0, 0.45],
+        y: [0, 0.5],
+        scale: 0.75,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '于吉/虚拟天团/chuchang',
+          scale: 0.7,
+          action: 'play',
+        },
+        gongji: {
+          name: '于吉/虚拟天团/chuchang',
+          scale: 0.9,
+          action: 'play',
+        },
+        beijing: {
+          name: '于吉/虚拟天团/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.4,
+        },
+      },
+    },
     zhangchunhua: { //张春华
       绰约多姿: {
         name: '张春华/绰约多姿/daiji2',
@@ -3799,6 +3855,14 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     //荀彧
     ol_xunyu: decadeUI.dynamicSkin.xunyu,
     re_xunyu: decadeUI.dynamicSkin.xunyu,
+
+    //于吉
+    xin_yuji: decadeUI.dynamicSkin.yuji,
+    re_yuji: decadeUI.dynamicSkin.yuji,
+    diy_yuji: decadeUI.dynamicSkin.yuji,
+    ns_yuji: decadeUI.dynamicSkin.yuji,
+    ns_yujisp: decadeUI.dynamicSkin.yuji,
+    shenyuji: decadeUI.dynamicSkin.yuji,
 
     //张春华
     re_zhangchunhua: decadeUI.dynamicSkin.zhangchunhua,
