@@ -4123,6 +4123,32 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										attributeOldValue: true
 									});
 								}
+								if(!window.fs&&typeof resolveLocalFileSystemURL!='function'){
+									const imgFormat = 'webp';
+									if (!this.classList.contains('infohidden')) {
+										const decadeCardImage = new Image(), decadeExtCardImage = lib.decade_extCardImage || {};
+										new Promise((resolve, reject) => {
+											decadeCardImage.onerror = reject;
+											decadeCardImage.onload = resolve;
+											if(!not_load_card_names.contains(fileName)){
+												decadeCardImage.src = decadeExtCardImage[fileName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${fileName}.${imgFormat}`;
+											}
+										}).catch(event => new Promise((resolve, reject) => {
+											const cardName = card[2];
+											if (cardName == fileName) reject(event);
+											decadeCardImage.onerror = reject;
+											decadeCardImage.onload = resolve;
+											decadeCardImage.src = decadeExtCardImage[cardName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${cardName}.${imgFormat}`;
+										})).then(event => {
+											this.classList.add('decade-card');
+											this.style.background = `url('${event.target.src}')`;
+											if (this.node.avatar) this.node.avatar.remove();
+											if (this.node.framebg) this.node.framebg.remove();
+										}).catch(err => {
+											//console.log('error: ', err);
+										});
+									}
+								}
 							}
 						}
 					);
