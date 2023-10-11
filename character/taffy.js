@@ -89,6 +89,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             var list = [];
             var skills = [];
             var map = [];
+            var evt = event.getParent(2);
             var allList = _status.characterlist.slice(0);
             game.countPlayer(function (current) {
               if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
@@ -138,6 +139,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   }
                   if (info.trigger.player) {
                     if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
+                      if (info.filter) {
+                        try {
+                          var bool = info.filter(evt, player);
+                          if (!bool) continue;
+                        } catch (e) {
+                          continue;
+                        }
+                      }
                       list.add(name);
                       if (!map[name]) map[name] = [];
                       map[name].push(skills2[j]);
@@ -147,6 +156,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   }
                   if (info.trigger.global) {
                     if (name2.includes(info.trigger.global) && (!info.trigger.player || info.trigger.player !== 'enterGame') || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
+                      if (info.filter) {
+                        try {
+                          var bool = info.filter(evt, player);
+                          if (!bool) continue;
+                        } catch (e) {
+                          continue;
+                        }
+                      }
                       list.add(name);
                       if (!map[name]) map[name] = [];
                       map[name].push(skills2[j]);
@@ -1751,6 +1768,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
               var list = [];
               var skills = [];
               var map = [];
+              var evt = event.getParent(2);
               var allList = _status.characterlist.slice(0);
               game.countPlayer(function (current) {
                 if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
@@ -1800,6 +1818,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     if (info.trigger.player) {
                       if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
+                        if (info.filter) {
+                          try {
+                            var bool = info.filter(evt, player);
+                            if (!bool) continue;
+                          } catch (e) {
+                            continue;
+                          }
+                        }
                         list.add(name);
                         if (!map[name]) map[name] = [];
                         map[name].push(skills2[j]);
@@ -1809,6 +1835,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     if (info.trigger.global) {
                       if (name2.includes(info.trigger.global) && (!info.trigger.player || info.trigger.player !== 'enterGame') || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
+                        if (info.filter) {
+                          try {
+                            var bool = info.filter(evt, player);
+                            if (!bool) continue;
+                          } catch (e) {
+                            continue;
+                          }
+                        }
                         list.add(name);
                         if (!map[name]) map[name] = [];
                         map[name].push(skills2[j]);
