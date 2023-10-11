@@ -2120,21 +2120,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
       },
     },
     sunhanhua: { //孙寒华
-      莲华熠熠: {
-        name: '孙寒华/莲华熠熠/XingXiang',
-        x: [0, -0.2],
-        y: [0, 0.2],
-        scale: 0.5,
-        angle: -15,
-        //speed: 1,
-        //action: 'DaiJi',
-        beijing: {
-          name: '孙寒华/莲华熠熠/BeiJing',
-          scale: 0.3,
-          x: [0, 0.4],
-          y: [0, 0.5]
-        },
-      },
       莲漪清荷: {
         name: '孙寒华/莲漪清荷/daiji2',
         play2: 'play2',
@@ -2177,6 +2162,21 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
             speed: 0.8,
             delay: 0.35,
           },
+        },
+      },
+      威灵尽显: {
+        name: '孙寒华/威灵尽显/XingXiang',
+        x: [0, 0.55],
+        y: [0, 0.35],
+        scale: 0.45,
+        angle: 0,
+        //speed: 1,
+        //action: 'DaiJi',
+        beijing: {
+          name: '孙寒华/威灵尽显/BeiJing',
+          scale: 0.3,
+          x: [0, 0.4],
+          y: [0, 0.5]
         },
       },
     },
@@ -2750,6 +2750,29 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           scale: 0.6,
           x: [0, 0.5],
           y: [0, 0.5]
+        },
+      },
+    },
+    wu_luxun: { // 武陆逊
+      经典形象: {
+        name: '武陆逊/经典形象/wumiao_luxun',
+        teshu: 'play2',
+        x: [0, -0.35],
+        y: [0, 0.4],
+        scale: 0.42,
+        angle: 0,
+        flipX: true,
+        //speed: 1,
+        background: "武陆逊/经典形象/beijing.png",
+        chuchang: {
+          name: '武陆逊/经典形象/wumiao_luxun',
+          action: 'play2',
+          scale: 0.5,
+        },
+        gongji: {
+          name: '武陆逊/经典形象/wumiao_luxun',
+          action: ['play2'],
+          scale: 0.5,
         },
       },
     },
