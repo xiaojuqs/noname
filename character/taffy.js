@@ -14,7 +14,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       ],
       minitaffy: ['female', 'qun', 1, ['taffytangshi', 'taffyzisha']],
       shixushao: ['male', 'qun', 4, ['shipingjian']],
-      spshenxushao: ['male', 'shen', 3, ['spshenpingjian'],
+      spshenxushao: ['male', 'shen', '1/3/1', ['spshenpingjian'],
         ['qun']
       ],
       oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
