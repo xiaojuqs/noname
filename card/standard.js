@@ -1356,14 +1356,14 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								if (bad_equip_num==es.length) return 0;
 								if(hs.length>0) return -1.5;
 								return (es.some(card=>{
-									return get.value(card,target)>0&&card!=target.getEquip('jinhe');
+									return get.equipValue(card)>0&&card!=target.getEquip('jinhe');
 								})||js.some(card=>{
 									var cardj=card.viewAs?{name:card.viewAs}:card;
 									return get.effect(target,cardj,target,player)<0;
 								}))?-1.5:1.5;
 							}
 							return (es.some(card=>{
-								return get.value(card,target)<=0;
+								return get.equipValue(card)<=0;
 							})||js.some(card=>{
 								var cardj=card.viewAs?{name:card.viewAs}:card;
 								return get.effect(target,cardj,target,player)<0;
@@ -1377,7 +1377,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							const att=get.attitude(player,target);
 							if(att<0){
 								if(!hs.length&&!es.some(card=>{
-									return get.value(card,target)>0&&card!=target.getEquip('jinhe');
+									return get.equipValue(card)>0&&card!=target.getEquip('jinhe');
 								})&&!js.some(card=>{
 									var cardj=card.viewAs?{name:card.viewAs}:card;
 									return get.effect(target,cardj,target,player)<0;
@@ -1385,7 +1385,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 							else if(att>1){
 								return (es.some(card=>{
-									return get.value(card,target)<=0;
+									return get.equipValue(card)<=0;
 								})||js.some(card=>{
 									var cardj=card.viewAs?{name:card.viewAs}:card;
 									return get.effect(target,cardj,target,player)<0;
@@ -1423,14 +1423,14 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								if (bad_equip_num==es.length) return 0;
 								if(hs.length>0) return -1.5;
 								return (es.some(card=>{
-									return get.value(card,target)>0&&card!=target.getEquip('jinhe');
+									return get.equipValue(card)>0&&card!=target.getEquip('jinhe');
 								})||js.some(card=>{
 									var cardj=card.viewAs?{name:card.viewAs}:card;
 									return get.effect(target,cardj,target,player)<0;
 								}))?-1.5:1.5;
 							}
 							return (es.some(card=>{
-								return get.value(card,target)<=0;
+								return get.equipValue(card)<=0;
 							})||js.some(card=>{
 								var cardj=card.viewAs?{name:card.viewAs}:card;
 								return get.effect(target,cardj,target,player)<0;
@@ -1446,7 +1446,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							const att=get.attitude(player,target);
 							if(att<0){
 								if(!hs.length&&!es.some(card=>{
-									return get.value(card,target)>0&&card!=target.getEquip('jinhe');
+									return get.equipValue(card)>0&&card!=target.getEquip('jinhe');
 								})&&!js.some(card=>{
 									var cardj=card.viewAs?{name:card.viewAs}:card;
 									return get.effect(target,cardj,target,player)<0;
@@ -1454,7 +1454,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							}
 							else if(att>1){
 								return (es.some(card=>{
-									return get.value(card,target)<=0;
+									return get.equipValue(card)<=0;
 								})||js.some(card=>{
 									var cardj=card.viewAs?{name:card.viewAs}:card;
 									return get.effect(target,cardj,target,player)<0;
@@ -1560,15 +1560,15 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 									if(target.hp==1&&!target.hujia) return 1.6;
 								}
 								if(es.some(card=>{
-									return get.value(card,target)<0;
+									return get.equipValue(card)<0;
 								})) return 1;
 								return -1.5;
 							}
 							else{
 								const noh=(hs.length==0||target.hasSkillTag('noh'));
 								const noe=(es.length==0||target.hasSkillTag('noe'));
-								const noe2=(noe||!es.some(card=>{
-									return get.value(card,target)>0;
+								const noe2=(noe||es.some(card=>{
+									return get.equipValue(card)<=0;
 								}));
 								const noj=(js.length==0||!js.some(card=>{
 									const cardj=card.viewAs?{name:card.viewAs}:card;

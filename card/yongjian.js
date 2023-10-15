@@ -120,7 +120,11 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				range:{global:1},
 				content:function(){
 					'step 0'
-					player.gainPlayerCard(target,'hej',true,[1,2]);
+					player.gainPlayerCard(target,'hej',true,[1,2]).set('ai',function(button){
+						let card=button.link;
+						if(get.type(card)=='equip') return get.equipValue(card);
+						return get.value(card);
+					});
 					'step 1'
 					if(result.bool&&target.isIn()){
 						var num=result.cards.length,hs=player.getCards('h');
@@ -154,7 +158,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 								})>0)?-0.3:0.3)*Math.sqrt(player.countCards('h'));
 							}
 							return ((target.countCards('ej',function(card){
-								if(get.position(card)=='e') return get.value(card,target)<=0;
+								if(get.position(card)=='e') return get.equipValue(card)<=0;
 								var cardj=card.viewAs?{name:card.viewAs}:card;
 								return get.effect(target,cardj,target,player)<0;
 							})>0)?1.5:-0.3)*Math.sqrt(player.countCards('h'));
