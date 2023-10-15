@@ -19,7 +19,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       ],
       oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
       oldtw_zhangmancheng: ['male', 'qun', 4, ['oldtwfengji', 'oldtwyiju', 'oldtwbudao']],
-      shenyuji: ['male', 'shen', 3, ['shenguhuo']]
+      shenyuji: ['male', 'shen', 3, ['shenguhuo']],
+      junko: ['female', 'shen', 3, ['junkochunhua', 'junkokuangqi', 'junkowuming']],
     },
     characterSort: {
       taffy: {
@@ -27,6 +28,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         taffy_shi: ['shiguanning', 'shixushao'],
         taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji'],
         taffy_tang: ['acetaffy', 'minitaffy'],
+        taffy_gzz: ['junko'],
       }
     },
     skill: {
@@ -2954,6 +2956,79 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           }
         },
       },
+      // 纯狐
+      junkochunhua: {
+        audio: 2,
+        trigger: {
+          global: 'damageEnd'
+        },
+        forced: true,
+        logTarget: 'player',
+        filter: function (event, player) {
+          return event.player != player && event.player.isIn();
+        },
+        content: function () {
+          trigger.player.addMark('junkochunhua', trigger.num, false);
+        },
+        group: ['junkochunhua_lose'],
+        marktext: '秽',
+        intro: {
+          name: '纯化(秽)',
+          name2: '秽',
+        },
+        subSkill: {
+          lose: {
+            audio: 'junkochunhua',
+            trigger: {
+              source: "damageAfter"
+            },
+            filter: function (event, player) {
+              return event.player.hasMark('junkochunhua') && event.player.countMark('junkochunhua') >= event.player.maxHp;
+            },
+            content: function (event, player) {
+              trigger.player.loseHp(trigger.player.hp);
+            },
+          },
+        },
+      },
+      junkokuangqi: {
+        audio: 2,
+        trigger: {
+          player: 'useCard2'
+        },
+        mod: {
+          targetInRange: function (card) {
+            return true;
+          },
+          cardUsable: function (card) {
+            return Infinity;
+          }
+        },
+        filter: function (event, player) {
+          return event.card.name !== 'lebu' && event.card.name !== 'bingliang' && event.card.storage && event.targets.length && game.filterPlayer(current => current != player).length;
+        },
+        content: function () {
+          'step 0'
+          var trigger = _status.event.getTrigger();
+          trigger.targets.removeArray(trigger.targets);
+          var targets = game.filterPlayer(current => current != player);
+          if (targets.length) trigger.targets.addArray(targets);
+        }
+      },
+      junkowuming: {
+        forced: true,
+        mod: {
+          targetEnabled: function (card) {
+            if (card.cards) {
+              for (var i of card.cards) {
+                return false;
+              }
+            } else if (get.itemtype(card) == 'card') {
+              return false;
+            }
+          },
+        },
+      },
     },
     card: {},
     characterIntro: {
@@ -2964,6 +3039,64 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shixushao: '许劭（shào）（150年—195年），字子将。汝南平舆（今河南平舆县射桥镇）人。东汉末年著名人物评论家。据说他每月都要对当时人物进行一次品评，人称为“月旦评”。曾任汝南郡功曹，后南渡投靠扬州刺史刘繇。刘繇被孙策击败后，许劭随其逃往豫章郡，并在豫章去世。',
       spshenxushao: '许劭（shào）（150年—195年），字子将。汝南平舆（今河南平舆县射桥镇）人。东汉末年著名人物评论家。据说他每月都要对当时人物进行一次品评，人称为“月旦评”。曾任汝南郡功曹，后南渡投靠扬州刺史刘繇。刘繇被孙策击败后，许劭随其逃往豫章郡，并在豫章去世。',
       shenyuji: '自号太平道人，琅琊人，在吴郡、会稽一带为百姓治病，甚得人心。孙策怒之，以惑人心为由斩之，后策常受吉咒而亡。',
+      junko: `东方绀珠传6面BOSS　（无名的存在）<br/>
+        纯狐<br/>
+        Junko<br/>
+        种族：神灵<br/>
+        能力：纯化程度的能力<br/>
+        <br/>
+        对于月之民抱有怨恨的存在。<br/>
+        自身也是被怨恨纯化的灵。<br/>
+        她已经连自己是什么人的情报都不需要了。<br/>
+        <br/>
+        她对月之民嫦娥有着强烈的怨恨。<br/>
+        详情与游戏的一部分结局重复，在此并不细说，<br/>
+        她似乎是一个每次袭击月之都，最终都被贤者平息其愤怒的存在。<br/>
+        丈夫杀死了自己的儿子，这是最初的怨恨，但怨恨早已纯化，<br/>
+        失去了控制。<br/>
+        <br/>
+        其存在只有一部分月之民知道。<br/>
+        因为月之民不需要有畏惧敌人的生活。<br/>
+        嫦娥是否知晓她的存在还尚不明确，但应该不会毫不知情吧。<br/>
+        <br/>
+        嫦娥，虽然在本作中并未登场，是被幽禁在月之都的月之女神。<br/>
+        她是月兔的支配者，也有着强大的力量，但并不会出现在外界面前。<br/>
+        嫦娥是使用了蓬莱之药的罪人。<br/>
+        <br/>
+        这次的月之都袭击计划的概要如下。<br/>
+        <br/>
+        「使月的正面，充满纯化了生命力的妖精，<br/>
+          将月球本身，化为生命之星。<br/>
+          这样一来，月之都就只好逃窜了。<br/>
+          趁其不备，讨伐藏匿其中的嫦娥。」<br/>
+          <br/>
+        厌恶地面充斥污秽（生命）而移居月球，是月之都的开端。<br/>
+        她想让相同的事情，发生在月球。<br/>
+        <br/>
+        计划十分顺利。<br/>
+        静海开始被生命填满。<br/>
+        地狱的妖精们，将月球当作了乐园。<br/>
+        地狱的环境便是如此严苛。<br/>
+        <br/>
+        月之民，对于她的生命之星计划束手无策。<br/>
+        <br/>
+        然而，纯狐却已经知道。<br/>
+        月之民不会就这样居住在污秽附近，他们一定会逃往梦境之类的地方。<br/>
+        所以，预测到这一切的她，将朋友送到了那边。<br/>
+        <br/>
+        不知该说是正如所料，还是说预料之外，月之民超过半年都没什么动静。<br/>
+        纯狐也攻击月之都感到厌倦了。双方都无法出手，陷入了胶着状态。<br/>
+        逐渐，她的愤怒有所舒缓，开始考虑今后该如何行动。<br/>
+        <br/>
+        就在此时，想不到人类居然出现了。<br/>
+        而且是污秽被净化的人类。是某种药物的影响吗。<br/>
+        <br/>
+        不厌恶生命，又感受不到生命。<br/>
+        虽然想不到会打出如此这般牺牲人类的奇计，但她却放心了。<br/>
+        <br/>
+        月之贤者所做之事超乎所料。<br/>
+        这是她的乐趣所在。<br/>
+        然后，终于，这次的复仇大戏，将要落下帷幕了。`,
     },
     characterTitle: {
       shenxushao: '#gViridian',
@@ -2976,6 +3109,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtw_niufudongxie: '#gViridian',
       oldtw_zhangmancheng: '#gViridian',
       shenyuji: '#gViridian',
+      junko: '#gViridian',
     },
     perfectPair: {},
     characterFilter: {},
@@ -3073,11 +3207,20 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shenguhuo_guess: "蛊惑",
       shenguhuo_info: "你可以扣置一张手牌当作一张基本牌或锦囊牌使用或打出。其他角色同时选择是否质疑。然后，你展示此牌。若有质疑的角色：若此牌为假，则此牌作废，且你与所有质疑者各摸一张牌；为真，则所有质疑角色失去1点体力，然后你可以令此牌作废并摸一张牌。",
       shenguhuo_append: '<span style="font-family: yuanli">拥有洞察人心的直觉，就有改变乱世的力量！</span>',
+      junko: '纯狐',
+      junkochunhua: '纯化',
+      junkochunhua_info: '①锁定技，当其他角色受到伤害后，其获得一枚“秽”。②当你造成伤害时，若该角色的“秽”数不小于X，你可以令其失去等同于其体力值的体力（X为其体力上限）。',
+      junkokuangqi: '狂气',
+      junkokuangqi_info: '①锁定技，你使用牌无距离和次数限制。②当你使用延时性锦囊牌以外的牌时，你可以令此牌目标改为所有其他角色。',
+      junkowuming: '无名',
+      junkowuming_info: '锁定技，你不能成为牌的目标。',
+      junkowuming_append: '<span style="font-family: yuanli">不共戴天之敌，嫦娥啊。你在看着吗！？</span>',
 
       taffy_old: "圣经·塔约",
       taffy_shi: "江山如故·塔",
       taffy_diy: "神·塔",
       taffy_tang: "东瀛·唐氏",
+      taffy_gzz: "东方·绀珠传",
     },
   };
 });

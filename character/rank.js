@@ -1755,6 +1755,7 @@ window.noname_character_rank={
       'oldtw_niufudongxie',
       'oldtw_zhangmancheng',
       'shenyuji',
+      'junko',
 		],
 		epic:[
 			'ol_pengyang',
