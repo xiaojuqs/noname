@@ -2982,12 +2982,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             trigger: {
               source: "damageAfter"
             },
-            check: function(event, player) {
-              var target=_status.event.getTrigger().player
-              return get.attitude(player,target)<-2;
+            check: function (event, player) {
+              var target = _status.event.getTrigger().player
+              return get.attitude(player, target) < -2;
             },
             filter: function (event, player) {
-              return event.player.hasMark('junkochunhua') && event.player.countMark('junkochunhua') >= event.player.maxHp&&event.player.isIn();
+              return event.player.hasMark('junkochunhua') && event.player.countMark('junkochunhua') >= event.player.maxHp && event.player.isIn();
             },
             content: function (event, player) {
               trigger.player.loseHp(trigger.player.hp);
@@ -3000,11 +3000,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         trigger: {
           player: 'useCard2'
         },
-        check: function(event, player) {
-          return event.card.name!=='wuzhong'&&event.card.name!=='tao'&&event.card.name!=='jiu'&&event.card.name!=='wugu'&&event.card.name!=='taoyuan';
+        check: function (event, player) {
+          return event.card.name !== 'wuzhong' && event.card.name !== 'tao' && event.card.name !== 'jiu' && event.card.name !== 'wugu' && event.card.name !== 'taoyuan';
         },
         filter: function (event, player) {
-          return get.type(event.card)!=='delay'&& get.type(event.card)!=='equip'&& event.card.storage && event.targets.length && game.filterPlayer(current => current != player).length;
+          return get.type(event.card) !== 'delay' && get.type(event.card) !== 'equip' && event.card.storage && event.targets.length && game.filterPlayer(current => current != player).length;
         },
         content: function () {
           'step 0'
@@ -3017,21 +3017,21 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       junkowuming: {
         forced: true,
         mod: {
-          suit:function(card){
-						return 'none';
-					},
+          suit: function (card) {
+            return 'none';
+          },
           targetInRange: function (card) {
-            if(get.color(card)=='none') return true;
+            if (get.color(card) == 'none') return true;
           },
           targetEnabled: function (card) {
             if (card.cards) {
               for (var i of card.cards) {
-                if(get.color(i)!=='none')
-                return false;
+                if (get.color(i) !== 'none')
+                  return false;
               }
             } else if (get.itemtype(card) == 'card') {
-              if(get.color(card)!=='none')
-              return false;
+              if (get.color(card) !== 'none')
+                return false;
             }
           },
         },
