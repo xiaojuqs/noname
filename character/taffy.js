@@ -2982,8 +2982,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             trigger: {
               source: "damageAfter"
             },
+            check: function(event, player) {
+              var target=_status.event.getTrigger().player
+              return get.attitude(player,target)<-2;
+            },
             filter: function (event, player) {
-              return event.player.hasMark('junkochunhua') && event.player.countMark('junkochunhua') >= event.player.maxHp;
+              return event.player.hasMark('junkochunhua') && event.player.countMark('junkochunhua') >= event.player.maxHp&&event.player.isIn();
             },
             content: function (event, player) {
               trigger.player.loseHp(trigger.player.hp);
@@ -2996,16 +3000,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         trigger: {
           player: 'useCard2'
         },
-        mod: {
-          targetInRange: function (card) {
-            return true;
-          },
-          cardUsable: function (card) {
-            return Infinity;
-          }
+        check: function(event, player) {
+          return event.card.name!=='wuzhong'&&event.card.name!=='tao'&&event.card.name!=='jiu'&&event.card.name!=='wugu'&&event.card.name!=='taoyuan';
         },
         filter: function (event, player) {
-          return event.card.name !== 'lebu' && event.card.name !== 'bingliang' && event.card.storage && event.targets.length && game.filterPlayer(current => current != player).length;
+          return get.type(event.card)!=='delay'&& get.type(event.card)!=='equip'&& event.card.storage && event.targets.length && game.filterPlayer(current => current != player).length;
         },
         content: function () {
           'step 0'
@@ -3018,12 +3017,20 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       junkowuming: {
         forced: true,
         mod: {
+          suit:function(card){
+						return 'none';
+					},
+          targetInRange: function (card) {
+            if(get.color(card)=='none') return true;
+          },
           targetEnabled: function (card) {
             if (card.cards) {
               for (var i of card.cards) {
+                if(get.color(i)!=='none')
                 return false;
               }
             } else if (get.itemtype(card) == 'card') {
+              if(get.color(card)!=='none')
               return false;
             }
           },
@@ -3209,11 +3216,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shenguhuo_append: '<span style="font-family: yuanli">拥有洞察人心的直觉，就有改变乱世的力量！</span>',
       junko: '纯狐',
       junkochunhua: '纯化',
-      junkochunhua_info: '①锁定技，当其他角色受到伤害后，其获得一枚“秽”。②当你造成伤害时，若该角色的“秽”数不小于X，你可以令其失去等同于其体力值的体力（X为其体力上限）。',
+      junkochunhua_info: '①锁定技，当其他角色受到伤害后，其获得一枚“秽”。②当你造成伤害后，若该角色的“秽”数不小于X，你可以令其失去等同于其体力值的体力（X为其体力上限）。',
       junkokuangqi: '狂气',
-      junkokuangqi_info: '①锁定技，你使用牌无距离和次数限制。②当你使用延时性锦囊牌以外的牌时，你可以令此牌目标改为所有其他角色。',
+      junkokuangqi_info: '当你使用牌时，若此牌无花色且不是延时类锦囊牌或装备牌，你可以令此牌目标改为所有其他角色。',
       junkowuming: '无名',
-      junkowuming_info: '锁定技，你不能成为牌的目标。',
+      junkowuming_info: '锁定技。①你的手牌花色均视为无。②你使用无色牌无距离限制。③你不能成为有花色牌的目标。',
       junkowuming_append: '<span style="font-family: yuanli">不共戴天之敌，嫦娥啊。你在看着吗！？</span>',
 
       taffy_old: "圣经·塔约",
