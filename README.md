@@ -39,5 +39,5 @@
 
 ## 在线部署地址
 
-- 会有的
+- Github Pages：https://viridian8520.github.io/noname/
 
