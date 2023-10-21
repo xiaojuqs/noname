@@ -245,3 +245,20 @@
 	background-position: center;
 	background-size: cover !important;
 }
+
+.buttons .card.button>.info {
+	color: #181818;
+	font-size: 20px;
+	font-weight: bold;
+	font-family: shousha;
+	background: rgba(230, 210, 166, 0.8);
+	border-radius: 2px;
+	border: 1px solid black;
+	writing-mode: vertical-rl;
+	-webkit-writing-mode: vertical-rl;
+	z-index: 1;
+}
+
+.buttons .card.button>.info:empty {
+	display: none;
+}
