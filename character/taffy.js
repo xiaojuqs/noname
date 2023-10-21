@@ -21,6 +21,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtw_zhangmancheng: ['male', 'qun', 4, ['oldtwfengji', 'oldtwyiju', 'oldtwbudao']],
       shenyuji: ['male', 'shen', 3, ['shenguhuo']],
       junko: ['female', 'shen', 3, ['junkochunhua', 'junkokuangqi', 'junkowuming']],
+      ruijier: ['female', 'shen', '', [],
+        ['unseen']
+      ],
     },
     characterSort: {
       taffy: {
@@ -3117,6 +3120,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtw_zhangmancheng: '#gViridian',
       shenyuji: '#gViridian',
       junko: '#gViridian',
+
     },
     perfectPair: {},
     characterFilter: {},
@@ -3222,6 +3226,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       junkowuming: '无名',
       junkowuming_info: '锁定技。①你的手牌花色均视为无。②你使用无色牌无距离限制。③你不能成为有花色牌的目标。',
       junkowuming_append: '<span style="font-family: yuanli">不共戴天之敌，嫦娥啊。你在看着吗！？</span>',
+      ruijier: '瑞吉儿',
 
       taffy_old: "圣经·塔约",
       taffy_shi: "江山如故·塔",
