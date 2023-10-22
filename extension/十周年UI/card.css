@@ -246,7 +246,7 @@
 	background-size: cover !important;
 }
 
-.buttons .card.button>.info {
+.buttons .card.button>.info:not(.gaintag) {
 	color: #181818;
 	font-size: 20px;
 	font-weight: bold;
