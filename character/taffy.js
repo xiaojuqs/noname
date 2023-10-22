@@ -21,6 +21,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtw_zhangmancheng: ['male', 'qun', 4, ['oldtwfengji', 'oldtwyiju', 'oldtwbudao']],
       shenyuji: ['male', 'shen', 3, ['shenguhuo']],
       junko: ['female', 'shen', 3, ['junkochunhua', 'junkokuangqi', 'junkowuming']],
+      huiwansunquan: ["male", "wu", 4, ["rezhiheng", "huiwan", "rejiuyuan"]],
       ruijier: ['female', 'shen', '', [],
         ['unseen']
       ],
@@ -3039,6 +3040,61 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           },
         },
       },
+      // 会玩的孙权
+      huiwan: {
+        trigger:{player:'drawBefore'},
+        frequent:true,
+        content: function () {
+          'step 0'
+          var num=trigger.num;
+          var chooseWashAfter = false;
+          event.chooseWashAfter = chooseWashAfter;
+          if(!ui.cardPile.hasChildNodes()) {
+            game.washCard();
+          }
+          var source=ui['cardPile'].childNodes;
+          var list=[];
+          if (num > source.length) {
+            chooseWashAfter = true;
+            event.chooseWashAfter = chooseWashAfter;
+          }
+          for(let i=0;i<source.length;i++) list.push(source[i]);
+          player.chooseButton([`会玩：选择获得${get.cnNumber(num > source.length ? source.length : num)}张牌`,list],[num > source.length ? source.length : num, num],true).set('ai', function (button) {
+            var target = player;
+            var card = {
+              name: button.link[2]
+            };
+            return get.attitude(_status.event.player, target) * (target.getUseValue(card) - 0.1);
+          });
+          'step 1'
+          if (result.links.length !== 0) {
+            player.gain(result.links,'draw');
+          }
+          'step 2'
+          if (event.chooseWashAfter) {
+            game.washCard();
+            var num=trigger.num - result.links.length;
+            var source=ui['cardPile'].childNodes;
+            var list=[];
+            for(let i=0;i<source.length;i++) list.push(source[i]);
+            player.chooseButton([`会玩：选择获得${get.cnNumber(num > source.length ? source.length : num)}张牌`,list],[num > source.length ? source.length : num, num],true).set('ai', function (button) {
+              var target = player;
+              var card = {
+                name: button.link[2]
+              };
+              return get.attitude(_status.event.player, target) * (target.getUseValue(card) - 0.1);
+            });
+          }
+          'step 3'
+          if (event.chooseWashAfter) {
+            if (result.links.length !== 0) {
+              player.gain(result.links,'draw');
+            }
+          }
+          'step 4'
+          trigger.cancel();
+        },
+      },
     },
     card: {},
     characterIntro: {
@@ -3107,6 +3163,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         月之贤者所做之事超乎所料。<br/>
         这是她的乐趣所在。<br/>
         然后，终于，这次的复仇大戏，将要落下帷幕了。`,
+      huiwansunquan: '界孙权，但是会玩。',
     },
     characterTitle: {
       shenxushao: '#gViridian',
@@ -3120,7 +3177,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtw_zhangmancheng: '#gViridian',
       shenyuji: '#gViridian',
       junko: '#gViridian',
-
+      huiwansunquan: '#gViridian',
     },
     perfectPair: {},
     characterFilter: {},
@@ -3227,6 +3284,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       junkowuming_info: '锁定技。①你的手牌花色均视为无。②你使用无色牌无距离限制。③你不能成为有花色牌的目标。',
       junkowuming_append: '<span style="font-family: yuanli">不共戴天之敌，嫦娥啊。你在看着吗！？</span>',
       ruijier: '瑞吉儿',
+      huiwansunquan: "会玩的孙权",
+      huiwansunquan_prefix: "会玩的",
+      huiwansunquan_ab: "会玩权",
+      huiwan: "会玩",
+      huiwan_info: "当你摸牌时，你可以改为观看牌堆所有牌并从中选择获得等量的牌。",
 
       taffy_old: "圣经·塔约",
       taffy_shi: "江山如故·塔",
