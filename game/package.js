@@ -20,6 +20,10 @@ window.noname_package={
 		offline:'线下武将',
 		jsrg:'江山如故',
 		old:'怀旧',
+
+    // taffy: 永雏塔菲限定武将喵
+    taffy:'永雏塔菲',
+
 		diy:'DIY',
 		ddd:'3D精选',
 		yxs:'英雄杀',
@@ -30,7 +34,6 @@ window.noname_package={
 		swd:'轩辕剑',
 		gujian:'古剑奇谭',
 		xianjian:'仙剑奇侠传',
-    taffy:'永雏塔菲',
 	},
 	card:{
 		standard:'标准',

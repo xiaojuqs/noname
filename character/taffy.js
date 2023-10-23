@@ -21,7 +21,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtw_zhangmancheng: ['male', 'qun', 4, ['oldtwfengji', 'oldtwyiju', 'oldtwbudao']],
       shenyuji: ['male', 'shen', 3, ['shenguhuo']],
       junko: ['female', 'shen', 3, ['junkochunhua', 'junkokuangqi', 'junkowuming']],
-      huiwansunquan: ["male", "wu", 4, ["rezhiheng", "huiwan", "rejiuyuan"]],
+      huiwansunquan: ["male", "wu", 4, ["rezhiheng", "rejiuyuan", "huiwan"]],
+      huiwansunquanplus: ["male", "wu", 4, ["rezhiheng", "rejiuyuan", "huiwanplus"]],
       ruijier: ['female', 'shen', '', [],
         ['unseen']
       ],
@@ -33,6 +34,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji'],
         taffy_tang: ['acetaffy', 'minitaffy'],
         taffy_gzz: ['junko'],
+        taffy_wu: ['huiwansunquan', 'huiwansunquanplus'],
       }
     },
     skill: {
@@ -3042,24 +3044,26 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       },
       // 会玩的孙权
       huiwan: {
-        trigger:{player:'drawBefore'},
-        frequent:true,
+        trigger: {
+          player: 'drawBefore'
+        },
+        frequent: true,
         content: function () {
           'step 0'
-          var num=trigger.num;
+          var num = trigger.num;
           var chooseWashAfter = false;
           event.chooseWashAfter = chooseWashAfter;
-          if(!ui.cardPile.hasChildNodes()) {
+          if (ui.cardPile.childElementCount === 0) {
             game.washCard();
           }
-          var source=ui['cardPile'].childNodes;
-          var list=[];
+          var source = ui['cardPile'].childNodes;
+          var list = [];
           if (num > source.length) {
             chooseWashAfter = true;
             event.chooseWashAfter = chooseWashAfter;
           }
-          for(let i=0;i<source.length;i++) list.push(source[i]);
-          player.chooseButton([`会玩：选择获得${get.cnNumber(num > source.length ? source.length : num)}张牌`,list],[num > source.length ? source.length : num, num],true).set('ai', function (button) {
+          for (let i = 0; i < source.length; i++) list.push(source[i]);
+          player.chooseButton([`会玩：选择获得${get.cnNumber(num > source.length ? source.length : num)}张牌`, list], [num > source.length ? source.length : num, num], true).set('ai', function (button) {
             var target = player;
             var card = {
               name: button.link[2]
@@ -3068,16 +3072,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           });
           'step 1'
           if (result.links.length !== 0) {
-            player.gain(result.links,'draw');
+            player.gain(result.links, 'draw');
           }
           'step 2'
           if (event.chooseWashAfter) {
             game.washCard();
-            var num=trigger.num - result.links.length;
-            var source=ui['cardPile'].childNodes;
-            var list=[];
-            for(let i=0;i<source.length;i++) list.push(source[i]);
-            player.chooseButton([`会玩：选择获得${get.cnNumber(num > source.length ? source.length : num)}张牌`,list],[num > source.length ? source.length : num, num],true).set('ai', function (button) {
+            var num = trigger.num - result.links.length;
+            var source = ui['cardPile'].childNodes;
+            var list = [];
+            for (let i = 0; i < source.length; i++) list.push(source[i]);
+            player.chooseButton([`会玩：选择获得${get.cnNumber(num > source.length ? source.length : num)}张牌`, list], [num > source.length ? source.length : num, num], true).set('ai', function (button) {
               var target = player;
               var card = {
                 name: button.link[2]
@@ -3088,13 +3092,157 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           'step 3'
           if (event.chooseWashAfter) {
             if (result.links.length !== 0) {
-              player.gain(result.links,'draw');
+              player.gain(result.links, 'draw');
             }
           }
           'step 4'
           trigger.cancel();
         },
       },
+      // 超会玩的孙权
+      huiwanplus: {
+        trigger: {
+          global: 'drawBefore'
+        },
+        forced:true,
+        content: function () {
+          'step 0'
+          var num = trigger.num;
+          var chooseWashAfter = false;
+          event.chooseWashAfter = chooseWashAfter;
+          if (ui.cardPile.childElementCount === 0) {
+            game.washCard();
+          }
+          var source = ui['cardPile'].childNodes;
+          var list = [];
+          if (num > source.length) {
+            chooseWashAfter = true;
+            event.chooseWashAfter = chooseWashAfter;
+          }
+          for (let i = 0; i < source.length; i++) list.push(source[i]);
+          player.chooseButton([`超玩：选择令${get.translation(trigger.player)}获得${get.cnNumber(num > source.length ? source.length : num)}张牌`, list], [num > source.length ? source.length : num, num], true).set('ai', function (button) {
+            var target = trigger.player;
+            var card = {
+              name: button.link[2]
+            };
+            return get.attitude(player, target) * (target.getUseValue(card) - 0.1);
+          });
+          'step 1'
+          if (result.links.length !== 0) {
+            trigger.player.gain(result.links, 'draw');
+          }
+          'step 2'
+          if (event.chooseWashAfter) {
+            game.washCard();
+            var num = trigger.num - result.links.length;
+            var source = ui['cardPile'].childNodes;
+            var list = [];
+            for (let i = 0; i < source.length; i++) list.push(source[i]);
+            player.chooseButton([`超玩：选择令${get.translation(trigger.player)}获得${get.cnNumber(num > source.length ? source.length : num)}张牌`, list], [num > source.length ? source.length : num, num], true).set('ai', function (button) {
+              var target = trigger.player;
+              var card = {
+                name: button.link[2]
+              };
+              return get.attitude(player, target) * (target.getUseValue(card) - 0.1);
+            });
+          }
+          'step 3'
+          if (event.chooseWashAfter) {
+            if (result.links.length !== 0) {
+              trigger.player.gain(result.links, 'draw');
+            }
+          }
+          'step 4'
+          trigger.cancel();
+        },
+        group: 'huiwanplus_judge',
+      },
+      huiwanplus_judge:{
+				trigger:{global:'judgeBefore'},
+				forced:true,
+				priority:1,
+				unique:true,
+				content:function(){
+					"step 0"
+          if (ui.cardPile.childElementCount === 0) {
+            game.washCard();
+          }
+          var source = ui['cardPile'].childNodes;
+          event.cards = [];
+          for (let i = 0; i < source.length; i++) event.cards.push(source[i]);
+					player.chooseCardButton(true,event.cards,'超玩：选择一张牌作为'+get.translation(trigger.player)+'的'+trigger.judgestr+'判定结果').ai=function(button){
+						if(get.attitude(player,trigger.player)>0){
+							return 1+trigger.judge(button.link);
+						}
+						if(get.attitude(player,trigger.player)<0){
+							return 1-trigger.judge(button.link);
+						}
+						return 0;
+					};
+					"step 1"
+					if(!result.bool){
+						event.finish();
+						return;
+					}
+					player.logSkill('huiwanplus_judge',trigger.player);
+					var card=result.links[0];
+					event.cards.remove(card);
+					var judgestr=get.translation(trigger.player)+'的'+trigger.judgestr+'判定';
+					event.videoId=lib.status.videoId++;
+					event.dialog=ui.create.dialog(judgestr);
+					event.dialog.classList.add('center');
+					event.dialog.videoId=event.videoId;
+
+					game.addVideo('judge1',player,[get.cardInfo(card),judgestr,event.videoId]);
+					// for(var i=0;i<event.cards.length;i++) event.cards[i].discard();
+          result.links[0].discard();
+					// var node=card.copy('thrown','center',ui.arena).animate('start');
+					var node;
+					if(game.chess){
+						node=card.copy('thrown','center',ui.arena).animate('start');
+					}
+					else{
+						node=player.$throwordered(card.copy(),true);
+					}
+					node.classList.add('thrownhighlight');
+					ui.arena.classList.add('thrownhighlight');
+					if(card){
+						trigger.cancel();
+						trigger.result={
+							card:card,
+							judge:trigger.judge(card),
+							node:node,
+							number:get.number(card),
+							suit:get.suit(card),
+							color:get.color(card),
+						};
+						if(trigger.result.judge>0){
+							trigger.result.bool=true;
+							trigger.player.popup('洗具');
+						}
+						if(trigger.result.judge<0){
+							trigger.result.bool=false;
+							trigger.player.popup('杯具');
+						}
+						game.log(trigger.player,'的判定结果为',card);
+						trigger.direct=true;
+						trigger.position.appendChild(card);
+						game.delay(2);
+					}
+					else{
+						event.finish();
+					}
+					"step 2"
+					ui.arena.classList.remove('thrownhighlight');
+					event.dialog.close();
+					game.addVideo('judge2',null,event.videoId);
+					ui.clear();
+					var card=trigger.result.card;
+					trigger.position.appendChild(card);
+					trigger.result.node.delete();
+					game.delay();
+				},
+			},
     },
     card: {},
     characterIntro: {
@@ -3164,6 +3312,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         这是她的乐趣所在。<br/>
         然后，终于，这次的复仇大戏，将要落下帷幕了。`,
       huiwansunquan: '界孙权，但是会玩。',
+      huiwansunquanplus: '界孙权，但是超会玩。'
     },
     characterTitle: {
       shenxushao: '#gViridian',
@@ -3178,6 +3327,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shenyuji: '#gViridian',
       junko: '#gViridian',
       huiwansunquan: '#gViridian',
+      huiwansunquanplus: '#gViridian',
     },
     perfectPair: {},
     characterFilter: {},
@@ -3289,12 +3439,28 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       huiwansunquan_ab: "会玩权",
       huiwan: "会玩",
       huiwan_info: "当你摸牌时，你可以改为观看牌堆所有牌并从中选择获得等量的牌。",
+      huiwan_append: '<span style="font-family: yuanli">感觉不如界权，精品第一，史诗质检员，回合内大制衡找顺拆卡距离随便打，不好打的制衡找无懈闪桃下回合找顺拆继续打，对爆也是界权优。</span>',
+      huiwansunquanplus: "超会玩的孙权",
+      huiwansunquanplus_prefix: "超会玩的",
+      huiwansunquanplus_ab: "超玩权",
+      huiwanplus: "超玩",
+      huiwanplus_info: "锁定技。①一名角色摸牌时，你改为观看牌堆所有牌并从中选择等量的牌令其获得。②一名角色的判定牌生效前，你观看牌堆所有牌并选择一张作为判定结果，此结果不可更改。",
+      huiwanplus_append: `<span style="font-family: yuanli">思权拳 思如泉涌！<br/>
+      念权剑 念念不忘！！<br/>
+      界权掌 生生世世！！<br/>
+      会玩、会玩、会玩！<br/>
+      璀璨中的凋零、制衡联合！<br/>
+      极冻中的炽烈、纵横捭阖！<br/>
+      虚无中的真言、容我三思！<br/>
+      冰霜中的独舞、则吴盛可期！</span>`,
+      huiwanplus_judge: "超玩",
 
       taffy_old: "圣经·塔约",
       taffy_shi: "江山如故·塔",
       taffy_diy: "神·塔",
       taffy_tang: "东瀛·唐氏",
       taffy_gzz: "东方·绀珠传",
+      taffy_wu: "东吴·超玩会",
     },
   };
 });
