@@ -1758,6 +1758,7 @@ window.noname_character_rank={
       'junko',
       'huiwansunquan',
       'huiwansunquanplus',
+      'taffyboss_lvbu1',
 		],
 		epic:[
 			'ol_pengyang',

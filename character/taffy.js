@@ -23,6 +23,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       junko: ['female', 'shen', 3, ['junkochunhua', 'junkokuangqi', 'junkowuming']],
       huiwansunquan: ["male", "wu", 4, ["rezhiheng", "rejiuyuan", "huiwan"]],
       huiwansunquanplus: ["male", "wu", 4, ["rezhiheng", "rejiuyuan", "huiwanplus"]],
+      taffyboss_lvbu1: ['male', 'shen', 8, ['mashu', 'wushuang', 'taffyboss_baonu', 'taffyboss_jingjia', 'boss_aozhan'],
+        ['qun'], 'wei'
+      ],
       ruijier: ['female', 'shen', '', [],
         ['unseen']
       ],
@@ -30,6 +33,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     characterSort: {
       taffy: {
         taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng'],
+        taffy_ol: ['taffyboss_lvbu1'],
         taffy_shi: ['shiguanning', 'shixushao'],
         taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji'],
         taffy_tang: ['acetaffy', 'minitaffy'],
@@ -3104,7 +3108,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         trigger: {
           global: 'drawBefore'
         },
-        forced:true,
+        forced: true,
         content: function () {
           'step 0'
           var num = trigger.num;
@@ -3157,92 +3161,254 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         group: 'huiwanplus_judge',
       },
-      huiwanplus_judge:{
-				trigger:{global:'judgeBefore'},
-				forced:true,
-				priority:1,
-				unique:true,
-				content:function(){
-					"step 0"
+      huiwanplus_judge: {
+        trigger: {
+          global: 'judgeBefore'
+        },
+        forced: true,
+        priority: 1,
+        unique: true,
+        content: function () {
+          "step 0"
           if (ui.cardPile.childElementCount === 0) {
             game.washCard();
           }
           var source = ui['cardPile'].childNodes;
           event.cards = [];
           for (let i = 0; i < source.length; i++) event.cards.push(source[i]);
-					player.chooseCardButton(true,event.cards,'超玩：选择一张牌作为'+get.translation(trigger.player)+'的'+trigger.judgestr+'判定结果').ai=function(button){
-						if(get.attitude(player,trigger.player)>0){
-							return 1+trigger.judge(button.link);
-						}
-						if(get.attitude(player,trigger.player)<0){
-							return 1-trigger.judge(button.link);
-						}
-						return 0;
-					};
-					"step 1"
-					if(!result.bool){
-						event.finish();
-						return;
-					}
-					player.logSkill('huiwanplus_judge',trigger.player);
-					var card=result.links[0];
-					event.cards.remove(card);
-					var judgestr=get.translation(trigger.player)+'的'+trigger.judgestr+'判定';
-					event.videoId=lib.status.videoId++;
-					event.dialog=ui.create.dialog(judgestr);
-					event.dialog.classList.add('center');
-					event.dialog.videoId=event.videoId;
+          player.chooseCardButton(true, event.cards, '超玩：选择一张牌作为' + get.translation(trigger.player) + '的' + trigger.judgestr + '判定结果').ai = function (button) {
+            if (get.attitude(player, trigger.player) > 0) {
+              return 1 + trigger.judge(button.link);
+            }
+            if (get.attitude(player, trigger.player) < 0) {
+              return 1 - trigger.judge(button.link);
+            }
+            return 0;
+          };
+          "step 1"
+          if (!result.bool) {
+            event.finish();
+            return;
+          }
+          player.logSkill('huiwanplus_judge', trigger.player);
+          var card = result.links[0];
+          event.cards.remove(card);
+          var judgestr = get.translation(trigger.player) + '的' + trigger.judgestr + '判定';
+          event.videoId = lib.status.videoId++;
+          event.dialog = ui.create.dialog(judgestr);
+          event.dialog.classList.add('center');
+          event.dialog.videoId = event.videoId;
 
-					game.addVideo('judge1',player,[get.cardInfo(card),judgestr,event.videoId]);
-					// for(var i=0;i<event.cards.length;i++) event.cards[i].discard();
+          game.addVideo('judge1', player, [get.cardInfo(card), judgestr, event.videoId]);
+          // for(var i=0;i<event.cards.length;i++) event.cards[i].discard();
           result.links[0].discard();
-					// var node=card.copy('thrown','center',ui.arena).animate('start');
-					var node;
-					if(game.chess){
-						node=card.copy('thrown','center',ui.arena).animate('start');
-					}
-					else{
-						node=player.$throwordered(card.copy(),true);
-					}
-					node.classList.add('thrownhighlight');
-					ui.arena.classList.add('thrownhighlight');
-					if(card){
-						trigger.cancel();
-						trigger.result={
-							card:card,
-							judge:trigger.judge(card),
-							node:node,
-							number:get.number(card),
-							suit:get.suit(card),
-							color:get.color(card),
-						};
-						if(trigger.result.judge>0){
-							trigger.result.bool=true;
-							trigger.player.popup('洗具');
-						}
-						if(trigger.result.judge<0){
-							trigger.result.bool=false;
-							trigger.player.popup('杯具');
-						}
-						game.log(trigger.player,'的判定结果为',card);
-						trigger.direct=true;
-						trigger.position.appendChild(card);
-						game.delay(2);
-					}
-					else{
-						event.finish();
-					}
-					"step 2"
-					ui.arena.classList.remove('thrownhighlight');
-					event.dialog.close();
-					game.addVideo('judge2',null,event.videoId);
-					ui.clear();
-					var card=trigger.result.card;
-					trigger.position.appendChild(card);
-					trigger.result.node.delete();
-					game.delay();
-				},
-			},
+          // var node=card.copy('thrown','center',ui.arena).animate('start');
+          var node;
+          if (game.chess) {
+            node = card.copy('thrown', 'center', ui.arena).animate('start');
+          } else {
+            node = player.$throwordered(card.copy(), true);
+          }
+          node.classList.add('thrownhighlight');
+          ui.arena.classList.add('thrownhighlight');
+          if (card) {
+            trigger.cancel();
+            trigger.result = {
+              card: card,
+              judge: trigger.judge(card),
+              node: node,
+              number: get.number(card),
+              suit: get.suit(card),
+              color: get.color(card),
+            };
+            if (trigger.result.judge > 0) {
+              trigger.result.bool = true;
+              trigger.player.popup('洗具');
+            }
+            if (trigger.result.judge < 0) {
+              trigger.result.bool = false;
+              trigger.player.popup('杯具');
+            }
+            game.log(trigger.player, '的判定结果为', card);
+            trigger.direct = true;
+            trigger.position.appendChild(card);
+            game.delay(2);
+          } else {
+            event.finish();
+          }
+          "step 2"
+          ui.arena.classList.remove('thrownhighlight');
+          event.dialog.close();
+          game.addVideo('judge2', null, event.videoId);
+          ui.clear();
+          var card = trigger.result.card;
+          trigger.position.appendChild(card);
+          trigger.result.node.delete();
+          game.delay();
+        },
+      },
+      // 最强神话
+      taffyboss_baonuwash: {
+        trigger: {
+          player: 'phaseAfter'
+        },
+        forced: true,
+        content: function () {
+          game.over(game.me == game.boss);
+        },
+        temp: true,
+      },
+      taffyboss_baonu: {
+        unique: true,
+        trigger: {
+          player: 'changeHp',
+          global: 'boss_baonuwash'
+        },
+        forced: true,
+        priority: 100,
+        fixed: true,
+        audio: 'shenji',
+        // mode:['identity','guozhan','boss','stone'],
+        init: function (player) {
+          if (get.mode() == 'boss' && player == game.boss) {
+            lib.onwash.push(function () {
+              if (!_status.boss_baonuwash) {
+                _status.boss_baonuwash = true;
+                _status.event.parent.trigger('taffyboss_baonuwash');
+              } else {
+                _status.event.player.addSkill('taffyboss_baonuwash');
+              }
+            });
+            for (var i in lib.card) {
+              if (lib.card[i].subtype == 'equip1') lib.card[i].recastable = true;
+            }
+          }
+        },
+        filter: function (event, player) {
+          let isBoss = false;
+          let list = Object.keys(lib.character);
+          console.log(list);
+          if (list.includes("boss_lvbu3")) {
+            isBoss = true;
+          }
+          return (player.hp <= 4 || _status.taffyboss_baonuwash) && isBoss;
+        },
+        content: function () {
+          'step 0'
+          if (player.hp > 6) {
+            game.delay();
+          }
+          'step 1'
+          player.chooseControl('暴怒战神', '神鬼无前', function () {
+            if (Math.random() < 0.5) return '神鬼无前';
+            return '暴怒战神';
+          }).set('prompt', '选择一个形态');
+          'step 2'
+          var hp = player.hp;
+          player.removeSkill('boss_baonu', true);
+          if (result.control == '暴怒战神') {
+            player.uninit();
+            player.init('boss_lvbu2');
+          } else {
+            player.uninit();
+            player.init('boss_lvbu3');
+          }
+          if (hp > 6) {
+            player.maxHp = hp;
+            player.hp = hp;
+          }
+          player.update();
+          ui.clear();
+          if (player.isLinked()) player.link();
+          if (player.isTurnedOver()) player.turnOver();
+          player.discard(player.getCards('j'));
+          'step 3'
+          while (_status.event.name != 'phaseLoop') {
+            _status.event = _status.event.parent;
+          }
+          game.resetSkills();
+          _status.paused = false;
+          _status.event.player = player;
+          _status.event.step = 0;
+          if (game.bossinfo) {
+            game.bossinfo.loopType = 1;
+            _status.roundStart = game.boss;
+          }
+        },
+        ai: {
+          effect: {
+            target: function (card, player, target) {
+              if (get.tag(card, 'damage') || get.tag(card, 'loseHp')) {
+                if (player.hp == 5) {
+                  if (game.players.length < 4) return [0, 5];
+                  var num = 0
+                  for (var i = 0; i < game.players.length; i++) {
+                    if (game.players[i] != game.boss && game.players[i].hp == 1) {
+                      num++;
+                    }
+                  }
+                  if (num > 1) return [0, 2];
+                  if (num && Math.random() < 0.7) return [0, 1];
+                }
+              }
+            }
+          }
+        }
+      },
+      taffyboss_jingjia: {
+        trigger: {
+          global: 'phaseBefore',
+          player: 'enterGame',
+        },
+        forced: true,
+        filter: function (event, player) {
+          return (event.name != 'phase' || game.phaseNumber == 0);
+        },
+        content: function () {
+          'step 0'
+          lib.inpile.addArray(['wushuangfangtianji', 'shufazijinguan', 'hongmianbaihuapao', 'linglongshimandai', 'lianjunshengyan']);
+          ui.cardPile.insertBefore(game.createCard2('linglongshimandai', 'club', 2), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('linglongshimandai', 'spade', 2), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('hongmianbaihuapao', 'club', 2), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('hongmianbaihuapao', 'spade', 2), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('wushuangfangtianji', 'diamond', 12), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('shufazijinguan', 'diamond', 5), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('lianjunshengyan', 'heart', 1), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('lianjunshengyan', 'heart', 3), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          ui.cardPile.insertBefore(game.createCard2('lianjunshengyan', 'heart', 4), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)]);
+          var next = game.createEvent('taffyboss_jingjia_equip');
+          next.player = game.boss || player;
+          next.setContent(function () {
+            'step 0'
+            event.cards = 6;
+            console.log(cards);
+            if (event.cards === 0) {
+              event.finish();
+              return;
+            }
+            player.logSkill('taffyboss_jingjia_equip');
+            event.num = 1.5;
+            'step 1'
+            var card = get.cardPile2(function (card) {
+              if (card.name == 'linglongshimandai') {
+                return true;
+              } else if (card.name == 'hongmianbaihuapao') {
+                return true;
+              } else if (card.name == 'wushuangfangtianji') {
+                return true;
+              } else if (card.name == 'shufazijinguan') {
+                return true;
+              }
+            });
+            event.cards--;
+            if (player.canEquip(card) && Math.random() < event.num) {
+              player.equip(card);
+              event.num = 0.5;
+            }
+            if (event.cards !== 0) event.redo();
+          });
+        },
+      },
     },
     card: {},
     characterIntro: {
@@ -3328,6 +3494,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       junko: '#gViridian',
       huiwansunquan: '#gViridian',
       huiwansunquanplus: '#gViridian',
+      taffyboss_lvbu1: '#gViridian',
     },
     perfectPair: {},
     characterFilter: {},
@@ -3454,8 +3621,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       虚无中的真言、容我三思！<br/>
       冰霜中的独舞、则吴盛可期！</span>`,
       huiwanplus_judge: "超玩",
+      taffyboss_lvbu1: '最强神话',
+      taffyboss_baonu: '暴怒',
+      taffyboss_baonu_info: '锁定技，当你的体力值降至4或更低时，你变身为暴怒战神或神鬼无前，并立即开始你的回合。',
+      taffyboss_jingjia: "精甲",
+      taffyboss_jingjia_info: "锁定技，游戏开始时，将本局游戏中加入的装备随机置入你的装备区。",
 
       taffy_old: "圣经·塔约",
+      taffy_ol: "江山如故·永",
       taffy_shi: "江山如故·塔",
       taffy_diy: "神·塔",
       taffy_tang: "东瀛·唐氏",
