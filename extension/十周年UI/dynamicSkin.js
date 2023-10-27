@@ -810,6 +810,38 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         },
       },
     },
+    guanyu: { //关羽
+      明良千古: {
+        name: '关羽/明良千古/XingXiang',
+        x: [0, 0],
+        y: [0, -0.1],
+        scale: 0.6,
+        angle: 0,
+        //speed: 1,
+        //action: 'DaiJi',
+        beijing: {
+          name: '关羽/明良千古/BeiJing',
+          scale: 0.3,
+          x: [0, 0.4],
+          y: [0, 0.5]
+        },
+      },
+      啸风从龙: {
+        name: '关羽/啸风从龙/XingXiang',
+        x: [0, 0.2],
+        y: [0, 0.35],
+        scale: 0.4,
+        angle: 0,
+        //speed: 1,
+        //action: 'DaiJi',
+        beijing: {
+          name: '关羽/啸风从龙/BeiJing',
+          scale: 0.3,
+          x: [0, 0.4],
+          y: [0, 0.5]
+        },
+      },
+    },
     guanning: { //管宁
       墨韵荷香: {
         name: '管宁/墨韵荷香/daiji2',
@@ -1949,6 +1981,23 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
             speed: 0.8,
             delay: 0.4,
           },
+        },
+      },
+    },
+    shen_simayi: { //神司马懿
+      鉴往知来: {
+        name: '神司马懿/鉴往知来/XingXiang',
+        x: [0, 0.46],
+        y: [0, 0.07],
+        scale: 0.58,
+        angle: 0,
+        //speed: 1,
+        //action: 'DaiJi',
+        beijing: {
+          name: '神司马懿/鉴往知来/BeiJing',
+          scale: 0.3,
+          x: [0, 0.4],
+          y: [0, 0.5]
         },
       },
     },
@@ -3762,6 +3811,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     // 管宁
     shiguanning: decadeUI.dynamicSkin.guanning,
 
+    //关羽
+    re_guanyu: decadeUI.dynamicSkin.guanyu,
+    jsp_guanyu: decadeUI.dynamicSkin.guanyu,
+    jsrg_guanyu: decadeUI.dynamicSkin.guanyu,
+
     //关索
     ol_guansuo: decadeUI.dynamicSkin.guansuo,
 
@@ -3795,6 +3849,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     re_liubei: decadeUI.dynamicSkin.liubei,
     sb_liubei: decadeUI.dynamicSkin.liubei,
     dc_liubei: decadeUI.dynamicSkin.liubei,
+    jsrg_liubei: decadeUI.dynamicSkin.liubei,
 
     //留赞
     re_liuzan: decadeUI.dynamicSkin.liuzan,
@@ -3810,6 +3865,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
     //南华老仙
     re_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
+    jsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
 
     //潘淑
     re_panshu: decadeUI.dynamicSkin.panshu,
@@ -3822,12 +3878,16 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
     // 神曹操
     old_caocao: decadeUI.dynamicSkin.shen_caocao,
+    shoushen_caocao: decadeUI.dynamicSkin.shen_caocao,
 
     //神吕蒙
     tw_shen_lvmeng: decadeUI.dynamicSkin.shen_lvmeng,
 
     // 神马超
     ps_shen_machao: decadeUI.dynamicSkin.shen_machao,
+
+    // 神司马懿
+    babyshen_simayi: decadeUI.dynamicSkin.shen_simayi,
 
     // 孙寒华
     dc_sunhanhua: decadeUI.dynamicSkin.sunhanhua,

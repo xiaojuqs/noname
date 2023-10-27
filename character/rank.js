@@ -1759,6 +1759,8 @@ window.noname_character_rank={
       'huiwansunquan',
       'huiwansunquanplus',
       'taffyboss_lvbu1',
+      'shoushen_caocao',
+      'babyshen_simayi',
 		],
 		epic:[
 			'ol_pengyang',

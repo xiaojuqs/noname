@@ -26,6 +26,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       taffyboss_lvbu1: ['male', 'shen', 8, ['mashu', 'wushuang', 'taffyboss_baonu', 'taffyboss_jingjia', 'boss_aozhan'],
         ['qun'], 'wei'
       ],
+      shoushen_caocao: ['male', 'shen', 3, ['guixin', 'feiying'],
+        ['wei']
+      ],
+      babyshen_simayi: ["male", "shen", 3, ["babyrenjie", "babyjilue", "babylianpo"],
+        []
+      ],
       ruijier: ['female', 'shen', '', [],
         ['unseen']
       ],
@@ -34,7 +40,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       taffy: {
         taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng'],
         taffy_ol: ['taffyboss_lvbu1'],
+        taffy_shou: ['shoushen_caocao'],
         taffy_shi: ['shiguanning', 'shixushao'],
+        taffy_baby: ['babyshen_simayi'],
         taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji'],
         taffy_tang: ['acetaffy', 'minitaffy'],
         taffy_gzz: ['junko'],
@@ -3409,6 +3417,329 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           });
         },
       },
+      // 欢杀神司马懿
+      babyrenjie: {
+        audio: 'renjie2',
+        trigger: {
+          player: ['damageEnd', 'loseAfter'],
+          global: 'loseAsyncAfter',
+        },
+        forced: true,
+        group: 'babyrenjie_begin',
+        filter: function (event, player) {
+          if (event.name == 'damage') return event.num > 0;
+          if (event.type != 'discard' || event.getlx === false) return false;
+          var evt = event.getParent('phaseDiscard'),
+            evt2 = event.getl(player);
+          return evt && evt2 && evt.name == 'phaseDiscard' && evt.player == player && evt2.cards2 && evt2.cards2.length > 0;
+        },
+        content: function () {
+          player.addMark('babyrenjie', trigger.name == 'damage' ? trigger.num : trigger.getl(player).cards2.length);
+        },
+        intro: {
+          name2: '忍',
+          content: "mark",
+        },
+        ai: {
+          maixie: true,
+          maixie_hp: true,
+          combo: "babyjilue",
+        },
+        subSkill: {
+          begin: {
+            trigger: {
+              global: 'phaseBefore',
+              player: 'enterGame'
+            },
+            forced: true,
+            filter: function (event, player) {
+              return (event.name != 'phase' || game.phaseNumber == 0);
+            },
+            audio: 'babyjilue',
+            forced: true,
+            unique: true,
+            content: function () {
+              player.addMark('babyrenjie', 1);
+            },
+          },
+        },
+      },
+      babyjilue: {
+        audio: 'sbaiyin',
+        group: ["babyjilue_guicai", "babyjilue_fangzhu", "babyjilue_wansha", "babyjilue_jizhi", 'babyjilue_draw'],
+        derivation: ['babyjilue_guicai', 'babyjilue_fangzhu', 'babyjilue_jizhi', 'babyjilue_wansha'],
+        subfrequent: ['draw'],
+        subSkill: {
+          guicai: {
+            audio: 'jilue_guicai',
+            trigger: {
+              global: "judge",
+            },
+            direct: true,
+            filter: function (event, player) {
+              return player.countCards('he') > 0 && player.hasMark('babyrenjie');
+            },
+            content: function () {
+              "step 0"
+              player.chooseCard('是否弃置一枚“忍”，并发动〖鬼才〗？', get.skillInfoTranslation('babyjilue_guicai'), 'he', function (card) {
+                var player = _status.event.player;
+                var mod2 = game.checkMod(card, player, 'unchanged', 'cardEnabled2', player);
+                if (mod2 != 'unchanged') return mod2;
+                var mod = game.checkMod(card, player, 'unchanged', 'cardRespondable', player);
+                if (mod != 'unchanged') return mod;
+                return true;
+              }).ai = function (card) {
+                var trigger = _status.event.parent._trigger;
+                var player = _status.event.player;
+                var result = trigger.judge(card) - trigger.judge(trigger.player.judging[0]);
+                var attitude = get.attitude(player, trigger.player);
+                if (attitude == 0 || result == 0) return 0;
+                if (attitude > 0) {
+                  return result - get.value(card) / 2;
+                } else {
+                  return -result - get.value(card) / 2;
+                }
+              };
+              "step 1"
+              if (result.bool) {
+                player.respond(result.cards, 'highlight', 'babyjilue_guicai', 'noOrdering');
+              } else {
+                event.finish();
+              }
+              "step 2"
+              if (result.bool) {
+                var card = result.cards[0];
+                player.removeMark('babyrenjie', 1);
+                if (trigger.player.judging[0].clone) {
+                  trigger.player.judging[0].clone.delete();
+                  game.addVideo('deletenode', player, get.cardsInfo([trigger.player.judging[0].clone]));
+                }
+                game.cardsDiscard(trigger.player.judging[0]);
+                if (get.suit(card) == 'heart') {
+                  player.recover();
+                } else if (get.suit(card) == 'club') {
+                  player.draw(2, 'nodelay');
+                }
+                trigger.player.judging[0] = card;
+                trigger.orderingCards.addArray(result.cards);
+                game.log(trigger.player, '的判定牌改为', card);
+              }
+              "step 3"
+              game.delay(2);
+            },
+            ai: {
+              rejudge: true,
+              tag: {
+                rejudge: 1,
+              },
+            },
+          },
+          fangzhu: {
+            audio: 'jilue_fangzhu',
+            trigger: {
+              player: 'damageEnd'
+            },
+            direct: true,
+            filter: function (event, player) {
+              return player.hasMark('babyrenjie');
+            },
+            content: function () {
+              "step 0"
+              player.chooseTarget('是否弃置一枚“忍”，并发动【放逐】？', get.skillInfoTranslation('babyjilue_fangzhu'), function (card, player, target) {
+                return player != target
+              }).ai = function (target) {
+                if (target.hasSkillTag('noturn')) return 0;
+                if (target.isTurnedOver()) {
+                  return get.attitude(player, target) - 1;
+                }
+                return -get.attitude(player, target) - 1;
+              }
+              "step 1"
+              if (result.bool) {
+                player.removeMark('babyrenjie', 1);
+                player.logSkill('babyjilue_fangzhu', result.targets);
+                result.targets[0].draw();
+                result.targets[0].turnOver();
+              }
+            },
+            ai: {
+              maixie: true,
+              maixie_hp: true,
+              effect: {
+                target: function (card, player, target) {
+                  if (get.tag(card, 'damage')) {
+                    if (player.hasSkillTag('jueqing', false, target)) return [1, -2];
+                    if (target.hp <= 1) return;
+                    if (!target.hasFriend()) return;
+                    var hastarget = false;
+                    var turnfriend = false;
+                    var players = game.filterPlayer();
+                    for (var i = 0; i < players.length; i++) {
+                      if (get.attitude(target, players[i]) < 0 && !players[i].isTurnedOver()) {
+                        hastarget = true;
+                      }
+                      if (get.attitude(target, players[i]) > 0 && players[i].isTurnedOver()) {
+                        hastarget = true;
+                        turnfriend = true;
+                      }
+                    }
+                    if (get.attitude(player, target) > 0 && !hastarget) return;
+                    if (turnfriend) return [0.5, 1];
+                    if (target.hp > 1) return [1, 1];
+                  }
+                }
+              }
+            }
+          },
+          wansha: {
+            audio: 'jilue_wansha',
+            global: 'babyjilue_wansha_global',
+            trigger: {
+              global: 'dyingBegin'
+            },
+            // logTarget: 'player',
+            prompt: '是否弃一枚“忍”，本回合获得【完杀】？',
+            prompt2: () => get.skillInfoTranslation('babyjilue_wansha'),
+            filter: function (event, player) {
+              if (!player.hasMark('babyrenjie')) return false;
+              if (player.hasSkill('babyjilue_wansha_clear')) return false;
+              return player == _status.currentPhase;
+            },
+            content: function () {
+              player.removeMark('babyrenjie', 1);
+              player.addTempSkill('babyjilue_wansha_clear');
+            },
+          },
+          wansha_global: {
+            mod: {
+              cardEnabled: function (card, player) {
+                var source = _status.currentPhase;
+                if (card.name == 'tao' && source && source != player && source.hasSkill('babyjilue_wansha_clear')) return false;
+              },
+              cardSavable: function (card, player) {
+                var source = _status.currentPhase;
+                if (card.name == 'tao' && source && source != player && source.hasSkill('babyjilue_wansha_clear')) return false;
+              },
+            },
+          },
+          wansha_clear: {
+            charlotte: true,
+          },
+          jizhi: {
+            audio: 'jilue_zhiheng',
+            trigger: {
+              player: "useCard",
+            },
+            prompt: '是否弃一枚“忍”，发动【集智】？',
+            prompt2: () => get.skillInfoTranslation('babyjilue_jizhi'),
+            filter: function (event, player) {
+              return (get.type(event.card) == 'trick' && player.hasMark('babyrenjie'));
+            },
+            content: function () {
+              'step 0'
+              player.removeMark('babyrenjie', 1);
+              player.draw();
+              'step 1'
+              var cards = result;
+              if (get.itemtype(cards) != 'cards') {
+                event.finish();
+                return;
+              }
+              var type = get.type2(cards[0]);
+              switch (type) {
+                case 'basic':
+                  player.addTempSkill('babyjilue_limit');
+                  player.addMark('babyjilue_limit', 1, false);
+                  event.finish();
+                  break;
+                case 'trick':
+                  player.addTempSkill('babyjilue_sha');
+                  player.addMark('babyjilue_sha', 1, false);
+                  event.finish();
+                  break;
+                case 'equip':
+                  event.card = cards[0];
+                  break;
+                default:
+                  event.finish();
+              }
+              'step 2'
+              player.chooseTarget('集智：是否将' + get.translation(card) + '置入一名其他角色的装备区？', (card, player, target) => {
+                if (player == target) return false;
+                var card = _status.event.card;
+                return target.isEmpty(get.subtype(card));
+              }).set('ai', target => {
+                return get.effect(target, _status.event.card, _status.event.player, _status.event.player);
+              }).set('card', card);
+              'step 3'
+              if (result.bool) {
+                var target = result.targets[0];
+                player.$give(card, target, false);
+                game.delayx();
+                target.equip(card);
+              }
+            },
+            ai: {
+              threaten: 1.4,
+              noautowuxie: true,
+            },
+          },
+          limit: {
+            marktext: '智',
+            charlotte: true,
+            intro: {
+              name: '集智',
+              content: '手牌上限+#'
+            },
+            onremove: true,
+            mod: {
+              maxHandcard: function (player, num) {
+                return num + player.countMark('babyjilue_limit');
+              },
+            }
+          },
+          sha: {
+            marktext: '智',
+            charlotte: true,
+            intro: {
+              name: '集智',
+              content: '使用【杀】的次数上限+#'
+            },
+            onremove: true,
+            mod: {
+              cardUsable: function (card, player, num) {
+                if (card.name == 'sha') return num + player.countMark('babyjilue_sha');
+              },
+            }
+          },
+          draw: {
+            trigger: {
+              player: 'logSkill',
+            },
+            frequent: true,
+            prompt2: '当你每回合首次发动〖极略〗后，可摸一张牌',
+            filter: function (event, player) {
+              return event.skill.indexOf('babyjilue_') == 0 && player.getHistory('useSkill', evt => evt.skill.indexOf('babyjilue_') == 0).length == 1;
+            },
+            content: function () {
+              player.draw();
+            }
+          }
+        }
+      },
+      babylianpo: {
+        audio: 'lianpo',
+        trigger: {
+          global: "phaseAfter",
+        },
+        frequent: true,
+        filter: function (event, player) {
+          return player.getStat('kill') > 0;
+        },
+        content: function () {
+          player.insertPhase();
+        },
+      },
     },
     card: {},
     characterIntro: {
@@ -3626,10 +3957,32 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       taffyboss_baonu_info: '锁定技，当你的体力值降至4或更低时，你变身为暴怒战神或神鬼无前，并立即开始你的回合。',
       taffyboss_jingjia: "精甲",
       taffyboss_jingjia_info: "锁定技，游戏开始时，将本局游戏中加入的装备随机置入你的装备区。",
+      shoushen_caocao: "手杀神曹操",
+      shoushen_caocao_prefix: "手杀神",
+      babyshen_simayi: "欢杀神司马懿",
+      babyshen_simayi_prefix: "欢杀神",
+      babyrenjie: "忍戒",
+      babyrenjie_info: "锁定技，①游戏开始时或当你受到1点伤害后，你获得1枚“忍”标记。②当你于弃牌阶段内弃置牌后，你获得等同于失去的牌数量的“忍”。",
+      babyjilue: "极略",
+      babyjilue_info: "①当一名角色的判定牌生效前，你可以弃1枚“忍”并发动〖鬼才〗。②当你受到伤害后，你可以弃1枚“忍”并发动〖放逐〗。③当你使用锦囊牌时，你可以弃1枚“忍”并发动〖集智〗。④当一名角色于你的回合内进入濒死状态时，你可以弃1枚“忍”并获得〖完杀〗直到回合结束。⑤当你每回合首次发动〖极略〗后，可摸一张牌。",
+      babylianpo: "连破",
+      babylianpo_info: "一名角色的回合结束时，若你本回合内杀死过角色，则你可以进行一个额外的回合。",
+      babyjilue_fangzhu: "放逐",
+      babyjilue_fangzhu_info: "当你受到伤害后，你可以令一名其他角色摸一张牌并翻面。",
+      babyjilue_guicai: "鬼才",
+      babyjilue_guicai_info: "一名角色的判定牌生效前，你可以打出一张牌代替之。若此牌花色为：♥，你回复1点体力；♣，你摸两张牌。",
+      babyjilue_jizhi: "集智",
+      babyjilue_jizhi_info: "当你使用普通锦囊牌时，你可以摸一张牌。若此牌为：基本牌，你于本回合手牌上限+1；锦囊牌，你于本回合使用【杀】的次数上限+1；装备牌，你可以将此牌置入其他角色的装备区。",
+      babyjilue_wansha: "完杀",
+      babyjilue_wansha_info: "锁定技，你的回合内，其他角色不能使用【桃】。",
+      babyjilue_wansha_clear: "完杀",
+      babyjilue_wansha_clear_info: "锁定技，你的回合内，其他角色不能使用【桃】。",
 
       taffy_old: "圣经·塔约",
       taffy_ol: "江山如故·永",
+      taffy_shou: "江山如故·雏",
       taffy_shi: "江山如故·塔",
+      taffy_baby: "江山如故·菲",
       taffy_diy: "神·塔",
       taffy_tang: "东瀛·唐氏",
       taffy_gzz: "东方·绀珠传",
