@@ -21406,8 +21406,8 @@
 					}
 					next.setContent('expandEquip');
 					return next;
-				},
-				SortEquipNodes:function(){
+				}
+				SortEquipNodes(){
 					var player=this;
 					if(!player.node.equips.childNodes) return;
 					var childnodes_Array=[];
@@ -21424,7 +21424,7 @@
 					for(i=0;i<childnodes_Array.length;++i){
 						player.node.equips.appendChild(childnodes_Array[i]);
 					}
-				},
+				}
 				//判断判定区是否被废除
 				isDisabledJudge(){
 					return Boolean(this.storage._disableJudge);
@@ -21503,7 +21503,7 @@
 						}
 					}
 					player.SortEquipNodes();
-				},
+				}
 				//以下函数涉及到本次更新内容而进行修改
 				canEquip(name,replace){
 					const ranges=get.subtypes(name),rangex=[],player=this,combined=get.is.mountCombined();
@@ -22576,17 +22576,6 @@
 					}
 				}
 				uninit(){
-					if(window.decadeUI){
-						if (this.$jieMark)
-						this.$jieMark.remove();
-						
-						this.stopDynamic();
-						this.doubleAvatar = false;
-						this.node.campWrap.dataset.camp = null;
-						this.node.campWrap.node.campName.innerHTML = '';
-						this.node.campWrap.node.campName.style.backgroundImage = '';
-						this.node.name2.innerHTML = '';
-					}
 					this.expandedSlots={};
 					this.disabledSlots={};
 					
@@ -26471,10 +26460,8 @@
 						node.classList.add('damageadded');
 					}
 					node.innerHTML=str;
-					if(window.decadeUI) node.dataset.text = node.innerText;
 					node.dataset.nature=nature||'soil';
-					if(window.decadeUI) node.style.animation = 'open-fade-in 0.6s';
-				},
+				}
 				prompt_old(name2,className){
 					var node;
 					if(this.node.prompt){
