@@ -228,6 +228,7 @@ window.noname_source_list=[
 	'extension/十周年UI/decadeLayout.css',
 	'extension/十周年UI/dialog.css',
 	'extension/十周年UI/dynamicSkin.js',
+	'extension/十周年UI/dynamicSkinTemplate.js',
 	'extension/十周年UI/dynamicWorker.js',
 	'extension/十周年UI/effect.css',
 	'extension/十周年UI/effect.js',
