@@ -1005,10 +1005,6 @@
 	text-shadow: #000 1px 0 0, #000 0 1px 0, #000 -1px 0 0, #000 0 -1px 0, 0 0 8px #000;
 }
 
-.player>.judges>.card.feichu>.judge-mark>.judge::before {
-	content: '废';
-}
-
 .player>.judges>.card>.background,
 .judges>.card.fakejudge.fullskin>.background,
 .judges>.card.fakejudge.fullborder>.background {
