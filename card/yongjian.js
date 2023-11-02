@@ -122,8 +122,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					'step 0'
 					player.gainPlayerCard(target,'hej',true,[1,2]).set('ai',function(button){
 						let card=button.link;
-						if(get.type(card)=='equip') return get.equipValue(card);
-						return get.value(card);
+						if(get.type(card)=='equip'&&get.position(card)=='e'&&get.attitude(player,target)<0) return get.equipValue(card);
 					});
 					'step 1'
 					if(result.bool&&target.isIn()){
@@ -445,10 +444,10 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				equipSkill:true,
 				forced:true,
 				trigger:{target:'gift'},
-				filter:(event,player)=>event.target!=player,
+				filter:(event,player)=>event.target==player,
 				logTarget:'player',
 				content:()=>{
-					trigger.deniedGift.add(trigger.card);
+					trigger.deniedGifts.add(trigger.card);
 				},
 				ai:{
 					refuseGifts:true
