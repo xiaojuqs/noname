@@ -927,20 +927,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         initList: function () {
           // var list,skills=[];
           var skills = [];
-          var banned = ['xunyi'];
-          if (get.mode() == 'guozhan') {
-            list = [];
-            for (var i in lib.characterPack.mode_guozhan) list.push(i);
-          }
+          // var banned = ['xunyi'];
+          // if (get.mode() == 'guozhan') {
+          //   list = [];
+          //   for (var i in lib.characterPack.mode_guozhan) list.push(i);
+          // }
           // else if(_status.connectMode) list=get.charactersOL();
-          else {
-            // list=[];
-            // for(var i in lib.character){
-            // 	if(lib.filter.characterDisabled2(i)||lib.filter.characterDisabled(i)) continue;
-            // 	list.push(i);
-            // }
-            skills = ['tianyi', 'nzry_yili', 'zhichi', 'yicong', 'new_yijue', 'rerende', 'rejizhi', 'renxin', 'zhiyu', 'juyi', 'relixia', 'dcchongyi', 'tongli', 'renzheng', 'cslilu', 'reyixiang', 'xinfu_qianxin', 'yishe']
-          }
+          // else {
+          //   list=[];
+          //   for(var i in lib.character){
+          //   	 if(lib.filter.characterDisabled2(i)||lib.filter.characterDisabled(i)) continue;
+          //   	 list.push(i);
+          //   }
+          // }
           // for(var i of list){
           // 	if(i.indexOf('gz_jun')==0) continue;
           // 	for(var j of lib.character[i][3]){
@@ -956,6 +955,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           // 		}
           // 	}
           // }
+          skills = ['tianyi', 'nzry_yili', 'zhichi', 'yicong', 'new_yijue', 'rerende', 'rejizhi', 'renxin', 'zhiyu', 'juyi', 'relixia', 'dcchongyi', 'tongli', 'renzheng', 'cslilu', 'reyixiang', 'xinfu_qianxin', 'yishe']
           _status.shidunshi_list = skills;
         },
         subSkill: {
@@ -979,38 +979,20 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
               event.cardname = player.storage.shidunshi_damage;
               player.removeSkill('shidunshi_damage');
               event.target = trigger.source;
-              event.videoId = lib.status.videoId++;
-              var func = function (card, id, card2, card3) {
-                var list = [
-                  '防止即将对' + card3 + '造成的伤害，并令' + card + '获得一个技能名中包含“仁/义/礼/智/信”的技能',
-                  '从〖遁世〗中删除【' + card2 + '】并获得一枚“席”',
-                  '减1点体力上限，然后摸等同于“席”数的牌',
-                ];
-                var choiceList = ui.create.dialog('遁世：请选择两项');
-                choiceList.videoId = id;
-                for (var i = 0; i < list.length; i++) {
-                  var str = '<div class="popup text" style="width:calc(100% - 10px);display:inline-block">';
-                  str += list[i];
-                  str += '</div>';
-                  var next = choiceList.add(str);
-                  next.firstChild.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.button);
-                  next.firstChild.link = i;
-                  for (var j in lib.element.button) {
-                    next[j] = lib.element.button[j];
-                  }
-                  choiceList.buttons.add(next.firstChild);
-                }
-                return choiceList;
-              };
-              if (player.isOnline2()) {
-                player.send(func, get.translation(trigger.source), event.videoId, get.translation(event.cardname), get.translation(trigger.player));
-              }
-              event.dialog = func(get.translation(trigger.source), event.videoId, get.translation(event.cardname), get.translation(trigger.player));
-              if (player != game.me || _status.auto) {
-                event.dialog.style.display = 'none';
-              }
-              var next = player.chooseButton();
-              next.set('dialog', event.videoId);
+              var card = get.translation(trigger.source),
+                card2 = get.translation(event.cardname),
+                card3 = get.translation(trigger.player);
+              var list = [
+                '防止即将对' + card3 + '造成的伤害，并令' + card + '获得一个技能名中包含“仁/义/礼/智/信”的技能',
+                '从〖遁世〗中删除【' + card2 + '】并获得一枚“席”',
+                '减1点体力上限，然后摸等同于“席”数的牌',
+              ];
+              var next = player.chooseButton([
+                '遁世：请选择两项',
+                [list.map((item, i) => {
+                  return [i, item];
+                }), 'textbutton']
+              ]);
               next.set('forced', true);
               next.set('selectButton', 2);
               next.set('ai', function (button) {
@@ -1031,10 +1013,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 }
               });
               'step 1'
-              if (player.isOnline2()) {
-                player.send('closeDialog', event.videoId);
-              }
-              event.dialog.close();
               event.links = result.links.sort();
               for (var i of event.links) {
                 game.log(player, '选择了', '#g【遁世】', '的', '#y选项' + get.cnNumber(i + 1, true));
