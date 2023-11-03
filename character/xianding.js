@@ -10239,10 +10239,24 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							'选择手牌数大于你的一名角色',
 							'选择装备数大于你的一名角色',
 						];
-						var choiceList=ui.create.dialog('尊位：请选择一项','forcebutton','hidden');
-						choiceList.add([list.map((item,i)=>{
-							return [i,item];
-						}),'textbutton'])
+						var choiceList=ui.create.dialog('尊位：清选择一项','forcebutton','hidden');
+						for(var i=0;i<list.length;i++){
+							if(player.storage.zunwei&&player.storage.zunwei.contains(i)) continue;
+							var bool=game.hasPlayer(function(current){
+								return current!=player&&lib.skill.zunwei.backups[i].filterTarget(null,player,current);
+							});
+							var str='<div class="popup text" style="width:calc(100% - 10px);display:inline-block">';
+							if(!bool) str+='<div style="opacity:0.5">';
+							str+=list[i];
+							if(!bool) str+='</div>';
+							str+='</div>';
+							var next=choiceList.add(str);
+							next.firstChild.addEventListener(lib.config.touchscreen?'touchend':'click',ui.click.button);
+							next.firstChild.link=i;
+							next.firstChild._filterButton=bool;
+							Object.setPrototypeOf(next,lib.element.Button.prototype);
+							choiceList.buttons.add(next.firstChild);
+						}
 						return choiceList;
 					},
 					filter:function(button){
