@@ -573,17 +573,20 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					result:{
 						keepAI:true,
 						target:function(player,target){
-							var val=0;
+							if(target.countCards('e')>0&&(target.hasSkillTag('nodiscard')||target.hasSkillTag('nolose')||target.hasSkillTag('noh'))) return 0;
+							if((target.countCards('e',function(cardx){return cardx.subtype!='equip2'&&get.equipValue(cardx)<=0;})>0)) return 0;
+							let val=0;
+							if(target.sex=='male'){
+								let h_num=target.countCards('h');
+								if(h_num>0) val+=4/h_num;
+								let e_no_equip2_num=target.countCards('e',function(cardx){
+									return cardx.subtype!='equip2';
+								});;
+								if(e_no_equip2_num>0) val+=4/e_no_equip2_num;
+							}
 							var cards=target.getEquips(2);
 							for(var card of cards){
-								if(card) val=get.equipValue(card);
-								if(target.sex=='male'){
-									var num=target.countCards('he',function(cardx){
-										return cardx!=card;
-									});
-									if(num>0) val+=4/num;
-									if((target.countCards('e',function(card){return get.equipValue(card)<=0;})>0)&&val<=0) val=0;
-								}
+								if(card) val+=get.equipValue(card);
 							}
 							return -val;
 						},
