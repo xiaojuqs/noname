@@ -1,5 +1,40 @@
 'use strict';
 game.import('character', function (lib, game, ui, get, ai, _status) {
+
+  // 一些prefix样式补充
+  lib.namePrefix.set('旧武', {
+    /**
+     * @returns {string}
+     */
+    getSpan: () => `${get.prefixSpan('旧')}${get.prefixSpan('武')}`
+  });
+  lib.namePrefix.set('旧TW', {
+    /**
+     * @returns {string}
+     */
+    getSpan: () => `${get.prefixSpan('旧')}${get.prefixSpan('TW')}`
+  });
+  lib.namePrefix.set('手杀神', {
+    /**
+     * @returns {string}
+     */
+    getSpan: () => `${get.prefixSpan('手杀')}${get.prefixSpan('神')}`
+  });
+  lib.namePrefix.set('欢杀', {
+    getSpan: () => {
+      const span = document.createElement('span');
+      span.style.fontFamily = 'NonameSuits';
+      span.textContent = '👶';
+      return span.outerHTML;
+    }
+  });
+  lib.namePrefix.set('欢杀神', {
+    /**
+     * @returns {string}
+     */
+    getSpan: () => `${get.prefixSpan('欢杀')}${get.prefixSpan('神')}`
+  });
+
   return {
     name: 'taffy',
     connect: true,
@@ -3887,8 +3922,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       oldtw_bn_3_bg: '三',
       oldtwxiongjun: '凶军',
       oldtwxiongjun_info: '锁定技，当你造成伤害后，所有拥有〖凶军〗的角色摸一张牌。',
-      oldtw_zhangmancheng: '旧张曼成',
-      oldtw_zhangmancheng_prefix: '旧',
+      oldtw_zhangmancheng: '旧TW张曼成',
+      oldtw_zhangmancheng_prefix: '旧TW',
       oldtwfengji: '蜂集',
       oldtwfengji_info: '出牌阶段开始时，若你没有“示”，则你可以将一张牌作为“示”置于武将牌上并施法：从牌堆中获得X张与“示”牌名相同的牌，然后移去“示”。',
       oldtwyiju: '蚁聚',
