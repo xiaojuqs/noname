@@ -9860,6 +9860,7 @@ window.noname_asset_list=[
 	'extension/十周年UI/image/card/yihuajiemu.webp',
 	'extension/十周年UI/image/card/yinfengjia.webp',
 	'extension/十周年UI/image/card/yinfengyi.webp',
+	'extension/十周年UI/image/card/ying.webp',
 	'extension/十周年UI/image/card/yinyueqiang.webp',
 	'extension/十周年UI/image/card/yitianjian.webp',
 	'extension/十周年UI/image/card/yiyi.webp',
