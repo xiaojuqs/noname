@@ -3660,7 +3660,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 								const cardName = this.name;
 								const fileName = cardNature ? `${cardName}_${get.natureList(cardNature).sort(lib.sort.nature).join('_')}` : cardName;
 								let decadeCardSource = decadeExtCardImage[fileName];
-								let not_load_card_names=['sha_stab','sha_kami'];
+								let not_load_card_names=['sha_kami'];
 								if (!decadeCardSource && cardName != fileName && !not_load_card_names.contains(fileName)) decadeCardSource = decadeExtCardImage[cardName];
 
 								if (decadeCardSource) {
