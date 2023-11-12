@@ -35758,6 +35758,12 @@
 				 */
 				getSpan:()=>`${get.prefixSpan('TW')}${get.prefixSpan('神')}`
 			}],
+			['SP神',{
+				/**
+				 * @returns {string}
+				 */
+				getSpan:()=>`${get.prefixSpan('SP')}${get.prefixSpan('神')}`
+			}],
 			['TW将',{
 				/**
 				 * @returns {string}
