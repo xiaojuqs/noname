@@ -49,7 +49,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       ],
       minitaffy: ['female', 'qun', 1, ['taffytangshi', 'taffyzisha']],
       shixushao: ['male', 'qun', 4, ['shipingjian']],
-      spshenxushao: ['male', 'shen', 2, ['spshenpingjian'],
+      spshenxushao: ['male', 'shen', 3, ['spshenpingjian'],
         ['qun']
       ],
       oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
@@ -1767,6 +1767,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
             if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+            const tempSkills = Object.keys(player.tempSkills)
+            if (tempSkills.includes(skill)) {
+              return false;
+            }
+            const additionalSkills = Object.keys(player.additionalSkills)
+            for (let i = 0; i < additionalSkills.length; i++) {
+              if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
+                return false;
+              }
+            }
             return true;
           });
           var next = player.chooseButton(true, [
@@ -1997,6 +2007,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
             if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+            const tempSkills = Object.keys(player.tempSkills)
+            if (tempSkills.includes(skill)) {
+              return false;
+            }
+            const additionalSkills = Object.keys(player.additionalSkills)
+            for (let i = 0; i < additionalSkills.length; i++) {
+              if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
+                return false;
+              }
+            }
             return true;
           });
           var next = player.chooseButton(true, [
