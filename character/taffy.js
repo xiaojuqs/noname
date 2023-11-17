@@ -243,7 +243,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 if (event.dialog) event.dialog.close();
                 if (event.control) event.control.close();
               };
-              var chooseButton = function (list, skills) {
+              var chooseButton = function (list, skills, result, player) {
                 var event = _status.event;
                 if (!event._result) event._result = {};
                 event._result.skills = [];
@@ -300,9 +300,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 game.countChoose();
               };
               if (event.isMine()) {
-                chooseButton(list, skills);
+                chooseButton(list, skills, result, player);
               } else if (event.isOnline()) {
-                event.player.send(chooseButton, list, skills);
+                event.player.send(chooseButton, list, skills, result, player);
                 event.player.wait();
                 game.pause();
               } else {
@@ -1910,7 +1910,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   if (event.dialog) event.dialog.close();
                   if (event.control) event.control.close();
                 };
-                var chooseButton = function (list, skills) {
+                var chooseButton = function (list, skills, result, player) {
                   var event = _status.event;
                   if (!event._result) event._result = {};
                   event._result.skills = [];
@@ -1967,9 +1967,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   game.countChoose();
                 };
                 if (event.isMine()) {
-                  chooseButton(list, skills);
+                  chooseButton(list, skills, result, player);
                 } else if (event.isOnline()) {
-                  event.player.send(chooseButton, list, skills);
+                  event.player.send(chooseButton, list, skills, result, player);
                   event.player.wait();
                   game.pause();
                 } else {
@@ -2102,7 +2102,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   if (event.dialog) event.dialog.close();
                   if (event.control) event.control.close();
                 };
-                var chooseButton = function (list, skills) {
+                var chooseButton = function (list, skills, result, player) {
                   var event = _status.event;
                   if (!event._result) event._result = {};
                   event._result.skills = [];
@@ -2159,9 +2159,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                   game.countChoose();
                 };
                 if (event.isMine()) {
-                  chooseButton(list, skills);
+                  chooseButton(list, skills, result, player);
                 } else if (event.isOnline()) {
-                  event.player.send(chooseButton, list, skills);
+                  event.player.send(chooseButton, list, skills, result, player);
                   event.player.wait();
                   game.pause();
                 } else {
