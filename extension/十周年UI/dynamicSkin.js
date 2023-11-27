@@ -3804,6 +3804,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
     //杜预
     sp_duyu: decadeUI.dynamicSkin.duyu,
     pk_sp_duyu: decadeUI.dynamicSkin.duyu,
+    shenduyu: decadeUI.dynamicSkin.duyu,
 
     //冯妤//冯芳女
     re_fengfangnv: decadeUI.dynamicSkin.fengfangnv,

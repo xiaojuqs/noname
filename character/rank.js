@@ -1780,6 +1780,7 @@ window.noname_character_rank={
       'taffyboss_lvbu1',
       'shoushen_caocao',
       'babyshen_simayi',
+      'shenduyu',
 		],
 		epic:[
 			'ol_pengyang',

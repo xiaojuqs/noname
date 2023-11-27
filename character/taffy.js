@@ -67,6 +67,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       babyshen_simayi: ["male", "shen", 3, ["babyrenjie", "babyjilue", "babylianpo"],
         []
       ],
+      shenduyu: ['male', 'shen', 5, ['shenmiewu']],
       ruijier: ['female', 'shen', '', [],
         ['unseen']
       ],
@@ -78,7 +79,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         taffy_shou: ['shoushen_caocao'],
         taffy_shi: ['shiguanning', 'shixushao'],
         taffy_baby: ['babyshen_simayi'],
-        taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji'],
+        taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji', 'shenduyu'],
         taffy_tang: ['acetaffy', 'minitaffy'],
         taffy_gzz: ['junko'],
         taffy_wu: ['huiwansunquan', 'huiwansunquanplus'],
@@ -3773,6 +3774,196 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
           player.insertPhase();
         },
       },
+      shenmiewu: {
+        audio: 'spmiewu',
+        enable: ['chooseToUse', 'chooseToRespond'],
+        group: 'shenmiewu_shenpkmiewu',
+        filter: function (event, player) {
+          if (!player.countCards('hse') || player.hasSkill('shenmiewu2')) return false;
+          for (var i of lib.inpile) {
+            var type = get.type2(i);
+            if ((type == 'basic' || type == 'trick') && event.filterCard({
+                name: i
+              }, player, event)) return true;
+          }
+          return false;
+        },
+        chooseButton: {
+          dialog: function (event, player) {
+            var list = [];
+            for (var i = 0; i < lib.inpile.length; i++) {
+              var name = lib.inpile[i];
+              if (name == 'sha') {
+                if (event.filterCard({
+                    name: name
+                  }, player, event)) list.push(['基本', '', 'sha']);
+                for (var j of lib.inpile_nature) {
+                  if (event.filterCard({
+                      name: name,
+                      nature: j
+                    }, player, event)) list.push(['基本', '', 'sha', j]);
+                }
+              } else if (get.type2(name) == 'trick' && event.filterCard({
+                  name: name
+                }, player, event)) list.push(['锦囊', '', name]);
+              else if (get.type(name) == 'basic' && event.filterCard({
+                  name: name
+                }, player, event)) list.push(['基本', '', name]);
+            }
+            return ui.create.dialog('灭吴', [list, 'vcard']);
+          },
+          filter: function (button, player) {
+            return _status.event.getParent().filterCard({
+              name: button.link[2]
+            }, player, _status.event.getParent());
+          },
+          check: function (button) {
+            if (_status.event.getParent().type != 'phase') return 1;
+            var player = _status.event.player;
+            if (['wugu', 'zhulu_card', 'yiyi', 'lulitongxin', 'lianjunshengyan', 'diaohulishan'].contains(button.link[2])) return 0;
+            return player.getUseValue({
+              name: button.link[2],
+              nature: button.link[3],
+            });
+          },
+          backup: function (links, player) {
+            return {
+              filterCard: true,
+              audio: 'shenmiewu',
+              popname: true,
+              check: function (card) {
+                return 8 - get.value(card);
+              },
+              position: 'hse',
+              viewAs: {
+                name: links[0][2],
+                nature: links[0][3]
+              },
+              precontent: function () {
+                player.addTempSkill('shenmiewu2');
+              },
+            }
+          },
+          prompt: function (links, player) {
+            return '将一张牌当做' + (get.translation(links[0][3]) || '') + get.translation(links[0][2]) + '使用';
+          }
+        },
+        hiddenCard: function (player, name) {
+          if (!lib.inpile.contains(name)) return false;
+          var type = get.type2(name);
+          return (type == 'basic' || type == 'trick') && player.countCards('she') > 0 && !player.hasSkill('shenmiewu2');
+        },
+        ai: {
+          fireAttack: true,
+          respondSha: true,
+          respondShan: true,
+          skillTagFilter: function (player) {
+            if (!player.countCards('hse') || player.hasSkill('shenmiewu2')) return false;
+          },
+          order: 1,
+          result: {
+            player: function (player) {
+              if (_status.event.dying) return get.attitude(player, _status.event.dying);
+              return 1;
+            },
+          },
+        },
+        subSkill: {
+          shenpkmiewu:{
+            audio:'spmiewu',
+            enable:['chooseToUse','chooseToRespond'],
+            filter:function(event,player){
+              if(player.hasSkill('shenmiewu2') || !!player.countCards('hse') ) return false;
+              for(var i of lib.inpile){
+                var type=get.type(i);
+                if((type=='basic'||type=='trick')&&event.filterCard({name:i},player,event)) return true;
+              }
+              return false;
+            },
+            chooseButton:{
+              dialog:function(event,player){
+                var list=[];
+                for(var i=0;i<lib.inpile.length;i++){
+                  var name=lib.inpile[i];
+                  if(name=='sha'){
+                    if(event.filterCard({name:name},player,event)) list.push(['基本','','sha']);
+                    for(var j of lib.inpile_nature){
+                      if(event.filterCard({name:name,nature:j},player,event)) list.push(['基本','','sha',j]);
+                    }
+                  }
+                  else if(get.type(name)=='trick'&&event.filterCard({name:name},player,event)) list.push(['锦囊','',name]);
+                  else if(get.type(name)=='basic'&&event.filterCard({name:name},player,event)) list.push(['基本','',name]);
+                }
+                return ui.create.dialog('灭吴',[list,'vcard']);
+              },
+              filter:function(button,player){
+                return _status.event.getParent().filterCard({name:button.link[2]},player,_status.event.getParent());
+              },
+              check:function(button){
+                if(_status.event.getParent().type!='phase') return 1;
+                var player=_status.event.player;
+                if(['wugu','zhulu_card','yiyi','lulitongxin','lianjunshengyan','diaohulishan'].contains(button.link[2])) return 0;
+                return player.getUseValue({
+                  name:button.link[2],
+                  nature:button.link[3],
+                });
+              },
+              backup:function(links,player){
+                return {
+                  audio:'spmiewu',
+                  filterCard:()=>false,
+                  selectCard:-1,
+                  popname:true,
+                  viewAs:{name:links[0][2],nature:links[0][3]},
+                  precontent:function(){
+                    player.addTempSkill('shenmiewu2');
+                  },
+                }
+              },
+              prompt:function(links,player){
+                return '视为使用'+(get.translation(links[0][3])||'')+get.translation(links[0][2])+'并摸一张牌';
+              }
+            },
+            hiddenCard:function(player,name){
+              if(!lib.inpile.contains(name)) return false;
+              var type=get.type(name);
+              return (type=='basic'||type=='trick')&&player.countCards('she')===0&&!player.hasSkill('shenmiewu2');
+            },
+            ai:{
+              fireAttack:true,
+              respondSha:true,
+              respondShan:true,
+              skillTagFilter:function(player){
+                if(!!player.countCards('hse')||player.hasSkill('shenmiewu2')) return false;
+              },
+              order:1,
+              result:{
+                player:function(player){
+                  if(_status.event.dying) return get.attitude(player,_status.event.dying);
+                  return 1;
+                },
+              },
+            },
+          },
+        }
+      },
+      shenmiewu2: {
+        trigger: {
+          player: ['useCardAfter', 'respondAfter']
+        },
+        forced: true,
+        charlotte: true,
+        popup: false,
+        filter: function (event, player) {
+          return event.skill == 'shenmiewu_backup' || event.skill == 'shenmiewu_shenpkmiewu_backup';
+        },
+        content: function () {
+          player.draw();
+        },
+      },
+      shenmiewu_backup: {
+        audio: 'shenmiewu'
+      },
     },
     card: {},
     characterIntro: {
@@ -3842,7 +4033,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         这是她的乐趣所在。<br/>
         然后，终于，这次的复仇大戏，将要落下帷幕了。`,
       huiwansunquan: '界孙权，但是会玩。',
-      huiwansunquanplus: '界孙权，但是超会玩。'
+      huiwansunquanplus: '界孙权，但是超会玩。',
+      shenduyu: '杜预（222年－285年），字元凯，京兆郡杜陵县（今陕西西安）人，中国魏晋时期军事家、经学家、律学家，曹魏散骑常侍杜恕之子。杜预初仕曹魏，任尚书郎，后成为权臣司马昭的幕僚，封丰乐亭侯。西晋建立后，历任河南尹、安西军司、秦州刺史、度支尚书等职。咸宁四年（278年）接替羊祜出任镇南大将军，镇守荆州。他积极备战，支持晋武帝司马炎对孙吴作战，并在咸宁五年（279年）成为晋灭吴之战的统帅之一。战后因功进封当阳县侯，仍镇荆州。太康五年（285年），杜预被征入朝，拜司隶校尉，途中于邓县逝世，终年六十三岁。获赠征南大将军、开府仪同三司，谥号为成。杜预耽思经籍，博学多通，多有建树，时誉为“杜武库”。著有《春秋左氏传集解》及《春秋释例》等。为明朝之前唯一一个同时进入文庙和武庙之人。',
     },
     characterTitle: {
       shenxushao: '#gViridian',
@@ -3859,6 +4051,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       huiwansunquan: '#gViridian',
       huiwansunquanplus: '#gViridian',
       taffyboss_lvbu1: '#gViridian',
+      shenduyu: '#gViridian',
     },
     perfectPair: {},
     characterFilter: {},
@@ -4010,6 +4203,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       babyjilue_wansha_info: "锁定技，你的回合内，其他角色不能使用【桃】。",
       babyjilue_wansha_clear: "完杀",
       babyjilue_wansha_clear_info: "锁定技，你的回合内，其他角色不能使用【桃】。",
+      shenduyu: '神杜预',
+      shenduyu_prefix: '神',
+      shenmiewu: '灭吴',
+      shenmiewu2: '灭吴',
+      shenmiewu_backup: '灭吴',
+      shenmiewu_info: '每回合限一次。你可将一张牌当做任意基本牌或锦囊牌使用，然后摸一张牌。若你没有牌，你可视为使用或打出任意一张基本牌或普通锦囊牌，然后摸一张牌。',
 
       taffy_old: "圣经·塔约",
       taffy_ol: "江山如故·永",
