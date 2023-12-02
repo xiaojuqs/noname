@@ -2041,6 +2041,21 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           y: [0, 0.4]
         },
       },
+      爆料皮肤: {
+        name: '神荀彧/爆料皮肤/XingXiang',
+        x: [0, 0.5],
+        y: [0, 0.1],
+        scale: 0.5,
+        angle: 0,
+        //speed: 1,
+        //action: 'DaiJi',
+        beijing: {
+          name: '神荀彧/爆料皮肤/BeiJing',
+          scale: 0.3,
+          x: [0, 0.4],
+          y: [0, 0.5]
+        },
+      },
     },
     shen_zhaoyun: { //神赵云
       神龙佑主: {
@@ -2365,6 +2380,21 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
         //action: 'DaiJi',
         beijing: {
           name: '孙权/吴王六剑/BeiJing',
+          scale: 0.25,
+          x: [0, 0.4],
+          y: [0, 0.5]
+        },
+      },
+      爆料皮肤: {
+        name: '孙权/爆料皮肤/XingXiang',
+        x: [0, 0.5],
+        y: [0, 0],
+        scale: 0.5,
+        angle: 0,
+        //speed: 1,
+        //action: 'DaiJi',
+        beijing: {
+          name: '孙权/爆料皮肤/BeiJing',
           scale: 0.25,
           x: [0, 0.4],
           y: [0, 0.5]
@@ -3098,6 +3128,53 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
           x: [0, 0.5],
           y: [0, 0.5],
           scale: 0.3,
+        },
+      },
+      战场荣耀: {
+        name: '许劭/战场荣耀/daiji2',
+        teshu: {
+          name: '许劭/战场荣耀/chuchang2',
+          action: ['jineng'],
+          scale: 0.7,
+          whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use'],
+        },
+        play2: 'play2',
+        shan: 'play3',
+        x: [0, 0.5],
+        y: [0, 0.55],
+        scale: 0.7,
+        angle: 0,
+        //speed: 1,
+        shizhounian: true,
+        chuchang: {
+          name: '许劭/战场荣耀/chuchang',
+          action: 'play',
+          scale: 0.7,
+        },
+        gongji: {
+          name: '许劭/战场荣耀/chuchang2',
+          action: ['gongji'],
+          scale: 0.7,
+        },
+        beijing: {
+          name: '许劭/战场荣耀/beijing',
+          x: [0, 0.5],
+          y: [0, 0.5],
+          scale: 0.3,
+        },
+        zhishixian: {
+          name: '许劭/战场荣耀/shouji2',
+          scale: 0.5,
+          speed: 0.6,
+          delay: 0.2,
+          factor: 0.5,
+          effect: {
+            name: '许劭/战场荣耀/shouji',
+            scale: 0.8,
+            speed: 0.8,
+            delay: 0.3,
+            factor: 0.5,
+          },
         },
       },
     },

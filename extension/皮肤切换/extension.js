@@ -4785,6 +4785,11 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                           others.push(arg);
                                       }
                                   }
+                                  // taffy: 修复皮肤语音失效的问题喵
+                                  if (string.split('.').length > 1) {
+                                    string = string.substring(0, string.lastIndexOf("."))  //截取文件名
+                                  }
+                                  // taffy分界线
                                   let replaces = string.split('/')
                                   let replace = ''
 

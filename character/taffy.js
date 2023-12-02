@@ -4209,6 +4209,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       shenmiewu2: '灭吴',
       shenmiewu_backup: '灭吴',
       shenmiewu_info: '每回合限一次。你可将一张牌当做任意基本牌或锦囊牌使用，然后摸一张牌。若你没有牌，你可视为使用或打出任意一张基本牌或普通锦囊牌，然后摸一张牌。',
+      shenmiewu_append: '<span style="font-family: yuanli">吾军势如破竹，江东六郡唾手可得！</span>',
 
       taffy_old: "圣经·塔约",
       taffy_ol: "江山如故·永",
