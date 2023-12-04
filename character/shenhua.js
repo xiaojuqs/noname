@@ -2737,7 +2737,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									else if(att<0){
 										if(game.hasPlayer(function(current){
 											if(current!=target&&get.attitude(player,current)>0){
-												var es=target.getCards('e',filterCard);
+												var es=target.getCards('e');
 												for(var i=0;i<es.length;i++){
 													if(get.equipValue(es[i])>0&&current.canEquip(es[i],_status.event.canReplace)&&get.effect(current,es[i],player,player)>(_status.event.canReplace?get.effect(target,es[i],player,player):0)) return true;
 												}
