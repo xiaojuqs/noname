@@ -2714,40 +2714,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
 						content:function(){
 							"step 0"
-							var check=false;
-							if(!player.canMoveCard(true)){
-								check=false;
-							}
-							else{
-								//以下節錄game.js的moveCard函數下的target回傳部分
-								var check=game.hasPlayer(function(target){
-									var att=get.attitude(player,target);
-									if(att>0){
-										if(!_status.event.nojudge&&target.countCards('j',function(card){
-											return (card.name=='lebu'||card.name=='bingliang'||card.name=='caomu')&&game.hasPlayer(function(current){
-												return current!=target&&current.canAddJudge(card)&&get.attitude(player,current)<0;
-											});
-										})) return true;
-										if(target.countCards('e',function(card){
-											return get.equipValue(card)<0&&game.hasPlayer(function(current){
-												return current!=target&&get.attitude(player,current)<0&&current.canEquip(card,_status.event.canReplace)&&get.effect(target,card,player,player)<0;
-											});
-										})>0) return true;
-									}
-									else if(att<0){
-										if(game.hasPlayer(function(current){
-											if(current!=target&&get.attitude(player,current)>0){
-												var es=target.getCards('e');
-												for(var i=0;i<es.length;i++){
-													if(get.equipValue(es[i])>0&&current.canEquip(es[i],_status.event.canReplace)&&get.effect(current,es[i],player,player)>(_status.event.canReplace?get.effect(target,es[i],player,player):0)) return true;
-												}
-											}
-										})){
-											return true;
-										}
-									}
-								});
-							}
 							player.chooseToDiscard('he',get.prompt('xinjiewei'),'弃置一张牌并移动场上的一张牌',lib.filter.cardDiscardable).set('ai',function(card){
 								if(!_status.event.check) return 0;
 								return 7-get.value(card);
@@ -3539,7 +3505,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(trigger.name=='phaseUse') str+='，然后可以移动场上的一张牌';
 					switch(trigger.name){
 						case 'phaseJudge':
-							check=player.countCards('j');
+							check=player.hasJudge('lebu')||player.hasJudge('bingliang')||player.hasJudge('caomu');
 							break;
 						case 'phaseDraw':
 							var i,num=0,num2=0,players=game.filterPlayer();

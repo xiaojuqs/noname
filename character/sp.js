@@ -24659,7 +24659,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									return get.attitude(get.player(),target);
 								});
 							}
-							else event.goto(3);
+							else event.goto(2);
 							'step 1'
 							if(result.bool){
 								var target=result.targets[0];

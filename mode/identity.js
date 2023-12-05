@@ -555,12 +555,22 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				}
 				else{
-					return {
-						fan:'反',
-						zhong:'忠',
-						nei:'内',
-                        commoner:'民',
-						cai:'猜',
+					if(get.config('enable_commoner')){
+						return {
+							fan:'反',
+							zhong:'忠',
+							nei:'内',
+							commoner:'民',
+							cai:'猜',
+						}
+					}
+					else{
+						return {
+							fan:'反',
+							zhong:'忠',
+							nei:'内',
+							cai:'猜',
+						}
 					}
 				}
 			},
@@ -570,7 +580,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						case 'fan':list[i]='反贼';break;
 						case 'zhong':list[i]='忠臣';break;
 						case 'nei':list[i]='内奸';break;
-                        case 'commoner':list[i]='平民'; break;
+						case 'commoner':list[i]='平民'; break;
 						case 'zhu':list[i]='主公';break;
 						case 'enemy':list[i]='敌方';break;
 						case 'friend':list[i]='友方';break;
@@ -727,7 +737,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						switch(me.identity){
 							case 'fan':game.over(false);break;
 							case 'zhong':game.over(true);break;
-                            case 'commoner':game.over(true); break;
+							case 'commoner':game.over(true); break;
 							default:game.over();break;
 						}
 					}
@@ -735,7 +745,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						switch(me.identity){
 							case 'fan':game.over(true);break;
 							case 'zhong':game.over(false);break;
-                            case 'commoner':game.over(true); break;
+							case 'commoner':game.over(true); break;
 							default:game.over();break;
 						}
 					}
@@ -755,7 +765,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				}
 				else if(me.identity=='nei'){
-                    if(game.players.length==(1+game.players.filter(i=>i.identity=='commoner').length)&&me.isAlive()){
+						if(game.players.length==(1+game.players.filter(i=>i.identity=='commoner').length)&&me.isAlive()){
 						game.over(true);
 					}
 					else{
@@ -771,8 +781,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.over(false);
 					}
 				}
-                else if(me.identity=='commoner'){
-                    game.over(true);
+				else if(me.identity=='commoner'){
+					game.over(true);
 				}
 			},
 			checkOnlineResult:function(player){
@@ -784,7 +794,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				if(game.zhu.isAlive()){
 					return (player.identity=='zhu'||player.identity=='zhong'||player.identity=='mingzhong'||player.identity=='commoner'&&player.isAlive());
 				}
-                else if(game.players.length==(1+game.players.filter(i=>i.identity=='commoner').length)&&game.players[0].identity=='nei'||game.players[0].identity=='commoner'){
+				else if(game.players.length==(1+game.players.filter(i=>i.identity=='commoner').length)&&game.players[0].identity=='nei'||game.players[0].identity=='commoner'){
 					return player.isAlive();
 				}
 				else{
@@ -1507,7 +1517,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						else{
 							listi=['random','zhu','zhong','fan','nei'];
-                            if(get.config('enable_commoner')) listi.push('commoner');
+							if(get.config('enable_commoner')&&!event.stratagemMode) listi.push('commoner');
 						}
 
 						for(var i=0;i<listi.length;i++){
@@ -1547,9 +1557,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 										link=['zhu','zhong','nei','fan','mingzhong'].randomGet();
 									}
 									else{
-                                        var listi=['zhu','zhong','nei','fan'];
-                                        if(get.config('enable_commoner')) listi.push('commoner');
-                                        link=listi.randomGet();
+										var listi=['zhu','zhong','nei','fan'];
+										if(get.config('enable_commoner')&&!event.stratagemMode) listi.push('commoner');
+										link=listi.randomGet();
 									}
 									for(var i=0;i<this.parentNode.childElementCount;i++){
 										if(this.parentNode.childNodes[i].link==link){
@@ -2686,7 +2696,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 					}
 					if(this.identity=='fan'&&source) source.draw(3);
-                    else if(this.identity=='commoner'&&source) source.draw(2);
+					else if(this.identity=='commoner'&&source) source.draw(2);
 					else if(this.identity=='mingzhong'&&source){
 						if(source.identity=='zhu'){
 							source.discard(source.getCards('he'));
@@ -3483,11 +3493,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.players[i].ai.shown<1){
 							identity2='nei';break;
 						}
-                        else if(game.players[i].identity=='commoner'&&
-                            game.players[i].ai.identity_mark=='zhong'&&
-                            game.players[i].ai.shown<1){
-                            identity2='commoner'; break;
-                        }
+						else if(game.players[i].identity=='commoner'&&
+							game.players[i].ai.identity_mark=='zhong'&&
+							game.players[i].ai.shown<1){
+							identity2='commoner'; break;
+						}
 					}
 				}
 				var zhongmode=false;
@@ -3498,13 +3508,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				//condition: ai.identity_mark=='finished' and ai.shown==1
 				var mark_bug=false;
 				for(var i=0;i<game.players.length;i++){
-					if(game.players[i].ai.identity_mark=='finished'&&get.population('fan')==0){
+					if(game.players[i].ai.identity_mark=='finished'&&get.population('fan')==0&&get.population('commoner')==0){
 						if(game.players[i].identity=='nei'&&game.players[i].ai.shown>=1){
 							mark_bug=true;break;
 						}
 					}
 				}
-				if(mark_bug&&from.identity!='nei'&&from!=to&&get.population('fan')==0&&identity2=='zhong'){
+				if(mark_bug&&from.identity!='nei'&&from!=to&&get.population('fan')==0&&get.population('commoner')==0&&identity2=='zhong'){
 					for(var i=0;i<game.players.length;i++){
 						identity2='nei';break;
 					}
@@ -3526,7 +3536,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							case 'nei':
 								if(game.players.length==2) return -10;
 								if(to.identity=='zhong'&&get.population('fan')>0) return 0;
-								if(get.population('fan')==0){
+								if(get.population('fan')==0&&get.population('commoner')==0){
 									if(to.hp>=3&&!from.hasSkill('yimie')){
 										return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
 									}
@@ -3596,19 +3606,19 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							case 'zhu': return 10;
 							case 'zhong':case 'mingzhong': return 4;
 							case 'nei':
-								if(get.population('fan')==0){
+								if(get.population('fan')==0&&get.population('commoner')==0){
 									return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
 								}
 								if(zhongmode&&to.ai.sizhong&&to.ai.shown<1) return 6;
 								return Math.min(3,-situation);
 							case 'fan': return -8;
-                            case 'commoner':
-                                return Math.min(3,Math.max(-3,situation-0.2));
+							case 'commoner':
+								return Math.min(3,Math.max(-3,situation-0.2));
 						}
 						break;
 					case 'nei':
 						if(identity2=='zhu'&&game.players.length==2) return -10;
-                        if(from!=to&&identity2!='zhu'&&identity2!='commoner'&&game.players.length==3) return -8;
+						if(from!=to&&identity2!='zhu'&&identity2!='commoner'&&game.players.length==3) return -8;
 						var strategy=get.aiStrategy();
 						if(strategy==4){
 							if(from==to) return 10;
@@ -3635,7 +3645,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 									return 0;
 								}
 								else{
-									if(situation>1||get.population('fan')==0) num=0;
+									if(situation>1||(get.population('fan')+get.population('commoner')==0)) num=0;
 									else num=get.population('fan')+Math.max(0,3-game.zhu.hp);
 								}
 								if(strategy==2) num--;
@@ -3712,8 +3722,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								if(game.zhu&&game.zhu.hp<=2) return -1;
 								return Math.min(3,situation);
 							case 'fan': return 5;
-                            case 'commoner':
-                                return 2*get.population('fan')-3;
+							case 'commoner':
+								return 2*get.population('fan')-3;
 						}
 						break;
 					case 'commoner':
@@ -3769,6 +3779,17 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						zhuzhong-=j+4;
 						total+=j+4;
 						fan+=j+4;
+					}
+					else if(player.identity=='commoner'){
+						let commoner_situation=(1+get.population('zhong')+get.population('mingzhong'))-get.population('fan');
+						if(commoner_situation>0){
+							zhuzhong+=j*0.8+3;
+							total+=j*0.8+3;
+						} else if(commoner_situation<0){
+							zhuzhong-=j+4;
+							total+=j+4;
+							fan+=j+4;
+						}
 					}
 				}
 				if(absolute) return zhuzhong;
