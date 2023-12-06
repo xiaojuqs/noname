@@ -2384,6 +2384,9 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 													filename = 'nei';
 												}
 												break;
+											case '民':
+												filename = 'commoner';
+												break;
 											case '野':
 												filename = 'ye';
 												break;
@@ -5161,7 +5164,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 					if (!chinese) {
 						switch (mode) {
 							case 'identity': case 'huanhuazhizhan':
-							if (!player.isAlive() || player.identityShown || player == game.me) {
+							if (identity&&(!player.isAlive() || player.identityShown || player == game.me)) {
 								identity = (player.special_identity ? player.special_identity : identity).replace(/identity_/, '');
 							}
 
@@ -5213,7 +5216,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 					} else {
 						switch(mode){
 							case 'identity': case 'huanhuazhizhan':
-							if (identity.indexOf('cai') < 0) {
+							if (identity&&identity.indexOf('cai') < 0) {
 								if (isMark) {
 									if (player.special_identity) identity = player.special_identity + '_bg';
 								} else {

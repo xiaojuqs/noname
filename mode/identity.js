@@ -737,7 +737,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						switch(me.identity){
 							case 'fan':game.over(false);break;
 							case 'zhong':game.over(true);break;
-							case 'commoner':game.over(true); break;
+							case 'commoner':
+								if(me.classList.contains('dead')){
+									game.over(false);
+								}else{
+									game.over(true);
+								}
+								break;
 							default:game.over();break;
 						}
 					}
@@ -745,7 +751,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						switch(me.identity){
 							case 'fan':game.over(true);break;
 							case 'zhong':game.over(false);break;
-							case 'commoner':game.over(true); break;
+							case 'commoner':
+								if(me.classList.contains('dead')){
+									game.over(false);
+								}else{
+									game.over(true);
+								}
+								break;
 							default:game.over();break;
 						}
 					}
@@ -782,7 +794,11 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				}
 				else if(me.identity=='commoner'){
-					game.over(true);
+					if(me.classList.contains('dead')){
+						game.over(false);
+					}else{
+						game.over(true);
+					}
 				}
 			},
 			checkOnlineResult:function(player){

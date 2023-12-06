@@ -10012,6 +10012,7 @@ window.noname_asset_list=[
 	'extension/十周年UI/image/decoration/identity_boss.png',
 	'extension/十周年UI/image/decoration/identity_cai.png',
 	'extension/十周年UI/image/decoration/identity_cai_blue.png',
+	'extension/十周年UI/image/decoration/identity_commoner.png',
 	'extension/十周年UI/image/decoration/identity_dajiang.png',
 	'extension/十周年UI/image/decoration/identity_dizhu.png',
 	'extension/十周年UI/image/decoration/identity_enemy.png',
