@@ -1764,7 +1764,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         frequent: true,
         content: function () {
           'step 0'
-          if (!player.storage.spshenpingjianX && player.storage.spshenpingjianX !== 0) player.storage.spshenpingjianX = 1;
+          if (!player.storage.spshenpingjianX && player.storage.spshenpingjianX !== 0) player.storage.spshenpingjianX = 0;
           var skills = player.getSkills(null, false, false).filter(skill => {
             var info = get.info(skill);
             if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -1780,6 +1780,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
             return true;
           });
+          if (skills.length < 2) player.storage.spshenpingjianX = 1;
           var next = player.chooseButton(true, [
             '评荐：请选择失去任意个技能',
             [skills.map(i => [
@@ -2020,6 +2021,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
             return true;
           });
+          if (skills.length < 2) player.storage.spshenpingjianX = 1;
           var next = player.chooseButton(true, [
             '评荐：请选择失去任意个技能',
             [skills.map(i => [
@@ -4114,7 +4116,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       spshenxushao: '神许劭',
       spshenxushao_prefix: '神',
       spshenpingjian: '评荐',
-      spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。②出牌阶段限一次，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。③当你首次发动〖评荐〗时，你令本次〖评荐〗中的具有颜色的X+1。',
+      spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。②出牌阶段限一次，你可以选择失去X个技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（X至少为0）。③当你发动〖评荐〗时，若你拥有的技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
       spshenpingjian_use: '评荐',
       spshenpingjian_append: '<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
       oldtw_niufudongxie: '旧牛辅董翓',
