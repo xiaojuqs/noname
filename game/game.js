@@ -5259,7 +5259,7 @@ new Promise(resolve=>{
 					},
 					connect_enable_commoner:{
 						name:'启用平民',
-						init:false,
+						init:true,
 						restart:true,
 						frequent:false,
 						get intro(){
@@ -5287,7 +5287,7 @@ new Promise(resolve=>{
 					},
 					connect_enable_year_limit:{
 						name:'启用年机制',
-						init:false,
+						init:true,
 						restart:true,
 						frequent:false,
 						get intro(){
@@ -5842,7 +5842,7 @@ new Promise(resolve=>{
 					},
 					enable_commoner:{
 						name:'启用平民',
-						init:false,
+						init:true,
 						restart:true,
 						frequent:false,
 						intro:'开启后游戏中将有一个平民（身份）加入游戏。<br>具体规则请查看帮助。',
@@ -5862,7 +5862,7 @@ new Promise(resolve=>{
 					},
 					enable_year_limit:{
 						name:'启用年机制',
-						init:false,
+						init:true,
 						restart:true,
 						frequent:false,
 						intro:'开启后将会加入年机制。<br>年机制的具体规则请查看帮助。',
@@ -21759,7 +21759,7 @@ new Promise(resolve=>{
 							if(old_equip_num==5) return -1;
 							return old_equip_num;
 						}
-						return sort_equip_num(get.equipNum(a))>sort_equip_num(get.equipNum(b));
+						return sort_equip_num(get.equipNum(a))-sort_equip_num(get.equipNum(b));
 					});
 					for(i=0;i<childnodes_Array.length;++i){
 						player.node.equips.appendChild(childnodes_Array[i]);
@@ -59262,7 +59262,7 @@ new Promise(resolve=>{
 			 * 判断坐骑栏是否被合并
 			 */
 			mountCombined:function(){
-				if(lib.configOL){
+				if(lib.configOL.mount_combine){
 					return lib.configOL.mount_combine;
 				}
 				else if(typeof _status.mountCombined!='boolean'){
