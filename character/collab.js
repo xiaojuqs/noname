@@ -1427,7 +1427,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
 						usable:1,
 						filter:function(event,player){
-							return player.isTurnedOver()&&player!=_status.currentPhase&&event.getg(player).length>0;
+							return player.isTurnedOver()&&_status.currentPhase&&player!=_status.currentPhase&&event.getg(player).length>0;
 						},
 						check:function(event,player){
 							return get.attitude(player,_status.currentPhase)>0;
@@ -1450,7 +1450,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(event.name=='gain'&&player==event.player) return false;
 							var evt=event.getl(player);
 							if(!evt||!evt.cards2||!evt.cards2.length) return false;
-							return player.isTurnedOver()&&player!=_status.currentPhase&&_status.currentPhase.countCards('he')>0;
+							return player.isTurnedOver()&&_status.currentPhase&&player!=_status.currentPhase&&_status.currentPhase.countCards('he')>0;
 						},
 						check:function(event,player){
 							var target=_status.currentPhase;
