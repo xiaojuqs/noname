@@ -3499,7 +3499,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					identity2='zhong';
 					if(from==to) return 10;
 				}
-				if(from!=to&&to.identity=='nei'&&to.ai.shown<1&&(to.ai.identity_mark=='fan'||to.ai.identity_mark=='zhong')){
+				if(from!=to&&(to.identity=='nei'||to.identity=='commoner')&&to.ai.shown<1&&(to.ai.identity_mark=='fan'||to.ai.identity_mark=='zhong')){
 					identity2=to.ai.identity_mark;
 				}
 				if(from.identity!='nei'&&from.identity!='commoner'&&from!=to&&get.population('fan')==0&&identity2=='zhong'){
@@ -3759,21 +3759,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						break;
 					case 'commoner':
 						switch(identity2){
-							case 'zhu':
-								if(get.population('fan')+get.population('zhong')+get.population('mingzhong')==0) return -3;
-								if(situation>0) return 2*Math.min(4,(to.hp+to.countCards('h')/4-2));
-								if(situation>=-3&&game.zhu) return (to.hp-2)+to.countCards('h')/4; //return Math.min(-0.1,5-game.zhu.hp);
-								return to.hp+to.countCards('h')/3-4;
-							case 'zhong':
+							case 'zhu':case 'zhong':case 'mingzhong':
 								if(get.population('fan')==0&&get.population('nei')>0){
 									if(get.population('zhong')+get.population('mingzhong')==0) return -3;
 									return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
 								}
-								if(situation>0){
-									if(to.hp>=2) return Math.min(3,Math.max(1,to.hp+to.countCards('h')/4-4));
-									else return 0;
-								}
-								return -2;
+								return situation;
 							case 'nei':
 								if(get.population('fan')==0&&get.population('nei')>0){
 									if(get.population('zhong')+get.population('mingzhong')==0) return -3;
@@ -3784,9 +3775,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								if(situation>0) return -3;
 								return 0;
 							case 'fan':
-								if(situation<0) return to.hp+to.countCards('h')/4-1.7*get.population('fan')+2;
-								else if(situation==0) return 0;
-								return 0.55*get.population('fan')-2.1;
+								return -situation;
 							case 'commoner':
 								if(get.population('fan')==0&&get.population('nei')>0&&from!=to){
 									if(get.population('zhong')+get.population('mingzhong')==0) return -3;
@@ -3808,6 +3797,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 					else if(php>6){
 						php=6;
+					}
+					else if(player.hasSkill('tairan')){
+						php=php-player.storage.tairan2;
 					}
 					j=player.countCards('h')+player.countCards('e')*1.5+php*2;
 					if(player.identity=='zhu'){
