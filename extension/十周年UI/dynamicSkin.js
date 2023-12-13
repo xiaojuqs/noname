@@ -1097,7 +1097,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				scale: 0.4,
 				angle: 0,
 				//speed: 1,
-				//action: 'DaiJi',
+				action: 'DaiJi',
 				beijing: {
 					name: '花鬘/依心缱绻/BeiJing',
 					scale: 0.3,
@@ -1964,9 +1964,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		shen_guojia: { // 神郭嘉
 			倚星折月: {
 				name: '神郭嘉/倚星折月/XingXiang',
-				x: [0, -0.31],
-				y: [0, 0.34],
-				scale: 0.5,
+				x: [0, 0],
+				y: [0, 0.45],
+				scale: 0.4,
 				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
@@ -2004,9 +2004,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 			倚星折月2: {
 				name: '神郭嘉/倚星折月2/XingXiang-1',
-				x: [0, -0.31],
-				y: [0, 0.34],
-				scale: 0.5,
+				x: [0, 0],
+				y: [0, 0.45],
+				scale: 0.4,
 				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
