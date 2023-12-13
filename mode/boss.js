@@ -1175,7 +1175,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					var next=game.me.chooseButton(dialog,true).set('onfree',true);
 					next._triggered=null;
 					next.custom.replace.target=event.customreplacetarget;
-					next.selectButton=[3,3];
+					next.selectButton=[1,3];
 					// next.custom.add.button=function(){
 					//		if(ui.cheat2&&ui.cheat2.backup) return;
 					//		_status.event.dialog.content.childNodes[1].innerHTML=
