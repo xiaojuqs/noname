@@ -2547,7 +2547,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					result:{
 						player:function(player){
 							if(_status.event.dying){
-								return get.attitude(player,_status.event.dying);
+								let taos=player.getCards('h',i=>get.name(i)==='tao');
+								return _status.event.dying.hp+taos.length+1>0?get.attitude(player,_status.event.dying):0;
 							}
 							return _status.event.type=='phase'&&player.countMark('sbrende')<=2?0:1;
 						},
