@@ -2910,7 +2910,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						else if(targets.length>0){
 							for(var i=0;i<targets.length;i++){
 								shown=Math.abs(targets[i].ai.shown);
-								if(shown<0.2||targets[i].identity=='nei') c=0;
+								if(shown<0.2||targets[i].identity=='nei'||targets[i].identity=='commoner') c=0;
 								else if(shown<0.4) c=0.5;
 								else if(shown<0.6) c=0.8;
 								else c=1;
@@ -3528,7 +3528,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				}
 				if(get.population('fan')==0&&get.population('nei')>0){
 					for(var i=0;i<game.players.length;i++){
-						if(game.players[i].ai.identity_mark==undefined){
+						if(game.players[i].identity!='zhu'&&game.players[i].ai.identity_mark==undefined){
 							game.players[i].ai.identity_mark='zhong';
 						}
 					}
@@ -3619,7 +3619,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 									return 3;
 								}
 								if(situation<0&&game.zhu&&game.zhu.hp<=2) return -3.8;
-								return Math.max(-4,2-get.population('fan'));
+								return Math.min(0,Math.max(-3,situation));
 						}
 						break;
 					case 'zhong':case 'mingzhong':
@@ -3643,7 +3643,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								if(get.population('fan')==0&&get.population('nei')>0){
 									return to.hp==max_hp_exclude_zhu_and_self?-(to.countCards('h')+to.countCards('e')*1.5+to.hp*2):0;
 								}
-								return Math.min(3,Math.max(-3,situation-0.2));
+								if(zhongmode&&to.ai.sizhong&&to.ai.shown<0.95) return 6;
+								return Math.min(0,Math.max(-3,situation));
 						}
 						break;
 					case 'nei':
@@ -3661,7 +3662,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								if(strategy==5) return 10;
 								if(to.hp<=0&&get.population('fan')+get.population('zhong')+get.population('mingzhong')>0) return 10;
 								if(get.population('fan')+get.population('zhong')+get.population('mingzhong')==0) return -3;
-								if(situation>1&&to.hp>2) return 0;
+								if(situation>0&&to.hp>2) return 0;
 								if(get.population('fan')==1){
 									var fan;
 									for(var i=0;i<game.players.length;i++){
@@ -3755,7 +3756,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								return Math.min(3,situation);
 							case 'fan': return 5;
 							case 'commoner':
-								return 2*get.population('fan')-3;
+								if(zhongmode&&to.ai.sizhong&&to.ai.shown<0.95) return -6;
+								return Math.min(0,Math.max(-3,-situation));
 						}
 						break;
 					case 'commoner':
