@@ -1511,6 +1511,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               this.node.equips.show();
                               this.name=character;
                               this.name1=character;
+                              this.tempname=[];
                               this.sex=info[0];
                               this.group=info[1];
                               this.hp=hp1;

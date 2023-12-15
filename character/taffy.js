@@ -1500,7 +1500,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					player.storage.shipingjian_check[result.control] = (trigger.name == 'damage' ? trigger : 'phaseJieshu');
 					var name = event.list.find(name => lib.character[name][3].includes(result.control));
 					// if(name) lib.skill.rehuashen.createAudio(name,result.control,'xushao');
-					if (name) game.broadcastAll((player, name) => player.tempname?.add(name), player, name);
+					if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
 				},
 				group: 'shipingjian_use',
 				phaseUse_special: [],
@@ -1698,7 +1698,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					player.storage.shipingjian_check[result.control] = 'phaseUse';
 					var name = event.list.find(name => lib.character[name][3].includes(result.control));
 					// if(name) lib.skill.rehuashen.createAudio(name,result.control,'xushao');
-					if (name) game.broadcastAll((player, name) => player.tempname?.add(name), player, name);
+					if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
 				},
 				ai: {
 					order: 12,
