@@ -308,6 +308,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                                       specailEvent(this,'juexingji')
                                                   }
 
+                                                  // taffy: 补充检查限定技喵
+                                                  if (skillInfo.limited) {
+                                                      specailEvent(this,'xiandingji')
+                                                  }
+                                                  /* taffy分界线 */
+
                                                   // 检查使命技
                                                   if (name.endsWith('_fail')) {
                                                       let parentSkill = name.slice(0, name.length - 5)
@@ -401,6 +407,10 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
 
                                               if (skillInfo.juexingji) {
                                                   specailEvent(this,'juexingji')
+                                              }
+
+                                              if (skillInfo.xiandingji) {
+                                                  specailEvent(this,'xiandingji')
                                               }
 
                                               // 检查使命技
@@ -1896,7 +1906,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   })
 
                               }
-                              let isCutBg = lib.config[skinSwitch.configKey.cugDynamicBg] &&  ui.arena.dataset.dynamicSkinOutcrop === 'on' && (ui.arena.dataset.newDecadeStyle === 'on')
+                              // taffy: 注释皮肤切换原版代码
+                              // let isCutBg = lib.config[skinSwitch.configKey.cugDynamicBg] &&  ui.arena.dataset.dynamicSkinOutcrop === 'on' && (ui.arena.dataset.newDecadeStyle === 'on')
+                              /* taffy分界线 */
+                              // taffy: 修复动皮背景裁剪选项失效的问题喵
+                              let isCutBg = lib.config[skinSwitch.configKey.cugDynamicBg] &&  ui.arena.dataset.dynamicSkinOutcrop === 'on'
+                              /* taffy分界线 */
 
                               if (typeof animation == 'string') animation = { name: animation };
                               if (this.doubleAvatar) {
@@ -4684,6 +4699,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               } else if (path === 'extension/十周年UI/assets/dynamic/钟会/潜蛟觊天2/audio') {
                                 flods = [];
                                 files = ['bingliang.mp3','chiling.mp3','diaohulishan.mp3','guohe.mp3','gz_guguoanbang.mp3','gz_haolingtianxia','gz_kefuzhongyuan','huogong.mp3','huoshaolianying','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','paiyi_re_zhonghui1.mp3','paiyi_re_zhonghui2.mp3','re_zhonghui.mp3','requanji1.mp3','requanji2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shuiyanqijun.mp3','shunshou.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','wanjian.mp3','wenhe.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yiyi.mp3','yuanjiao.mp3','zhibi.mp3','zili_re_zhonghui1.mp3','zili_re_zhonghui2.mp3'];
+                              } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影/audio') {
+                                flods = [];
+                                files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
+                              } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影2/audio') {
+                                flods = [];
+                                files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
                               }
                               let name = isPrimary ? player.name1 : player.name2
                               for (let file of files) {
@@ -4743,6 +4764,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               } else if (path === 'extension/十周年UI/assets/dynamic/钟会/潜蛟觊天2/audio') {
                                 flods = [];
                                 files = ['bingliang.mp3','chiling.mp3','diaohulishan.mp3','guohe.mp3','gz_guguoanbang.mp3','gz_haolingtianxia','gz_kefuzhongyuan','huogong.mp3','huoshaolianying','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','paiyi_re_zhonghui1.mp3','paiyi_re_zhonghui2.mp3','re_zhonghui.mp3','requanji1.mp3','requanji2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shuiyanqijun.mp3','shunshou.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','wanjian.mp3','wenhe.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yiyi.mp3','yuanjiao.mp3','zhibi.mp3','zili_re_zhonghui1.mp3','zili_re_zhonghui2.mp3'];
+                              } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影/audio') {
+                                flods = [];
+                                files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
+                              } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影2/audio') {
+                                flods = [];
+                                files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
                               }
                               for (let file of files) {
                                 // 储存技能映射, 规则与模仿千幻, 与千幻一致
