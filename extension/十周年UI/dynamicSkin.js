@@ -3748,8 +3748,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				shan: 'play3',
 				x: [0, 0.5],
 				y: [0, 0.5],
-				scale: 0.75,
-				angle: 10,
+				scale: 0.8,
+				angle: 0,
 				hideSlots: ['ren_moanbutouying'], // 隐藏不需要的部件，想知道具体部件名称请使用SpineAltasSplit工具查看
 				//speed: 1,
 				shizhounian: true,

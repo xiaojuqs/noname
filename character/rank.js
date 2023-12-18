@@ -1823,6 +1823,7 @@ window.noname_character_rank={
       'shoushen_caocao',
       'babyshen_simayi',
       'shenduyu',
+      'shenchengui',
 		],
 		epic:[
 			'ol_pengyang',

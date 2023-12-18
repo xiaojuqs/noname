@@ -69,6 +69,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				[]
 			],
 			shenduyu: ['male', 'shen', 5, ['shenmiewu']],
+			shenchengui: ['male', 'shen', 3, ['shendcyingtu', 'shendccongshi']],
 			ruijier: ['female', 'shen', '', [],
 				['unseen']
 			],
@@ -80,7 +81,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				taffy_shou: ['shoushen_caocao'],
 				taffy_shi: ['shiguanning', 'shixushao'],
 				taffy_baby: ['babyshen_simayi'],
-				taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji', 'shenduyu'],
+				taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji', 'shenduyu', 'shenchengui'],
 				taffy_tang: ['acetaffy', 'minitaffy'],
 				taffy_gzz: ['junko'],
 				taffy_wu: ['huiwansunquan', 'huiwansunquanplus'],
@@ -3997,6 +3998,95 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			shenmiewu_backup: {
 				audio: 'shenmiewu'
 			},
+			//神陈珪
+			shendcyingtu: {
+				audio: 'dcyingtu',
+				trigger: {
+					global: ['gainAfter', 'loseAsyncAfter'],
+				},
+				usable: 1,
+				filter: function (event, player) {
+					var evt = event.getParent('phaseDraw');
+					if (event.player == player) return false;
+					if (evt && event.player == evt.player) return false;
+					return event.getg(event.player).length > 0 && event.player.hasCard(function (card) {
+						return lib.filter.canBeGained(card, event.player, player)
+					}, 'he');
+				},
+				logTarget: 'player',
+				direct: true,
+				checkx: function (player, source) {
+					return Math.min(0, get.attitude(player, source)) >= get.attitude(player, source);
+				},
+				content: function () {
+					'step 0'
+					player.chooseBool(
+						get.prompt('shendcyingtu', trigger.player),
+						'获得该角色的一张牌，然后将一张牌交给一名其他角色。若你给出的是装备牌，则其使用其得到的牌。'
+					).set('goon', lib.skill.shendcyingtu.checkx(player, trigger.player)).set('ai', function () {
+						return _status.event.goon;
+					});
+					'step 1'
+					if (result.bool) {
+						player.logSkill('shendcyingtu', trigger.player);
+						var next = game.createEvent('shendcyingtu_insert');
+						next.player = player;
+						next.target = trigger.player;
+						next.setContent(lib.skill.shendcyingtu.contentx);
+						event.finish();
+					} else if (targets?.length > 0) event.goto(1);
+					else player.storage.counttrigger.shendcyingtu--;
+				},
+				contentx: function () {
+					'step 0'
+					player.gainPlayerCard(target, true, 'he');
+					player.chooseCardTarget({
+						prompt: '请选择要交出的牌和目标',
+						prompt2: '将一张牌交给一名其他角色，若你给出的是装备牌，则其使用其得到的牌',
+						position: 'he',
+						filterCard: true,
+						forced: true,
+						filterTarget: lib.filter.notMe,
+						ai1: function (card) {
+							if (!game.hasPlayer(function (current) {
+									return get.attitude(current, player) > 0 && !current.hasSkillTag('nogain');
+								})) return 0;
+							return 1 / Math.max(0.1, get.value(card));
+						},
+						ai2: function (target) {
+							var player = _status.event.player,
+								att = get.attitude(player, target);
+							if (target.hasSkillTag('nogain')) att /= 9;
+							return 4 + att;
+						},
+					});
+					'step 1'
+					if (result.bool) {
+						var target = result.targets[0];
+						var card = result.cards[0];
+						event.target = target;
+						event.card = card;
+						player.line(target);
+						player.give(card, target);
+					} else event.finish();
+					'step 2'
+					if (target.getCards('h').contains(card) && get.type(card, null, target) == 'equip' && target.canUse(card, target)) target.chooseUseTarget(card, true, 'nopopup');
+				},
+			},
+			shendccongshi: {
+				audio: 'dccongshi',
+				trigger: {
+					global: 'useCardAfter'
+				},
+				forced: true,
+				locked: false,
+				filter: function (event, player) {
+					return get.type(event.card, null, false) == 'equip';
+				},
+				content: function () {
+					player.draw();
+				},
+			},
 		},
 		card: {},
 		characterIntro: {
@@ -4068,6 +4158,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			huiwansunquan: '界孙权，但是会玩。',
 			huiwansunquanplus: '界孙权，但是超会玩。',
 			shenduyu: '杜预（222年－285年），字元凯，京兆郡杜陵县（今陕西西安）人，中国魏晋时期军事家、经学家、律学家，曹魏散骑常侍杜恕之子。杜预初仕曹魏，任尚书郎，后成为权臣司马昭的幕僚，封丰乐亭侯。西晋建立后，历任河南尹、安西军司、秦州刺史、度支尚书等职。咸宁四年（278年）接替羊祜出任镇南大将军，镇守荆州。他积极备战，支持晋武帝司马炎对孙吴作战，并在咸宁五年（279年）成为晋灭吴之战的统帅之一。战后因功进封当阳县侯，仍镇荆州。太康五年（285年），杜预被征入朝，拜司隶校尉，途中于邓县逝世，终年六十三岁。获赠征南大将军、开府仪同三司，谥号为成。杜预耽思经籍，博学多通，多有建树，时誉为“杜武库”。著有《春秋左氏传集解》及《春秋释例》等。为明朝之前唯一一个同时进入文庙和武庙之人。',
+			shenchengui: '陈珪（生卒年不详），一作圭，字汉瑜。徐州下邳（治今江苏睢宁西北）人，广汉太守陈亹之孙，太尉陈球之侄，吴郡太守陈瑀（一作陈璃）、汝阴太守陈琮的从兄，陈登、陈应之父。官至沛相。',
 		},
 		characterTitle: {
 			shenxushao: '#gViridian',
@@ -4085,6 +4176,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			huiwansunquanplus: '#gViridian',
 			taffyboss_lvbu1: '#gViridian',
 			shenduyu: '#gViridian',
+			shenchengui: '#gViridian',
 		},
 		perfectPair: {},
 		characterFilter: {},
@@ -4243,6 +4335,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			shenmiewu_backup: '灭吴',
 			shenmiewu_info: '每回合限一次。你可将一张牌当做任意基本牌或锦囊牌使用，然后摸一张牌。若你没有牌，你可视为使用或打出任意一张基本牌或普通锦囊牌，然后摸一张牌。',
 			shenmiewu_append: '<span style="font-family: yuanli">吾军势如破竹，江东六郡唾手可得！</span>',
+			shenchengui: '神陈珪',
+			shenchengui_prefix: '神',
+			shendcyingtu: '营图',
+			shendcyingtu_info: '每回合限一次。当一名其他角色于摸牌阶段外得到牌后，你可以获得其一张牌，然后将一张牌交给一名其他角色。若你给出的牌为装备牌，则其使用之。',
+			shendccongshi: '从势',
+			shendccongshi_info: '一名角色使用的装备牌结算结束后，你摸一张牌。',
+			shendccongshi_append: '<span style="font-family: yuanli">不过略施小计，聊戏莽夫耳。</span>',
 
 			taffy_old: "圣经·塔约",
 			taffy_ol: "江山如故·永",
