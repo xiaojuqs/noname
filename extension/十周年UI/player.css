@@ -489,7 +489,9 @@
 	background-position: top;
 	border-radius: 8px;
 	transition-property: opacity, transform;
-	z-index: 61;
+  /* taffy: 修复武将牌喝酒样式问题喵 */
+	z-index: 62;
+  /* taffy分界线 */
 }
 
 .player.connect>div:not(.avatar):not(.name):not(.nameol):not(.hp):not(.room):not(.gaming):not(.identity).primary-avatar {
@@ -506,10 +508,14 @@
 }
 
 .player>.deputy-avatar {
-	left: 50%;
+  /* taffy: 修复武将牌喝酒样式喵 */
+	/* left: 50%; */
+  /* taffy分界线 */
 	top: auto;
 	bottom: 0;
-	width: 50%;
+  /* taffy: 修复武将牌喝酒样式喵 */
+	width: 100%;
+  /* taffy分界线 */
 	height: 100%;
 	opacity: 1;
 	background-size: cover;

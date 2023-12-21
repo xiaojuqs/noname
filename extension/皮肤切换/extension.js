@@ -197,9 +197,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
 
                           }
                       }
-                      // taffy: 注释皮肤切换原版代码
-                      // skinSwitch.skinSwitchCheckYH(this)
-                      /* taffy分界线 */
+                      skinSwitch.skinSwitchCheckYH(this)
                   };
 
                   function pfqh_uninit() {
@@ -1066,9 +1064,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
                               },
                               content: function () {
-                                // taffy: 注释皮肤切换原版代码
-                                // skinSwitch.skinSwitchCheckYH(player)
-                                /* taffy分界线 */
+                                skinSwitch.skinSwitchCheckYH(player)
                               }
                           }
 
@@ -1082,9 +1078,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
                               },
                               content: function () {
-                                // taffy: 注释皮肤切换原版代码
-                                // skinSwitch.skinSwitchCheckYH(player)
-                                /* taffy分界线 */
+                                skinSwitch.skinSwitchCheckYH(player)
                               }
                           }
 
@@ -1775,10 +1769,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   var forces = lib.character[character][1];
 
                                   if (forces !== 'shen' && !hasHideWuJiang) {
-                                      // taffy: 注释皮肤切换原版代码
-                                      // skinSwitch.skinSwitchCheckYH(this, forces)
-                                      /* taffy分界线 */
-
+                                      skinSwitch.skinSwitchCheckYH(this, forces)
                                   }
 
                                   skinSwitch.dynamic.startPlay2Random(this)
@@ -1836,9 +1827,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               let that = this;
 
                               let addYh = () => {
-                                // taffy: 注释皮肤切换原版代码
-                                // skinSwitch.skinSwitchCheckYH(that)
-                                /* taffy分界线 */
+                                skinSwitch.skinSwitchCheckYH(that)
                               }
 
                               function showDynamicSkin(e)
@@ -1934,7 +1923,9 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                       height: [0, 1],
                                       clipParent: true
                                   }
-                                  if (animation.player && animation.player.beijing && isCutBg) {
+                                  // taffy: 非十周年动皮不裁剪背景喵
+                                  if (animation.player && animation.player.beijing && isCutBg && animation.player.shizhounian) {
+                                  /* taffy分界线 */
                                       animation.player.beijing.clip = {
                                           x: [0, deputy ? 0.5 : 0],
                                           y: 0,
@@ -1944,7 +1935,9 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                       }
                                   }
                               } else {
-                                  if (animation.player && animation.player.beijing && isCutBg) {
+                                  // taffy: 非十周年动皮不裁剪背景喵
+                                  if (animation.player && animation.player.beijing && isCutBg && animation.player.shizhounian) {
+                                  /* taffy分界线 */
                                       animation.player.beijing.clip = {
                                           x: 0,
                                           y: 0,
@@ -2139,6 +2132,9 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
               // 检查圆弧
               skinSwitchCheckYH: function (player, forces) {
                   if (lib.config['extension_十周年UI_newDecadeStyle'] == "on") return;
+                  // taffy: 非十周年动皮添加圆弧喵
+                  if (ui.arena.dataset.dynamicSkinOutcrop !== 'on') return
+                  /* taffy分界线 */
                   if (!player || get.itemtype(player) != 'player') return;
                   let group = forces || player.group || 'weizhi';
                   let isYh = false;
@@ -2149,6 +2145,16 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                   }
 
                   let skinYh = player.getElementsByClassName("skinYh");
+                  // taffy: 非十周年动皮添加圆弧喵
+                  if (lib.config[skinSwitch.configKey.cugDynamicBg]) {
+                    if (player.dynamic?.primary?.shizhounian) {
+                      if (skinYh.length > 0) {
+                        player.removeChild(skinYh[0]);
+                      }
+                      return
+                    }
+                  }
+                  /* taffy分界线 */
                   if (isYh && skinYh.length == 0) {
                       let yh = skinSwitch.createYH(group)
                       player.append(yh)
@@ -2374,13 +2380,17 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
               },
               createYH: function (group) {
                   var yh = document.createElement("img");
-                  // taffy: 注释皮肤切换原版代码
                   yh.src = skinSwitch.url + "/images/border/" + group + ".png";
-                  /* taffy分界线 */
                   yh.classList.add("skinYh")
                   yh.style.display = "block";
                   yh.style.position = "absolute";
-                  yh.style.top = "-22px";
+                  // taffy: 注释原版皮切代码喵
+                  // yh.style.top = "-22px";
+                  /* taffy分界线 */
+                  // taffy: 调整圆弧位置喵
+                  yh.style.top = "-35px";
+                  yh.style.left = "-9px";
+                  /* taffy分界线 */
                   yh.style.height = "50px";
                   yh.style.width = "131.1px";
                   yh.style.zIndex = "61";
@@ -3030,9 +3040,15 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                           currentSelect = skin
                                           skinView.setBackground(name, 'character');
                                           setStaticSkin()
+                                          // taffy: 非十周年动皮检测圆弧喵
+                                          skinSwitch.skinSwitchCheckYH(player)
+                                          /* taffy分界线 */
                                       } else {
                                           skinSwitch.dynamic.selectSkinV3(skinKey, player, isPrimary)
                                           currentSelect = skin
+                                          // taffy: 非十周年动皮检测圆弧喵
+                                          skinSwitch.skinSwitchCheckYH(player)
+                                          /* taffy分界线 */
                                       }
                                       viewState.refreshSkins()
                                   })

@@ -355,6 +355,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.5],
 				scale: 0.8,
 				angle: 0,
+        clipSlots: ['r111'],	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				//speed: 1,
 				shizhounian: true,
 				chuchang: {
@@ -418,7 +419,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				name: '曹爽/受诏专权/xingxiang',
 				version: "4.0",
 				json: true,
-				shizhounian: true,
+				// shizhounian: true,
 				x: [0, 0.67],
 				y: [0, 0.45],
 				scale: 0.6,
@@ -1592,7 +1593,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '马钧/能工巧匠/BeiJing',
 					scale: 0.3,
 					x: [0, -0.8],
-					y: [0, 0.4]
+					y: [0, 0.5]
 				},
 			},
 		},
@@ -1703,7 +1704,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			江东锦绣: {
 				name: '潘淑/江东锦绣/xingxiang',
 				version: "4.0",
-				shizhounian: true,
+				// shizhounian: true,
 				x: [0, 0.4],
 				y: [0, 0.5],
 				scale: 0.65,
@@ -1724,7 +1725,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				beijing: {
 					name: '潘淑/江东锦绣/beijing',
 					version: "4.0",
-					scale: 0.6,
+					scale: 0.7,
 					x: [0, 0.5],
 					y: [0, 0.5]
 				},
@@ -1815,7 +1816,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				name: '芮姬/玉芮花意/xingxiang',
 				version: "4.0",
 				json: true,
-				shizhounian: true,
+				// shizhounian: true,
 				x: [0, 0.9],
 				y: [0, 0.5],
 				scale: 0.7,
@@ -1943,7 +1944,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 						x: [0, 0.5],
 						y: [0, 0.5],
 						scale: 0.6,
-						audio: '神郭嘉/倚星折月2/audio/victory',
+						// audio: '神郭嘉/倚星折月2/audio/victory',
 						delay: 1,
 					},
 					condition: {
@@ -2565,7 +2566,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				name: '滕芳兰/脂车香姝/xingxiang',
 				version: "4.0",
 				json: true,
-				shizhounian: true,
+				// shizhounian: true,
 				x: [0, 0.5],
 				y: [0, 0.45],
 				scale: 0.7,
@@ -2797,6 +2798,21 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					},
 				},
 			},
+      爆料皮肤: {
+				name: '文鸯/爆料皮肤/XingXiang',
+				x: [0, 0.5],
+				y: [0, 0.35],
+				scale: 0.45,
+				angle: 0,
+				//speed: 1,
+				//action: 'DaiJi',
+				beijing: {
+					name: '文鸯/爆料皮肤/BeiJing',
+					scale: 0.3,
+					x: [0, 0.4],
+					y: [0, 0.5]
+				},
+			},
 		},
 		wolongfengchu: { //卧龙凤雏
 			赤壁链火: {
@@ -2856,6 +2872,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.4],
 				scale: 0.42,
 				angle: 0,
+        shizhounian: true,
 				flipX: true,
 				//speed: 1,
 				background: "武陆逊/经典形象/beijing.png",
@@ -2906,6 +2923,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.35],
 				scale: 0.5,
 				angle: 0,
+        shizhounian: true,
 				//speed: 1,
 				background: "武诸葛亮/经典形象/beijing.png",
 				chuchang: {
@@ -3207,7 +3225,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '荀彧/驱虎吞狼/BeiJing',
 					scale: 0.25,
 					x: [0, 0.1],
-					y: [0, 0.5]
+					y: [0, 0.6]
 				},
 			},
 		},
@@ -3283,8 +3301,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				//action: 'DaiJi',
 				beijing: {
 					name: '杨彪/忧心国事/BeiJing',
-					scale: 0.25,
-					x: [0, 0.4],
+					scale: 0.5,
+					x: [0, 0.5],
 					y: [0, 0.5]
 				},
 			},
@@ -3294,7 +3312,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				name: '袁谭袁尚/常棣失华/xingxiang',
 				version: "4.0",
 				json: true,
-				shizhounian: true,
+				// shizhounian: true,
 				x: [0, 0.45],
 				y: [0, 0.55],
 				scale: 0.4,
@@ -3877,7 +3895,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				scale: 0.9,
 				angle: 0,
 				//speed: 1,
-				shizhounian: true,
+				// shizhounian: true,
 				chuchang: {
 					name: '钟琰/雪荣钟情/jineng01',
 					version: "4.0",
