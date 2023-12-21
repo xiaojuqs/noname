@@ -1824,6 +1824,7 @@ window.noname_character_rank={
       'babyshen_simayi',
       'shenduyu',
       'shenchengui',
+      'taffyjsrg_nanhualaoxian',
 		],
 		epic:[
 			'ol_pengyang',

@@ -35,7 +35,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 		 */
 		getSpan: () => `${get.prefixSpan('欢杀')}${get.prefixSpan('神')}`
 	});
-
+  lib.namePrefix.set('面杀', {
+		showName: '面',
+	});
+  lib.namePrefix.set('面杀起', {
+		/**
+		 * @returns {string}
+		 */
+		getSpan: () => `${get.prefixSpan('面杀')}${get.prefixSpan('起')}`
+	});
 	return {
 		name: 'taffy',
 		connect: true,
@@ -70,6 +78,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			],
 			shenduyu: ['male', 'shen', 5, ['shenmiewu']],
 			shenchengui: ['male', 'shen', 3, ['shendcyingtu', 'shendccongshi']],
+      taffyjsrg_nanhualaoxian: ['male','qun',3,['taffyjsrgshoushu','jsrgxundao','jsrglinghua']],
 			ruijier: ['female', 'shen', '', [],
 				['unseen']
 			],
@@ -77,6 +86,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 		characterSort: {
 			taffy: {
 				taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng'],
+        taffy_off: ['taffyjsrg_nanhualaoxian'],
 				taffy_ol: ['taffyboss_lvbu1'],
 				taffy_shou: ['shoushen_caocao'],
 				taffy_shi: ['shiguanning', 'shixushao'],
@@ -4087,6 +4097,67 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					player.draw();
 				},
 			},
+      // 起南华老仙
+      taffyjsrgshoushu: {
+				audio:'jsrgshoushu',
+        forced:true,
+				trigger:{global:'roundStart'},
+				filter:function(event,player){
+					if(game.hasPlayer(function(current){
+						return current.countCards('hej','taipingyaoshu');
+					})) return false;
+					return true;
+				},
+				direct:true,
+				group:'jsrgshoushu_destroy',
+				content:function(){
+					'step 0'
+					player.chooseTarget(get.prompt('jsrgshoushu'),'将【太平要术】置入一名角色的装备区',(card,player,target)=>{
+						var card={name:'taipingyaoshu'};
+						return target.canEquip(card,true);
+					}).set('ai',target=>{
+						return target.getUseValue({name:'taipingyaoshu'})*get.attitude(_status.event.player,target);
+					})
+					'step 1'
+					if(result.bool){
+						var target=result.targets[0];
+						event.target=target;
+						player.logSkill('jsrgshoushu',target);
+						if(!lib.inpile.contains('taipingyaoshu')){
+							lib.inpile.push('taipingyaoshu');
+						}
+						event.card=game.createCard2('taipingyaoshu','heart',3);
+					}
+					else event.finish();
+					'step 2'
+					if(card) target.equip(card);
+				},
+				subSkill:{
+					destroy:{
+						audio:'jsrgshoushu',
+						trigger:{
+							global:['loseEnd','equipEnd','addJudgeEnd','gainEnd','loseAsyncEnd','addToExpansionEnd'],
+						},
+						forced:true,
+						filter:function(event,player){
+							return game.hasPlayer(current=>{
+								var evt=event.getl(current);
+								if(evt&&evt.es) return evt.es.some(i=>i.name=='taipingyaoshu');
+								return false;
+							});
+						},
+						content:function(){
+							var cards=[];
+							game.countPlayer(current=>{
+								var evt=trigger.getl(current);
+								if(evt&&evt.es) return cards.addArray(evt.es.filter(i=>i.name=='taipingyaoshu'));
+							});
+							game.cardsGotoSpecial(cards);
+							game.log(cards,'被销毁了');
+						}
+					}
+				}
+      },
 		},
 		card: {},
 		characterIntro: {
@@ -4342,8 +4413,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			shendccongshi: '从势',
 			shendccongshi_info: '一名角色使用的装备牌结算结束后，你摸一张牌。',
 			shendccongshi_append: '<span style="font-family: yuanli">不过略施小计，聊戏莽夫耳。</span>',
+      taffyjsrg_nanhualaoxian:'面杀起南华老仙',
+      taffyjsrg_nanhualaoxian_prefix:'面杀起',
+      taffyjsrg_nanhualaoxian_ab: '面杀起南华',
+      taffyjsrgshoushu: '授术',
+			taffyjsrgshoushu_info:'锁定技。①一轮游戏开始时，若场上没有【太平要术】，你可以从游戏外将【太平要术】置于一名角色的装备区内。②当【太平要术】离开一名角色的装备区后，你令此牌销毁。',
 
 			taffy_old: "圣经·塔约",
+      taffy_off: "江山如故·唐",
 			taffy_ol: "江山如故·永",
 			taffy_shou: "江山如故·雏",
 			taffy_shi: "江山如故·塔",

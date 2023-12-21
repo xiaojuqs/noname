@@ -755,6 +755,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.45],
 				scale: 0.85,
 				angle: 0,
+        clipSlots: ['R37', 'N17'],	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				//speed: 1,
 				shizhounian: true,
 				chuchang: {
@@ -4096,6 +4097,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		//南华老仙
 		re_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
 		jsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
+    taffyjsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
 
 		//潘淑
 		re_panshu: decadeUI.dynamicSkin.panshu,
