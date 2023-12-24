@@ -1825,6 +1825,8 @@ window.noname_character_rank={
       'shenduyu',
       'shenchengui',
       'taffyjsrg_nanhualaoxian',
+      'oldruiji',
+      'oldtengfanglan',
 		],
 		epic:[
 			'ol_pengyang',

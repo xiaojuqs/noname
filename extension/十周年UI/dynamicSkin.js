@@ -355,7 +355,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.5],
 				scale: 0.8,
 				angle: 0,
-        clipSlots: ['r111'],	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['r111'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				//speed: 1,
 				shizhounian: true,
 				chuchang: {
@@ -755,7 +755,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.45],
 				scale: 0.85,
 				angle: 0,
-        clipSlots: ['R37', 'N17'],	// 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['R37', 'N17'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				//speed: 1,
 				shizhounian: true,
 				chuchang: {
@@ -2428,8 +2428,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					y: [0, 0.5]
 				},
 			},
-			爆料皮肤: {
-				name: '孙权/爆料皮肤/XingXiang',
+			永开吴祚: {
+				name: '孙权/永开吴祚/XingXiang',
 				x: [0, 0.5],
 				y: [0, 0],
 				scale: 0.5,
@@ -2437,7 +2437,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				//speed: 1,
 				//action: 'DaiJi',
 				beijing: {
-					name: '孙权/爆料皮肤/BeiJing',
+					name: '孙权/永开吴祚/BeiJing',
 					scale: 0.25,
 					x: [0, 0.4],
 					y: [0, 0.5]
@@ -2799,8 +2799,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					},
 				},
 			},
-      爆料皮肤: {
-				name: '文鸯/爆料皮肤/XingXiang',
+			势若万钧: {
+				name: '文鸯/势若万钧/XingXiang',
 				x: [0, 0.5],
 				y: [0, 0.35],
 				scale: 0.45,
@@ -2808,7 +2808,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				//speed: 1,
 				//action: 'DaiJi',
 				beijing: {
-					name: '文鸯/爆料皮肤/BeiJing',
+					name: '文鸯/势若万钧/BeiJing',
 					scale: 0.3,
 					x: [0, 0.4],
 					y: [0, 0.5]
@@ -2873,7 +2873,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.4],
 				scale: 0.42,
 				angle: 0,
-        shizhounian: true,
+				shizhounian: true,
 				flipX: true,
 				//speed: 1,
 				background: "武陆逊/经典形象/beijing.png",
@@ -2924,7 +2924,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.35],
 				scale: 0.5,
 				angle: 0,
-        shizhounian: true,
+				shizhounian: true,
 				//speed: 1,
 				background: "武诸葛亮/经典形象/beijing.png",
 				chuchang: {
@@ -3618,6 +3618,31 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					},
 				},
 			},
+			涟漪夏梦: {
+				name: '张嫙/涟漪夏梦/daiji2',
+				x: [0, 0.45],
+				y: [0, 0.47],
+				scale: 0.77,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '张嫙/涟漪夏梦/chuchang',
+					scale: 0.8,
+					action: 'play',
+				},
+				gongji: {
+					name: '张嫙/涟漪夏梦/chuchang',
+					scale: 1,
+					action: 'play',
+				},
+				beijing: {
+					name: '张嫙/涟漪夏梦/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.4,
+				},
+			},
 		},
 		zhangyao: { //张媱
 			双姝绰约: {
@@ -4097,7 +4122,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		//南华老仙
 		re_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
 		jsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
-    taffyjsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
+		taffyjsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
 
 		//潘淑
 		re_panshu: decadeUI.dynamicSkin.panshu,
@@ -4107,6 +4132,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 芮姬
 		dc_ruiji: decadeUI.dynamicSkin.ruiji,
+		oldruiji: decadeUI.dynamicSkin.ruiji,
 
 		// 神曹操
 		old_caocao: decadeUI.dynamicSkin.shen_caocao,
@@ -4140,6 +4166,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 滕芳兰
 		dc_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
+		oldtengfanglan: decadeUI.dynamicSkin.tengfanglan,
 
 		//王元姬
 		jin_wangyuanji: decadeUI.dynamicSkin.wangyuanji,
