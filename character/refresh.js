@@ -558,6 +558,10 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			//界司马朗
 			requji:{
 				inherit:'quji',
+				selectCard:function(){
+					var player=_status.event.player;
+					return [1,player.getDamagedHp()];
+				},
 				content:function(){
 					'step 0'
 					target.recover();

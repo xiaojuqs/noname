@@ -3731,7 +3731,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								return num;
 							case 'commoner':
 								if(get.population('fan')+get.population('zhong')+get.population('mingzhong')==0) return -1;
-								return Math.min(Math.max(-situation,-2),2);
+								return situation==0?-1:-3;
 						}
 						break;
 					case 'fan':
