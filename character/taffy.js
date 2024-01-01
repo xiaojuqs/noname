@@ -63,7 +63,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				['qun']
 			],
 			oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
-			oldtw_zhangmancheng: ['male', 'qun', 4, ['oldtwfengji', 'oldtwyiju', 'oldtwbudao']],
+			oldtw_zhangmancheng: ['male', 'qun', 4, ['twfengji', 'twyiju', 'oldtwbudao']],
 			shenyuji: ['male', 'shen', 3, ['shenguhuo']],
 			junko: ['female', 'shen', 3, ['junkochunhua', 'junkokuangqi', 'junkowuming']],
 			huiwansunquan: ["male", "wu", 4, ["rezhiheng", "rejiuyuan", "huiwan"]],
@@ -103,10 +103,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 		skill: {
 			// 评世雕龙
 			shenpingjian: {
-				audio: 4,
-				trigger: {
-					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
-				},
 				initList: function () {
 					var list = [];
 					if (_status.connectMode) var list = get.charactersOL();
@@ -122,6 +118,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						list.remove(current.name2);
 					});
 					_status.characterlist = list;
+				},
+				audio: 4,
+				trigger: {
+					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
 				},
 				frequent: true,
 				content: function () {
@@ -157,16 +157,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						if (!_status.characterlist) {
 							lib.skill.shenpingjian.initList();
 						}
-						var list = [];
-						var skills = [];
-						var map = [];
-						var evt = event.getParent(2);
 						var allList = _status.characterlist.slice(0);
 						game.countPlayer(function (current) {
 							if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
 							if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
 							if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
 						});
+						var list = [];
+						var skills = [];
+						var map = [];
 						allList.randomSort();
 						var name2 = event.triggername;
 
@@ -212,7 +211,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 										if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
 											if (info.filter) {
 												try {
-													var bool = info.filter(evt, player);
+													var bool = info.filter(trigger, player);
 													if (!bool) continue;
 												} catch (e) {
 													continue;
@@ -229,7 +228,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 										if (name2.includes(info.trigger.global) && (!info.trigger.player || info.trigger.player !== 'enterGame') || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
 											if (info.filter) {
 												try {
-													var bool = info.filter(evt, player);
+													var bool = info.filter(trigger, player);
 													if (!bool) continue;
 												} catch (e) {
 													continue;
@@ -247,6 +246,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							if (list.length >= 2 * result.links.length + 3) break;
 						}
 						if (skills.length) {
+							event.list = list;
 							if (player.isUnderControl()) {
 								game.swapPlayerAuto(player);
 							}
@@ -334,6 +334,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						for (var i of map.skills) {
 							player.addSkill(i);
 							game.log(player, '获得了技能', '#g【' + get.translation(i) + '】');
+							var name = event.list.find(name => lib.character[name][3].includes(i));
+							if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
 						}
 					}
 				},
@@ -412,6 +414,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						}
 						if (!list.length) event.finish();
 						else {
+							event.list = list;
 							player.chooseButton([
 								'评荐：请选择至多' + get.cnNumber(result.links.length) + '张武将牌并获得其所有技能',
 								[list, 'character'],
@@ -426,6 +429,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								for (let j = 0; j < skills.length; j++) {
 									player.addSkill(skills[j]);
 									game.log(player, '获得了技能', '#g【' + get.translation(skills[j]) + '】');
+									var name = event.list.find(name => lib.character[name][3].includes(skills[j]));
+									if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
 								}
 							}
 						}
@@ -476,11 +481,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						}
 						if (list.length > 2) break;
 					}
-					if (skills.length) player.chooseControl(skills).set('dialog', ['评荐：请选择获得一个技能', [list, 'character']]);
-					else event.finish();
+					if (skills.length) {
+						event.list = list;
+						player.chooseControl(skills).set('dialog', ['评荐：请选择获得一个技能', [list, 'character']]);
+					} else event.finish();
 					'step 5'
 					player.addSkill(result.control);
 					game.log(player, '获得了技能', '#g【' + get.translation(result.control) + '】');
+					var name = event.list.find(name => lib.character[name][3].includes(i));
+					if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
 				},
 				ai: {
 					order: 12,
@@ -976,36 +985,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					},
 				},
 				initList: function () {
-					// var list,skills=[];
 					var skills = [];
-					// var banned = ['xunyi'];
-					// if (get.mode() == 'guozhan') {
-					//   list = [];
-					//   for (var i in lib.characterPack.mode_guozhan) list.push(i);
-					// }
-					// else if(_status.connectMode) list=get.charactersOL();
-					// else {
-					//   list=[];
-					//   for(var i in lib.character){
-					//   	 if(lib.filter.characterDisabled2(i)||lib.filter.characterDisabled(i)) continue;
-					//   	 list.push(i);
-					//   }
-					// }
-					// for(var i of list){
-					// 	if(i.indexOf('gz_jun')==0) continue;
-					// 	for(var j of lib.character[i][3]){
-					// 		var skill=lib.skill[j];
-					// 		if(!skill||skill.zhuSkill||banned.contains(j)) continue;
-					// 		if(skill.ai&&(skill.ai.combo||skill.ai.notemp||skill.ai.neg)) continue;
-					// 		var info=get.translation(j);
-					// 		for(var ix=0;ix<info.length;ix++){
-					// 			if(/仁|义|礼|智|信/.test(info[ix])==true){
-					// 				skills.add(j);
-					// 				break;
-					// 			}
-					// 		}
-					// 	}
-					// }
 					skills = ['rerende', 'renxin', 'renzheng', 'juyi', 'yicong', 'new_yijue', 'yishe', 'reyixiang', 'tianyi', 'dcchongyi', 'tongli', 'relixia', 'cslilu', 'nzry_yili', 'zhiyu', 'zhichi', 'rejizhi', 'xinfu_qianxin'];
 					_status.shidunshi_list = skills;
 				},
@@ -1771,10 +1751,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			},
 			// 神许劭
 			spshenpingjian: {
-				audio: 'shenpingjian',
-				trigger: {
-					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
-				},
 				initList: function () {
 					var list = [];
 					if (_status.connectMode) var list = get.charactersOL();
@@ -1790,6 +1766,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						list.remove(current.name2);
 					});
 					_status.characterlist = list;
+				},
+				audio: 'shenpingjian',
+				trigger: {
+					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
 				},
 				frequent: true,
 				content: function () {
@@ -1840,16 +1820,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							if (!_status.characterlist) {
 								lib.skill.spshenpingjian.initList();
 							}
-							var list = [];
-							var skills = [];
-							var map = [];
-							var evt = event.getParent(2);
 							var allList = _status.characterlist.slice(0);
 							game.countPlayer(function (current) {
 								if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
 								if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
 								if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
 							});
+							var list = [];
+							var skills = [];
+							var map = [];
 							allList.randomSort();
 							var name2 = event.triggername;
 
@@ -1895,7 +1874,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 											if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && hasCommonElement(info.trigger.player, name2)) {
 												if (info.filter) {
 													try {
-														var bool = info.filter(evt, player);
+														var bool = info.filter(trigger, player);
 														if (!bool) continue;
 													} catch (e) {
 														continue;
@@ -1912,7 +1891,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 											if (name2.includes(info.trigger.global) && (!info.trigger.player || info.trigger.player !== 'enterGame') || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
 												if (info.filter) {
 													try {
-														var bool = info.filter(evt, player);
+														var bool = info.filter(trigger, player);
 														if (!bool) continue;
 													} catch (e) {
 														continue;
@@ -1930,6 +1909,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								if (list.length >= 2 * (result.links.length + player.storage.spshenpingjianX) + 1) break;
 							}
 							if (skills.length) {
+								event.list = list;
 								if (player.isUnderControl()) {
 									game.swapPlayerAuto(player);
 								}
@@ -2018,6 +1998,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						for (var i of map.skills) {
 							player.addSkill(i);
 							game.log(player, '获得了技能', '#g【' + get.translation(i) + '】');
+							var name = event.list.find(name => lib.character[name][3].includes(i));
+							if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
 						}
 						player.storage.spshenpingjianX = 0;
 					}
@@ -2123,6 +2105,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								if (list.length >= 2 * (result.links.length + player.storage.spshenpingjianX) + 1) break;
 							}
 							if (skills.length) {
+								event.list = list;
 								if (player.isUnderControl()) {
 									game.swapPlayerAuto(player);
 								}
@@ -2211,6 +2194,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						for (var i of map.skills) {
 							player.addSkill(i);
 							game.log(player, '获得了技能', '#g【' + get.translation(i) + '】');
+							var name = event.list.find(name => lib.character[name][3].includes(i));
+							if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
 						}
 						player.storage.spshenpingjianX = 0;
 					}
@@ -2449,147 +2434,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				}
 			},
 			// 旧张曼成
-			oldtwfengji: {
-				audio: 'twfengji',
-				mahouSkill: true,
-				trigger: {
-					player: 'phaseUseBegin'
-				},
-				filter: function (event, player) {
-					return !player.getExpansions('oldtwfengji').length && !player.hasSkill('oldtwfengji_mahou') && player.countCards('he');
-				},
-				direct: true,
-				content: function () {
-					'step 0'
-					player.chooseCard('he', get.prompt2('oldtwfengji')).set('ai', function (card) {
-						var name = card.name,
-							num = 0;
-						for (var i = 0; i < ui.cardPile.childNodes.length; i++) {
-							if (ui.cardPile.childNodes[i].name == name) num++;
-						}
-						if (num < 2) return false;
-						return 8 - get.value(card);
-					});
-					'step 1'
-					if (result.bool) {
-						player.logSkill('oldtwfengji');
-						player.addToExpansion(result.cards, player, 'giveAuto').gaintag.add('oldtwfengji');
-						player.chooseControl('1回合', '2回合', '3回合').set('prompt', '请选择施法时长').set('ai', function () {
-							var player = _status.event.player;
-							var safe = Math.min(player.getHandcardLimit(), player.countCards('h', 'shan'));
-							if (safe < Math.min(3, game.countPlayer())) {
-								var next = player.next;
-								while (next != player && get.attitude(next, player) > 0) {
-									safe++;
-									next = next.next;
-								}
-							}
-							return Math.max(2, Math.min(safe, 3, game.countPlayer())) - 1;
-						});
-					} else event.finish();
-					'step 2'
-					player.storage.oldtwfengji_mahou = [result.index + 1, result.index + 1];
-					player.addTempSkill('oldtwfengji_mahou', {
-						player: 'die'
-					});
-				},
-				marktext: '示',
-				onremove: function (player, skill) {
-					var cards = player.getExpansions(skill);
-					if (cards.length) player.loseToDiscardpile(cards);
-				},
-				intro: {
-					content: 'expansion',
-					markcount: 'expansion',
-				},
-				subSkill: {
-					mahou: {
-						trigger: {
-							global: 'phaseEnd'
-						},
-						forced: true,
-						popup: false,
-						charlotte: true,
-						content: function () {
-							var list = player.storage.oldtwfengji_mahou;
-							list[1]--;
-							if (list[1] == 0) {
-								game.log(player, '的“蜂集”魔法生效');
-								player.logSkill('oldtwfengji');
-								var cards = player.getExpansions('oldtwfengji');
-								if (cards.length) {
-									var cards2 = [],
-										num = list[0];
-									for (var card of cards) {
-										for (var i = 0; i < num; i++) {
-											var card2 = get.cardPile2(function (cardx) {
-												return cardx.name == card.name && !cards2.contains(cardx);
-											});
-											if (card2) cards2.push(card2);
-											else break;
-										}
-									}
-									game.delayx();
-									if (cards2.length) player.gain(cards2, 'gain2');
-									player.loseToDiscardpile(cards);
-								}
-								player.removeSkill('oldtwfengji_mahou');
-							} else {
-								game.log(player, '的“蜂集”魔法剩余', '#g' + (list[1]) + '回合');
-								player.markSkill('oldtwfengji_mahou');
-							}
-						},
-						ai: {
-							threaten: 2.5
-						},
-						mark: true,
-						onremove: true,
-						//该图标为灵魂宝石
-						marktext: '♗',
-						intro: {
-							name: '施法：蜂集',
-							markcount: function (storage) {
-								if (storage) return storage[1];
-								return 0;
-							},
-							content: function (storage) {
-								if (storage) {
-									return '经过' + storage[1] + '个“回合结束时”后，若有“示”，则从牌堆中获得' + storage[0] + '张和“示”名称相同的牌';
-								}
-								return '未指定施法效果';
-							},
-						},
-					},
-				},
-			},
-			oldtwyiju: {
-				audio: 'twyiju',
-				locked: false,
-				mod: {
-					attackRangeBase: function (player, num) {
-						if (player.getExpansions('oldtwfengji').length) return player.hp;
-					},
-					cardUsable: function (card, player, num) {
-						if (card.name == 'sha' && player.getExpansions('oldtwfengji').length) return num - 1 + player.hp;
-					},
-				},
-				trigger: {
-					player: 'damageBegin3'
-				},
-				filter: function (event, player) {
-					return player.getExpansions('oldtwfengji').length > 0;
-				},
-				forced: true,
-				content: function () {
-					trigger.num++;
-					var cards = player.getExpansions('oldtwfengji');
-					if (cards.length) player.loseToDiscardpile(cards);
-				},
-				ai: {
-					halfneg: true,
-					combo: 'oldtwfengji',
-				},
-			},
 			oldtwbudao: {
 				audio: 'twbudao',
 				trigger: {
@@ -4258,7 +4102,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								cards: cards,
 								filterTarget: lib.filter.notMe,
 								selectCard: [1, cards.length],
-								prompt: '是否将得到的牌分配给其他角色？',
+								prompt: '是否将获得的牌分配给其他角色？',
 								ai1: function (card) {
 									return -1;
 								},
@@ -4596,10 +4440,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					var index = ['选项一', '选项二', '选项三', '选项四'].indexOf(result.control);
 					player.markAuto('oldluochong', [index]);
 					game.log(player, '移去了', '#g【落宠】', '的', '#y' + [
-						'令一名角色回复1点体力。',
-						'令一名其他角色失去1点体力。',
-						'弃置一名其他角色的至多两张牌。',
-						'令一名角色摸两张牌。',
+						'令一名角色回复1点体力',
+						'令一名其他角色失去1点体力',
+						'弃置一名其他角色的至多两张牌',
+						'令一名角色摸两张牌',
 					][index], '的选项');
 				},
 			},
@@ -4680,14 +4524,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 		},
 		characterTitle: {
 			shenxushao: '#gViridian',
-			oldwu_zhugeliang: '#gViridian',
 			shiguanning: '#gViridian',
 			acetaffy: '#gViridian',
 			minitaffy: '#gViridian',
 			shixushao: '#gViridian',
 			spshenxushao: '#gViridian',
 			oldtw_niufudongxie: '#gViridian',
-			oldtw_zhangmancheng: '#gViridian',
 			shenyuji: '#gViridian',
 			junko: '#gViridian',
 			huiwansunquan: '#gViridian',
@@ -4797,10 +4639,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			oldtwxiongjun_info: '锁定技，当你造成伤害后，所有拥有〖凶军〗的角色摸一张牌。',
 			oldtw_zhangmancheng: '旧TW张曼成',
 			oldtw_zhangmancheng_prefix: '旧TW',
-			oldtwfengji: '蜂集',
-			oldtwfengji_info: '出牌阶段开始时，若你没有“示”，则你可以将一张牌作为“示”置于武将牌上并施法：从牌堆中获得X张与“示”牌名相同的牌，然后移去“示”。',
-			oldtwyiju: '蚁聚',
-			oldtwyiju_info: '非锁定技。若你的武将牌上有“示”，则：①你使用【杀】的次数上限和攻击范围的基数改为你的体力值。②当你受到伤害时，你移去“示”，且令此伤害+1。',
 			oldtwbudao: '布道',
 			oldtwbudao_info: '限定技。准备阶段，你可减1点体力上限，回复1点体力并选择获得一个〖布道〗技能池里的技能（三选一）。然后你可以令一名其他角色也获得此技能并交给你一张牌。',
 			shenyuji: '神于吉',
@@ -4879,17 +4717,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			shendccongshi_append: '<span style="font-family: yuanli">不过略施小计，聊戏莽夫耳。</span>',
 			taffyjsrg_nanhualaoxian: '面杀起南华老仙',
 			taffyjsrg_nanhualaoxian_prefix: '面杀起',
-			taffyjsrg_nanhualaoxian_ab: '面杀起南华',
 			taffyjsrgshoushu: '授术',
 			taffyjsrgshoushu_info: '锁定技。①一轮游戏开始时，若场上没有【太平要术】，你可以从游戏外将【太平要术】置于一名角色的装备区内。②当【太平要术】离开一名角色的装备区后，你令此牌销毁。',
-      oldruiji: '旧OL芮姬',
+			oldruiji: '旧OL芮姬',
 			oldruiji_prefix: '旧OL',
 			oldqiaoli: '巧力',
 			oldqiaoli_info: '①你可以将一张装备牌当做【决斗】使用。若此【决斗】对应的实体牌：为武器牌，当你以此法声明使用【决斗】后，你摸X张牌（X为此牌的攻击范围），且可以将其中任意张牌分配给其他角色；不为武器牌，此牌不可被响应。②结束阶段开始时，若你于本回合内发动过〖巧力①〗，则你从牌堆中获得一张装备牌。',
 			oldqiaoli_given: '已分配',
 			oldqingliang: '清靓',
 			oldqingliang_info: '每回合限一次。当你成为其他角色使用牌的目标时，你可展示所有手牌，然后选择一项：⒈你与其各摸一张牌，⒉取消此目标，然后弃置你手牌中一种花色的所有牌。',
-      oldtengfanglan: '旧OL滕芳兰',
+			oldtengfanglan: '旧OL滕芳兰',
 			oldtengfanglan_prefix: '旧OL',
 			oldluochong: '落宠',
 			oldluochong_info: '准备阶段开始时/当你受到伤害后，你可选择本轮内未选择过的一项：⒈令一名角色回复1点体力。⒉令一名其他角色失去1点体力。⒊弃置一名其他角色的至多两张牌。⒋令一名角色摸两张牌。',
