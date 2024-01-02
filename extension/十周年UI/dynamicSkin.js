@@ -457,6 +457,52 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		caoxian: { // 曹宪
+			元春呈祥: {
+				name: '曹宪/元春呈祥/daiji2',
+				teshu: {
+					name: '曹宪/元春呈祥/chuchang2',
+					action: ['jineng'],
+					scale: 0.6,
+				},
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.45],
+				y: [0, 0.5],
+				scale: 0.8,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '曹宪/元春呈祥/chuchang',
+					action: 'play',
+					scale: 0.75,
+				},
+				gongji: {
+					name: '曹宪/元春呈祥/chuchang2',
+					action: ['gongji'],
+					scale: 0.6,
+				},
+				beijing: {
+					name: '曹宪/元春呈祥/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: '曹宪/元春呈祥/shouji2',
+					scale: 0.5,
+					speed: 0.6,
+					delay: 0.3,
+					effect: {
+						name: '曹宪/元春呈祥/shouji',
+						scale: 0.5,
+						speed: 0.8,
+						delay: 0.4,
+					},
+				},
+			},
+		},
 		caoxiancaohua: { //曹宪曹华
 			娇媚芙蓉: {
 				name: '曹宪曹华/娇媚芙蓉/xingxiang',
@@ -859,7 +905,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '管宁/墨韵荷香/chuchang2',
 					action: 'jineng',
 					scale: 0.5,
-					whitelist: ['dunshi', 'shidunshi'],
+					whitelist: ['dunshi', 'dunshi_backup', 'dunshi_damage', 'shidunshi', 'shidunshi_backup', 'shidunshi_damage'],
 				},
 				beijing: {
 					name: '管宁/墨韵荷香/beijing',
@@ -1541,7 +1587,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				teshu: {
 					name: '吕玲绮/冰魄映雪/chuchang2',
 					action: ['jineng'],
-					scale: 0.9,
+					scale: 0.7,
 				},
 				shan: 'play3',
 				play2: 'play2',
@@ -1554,12 +1600,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: '吕玲绮/冰魄映雪/chuchang',
 					action: 'play',
-					scale: 1,
+					scale: 0.7,
 				},
 				gongji: {
 					name: '吕玲绮/冰魄映雪/chuchang2',
 					action: ['gongji'],
-					scale: 0.8,
+					scale: 0.7,
 				},
 				beijing: {
 					name: '吕玲绮/冰魄映雪/beijing',
@@ -1745,7 +1791,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				teshu: {
 					name: '蒲元/战场绝版/chuchang2',
 					action: ['jineng'],
-					scale: 0.8,
+					scale: 0.7,
 				},
 				play2: 'play2',
 				shan: 'play3',
@@ -1758,12 +1804,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: '蒲元/战场绝版/chuchang',
 					action: 'play',
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: '蒲元/战场绝版/chuchang2',
 					action: ['gongji'],
-					scale: 0.8,
+					scale: 0.7,
 				},
 				beijing: {
 					name: '蒲元/战场绝版/beijing',
@@ -4066,6 +4112,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 管宁
 		shiguanning: decadeUI.dynamicSkin.guanning,
+		shenshiguanning: decadeUI.dynamicSkin.guanning,
 
 		//关羽
 		re_guanyu: decadeUI.dynamicSkin.guanyu,
@@ -4122,7 +4169,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		//南华老仙
 		re_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
 		jsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
-		taffyjsrg_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
 
 		//潘淑
 		re_panshu: decadeUI.dynamicSkin.panshu,
