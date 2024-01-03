@@ -4979,7 +4979,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			shenshiguanning: '新杀神管宁',
 			shenshiguanning_prefix: '新杀神',
 			shenshidunshi: '遁世',
-			shenshidunshi_info: '每回合限一次。你可以视为使用或打出一张【杀】/【闪】/【桃】/【酒】，然后当前回合角色于本回合内下一次造成伤害时，你可以防止此伤害，并令系统从技能名中包含“仁/义/礼/智/信”字样的技能中随机选择三个其未拥有的技能，然后你令一名角色获得其中一个技能。',
+			shenshidunshi_info: '每回合限一次。你可以视为使用或打出一张【杀】/【闪】/【桃】/【酒】，然后当前回合角色于本回合内下一次造成伤害时，你可以防止此伤害，并令系统从技能名中包含“仁/义/礼/智/信”字样的技能中随机选择三个技能，然后你令一名角色获得其中一个技能。',
 			shenshidunshi_append: `<span style="font-family: yuanli">骑鹤仙人下九天，飘然来去似飞烟。<br/>
       身轻如燕随风舞，心静如水伴月眠。<br/>
       高飞远举逍遥乐，俯视人间万象全。<br/>
