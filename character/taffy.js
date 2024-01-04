@@ -135,6 +135,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					var skills = player.getSkills(null, false, false).filter(skill => {
 						var info = get.info(skill);
 						if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+						const tempSkills = Object.keys(player.tempSkills)
+						if (tempSkills.includes(skill)) {
+							return false;
+						}
+						const additionalSkills = Object.keys(player.additionalSkills)
+						for (let i = 0; i < additionalSkills.length; i++) {
+							if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
+								return false;
+							}
+						}
 						return true;
 					});
 					var next = player.chooseButton(true, [
@@ -375,6 +385,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						var skills = player.getSkills(null, false, false).filter(skill => {
 							var info = get.info(skill);
 							if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+							const tempSkills = Object.keys(player.tempSkills)
+							if (tempSkills.includes(skill)) {
+								return false;
+							}
+							const additionalSkills = Object.keys(player.additionalSkills)
+							for (let i = 0; i < additionalSkills.length; i++) {
+								if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
+									return false;
+								}
+							}
 							return true;
 						});
 						var next = player.chooseButton(true, [
@@ -4770,7 +4790,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			shenchengui: '#gViridian',
 			shenshiguanning: '#gViridian',
 		},
-		perfectPair: {},
 		characterFilter: {},
 		dynamicTranslate: {
 			shidunshi: function (player) {
@@ -4818,7 +4837,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		perfectPair: {},
-		characterReplace: {},
+		characterReplace: {
+			wu_zhugeliang: ['wu_zhugeliang', 'oldwu_zhugeliang'],
+			guanning: ['guanning', 'shiguanning'],
+			xushao: ['xushao', 'jsrg_xushao', 'shixushao'],
+			niufudongxie: ['tw_niufudongxie', 'oldtw_niufudongxie'],
+			zhangmancheng: ['dc_zhangmancheng', 'tw_zhangmancheng', 'oldtw_zhangmancheng'],
+			sunquan: ['sunquan', 're_sunquan', 'sb_sunquan', 'dc_sunquan', 'huiwansunquan', 'huiwansunquanplus'],
+			shen_caocao: ['shen_caocao', 'shoushen_caocao'],
+			shen_simayi: ['shen_simayi', 'babyshen_simayi'],
+			ruiji: ['ruiji', 'dc_ruiji', 'oldruiji'],
+			tengfanglan: ['tengfanglan', 'dc_tengfanglan', 'oldtengfanglan'],
+			feiyi: ['ol_feiyi', 'feiyi', 'tw_feiyi', 'oldol_feiyi'],
+		},
 		translate: {
 			shenxushao: '评世雕龙',
 			shenpingjian: '评荐',
@@ -4850,7 +4881,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			taffytangshi: '糖氏',
 			taffytangshi_info: '出牌阶段，你可以随机播放一条小菲的糖氏语音。',
 			taffyzisha: '紫砂',
-			taffyzisha_info: '出牌阶段限一次，你可以死亡',
+			taffyzisha_info: '出牌阶段限一次，你可以死亡。',
 			shixushao: '新杀许劭',
 			shixushao_prefix: '新杀',
 			shipingjian: '评荐',
