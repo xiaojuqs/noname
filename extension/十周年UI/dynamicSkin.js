@@ -4052,6 +4052,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+    zhujianping: { //朱建平
+			命镜幻生: {
+				name: '朱建平/命镜幻生/daiji2',
+				x: [0, 0.5],
+				y: [0, 0.5],
+				scale: 0.7,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '朱建平/命镜幻生/chuchang',
+					scale: 0.7,
+					action: 'play',
+				},
+				gongji: {
+					name: '朱建平/命镜幻生/chuchang',
+					scale: 0.9,
+					action: 'play',
+				},
+				beijing: {
+					name: '朱建平/命镜幻生/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.4,
+				},
+			},
+		},
 		zuoci: { //左慈
 			役使鬼神: {
 				name: '左慈/役使鬼神/XingXiang',
