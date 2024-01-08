@@ -2368,23 +2368,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					twzhouhu: (target) => 1,
 					twzuhuo: (target, player) => 1,
 					twharvestinori: (target) => 1,
-					// twhuangjin:(target)=>Math.random()/5,
-					// twguimen:(target)=>Math.sqrt(Math.min(3,target.countCards('he',{suit:'spade'})))*0.09,
-					// twzhouzu:(target)=>{
-					// 	var rand=Math.random();
-					// 	if(rand<0.8) return 1-Math.sqrt(0.8-rand);
-					// 	return 1;
-					// },
-					// twdidao:(target,player)=>{
-					// 	if([target,player].some(current=>current.getSkills().some(skill=>{
-					// 		var info=get.info(skill);
-					// 		if(!info||!info.ai||!info.ai.rejudge) return false;
-					// 		return true;
-					// 	}))){
-					// 		return 0.05;
-					// 	}
-					// 	return 0.85+Math.random()/5;
-					// }
 				},
 				content: function () {
 					'step 0'
@@ -2399,7 +2382,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					player.chooseControl(skills).set('choiceList', skills.map(function (i) {
 						return '<div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div>';
 					})).set('displayIndex', false).set('prompt', '布道：选择获得一个技能').set('ai', () => {
-						return _status.event.choice;
+						return 'twharvestinori';
 					}).set('choice', skills.sort((a, b) => (map[b](target, player) || 0.5) - (map[a](target, player) || 0.5))[0]);
 					'step 1'
 					var skill = result.control;
@@ -2408,7 +2391,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					player.chooseTarget(lib.filter.notMe, '是否令一名其他角色也获得【' + get.translation(skill) + '】？').set('ai', function (target) {
 						var player = _status.event.player;
 						if (player.identity == 'nei') return 0;
-						return get.attitude(player, target) - 6;
+						return get.attitude(player, target);
 					});
 					'step 2'
 					if (result.bool) {
@@ -4515,26 +4498,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					if (player.storage.shenshidunshi && player.storage.shenshidunshi[0].contains(name) && !player.getStat('skill').shenshidunshi) return true;
 					return false;
 				},
-				marktext: '席',
-				mark: true,
-				intro: {
-					markcount: function (storage) {
-						return storage[1];
-					},
-					content: function (storage, player) {
-						if (!storage) return;
-						var str = '<li>';
-						if (!storage[0].length) {
-							str += '已无可用牌';
-						} else {
-							str += '剩余可用牌：';
-							str += get.translation(storage[0]);
-						}
-						str += '<br><li>“席”标记数量：';
-						str += (storage[1]);
-						return str;
-					},
-				},
 				filter: function (event, player) {
 					if (event.type == 'wuxie') return false;
 					var storage = player.storage.shenshidunshi;
@@ -4820,19 +4783,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					}
 					str += choiceList[i];
 				}
-				return str;
-			},
-			shenshidunshi: function (player) {
-				var info = player.storage.shenshidunshi;
-				var str = '每回合限一次。你可以视为使用或打出一张';
-				var list = ['sha', 'shan', 'tao', 'jiu'];
-				for (var i of list) {
-					var strx = '【' + get.translation(i) + '】';
-					if (!info || !info[0].contains(i)) strx = ('<span style="text-decoration:line-through;">' + strx + '</span>');
-					str += strx;
-					if (i != 'jiu') str += '/';
-				}
-				str += '，然后当前回合角色于本回合内下一次造成伤害时，你可以防止此伤害，并令系统从技能名中包含“仁/义/礼/智/信”字样的技能中随机选择三个技能，然后你令一名角色获得其中一个技能。';
 				return str;
 			},
 		},
