@@ -1454,14 +1454,20 @@ new Promise(resolve=>{
 						else{
 							map.auto_check_update.hide();
 						}
-						if(lib.device){
-							map.enable_vibrate.show();
-							map.keep_awake.show();
-						}
-						else{
-							map.enable_vibrate.hide();
-							map.keep_awake.hide();
-						}
+            // taffy: 注释game.js原版代码喵
+						// if(lib.device){
+						// 	map.enable_vibrate.show();
+						// 	map.keep_awake.show();
+						// }
+						// else{
+						// 	map.enable_vibrate.hide();
+						// 	map.keep_awake.hide();
+						// }
+            /* taffy分界线 */
+            // taffy: 开启一些被隐藏的选项
+            map.enable_vibrate.show();
+            map.keep_awake.show();
+            /* taffy分界线 */
 						// if(config.enable_pressure){
 						// 	map.pressure_click.show();
 						// 	if(lib.device){
