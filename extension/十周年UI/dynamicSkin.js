@@ -1627,6 +1627,54 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		luotong: { // 骆统
+			沐粽端阳: {
+				name: '骆统/沐粽端阳/daiji2',
+				teshu: {
+					name: '骆统/沐粽端阳/chuchang2',
+					action: ['jineng'],
+					scale: 0.5,
+				},
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.45],
+				y: [0, 0.5],
+				scale: 0.75,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '骆统/沐粽端阳/chuchang',
+					action: 'play',
+					scale: 0.8,
+				},
+				gongji: {
+					name: '骆统/沐粽端阳/chuchang2',
+					action: ['gongji'],
+					scale: 0.5,
+				},
+				beijing: {
+					name: '骆统/沐粽端阳/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: '骆统/沐粽端阳/shouji2',
+					scale: 0.5,
+					speed: 0.6,
+					delay: 0.2,
+					factor: 0.5,
+					effect: {
+						name: '骆统/沐粽端阳/shouji',
+						scale: 0.4,
+						speed: 0.8,
+						delay: 0.3,
+						factor: 0.5,
+					},
+				},
+			},
+		},
 		majun: { //马钧
 			能工巧匠: {
 				name: '马钧/能工巧匠/XingXiang',
@@ -1919,29 +1967,51 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		shen_dengai: { //神邓艾
-			遏川制泽: {
-				name: '神邓艾/遏川制泽/daiji2',
-				x: [0, 0.5],
+			巨灵撼宇: {
+				name: '神邓艾/巨灵撼宇/daiji2',
+				teshu: {
+					name: '神邓艾/巨灵撼宇/chuchang2',
+					action: ['jineng'],
+					scale: 0.7,
+				},
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.45],
 				y: [0, 0.5],
-				scale: 0.7,
-				angle: 5,
+				scale: 0.75,
+				angle: 0,
+				clipSlots: ['texiao/pan00'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				//speed: 1,
 				shizhounian: true,
 				chuchang: {
-					name: '神邓艾/遏川制泽/chuchang',
-					scale: 0.7,
+					name: '神邓艾/巨灵撼宇/chuchang',
 					action: 'play',
+					scale: 0.7,
 				},
 				gongji: {
-					name: '神邓艾/遏川制泽/chuchang',
-					scale: 0.9,
-					action: 'play',
+					name: '神邓艾/巨灵撼宇/chuchang2',
+					action: ['gongji'],
+					scale: 0.7,
 				},
 				beijing: {
-					name: '神邓艾/遏川制泽/beijing',
+					name: '神邓艾/巨灵撼宇/beijing',
 					x: [0, 0.5],
 					y: [0, 0.5],
 					scale: 0.3,
+				},
+				zhishixian: {
+					name: '神邓艾/巨灵撼宇/shouji2',
+					scale: 0.5,
+					speed: 0.6,
+					delay: 0.2,
+					factor: 0.5,
+					effect: {
+						name: '神邓艾/巨灵撼宇/shouji',
+						scale: 0.4,
+						speed: 0.8,
+						delay: 0.3,
+						factor: 0.5,
+					},
 				},
 			},
 		},
@@ -3138,7 +3208,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '许劭/评世雕龙/chuchang2',
 					action: ['jineng'],
 					scale: 0.7,
-					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use'],
+					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use', 'taffyre_pingjian', 'taffyre_pingjian_use'],
 				},
 				play2: 'play2',
 				shan: 'play3',
@@ -3184,24 +3254,24 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				name: '许劭/声名鹊起/daiji2',
 				teshu: {
 					name: '许劭/声名鹊起/chuchang',
-					scale: 1,
+					scale: 0.8,
 					action: 'play',
-					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use'],
+					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use', 'taffyre_pingjian', 'taffyre_pingjian_use'],
 				},
-				x: [0, 0.42],
+				x: [0, 0.45],
 				y: [0, 0.5],
-				scale: 0.8,
+				scale: 0.7,
 				angle: 0,
 				//speed: 1,
 				shizhounian: true,
 				chuchang: {
 					name: '许劭/声名鹊起/chuchang',
-					scale: 1,
+					scale: 0.7,
 					action: 'play',
 				},
 				gongji: {
 					name: '许劭/声名鹊起/chuchang',
-					scale: 1,
+					scale: 0.8,
 					action: 'play',
 				},
 				beijing: {
@@ -3217,7 +3287,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '许劭/战场荣耀/chuchang2',
 					action: ['jineng'],
 					scale: 0.7,
-					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use'],
+					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use', 'taffyre_pingjian', 'taffyre_pingjian_use'],
 				},
 				play2: 'play2',
 				shan: 'play3',
@@ -4052,7 +4122,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
-    zhujianping: { //朱建平
+		zhujianping: { //朱建平
 			命镜幻生: {
 				name: '朱建平/命镜幻生/daiji2',
 				x: [0, 0.5],
@@ -4187,6 +4257,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		//陆郁生
 		ol_luyusheng: decadeUI.dynamicSkin.luyusheng,
 
+		// 骆统
+		dc_luotong: decadeUI.dynamicSkin.luotong,
+
 		//马钧
 		old_majun: decadeUI.dynamicSkin.majun,
 
@@ -4261,7 +4334,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		shenxushao: decadeUI.dynamicSkin.xushao,
 		shixushao: decadeUI.dynamicSkin.xushao,
 		spshenxushao: decadeUI.dynamicSkin.xushao,
-    boss_xushao: decadeUI.dynamicSkin.xushao,
+		boss_xushao: decadeUI.dynamicSkin.xushao,
+		taffyre_xushao: decadeUI.dynamicSkin.xushao,
 
 		//许攸
 		sp_xuyou: decadeUI.dynamicSkin.xuyou,

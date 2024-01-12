@@ -1828,6 +1828,7 @@ window.noname_character_rank={
       'oldtengfanglan',
       'oldol_feiyi',
       'shenshiguanning',
+      'taffyre_xushao',
 		],
 		epic:[
 			'ol_pengyang',
