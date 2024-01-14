@@ -17,16 +17,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						game.players=game.players.concat(game.dead);
 						if(!_status.showShouSha局势){
 							game.players.forEach(value=>{
-								if(game.dead.contains(value)){
+								if(game.dead.includes(value)){
 									value.局势分数-=20;
 								}
 								value.getEnemies().forEach(current=>{
-									if(game.dead.contains(current)||current.isDead()){
+									if(game.dead.includes(current)||current.isDead()){
 										value.局势分数+=2;
 									}
 								})
 								value.getFriends().forEach(current=>{
-									if(current.isDead()||game.dead.contains(current))
+									if(current.isDead()||game.dead.includes(current))
 									value.局势分数-=2;
 								})
 							})
@@ -168,13 +168,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						if(!event.source||event.source==player||!event.source.isIn()) return false;
 						if(!event.cards||event.cards.length==0) return false;
 						if(event.source.identity=='nei') return true;
-						return event.player.getEnemies().contains(event.source);
+						return event.player.getEnemies().includes(event.source);
 					}
 					if(name==='discardEnd'){
 						if(!event.source||event.source==player||!event.source.isIn()) return false;
 						if(!event.cards||event.cards.length==0) return false;
 						if(event.source.identity=='nei') return true;
-						return event.player.getEnemies().contains(event.source);
+						return event.player.getEnemies().includes(event.source);
 					}
 				},
 				content:function(){
@@ -192,7 +192,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				filter:function(event,player){
 					if(!event.source||!event.source.isIn()) return false;
 					if(event.source.identity == 'nei') return true;
-					return event.player.getFriends().contains(event.source)||event.player==event.source;
+					return event.player.getFriends().includes(event.source)||event.player==event.source;
 				},
 				content:function(){
 					trigger.num>5?trigger.source.治疗分数+=10:trigger.source.治疗分数+=2*trigger.num;
@@ -209,14 +209,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					return (event.source&&event.source.isIn());
 				},
 				content:function(){
-					if(trigger.player.getFriends().contains(trigger.source)){
+					if(trigger.player.getFriends().includes(trigger.source)){
 						trigger.source.惩罚扣分+=5;
 						if(trigger.source.identity == 'nei'&&trigger.player.identity!='zhu'){
 							trigger.source.惩罚扣分-=5;
 							trigger.source.攻击分数+=3;
 						}
 					}
-					if(trigger.player.getEnemies().contains(trigger.source)){
+					if(trigger.player.getEnemies().includes(trigger.source)){
 						trigger.source.攻击分数+=3;
 					}
 				},

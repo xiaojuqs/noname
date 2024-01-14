@@ -89,7 +89,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"挑�
 		});
 		lib.translate['boss_mode_card_pile_card_config']='挑战卡牌';
 		lib.config.all.cards.push('boss_mode_card_pile');
-		if(!lib.config.cards.contains('boss_mode_card_pile')) lib.config.cards.push('boss_mode_card_pile');
+		if(!lib.config.cards.includes('boss_mode_card_pile')) lib.config.cards.push('boss_mode_card_pile');
 	}
 },help:{},config:{},package:{
 	character:{
