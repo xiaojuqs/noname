@@ -3666,7 +3666,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										new Promise((resolve, reject) => {
 											decadeCardImage.onerror = reject;
 											decadeCardImage.onload = resolve;
-											if(!not_load_card_names.contains(fileName)){
+											if(!not_load_card_names.includes(fileName)){
 												decadeCardImage.src = decadeExtCardImage[fileName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${fileName}.${imgFormat}`;
 											}
 										}).catch(event => new Promise((resolve, reject) => {
