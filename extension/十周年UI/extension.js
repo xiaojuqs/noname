@@ -2310,6 +2310,11 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						/\s*game\s*\.\s*delayx\s*\(\s*\)\s*;(?=\s*if\s*\(\s*event\s*\.\s*updatePile\s*\)\s*game\s*\.\s*updateRoundNumber\s*\(\s*\)\s*;)/
 					);
 					lib.element.Player = class extends lib.element.Player {
+						constructor(){
+							let player = super(...arguments);
+							Object.setPrototypeOf(player,lib.element.Player.prototype);
+							return player;
+						}
 						get group() {
 							return this._decadeGroup;
 						}
@@ -2332,6 +2337,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							super.buildNode();
 							this.node.avatar.className = 'primary-avatar';
 							this.node.avatar2.className = 'deputy-avatar';
+							this.node.avatar2.hide();
 							this.node.turnedover.className = 'turned-over';
 							this.node.turnedover.textContent = '';
 							this.node.count.show().className = 'card-count';
@@ -3573,6 +3579,11 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						}
 					};
 					lib.element.Card = class extends lib.element.Card {
+						constructor(){
+							let card = super(...arguments);
+							Object.setPrototypeOf(card,lib.element.Card.prototype);
+							return card;
+						}
 						buildNode() {
 							super.buildNode();
 							const node = this.node;
@@ -3664,7 +3675,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 								const fileName = cardNature ? `${cardName}_${get.natureList(cardNature).sort(lib.sort.nature).join('_')}` : cardName;
 								let decadeCardSource = decadeExtCardImage[fileName];
 								let not_load_card_names=['sha_kami'];
-								if (!decadeCardSource && cardName != fileName && !not_load_card_names.contains(fileName)) decadeCardSource = decadeExtCardImage[cardName];
+								if (!decadeCardSource && cardName != fileName && !not_load_card_names.includes(fileName)) decadeCardSource = decadeExtCardImage[cardName];
 
 								if (decadeCardSource) {
 									this.classList.add('decade-card');
@@ -3699,7 +3710,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 										new Promise((resolve, reject) => {
 											decadeCardImage.onerror = reject;
 											decadeCardImage.onload = resolve;
-											if(!not_load_card_names.contains(fileName)){
+											if(!not_load_card_names.includes(fileName)){
 												decadeCardImage.src = decadeExtCardImage[fileName] || `${lib.assetURL}extension/`+window.decadeUI.extensionName+`/image/card/${fileName}.${imgFormat}`;
 											}
 										}).catch(event => new Promise((resolve, reject) => {
@@ -3803,6 +3814,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							delete dialog.bar1;
 							dialog.bar2.remove();
 							delete dialog.bar2;
+							Object.setPrototypeOf(dialog,lib.element.Dialog.prototype);
 							return dialog;
 						}
 					};
