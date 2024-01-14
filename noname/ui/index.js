@@ -9476,7 +9476,7 @@ class Create extends Uninstantable {
 		];
 		var need_reload=false;
 		for(var i=0;i<addtional_extention_names.length;i++){
-			if(!lib.config.extensions.contains(addtional_extention_names[i][0])&&addtional_extention_names[i][1]){
+			if(!lib.config.extensions.includes(addtional_extention_names[i][0])&&addtional_extention_names[i][1]){
 				var need_reload=true;
 				lib.config.extensions.add(addtional_extention_names[i][0]);
 				game.saveConfig('extensions',lib.config.extensions);
