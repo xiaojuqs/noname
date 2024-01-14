@@ -451,7 +451,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 				equipSkill:true,
 				forced:true,
 				trigger:{target:'gift'},
-				filter:(event,player)=>event.target==player,
+				filter:(event,player)=>event.player!=player,
 				logTarget:'player',
 				content:()=>{
 					trigger.deniedGifts.add(trigger.card);
