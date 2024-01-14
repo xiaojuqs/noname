@@ -123,6 +123,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					player.gainPlayerCard(target,'hej',true,[1,2]).set('ai',function(button){
 						let card=button.link;
 						if(get.type(card)=='equip'&&get.position(card)=='e'&&get.attitude(player,target)<0) return get.equipValue(card);
+						if(get.position(card)=='j'&&get.attitude(player,target)<0) return 0;
 					});
 					'step 1'
 					if(result.bool&&target.isIn()){
