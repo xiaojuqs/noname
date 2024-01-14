@@ -1775,8 +1775,12 @@ export const Content = {
 	gameDraw: function () {
 		"step 0";
 		if (_status.brawl && _status.brawl.noGameDraw) {
-			event.finish();
-			return;
+			if(window.decadeUI){
+				return event.goto(4);
+			} else {
+				event.finish();
+				return;
+			}
 		}
 		var end = player;
 		var numx = num;
@@ -1786,6 +1790,9 @@ export const Content = {
 			}
 			if (player.getTopCards) player.directgain(player.getTopCards(numx));
 			else player.directgain(get.cards(numx));
+			if(window.decadeUI){
+				player.$draw(numx);
+			}
 			if (player.singleHp === true && get.mode() != 'guozhan' && (lib.config.mode != 'doudizhu' || _status.mode != 'online')) {
 				player.doubleDraw();
 			}
@@ -1807,7 +1814,11 @@ export const Content = {
 			};
 		}
 		else {
-			event.finish();
+			if(window.decadeUI){
+				event.goto(4);
+			} else {
+				event.finish();
+			}
 		}
 		"step 2";
 		if (event.changeCard == 'once') {
@@ -1844,7 +1855,15 @@ export const Content = {
 			if (event.dialog) event.dialog.close();
 			if (ui.confirm) ui.confirm.close();
 			game.me._start_cards = game.me.getCards('h');
-			event.finish();
+			if(window.decadeUI){
+				event.goto(4);
+			} else {
+				event.finish();
+			}
+		}
+		"step 4";
+		if(window.decadeUI){
+			setTimeout(decadeUI.effect.gameStart, 51);
 		}
 	},
 	phaseLoop: function () {
@@ -2700,7 +2719,9 @@ export const Content = {
 				next.setContent(lib.card[name].cancel);
 				next.cards = [event.card];
 				if (!event.card.viewAs) next.card = get.autoViewAs(event.card);
-				else next.card = get.autoViewAs({ name: name }, next.cards);
+				//修浮雷報錯
+				//else next.card = get.autoViewAs({ name: name }, next.cards);
+				else next.card = get.autoViewAs(event.card, next.cards);
 				next.player = player;
 			}
 		}
@@ -2710,7 +2731,9 @@ export const Content = {
 			next._result = result;
 			next.cards = [event.card];
 			if (!event.card.viewAs) next.card = get.autoViewAs(event.card);
-			else next.card = get.autoViewAs({ name: name }, next.cards);
+			//修浮雷報錯
+			//else next.card = get.autoViewAs({ name: name }, next.cards);
+			else next.card = get.autoViewAs(event.card, next.cards);
 			next.player = player;
 		}
 		ui.clear();
@@ -5844,14 +5867,14 @@ export const Content = {
 				if (att > 0) {
 					if (!_status.event.nojudge && target.countCards('j', function (card) {
 						if (!filterCard(card)) return false;
-						return game.hasPlayer(function (current) {
+						return ['lebu','bingliang','caomu'].contains(card.name)&&game.hasPlayer(function (current) {
 							if (!aimTargets.includes(current)) return false;
 							return current != target && current.canAddJudge(card) && get.attitude(player, current) < 0;
 						});
 					})) return 14;
 					if (target.countCards('e', function (card) {
 						if (!filterCard(card)) return false;
-						return get.value(card, target) < 0 && game.hasPlayer(function (current) {
+						return get.equipValue(card) < 0 && game.hasPlayer(function (current) {
 							if (!aimTargets.includes(current)) return false;
 							return current != target && get.attitude(player, current) < 0 && current.canEquip(card, _status.event.canReplace) && get.effect(target, card, player, player) < 0;
 						});
@@ -5862,7 +5885,7 @@ export const Content = {
 						if (current != target && get.attitude(player, current) > 0) {
 							var es = target.getCards('e', filterCard);
 							for (var i = 0; i < es.length; i++) {
-								if (get.value(es[i], target) > 0 && current.canEquip(es[i], _status.event.canReplace) && get.effect(current, es[i], player, player) > (_status.event.canReplace ? get.effect(target, es[i], player, player) : 0)) return true;
+								if (get.equipValue(es[i]) > 0 && current.canEquip(es[i], _status.event.canReplace) && get.effect(current, es[i], player, player) > (_status.event.canReplace ? get.effect(target, es[i], player, player) : 0)) return true;
 							}
 						}
 					})) {
@@ -5871,24 +5894,25 @@ export const Content = {
 				}
 				return 0;
 			}
-			var es = ui.selected.targets[0].getCards('e', filterCard);
-			var i;
-			var att2 = get.sgn(get.attitude(player, ui.selected.targets[0]));
-			for (i = 0; i < es.length; i++) {
-				if (sgnatt != 0 && att2 != 0 && sgnatt != att2 &&
-					get.sgn(get.value(es[i], ui.selected.targets[0])) == -att2 &&
-					get.sgn(get.effect(target, es[i], player, target)) == sgnatt &&
-					target.canEquip(es[i], _status.event.canReplace)) {
-					return Math.abs(att);
+			var sec_target=ui.selected.targets[0];
+			var sec_att1=get.attitude(player,sec_target);
+			var sec_att2=get.attitude(player,target);
+			if(sec_target!=target){
+				if(sec_att1>0&&sec_att2<0){
+					if(!_status.event.nojudge&&sec_target.countCards('j',function(card){
+						if(!filterCard(card)) return false;
+						return ['lebu','bingliang','caomu'].contains(card.name)&&target.canAddJudge(card);
+					})) return 14;
+					if(sec_target.countCards('e',function(card){
+						return get.equipValue(card)<0&&target.canEquip(card);
+					})>0) return 9;
+				} else if(sec_att1<0&&sec_att2>0){
+					if(sec_target.countCards('e',function(card){
+						return get.equipValue(card)>0&&target.canEquip(card,_status.event.canReplace);
+					})>0) return 8;
 				}
 			}
-			if (i == es.length && (_status.event.nojudge || !ui.selected.targets[0].countCards('j', function (card) {
-				if (!filterCard(card)) return false;
-				return target.canAddJudge(card);
-			}) || att2 <= 0)) {
-				return 0;
-			}
-			return -att * att2;
+			return 0;
 		});
 		next.set('multitarget', true);
 		next.set('targetprompt', _status.event.targetprompt || ['被移走', '移动目标']);
@@ -5914,20 +5938,20 @@ export const Content = {
 		game.delay();
 		'step 3';
 		if (targets.length == 2) {
-			player.choosePlayerCard('ej', true, function (button) {
+			player.choosePlayerCard('ej', true, targets[0]).set('ai', function (button) {
 				var player = _status.event.player;
 				var targets0 = _status.event.targets0;
 				var targets1 = _status.event.targets1;
 				if (get.attitude(player, targets0) > 0 && get.attitude(player, targets1) < 0) {
-					if (get.position(button.link) == 'j') return 12;
-					if (get.value(button.link, targets0) < 0 && get.effect(targets1, button.link, player, targets1) > 0) return 10;
-					return 0;
-				}
-				else {
+					if (get.position(button.link) == 'j' && ['lebu','bingliang','caomu'].contains(button.link.name)) return 12+get.value(button.link);
+					if (get.equipValue(button.link) < 0) return 10;
+					return -10;
+				} else if(get.attitude(player,targets0)<0&&get.attitude(player,targets1)>0){
 					if (get.position(button.link) == 'j') return -10;
-					return get.value(button.link) * get.effect(targets1, button.link, player, targets1);
+					if (get.equipValue(button.link) > 0 && get.effect(targets1,button.link,player,targets1) > 0) return 10+get.equipValue(button.link);
 				}
-			}, targets[0]).set('nojudge', event.nojudge || false).set('targets0', targets[0]).set('targets1', targets[1]).set('filterButton', function (button) {
+				return 0
+			}).set('nojudge', event.nojudge || false).set('targets0', targets[0]).set('targets1', targets[1]).set('filterButton', function (button) {
 				var targets1 = _status.event.targets1;
 				if (!get.event('filter')(button.link)) return false;
 				if (get.position(button.link) == 'j') {
@@ -8133,11 +8157,17 @@ export const Content = {
 				card.classList.add('drawinghidden');
 				card.viewAs = viewAs;
 				if (viewAs && viewAs != card.name && (card.classList.contains('fullskin') || card.classList.contains('fullborder'))) {
-					card.classList.add('fakejudge');
-					card.node.background.innerHTML = lib.translate[viewAs + '_bg'] || get.translation(viewAs)[0];
+					if(window.decadeUI){
+						card.classList.add('fakejudge');
+						card.node.judgeMark.node.judge.innerHTML = get.translation(viewAs)[0];
+					} else {
+						card.classList.add('fakejudge');
+						card.node.background.innerHTML = lib.translate[viewAs + '_bg'] || get.translation(viewAs)[0];
+					}
 				}
 				else {
 					card.classList.remove('fakejudge');
+					if(window.decadeUI) card.node.judgeMark.node.judge.innerHTML = get.translation(card.name)[0];
 				}
 				player.node.judges.insertBefore(card, player.node.judges.firstChild);
 				ui.updatej(player);
@@ -8161,12 +8191,14 @@ export const Content = {
 			if (cards[0].viewAs && cards[0].viewAs != cards[0].name) {
 				if (cards[0].classList.contains('fullskin') || cards[0].classList.contains('fullborder')) {
 					cards[0].classList.add('fakejudge');
+					if(window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].viewAs)[0];
 					cards[0].node.background.innerHTML = lib.translate[cards[0].viewAs + '_bg'] || get.translation(cards[0].viewAs)[0];
 				}
 				game.log(player, '被贴上了<span class="yellowtext">' + get.translation(cards[0].viewAs) + '</span>（', cards, '）');
 			}
 			else {
 				cards[0].classList.remove('fakejudge');
+				if(window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].name)[0];
 				game.log(player, '被贴上了', cards);
 			}
 			game.addVideo('addJudge', player, [get.cardInfo(cards[0]), cards[0].viewAs]);
@@ -8204,14 +8236,24 @@ export const Content = {
 				event.node = card.copy('thrown', 'center', ui.arena).addTempClass('start');
 			}
 			else {
-				event.node = player.$throwordered(card.copy(), true);
+				if(window.decadeUI){
+					event.node = player.$throwordered2(card.copy(), true);
+				} else {
+					event.node = player.$throwordered(card.copy(), true);
+				}
 			}
 			if (lib.cardOL) lib.cardOL[cardid] = event.node;
 			event.node.cardid = cardid;
-			event.node.classList.add('thrownhighlight');
-			ui.arena.classList.add('thrownhighlight');
-			event.dialog = ui.create.dialog(str);
-			event.dialog.classList.add('center');
+			if (!window.decadeUI) {
+				event.node.classList.add('thrownhighlight');
+				ui.arena.classList.add('thrownhighlight');
+				event.dialog = ui.create.dialog(str);
+				event.dialog.classList.add('center');
+			} else {
+				event.dialog = dui.showHandTip(str);
+				event.dialog.strokeText();
+				if (game.online) ui.dialogs.push(event.dialog);
+			}
 			event.dialog.videoId = id;
 		}, player, player.judging[0], judgestr, event.videoId, get.id());
 
@@ -8250,13 +8292,14 @@ export const Content = {
 			if (dialog) {
 				dialog.close();
 			}
-			ui.arena.classList.remove('thrownhighlight');
+			if (!window.decadeUI) ui.arena.classList.remove('thrownhighlight');
 		}, event.videoId);
 		event.dialog.close();
 		game.addVideo('judge2', null, event.videoId);
 		ui.arena.classList.remove('thrownhighlight');
 		game.log(player, '的判定结果为', event.result.card);
 		event.trigger('judgeFixing');
+		if (window.decadeUI) event.triggerMessage('judgeresult');
 		if (event.callback) {
 			var next = game.createEvent('judgeCallback', false);
 			next.player = player;

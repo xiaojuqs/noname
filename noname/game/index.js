@@ -4754,6 +4754,11 @@ export class Game extends Uninstantable {
 					dialog.add('<div class="text center">' + get.translation(game.players[i]) + '</div>');
 					dialog.addSmall(hs);
 				}
+				let muniu=game.players[i].getEquip('muniu');
+				if(muniu&&muniu.cards&&muniu.cards.length){
+					dialog.add('<div class="text center">'+get.translation(game.players[i])+'的'+get.translation('muniu')+'</div>');
+					dialog.addSmall(muniu.cards);
+				}
 			}
 
 			for (let j = 0; j < game.dead.length; j++) {
@@ -4761,6 +4766,11 @@ export class Game extends Uninstantable {
 				if (hs.length) {
 					dialog.add('<div class="text center">' + get.translation(game.dead[j]) + '</div>');
 					dialog.addSmall(hs);
+				}
+				let muniu=game.dead[j].getEquip('muniu');
+				if(muniu&&muniu.cards&&muniu.cards.length){
+					dialog.add('<div class="text center">'+get.translation(game.dead[j])+'的'+get.translation('muniu')+'</div>');
+					dialog.addSmall(muniu.cards);
 				}
 			}
 
@@ -5160,6 +5170,11 @@ export class Game extends Uninstantable {
 				dialog.add('<div class="text center">' + get.translation(game.players[i]) + '</div>');
 				dialog.addSmall(hs);
 			}
+			let muniu=game.players[i].getEquip('muniu');
+			if(muniu&&muniu.cards&&muniu.cards.length){
+				dialog.add('<div class="text center">'+get.translation(game.players[i])+'的'+get.translation('muniu')+'</div>');
+				dialog.addSmall(muniu.cards);
+			}
 		}
 		for (let i = 0; i < game.dead.length; i++) {
 			if (!_status.connectMode && game.dead[i].isUnderControl(true) && game.layout != 'long2') continue;
@@ -5167,6 +5182,11 @@ export class Game extends Uninstantable {
 			if (hs.length) {
 				dialog.add('<div class="text center">' + get.translation(game.dead[i]) + '</div>');
 				dialog.addSmall(hs);
+			}
+			let muniu=game.dead[i].getEquip('muniu');
+			if(muniu&&muniu.cards&&muniu.cards.length){
+				dialog.add('<div class="text center">'+get.translation(game.dead[i])+'的'+get.translation('muniu')+'</div>');
+				dialog.addSmall(muniu.cards);
 			}
 		}
 		dialog.add(ui.create.div('.placeholder.slim'));
@@ -5952,6 +5972,13 @@ export class Game extends Uninstantable {
 					else if (!selectableTargets && players[i].classList.contains('selectable')) {
 						selectableTargets = true;
 					}
+					if (window.decadeUI){
+						if (players[i].classList.contains('selected')||players[i].classList.contains('selectable')){
+							players[i].classList.remove('un-selectable');
+						} else {
+							players[i].classList.add('un-selectable');
+						}
+					}
 					if (players[i].instance) {
 						if (players[i].classList.contains('selected')) {
 							players[i].instance.classList.add('selected');
@@ -6178,6 +6205,7 @@ export class Game extends Uninstantable {
 			for (j = 0; j < players.length; j++) {
 				players[j].classList.remove('selected');
 				players[j].classList.remove('selectable');
+				if (window.decadeUI) players[j].classList.remove('un-selectable');
 				if (players[j].instance) {
 					players[j].instance.classList.remove('selected');
 					players[j].instance.classList.remove('selectable');

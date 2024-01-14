@@ -6738,7 +6738,7 @@ class Create extends Uninstantable {
 					updatepx.style.whiteSpace = 'nowrap';
 					updatepx.style.marginTop = '8px';
 					var buttonx = ui.create.node('button', '访问项目主页', function () {
-						window.open('https://github.com/libccy/noname');
+						window.open('https://github.com/adeFuLoDgu/noname');
 					});
 					updatepx.appendChild(buttonx);
 					ui.updateUpdate = function () {
@@ -9468,6 +9468,23 @@ class Create extends Uninstantable {
 			(lib.arenaReady.shift())();
 		}
 		delete lib.arenaReady;
+		//load custom extension start
+		var addtional_extention_names=[
+			['十周年UI', true],
+			['挑战卡牌', true],
+			['MVP扩展', true],
+		];
+		var need_reload=false;
+		for(var i=0;i<addtional_extention_names.length;i++){
+			if(!lib.config.extensions.contains(addtional_extention_names[i][0])&&addtional_extention_names[i][1]){
+				var need_reload=true;
+				lib.config.extensions.add(addtional_extention_names[i][0]);
+				game.saveConfig('extensions',lib.config.extensions);
+				game.saveConfig('extension_'+addtional_extention_names[i][0]+'_enable',addtional_extention_names[i][1]);
+			}
+		}
+		if(need_reload) game.reload();
+		//load custom extension end
 		if (lib.config.auto_check_update) {
 			setTimeout(function () {
 				game.checkForUpdate(false);
@@ -9597,6 +9614,7 @@ class Create extends Uninstantable {
 			delete node.activate;
 		};
 		_status.prebutton.push(node);
+		if (window.decadeUI&&position) position.appendChild(node);
 		return node;
 	}
 	static buttonPresets = {
@@ -9951,10 +9969,12 @@ class Create extends Uninstantable {
 				for (var i of game.connectPlayers) {
 					if (!i.nickname && !i.classList.contains('unselectable2')) num++;
 				}
+				/*
 				if (num >= lib.configOL.number - 1) {
 					alert('至少要有两名玩家才能开始游戏！');
 					return;
 				}
+				*/
 				game.resume();
 			}
 			button.delete();

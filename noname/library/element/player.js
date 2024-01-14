@@ -639,9 +639,21 @@ export class Player extends HTMLDivElement {
 	//赠予AI相关
 	getGiftAIResultTarget(card, target) {
 		if (!card || target.refuseGifts(card, this)) return 0;
-		if (get.type(card, false) == 'equip') return get.effect(target, card, target, target);
+		if(get.type(card,false)=='equip'){
+			var target_equip_cards=target.getEquips(get.equiptype(card));
+			for(var target_equip_card of target_equip_cards){
+				if(target_equip_card){
+					if(get.equipValue(target_equip_card)<=0&&get.equipValue(card)<=0) return 0;
+					if(get.equipValue(target_equip_card)>0&&get.equipValue(card)<=0) return -1+get.equipValue(card);
+				}
+			}
+			return get.effect(target,card,target,target);
+		}
 		if (card.name == 'du') return this.hp > target.hp ? -1 : 0;
 		if (target.hasSkillTag('nogain')) return 0;
+		if(game.hasPlayer(function(current){
+			return current.getEquip('shanrangzhaoshu')&&get.attitude(target,current)<0;
+		})) return 0;
 		return Math.max(1, get.value(card, this) - get.value(card, target));
 	}
 	getGiftEffect(card, target) {
@@ -923,6 +935,24 @@ export class Player extends HTMLDivElement {
 		next.setContent('expandEquip');
 		return next;
 	}
+	SortEquipNodes() {
+		var player=this;
+		if (!player.node.equips.childNodes) return;
+		var childnodes_Array=[];
+		for (var i in player.node.equips.childNodes){
+			if (player.node.equips.childNodes[i].nodeType==1) childnodes_Array.push(player.node.equips.childNodes[i]);
+		}
+		childnodes_Array.sort(function(a,b){
+			var sort_equip_num=function(old_equip_num){
+				if (old_equip_num==5) return -1;
+				return old_equip_num;
+			}
+			return sort_equip_num(get.equipNum(a))-sort_equip_num(get.equipNum(b));
+		});
+		for (i=0;i<childnodes_Array.length;++i){
+			player.node.equips.appendChild(childnodes_Array[i]);
+		}
+	}
 	//判断判定区是否被废除
 	isDisabledJudge() {
 		return Boolean(this.storage._disableJudge);
@@ -1000,6 +1030,7 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
+		player.SortEquipNodes();
 	}
 	//以下函数涉及到本次更新内容而进行修改
 	canEquip(name, replace) {
@@ -4344,7 +4375,7 @@ export class Player extends HTMLDivElement {
 				for (var i = 0; i < es.length; i++) {
 					if (aimTargets.some(current2 => {
 						if (withatt) {
-							if (get.sgn(get.value(es[i], current)) != -att) return false;
+							if (get.sgn(get.equipValue(es[i])) != -att) return false;
 							var att2 = get.sgn(get.attitude(player, current2));
 							if (!canReplace || att < 0 && current2.countEquipableSlot(get.subtype(es[i]))) {
 								if (att == att2 || att2 != get.sgn(get.effect(current2, es[i], player, current2))) return false;
@@ -6333,6 +6364,7 @@ export class Player extends HTMLDivElement {
 					id: id
 				};
 				player.marks[id].setBackground(target, 'character');
+				if(window.decadeUI) player.marks[id].style.backgroundSize = "cover !important";
 				game.addVideo('changeMarkCharacter', player, {
 					id: id,
 					name: name,
@@ -9100,19 +9132,9 @@ export class Player extends HTMLDivElement {
 		delete card._transform;
 		var player = this;
 		var equipNum = get.equipNum(card);
-		var equipped = false;
-		for (var i = 0; i < player.node.equips.childNodes.length; i++) {
-			if (get.equipNum(player.node.equips.childNodes[i]) >= equipNum) {
-				player.node.equips.insertBefore(card, player.node.equips.childNodes[i]);
-				equipped = true;
-				break;
-			}
-		}
-		if (!equipped) {
-			player.node.equips.appendChild(card);
-			if (_status.discarded) {
-				_status.discarded.remove(card);
-			}
+		player.node.equips.appendChild(card);
+		if (_status.discarded) {
+			_status.discarded.remove(card);
 		}
 		var info = get.info(card);
 		if (info.skills) {
@@ -9120,6 +9142,7 @@ export class Player extends HTMLDivElement {
 				player.addSkillTrigger(info.skills[i]);
 			}
 		}
+		player.SortEquipNodes();
 		return player;
 	}
 	$gain(card, log, init) {

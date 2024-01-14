@@ -28,12 +28,12 @@ export class Library extends Uninstantable {
 	static configprefix = 'noname_0.9_';
 	static versionOL = 27;
 	static updateURLS = {
-		coding: 'https://gitcode.net/sinat_33405273/noname/-/raw/',
-		github: 'https://raw.githubusercontent.com/libccy/noname',
+		coding: 'https://raw.githubusercontent.com/adeFuLoDgu/noname',
+		github: 'https://raw.githubusercontent.com/adeFuLoDgu/noname',
 	};
-	static updateURL = 'https://raw.githubusercontent.com/libccy/noname';
-	static mirrorURL = 'https://gitcode.net/sinat_33405273/noname/-/raw/';
-	static hallURL = '47.99.105.222';
+	static updateURL = 'https://raw.githubusercontent.com/adeFuLoDgu/noname';
+	static mirrorURL = 'https://raw.githubusercontent.com/adeFuLoDgu/noname';
+	static hallURL = '127.0.0.1';
 	static assetURL = assetURL;
 	static userAgent = userAgent;
 	static characterDefaultPicturePath = characterDefaultPicturePath;
@@ -148,7 +148,7 @@ export class Library extends Uninstantable {
 					const cs = lib.linq.cselector;
 					const g1 = cs.group(
 						cs.of(
-							cs.class("player ", "identity"),
+							cs.class("player", "identity"),
 							cs.isAttr("data-color", `"${id}"`)
 						),
 						cs.of(
@@ -1121,7 +1121,7 @@ export class Library extends Uninstantable {
 				},
 				update_link: {
 					name: '更新地址',
-					init: 'coding',
+					init: 'github',
 					unfrequent: true,
 					item: {
 						coding: 'CSDN',
@@ -1337,7 +1337,7 @@ export class Library extends Uninstantable {
 			config: {
 				theme: {
 					name: '主题',
-					init: 'woodden',
+					init: 'simple',
 					item: {},
 					visualMenu: function (node, link) {
 						if (!node.menu) {
@@ -1586,7 +1586,7 @@ export class Library extends Uninstantable {
 				},
 				player_height_nova: {
 					name: '角色高度',
-					init: 'short',
+					init: 'long',
 					item: {
 						// auto:'自动',
 						short: '矮',
@@ -1647,7 +1647,7 @@ export class Library extends Uninstantable {
 				ui_zoom: {
 					name: '界面缩放',
 					unfrequent: true,
-					init: 'normal',
+					init: 'ebig',
 					item: {
 						esmall: '80%',
 						vsmall: '90%',
@@ -1884,7 +1884,7 @@ export class Library extends Uninstantable {
 				},
 				change_skin_auto: {
 					name: '自动换肤',
-					init: 'off',
+					init: '60000',
 					item: {
 						'off': '关闭',
 						'30000': '半分钟',
@@ -1903,7 +1903,7 @@ export class Library extends Uninstantable {
 				},
 				card_style: {
 					name: '卡牌样式',
-					init: 'default',
+					init: 'simple',
 					intro: '设置正面朝上的卡牌的样式',
 					item: {
 						wood: '木纹',
@@ -2024,7 +2024,7 @@ export class Library extends Uninstantable {
 				cardback_style: {
 					name: '卡背样式',
 					intro: '设置背面朝上的卡牌的样式',
-					init: 'default',
+					init: 'official',
 					item: {
 						// wood:'木纹',
 						// music:'音乐',
@@ -3218,7 +3218,7 @@ export class Library extends Uninstantable {
 				cardshape: {
 					name: '手牌显示',
 					intro: '将手牌设置为正方形或长方形',
-					init: 'default',
+					init: 'oblong',
 					unfrequent: true,
 					item: {
 						default: '默认',
@@ -4101,7 +4101,7 @@ export class Library extends Uninstantable {
 				},
 				show_cardpile_number: {
 					name: '显示剩余牌数',
-					init: false,
+					init: true,
 					unfrequent: true,
 					onclick: function (bool) {
 						game.saveConfig('show_cardpile_number', bool);
@@ -4151,7 +4151,7 @@ export class Library extends Uninstantable {
 				},
 				show_discardpile: {
 					name: '暂停时显示弃牌堆',
-					init: false,
+					init: true,
 					unfrequent: true,
 				},
 				show_extensionmaker: {
@@ -4289,7 +4289,7 @@ export class Library extends Uninstantable {
 				},
 				equip_audio: {
 					name: '装备配音',
-					init: false,
+					init: true,
 				},
 				repeat_audio: {
 					name: '播放重复语音',
@@ -5037,7 +5037,7 @@ export class Library extends Uninstantable {
 				},
 				connect_enable_commoner: {
 					name: '启用平民',
-					init: false,
+					init: true,
 					restart: true,
 					frequent: false,
 					get intro() {
@@ -5065,7 +5065,7 @@ export class Library extends Uninstantable {
 				},
 				connect_enable_year_limit: {
 					name: '启用年机制',
-					init: false,
+					init: true,
 					restart: true,
 					frequent: false,
 					get intro() {
@@ -5620,7 +5620,7 @@ export class Library extends Uninstantable {
 				},
 				enable_commoner: {
 					name: '启用平民',
-					init: false,
+					init: true,
 					restart: true,
 					frequent: false,
 					intro: '开启后游戏中将有一个平民（身份）加入游戏。<br>具体规则请查看帮助。',
@@ -5640,7 +5640,7 @@ export class Library extends Uninstantable {
 				},
 				enable_year_limit: {
 					name: '启用年机制',
-					init: false,
+					init: true,
 					restart: true,
 					frequent: false,
 					intro: '开启后将会加入年机制。<br>年机制的具体规则请查看帮助。',
@@ -12931,6 +12931,12 @@ export class Library extends Uninstantable {
 			 * @returns {string}
 			 */
 			getSpan: () => `${get.prefixSpan('TW')}${get.prefixSpan('神')}`
+		}],
+		['SP神',{
+			/**
+			 * @returns {string}
+			 */
+			getSpan:()=>`${get.prefixSpan('SP')}${get.prefixSpan('神')}`
 		}],
 		['TW将', {
 			/**

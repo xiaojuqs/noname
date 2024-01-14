@@ -90,7 +90,7 @@ export async function boot() {
 			window.onload = resolve;
 		} else resolve(void 0);
 	}).then(onWindowReady.bind(window));
-
+	
 
 	// 闭源客户端检测并提醒
 	if (lib.assetURL.includes('com.widget.noname.qingyao') || lib.assetURL.includes('online.nonamekill.android')) {
@@ -143,7 +143,7 @@ export async function boot() {
 	// 读取模式
 	if (config2.mode) config.set('mode', config2.mode);
 	if (config.get('mode_config')[config.get('mode')] === undefined)
-		config.get('mode_config')[config.get('mode')] = {};
+		 config.get('mode_config')[config.get('mode')] = {};
 
 	// 复制共有模式设置
 	for (const name in config.get('mode_config').global) {
@@ -368,23 +368,21 @@ export async function boot() {
 				//lib.init.onload=backup_onload;
 				_status.evaluatingExtension = false;
 			}
-			else if (config.get('mode') != 'connect' || (!localStorage.getItem(lib.configprefix + 'directstart') && show_splash)) {
+			else {
 				extensionlist.push(config.get('extensions')[name]);
 			}
 		}
 	}
 	else {
-		if (config.get('mode') != 'connect' || (!localStorage.getItem(lib.configprefix + 'directstart') && show_splash)) {
-			var alerted = false;
-			for (var name = 0; name < config.get('extensions').length; name++) {
-				if (Reflect.get(window, 'bannedExtensions').includes(config.get('extensions')[name])) {
-					//if(!alerted) alert('读取某些扩展时出现问题。');
-					alerted = true;
-					continue;
-				}
-				// @ts-ignore
-				game.import('extension', { name: config.get('extensions')[name] });
+		var alerted = false;
+		for (var name = 0; name < config.get('extensions').length; name++) {
+			if (Reflect.get(window, 'bannedExtensions').includes(config.get('extensions')[name])) {
+				//if(!alerted) alert('读取某些扩展时出现问题。');
+				alerted = true;
+				continue;
 			}
+			// @ts-ignore
+			game.import('extension', { name: config.get('extensions')[name] });
 		}
 	}
 
@@ -466,7 +464,7 @@ export async function boot() {
 		Reflect.get(ui, 'css')[stylesName[i]] = stylesLoaded[i];
 	}
 
-	if (extensionlist.length && (config.get('mode') != 'connect' || show_splash)) {
+	if (extensionlist.length) {
 		_status.extensionLoading = [];
 
 		const bannedExtensions = Reflect.get(window, 'bannedExtensions');
