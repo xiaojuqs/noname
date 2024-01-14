@@ -4215,6 +4215,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		re_guanyu: decadeUI.dynamicSkin.guanyu,
 		jsp_guanyu: decadeUI.dynamicSkin.guanyu,
 		jsrg_guanyu: decadeUI.dynamicSkin.guanyu,
+    sb_guanyu: decadeUI.dynamicSkin.guanyu,
 
 		//关索
 		dc_guansuo: decadeUI.dynamicSkin.guansuo,
