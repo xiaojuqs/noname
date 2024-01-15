@@ -215,7 +215,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 			var url = getComputedStyle(playerAvatar).backgroundImage;
 			var image = new Image();
 			var bgImage = new Image();
-			
+		
 			image.onload = function () {
 				bgImage.onload = function () {
 					var animation = decadeUI.animation;
@@ -272,10 +272,12 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 				
 				bgImage.src = decadeUIPath + 'assets/image/bg_xianding_' + camp + '.png';
 			};
-			
-			image.src = url.replace(/url\(|\)|'|"/ig, '');
+			image.src = url.split(',')[0].replace(/url\(|\)|'|"/ig, '');
+			image.onerror = function () {
+				image.onerror = void 0;
+				image.src = url.split(',')[1].replace(/url\(|\)|'|"/ig, '');
+			}
 		},
-
 	};
 });
 
