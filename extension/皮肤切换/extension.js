@@ -4707,19 +4707,19 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                 folds = [];
                                 files = ['bingliang.mp3','diaohulishan.mp3','guohe.mp3','huogong.mp3','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','sghuishi1.mp3','sghuishi2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shen_guojia.mp3','shuishi1.mp3','shuishi2.mp3','shuiyanqijun.mp3','shunshou.mp3','stianyi1.mp3','stianyi2.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','victory.mp3','wanjian.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yuanjiao.mp3','zhibi.mp3','zuoxing1.mp3','zuoxing2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/神郭嘉/倚星折月2/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['bingliang.mp3','diaohulishan.mp3','die.mp3','guohe.mp3','huogong.mp3','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','resghuishi1.mp3','resghuishi2.mp3','sghuishi1.mp3','sghuishi2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shen_guojia.mp3','shuishi1.mp3','shuishi2.mp3','shuiyanqijun.mp3','shunshou.mp3','stianyi1.mp3','stianyi2.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','vector.mp3','victory.mp3','wanjian.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yuanjiao.mp3','zhibi.mp3','zuoxing1.mp3','zuoxing2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/钟会/潜蛟觊天/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['bingliang.mp3','chiling.mp3','diaohulishan.mp3','guohe.mp3','gz_guguoanbang.mp3','gz_haolingtianxia','gz_kefuzhongyuan','huogong.mp3','huoshaolianying','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','paiyi_re_zhonghui1.mp3','paiyi_re_zhonghui2.mp3','re_zhonghui.mp3','requanji1.mp3','requanji2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shuiyanqijun.mp3','shunshou.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','wanjian.mp3','wenhe.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yiyi.mp3','yuanjiao.mp3','zhibi.mp3','zili_re_zhonghui1.mp3','zili_re_zhonghui2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/钟会/潜蛟觊天2/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['bingliang.mp3','chiling.mp3','diaohulishan.mp3','guohe.mp3','gz_guguoanbang.mp3','gz_haolingtianxia','gz_kefuzhongyuan','huogong.mp3','huoshaolianying','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','paiyi_re_zhonghui1.mp3','paiyi_re_zhonghui2.mp3','re_zhonghui.mp3','requanji1.mp3','requanji2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shuiyanqijun.mp3','shunshou.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','wanjian.mp3','wenhe.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yiyi.mp3','yuanjiao.mp3','zhibi.mp3','zili_re_zhonghui1.mp3','zili_re_zhonghui2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影2/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
                               }
                               let name = isPrimary ? player.name1 : player.name2
@@ -4772,19 +4772,19 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                 folds = [];
                                 files = ['bingliang.mp3','diaohulishan.mp3','guohe.mp3','huogong.mp3','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','sghuishi1.mp3','sghuishi2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shen_guojia.mp3','shuishi1.mp3','shuishi2.mp3','shuiyanqijun.mp3','shunshou.mp3','stianyi1.mp3','stianyi2.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','victory.mp3','wanjian.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yuanjiao.mp3','zhibi.mp3','zuoxing1.mp3','zuoxing2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/神郭嘉/倚星折月2/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['bingliang.mp3','diaohulishan.mp3','die.mp3','guohe.mp3','huogong.mp3','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','resghuishi1.mp3','resghuishi2.mp3','sghuishi1.mp3','sghuishi2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shen_guojia.mp3','shuishi1.mp3','shuishi2.mp3','shuiyanqijun.mp3','shunshou.mp3','stianyi1.mp3','stianyi2.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','vector.mp3','victory.mp3','wanjian.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yuanjiao.mp3','zhibi.mp3','zuoxing1.mp3','zuoxing2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/钟会/潜蛟觊天/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['bingliang.mp3','chiling.mp3','diaohulishan.mp3','guohe.mp3','gz_guguoanbang.mp3','gz_haolingtianxia','gz_kefuzhongyuan','huogong.mp3','huoshaolianying','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','paiyi_re_zhonghui1.mp3','paiyi_re_zhonghui2.mp3','re_zhonghui.mp3','requanji1.mp3','requanji2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shuiyanqijun.mp3','shunshou.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','wanjian.mp3','wenhe.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yiyi.mp3','yuanjiao.mp3','zhibi.mp3','zili_re_zhonghui1.mp3','zili_re_zhonghui2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/钟会/潜蛟觊天2/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['bingliang.mp3','chiling.mp3','diaohulishan.mp3','guohe.mp3','gz_guguoanbang.mp3','gz_haolingtianxia','gz_kefuzhongyuan','huogong.mp3','huoshaolianying','jiedao.mp3','jiu.mp3','juedou.mp3','lebu.mp3','lianjunshengyan.mp3','lulitongxin.mp3','nanman.mp3','paiyi_re_zhonghui1.mp3','paiyi_re_zhonghui2.mp3','re_zhonghui.mp3','requanji1.mp3','requanji2.mp3','sha.mp3','sha_fire.mp3','sha_thunder.mp3','shan.mp3','shandian.mp3','shuiyanqijun.mp3','shunshou.mp3','tao.mp3','taoyuan.mp3','tiesuo.mp3','wanjian.mp3','wenhe.mp3','wugu.mp3','wuxie.mp3','wuzhong.mp3','yiyi.mp3','yuanjiao.mp3','zhibi.mp3','zili_re_zhonghui1.mp3','zili_re_zhonghui2.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
                               } else if (path === 'extension/十周年UI/assets/dynamic/赵襄/月痕芳影2/audio') {
-                                flods = [];
+                                folds = [];
                                 files = ['fanghun1.mp3', 'fanghun2.mp3', 'fuhan1.mp3', 'fuhan2.mp3', 'dc_zhaoxiang.mp3'];
                               }
                               for (let file of files) {
