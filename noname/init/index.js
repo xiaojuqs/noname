@@ -58,8 +58,8 @@ export async function boot() {
 	_status.event = lib.element.GameEvent.initialGameEvent();
 
 	setWindowListener();
-	await setOnError();
-
+	const promiseErrorHandler = await setOnError();
+	
 	// 无名杀更新日志
 	if (window.noname_update) {
 		Reflect.set(lib, 'version', window.noname_update.version);
@@ -466,7 +466,8 @@ export async function boot() {
 
 	if (extensionlist.length) {
 		_status.extensionLoading = [];
-
+		_status.extensionLoaded = [];
+		
 		const bannedExtensions = Reflect.get(window, 'bannedExtensions');
 
 		const extensionsLoading = [];
@@ -475,8 +476,25 @@ export async function boot() {
 			extensionsLoading.push(importExtension(name));
 		}
 
-		await Promise.allSettled(extensionsLoading);
-		await Promise.allSettled(_status.extensionLoading);
+		const extErrorList = [];
+		for (const promise of extensionsLoading) {
+			await promise.catch(async (error) => {
+				extErrorList.add(error);
+				if (!promiseErrorHandler || !promiseErrorHandler.onHandle) return;
+				// @ts-ignore
+				await promiseErrorHandler.onHandle({ promise });
+			});
+		}
+		for (const promise of _status.extensionLoading) {
+			await promise.catch(async (error) => {
+				if (extErrorList.includes(error)) return;
+				if (!promiseErrorHandler || !promiseErrorHandler.onHandle) return;
+				// @ts-ignore
+				await promiseErrorHandler.onHandle({ promise });
+			});
+		}
+		// await Promise.allSettled(_status.extensionLoading);
+
 		_status.extensionLoaded.filter(Boolean).forEach((name) => {
 			lib.announce.publish("Noname.Init.Extension.onLoad", name);
 			lib.announce.publish(`Noname.Init.Extension.${name}.onLoad`, void 0);
@@ -865,6 +883,7 @@ async function setOnError() {
 			game.loop();
 		}
 	};
+	return promiseErrorHandler;
 }
 
 function setWindowListener() {

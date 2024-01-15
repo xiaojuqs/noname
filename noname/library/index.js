@@ -13073,11 +13073,10 @@ export class Library extends Uninstantable {
 	static other = {
 		ignore: () => void 0
 	};
-}
-Library.config = undefined;
+};
 
+Library.config = undefined;
 Library.configOL = undefined;
-;
 
 export const lib = Library;
 
