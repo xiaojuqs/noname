@@ -65,7 +65,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			],
 			minitaffy: ['female', 'qun', 1, ['taffytangshi', 'taffyzisha']],
 			shixushao: ['male', 'qun', 4, ['shipingjian']],
-			spshenxushao: ['male', 'shen', 3, ['spshenpingjian'],
+			spshenxushao: ['male', 'shen', '2/2/1', ['spshenpingjian'],
 				['qun']
 			],
 			oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
@@ -89,7 +89,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			oldtengfanglan: ['female', 'wu', 3, ['oldluochong', 'oldaichen']],
 			oldol_feiyi: ['male', 'shu', 3, ['oldyanru', 'oldhezhong']],
 			shenshiguanning: ['male', 'shen', '3/7', ['shenshidunshi']],
-			taffyre_xushao: ['male', 'qun', '3/3/1', ['taffyre_pingjian']],
+			taffyre_xushao: ['male', 'qun', 3, ['taffyre_pingjian']],
 			ruijier: ['female', 'shen', '', [],
 				['unseen']
 			],
