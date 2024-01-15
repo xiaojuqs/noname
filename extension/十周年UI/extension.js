@@ -2337,7 +2337,9 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							super.buildNode();
 							this.node.avatar.className = 'primary-avatar';
 							this.node.avatar2.className = 'deputy-avatar';
-							this.node.avatar2.hide();
+              // taffy: 注释adeFuLoDgu代码喵
+							// this.node.avatar2.hide();
+              /* taffy分界线 */
 							this.node.turnedover.className = 'turned-over';
 							this.node.turnedover.textContent = '';
 							this.node.count.show().className = 'card-count';
