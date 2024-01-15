@@ -445,7 +445,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						marktext:'衡',
 						intro:{
 							markcount:function(storage,player){
-								return player.getStorage('dczhiheng_hit')?player.getStorage('dczhiheng_hit').length:0;
+								return player.getExpansions('dczhiheng_hit').length;
 							},
 							content:'本回合已对$造成过伤害',
 						},
