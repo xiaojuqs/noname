@@ -139,7 +139,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         // @ts-ignore
                         window.qnssFindDieAudio(findInExt, charName)
                     });
-                } else if (lib.character[charName] && lib.character[charName][4].contains("die_audio")) {
+                } else if (lib.character[charName] && lib.character[charName][4].includes("die_audio")) {
                     // @ts-ignore
                     game.playAudio("die", charName, function () {
                         game.alert("该武将没有阵亡语音");
@@ -265,7 +265,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     const info = lib.skill[v];
                     if (typeof info.trigger != 'object' || typeof info.content != 'function') return false;
                     for (const t in info.trigger) {
-                        if (['global', 'player'].contains(t)) {
+                        if (['global', 'player'].includes(t)) {
                             if (!Array.isArray(info.trigger[t])) info.trigger[t] = [info.trigger[t]];
                             if (!info.trigger[t].some(v => v.startsWith('die'))) return false;
                         }
@@ -347,7 +347,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }).catch(console.error);
             }).catch(console.error);
 
-            /** 
+            /**
              * @description 双击复制
              * @param target 要复制的目标
              * */
@@ -480,7 +480,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         const input = ui.create.node('input');
                         input.type = 'checkbox';
                         input.value = key;
-                        input.checked = this.searcherModule.contains(key);
+                        input.checked = this.searcherModule.includes(key);
                         input.addEventListener('change', () => {
                             if (input.checked) {
                                 this.searcherModule.add(key);
@@ -494,7 +494,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         li.appendChild(ui.create.node('span', value));
                     }
 
-                    // 暂停游戏 
+                    // 暂停游戏
                     game.pause2();
                     // 复制时会触发window.onkeydown
                     this.keydownFun = window.onkeydown;
@@ -677,7 +677,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         if (!this.input.value) return;
                         this.alwaysShow.sort();
                         for (let data of this.alwaysShow.filter(data => data.startsWith(this.input.value) && this.input.value != data)) {
-                            if (!this.searchList.contains(data) && !lib.skill[data]) {
+                            if (!this.searchList.includes(data) && !lib.skill[data]) {
                                 continue;
                             }
                             this.ul.appendChild(createLi(data));
@@ -690,7 +690,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         for (const key of array) {
                             // 最多显示30条信息
                             if (this.ul.childElementCount >= 30) return;
-                            if (this.searchList.contains(value + key)) {
+                            if (this.searchList.includes(value + key)) {
                                 continue;
                             } else if (!this.input.value) {
                                 continue;
@@ -1000,7 +1000,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 /** 寻找角色 */
                 findCharacter(result) {
                     console.time('findCharacter');
-                    /** 
+                    /**
                      * @type { ({ packName: string, packTranslate: string, characterName: string, characterData: HeroData })[] }
                      */
                     let name = [];
@@ -1008,9 +1008,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         for (const characterName in lib.characterPack[packName]) {
                             // 没有翻译的武将不显示
                             if (typeof lib.translate[characterName] != 'string') continue;
-                            /** 
+                            /**
                              * 武将信息
-                             * @type { HeroData } 
+                             * @type { HeroData }
                              */
                             const characterData = lib.characterPack[packName][characterName];
                             // 如果result是中文
@@ -1216,14 +1216,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 <font color=6df95b>${data.packName}</font>
                                 <font color=6df95b>]</font>
                                 </br>
-                                
+
                                 <span class="bluetext" ondblclick="game.全能搜索_copy(this.nextElementSibling.nextElementSibling)">武将名称&nbsp</span>
                                     ${lib.translate[charName]}
                                     <font color=6df95b>[</font>
                                     <font color=6df95b>${charName}</font>
                                     <font color=6df95b>]</font>
                                 </br>
-                                
+
                                 <span class="bluetext" ondblclick="game.全能搜索_copy(this.nextElementSibling)">武将称号&nbsp</span>
                                 <span>${get.colorspan(lib.characterTitle[charName] || "暂无称号")}</span>
                                 </br>
@@ -1240,7 +1240,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                                 <span class="bluetext">体力上限&nbsp</span><span>${character[2]}</span>
                                 </br>
-                                            
+
                                 <span class="bluetext">阵亡语音&nbsp</span>
                                 <img src='${layoutPath}img/qhly_pic_playaudiobutton.png' alt='点击播放阵亡语音' onclick='window.qnssPlayDieAudio("${charName}");'style='position: absolute; width: 100px; margin: 0; padding: 0;' />
                                 </br>
@@ -1268,12 +1268,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 /** 寻找卡牌 */
                 findCard(result) {
                     console.time('findCard');
-                    /** 
+                    /**
                     * @type { ({ packName: string, packTranslate: string, cardName: string, cardData: ExCardData, nature?: string })[] }
                     */
                     let name = [];
 
-                    if (['leisha', 'huosha', 'icesha', 'kamisha', 'cisha'].contains(result)) {
+                    if (['leisha', 'huosha', 'icesha', 'kamisha', 'cisha'].includes(result)) {
                         let nature;
                         switch (result) {
                             case 'leisha':
@@ -1298,7 +1298,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             cardData: lib.card['sha'],
                             nature
                         });
-                    } else if (['雷杀', '火杀', '冰杀', '神杀', '刺杀'].contains(result)) {
+                    } else if (['雷杀', '火杀', '冰杀', '神杀', '刺杀'].includes(result)) {
                         let nature;
                         switch (result) {
                             case '雷杀':
@@ -1323,7 +1323,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             cardData: lib.card['sha'],
                             nature
                         });
-                    } else if (['杀', 'sha'].contains(result)) {
+                    } else if (['杀', 'sha'].includes(result)) {
                         [undefined, 'thunder', 'fire', 'ice', 'kami', 'stab'].forEach(nature => {
                             name.push({
                                 packName: 'standard',
@@ -1443,10 +1443,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 <font color=6df95b>${cardData.type ? lib.translate[cardData.type] : '无'}</font>
                                 <font color=6df95b> ]</font>
                                 </br>
-                                
+
                                 <span class="bluetext" ondblclick="game.全能搜索_copy(this.nextSibling)">卡牌效果</span>${nature ? lib.card.sha.cardPrompt({ name: 'sha', nature }) : lib.translate[cardName + '_info']}
                                 </br>
-                                
+
                                 <span class="bluetext" ondblclick="game.全能搜索_copy(this.nextElementSibling.nextElementSibling)">所在卡牌包</span>${packTranslate || '无'}
                                 <font color=6df95b>[ </font>
                                 <font color=6df95b>${cardPack || '无'}</font>
@@ -1472,13 +1472,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                                 <span class="bluetext">卡牌代码</span>
                                 <span style="color: white;" onclick='window.qnssShowCode.call(this, "${lib.translate[cardName]}")'>点击查看${lib.translate[cardName]}代码</span>
-                                
+
                                 <span style="display: none;">
                                     </br>
                                     <font color="21ffd8">[ ${lib.translate[cardName]} ] </font>卡牌代码：</br>
                                     <pre class="hljs language-javascript" style="user-select:text;-webkit-user-select:text;">${game.全能搜索_highlight(get.stringify(cardData))}</pre>
                                 </span>
-                                
+
                                 </br></br></br>
                             `);
 
@@ -1501,7 +1501,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     let skills = [];
 
                     for (let skillName in lib.skill) {
-                        if (['global', 'globalmap', 'storage'].contains(skillName) || typeof lib.skill[skillName] != 'object') continue;
+                        if (['global', 'globalmap', 'storage'].includes(skillName) || typeof lib.skill[skillName] != 'object') continue;
                         // 中文包含的，或者英文id对应的
                         if ((lib.translate[skillName] && lib.translate[skillName].includes(result)) || skillName === result) skills.push({
                             skillName,
@@ -1584,7 +1584,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         // const append = skill.append;
 
                         // 关键字高亮
-                        if (indexs.contains(i)) {
+                        if (indexs.includes(i)) {
                             let index = -1;
                             let translate = info;
                             for (const str of translateSearcher) {
@@ -1606,9 +1606,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             for (const characterName in lib.characterPack[packName]) {
                                 // 没有翻译的武将不显示
                                 if (typeof lib.translate[characterName] != 'string') continue;
-                                /** 
+                                /**
                                  * 武将信息
-                                 * @type { HeroData } 
+                                 * @type { HeroData }
                                  */
                                 const characterData = lib.characterPack[packName][characterName];
                                 // 如果result是中文
@@ -1659,7 +1659,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     const buttons2 = ui.create.buttons(name, 'character', buttons, false);
                                     buttons2.forEach(v => {
                                         v.style.height = '108px';
-     
+
                                         const hps = v.getElementsByClassName('hp');
                                         // @ts-ignore
                                         const hp = hps[0];
@@ -1668,14 +1668,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                         hp.style.top = 'auto';
                                         hp.style.bottom = '5px';
                                         hp.style.textAlign = 'right';
-     
+
                                         const identitys = v.getElementsByClassName('identity');
                                         // @ts-ignore
                                         const identity = identitys[0];
                                         identity.style.left = 'auto';
                                         identity.style.right = '3px';
                                         identity.style.top = '3px';
-                                        
+
                                         v.setAttribute('onclick', `
                                             if (confirm("是否查看" + this.link + "的信息？")) {
                                                 _status.全能搜索_Searcher.tujianBegin(this.link);
@@ -1798,7 +1798,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 }
                                 else {
                                     try {
-                                        if (Array.isArray(obj) && obj.contains(Infinity)) {
+                                        if (Array.isArray(obj) && obj.includes(Infinity)) {
                                             obj = obj.slice(0);
                                             let rand = get.id();
                                             for (let i = 0; i < obj.length; i++) {
@@ -1885,7 +1885,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 if (descriptionObj.from) {
                                     descriptionStr += `
                                         <span class="bluetext">代码来源</span>：
-                                        <span>${lib.config.extensions.contains(descriptionObj.from) ? ('扩展【' + descriptionObj.from + '】') : descriptionObj.from}</span>
+                                        <span>${lib.config.extensions.includes(descriptionObj.from) ? ('扩展【' + descriptionObj.from + '】') : descriptionObj.from}</span>
                                         </br>
                                     `;
                                 }
@@ -2073,11 +2073,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 /**
                  * 展示
-                 * @param { Lib.element.Dialog } dialog 
-                 * @param { string } result 
-                 * @param { boolean } [canAddToDataList] 
-                 * @param { boolean } [notCheckKey] 
-                 * @returns 
+                 * @param { Lib.element.Dialog } dialog
+                 * @param { string } result
+                 * @param { boolean } [canAddToDataList]
+                 * @param { boolean } [notCheckKey]
+                 * @returns
                  */
                 tujianBegin(dialog, result, canAddToDataList, notCheckKey) {
                     this.clearDialog(dialog);
@@ -2091,7 +2091,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     console.log('------------------------');
                     console.log('搜索内容: ' + result);
 
-                    const containsKey = key => notCheckKey || this.searcherModule.contains(key);
+                    const containsKey = key => notCheckKey || this.searcherModule.includes(key);
 
                     let resultCharacter = containsKey('findCharacter') ? this.findCharacter(result) : false;
                     let resultCard = containsKey('findCard') ? this.findCard(result) : false;

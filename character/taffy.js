@@ -128,7 +128,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				audio: 4,
 				trigger: {
-					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
+					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBeforeStart'],
 				},
 				frequent: true,
 				content: function () {
@@ -217,8 +217,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								for (var k = 0; k < list2.length; k++) {
 									var info = lib.skill[list2[k]];
 									if (!info || !info.trigger) continue;
-									if (name2 === 'phaseBefore') {
-										name2 = ['phaseBefore', 'phaseBeginStart', 'phaseBegin', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
+                  if (name2 === 'phaseBeforeStart') {
+                    name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
 									} else if (name2 === 'damageBefore') {
 										name2 = ['damageBefore', 'damageBegin', 'damageBegin2', 'damageBegin3', 'damageBegin4', 'damage', 'damageSource', 'damageEnd', 'damageAfter']
 									} else if (name2 === 'phaseJieshuBefore') {
@@ -1689,7 +1689,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				audio: 'shenpingjian',
 				trigger: {
-					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
+					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBeforeStart'],
 				},
 				frequent: true,
 				content: function () {
@@ -1783,8 +1783,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									for (var k = 0; k < list2.length; k++) {
 										var info = lib.skill[list2[k]];
 										if (!info || !info.trigger) continue;
-										if (name2 === 'phaseBefore') {
-											name2 = ['phaseBefore', 'phaseBeginStart', 'phaseBegin', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
+										if (name2 === 'phaseBeforeStart') {
+											name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
 										} else if (name2 === 'damageBefore') {
 											name2 = ['damageBefore', 'damageBegin', 'damageBegin2', 'damageBegin3', 'damageBegin4', 'damage', 'damageSource', 'damageEnd', 'damageAfter']
 										} else if (name2 === 'phaseJieshuBefore') {
@@ -4682,7 +4682,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				audio: 'shenpingjian',
 				trigger: {
-					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
+					player: ['damageBefore', 'phaseJieshuBefore', 'phaseBeforeStart'],
 				},
 				frequent: true,
 				content: function () {
@@ -4776,8 +4776,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									for (var k = 0; k < list2.length; k++) {
 										var info = lib.skill[list2[k]];
 										if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
-										if (name2 === 'phaseBefore') {
-											name2 = ['phaseBefore', 'phaseBeginStart', 'phaseBegin', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
+										if (name2 === 'phaseBeforeStart') {
+											name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
 										} else if (name2 === 'damageBefore') {
 											name2 = ['damageBefore', 'damageBegin', 'damageBegin2', 'damageBegin3', 'damageBegin4', 'damage', 'damageSource', 'damageEnd', 'damageAfter']
 										} else if (name2 === 'phaseJieshuBefore') {

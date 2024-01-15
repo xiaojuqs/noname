@@ -494,21 +494,21 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                       };
                                       if (info.sourceSkill) {
                                           logInfo.sourceSkill = name;
-                                          if (global.contains(name)) {
+                                          if (global.includes(name)) {
                                               logInfo.type = 'global';
-                                          } else if (players.contains(name)) {
+                                          } else if (players.includes(name)) {
                                               logInfo.type = 'player';
-                                          } else if (equips.contains(name)) {
+                                          } else if (equips.includes(name)) {
                                               logInfo.type = 'equip';
                                           }
                                       } else {
-                                          if (global.contains(name)) {
+                                          if (global.includes(name)) {
                                               logInfo.sourceSkill = name;
                                               logInfo.type = 'global';
-                                          } else if (players.contains(name)) {
+                                          } else if (players.includes(name)) {
                                               logInfo.sourceSkill = name;
                                               logInfo.type = 'player';
-                                          } else if (equips.contains(name)) {
+                                          } else if (equips.includes(name)) {
                                               logInfo.sourceSkill = name;
                                               logInfo.type = 'equip';
                                           } else {
@@ -516,7 +516,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                               for (var i of players) {
                                                   var expand = [i];
                                                   game.expandSkills(expand);
-                                                  if (expand.contains(name)) {
+                                                  if (expand.includes(name)) {
                                                       bool = true;
                                                       logInfo.sourceSkill = i;
                                                       logInfo.type = 'player';
@@ -527,7 +527,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                                   for (var i of players) {
                                                       var expand = [i];
                                                       game.expandSkills(expand);
-                                                      if (expand.contains(name)) {
+                                                      if (expand.includes(name)) {
                                                           logInfo.sourceSkill = i;
                                                           logInfo.type = 'equip';
                                                           break;
@@ -1489,13 +1489,13 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               var skills=info[3].slice(0);
                               this.clearSkills(true);
                               this.classList.add('fullskin');
-                              if(!game.minskin&&get.is.newLayout()&&!info[4].contains('minskin')){
+                              if(!game.minskin&&get.is.newLayout()&&!info[4].includes('minskin')){
                                   this.classList.remove('minskin');
                                   this.node.avatar.setBackground(character,'character');
                               }
                               else{
                                   this.node.avatar.setBackground(character,'character');
-                                  if(info[4].contains('minskin')){
+                                  if(info[4].includes('minskin')){
                                       this.classList.add('minskin');
                                   }
                                   else if(game.minskin){
@@ -1528,7 +1528,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               if(this.classList.contains('minskin')&&this.node.name.querySelectorAll('br').length>=4){
                                   this.node.name.classList.add('long');
                               }
-                              if(info[4].contains('hiddenSkill')&&!this.noclick){
+                              if(info[4].includes('hiddenSkill')&&!this.noclick){
                                   if(!this.hiddenSkills) this.hiddenSkills=[];
                                   this.hiddenSkills.addArray(skills);
                                   skills=[];
@@ -1595,7 +1595,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                       };
                                   }
                                   this.node.count.classList.add('p2');
-                                  if(info2[4].contains('hiddenSkill')&&!this.noclick){
+                                  if(info2[4].includes('hiddenSkill')&&!this.noclick){
                                       if(!this.hiddenSkills) this.hiddenSkills=[];
                                       this.hiddenSkills.addArray(info2[3]);
                                       this.classList.add(_status.video?'unseen2_v':'unseen2');
