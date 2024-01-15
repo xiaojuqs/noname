@@ -204,8 +204,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 									return true;
 								});
-								if (playerSkills.contains(skills2[j])) continue;
-								if (skills.contains(skills2[j])) {
+								if (playerSkills.includes(skills2[j])) continue;
+								if (skills.includes(skills2[j])) {
 									list.add(name);
 									if (!map[name]) map[name] = [];
 									map[name].push(skills2[j]);
@@ -301,7 +301,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 											_status.tempNoButton = false;
 										}, 500);
 										var link = this.link;
-										if (!this.classList.contains('bluebg')) {
+										if (!this.classList.includes('bluebg')) {
 											if (rSkill.length >= result.links.length + 1) return;
 											rSkill.add(link);
 											this.classList.add('bluebg');
@@ -487,8 +487,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 								return true;
 							});
-							if (playerSkills.contains(skills2[j])) continue;
-							if (skills.contains(skills2[j]) || lib.skill.shenpingjian.phaseUse_special.contains(skills2[j])) {
+							if (playerSkills.includes(skills2[j])) continue;
+							if (skills.includes(skills2[j]) || lib.skill.shenpingjian.phaseUse_special.includes(skills2[j])) {
 								list.add(name);
 								if (!map[name]) map[name] = [];
 								map[name].push(skills2[j]);
@@ -534,7 +534,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				filter: function (event, player) {
 					if (!player.isPhaseUsing() || player.hasSkill('olddcqingshi_blocker')) return false;
-					// if(player.getStorage('olddcqingshi_clear').contains(event.card.name)) return false;
+					// if(player.getStorage('olddcqingshi_clear').includes(event.card.name)) return false;
 					if (player.hasCard(card => {
 							return get.name(card) == event.card.name;
 						})) return true;
@@ -569,14 +569,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								}
 							}
 						}
-						if (choicesx.contains('选项三')) return '选项三';
-						if (choicesx.contains('选项二')) {
+						if (choicesx.includes('选项三')) return '选项三';
+						if (choicesx.includes('选项二')) {
 							var cnt = game.countPlayer(current => get.attitude(player, current) > 0);
 							if (cnt > 2) {
 								return '选项二';
 							} else if (!cnt) choicesx.remove('选项二');
 						}
-						if (get.tag(trigger.card, 'damage') && choicesx.contains('选项一') && trigger.targets.some(current => {
+						if (get.tag(trigger.card, 'damage') && choicesx.includes('选项一') && trigger.targets.some(current => {
 								return get.attitude(player, current) < 0;
 							})) return '选项一';
 						return 0;
@@ -596,7 +596,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				content1: function () {
 					'step 0'
 					player.chooseTarget('令' + get.translation(card) + '对其中一个目标造成的伤害+1', true, (card, player, target) => {
-						return _status.event.targets.contains(target);
+						return _status.event.targets.includes(target);
 					}).set('ai', target => {
 						return 2 - get.attitude(_status.event.player, target);
 					}).set('targets', event.getParent().getTrigger().targets);
@@ -692,7 +692,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							return player.hasHistory('lose', function (evt) {
 								if (evt.getParent() != event) return false;
 								for (var i in evt.gaintag_map) {
-									if (evt.gaintag_map[i].contains('olddczhizhe')) {
+									if (evt.gaintag_map[i].includes('olddczhizhe')) {
 										if (event.cards.some(card => {
 												return get.position(card, true) == 'o' && card.cardid == i;
 											})) return true;
@@ -707,7 +707,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							player.getHistory('lose', function (evt) {
 								if (evt.getParent() != trigger) return false;
 								for (var i in evt.gaintag_map) {
-									if (evt.gaintag_map[i].contains('olddczhizhe')) {
+									if (evt.gaintag_map[i].includes('olddczhizhe')) {
 										var cardsx = trigger.cards.filter(card => {
 											return get.position(card, true) == 'o' && card.cardid == i;
 										});
@@ -778,7 +778,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					];
 				},
 				hiddenCard: function (player, name) {
-					if (player.storage.shidunshi && player.storage.shidunshi[0].contains(name) && !player.getStat('skill').shidunshi) return true;
+					if (player.storage.shidunshi && player.storage.shidunshi[0].includes(name) && !player.getStat('skill').shidunshi) return true;
 					return false;
 				},
 				marktext: '席',
@@ -869,12 +869,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						if (player.getStat('skill').shidunshi) return false;
 						switch (tag) {
 							case 'respondSha':
-								return (_status.event.type != 'phase' || (player == game.me || player.isUnderControl() || player.isOnline())) && storage[0].contains('sha');
+								return (_status.event.type != 'phase' || (player == game.me || player.isUnderControl() || player.isOnline())) && storage[0].includes('sha');
 							case 'respondShan':
-								return storage[0].contains('shan');
+								return storage[0].includes('shan');
 							case 'save':
-								if (arg == player && storage[0].contains('jiu')) return true;
-								return storage[0].contains('tao');
+								if (arg == player && storage[0].includes('jiu')) return true;
+								return storage[0].includes('tao');
 						}
 					},
 					order: 2,
@@ -951,7 +951,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							for (var i of event.links) {
 								game.log(player, '选择了', '#g【遁世】', '的', '#y选项' + get.cnNumber(i + 1, true));
 							}
-							if (event.links.contains(0)) {
+							if (event.links.includes(0)) {
 								trigger.cancel();
 								if (!_status.shidunshi_list) lib.skill.shidunshi.initList();
 								var list = _status.shidunshi_list.filter(function (i) {
@@ -973,7 +973,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									else if (player == game.me) func(list, event.videoId, target);
 									player.chooseControl(list).set('ai', function () {
 										var controls = _status.event.controls;
-										if (controls.contains('cslilu')) return 'cslilu';
+										if (controls.includes('cslilu')) return 'cslilu';
 										return controls[0];
 									});
 								}
@@ -983,12 +983,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							target.addSkillLog(result.control);
 							'step 3'
 							var storage = player.storage.shidunshi;
-							if (event.links.contains(1)) {
+							if (event.links.includes(1)) {
 								storage[0].remove(event.cardname);
 								storage[1]++;
 								player.markSkill('shidunshi');
 							}
-							if (event.links.contains(2)) {
+							if (event.links.includes(2)) {
 								player.loseMaxHp();
 								if (storage[1] > 0) player.draw(storage[1]);
 							}
@@ -1349,8 +1349,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							skills2 = lib.character[name][3];
 						}
 						for (var j = 0; j < skills2.length; j++) {
-							if (player.getStorage('shipingjian').contains(skills2[j])) continue;
-							if (skills.contains(skills2[j])) {
+							if (player.getStorage('shipingjian').includes(skills2[j])) continue;
+							if (skills.includes(skills2[j])) {
 								list.add(name);
 								if (!map[name]) map[name] = [];
 								map[name].push(skills2[j]);
@@ -1383,7 +1383,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							for (var k = 0; k < list2.length; k++) {
 								var info = lib.skill[list2[k]];
 								if (!info || !info.trigger || !info.trigger.player || info.silent || info.limited || info.juexingji || info.zhuanhuanji || info.hiddenSkill || info.dutySkill) continue;
-								if (info.trigger.player == name2 || Array.isArray(info.trigger.player) && info.trigger.player.contains(name2)) {
+								if (info.trigger.player == name2 || Array.isArray(info.trigger.player) && info.trigger.player.includes(name2)) {
 									if (info.ai && (info.ai.combo || info.ai.notemp || info.ai.neg)) continue;
 									if (info.init) continue;
 									if (info.filter) {
@@ -1523,7 +1523,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						if (name.indexOf('zuoci') != -1 || name.indexOf('xushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1) continue;
 						var skills2 = lib.character[name][3];
 						for (var j = 0; j < skills2.length; j++) {
-							if (player.getStorage('shipingjian').contains(skills2[j])) continue;
+							if (player.getStorage('shipingjian').includes(skills2[j])) continue;
 							if (skills2[j] === 'qianxin') {
 								list.add(name);
 								if (!map[name]) map[name] = [];
@@ -1533,7 +1533,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							}
 							if (get.is.locked(skills2[j], player)) continue;
 							var info = lib.translate[skills2[j] + '_info'];
-							if (skills.contains(skills2[j]) ||
+							if (skills.includes(skills2[j]) ||
 								(info && info.indexOf('当你于出牌阶段') != -1 && info.indexOf('当你于出牌阶段外') == -1) ||
 								skills2[j] === 'lijian' ||
 								skills2[j] === 'xinmieji' ||
@@ -1574,7 +1574,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							for (var k = 0; k < list2.length; k++) {
 								var info = lib.skill[list2[k]];
 								if (!info || !info.enable || info.charlotte || info.limited || info.juexingji || info.zhuanhuanji || info.hiddenSkill || info.dutySkill) continue;
-								if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.contains('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.contains('chooseToUse')))) {
+								if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
 									if (info.ai && (info.ai.combo || info.ai.notemp || info.ai.neg)) continue;
 									if (info.init || info.onChooseToUse) continue;
 									if (info.filter) {
@@ -1770,8 +1770,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 										if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 										return true;
 									});
-									if (playerSkills.contains(skills2[j])) continue;
-									if (skills.contains(skills2[j])) {
+									if (playerSkills.includes(skills2[j])) continue;
+									if (skills.includes(skills2[j])) {
 										list.add(name);
 										if (!map[name]) map[name] = [];
 										map[name].push(skills2[j]);
@@ -1867,7 +1867,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.contains('bluebg')) {
+											if (!this.classList.includes('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.spshenpingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
@@ -2003,8 +2003,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 										if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 										return true;
 									});
-									if (playerSkills.contains(skills2[j])) continue;
-									if (skills.contains(skills2[j]) || lib.skill.spshenpingjian.phaseUse_special.contains(skills2[j])) {
+									if (playerSkills.includes(skills2[j])) continue;
+									if (skills.includes(skills2[j]) || lib.skill.spshenpingjian.phaseUse_special.includes(skills2[j])) {
 										list.add(name);
 										if (!map[name]) map[name] = [];
 										map[name].push(skills2[j]);
@@ -2064,7 +2064,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.contains('bluebg')) {
+											if (!this.classList.includes('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.spshenpingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
@@ -2244,7 +2244,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				position: 'he',
 				filterTarget: function (card, player, target) {
-					return player != target && !player.getStorage('oldtwxiongxi_target').contains(target);
+					return player != target && !player.getStorage('oldtwxiongxi_target').includes(target);
 				},
 				content: function () {
 					player.addTempSkill('oldtwxiongxi_clear', ['phaseUseAfter', 'phaseAfter']);
@@ -2420,7 +2420,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				group: ['shenguhuo_guess'],
 				enable: ['chooseToUse', 'chooseToRespond'],
 				hiddenCard: function (player, name) {
-					return (lib.inpile.contains(name) && player.countCards('hs') > 0);
+					return (lib.inpile.includes(name) && player.countCards('hs') > 0);
 				},
 				filter: function (event, player) {
 					if (!player.countCards('hs')) return false;
@@ -2488,11 +2488,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								if (typeof savable == 'function') savable = savable(card, player, player);
 								return savable;
 							}, 'hs')) {
-							if (!player.getStorage('shenguhuo_cheated').contains(card.name + card.nature) && Math.random() < 0.4) return 1;
+							if (!player.getStorage('shenguhuo_cheated').includes(card.name + card.nature) && Math.random() < 0.4) return 1;
 							return 0;
 						}
 						var val = _status.event.getParent().type == 'phase' ? player.getUseValue(card) : 1;
-						if (player.getStorage('shenguhuo_cheated').contains(card.name + card.nature) && !player.hasCard(function (cardx) {
+						if (player.getStorage('shenguhuo_cheated').includes(card.name + card.nature) && !player.hasCard(function (cardx) {
 								if (card.name == cardx.name) {
 									if (card.name != 'sha') return true;
 									return get.is.sameNature(card, cardx);
@@ -2547,7 +2547,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								});
 								var cardx = lib.skill.shenguhuo_backup.viewAs;
 								if (enemyNum) {
-									if (card.name == cardx.name && (card.name != 'sha' || get.is.sameNature(card, cardx)) || player.getStorage('shenguhuo_cheated').contains(card.name + card.nature)) return 8 + Math.random() * 3;
+									if (card.name == cardx.name && (card.name != 'sha' || get.is.sameNature(card, cardx)) || player.getStorage('shenguhuo_cheated').includes(card.name + card.nature)) return 8 + Math.random() * 3;
 									else if (lib.skill.shenguhuo_backup.aiUse < 0.5 && !player.isDying()) return 0;
 								}
 								return get.value(cardx) - get.value(card);
@@ -2707,7 +2707,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								if (eff < -7) return (Math.random() + Math.pow(-(eff + 7) / 8, 2)) / Math.sqrt(evt.betrayers.length + 1) + (player.hp - 3) * 0.05 + Math.max(0, 4 - evt.player.hp) * 0.05 - (player.hp == 1 && !get.tag(card, 'damage') ? 0.2 : 0);
 								return Math.pow((get.value(card, evt.player, 'raw') - 4) / (eff == 0 ? 3.1 : 10), 2) / Math.sqrt(evt.betrayers.length || 1) + (player.hp - 3) * 0.05 + Math.max(0, 4 - evt.player.hp) * 0.05;
 							}
-							if (evt.player.getStorage('shenguhuo_cheated').contains(card.name + card.nature)) return Math.random() + 0.3;
+							if (evt.player.getStorage('shenguhuo_cheated').includes(card.name + card.nature)) return Math.random() + 0.3;
 						}
 						return Math.random();
 					});
@@ -3600,7 +3600,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					check: function (button) {
 						if (_status.event.getParent().type != 'phase') return 1;
 						var player = _status.event.player;
-						if (['wugu', 'zhulu_card', 'yiyi', 'lulitongxin', 'lianjunshengyan', 'diaohulishan'].contains(button.link[2])) return 0;
+						if (['wugu', 'zhulu_card', 'yiyi', 'lulitongxin', 'lianjunshengyan', 'diaohulishan'].includes(button.link[2])) return 0;
 						return player.getUseValue({
 							name: button.link[2],
 							nature: button.link[3],
@@ -3629,7 +3629,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					}
 				},
 				hiddenCard: function (player, name) {
-					if (!lib.inpile.contains(name)) return false;
+					if (!lib.inpile.includes(name)) return false;
 					var type = get.type2(name);
 					return (type == 'basic' || type == 'trick') && player.countCards('she') > 0 && !player.hasSkill('shenmiewu2');
 				},
@@ -3694,7 +3694,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							check: function (button) {
 								if (_status.event.getParent().type != 'phase') return 1;
 								var player = _status.event.player;
-								if (['wugu', 'zhulu_card', 'yiyi', 'lulitongxin', 'lianjunshengyan', 'diaohulishan'].contains(button.link[2])) return 0;
+								if (['wugu', 'zhulu_card', 'yiyi', 'lulitongxin', 'lianjunshengyan', 'diaohulishan'].includes(button.link[2])) return 0;
 								return player.getUseValue({
 									name: button.link[2],
 									nature: button.link[3],
@@ -3720,7 +3720,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							}
 						},
 						hiddenCard: function (player, name) {
-							if (!lib.inpile.contains(name)) return false;
+							if (!lib.inpile.includes(name)) return false;
 							var type = get.type(name);
 							return (type == 'basic' || type == 'trick') && player.countCards('she') === 0 && !player.hasSkill('shenmiewu2');
 						},
@@ -3832,7 +3832,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						player.give(card, target);
 					} else event.finish();
 					'step 2'
-					if (target.getCards('h').contains(card) && get.type(card, null, target) == 'equip' && target.canUse(card, target)) target.chooseUseTarget(card, true, 'nopopup');
+					if (target.getCards('h').includes(card) && get.type(card, null, target) == 'equip' && target.canUse(card, target)) target.chooseUseTarget(card, true, 'nopopup');
 				},
 			},
 			shendccongshi: {
@@ -3922,7 +3922,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							}
 							var hs = player.getCards('h');
 							cards = cards.filter(function (card) {
-								return hs.contains(card);
+								return hs.includes(card);
 							});
 							if (!cards.length) {
 								event.finish(5);
@@ -3936,7 +3936,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							'step 2'
 							player.chooseCardTarget({
 								filterCard: function (card) {
-									return _status.event.cards.contains(card) && !card.hasGaintag('oldqiaoli_given');
+									return _status.event.cards.includes(card) && !card.hasGaintag('oldqiaoli_given');
 								},
 								cards: cards,
 								filterTarget: lib.filter.notMe,
@@ -4109,7 +4109,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					var storage1 = player.getStorage('oldluochong_round'),
 						storage2 = player.getStorage('oldluochong');
 					for (var i = 0; i < 4; i++) {
-						if (!storage1.contains(i) && !storage2.contains(i) && (i != 2 || game.hasPlayer(function (current) {
+						if (!storage1.includes(i) && !storage2.includes(i) && (i != 2 || game.hasPlayer(function (current) {
 								return current != player && current.hasCard(function (card) {
 									return lib.filter.canBeDiscarded(card, player, current);
 								}, 'he')
@@ -4130,9 +4130,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					var storage1 = player.getStorage('oldluochong_round'),
 						storage2 = player.getStorage('oldluochong');
 					for (var i = 0; i < 4; i++) {
-						if (storage2.contains(i)) {
+						if (storage2.includes(i)) {
 							choiceList[i] = ('<span style="text-decoration: line-through; opacity:0.5; ">' + choiceList[i] + '</span>');
-						} else if (storage1.contains(i) || (i == 2 && !game.hasPlayer(function (current) {
+						} else if (storage1.includes(i) || (i == 2 && !game.hasPlayer(function (current) {
 								return current != player && current.hasCard(function (card) {
 									return lib.filter.canBeDiscarded(card, player, current);
 								}, 'he')
@@ -4263,7 +4263,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					];
 					var storage2 = player.getStorage('oldluochong');
 					for (var i = 0; i < 4; i++) {
-						if (storage2.contains(i)) {
+						if (storage2.includes(i)) {
 							choiceList[i] = ('<span style="text-decoration: line-through; opacity:0.5; ">' + choiceList[i] + '</span>');
 						} else list.push('选项' + get.cnNumber(i + 1, true))
 					}
@@ -4271,7 +4271,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						var controls = _status.event.controls.slice(0);
 						var list = ['选项三', '选项四', '选项二', '选项一'];
 						for (var i of list) {
-							if (controls.contains(i)) return i;
+							if (controls.includes(i)) return i;
 						}
 						return 0;
 					});
@@ -4498,7 +4498,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					];
 				},
 				hiddenCard: function (player, name) {
-					if (player.storage.shenshidunshi && player.storage.shenshidunshi[0].contains(name) && !player.getStat('skill').shenshidunshi) return true;
+					if (player.storage.shenshidunshi && player.storage.shenshidunshi[0].includes(name) && !player.getStat('skill').shenshidunshi) return true;
 					return false;
 				},
 				filter: function (event, player) {
@@ -4569,12 +4569,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						if (player.getStat('skill').shenshidunshi) return false;
 						switch (tag) {
 							case 'respondSha':
-								return (_status.event.type != 'phase' || (player == game.me || player.isUnderControl() || player.isOnline())) && storage[0].contains('sha');
+								return (_status.event.type != 'phase' || (player == game.me || player.isUnderControl() || player.isOnline())) && storage[0].includes('sha');
 							case 'respondShan':
-								return storage[0].contains('shan');
+								return storage[0].includes('shan');
 							case 'save':
-								if (arg == player && storage[0].contains('jiu')) return true;
-								return storage[0].contains('tao');
+								if (arg == player && storage[0].includes('jiu')) return true;
+								return storage[0].includes('tao');
 						}
 					},
 					order: 2,
@@ -4640,7 +4640,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									else if (player == game.me) func(list, event.videoId, target);
 									player.chooseControl(list).set('ai', function () {
 										var controls = _status.event.controls;
-										if (controls.contains('cslilu')) return 'cslilu';
+										if (controls.includes('cslilu')) return 'cslilu';
 										return controls[0];
 									});
 								}
@@ -4764,8 +4764,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 										if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 										return true;
 									});
-									if (playerSkills.contains(skills2[j])) continue;
-									if (skills.contains(skills2[j])) {
+									if (playerSkills.includes(skills2[j])) continue;
+									if (skills.includes(skills2[j])) {
 										list.add(name);
 										if (!map[name]) map[name] = [];
 										map[name].push(skills2[j]);
@@ -4861,7 +4861,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.contains('bluebg')) {
+											if (!this.classList.includes('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.taffyre_pingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
@@ -4997,8 +4997,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 										if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 										return true;
 									});
-									if (playerSkills.contains(skills2[j])) continue;
-									if (skills.contains(skills2[j]) || lib.skill.taffyre_pingjian.phaseUse_special.contains(skills2[j])) {
+									if (playerSkills.includes(skills2[j])) continue;
+									if (skills.includes(skills2[j]) || lib.skill.taffyre_pingjian.phaseUse_special.includes(skills2[j])) {
 										list.add(name);
 										if (!map[name]) map[name] = [];
 										map[name].push(skills2[j]);
@@ -5058,7 +5058,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.contains('bluebg')) {
+											if (!this.classList.includes('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.taffyre_pingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
@@ -5224,7 +5224,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				var list = ['sha', 'shan', 'tao', 'jiu'];
 				for (var i of list) {
 					var strx = '【' + get.translation(i) + '】';
-					if (!info || !info[0].contains(i)) strx = ('<span style="text-decoration:line-through;">' + strx + '</span>');
+					if (!info || !info[0].includes(i)) strx = ('<span style="text-decoration:line-through;">' + strx + '</span>');
 					str += strx;
 					if (i != 'jiu') str += '/';
 				}
@@ -5241,7 +5241,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					'⒋令一名角色摸两张牌。'
 				];
 				for (var i = 0; i < 4; i++) {
-					if (storage.contains(i)) {
+					if (storage.includes(i)) {
 						choiceList[i] = ('<span style="text-decoration: line-through;">' + choiceList[i] + '</span>');
 					}
 					str += choiceList[i];
