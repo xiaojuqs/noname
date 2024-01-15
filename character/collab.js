@@ -434,14 +434,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							return !player.getStorage('dczhiheng_hit').includes(event.player);
 						},
 						content:function(){
-              // taffy: 注释collab.js原版代码喵
-              // player.addTempSkill('dczhiheng_hit');
-							// player.markAuto('dczhiheng_hit',[trigger.player]);
-              /* taffy分界线 */
-              // taffy: 修复经典孙权storage undefined的问题喵
-							player.markAuto('dczhiheng_hit',[trigger.player]);
               player.addTempSkill('dczhiheng_hit');
-              /* taffy分界线 */
+							player.markAuto('dczhiheng_hit',[trigger.player]);
 						}
 					},
 					hit:{
@@ -451,7 +445,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						marktext:'衡',
 						intro:{
 							markcount:function(storage,player){
-								return player.getStorage('dczhiheng_hit').length;
+								return player.getStorage('dczhiheng_hit')?player.getStorage('dczhiheng_hit').length:0;
 							},
 							content:'本回合已对$造成过伤害',
 						},
