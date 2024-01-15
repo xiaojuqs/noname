@@ -301,7 +301,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 											_status.tempNoButton = false;
 										}, 500);
 										var link = this.link;
-										if (!this.classList.includes('bluebg')) {
+										if (!this.classList.contains('bluebg')) {
 											if (rSkill.length >= result.links.length + 1) return;
 											rSkill.add(link);
 											this.classList.add('bluebg');
@@ -1867,7 +1867,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.includes('bluebg')) {
+											if (!this.classList.contains('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.spshenpingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
@@ -2064,7 +2064,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.includes('bluebg')) {
+											if (!this.classList.contains('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.spshenpingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
@@ -3109,7 +3109,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				filter: function (event, player) {
 					let isBoss = false;
 					let list = Object.keys(lib.character);
-					console.log(list);
 					if (list.includes("boss_lvbu3")) {
 						isBoss = true;
 					}
@@ -4861,7 +4860,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.includes('bluebg')) {
+											if (!this.classList.contains('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.taffyre_pingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
@@ -5058,7 +5057,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 												_status.tempNoButton = false;
 											}, 500);
 											var link = this.link;
-											if (!this.classList.includes('bluebg')) {
+											if (!this.classList.contains('bluebg')) {
 												if (rSkill.length >= result.links.length + player.storage.taffyre_pingjianX) return;
 												rSkill.add(link);
 												this.classList.add('bluebg');
