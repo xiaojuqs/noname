@@ -5008,9 +5008,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									var list2 = [skills2[j]];
 									game.expandSkills(list2);
 									for (var k = 0; k < list2.length; k++) {
-                    console.log(list2[k]);
 										var info = lib.skill[list2[k]];
-                    console.log(!info || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill);
 										if (!info || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 										list.add(name);
 										if (!map[name]) map[name] = [];
