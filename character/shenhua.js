@@ -3666,10 +3666,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(typeof card==='object'&&get.name(card)==='sha'&&target.mayHaveShan(player,'use')) return [0.6,0.75];
 							if(!target.hasFriend()&&!player.hasUnknown()) return;
 							if(_status.currentPhase==target||get.type(card)==='delay') return;
-							if(player.hasSkillTag('directHit_ai',true,{
-								target:target,
-								card:card,
-							},true)) return;
 							if(card.name!='shuiyanqijunx'&&get.tag(card,'loseCard')&&target.countCards('he')){
 								if(target.hasSkill('ziliang')) return 0.7;
 								return [0.5,Math.max(2,target.countCards('h'))];
