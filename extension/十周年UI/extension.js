@@ -2293,7 +2293,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							super.buildNode();
 							this.node.avatar.className = 'primary-avatar';
 							this.node.avatar2.className = 'deputy-avatar';
-							this.node.avatar2.hide();
+							if(!duicfg.dynamicSkin) this.node.avatar2.hide();
 							this.node.turnedover.className = 'turned-over';
 							this.node.turnedover.textContent = '';
 							this.node.count.show().className = 'card-count';
