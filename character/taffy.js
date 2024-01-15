@@ -89,7 +89,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			oldtengfanglan: ['female', 'wu', 3, ['oldluochong', 'oldaichen']],
 			oldol_feiyi: ['male', 'shu', 3, ['oldyanru', 'oldhezhong']],
 			shenshiguanning: ['male', 'shen', '3/7', ['shenshidunshi']],
-			taffyre_xushao: ['male', 'qun', 3, ['taffyre_pingjian']],
+			taffyre_xushao: ['male', 'qun', '3/3/1', ['taffyre_pingjian']],
 			ruijier: ['female', 'shen', '', [],
 				['unseen']
 			],
