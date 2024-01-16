@@ -2311,7 +2311,12 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							super.buildNode();
 							this.node.avatar.className = 'primary-avatar';
 							this.node.avatar2.className = 'deputy-avatar';
-							if(!duicfg.dynamicSkin) this.node.avatar2.hide();
+              // taffy: 注释extension.js原版代码喵
+              // if(!duicfg.dynamicSkin) this.node.avatar2.hide();
+              /* taffy分界线 */
+              // taffy: 修复动皮状态喝酒样式问题喵
+							this.node.avatar2.hide();
+              /* taffy分界线 */
 							this.node.turnedover.className = 'turned-over';
 							this.node.turnedover.textContent = '';
 							this.node.count.show().className = 'card-count';

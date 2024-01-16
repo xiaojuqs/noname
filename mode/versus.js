@@ -5055,9 +5055,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					game.addVideo('jiuNode',player,false);
 					if(player.node.jiu){
 						player.node.jiu.delete();
-						player.node.jiu2.delete();
+            // taffy: 注释versus.js原版代码喵
+						// player.node.jiu2.delete();
+            /* taffy分界线 */
 						delete player.node.jiu;
-						delete player.node.jiu2;
+            // taffy: 注释versus.js原版代码喵
+						// delete player.node.jiu2;
+            /* taffy分界线 */
 					}
 					delete player.storage.xionghuangjiu;
 				},
@@ -6534,8 +6538,13 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							}
 							game.addVideo('jiuNode',target,true);
 							if(!target.node.jiu&&lib.config.jiu_effect){
-								target.node.jiu=ui.create.div('.playerjiu',target.node.avatar);
-								target.node.jiu2=ui.create.div('.playerjiu',target.node.avatar2);
+                // taffy: 注释versus.js原版代码喵
+								// target.node.jiu=ui.create.div('.playerjiu',target.node.avatar);
+								// target.node.jiu2=ui.create.div('.playerjiu',target.node.avatar2);
+                /* taffy分界线 */
+                // taffy: 修复动皮状态喝酒样式问题喵
+                target.node.jiu=ui.create.div('.playerjiu',target);
+                /* taffy分界线 */
 							}
 							if(gain2&&card.clone&&(card.clone.parentNode==target.parentNode||card.clone.parentNode==ui.arena)){
 								card.clone.moveDelete(target);

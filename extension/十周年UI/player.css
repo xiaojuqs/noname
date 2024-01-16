@@ -489,9 +489,7 @@
 	background-position: top;
 	border-radius: 8px;
 	transition-property: opacity, transform;
-  /* taffy: 修复武将牌喝酒样式问题喵 */
-	z-index: 62;
-  /* taffy分界线 */
+	z-index: 61;
 }
 
 .player.connect>div:not(.avatar):not(.name):not(.nameol):not(.hp):not(.room):not(.gaming):not(.identity).primary-avatar {
@@ -508,14 +506,10 @@
 }
 
 .player>.deputy-avatar {
-  /* taffy: 修复武将牌喝酒样式喵 */
-	/* left: 50%; */
-  /* taffy分界线 */
+	left: 50%;
 	top: auto;
 	bottom: 0;
-  /* taffy: 修复武将牌喝酒样式喵 */
-	width: 100%;
-  /* taffy分界线 */
+	width: 50%;
 	height: 100%;
 	opacity: 1;
 	background-size: cover;
@@ -1259,9 +1253,7 @@
 	background-position: center;
 	transform: none;
 	opacity: 0;
-  /* taffy: 修复阵亡身份不可见喵 */
-	z-index: 62;
-  /* taffy分界线 */
+	z-index: 61;
 }
 
 .player.opposite-camp>.died-identity {
