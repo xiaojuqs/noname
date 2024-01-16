@@ -5868,7 +5868,7 @@ export const Content = {
 				if (att > 0) {
 					if (!_status.event.nojudge && target.countCards('j', function (card) {
 						if (!filterCard(card)) return false;
-						return ['lebu','bingliang','caomu'].contains(card.name)&&game.hasPlayer(function (current) {
+						return ['lebu','bingliang','caomu'].includes(card.name)&&game.hasPlayer(function (current) {
 							if (!aimTargets.includes(current)) return false;
 							return current != target && current.canAddJudge(card) && get.attitude(player, current) < 0;
 						});
@@ -5902,7 +5902,7 @@ export const Content = {
 				if(sec_att1>0&&sec_att2<0){
 					if(!_status.event.nojudge&&sec_target.countCards('j',function(card){
 						if(!filterCard(card)) return false;
-						return ['lebu','bingliang','caomu'].contains(card.name)&&target.canAddJudge(card);
+						return ['lebu','bingliang','caomu'].includes(card.name)&&target.canAddJudge(card);
 					})) return 14;
 					if(sec_target.countCards('e',function(card){
 						return get.equipValue(card)<0&&target.canEquip(card);
@@ -5944,7 +5944,7 @@ export const Content = {
 				var targets0 = _status.event.targets0;
 				var targets1 = _status.event.targets1;
 				if (get.attitude(player, targets0) > 0 && get.attitude(player, targets1) < 0) {
-					if (get.position(button.link) == 'j' && ['lebu','bingliang','caomu'].contains(button.link.name)) return 12+get.value(button.link);
+					if (get.position(button.link) == 'j' && ['lebu','bingliang','caomu'].includes(button.link.name)) return 12+get.value(button.link);
 					if (get.equipValue(button.link) < 0) return 10;
 					return -10;
 				} else if(get.attitude(player,targets0)<0&&get.attitude(player,targets1)>0){

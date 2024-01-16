@@ -13700,7 +13700,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								target:target,
 								card:card
 							})) return;
-							if(target.storage.gx_chongyingshenfu_effect&&target.getStorage('gx_chongyingshenfu_effect').contains(card.name)) return 'zerotarget';
+							if(target.storage.gx_chongyingshenfu_effect&&target.getStorage('gx_chongyingshenfu_effect').includes(card.name)) return 'zerotarget';
 						},
 					},
 				},

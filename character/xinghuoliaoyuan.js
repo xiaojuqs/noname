@@ -1066,7 +1066,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(player.hasSkillTag('jueqing',false,target)) return [1,-1];
 							if(get.tag(card,'damage')&&player!=target&&get.attitude(player,target)<0){
 								var cards=player.getCards('h',function(cardx){
-									return card!=cardx&&(!card.cards||!card.cards.contains(cardx))&&get.suit(cardx)=='heart';
+									return card!=cardx&&(!card.cards||!card.cards.includes(cardx))&&get.suit(cardx)=='heart';
 								});
 								if(!cards.length) return 'zeroplayertarget';
 								for(var i of cards){

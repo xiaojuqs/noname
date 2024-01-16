@@ -2094,7 +2094,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 							for(var i=0;i<target_player_gain_history.length;i++){
 								for(var j=0;j<target_player_gain_history[i].cards.length;j++){
 									var current_card=target_player_gain_history[i].cards[j];
-									if(target_player_handcards.contains(current_card)&&current_card.name=='du') return 'cancel2';
+									if(target_player_handcards.includes(current_card)&&current_card.name=='du') return 'cancel2';
 								}
 							}
 							if(get.attitude(_status.event.player,_status.event.getParent().target)<0) return give_me;
@@ -4710,7 +4710,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				trigger:{source:'damageBegin1'},
 				forced:true,
 				filter:function(event,player){
-					return lib.linked.contains(event.nature);
+					return lib.linked.includes(event.nature);
 				},
 				content:function(){
 					trigger.num++;

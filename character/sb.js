@@ -4136,7 +4136,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					'step 0'
-					if(!lib.inpile.contains('taipingyaoshu')){
+					if(!lib.inpile.includes('taipingyaoshu')){
 						lib.inpile.push('taipingyaoshu');
 					}
 					event.card=game.createCard2('taipingyaoshu','heart',3);

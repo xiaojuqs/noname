@@ -5054,7 +5054,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(player.isHealthy()){
 						event.type=0;
 						player.chooseBool(get.prompt('caishi'),'令自己的手牌上限+1',function(){
-							return player.skipList.contains('phaseUse')||player.needsToDiscard()>0||player.getHandcardLimit()<=0;
+							return player.skipList.includes('phaseUse')||player.needsToDiscard()>0||player.getHandcardLimit()<=0;
 						});
 					}
 					else{
@@ -5064,7 +5064,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								if(player.countCards('h','tao')>=2) return;
 								return 1;
 							} else {
-								return (player.skipList.contains('phaseUse')||player.needsToDiscard()>0||player.getHandcardLimit()<=0)?0:1;
+								return (player.skipList.includes('phaseUse')||player.needsToDiscard()>0||player.getHandcardLimit()<=0)?0:1;
 							}
 						});
 					}

@@ -802,7 +802,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 							var cards=player.getCards('h')
 							var card_suits=[];
 							for(var i=0;i<cards.length;i++){
-								if(!card_suits.contains(get.suit(cards[i]))) card_suits.push(get.suit(cards[i]));
+								if(!card_suits.includes(get.suit(cards[i]))) card_suits.push(get.suit(cards[i]));
 							}
 							if(card_suits.length>=2) return 1;
 							return 0;
