@@ -576,7 +576,13 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					value:6,
 					result:{
 						target:function(player,target){
-							if(target.getCards('e').length==1&&get.equipValue(target.getCards('e')[0])<=0) return 0;
+							if(target.getCards('h').length==0){
+								let bad_equip_num=0;
+								for (let i=0;i<target.getCards('e').length;i++){
+									if (get.equipValue(target.getCards('e')[i])<=0) bad_equip_num+=1;
+								}
+								if (bad_equip_num==target.getCards('e').length) return 0;
+							}
 							if(game.players.length>2){
 								var list=player.getEnemies();
 								for(var i=0;i<list.length;i++){

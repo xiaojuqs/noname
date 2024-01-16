@@ -3745,7 +3745,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								return -7;
 							case 'mingzhong':return -5;
 							case 'nei':
-								if(zhongmode&&to.ai.sizhong) return -7;
+								if(zhongmode&&to.ai.sizhong&&to.ai.shown<0.95) return -7;
 								if(get.population('fan')==1) return 0;
 								if(get.population('zhong')+get.population('mingzhong')==0) return -7;
 								if(game.zhu&&game.zhu.hp<=2) return -1;

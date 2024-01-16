@@ -1011,32 +1011,6 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 								break;
 							}
 						},
-						expandSkills:function(skills){
-							var expands = [];
-							var info;
-							for(var i = 0; i < skills.length; i++){
-								info = get.info(skills[i]);
-								if (info) {
-									if(info.group) {
-										expands.add(info.group);
-									}
-								} else{
-									console.log(skills[i]);
-								}
-							}
-
-							var i, j;
-							for (i = 0; i < expands.length; i++) {
-								if (Array.isArray(expands[i])) {
-									for (j = 0; j < expands[i].length; j++) {
-										skills.add(expands[i][j]);
-									}
-								} else {
-									skills.add(expands[i]);
-								}
-							}
-							return skills;
-						},
 
 						gameDraw:function(){
 							decadeUI.delay(100);
@@ -2013,7 +1987,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 							} else lose_list.push([player, result[0].cards]);
 						};
 						for (var j = 0; j < targets.length; j++) {
-							if (event.list.contains(targets[j])) {
+							if (event.list.includes(targets[j])) {
 								var i = event.list.indexOf(targets[j]);
 								if (result[i].skill && lib.skill[result[i].skill] && lib.skill[result[i].skill].onCompare) {
 									event.list[i].logSkill(result[i].skill);
@@ -2033,7 +2007,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						event.lose_list=lose_list;
 						event.getNum=function(card){
 							for(var i of event.lose_list){
-								if(i[1].contains&&i[1].contains(card)) return get.number(card,i[0]);
+								if(i[1].contains&&i[1].includes(card)) return get.number(card,i[0]);
 							}
 							return get.number(card,false);
 						}
