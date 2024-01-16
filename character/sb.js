@@ -1823,9 +1823,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					})):0,alter=[null,1,1],temp;
 					for(let i of game.players){
 						if(player===i) continue;
-						let vplayer=new lib.element.Player(i);
-						temp=get.effect(i,new lib.element.VCard({name:'juedou',isCard:true}),vplayer,i);
-						vplayer.remove();
+						temp=get.effect(i,new lib.element.VCard({name:'juedou',isCard:true}),get.copy(i),i);
 						if(temp){
 							let att=get.attitude(event.player,i);
 							if(!att&&sbbiyue||att*temp>0) targets.push([i,temp,att]);
