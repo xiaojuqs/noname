@@ -6028,14 +6028,6 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 						const entryName = entry.name, fileName = lib.path.parse(entryName).name;
 						if (!decadeExtCardImage[fileName]) decadeExtCardImage[fileName] = `${decadeUIPath}image/card/${entryName}`;
 					}));
-          // // taffy: 修复卡牌图片丢失问题
-          // else {
-          //   const cardSource = ['bagua', 'baiyin', 'bingliang', 'caochuan', 'caochuanjiejian', 'caomu', 'chenhuodajie', 'chiling', 'chitu', 'chixueqingfeng', 'chiyanzhenhunqin', 'cixiong', 'dawan', 'diaobingqianjiang', 'diaohulishan', 'dilu', 'dinglanyemingzhu', 'du', 'fangtian', 'feilongduofeng', 'fengchu_card', 'fudichouxin', 'fulei', 'geanguanhuo', 'guanshi', 'gubuzifeng', 'guding', 'guilongzhanyuedao', 'guofengyupao', 'guohe', 'hanbing', 'honghuangzhili', 'hongmianbaihuapao', 'hongshui', 'hualiu', 'huogong', 'huoshan', 'huoshaolianying', 'huxinjing', 'jiedao', 'jiejia', 'jinchan', 'jingfanma', 'jinhe', 'jinwuluorigong', 'jiu', 'juechenjinge', 'juedou', 'jueying', 'kaihua', 'lanyinjia', 'lebu', 'lianjunshengyan', 'linglongshimandai', 'lingsheji', 'liulongcanjia', 'longfenghemingjian', 'lulitongxin', 'ly_piliche', 'minguangkai', 'muniu', 'nanman', 'numa', 'nvzhuang', 'pyzhuren_club', 'pyzhuren_diamond', 'pyzhuren_heart', 'pyzhuren_shandian', 'pyzhuren_spade', 'qibaodao', 'qicaishenlu', 'qijia', 'qilin', 'qimenbagua', 'qinggang', 'qinglong', 'renwang', 'rewrite_bagua', 'rewrite_baiyin', 'rewrite_lanyinjia', 'rewrite_renwang', 'rewrite_tengjia', 'rewrite_zhuge', 'sadouchengbing', 'sanjian', 'sha', 'sha_fire', 'sha_ice', 'sha_thunder', 'shan', 'shandian', 'shanrangzhaoshu', 'shengdong', 'shezhanqunru', 'shufazijinguan', 'shuijing_card', 'shuiyanqijun', 'shuiyanqijunx', 'shunshou', 'suolianjia', 'taipingyaoshu', 'tao', 'taoyuan', 'tengjia', 'tiesuo', 'toulianghuanzhu', 'wangmeizhike', 'wanjian', 'wolong_card', 'wufengjian', 'wugu', 'wuliu', 'wushuangfangtianji', 'wuxie', 'wuzhong', 'wy_meirenji', 'wy_xiaolicangdao', 'xietianzi', 'xingtianpojunfu', 'xiuluolianyuji', 'xuanjian_card', 'xuwangzhimian', 'yajiaoqiang', 'yexingyi', 'yihuajiemu', 'yinfengjia', 'yinyueqiang', 'yiyi', 'youdishenru', 'yuanjiao', 'yuxi', 'zengbin', 'zhangba', 'zheji', 'zhibi', 'zhuahuang', 'zhuge', 'zhulu_card', 'zhungangshuo', 'zhuque', 'zixin']
-          //   for (let i = 0; i < cardSource.length; i++) {
-          //     decadeExtCardImage[cardSource[i]] = `${decadeUIPath}image/card/${cardSource[i]}.webp`;
-          //   }
-          // }
-          // /* taffy分界线 */
 					return this;
 				};
 				decadeModule.js = function (path) {
