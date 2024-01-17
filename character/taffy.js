@@ -149,7 +149,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						return true;
 					});
 					var next = player.chooseButton(true, [
-						'评荐：请选择失去任意个技能',
+						'评荐：选择失去任意个技能',
 						[skills.map(i => [
 							i,
 							'<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
@@ -281,7 +281,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 								if (!event._result) event._result = {};
 								event._result.skills = [];
 								var rSkill = event._result.skills;
-								var dialog = ui.create.dialog('评荐：请选择获得至多' + get.cnNumber(result.links.length + 1) + '个技能', [list, 'character'], 'hidden');
+								var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + 1) + '个技能', [list, 'character'], 'hidden');
 								event.dialog = dialog;
 								var table = document.createElement('div');
 								table.classList.add('add-setting');
@@ -367,157 +367,296 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				enable: 'phaseUse',
 				usable: 1,
 				prompt: () => lib.translate.shenpingjian_info,
-				content: function () {
-					'step 0'
-					player.chooseBool('评荐：是否选择失去X个非Charlotte技能并令系统随机检索出2X+1张武将牌，然后你选择其中至多X张武将牌并获得其所有技能？').ai = () => {
-						var skills = player.getSkills(null, false, false).filter(skill => {
-							var info = get.info(skill);
-							if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
-							return true;
-						});
-						if (skills.length > 1) {
-							return true;
-						} else {
-							return false;
-						}
-					};
-					'step 1'
-					if (result.bool) {
-						var skills = player.getSkills(null, false, false).filter(skill => {
-							var info = get.info(skill);
-							if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
-							const tempSkills = Object.keys(player.tempSkills)
-							if (tempSkills.includes(skill)) {
-								return false;
-							}
-							const additionalSkills = Object.keys(player.additionalSkills)
-							for (let i = 0; i < additionalSkills.length; i++) {
-								if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
-									return false;
-								}
-							}
-							return true;
-						});
-						var next = player.chooseButton(true, [
-							'评荐：请选择失去至少一个技能',
-							[skills.map(i => [
-								i,
-								'<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
-							]), 'textbutton'],
-						]);
-						next.set('selectButton', [1, skills.length]);
-						next.set('ai', function (button) {
-							if (button.link == 'shenpingjian') return -1;
-							return Math.random();
-						});
-					}
-					'step 2'
-					if (result.bool) {
-						let rSkillInfo;
-						for (let i = 0; i < result.links.length; i++) {
-							rSkillInfo = get.info(result.links[i]);
-							if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
-								player.restoreSkill(result.links[i]);
-							}
-							player.removeSkill(result.links[i]);
-							game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
-						}
-						if (!_status.characterlist) {
-							lib.skill.shenpingjian.initList();
-						}
-						var list = [];
-						var allList = _status.characterlist.slice(0);
-						game.countPlayer(function (current) {
-							if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
-							if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
-							if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
-						});
-						allList.randomSort();
-						for (var i = 0; i < allList.length; i++) {
-							var name = allList[i];
-							if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1) continue;
-							list.add(name);
-							if (list.length >= 2 * result.links.length + 1) break;
-						}
-						if (!list.length) event.finish();
-						else {
-							event.list = list;
-							player.chooseButton([
-								'评荐：请选择至多' + get.cnNumber(result.links.length) + '张武将牌并获得其所有技能',
-								[list, 'character'],
-							], [0, result.links.length], true);
-						}
-					}
-					'step 3'
-					if (result.bool) {
-						if (result.links.length !== 0) {
-							for (let i = 0; i < result.links.length; i++) {
-								var skills = lib.character[result.links[i]][3];
-								for (let j = 0; j < skills.length; j++) {
-									player.addSkill(skills[j]);
-									game.log(player, '获得了技能', '#g【' + get.translation(skills[j]) + '】');
-									var name = event.list.find(name => lib.character[name][3].includes(skills[j]));
-									if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
-								}
-							}
-						}
-						event.finish();
-					}
-					'step 4'
-					var list = [];
-					var skills = [];
-					var map = [];
-					if (!_status.characterlist) {
-						lib.skill.shenpingjian.initList();
-					}
-					var allList = _status.characterlist.slice(0);
-					game.countPlayer(function (current) {
-						if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
-						if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
-						if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
-					});
-					allList.randomSort();
-					for (var i = 0; i < allList.length; i++) {
-						var name = allList[i];
-						if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1) continue;
-						var skills2 = lib.character[name][3];
-						for (var j = 0; j < skills2.length; j++) {
-							var playerSkills = player.getSkills(null, false, false).filter(skill => {
-								var info = get.info(skill);
-								if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
-								return true;
-							});
-							if (playerSkills.includes(skills2[j])) continue;
-							if (skills.includes(skills2[j]) || lib.skill.shenpingjian.phaseUse_special.includes(skills2[j])) {
-								list.add(name);
-								if (!map[name]) map[name] = [];
-								map[name].push(skills2[j]);
-								skills.add(skills2[j]);
-								continue;
-							}
-							var list2 = [skills2[j]];
-							game.expandSkills(list2);
-							for (var k = 0; k < list2.length; k++) {
-								var info = lib.skill[list2[k]];
-								if (!info) continue;
-								list.add(name);
-								if (!map[name]) map[name] = [];
-								map[name].push(skills2[j]);
-								skills.add(skills2[j]);
-								break;
-							}
-						}
-						if (list.length > 2) break;
-					}
-					if (skills.length) {
-						event.list = list;
-						player.chooseControl(skills).set('dialog', ['评荐：请选择获得一个技能', [list, 'character']]);
-					} else event.finish();
-					'step 5'
-					player.addSkill(result.control);
-					game.log(player, '获得了技能', '#g【' + get.translation(result.control) + '】');
-					var name = event.list.find(name => lib.character[name][3].includes(i));
-					if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
+        chooseButton:{
+					dialog:function(event,player){
+						var dialog=ui.create.dialog('评荐：请选择一项','hidden');
+						dialog.add([[
+							['character','<div class="popup text" style="width:calc(100% - 25px);display:inline-block">失去X个非Charlotte技能并令系统随机检索出2X+1张武将牌，然后你选择其中至多X张并获得其所有技能</div>'],
+							['skill','<div class="popup text" style="width:calc(100% - 25px);display:inline-block">失去X个非Charlotte技能并令系统随机检索出2X+3张武将牌，然后你获得其中至多X+1个技能</div>']
+						],'textbutton']);
+						return dialog;
+					},
+					check:function(button){
+						if(button.link=='character') return 1;
+					},
+					backup:function(links){
+						return get.copy(lib.skill['shenpingjian_use_'+links[0]]);
+					},
+					prompt:function(links){
+						if(links[0]=='character') return '失去X个非Charlotte技能并令系统随机检索出2X+1张武将牌，然后你选择其中至多X张并获得其所有技能';
+						return '失去X个非Charlotte技能并令系统随机检索出2X+3张武将牌，然后你获得其中至多X+1个技能';
+					},
+				},
+        subSkill:{
+					backup:{audio:'shenpingjian'},
+					character:{
+						audio:'shenpingjian',
+						content:function(){
+							'step 0'
+              var skills = player.getSkills(null, false, false).filter(skill => {
+                var info = get.info(skill);
+                if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+                const tempSkills = Object.keys(player.tempSkills)
+                if (tempSkills.includes(skill)) {
+                  return false;
+                }
+                const additionalSkills = Object.keys(player.additionalSkills)
+                for (let i = 0; i < additionalSkills.length; i++) {
+                  if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
+                    return false;
+                  }
+                }
+                return true;
+              });
+              var next = player.chooseButton(true, [
+                '评荐：选择失去任意个技能',
+                [skills.map(i => [
+                  i,
+                  '<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
+                ]), 'textbutton'],
+              ]);
+              next.set('selectButton', [0, skills.length]);
+              next.set('ai', function (button) {
+                if (button.link == 'shenpingjian') return -1;
+                return Math.random();
+              });
+							'step 1'
+              if (result.bool) {
+                if (result.links.length === 0) {
+                  event.finish();
+                } else {
+                  let rSkillInfo;
+                  for (let i = 0; i < result.links.length; i++) {
+                    rSkillInfo = get.info(result.links[i]);
+                    if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
+                      player.restoreSkill(result.links[i]);
+                    }
+                    player.removeSkill(result.links[i]);
+                    game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
+                  }
+                  if (!_status.characterlist) {
+                    lib.skill.shenpingjian.initList();
+                  }
+                  var list = [];
+                  var allList = _status.characterlist.slice(0);
+                  game.countPlayer(function (current) {
+                    if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
+                    if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
+                    if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
+                  });
+                  allList.randomSort();
+                  for (var i = 0; i < allList.length; i++) {
+                    var name = allList[i];
+                    if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1) continue;
+                    list.add(name);
+                    if (list.length >= 2 * result.links.length + 1) break;
+                  }
+                  if (!list.length) event.finish();
+                  else {
+                    event.list = list;
+                    player.chooseButton([
+                      '评荐：请选择至多' + get.cnNumber(result.links.length) + '张武将牌并获得其所有技能',
+                      [list, 'character'],
+                    ], [0, result.links.length], true);
+                  }
+                }
+              }
+              'step 2'
+              if (result.links.length !== 0) {
+                for (let i = 0; i < result.links.length; i++) {
+                  var skills = lib.character[result.links[i]][3];
+                  for (let j = 0; j < skills.length; j++) {
+                    player.addSkill(skills[j]);
+                    game.log(player, '获得了技能', '#g【' + get.translation(skills[j]) + '】');
+                    var name = event.list.find(name => lib.character[name][3].includes(skills[j]));
+                    if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
+                  }
+                }
+              }
+						},
+					},
+					skill:{
+						audio:'shenpingjian',
+						content:function(){
+              'step 0'
+              var skills = player.getSkills(null, false, false).filter(skill => {
+                var info = get.info(skill);
+                if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+                const tempSkills = Object.keys(player.tempSkills)
+                if (tempSkills.includes(skill)) {
+                  return false;
+                }
+                const additionalSkills = Object.keys(player.additionalSkills)
+                for (let i = 0; i < additionalSkills.length; i++) {
+                  if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
+                    return false;
+                  }
+                }
+                return true;
+              });
+              var next = player.chooseButton(true, [
+                '评荐：选择失去任意个技能',
+                [skills.map(i => [
+                  i,
+                  '<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
+                ]), 'textbutton'],
+              ]);
+              next.set('selectButton', [0, skills.length]);
+              next.set('ai', function (button) {
+                if (button.link == 'shenpingjian') return -1;
+                return Math.random();
+              });
+              'step 1'
+              if (result.bool) {
+                let rSkillInfo;
+                for (let i = 0; i < result.links.length; i++) {
+                  rSkillInfo = get.info(result.links[i]);
+                  if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
+                    player.restoreSkill(result.links[i]);
+                  }
+                  player.removeSkill(result.links[i]);
+                  game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
+                }
+                var list = [];
+                var skills = [];
+                var map = [];
+                if (!_status.characterlist) {
+                  lib.skill.spshenpingjian.initList();
+                }
+                var allList = _status.characterlist.slice(0);
+                game.countPlayer(function (current) {
+                  if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
+                  if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
+                  if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
+                });
+                allList.randomSort();
+                for (var i = 0; i < allList.length; i++) {
+                  var name = allList[i];
+                  if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1) continue;
+                  var skills2 = lib.character[name][3];
+                  for (var j = 0; j < skills2.length; j++) {
+                    var playerSkills = player.getSkills(null, false, false).filter(skill => {
+                      var info = get.info(skill);
+                      if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+                      return true;
+                    });
+                    if (playerSkills.includes(skills2[j])) continue;
+                    if (skills.includes(skills2[j]) || lib.skill.spshenpingjian.phaseUse_special.includes(skills2[j])) {
+                      list.add(name);
+                      if (!map[name]) map[name] = [];
+                      map[name].push(skills2[j]);
+                      skills.add(skills2[j]);
+                      continue;
+                    }
+                    var list2 = [skills2[j]];
+                    game.expandSkills(list2);
+                    for (var k = 0; k < list2.length; k++) {
+                      var info = lib.skill[list2[k]];
+                      if (!info) continue;
+                      list.add(name);
+                      if (!map[name]) map[name] = [];
+                      map[name].push(skills2[j]);
+                      skills.add(skills2[j]);
+                      break;
+                    }
+                  }
+                  if (list.length >= 2 * (result.links.length) + 3) break;
+                }
+                if (skills.length) {
+                  event.list = list;
+                  if (player.isUnderControl()) {
+                    game.swapPlayerAuto(player);
+                  }
+                  var switchToAuto = function () {
+                    _status.imchoosing = false;
+                    event._result = {
+                      bool: true,
+                      skills: skills.randomGets(result.links.length + 1),
+                    };
+                    if (event.dialog) event.dialog.close();
+                    if (event.control) event.control.close();
+                  };
+                  var chooseButton = function (list, skills, result, player) {
+                    var event = _status.event;
+                    if (!event._result) event._result = {};
+                    event._result.skills = [];
+                    var rSkill = event._result.skills;
+                    var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + 1) + '个技能', [list, 'character'], 'hidden');
+                    event.dialog = dialog;
+                    var table = document.createElement('div');
+                    table.classList.add('add-setting');
+                    table.style.margin = '0';
+                    table.style.width = '100%';
+                    table.style.position = 'relative';
+                    for (var i = 0; i < skills.length; i++) {
+                      var td = ui.create.div('.shadowed.reduce_radius.pointerdiv.tdnode');
+                      td.link = skills[i];
+                      table.appendChild(td);
+                      td.innerHTML = '<span>' + get.translation(skills[i]) + '</span>';
+                      td.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
+                        if (_status.dragged) return;
+                        if (_status.justdragged) return;
+                        _status.tempNoButton = true;
+                        setTimeout(function () {
+                          _status.tempNoButton = false;
+                        }, 500);
+                        var link = this.link;
+                        if (!this.classList.contains('bluebg')) {
+                          if (rSkill.length >= result.links.length + 1) return;
+                          rSkill.add(link);
+                          this.classList.add('bluebg');
+                        } else {
+                          this.classList.remove('bluebg');
+                          rSkill.remove(link);
+                        }
+                      });
+                    }
+                    dialog.content.appendChild(table);
+                    dialog.add('　　');
+                    dialog.open();
+                    event.switchToAuto = function () {
+                      event.dialog.close();
+                      event.control.close();
+                      game.resume();
+                      _status.imchoosing = false;
+                    };
+                    event.control = ui.create.control('ok', function (link) {
+                      event.dialog.close();
+                      event.control.close();
+                      game.resume();
+                      _status.imchoosing = false;
+                    });
+                    for (var i = 0; i < event.dialog.buttons.length; i++) {
+                      event.dialog.buttons[i].classList.add('selectable');
+                    }
+                    game.pause();
+                    game.countChoose();
+                  };
+                  if (event.isMine()) {
+                    chooseButton(list, skills, result, player);
+                  } else if (event.isOnline()) {
+                    event.player.send(chooseButton, list, skills, result, player);
+                    event.player.wait();
+                    game.pause();
+                  } else {
+                    switchToAuto();
+                  }
+                } else {
+                  event.finish();
+                }
+              }
+              'step 2'
+              var map = event.result || result;
+              if (map && map.skills && map.skills.length) {
+                for (var i of map.skills) {
+                  player.addSkill(i);
+                  game.log(player, '获得了技能', '#g【' + get.translation(i) + '】');
+                  var name = event.list.find(name => lib.character[name][3].includes(i));
+                  if (name) game.broadcastAll((player, name) => player.tempname.add(name), player, name);
+                }
+              }
+						},
+					},
 				},
 				ai: {
 					order: 12,
@@ -1712,7 +1851,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					});
 					if (skills.length < 2) player.storage.spshenpingjianX = 1;
 					var next = player.chooseButton(true, [
-						'评荐：请选择失去任意个技能',
+						'评荐：选择失去任意个技能',
 						[skills.map(i => [
 							i,
 							'<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
@@ -1847,7 +1986,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									if (!event._result) event._result = {};
 									event._result.skills = [];
 									var rSkill = event._result.skills;
-									var dialog = ui.create.dialog('评荐：请选择获得至多' + get.cnNumber(result.links.length + player.storage.spshenpingjianX) + '个技能', [list, 'character'], 'hidden');
+									var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage.spshenpingjianX) + '个技能', [list, 'character'], 'hidden');
 									event.dialog = dialog;
 									var table = document.createElement('div');
 									table.classList.add('add-setting');
@@ -1955,7 +2094,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					});
 					if (skills.length < 2) player.storage.spshenpingjianX = 1;
 					var next = player.chooseButton(true, [
-						'评荐：请选择失去任意个技能',
+						'评荐：选择失去任意个技能',
 						[skills.map(i => [
 							i,
 							'<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
@@ -2044,7 +2183,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									if (!event._result) event._result = {};
 									event._result.skills = [];
 									var rSkill = event._result.skills;
-									var dialog = ui.create.dialog('评荐：请选择获得至多' + get.cnNumber(result.links.length + player.storage.spshenpingjianX) + '个技能', [list, 'character'], 'hidden');
+									var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage.spshenpingjianX) + '个技能', [list, 'character'], 'hidden');
 									event.dialog = dialog;
 									var table = document.createElement('div');
 									table.classList.add('add-setting');
@@ -2981,7 +3120,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					'step 4'
 					trigger.cancel();
 				},
-				group: 'huiwanplus_judge',
+				group: ['huiwanplus_judge', 'huiwanplus_gamedraw', 'dcjinjing'],
 			},
 			huiwanplus_judge: {
 				trigger: {
@@ -3069,6 +3208,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					game.delay();
 				},
 			},
+      huiwanplus_gamedraw: {
+        trigger:{
+          global:"gameDrawBefore",
+        },
+        forced: true,
+        content:function () {
+          for (var i = 0; i < game.players.length; i++) {
+            game.players[i].draw(4);
+          }
+          trigger.cancel();
+        },
+      },
 			// 最强神话
 			taffyboss_baonuwash: {
 				trigger: {
@@ -4705,7 +4856,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					});
 					if (skills.length < 2) player.storage.taffyre_pingjianX = 1;
 					var next = player.chooseButton(true, [
-						'评荐：请选择失去任意个技能',
+						'评荐：选择失去任意个技能',
 						[skills.map(i => [
 							i,
 							'<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
@@ -4840,7 +4991,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									if (!event._result) event._result = {};
 									event._result.skills = [];
 									var rSkill = event._result.skills;
-									var dialog = ui.create.dialog('评荐：请选择获得至多' + get.cnNumber(result.links.length + player.storage.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
+									var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
 									event.dialog = dialog;
 									var table = document.createElement('div');
 									table.classList.add('add-setting');
@@ -4948,7 +5099,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					});
 					if (skills.length < 2) player.storage.taffyre_pingjianX = 1;
 					var next = player.chooseButton(true, [
-						'评荐：请选择失去任意个技能',
+						'评荐：选择失去任意个技能',
 						[skills.map(i => [
 							i,
 							'<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div><div>' + get.skillInfoTranslation(i, player) + '</div></div>',
@@ -5037,7 +5188,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 									if (!event._result) event._result = {};
 									event._result.skills = [];
 									var rSkill = event._result.skills;
-									var dialog = ui.create.dialog('评荐：请选择获得至多' + get.cnNumber(result.links.length + player.storage.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
+									var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
 									event.dialog = dialog;
 									var table = document.createElement('div');
 									table.classList.add('add-setting');
@@ -5265,7 +5416,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 		translate: {
 			shenxushao: '评世雕龙',
 			shenpingjian: '评荐',
-			shenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个非Charlotte技能并令系统随机检索出2X+3张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多X+1个技能。②出牌阶段限一次，你可以选择一项：⒈选择失去X个非Charlotte技能并令系统随机检索出2X+1张武将牌，然后你可以选择其中至多X张武将牌并获得其所有技能。⒉令系统随机检索出三张武将牌。然后你可以选择获得其中一个技能。',
+			shenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2X+3张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以获得其中至多X+1个技能。②出牌阶段限一次，你可以选择一项：⒈失去X个非Charlotte技能并令系统随机检索出2X+1张武将牌，然后你可以选择其中至多X张并获得其所有技能。⒉失去X个非Charlotte技能并令系统随机检索出2X+3张武将牌，然后你可以获得其中至多X+1个技能。',
 			shenpingjian_append: '<span style="font-family: yuanli">玩这么阴间的武将，你良心不会痛吗？</span>',
 			shenpingjian_use: '评荐',
 			oldwu_zhugeliang: '旧武诸葛亮',
@@ -5302,7 +5453,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			spshenxushao: '神许劭',
 			spshenxushao_prefix: '神',
 			spshenpingjian: '评荐',
-			spshenpingjian_info: '①出牌阶段限一次/回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌/拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
+			spshenpingjian_info: '①出牌阶段限一次/回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌/拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 			spshenpingjian_use: '评荐',
 			spshenpingjian_append: '<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
 			oldtw_niufudongxie: '旧牛辅董翓',
@@ -5346,12 +5497,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			huiwansunquan_ab: "会玩权",
 			huiwan: "会玩",
 			huiwan_info: "当你摸牌时，你可以改为观看牌堆所有牌并从中选择获得等量的牌。",
-			huiwan_append: '<span style="font-family: yuanli">感觉不如界权，精品第一，史诗质检员，回合内大制衡找顺拆卡距离随便打，不好打的制衡找无懈闪桃下回合找顺拆继续打，对爆也是界权优。</span>',
+			huiwan_append: '<span style="font-family: yuanli">你说得对，但是感觉不如界权。全扩之鳌首，阴间之巅峰。待大制衡神技，拆顺兵乐无中尽入囊中。卡敌之距离，去敌之珍牌。对爆优文鸯，养猪胜神郭，况区区神甘大宝杨彪之流。于精品之榜首，乃史诗之质检。</span>',
 			huiwansunquanplus: "超会玩的孙权",
 			huiwansunquanplus_prefix: "超会玩的",
 			huiwansunquanplus_ab: "超玩权",
 			huiwanplus: "超玩",
-			huiwanplus_info: "锁定技。①一名角色摸牌时，你改为观看牌堆所有牌并从中选择等量的牌令其获得。②一名角色的判定牌生效前，你观看牌堆所有牌并选择一张作为判定结果，此结果不可更改。",
+			huiwanplus_info: "锁定技。①一名角色摸牌时，你改为观看牌堆所有牌并从中选择等量的牌令其获得。②一名角色的判定牌生效前，你观看牌堆所有牌并选择一张作为判定结果，此结果不可更改。③一名角色分发起始手牌前，你改为其摸四张牌。④其他角色的手牌对你可见。",
 			huiwanplus_append: `<span style="font-family: yuanli">思权拳 思如泉涌！<br/>
       念权剑 念念不忘！！<br/>
       界权掌 生生世世！！<br/>
@@ -5361,6 +5512,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
       虚无中的真言、容我三思！<br/>
       冰霜中的独舞、则吴盛可期！</span>`,
 			huiwanplus_judge: "超玩",
+      huiwanplus_gamedraw: "超玩",
 			taffyboss_lvbu1: '最强神话',
 			taffyboss_baonu: '暴怒',
 			taffyboss_baonu_info: '锁定技，当你的体力值降至4或更低时，你变身为暴怒战神或神鬼无前，并立即开始你的回合。',
@@ -5430,7 +5582,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			taffyre_xushao: '界许劭',
 			taffyre_xushao_prefix: '界',
 			taffyre_pingjian: '评荐',
-			taffyre_pingjian_info: '①出牌阶段限一次/回合开始前/结束阶段开始前/当你即将受到伤害前，你可以选择失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌/拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以选择获得其中至多<span class=greentext>X</span>个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外）。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
+			taffyre_pingjian_info: '①出牌阶段限一次/回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌/拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外）。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 			taffyre_pingjian_use: '评荐',
 			taffyre_pingjian_append: '<span style="font-family: yuanli">一人说尽千秋业，半纸雅评万世人。</span>',
 			ruijier: '瑞吉儿',
