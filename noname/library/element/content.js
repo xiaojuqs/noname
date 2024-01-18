@@ -3145,7 +3145,15 @@ export const Content = {
 					}
 					else {
 						if (event.prompt) event.dialog = ui.create.dialog(event.prompt);
-						if (event.prompt2) event.dialog.addText(event.prompt2);
+            // taffy: 注释content.js原版代码喵
+						// if (event.prompt2) event.dialog.addText(event.prompt2);
+            /* taffy分界线 */
+            // taffy: 修复无双技能报错问题喵
+            if (event.prompt2) {
+              if (!event.dialog) event.dialog = ui.create.dialog('hidden');
+              event.dialog.addText(event.prompt2);
+            }
+            /* taffy分界线 */
 					}
 				}
 			}

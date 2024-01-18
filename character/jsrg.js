@@ -5499,7 +5499,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					aiOrder:(player,card,num)=>{
 						if(num>0&&get.itemtype(card)==='card'&&get.subtype(card)==='equip1'&&!player.getEquip(1)){
 							if(card.name!=='zhuge'||player.getCardUsable('sha')||!player.needsToDiscard()||player.countCards('hs',i=>{
-								return get.name(i)==='sha'&&lib.filter.cardEnabled(i,target);
+                // taffy: 注释jsrg.js原版代码喵
+								// return get.name(i)==='sha'&&lib.filter.cardEnabled(i,target);
+                /* taffy分界线 */
+                // taffy: 修复振鞘技能报错问题喵
+                return get.name(i)==='sha'&&lib.filter.cardEnabled(i,player);
+                /* taffy分界线 */
 							})<2) return 0;
 						}
 					},
@@ -6329,7 +6334,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			jsrg_fanjiangzhangda_prefix:'转',
 			jsrgfushan:'负山',
 			jsrgfushan_info:'出牌阶段开始时，所有其他角色可以依次交给你一张牌并令你此阶段使用【杀】的次数上限+1。此阶段结束时，若你使用【杀】的次数未达到上限且此阶段以此法交给你牌的角色均存活，你失去2点体力，否则你将手牌摸至体力上限。',
-			
+
 			xumou_jsrg:'蓄谋',
 			xumou_jsrg_info:'“蓄谋”牌可在判定区内重复存在。判定阶段开始时，你选择一项：⒈使用此牌对应的实体牌，然后本阶段不能再使用此牌名的牌；⒉将所有的“蓄谋”牌置入弃牌堆。',
 
