@@ -927,21 +927,12 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 
 				"boss_sunce":["male","shen","1/8",["boss_jiang","boss_hunzi","boss_hunyou","boss_taoni"],['qun','boss','bossallowed'],'wu'],
 
-        // taffy: 评世雕龙喵
-        boss_xushao: ['male', 'shen', 4, ['shenpingjian'],['qun','boss','bossallowed'],'qun'],
-        /* taffy分界线 */
-
 				// boss_nianshou:['male','shen',Infinity,['boss_nianrui','boss_qixiang','boss_damagecount'],['boss'],'shu'],
 				// boss_yuji:['male','qun',8,[],['boss','bossallowed'],'nei'],
 				// boss_shuijing:['male','qun',8,[],['boss','bossallowed'],'wei'],
 				// boss_sunshangxiang:['male','qun',8,[],['boss','bossallowed'],'wei'],
 			}
 		},
-    // taffy: 评世雕龙喵
-    characterTitle:{
-			boss_xushao: '#gViridian',
-    },
-    /* taffy分界线 */
 		cardPack:{
 			mode_boss:['honghuangzhili','sadouchengbing','yihuajiemu','chiyanzhenhunqin','juechenjinge','xiuluolianyuji','longfenghemingjian','qicaishenlu','hongmianbaihuapao','boss_mengpohuihun','lingsheji','shanrangzhaoshu','jinwuluorigong','xingtianpojunfu','gubuzifeng']
 		},
@@ -1934,11 +1925,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					_status.taoni_over=get.copy(game.over);
 				},
 			},
-      // taffy: 评世雕龙喵
-      boss_xushao:{
-        chongzheng:0,
-      },
-      /* taffy分界线 */
 			global:{
 				loopType:1,
 				chongzheng:6
@@ -8935,9 +8921,6 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 			boss_diaochan:'绝代妖姬',
 			boss_guojia:'世之奇士',
 			boss_caocao:'魏武大帝',
-      // taffy: 评世雕龙喵
-      boss_xushao:'评世雕龙',
-      /* taffy分界线 */
 
 			boss_chiyanshilian:'夏之试炼',
 			boss_zhuque:'朱雀',
