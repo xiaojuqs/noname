@@ -123,7 +123,7 @@
             })
             .then(result => {
               if (result && result.success) {
-                callback(result.data.dirs, result.data.files);
+                callback(result.data.folders, result.data.files);
               }
             });
         };
