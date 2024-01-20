@@ -5087,7 +5087,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								group: ['taffyre_pingjian_use'],
 								phaseUse_special: [],
 								ai: {
-									threaten: 100
+									threaten: 99
 								},
 							},
 							taffyre_pingjian_use: {

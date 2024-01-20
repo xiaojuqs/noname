@@ -554,10 +554,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                           lib.skill._gj = {
                               // 指定多个目标也让触发攻击状态
                               trigger: {player: ['useCardBefore', 'useCard1', 'useCard2']},
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               filter: function (event, player) {
                                   if (player.isUnseen()) return false;
@@ -662,10 +658,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               trigger: {
                                   global: 'gameStart'
                               },
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               init: function (player, skill) {
                                   player.storage._hf = 0;
@@ -804,10 +796,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               trigger: {
                                   player: ['useSkillBefore']
                               },
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               filter: function (event, player) {
                                   return player.isAlive() && player.dynamic;
@@ -965,10 +953,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
 
                           lib.skill._playAudioToQueue = {
                               trigger: {player: ['useCardBefore', 'respondBefore']},
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               filter: function (event, player) {
                                   if (player.isUnseen()) return false;
@@ -1042,10 +1026,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               trigger:{
                                   global:"phaseBefore",
                               },
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               filter: function (event, player) {
                                   return game.players.length > 1  /*&&player.phaseNumber===0*/ && player === event.player && !player.doubleAvatar && player.dynamic && player.dynamic.primary && player.dynamic.primary.player.chuchang
@@ -1058,10 +1038,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               trigger:{
                                   player:'useCard'
                               },
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               filter: function (event, player) {
                                   // 打出闪时
@@ -1083,10 +1059,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               trigger: {
                                   global: 'gameStart'
                               },
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               filter: function (event, player) {
                                   return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
@@ -1101,10 +1073,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               trigger: {
                                   player: ['phaseBegin', 'phaseEnd']
                               },
-                              // taffy: 隐藏不该出现的技能发动顺序选择
-                              silent: true,
-                              charlotte: true,
-                              /* taffy分界线 */
                               forced: true,
                               filter: function (event, player) {
                                   return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
@@ -2214,20 +2182,28 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                           callback(false);
                           return;
                       }
+                  // taffy: 补充web端读取文件喵
+                  } else if (typeof resolveLocalFileSystemURL!='function') {
+                    try {
+                      game.readFile(lib.assetURL + path, (function (name) {
+                        return function (entry) {
+                          callback(true);
+                        }
+                      }(name)), function () {
+                        callback(false);
+                      });
+                    } catch (error) {
+                      callback(false);
+                    }
+                  /* taffy分界线 */
                   } else {
-                      // taffy: 注释皮肤切换原版代码
-                      // resolveLocalFileSystemURL(lib.assetURL + path, (function (name) {
-                      //     return function (entry) {
-                      //         callback(true);
-                      //     }
-                      // }(name)), function () {
-                      //     callback(false);
-                      // });
-                      /* taffy分界线 */
-                      // return function (entry) {
-                      //   callback(true);
-                      // }
-                      callback(true);
+                      resolveLocalFileSystemURL(lib.assetURL + path, (function (name) {
+                          return function (entry) {
+                              callback(true);
+                          }
+                      }(name)), function () {
+                          callback(false);
+                      });
                   }
               },
               // 尝试获取多个路径, 当某一个存在后立刻返回存在的对应的路径, 主要用来获取静态图片可能存放于多个位置
@@ -5113,9 +5089,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                       let path = skinSwitch.dcdPath + '/assets/dynamic/' + foldPath + '/' + playParams.skinName + '.jpg'
                       // 如果该皮肤存在, 那么设置该皮肤为静态皮肤
                       skinSwitch.qhly_checkFileExist(path, exists => {
-                          // taffy: 修复bug喵
-                          exists = false;
-                          /* taffy分界线 */
                           if (exists) {
                               let avatar = player.getElementsByClassName((isPrimary ? 'primary' : 'deputy') + '-avatar')
                               if (avatar.length) {

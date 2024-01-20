@@ -18,7 +18,9 @@
 app
 app.html
 ehthumbs.db
-extension
+# taffy: 自定义gitignore喵
+# extension
+# taffy分界线
 jsconfig.json
 localStorage.json
 main.js
@@ -27,9 +29,3 @@ noname.ico
 package-lock.json
 package.json
 Thumbs.db
-# taffy: 自定义gitignore喵
-!extension/挑战卡牌
-!extension/十周年UI
-!extension/皮肤切换
-!extension/MVP扩展
-!extension/全能搜索

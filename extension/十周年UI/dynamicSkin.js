@@ -1004,28 +1004,27 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		guojia: { //郭嘉
-			谋定天下: {
-				name: '郭嘉/谋定天下/daiji2',
-				x: [0, 0.45],
-				y: [0, 0.6],
-				scale: 0.6,
+			一世风华: {
+				name: '郭嘉/一世风华/daiji2',
+				x: [0, 0.42],
+				y: [0, 0.47],
+				scale: 0.8,
 				angle: 0,
-				clipSlots: ['guojia_MAshen', 'guojia_MAmao4'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				//speed: 1,
 				shizhounian: true,
 				chuchang: {
-					name: '郭嘉/谋定天下/chuchang',
-					scale: 0.7,
+					name: '郭嘉/一世风华/chuchang',
+					scale: 0.8,
 					action: 'play',
 				},
 				gongji: {
-					name: '郭嘉/谋定天下/chuchang',
-					scale: 0.9,
+					name: '郭嘉/一世风华/chuchang',
+					scale: 1,
 					action: 'play',
 				},
 				beijing: {
-					name: '郭嘉/谋定天下/beijing',
-					x: [0, 0.5],
+					name: '郭嘉/一世风华/beijing',
+					x: [0, -0.1],
 					y: [0, 0.5],
 					scale: 0.4,
 				},
@@ -4305,6 +4304,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		//郭照
 		xin_guozhao: decadeUI.dynamicSkin.guozhao,
+		jsrg_guozhao: decadeUI.dynamicSkin.guozhao,
 
 		//黄承彦
 		dc_huangchengyan: decadeUI.dynamicSkin.huangchengyan,
@@ -4457,6 +4457,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		//张琪瑛
 		old_zhangqiying: decadeUI.dynamicSkin.zhangqiying,
+
+		//张嫙
+		jsrg_zhangxuan: decadeUI.dynamicSkin.zhangxuan,
 
 		//赵襄
 		dc_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
