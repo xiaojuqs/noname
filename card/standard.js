@@ -280,6 +280,7 @@ game.import('card',function(lib,game,ui,get,ai,_status){
 					},
 					result:{
 						target:function(player,target,card,isLink){
+							if (player.hasSkill('oldjiefan')&&lib.skill.oldjiefan.ai.result.player(player)>0) return get.attitude(player,target);
 							let eff=-1.5,odds=1.35,num=1;
 							if(isLink){
 								let cache=_status.event.getTempCache('sha_result','eff');

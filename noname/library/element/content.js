@@ -3145,7 +3145,7 @@ export const Content = {
 					}
 					else {
 						if (event.prompt) event.dialog = ui.create.dialog(event.prompt);
-						if (event.prompt2) event.dialog.addText(event.prompt2);
+						if (event.prompt2&&event.dialog) event.dialog.addText(event.prompt2);
 					}
 				}
 			}
