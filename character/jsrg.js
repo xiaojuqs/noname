@@ -284,12 +284,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				usable:1,
 				filter(event,player){
 					const zhu=get.zhu(player);
-					if(!zhu||!zhu.isZhu2()) return false;
-					return !player.isZhu2();
+					if(!zhu||!zhu.isZhu2()||!zhu.countCards('h')) return false;
+					return !player.isZhu2()&&player.countCards('h');
 				},
 				async content(event,trigger,player){
 					player.chooseToDebate(game.filterPlayer(current=>{
-						return current==player||current.isZhu2();
+						return (current==player||current.isZhu2())&&current.countCards('h');
 					})).set('callback',async event=>{
 						const result=event.debateResult;
 						if(result.bool&&result.opinion){
@@ -993,6 +993,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								return '手牌上限+'+storage;
 							}
 						},
+						onremove:true,
 						charlotte:true,
 						mod:{
 							maxHandcard(player,num){
@@ -7377,12 +7378,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					aiOrder:(player,card,num)=>{
 						if(num>0&&get.itemtype(card)==='card'&&get.subtype(card)==='equip1'&&!player.getEquip(1)){
 							if(card.name!=='zhuge'||player.getCardUsable('sha')||!player.needsToDiscard()||player.countCards('hs',i=>{
-                // taffy: 注释jsrg.js原版代码喵
-								// return get.name(i)==='sha'&&lib.filter.cardEnabled(i,target);
-                /* taffy分界线 */
-                // taffy: 修复振鞘技能报错问题喵
-                return get.name(i)==='sha'&&lib.filter.cardEnabled(i,player);
-                /* taffy分界线 */
+								return get.name(i)==='sha'&&lib.filter.cardEnabled(i,player);
 							})<2) return 0;
 						}
 					},

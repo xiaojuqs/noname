@@ -2856,11 +2856,6 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 
 							return super.setIdentity(identity);
 						}
-						chooseToRespond() {
-							const chooseToRespond = super.chooseToRespond(...arguments);
-							if (/^请打出.*张/.test(chooseToRespond.prompt)) delete chooseToRespond.prompt;
-							return chooseToRespond;
-						}
 						useCard() {
 							const useCard = super.useCard(...arguments);
 							useCard.pushHandler((event, option) => {
