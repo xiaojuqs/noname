@@ -2093,7 +2093,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								prompt: () => lib.translate.spshenpingjian_info,
 								content: function () {
 									'step 0'
-									if (!player.storage.spshenpingjianX && player.storage.spshenpingjianX !== 0) player.storage.spshenpingjianX = 1;
+									if (!player.storage.spshenpingjianX && player.storage.spshenpingjianX !== 0) player.storage.spshenpingjianX = 0;
 									var skills = player.getSkills(null, false, false).filter(skill => {
 										var info = get.info(skill);
 										if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -5097,7 +5097,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								prompt: () => lib.translate.taffyre_pingjian_info,
 								content: function () {
 									'step 0'
-									if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage.taffyre_pingjianX = 1;
+									if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage.taffyre_pingjianX = 0;
 									var skills = player.getSkills(null, false, false).filter(skill => {
 										var info = get.info(skill);
 										if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
