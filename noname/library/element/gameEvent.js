@@ -45,10 +45,14 @@ export class GameEvent {
 		};
 		this._aiexclude = [];
 		this._notrigger = [];
+		/**
+		 * @type { Result }
+		 */
+		// @ts-ignore
 		this._result = {};
 		this._set = [];
-		/** 
-		 * @type {boolean} 这个事件是否使用异步函数处理 
+		/**
+		 * @type {boolean} 这个事件是否使用异步函数处理
 		 **/
 		this.async = false;
 		/**
@@ -307,7 +311,7 @@ export class GameEvent {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {Function | keyof typeof lib.element.contents} contents
 	 * @returns {GameEvent}
 	 */
@@ -738,7 +742,7 @@ export class GameEvent {
 	untrigger(all = true, player) {
 		const evt = this._triggering;
 		if (all) {
-			if (all !== 'currentOnly') this._triggered = 5;
+			if(all !== 'currentOnly') this._triggered = 5;
 			if (evt && evt.doingList) {
 				evt.doingList.forEach(doing => doing.todoList = []);
 			}
@@ -753,7 +757,7 @@ export class GameEvent {
 	}
 	/**
 	 * 事件转为Promise化
-	 * 
+	 *
 	 * @returns { GameEventPromise }
 	 */
 	toPromise() {
@@ -857,6 +861,11 @@ export class GameEvent {
 		 */
 		// @ts-ignore
 		this.excludeButton;
+		/**
+		 * @type { Result }
+		 */
+		// @ts-ignore
+		this.result;
 		throw new Error('Do not call this method');
 	}
 }

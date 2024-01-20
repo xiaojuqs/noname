@@ -22,9 +22,9 @@
     if (location.href.startsWith('http') && typeof window.initReadWriteFunction != 'function' && !window.require && !
       window.__dirname) {
       window.initReadWriteFunction = function (game) {
-        game.download = function () {
-          // 暂不实现
-        };
+        /*game.download = function() {
+        	// 暂不实现
+        };*/
 
         game.createDir = function (dir, success = () => {}, error = () => {}) {
           fetch(`./createDir?dir=${dir}`)

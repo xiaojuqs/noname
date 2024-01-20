@@ -8842,7 +8842,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						}
 						function isDefined(opd) {
 							if(opd!=undefined){
-								if (opd.get||opd.set||opd.writable!=true||opd.configurable!=true||opd.enumerable!=true){
+								if (opd.get||opd.set||opd.writable!=true||opd.configurable!=true){
 									return true;
 								}
 							}

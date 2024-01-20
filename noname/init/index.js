@@ -59,7 +59,7 @@ export async function boot() {
 
 	setWindowListener();
 	const promiseErrorHandler = await setOnError();
-	
+
 	// 无名杀更新日志
 	if (window.noname_update) {
 		Reflect.set(lib, 'version', window.noname_update.version);
@@ -90,7 +90,7 @@ export async function boot() {
 			window.onload = resolve;
 		} else resolve(void 0);
 	}).then(onWindowReady.bind(window));
-	
+
 
 	// 闭源客户端检测并提醒
 	if (lib.assetURL.includes('com.widget.noname.qingyao') || lib.assetURL.includes('online.nonamekill.android')) {
@@ -467,7 +467,7 @@ export async function boot() {
 	if (extensionlist.length) {
 		_status.extensionLoading = [];
 		_status.extensionLoaded = [];
-		
+
 		const bannedExtensions = Reflect.get(window, 'bannedExtensions');
 
 		const extensionsLoading = [];
@@ -848,7 +848,7 @@ async function setOnError() {
 				}
 				return showCode;
 			};
-			//协议名须和html一致(网页端防跨域)，且文件是js 
+			//协议名须和html一致(网页端防跨域)，且文件是js
 			if (typeof src == 'string' && src.startsWith(location.protocol) && src.endsWith('.js')) {
 				//获取代码
 				const codes = lib.init.reqSync('local:' + decodeURI(src).replace(lib.assetURL, '').replace(winPath, ''));
@@ -858,8 +858,9 @@ async function setOnError() {
 					str += '\n-------------';
 				}
 			}
-			//解析parsex里的content fun内容(通常是技能content) 
-			else if (err && err.stack && err.stack.split('\n')[1].trim().startsWith('at Object.eval [as content]')) {
+			//解析parsex里的content fun内容(通常是技能content)
+			// @ts-ignore
+			else if (err && err.stack && ['at Object.eval [as content]', 'at Proxy.content'].some(str => err.stack.split('\n')[1].trim().startsWith(str))) {
 				const codes = _status.event.content;
 				if (typeof codes == 'function') {
 					const lines = codes.toString().split("\n");
