@@ -1535,13 +1535,21 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 
 		lib.skill._jstx_recovertrigger={
 			trigger:{global:'recoverEnd'},
+      // taffy: 隐藏不该出现的技能发动顺序选择
+      forced: true,
+      popup: false,
+      priority: -100,
+      lastDo: true,
+      /* taffy分界线 */
 			filter:function(event,player){
 				if(_status.currentPhase!=player){
 					return event.player!=event.source&&event.source==player;
 				}
 				return true;
 			},
-			direct:true,
+      // taffy：注释adeFuLoDgu原版代码喵
+			// direct:true,
+      /* taffy分界线 */
 			content:function(){
 				if(_status.currentPhase!=player){
 					if(player.storage.jstxyishugaochao==undefined){
@@ -1571,7 +1579,15 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 			subSkill:{
 				Delete:{
 					trigger:{player:'phaseEnd'},
-					direct:true,
+          // taffy: 隐藏不该出现的技能发动顺序选择
+          forced: true,
+          popup: false,
+          priority: -100,
+          lastDo: true,
+          /* taffy分界线 */
+          // taffy：注释adeFuLoDgu原版代码喵
+          // direct:true,
+          /* taffy分界线 */
 					content:function(){
 						delete player.storage.jstxyishugaochao;
 					},
