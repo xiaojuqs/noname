@@ -8462,6 +8462,6 @@ export class Game extends Uninstantable {
 			return true;
 		});
 	}
-};
+}
 
 export const game = Game;
