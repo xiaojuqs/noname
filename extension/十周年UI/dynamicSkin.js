@@ -417,12 +417,17 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		caopi: { //曹丕
 			气荡山河: {
 				name: '曹丕/气荡山河/XingXiang',
-				x: [0, -0.1],
-				y: [0, 0.25],
-				scale: 0.45,
+				x: [0, -0.3],
+				y: [0, 0.1],
+				scale: 0.55,
 				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
+				gongji: {
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.7,
+				},
 				beijing: {
 					name: '曹丕/气荡山河/BeiJing',
 					scale: 0.3,
@@ -4026,6 +4031,53 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		zhaoyun: { // 赵云
+			金甲破阵: {
+				name: '赵云/金甲破阵/daiji2',
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.5],
+				y: [0, 0.55],
+				scale: 0.75,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '赵云/金甲破阵/chuchang',
+					action: 'play',
+					scale: 0.5,
+				},
+				teshu: {
+					name: '赵云/金甲破阵/chuchang2',
+					action: 'jineng',
+					scale: 0.6,
+				},
+				gongji: {
+					name: '赵云/金甲破阵/chuchang2',
+					action: 'gongji',
+					scale: 0.6,
+					filpX: true,
+				},
+				beijing: {
+					name: '赵云/金甲破阵/beijing',
+					x: [0, 0.3],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: '赵云/金甲破阵/shouji2',
+					scale: 0.5,
+					speed: 0.8,
+					delay: 0.4,
+					effect: {
+						name: '赵云/金甲破阵/shouji',
+						scale: 0.5,
+						speed: 0.8,
+						delay: 0.25,
+					},
+				},
+			},
+		},
 		zhonghui: { //钟会
 			钟桂香蒲: { //出场错误
 				name: '钟会/钟桂香蒲/daiji2',
@@ -4529,7 +4581,13 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		//赵襄
 		dc_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
-		zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
+
+		//赵云
+		ol_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		re_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		sp_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		sb_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		jsrg_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
 
 		//钟会
 		re_zhonghui: decadeUI.dynamicSkin.zhonghui,

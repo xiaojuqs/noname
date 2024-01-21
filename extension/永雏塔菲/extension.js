@@ -3298,7 +3298,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									}
 									'step 1'
 									player.chooseControl('暴怒战神', '神鬼无前', function () {
-										if (Math.random() < 0.5) return '神鬼无前';
+										if (Math.random() < 0.8) return '神鬼无前';
 										return '暴怒战神';
 									}).set('prompt', '选择一个形态');
 									'step 2'
@@ -6098,7 +6098,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-01-19",
+				name: "更新日期: 2024-01-21",
 			},
 			github: {
 				clear: true,
