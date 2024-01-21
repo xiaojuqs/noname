@@ -1182,7 +1182,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							getv=(name,player)=>{
 								let v=trigger.getTempCache('sangu',player.id+name);
 								if(typeof v==='number') return v;
-								v=player.getUseValue({name:name,storage:{sangu:true}},arg);
+								v=player.getUseValue({name:name,storage:{sangu:true}});
 								trigger.putTempCache('sangu',player.id+name,v);
 								return v;
 							};
