@@ -3,7 +3,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 		name: "永雏塔菲",
 		content: function (config, pack) {
 			// 武将评级：垃圾junk，精品rare，史诗epic，传说legend
-			lib.rank.rarity.legend.addArray(['shenxushao', 'oldwu_zhugeliang', 'shiguanning', 'acetaffy', 'minitaffy', 'shixushao', 'spshenxushao', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'shenyuji', 'junko', 'huiwansunquan', 'huiwansunquanplus', 'taffyboss_lvbu1', 'shoushen_caocao', 'babyshen_simayi', 'shenduyu', 'shenchengui', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'shenshiguanning', 'taffyre_xushao', 'ruijier', 'boss_xushao']);
+			lib.rank.rarity.legend.addArray(['shenxushao', 'oldwu_zhugeliang', 'shiguanning', 'acetaffy', 'minitaffy', 'shixushao', 'spshenxushao', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'shenyuji', 'junko', 'huiwansunquan', 'huiwansunquanplus', 'taffyboss_lvbu1', 'shoushen_caocao', 'babyshen_simayi', 'shenduyu', 'shenchengui', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'shenshiguanning', 'taffyre_xushao', 'taffyold_sb_caopi', 'ruijier', 'boss_xushao']);
 		},
 		precontent: function (qs) {
 			if (qs.enable) {
@@ -60,6 +60,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					 */
 					getSpan: () => `${get.prefixSpan('新杀')}${get.prefixSpan('神')}`
 				});
+				lib.namePrefix.set('旧谋', {
+					/**
+					 * @returns {string}
+					 */
+					getSpan: () => `${get.prefixSpan('旧')}${get.prefixSpan('谋')}`
+				});
 				game.import('character', function (lib, game, ui, get, ai, _status) {
 					const oobj = {
 						name: 'taffy_character',
@@ -100,6 +106,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							oldol_feiyi: ['male', 'shu', 3, ['oldyanru', 'oldhezhong']],
 							shenshiguanning: ['male', 'shen', '3/7', ['shenshidunshi']],
 							taffyre_xushao: ['male', 'qun', 3, ['taffyre_pingjian']],
+							taffyold_sb_caopi: ['male', 'wei', 3, ['taffyold_sbxingshang', 'taffyold_sbfangzhu', 'taffyold_sbsongwei'],
+								['zhu']
+							],
 							ruijier: ['female', 'shen', '', [],
 								['unseen']
 							],
@@ -109,7 +118,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						},
 						characterSort: {
 							taffy_character: {
-								taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi'],
+								taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'taffyold_sb_caopi'],
 								taffy_ol: ['taffyboss_lvbu1'],
 								taffy_shou: ['shoushen_caocao'],
 								taffy_shi: ['shiguanning', 'shixushao'],
@@ -5288,6 +5297,443 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									}
 								},
 							},
+							//旧谋曹丕
+							taffyold_sbxingshang: {
+								audio: 'sbxingshang',
+								trigger: {
+									global: ['die', 'damageEnd']
+								},
+								usable: 1,
+								forced: true,
+								locked: false,
+								async content(event, trigger, player) {
+									player.addMark('taffyold_sbxingshang', 1);
+								},
+								marktext: '颂',
+								intro: {
+									name: '颂',
+									content: 'mark',
+								},
+								ai: {
+									threaten: 2.5
+								},
+								group: 'taffyold_sbxingshang_use',
+								subSkill: {
+									use: {
+										audio: 'taffyold_sbxingshang',
+										enable: 'phaseUse',
+										filter: function (event, player) {
+											return game.hasPlayer(target => {
+												if (player.countMark('taffyold_sbxingshang') > 1) return true;
+												return player.countMark('sbxingshang') && (target.isLinked() || target.isTurnedOver());
+											});
+										},
+										usable: 2,
+										chooseButton: {
+											dialog: function () {
+												var dialog = ui.create.dialog(
+													'行殇：请选择你要执行的一项',
+													[
+														[
+															[1, '　　　⒈复原一名角色的武将牌　　　'],
+															[2, '　　　⒉令一名角色摸' + Math.min(5, Math.max(2, game.dead.length)) + '张牌　　　'],
+														], 'tdnodes'
+													],
+													[
+														[
+															[3, '　　　⒊令一名体力上限小于10的角色加1点体力上限并回复1点体力，然后随机恢复一个被废除的装备栏　　　'],
+														], 'tdnodes'
+													],
+													[
+														[
+															[4, '　　　⒋获得一名已阵亡角色的所有技能，然后失去武将牌上的所有技能　　　'],
+														], 'tdnodes'
+													]
+												);
+												return dialog;
+											},
+											filter: function (button, player) {
+												if (button.link > player.countMark('taffyold_sbxingshang')) return false;
+												switch (button.link) {
+													case 1:
+														return game.hasPlayer(target => target.isLinked() || target.isTurnedOver());
+													case 2:
+														return true;
+													case 3:
+														return game.hasPlayer(target => target.maxHp < 10);
+													case 4:
+														return game.dead.length;
+												}
+											},
+											check: function (button) {
+												let player = _status.event.player;
+												switch (button.link) {
+													case 1:
+														return game.filterPlayer(current => get.attitude(player, current) > 0).reduce((list, target) => {
+															let num = 0;
+															if (target.isLinked()) num += 0.5;
+															if (target.isTurnedOver()) num += 10;
+															list.push(num);
+															return list;
+														}, []).sort((a, b) => b - a)[0];
+													case 2:
+														return Math.min(5, Math.max(2, game.dead.length));
+													case 3:
+														return game.filterPlayer().reduce((list, target) => {
+															list.push(get.recoverEffect(target, player, player));
+															return list;
+														}, []).sort((a, b) => b - a)[0];
+													case 4:
+														return game.dead.reduce((list, target) => {
+															let num = 0;
+															if (target.name && lib.character[target.name]) num += get.rank(target.name, true);
+															if (target.name2 && lib.character[target.name2]) num += get.rank(target.name2, true);
+															list.push(num);
+															return list;
+														}, []).sort((a, b) => b - a)[0];
+												}
+											},
+											backup: function (links, player) {
+												return {
+													num: links[0],
+													audio: 'taffyold_sbxingshang',
+													filterTarget: function (card, player, target) {
+														switch (lib.skill.taffyold_sbxingshang_use_backup.num) {
+															case 1:
+																return target => target.isLinked() || target.isTurnedOver();
+															case 2:
+																return true;
+															case 3:
+																return target.maxHp < 10;
+															case 4:
+																return target == player;
+														}
+													},
+													selectTarget: () => lib.skill.taffyold_sbxingshang_use_backup.num == 4 ? -1 : 1,
+													async content(event, trigger, player) {
+														const target = event.targets[0];
+														const num = lib.skill.taffyold_sbxingshang_use_backup.num;
+														player.removeMark('taffyold_sbxingshang', num);
+														switch (num) {
+															case 1:
+																if (target.isLinked()) target.link(false);
+																if (target.isTurnedOver()) target.turnOver();
+																break;
+															case 2:
+																target.draw(Math.min(5, Math.max(2, game.dead.length)));
+																break;
+															case 3:
+																target.gainMaxHp();
+																target.recover();
+																let list = [];
+																for (let i = 1; i <= 5; i++) {
+																	if (target.hasDisabledSlot(i)) list.push('equip' + i);
+																}
+																if (list.length) target.enableEquip(list.randomGet());
+																break;
+															case 4:
+																let map = {};
+																game.dead.forEach(target => map[target.playerid] = get.translation(target));
+																const {
+																	result: {
+																		control
+																	}
+																} = await player.chooseControl(Object.values(map)).set('ai', () => {
+																	const getNum = (target) => {
+																		let num = 0;
+																		if (target.name && lib.character[target.name]) num += get.rank(target.name, true);
+																		if (target.name2 && lib.character[target.name2]) num += get.rank(target.name2, true);
+																		return num;
+																	};
+																	let controls = _status.event.controls.slice();
+																	controls = controls.map(name => [name, game.dead.find(target => _status.event.map[target.playerid] == name)]);
+																	controls.sort((a, b) => getNum(b[1]) - getNum(a[1]));
+																	return controls[0][0];
+																}).set('prompt', '获得一名已阵亡角色的所有技能').set('map', map);
+																if (control) {
+																	const target2 = game.dead.find(targetx => map[targetx.playerid] == control);
+																	player.line(target2);
+																	game.log(player, '选择了', target2);
+																	const skills = target2.getStockSkills(true, true);
+																	const skills2 = player.getStockSkills(true, true);
+																	player.addSkillLog(skills);
+																	player.removeSkillLog(skills2);
+																}
+														}
+													},
+													ai: {
+														result: {
+															target: function (player, target) {
+																switch (lib.skill.taffyold_sbxingshang_use_backup.num) {
+																	case 1:
+																		let num = 0;
+																		if (target.isLinked()) num += 0.5;
+																		if (target.isTurnedOver()) num += 10;
+																		return num;
+																	case 2:
+																		return 1;
+																	case 3:
+																		return get.recoverEffect(target, player, player);
+																	case 4:
+																		return 1;
+																}
+															},
+														},
+													},
+												}
+											},
+											prompt: function (links, player) {
+												switch (links[0]) {
+													case 1:
+														return '复原一名角色的武将牌';
+													case 2:
+														return '令一名角色摸' + get.cnNumber(Math.min(5, Math.max(2, game.dead.length))) + '张牌';
+													case 3:
+														return '令一名体力上限小于10的角色加1点体力上限并回复1点体力，然后随机恢复一个被废除的装备栏';
+													case 4:
+														return '获得一名已阵亡角色的所有技能，然后失去武将牌上的所有技能';
+												}
+											}
+										},
+										ai: {
+											order: 9,
+											result: {
+												player: 1
+											},
+										},
+									},
+									use_backup: {},
+								},
+							},
+							taffyold_sbfangzhu: {
+								audio: 'sbfangzhu',
+								enable: 'phaseUse',
+								filter: function (event, player) {
+									return player.countMark('taffyold_sbxingshang') > 0;
+								},
+								usable: 2,
+								chooseButton: {
+									dialog: function () {
+										var dialog = ui.create.dialog('放逐：请选择你要执行的一项', 'hidden');
+										dialog.add([
+											[
+												[4, '移去1个“颂”标记，令一名其他角色只能使用你选择的一种类型的牌直到其回合结束'],
+												[1, '移去2个“颂”标记，令一名其他角色的非Charlotte技能失效直到其回合结束'],
+												[2, '移去2个“颂”标记，令一名其他角色不能响应除其外的角色使用的牌直到其回合结束'],
+												[3, '移去3个“颂”标记，令一名其他角色将武将牌翻面']
+											], 'textbutton'
+										]);
+										return dialog;
+									},
+									filter: function (button, player) {
+										switch (button.link) {
+											case 1:
+												if (2 > player.countMark('taffyold_sbxingshang')) return false;
+												return true;
+											case 2:
+												if (2 > player.countMark('taffyold_sbxingshang')) return false;
+												return true;
+											case 3:
+												if (3 > player.countMark('taffyold_sbxingshang')) return false;
+												return true;
+											case 4:
+												if (1 > player.countMark('taffyold_sbxingshang')) return false;
+												return game.hasPlayer(target => target != player && !target.hasSkill('taffyold_sbfangzhu_ban'));
+										}
+									},
+									check: function (button) {
+										let player = _status.event.player;
+										switch (button.link) {
+											case 1:
+												return game.filterPlayer(current => get.attitude(player, current) < 0).reduce((list, target) => {
+													let num = 0;
+													if (target.name && lib.character[target.name]) num += get.rank(target.name, true);
+													if (target.name2 && lib.character[target.name2]) num += get.rank(target.name2, true);
+													list.push(num);
+													return list;
+												}, []).sort((a, b) => b - a)[0];
+											case 2:
+												return 0;
+											case 3:
+												return game.filterPlayer(target => target != player && !target.hasSkill('taffyold_sbfangzhu_ban')).reduce((list, target) => {
+													if (get.attitude(player, target) > 0 && target.isTurnedOver()) list.push(10 * target.countCards('hs') + 1);
+													else if (get.attitude(player, target) < 0 && !target.isTurnedOver()) list.push(5 * target.countCards('hs') + 1);
+													else list.push(0);
+													return list;
+												}, []).sort((a, b) => b - a)[0];
+											case 4:
+												return 0;
+										}
+									},
+									backup: function (links, player) {
+										return {
+											num: links[0],
+											audio: 'taffyold_sbfangzhu',
+											filterTarget: lib.filter.notMe,
+											async content(event, trigger, player) {
+												const target = event.target;
+												const num = lib.skill.taffyold_sbfangzhu_backup.num;
+												switch (num) {
+													case 1:
+														player.removeMark('taffyold_sbxingshang', 2);
+														target.removeSkill('baiban');
+														target.addTempSkill('baiban', {
+															player: 'phaseEnd'
+														});
+														break;
+													case 2:
+														player.removeMark('taffyold_sbxingshang', 2);
+														target.addTempSkill('taffyold_sbfangzhu_kill', {
+															player: 'phaseEnd'
+														});
+														break;
+													case 3:
+														player.removeMark('taffyold_sbxingshang', 3);
+														target.turnOver();
+														break;
+													case 4:
+														player.removeMark('taffyold_sbxingshang', 1);
+														const {
+															result: {
+																control
+															}
+														} = await player.chooseControl('basic', 'trick', 'equip').set('ai', () => 'equip').set('prompt', '放逐：请选择' + get.translation(target) + '仅能使用的类别的牌');
+														if (control) {
+															player.line(target);
+															player.popup(get.translation(control) + '牌');
+															target.addTempSkill('taffyold_sbfangzhu_ban', {
+																player: 'phaseEnd'
+															});
+															target.markAuto('taffyold_sbfangzhu_ban', [control]);
+														}
+												}
+											},
+											ai: {
+												result: {
+													target: function (player, target) {
+														switch (lib.skill.taffyold_sbfangzhu_backup.num) {
+															case 1:
+																let num = 0;
+																if (target.name && lib.character[target.name]) num += get.rank(target.name, true);
+																if (target.name2 && lib.character[target.name2]) num += get.rank(target.name2, true);
+																return num;
+															case 2:
+																return 0;
+															case 3:
+																if (get.attitude(player, target) > 0 && target.isTurnedOver()) return 10 * target.countCards('hs') + 1;
+																if (get.attitude(player, target) < 0 && !target.isTurnedOver()) return -5 * target.countCards('hs') + 1;
+																return 0;
+															case 4:
+																return 0;
+														}
+													},
+												},
+											},
+										}
+									},
+									prompt: function (links, player) {
+										switch (links[0]) {
+											case 1:
+												return '移去2个“颂”标记，令一名其他角色的非Charlotte技能失效直到其回合结束';
+											case 2:
+												return '移去2个“颂”标记，令一名其他角色不能响应除其外的角色使用的牌直到其回合结束';
+											case 3:
+												return '移去3个“颂”标记，令一名其他角色将武将牌翻面';
+											case 4:
+												return '移去1个“颂”标记，令一名其他角色只能使用你选择的一种类型的牌直到其回合结束';
+										}
+									}
+								},
+								ai: {
+									order: 9,
+									result: {
+										player: 1
+									},
+								},
+								subSkill: {
+									backup: {},
+									kill: {
+										charlotte: true,
+										mark: true,
+										marktext: '禁',
+										intro: {
+											content: '不能响应其他角色使用的牌'
+										},
+										trigger: {
+											global: 'useCard1'
+										},
+										filter: function (event, player) {
+											return event.player != player;
+										},
+										forced: true,
+										popup: false,
+										async content(event, trigger, player) {
+											trigger.directHit.add(player);
+										},
+									},
+									ban: {
+										charlotte: true,
+										onremove: true,
+										mark: true,
+										marktext: '禁',
+										intro: {
+											markcount: () => 0,
+											content: '只能使用$牌',
+										},
+										mod: {
+											cardEnabled: function (card, player) {
+												if (!player.getStorage('taffyold_sbfangzhu_ban').includes(get.type2(card))) return false;
+											},
+											cardSavable: function (card, player) {
+												if (!player.getStorage('taffyold_sbfangzhu_ban').includes(get.type2(card))) return false;
+											},
+										},
+									},
+								},
+							},
+							taffyold_sbsongwei: {
+								audio: 'sbsongwei',
+								trigger: {
+									player: 'phaseUseBegin'
+								},
+								filter: function (event, player) {
+									return game.hasPlayer(target => target.group == 'wei' && target != player);
+								},
+								zhuSkill: true,
+								forced: true,
+								locked: false,
+								async content(event, trigger, player) {
+									player.addMark('taffyold_sbxingshang', game.countPlayer(target => target.group == 'wei' && target != player));
+								},
+								group: 'taffyold_sbsongwei_delete',
+								subSkill: {
+									delete: {
+										audio: 'taffyold_sbsongwei',
+										enable: 'phaseUse',
+										filter: function (event, player) {
+											return !player.storage.taffyold_sbsongwei_delete && game.hasPlayer(target => lib.skill.taffyold_sbsongwei.subSkill.delete.filterTarget(null, player, target));
+										},
+										filterTarget: function (card, player, target) {
+											return target != player && target.group == 'wei' && target.getStockSkills(false, true).length;
+										},
+										skillAnimation: true,
+										animationColor: 'thunder',
+										async content(event, trigger, player) {
+											player.storage.taffyold_sbsongwei_delete = true;
+											player.awakenSkill('taffyold_sbsongwei_delete');
+											event.target.removeSkillLog(event.target.getStockSkills(false, true));
+										},
+										ai: {
+											order: 13,
+											result: {
+												target: function (player, target) {
+													return -target.getStockSkills(false, true).length;
+												},
+											},
+										},
+									},
+								},
+							},
 						},
 						card: {},
 						characterIntro: {
@@ -5382,6 +5828,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							shenshiguanning: '#gViridian',
 							taffyre_xushao: '#gViridian',
 							boss_xushao: '#gViridian',
+							taffyold_sb_caopi: '#gViridian',
 						},
 						characterFilter: {},
 						dynamicTranslate: {
@@ -5429,6 +5876,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							ruiji: ['ruiji', 'dc_ruiji', 'oldruiji'],
 							tengfanglan: ['tengfanglan', 'dc_tengfanglan', 'oldtengfanglan'],
 							feiyi: ['ol_feiyi', 'feiyi', 'tw_feiyi', 'oldol_feiyi'],
+							caopi: ['caopi', 're_caopi', 'ps_caopi', 'sb_caopi', 'taffyold_sb_caopi'],
 						},
 						translate: {
 							shenxushao: '评世雕龙',
@@ -5602,6 +6050,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyre_pingjian_info: '①出牌阶段限一次/回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌/拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至结束阶段结束后/当你即将受到伤害前至当你受到的伤害结算后的技能的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外）。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 							taffyre_pingjian_use: '评荐',
 							taffyre_pingjian_append: '<span style="font-family: yuanli">一人说尽千秋业，半纸雅评万世人。</span>',
+							taffyold_sb_caopi: '旧谋曹丕',
+							taffyold_sb_caopi_prefix: '旧谋',
+							taffyold_sbxingshang: '行殇',
+							taffyold_sbxingshang_info: '①每回合限一次，当一名角色死亡时或受到伤害时，你获得1个“颂”标记。②出牌阶段限两次，你可以：1.移去1个“颂”标记，令一名角色复原武将牌；2.移去2个“颂”标记，令一名角色摸X张牌（X为场上阵亡角色数，且X至少为2，至多为5）；3.移去3个“颂”标记，令一名体力上限小于10的角色加1点体力上限，回复1点体力，随机恢复一个已废除的装备栏；4.移去4个“颂”标记，获得一名阵亡角色武将牌上的所有技能，然后你失去武将牌上的所有技能。',
+							taffyold_sbfangzhu: '放逐',
+							taffyold_sbfangzhu_info: '出牌阶段限两次，你可以：1.移去1个“颂”标记，令一名其他角色只能使用你选择的一种类型的牌直到其回合结束。2.移去2个“颂”标记，令一名其他角色的非Charlotte技能失效直到其回合结束；3.移去2个“颂”标记，令一名其他角色不能响应除其以外的角色使用的牌直到其回合结束；4.移去3个“颂”标记，令一名其他角色将武将牌翻面；',
+							taffyold_sbsongwei: '颂威',
+							taffyold_sbsongwei_info: '主公技。①出牌阶段开始时，你获得Y个“颂”标记（Y为场上其他魏势力角色数）。②每局游戏限一次，出牌阶段，你可以令一名其他魏势力角色失去所有武将牌的技能。',
 							ruijier: '瑞吉儿',
 							boss_xushao: '评世雕龙',
 

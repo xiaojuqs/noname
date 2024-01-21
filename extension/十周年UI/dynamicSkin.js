@@ -160,7 +160,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				name: '曹操/逐鹿天下/XingXiang',
 				x: [0, 0.5],
 				y: [0, 0.15],
-				scale: 0.4,
+				scale: 0.45,
 				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
@@ -411,6 +411,23 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					x: [0, 0.5],
 					y: [0, 0.5],
 					scale: 0.3,
+				},
+			},
+		},
+		caopi: { //曹丕
+			气荡山河: {
+				name: '曹丕/气荡山河/XingXiang',
+				x: [0, -0.1],
+				y: [0, 0.25],
+				scale: 0.45,
+				angle: 0,
+				//speed: 1,
+				//action: 'DaiJi',
+				beijing: {
+					name: '曹丕/气荡山河/BeiJing',
+					scale: 0.3,
+					x: [0, 1.7],
+					y: [0, 0.5]
 				},
 			},
 		},
@@ -4213,10 +4230,10 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		zhugeliang: { //诸葛亮
 			龙跃凤鸣: {
 				name: '诸葛亮/龙跃凤鸣/XingXiang',
-				x: [0, 0.8],
-				y: [0, 0.08],
-				scale: 0.55,
-				angle: 15,
+				x: [0, 0.6],
+				y: [0, 0.15],
+				scale: 0.5,
+				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
 				beijing: {
@@ -4224,6 +4241,50 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					scale: 0.3,
 					x: [0, 0.4],
 					y: [0, 0.5]
+				},
+			},
+			战场荣耀: {
+				name: '诸葛亮/战场荣耀/daiji2',
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.5],
+				y: [0, 0.55],
+				scale: 0.75,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '诸葛亮/战场荣耀/chuchang',
+					action: 'play',
+					scale: 0.9,
+				},
+				gongji: {
+					name: '诸葛亮/战场荣耀/chuchang2',
+					action: 'gongji',
+					scale: 0.7,
+				},
+				teshu: {
+					name: '诸葛亮/战场荣耀/chuchang2',
+					action: 'jineng',
+					scale: 0.7,
+				},
+				beijing: {
+					name: '诸葛亮/战场荣耀/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: '诸葛亮/战场荣耀/shouji2',
+					scale: 0.5,
+					speed: 1.2,
+					delay: 0.3,
+					effect: {
+						name: '诸葛亮/战场荣耀/shouji',
+						scale: 0.6,
+						speed: 0.6,
+						delay: 0.7,
+					},
 				},
 			},
 		},
@@ -4256,6 +4317,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		sb_caocao: decadeUI.dynamicSkin.caocao,
 		jsrg_caocao: decadeUI.dynamicSkin.caocao,
 		dc_caocao: decadeUI.dynamicSkin.caocao,
+
+		//曹丕
+		re_caopi: decadeUI.dynamicSkin.caopi,
+		sb_caopi: decadeUI.dynamicSkin.caopi,
+		taffyold_sb_caopi: decadeUI.dynamicSkin.caopi,
 
 		//大乔
 		re_daqiao: decadeUI.dynamicSkin.daqiao,
@@ -4483,6 +4549,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		re_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+		jsrg_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 
 		//左慈
 		re_zuoci: decadeUI.dynamicSkin.zuoci,
