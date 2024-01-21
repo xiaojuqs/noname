@@ -3056,6 +3056,12 @@ export class Library extends Uninstantable {
 						lib.init.cssstyles();
 					}
 				},
+				equip_span:{
+					name: '装备牌占位',
+					intro:'打开后，没有装备的装备区将在装备栏占据空白位置。',
+					init: true,
+					unfrequent:false,
+				},
 				fold_card: {
 					name: '折叠手牌',
 					init: true,
@@ -9351,6 +9357,18 @@ export class Library extends Uninstantable {
 		disable_judge: '已废除',
 		disable_judge_info: '判定区已废除',
 		disable_judge_bg: '废',
+		empty_equip1: "空武器",
+		empty_equip1_info: "武器栏为空",
+		empty_equip2: "空防具",
+		empty_equip2_info: "防具栏为空",
+		empty_equip3: "空防御坐骑",
+		empty_equip3_info: "防御坐骑栏为空",
+		empty_equip4: "空攻击坐骑",
+		empty_equip4_info: "攻击坐骑栏为空",
+		empty_equip5: "空宝物",
+		empty_equip5_info: "宝物栏为空",
+		empty_equip6: '空特殊装备',
+		empty_equip6_info: '特殊装备栏为空',
 		pss: '手势',
 		pss_paper: '布',
 		pss_scissor: '剪刀',
@@ -9574,6 +9592,30 @@ export class Library extends Uninstantable {
 			subtype: "equip5",
 		},
 		feichu_equip6: {
+			type: "equip",
+			subtype: "equip6",
+		},
+		empty_equip1: {
+			type: "equip",
+			subtype: "equip1",
+		},
+		empty_equip2: {
+			type: "equip",
+			subtype: "equip2",
+		},
+		empty_equip3: {
+			type: "equip",
+			subtype: "equip3",
+		},
+		empty_equip4: {
+			type: "equip",
+			subtype: "equip4",
+		},
+		empty_equip5: {
+			type: "equip",
+			subtype: "equip5",
+		},
+		empty_equip6: {
 			type: "equip",
 			subtype: "equip6",
 		},
