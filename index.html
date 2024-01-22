@@ -124,7 +124,7 @@
                 .catch(error);
             };
 
-            game.getFileList = function (dir, callback = () => {}) {
+            game.getFileList = function (dir, callback = () => {}, error = () => {}) {
               fetch(`./getFileList?dir=${dir}`)
                 .then(response => {
                   return response.json();
@@ -132,8 +132,10 @@
                 .then(result => {
                   if (result && result.success) {
                     callback(result.data.folders, result.data.files);
+                  } else {
+                    error();
                   }
-                });
+                })
             };
 
             game.ensureDirectory = function (list, callback = () => {}, file = false) {

@@ -9514,6 +9514,7 @@ class Create extends Uninstantable {
 			['十周年UI', true],
 			['挑战卡牌', true],
 			['MVP扩展', true],
+			['千幻聆音', true],
 			['皮肤切换', true],
 			['永雏塔菲', true],
 		];

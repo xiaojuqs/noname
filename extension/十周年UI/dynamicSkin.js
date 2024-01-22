@@ -4493,7 +4493,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		ps_shen_machao: decadeUI.dynamicSkin.shen_machao,
 
 		// 神司马懿
-		babyshen_simayi: decadeUI.dynamicSkin.shen_simayi,
+		taffybaby_shen_simayi: decadeUI.dynamicSkin.shen_simayi,
 
 		//孙策
 		re_sunce: decadeUI.dynamicSkin.sunce,

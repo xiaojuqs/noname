@@ -2889,6 +2889,10 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                       let skinKeys = Object.keys(skinInfoMap)
                       // viewState.skins = skinList;
                       viewState.skinTotalWidth = (viewState.skinPerWidth + viewState.skinGap) * skinKeys.length - viewState.skinGap;
+                      // taffy: 修复千幻扩展皮肤顺序错乱问题
+                      skinKeys.remove('__default');
+                      skinKeys.unshift('__default');
+                      /* taffy分界线 */
                       for (let i = 0; i < skinKeys.length; i++) {
                           let skinKey = skinKeys[i]
 
@@ -3007,11 +3011,17 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                           game.qhly_setCurrentSkin(name, skin, function () {
                                               viewState.refreshSkins();
                                           }, true);
+                                          // taffy: 非十周年动皮检测圆弧喵
+                                          skinSwitch.skinSwitchCheckYH(player)
+                                          /* taffy分界线 */
                                       } else {
                                           game.qhly_setCurrentSkin(name, skin, function () {
                                               viewState.refreshSkins();
                                           }, true);
                                           setStaticSkin()
+                                          // taffy: 非十周年动皮检测圆弧喵
+                                          skinSwitch.skinSwitchCheckYH(player)
+                                          /* taffy分界线 */
                                       }
                                   })
                               })(name, skin, skinView);

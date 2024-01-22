@@ -3,7 +3,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 		name: "永雏塔菲",
 		content: function (config, pack) {
 			// 武将评级：垃圾junk，精品rare，史诗epic，传说legend
-			lib.rank.rarity.legend.addArray(['shenxushao', 'oldwu_zhugeliang', 'shiguanning', 'acetaffy', 'minitaffy', 'shixushao', 'spshenxushao', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'shenyuji', 'junko', 'huiwansunquan', 'huiwansunquanplus', 'taffyboss_lvbu1', 'shoushen_caocao', 'babyshen_simayi', 'shenduyu', 'shenchengui', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'shenshiguanning', 'taffyre_xushao', 'taffyold_sb_caopi', 'ruijier', 'boss_xushao']);
+			lib.rank.rarity.legend.addArray(['shenxushao', 'oldwu_zhugeliang', 'shiguanning', 'acetaffy', 'minitaffy', 'shixushao', 'spshenxushao', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'shenyuji', 'junko', 'huiwansunquan', 'huiwansunquanplus', 'taffyboss_lvbu1', 'shoushen_caocao', 'taffybaby_shen_simayi', 'shenduyu', 'shenchengui', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'shenshiguanning', 'taffyre_xushao', 'taffyold_sb_caopi', 'ruijier', 'boss_xushao']);
+      // 适配千幻聆音换肤
+      if (!lib.qhlypkg) {
+        lib.qhlypkg = [];
+      }
+      lib.qhlypkg.push({
+        isExt: true,
+        filterCharacter: function (name) {
+          return name.includes('taffy');
+        },
+        isLutou: lib.config.xwLutou,
+        prefix: 'extension/永雏塔菲/image/character/',
+        lutouPrefix: 'extension/永雏塔菲/image/character/lutou/',
+        skin: {
+          standard: 'extension/永雏塔菲/skin/standard/',
+          lutou: 'extension/永雏塔菲/skin/lutou/',
+        },
+        audioOrigin: 'extension/永雏塔菲/audio/',
+        audio: 'extension/永雏塔菲/skin/audio/',
+      });
 		},
 		precontent: function (qs) {
 			if (qs.enable) {
@@ -96,7 +115,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							shoushen_caocao: ['male', 'shen', 3, ['guixin', 'feiying'],
 								['wei']
 							],
-							babyshen_simayi: ["male", "shen", 3, ["babyrenjie", "babyjilue", "babylianpo"],
+							taffybaby_shen_simayi: ["male", "shen", 3, ["babyrenjie", "babyjilue", "babylianpo"],
 								[]
 							],
 							shenduyu: ['male', 'shen', 5, ['shenmiewu']],
@@ -122,7 +141,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								taffy_ol: ['taffyboss_lvbu1'],
 								taffy_shou: ['shoushen_caocao'],
 								taffy_shi: ['shiguanning', 'shixushao'],
-								taffy_baby: ['babyshen_simayi'],
+								taffy_baby: ['taffybaby_shen_simayi'],
 								taffy_diy: ["shenxushao", 'spshenxushao', 'shenyuji', 'shenduyu', 'shenchengui', 'shenshiguanning', 'taffyre_xushao', 'boss_xushao'],
 								taffy_tang: ['acetaffy', 'minitaffy'],
 								taffy_gzz: ['junko'],
@@ -1163,6 +1182,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							},
 							// 永雏塔菲
 							taffybaomi: {
+                audio: 2,
 								trigger: {
 									source: 'damageBefore'
 								},
@@ -1217,6 +1237,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								}
 							},
 							taffyfeizhu: {
+                audio: 2,
 								trigger: {
 									player: 'damageBegin4'
 								},
@@ -1342,6 +1363,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								},
 							},
 							taffychusheng: {
+                audio: 2,
 								enable: 'phaseUse',
 								usable: 1,
 								// limited:true,
@@ -5872,7 +5894,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							zhangmancheng: ['dc_zhangmancheng', 'tw_zhangmancheng', 'oldtw_zhangmancheng'],
 							sunquan: ['sunquan', 're_sunquan', 'sb_sunquan', 'dc_sunquan', 'huiwansunquan', 'huiwansunquanplus'],
 							shen_caocao: ['shen_caocao', 'shoushen_caocao'],
-							shen_simayi: ['shen_simayi', 'babyshen_simayi'],
+							shen_simayi: ['shen_simayi', 'taffybaby_shen_simayi'],
 							ruiji: ['ruiji', 'dc_ruiji', 'oldruiji'],
 							tengfanglan: ['tengfanglan', 'dc_tengfanglan', 'oldtengfanglan'],
 							feiyi: ['ol_feiyi', 'feiyi', 'tw_feiyi', 'oldol_feiyi'],
@@ -5985,8 +6007,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyboss_jingjia_info: "锁定技，游戏开始时，将本局游戏中加入的装备随机置入你的装备区。",
 							shoushen_caocao: "手杀神曹操",
 							shoushen_caocao_prefix: "手杀神",
-							babyshen_simayi: "欢杀神司马懿",
-							babyshen_simayi_prefix: "欢杀神",
+							taffybaby_shen_simayi: "欢杀神司马懿",
+							taffybaby_shen_simayi_prefix: "欢杀神",
 							babyrenjie: "忍戒",
 							babyrenjie_info: "锁定技，①游戏开始时或当你受到1点伤害后，你获得1枚“忍”标记。②当你于弃牌阶段内弃置牌后，你获得等同于失去的牌数量的“忍”。",
 							babyjilue: "极略",
