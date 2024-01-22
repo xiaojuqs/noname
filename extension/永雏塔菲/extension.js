@@ -3,26 +3,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 		name: "永雏塔菲",
 		content: function (config, pack) {
 			// 武将评级：垃圾junk，精品rare，史诗epic，传说legend
-			lib.rank.rarity.legend.addArray(['shenxushao', 'oldwu_zhugeliang', 'shiguanning', 'acetaffy', 'minitaffy', 'shixushao', 'spshenxushao', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'shenyuji', 'junko', 'huiwansunquan', 'huiwansunquanplus', 'taffyboss_lvbu1', 'shoushen_caocao', 'taffybaby_shen_simayi', 'shenduyu', 'shenchengui', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'shenshiguanning', 'taffyre_xushao', 'taffyold_sb_caopi', 'ruijier', 'boss_xushao']);
-      // 适配千幻聆音换肤
-      if (!lib.qhlypkg) {
-        lib.qhlypkg = [];
-      }
-      lib.qhlypkg.push({
-        isExt: true,
-        filterCharacter: function (name) {
-          return name.includes('taffy');
-        },
-        isLutou: lib.config.xwLutou,
-        prefix: 'extension/永雏塔菲/image/character/',
-        lutouPrefix: 'extension/永雏塔菲/image/character/lutou/',
-        skin: {
-          standard: 'extension/永雏塔菲/skin/standard/',
-          lutou: 'extension/永雏塔菲/skin/lutou/',
-        },
-        audioOrigin: 'extension/永雏塔菲/audio/',
-        audio: 'extension/永雏塔菲/skin/audio/',
-      });
+			lib.rank.rarity.legend.addArray(['shenxushao', 'oldwu_zhugeliang', 'shiguanning', 'acetaffy', 'minitaffy', 'shixushao', 'spshenxushao', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'shenyuji', 'junko', 'huiwansunquan', 'huiwansunquanplus', 'taffyboss_lvbu1', 'shoushen_caocao', 'taffybaby_shen_simayi', 'shenduyu', 'shenchengui', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'shenshiguanning', 'taffyre_xushao', 'taffyold_sb_caopi', 'ruijier', 'boss_xushao', 'taffyold_yuantanyuanshang', 'taffyold_zhanghua']);
+			// 适配千幻聆音换肤
+			if (!lib.qhlypkg) {
+				lib.qhlypkg = [];
+			}
+			lib.qhlypkg.push({
+				isExt: true,
+				filterCharacter: function (name) {
+					return name.includes('taffy');
+				},
+				isLutou: lib.config.xwLutou,
+				prefix: 'extension/永雏塔菲/image/character/',
+				lutouPrefix: 'extension/永雏塔菲/image/character/lutou/',
+				skin: {
+					standard: 'extension/永雏塔菲/skin/standard/',
+					lutou: 'extension/永雏塔菲/skin/lutou/',
+				},
+				audioOrigin: 'extension/永雏塔菲/audio/',
+				audio: 'extension/永雏塔菲/skin/audio/',
+			});
 		},
 		precontent: function (qs) {
 			if (qs.enable) {
@@ -93,7 +93,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							shenxushao: ['male', 'shen', 1, ['shenpingjian'],
 								['qun']
 							],
-							oldwu_zhugeliang: ['male', 'shu', '4/7', ['dcjincui', 'olddcqingshi', 'olddczhizhe']],
+							oldwu_zhugeliang: ['male', 'shu', '4/7', ['dcjincui', 'olddcqingshi', 'olddczhizhe'], ['character:wu_zhugeliang', 'die_audio:wu_zhugeliang']],
 							shiguanning: ['male', 'qun', '3/7', ['shidunshi']],
 							acetaffy: ['female', 'shen', 3, ['taffybaomi', 'taffyfeizhu', 'taffyzuoai', 'taffychusheng'],
 								['qun']
@@ -103,8 +103,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							spshenxushao: ['male', 'shen', '2/2/1', ['spshenpingjian'],
 								['qun']
 							],
-							oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng']],
-							oldtw_zhangmancheng: ['male', 'qun', 4, ['twfengji', 'twyiju', 'oldtwbudao']],
+							oldtw_niufudongxie: ['double', 'qun', 4, ['oldtwjuntun', 'oldtwxiongxi', 'oldtwxiafeng'], ['character:tw_niufudongxie', 'die_audio:tw_niufudongxie']],
+							oldtw_zhangmancheng: ['male', 'qun', 4, ['twfengji', 'twyiju', 'oldtwbudao'], ['character:tw_zhangmancheng', 'die_audio:zhangmancheng']],
 							shenyuji: ['male', 'shen', 3, ['shenguhuo']],
 							junko: ['female', 'shen', 3, ['junkochunhua', 'junkokuangqi', 'junkowuming']],
 							huiwansunquan: ["male", "wu", 4, ["rezhiheng", "rejiuyuan", "huiwan"]],
@@ -113,20 +113,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								['qun'], 'wei'
 							],
 							shoushen_caocao: ['male', 'shen', 3, ['guixin', 'feiying'],
-								['wei']
+								['wei', 'character:shen_caocao', 'die_audio:shen_caocao']
 							],
 							taffybaby_shen_simayi: ["male", "shen", 3, ["babyrenjie", "babyjilue", "babylianpo"],
 								[]
 							],
 							shenduyu: ['male', 'shen', 5, ['shenmiewu']],
 							shenchengui: ['male', 'shen', 3, ['shendcyingtu', 'shendccongshi']],
-							oldruiji: ['female', 'wu', 3, ['oldqiaoli', 'oldqingliang']],
-							oldtengfanglan: ['female', 'wu', 3, ['oldluochong', 'oldaichen']],
-							oldol_feiyi: ['male', 'shu', 3, ['oldyanru', 'oldhezhong']],
+							oldruiji: ['female', 'wu', 3, ['oldqiaoli', 'oldqingliang'], ['character:ruiji', 'die_audio:ruiji']],
+							oldtengfanglan: ['female', 'wu', 3, ['oldluochong', 'oldaichen'], ['character:tengfanglan', 'die_audio:tengfanglan']],
+							oldol_feiyi: ['male', 'shu', 3, ['oldyanru', 'oldhezhong'], ['character:ol_feiyi', 'die_audio:ol_feiyi']],
 							shenshiguanning: ['male', 'shen', '3/7', ['shenshidunshi']],
 							taffyre_xushao: ['male', 'qun', 3, ['taffyre_pingjian']],
 							taffyold_sb_caopi: ['male', 'wei', 3, ['taffyold_sbxingshang', 'taffyold_sbfangzhu', 'taffyold_sbsongwei'],
-								['zhu']
+								['zhu', 'character:sb_caopi', 'die_audio:sb_caopi']
+							],
+							taffyold_yuantanyuanshang: ['male', 'qun', 4, ['taffyold_neifa'],
+								['character:yuantanyuanshang', 'die_audio:yuantanyuanshang']
+							],
+							taffyold_zhanghua: ['male', 'jin', 3, ['olbihun', 'olchuanwu', 'oljianhe'],
+								['character:zhanghua', 'die_audio:zhanghua']
 							],
 							ruijier: ['female', 'shen', '', [],
 								['unseen']
@@ -137,7 +143,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						},
 						characterSort: {
 							taffy_character: {
-								taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'taffyold_sb_caopi'],
+								taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'taffyold_sb_caopi', 'taffyold_yuantanyuanshang', 'taffyold_zhanghua'],
 								taffy_ol: ['taffyboss_lvbu1'],
 								taffy_shou: ['shoushen_caocao'],
 								taffy_shi: ['shiguanning', 'shixushao'],
@@ -1182,7 +1188,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							},
 							// 永雏塔菲
 							taffybaomi: {
-                audio: 2,
+								audio: 2,
 								trigger: {
 									source: 'damageBefore'
 								},
@@ -1237,7 +1243,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								}
 							},
 							taffyfeizhu: {
-                audio: 2,
+								audio: 2,
 								trigger: {
 									player: 'damageBegin4'
 								},
@@ -1363,7 +1369,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								},
 							},
 							taffychusheng: {
-                audio: 2,
+								audio: 2,
 								enable: 'phaseUse',
 								usable: 1,
 								// limited:true,
@@ -5756,6 +5762,149 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									},
 								},
 							},
+							//旧二袁
+							taffyold_neifa: {
+								audio: 'neifa',
+								trigger: {
+									player: 'phaseUseBegin'
+								},
+								content: function () {
+									'step 0'
+									player.draw();
+									'step 1'
+									player.chooseToDiscard(true, 'he');
+									'step 2'
+									if (result.bool && result.cards && result.cards.length) {
+										var name = get.type(result.cards[0]) == 'basic' ? 'taffyold_neifa_basic' : 'taffyold_neifa_nobasic';
+										player.addTempSkill(name);
+										player.addMark(name, 1, false);
+									}
+								},
+							},
+							taffyold_neifa_basic: {
+								mark: true,
+								marktext: '伐',
+								onremove: true,
+								intro: {
+									name: '内伐 - 基本牌',
+									content: '本回合内不能使用锦囊牌和装备牌，且使用【杀】选择目标时可以多选择#个目标，且使用【杀】的目标次数上限+X。（X为手牌中不能使用的牌且最多为5）',
+								},
+								mod: {
+									cardEnabled: function (card, player) {
+										if (['trick', 'equip'].contains(get.type(card, 'trick'))) return false;
+									},
+									cardUsable: function (card, player, num) {
+										if (card.name == 'sha') {
+											return num + player.countMark('taffyold_neifa_basic') * Math.min(5, player.countCards('h', function (cardx) {
+												return !lib.filter.cardEnabled(cardx, player);
+											}));
+										}
+									},
+								},
+								trigger: {
+									player: 'useCard2'
+								},
+								filter: function (event, player) {
+									if (event.card.name != 'sha') return false;
+									return game.hasPlayer(function (current) {
+										return !event.targets.contains(current) && player.canUse(event.card, current);
+									});
+								},
+								direct: true,
+								content: function () {
+									'step 0'
+									player.chooseTarget(get.prompt('taffyold_neifa'), '为' + get.translation(trigger.card) + '增加至多' + get.cnNumber(player.countMark('taffyold_neifa_basic')) + '个目标', [1, player.countMark('taffyold_neifa_basic')], function (card, player, target) {
+										return !_status.event.sourcex.contains(target) && player.canUse(_status.event.card, target);
+									}).set('sourcex', trigger.targets).set('ai', function (target) {
+										var player = _status.event.player;
+										return get.effect(target, _status.event.card, player, player);
+									}).set('card', trigger.card);
+									'step 1'
+									if (result.bool) {
+										if (!event.isMine() && !_status.connectMode) game.delayx();
+										event.targets = result.targets;
+									} else {
+										event.finish();
+									}
+									'step 2'
+									player.logSkill('taffyold_neifa', event.target);
+									trigger.targets.addArray(event.targets);
+								},
+							},
+							taffyold_neifa_nobasic: {
+								trigger: {
+									player: 'useCard2'
+								},
+								direct: true,
+								mark: true,
+								marktext: '伐',
+								onremove: true,
+								mod: {
+									cardEnabled: function (card, player) {
+										if (get.type(card) == 'basic') return false;
+									},
+								},
+								intro: {
+									name: '内伐 - 非基本牌',
+									content: '本回合内不能使用基本牌，且使用普通锦囊牌选择目标时可以多选择#个目标，且使用装备牌时摸X张牌（X为手牌中不能使用的牌且最多为5）。'
+								},
+								filter: function (event, player) {
+									if (get.type(event.card) != 'trick') return false;
+									var info = get.info(event.card);
+									if (info.allowMultiple == false) return false;
+									if (event.targets && !info.multitarget) {
+										if (game.hasPlayer(function (current) {
+												return lib.filter.targetEnabled2(event.card, player, current) && !event.targets.contains(current);
+											})) {
+											return true;
+										}
+									}
+									return false;
+								},
+								content: function () {
+									'step 0'
+									var prompt2 = '为' + get.translation(trigger.card) + '额外指定' + get.cnNumber(player.countMark(event.name)) + '名目标'
+									player.chooseTarget([1, player.countMark(event.name)], get.prompt('taffyold_neifa'), function (card, player, target) {
+										var player = _status.event.player;
+										if (_status.event.targets.contains(target)) return false;
+										return lib.filter.targetEnabled2(_status.event.card, player, target);
+									}).set('prompt2', prompt2).set('ai', function (target) {
+										var trigger = _status.event.getTrigger();
+										var player = _status.event.player;
+										return get.effect(target, trigger.card, player, player);
+									}).set('targets', trigger.targets).set('card', trigger.card);
+									'step 1'
+									if (result.bool) {
+										if (!event.isMine()) game.delayx();
+										event.targets = result.targets;
+									} else {
+										event.finish();
+									}
+									'step 2'
+									if (event.targets) {
+										player.logSkill('taffyold_neifa', event.targets);
+										trigger.targets.addArray(event.targets);
+									}
+								},
+								group: 'taffyold_neifa_use',
+							},
+							taffyold_neifa_use: {
+								audio: 'neifa',
+								trigger: {
+									player: 'useCard'
+								},
+								forced: true,
+								filter: function (event, player) {
+									return get.type(event.card) == 'equip' && player.countMark('taffyold_neifa_nobasic') * Math.min(5, player.countCards('h', function (cardx) {
+										return !lib.filter.cardEnabled(cardx, player);
+									})) > 0;
+								},
+								content: function () {
+									player.draw(player.countMark('taffyold_neifa_nobasic') * Math.min(5, player.countCards('h', function (cardx) {
+										return !lib.filter.cardEnabled(cardx, player);
+									})));
+								},
+							},
 						},
 						card: {},
 						characterIntro: {
@@ -5899,6 +6048,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							tengfanglan: ['tengfanglan', 'dc_tengfanglan', 'oldtengfanglan'],
 							feiyi: ['ol_feiyi', 'feiyi', 'tw_feiyi', 'oldol_feiyi'],
 							caopi: ['caopi', 're_caopi', 'ps_caopi', 'sb_caopi', 'taffyold_sb_caopi'],
+							yuantanyuanshang: ['yuantanyuanshang', 'yuantanyuanxiyuanshang', 'taffyold_yuantanyuanshang'],
+							zhanghua: ['zhanghua', 'taffyold_zhanghua'],
 						},
 						translate: {
 							shenxushao: '评世雕龙',
@@ -6080,6 +6231,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyold_sbfangzhu_info: '出牌阶段限两次，你可以：1.移去1个“颂”标记，令一名其他角色只能使用你选择的一种类型的牌直到其回合结束。2.移去2个“颂”标记，令一名其他角色的非Charlotte技能失效直到其回合结束；3.移去2个“颂”标记，令一名其他角色不能响应除其以外的角色使用的牌直到其回合结束；4.移去3个“颂”标记，令一名其他角色将武将牌翻面；',
 							taffyold_sbsongwei: '颂威',
 							taffyold_sbsongwei_info: '主公技。①出牌阶段开始时，你获得Y个“颂”标记（Y为场上其他魏势力角色数）。②每局游戏限一次，出牌阶段，你可以令一名其他魏势力角色失去所有武将牌的技能。',
+							taffyold_yuantanyuanshang: '旧袁谭袁尚',
+							taffyold_yuantanyuanshang_prefix: '旧',
+							taffyold_neifa: '内伐',
+							taffyold_neifa_info: '出牌阶段开始时，你可以摸一张牌，然后弃置一张牌。若弃置的牌是基本牌，本回合你不能使用锦囊和装备牌，且【杀】的使用次数+X且目标+1；若弃置的不是基本牌，本回合你不能使用基本牌，且普通锦囊牌的目标+1，使用装备牌时摸X张牌（X为手牌中不能使用的牌且最多为5）。',
+							taffyold_neifa_use: '内伐',
+							taffyold_zhanghua: '旧张华',
+							taffyold_zhanghua_prefix: '旧',
 							ruijier: '瑞吉儿',
 							boss_xushao: '评世雕龙',
 
@@ -6094,11 +6252,68 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffy_wu: "东吴·超玩会",
 						},
 					};
+					const whiteList = [...oobj.characterSort.taffy_character.taffy_old, 'shoushen_caocao'];
+          const specialDetails = {
+            shiguanning: {
+              character: 'character:ddd_guanning',
+              die: 'die:ext:永雏塔菲/audio/die/shiguanning.mp3',
+            },
+            spshenxushao: {
+              character: 'ext:永雏塔菲/image/character/shenxushao.jpg',
+              die: 'die:ext:永雏塔菲/audio/die/shenxushao.mp3',
+            },
+            shenyuji: {
+              character: 'ext:永雏塔菲/image/character/shenyuji.jpg',
+              die: 'die_audio:yuji',
+            },
+            huiwansunquan: {
+              character: 'ext:永雏塔菲/image/character/huiwansunquan.jpg',
+              die: 'die_audio:re_sunquan',
+            },
+            huiwansunquanplus: {
+              character: 'ext:永雏塔菲/image/character/huiwansunquan.jpg',
+              die: 'die_audio:re_sunquan',
+            },
+            taffyboss_lvbu1: {
+              character: 'ext:永雏塔菲/image/character/taffyboss_lvbu1.jpg',
+              die: 'die_audio:boss_lvbu1',
+            },
+            taffybaby_shen_simayi: {
+              character: 'ext:永雏塔菲/image/character/taffybaby_shen_simayi.jpg',
+              die: 'die_audio:shen_simayi',
+            },
+            shenduyu: {
+              character: 'ext:永雏塔菲/image/character/shenduyu.jpg',
+              die: 'die_audio:sp_duyu',
+            },
+            shenchengui: {
+              character: 'ext:永雏塔菲/image/character/shenchengui.jpg',
+              die: 'die_audio:chengui',
+            },
+            taffyre_xushao: {
+              character: 'ext:永雏塔菲/image/character/taffyre_xushao.jpg',
+              die: 'die:ext:永雏塔菲/audio/die/shixushao.mp3',
+            },
+            boss_xushao: {
+              character: 'ext:永雏塔菲/image/character/shenxushao.jpg',
+              die: 'die:ext:永雏塔菲/audio/die/shenxushao.mp3',
+            },
+          };
+          const specialList = Object.keys(specialDetails);
 					for (let i in oobj.character) {
+						if (whiteList.includes(i)) continue;
+            if (specialList.includes(i)) {
+              if (oobj.character[i][4]) {
+                oobj.character[i][4].push(specialDetails[i].character, specialDetails[i].die);
+              } else {
+                oobj.character[i].splice(4, 0, [specialDetails[i].character, specialDetails[i].die]);
+              }
+              continue;
+            }
 						if (oobj.character[i][4]) {
-							oobj.character[i][4].push('ext:' + '永雏塔菲' + '/image/character/' + i + '.jpg', 'die:ext:' + '永雏塔菲' + '/audio/die/' + i + '.mp3');
+							oobj.character[i][4].push('ext:永雏塔菲/image/character/' + i + '.jpg', 'die:ext:永雏塔菲/audio/die/' + i + '.mp3');
 						} else {
-							oobj.character[i].splice(4, 0, ['ext:' + '永雏塔菲' + '/image/character/' + i + '.jpg', 'die:ext:' + '永雏塔菲' + '/audio/die/' + i + '.mp3']);
+							oobj.character[i].splice(4, 0, ['ext:永雏塔菲/image/character/' + i + '.jpg', 'die:ext:永雏塔菲/audio/die/' + i + '.mp3']);
 						}
 					}
 					for (let i in oobj.skill) {
@@ -6120,7 +6335,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-01-21",
+				name: "更新日期: 2024-01-22",
 			},
 			github: {
 				clear: true,

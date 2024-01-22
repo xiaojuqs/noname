@@ -4562,6 +4562,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		ol_xunyu: decadeUI.dynamicSkin.xunyu,
 		re_xunyu: decadeUI.dynamicSkin.xunyu,
 
+    // 袁谭袁尚
+    taffyold_yuantanyuanshang: decadeUI.dynamicSkin.yuantanyuanshang,
+
 		//于吉
 		xin_yuji: decadeUI.dynamicSkin.yuji,
 		re_yuji: decadeUI.dynamicSkin.yuji,
