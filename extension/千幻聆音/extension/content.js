@@ -6360,6 +6360,14 @@ export let CONTENT = function (config, pack) {
           return;
         }
       }
+      // taffy: 修复千幻聆音不检测die_audio tag的问题
+      else if (lib.character[name] && lib.character[name][4].some(tag => tag.startsWith('die_audio'))) {
+        var tag = lib.character[name][4].find(tag => tag.startsWith('die_audio'));
+        var list = tag.split(':').slice(1);
+        _status.qhly_audioTry = game.playAudio('die', list.length ? list[0] : name);
+        return;
+      }
+      /* taffy分界线 */
       var skinPackage = game.qhly_foundPackage(name);
       if (skinPackage.isExt) {
         var path = skinPackage.audioOrigin;
