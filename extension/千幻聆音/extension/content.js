@@ -2568,6 +2568,23 @@ export let CONTENT = function (config, pack) {
       if (!name) return;
       var realName = name;
       if (lib.qhly_skinShare[name] && lib.qhly_skinShare[name].name) realName = lib.qhly_skinShare[name].name;
+      // taffy: 修复nameinfo[4]中指定的原画路径信息无法被千幻聆音检测到的问题
+      let nameinfo = get.character(realName);
+      if (nameinfo && nameinfo[4]) for (const value of nameinfo[4]) {
+				if (value.startsWith('ext:')) {
+					realName = value.slice(4).replace(/(.*\/)*([^.]+).*/ig,"$2");
+					break;
+				}
+				else if (value.startsWith('db:')) {
+					realName = value.slice(3).replace(/(.*\/)*([^.]+).*/ig,"$2");
+					break;
+				}
+				else if (value.startsWith('character:')) {
+					realName = value.slice(10);
+					break;
+				}
+			}
+      /* taffy分界线 */
       return realName;
     }
     game.qhly_getCoordinate = function (domNode, subtr) {
@@ -5219,7 +5236,15 @@ export let CONTENT = function (config, pack) {
                 if (typeof prefix == 'function') {
                   prefix = prefix(cname);
                 }
-                if (lib.config.qhly_noSkin == 'origin') that.qhly_origin_setBackgroundImage(prefix + realName + '.jpg');//原画
+                // taffy: 注释content.js原版代码喵
+                // if (lib.config.qhly_noSkin == 'origin') that.qhly_origin_setBackgroundImage(prefix + realName + '.jpg');//原画
+                /* taffy分界线 */
+                // taffy: 修复千幻与皮切bug喵
+                if (lib.config.qhly_noSkin == 'origin') {
+                  if (prefix.includes('.jpg')) that.qhly_origin_setBackgroundImage(prefix);//原画
+                  else that.qhly_origin_setBackgroundImage(prefix + realName + '.jpg');//原画
+                }
+                /* taffy分界线 */
                 else that.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
               }
             })
@@ -7990,7 +8015,15 @@ export let CONTENT = function (config, pack) {
                   if (typeof prefix == 'function') {
                     prefix = prefix(namex);
                   }
-                  if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namex + '.jpg');//原画
+                  // taffy: 注释content.js原版代码喵
+                  // if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namex + '.jpg');//原画
+                  /* taffy分界线 */
+                  // taffy: 修复千幻与皮切bug喵
+                  if (lib.config.qhly_noSkin == 'origin') {
+                    if (prefix.includes('.jpg')) skinView2.qhly_origin_setBackgroundImage(prefix);//原画
+                    else skinView2.qhly_origin_setBackgroundImage(prefix + namex + '.jpg');//原画
+                  }
+                /* taffy分界线 */
                   else skinView2.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
                 }
               })
@@ -8234,7 +8267,15 @@ export let CONTENT = function (config, pack) {
                     if (typeof prefix == 'function') {
                       prefix = prefix(namey);
                     }
-                    if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namey + '.jpg');//原画
+                    // taffy: 注释content.js原版代码喵
+                    // if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namey + '.jpg');//原画
+                    /* taffy分界线 */
+                    // taffy: 修复千幻与皮切bug喵
+                    if (lib.config.qhly_noSkin == 'origin') {
+                      if (prefix.includes('.jpg')) skinView2.qhly_origin_setBackgroundImage(prefix);//原画
+                      else skinView2.qhly_origin_setBackgroundImage(prefix + namey + '.jpg');//原画
+                    }
+                    /* taffy分界线 */
                     else skinView2.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
                   }
                 })
@@ -8912,7 +8953,15 @@ export let CONTENT = function (config, pack) {
                   if (typeof prefix == 'function') {
                     prefix = prefix(namex);
                   }
-                  if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namex + '.jpg');//原画
+                  // taffy: 注释content.js原版代码喵
+                  // if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namex + '.jpg');//原画
+                  /* taffy分界线 */
+                  // taffy: 修复千幻与皮切bug喵
+                  if (lib.config.qhly_noSkin == 'origin') {
+                    if (prefix.includes('.jpg')) skinView2.qhly_origin_setBackgroundImage(prefix);//原画
+                    else skinView2.qhly_origin_setBackgroundImage(prefix + namex + '.jpg');//原画
+                  }
+                /* taffy分界线 */
                   else skinView2.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
                 }
               })
@@ -9132,7 +9181,15 @@ export let CONTENT = function (config, pack) {
                     if (typeof prefix == 'function') {
                       prefix = prefix(namey);
                     }
-                    if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namey + '.jpg');//原画
+                    // taffy: 注释content.js原版代码喵
+                    // if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + namey + '.jpg');//原画
+                    /* taffy分界线 */
+                    // taffy: 修复千幻与皮切bug喵
+                    if (lib.config.qhly_noSkin == 'origin') {
+                      if (prefix.includes('.jpg')) skinView2.qhly_origin_setBackgroundImage(prefix);//原画
+                      else skinView2.qhly_origin_setBackgroundImage(prefix + namey + '.jpg');//原画
+                    }
+                    /* taffy分界线 */
                     else skinView2.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
                   }
                 })
@@ -10756,7 +10813,15 @@ export let CONTENT = function (config, pack) {
                       if (typeof prefix == 'function') {
                         prefix = prefix(name);
                       }
-                      if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + name + '.jpg');//原画
+                      // taffy: 注释content.js原版代码喵
+                      // if (lib.config.qhly_noSkin == 'origin') skinView2.qhly_origin_setBackgroundImage(prefix + name + '.jpg');//原画
+                      /* taffy分界线 */
+                      // taffy: 修复千幻与皮切bug喵
+                      if (lib.config.qhly_noSkin == 'origin') {
+                        if (prefix.includes('.jpg')) skinView2.qhly_origin_setBackgroundImage(prefix);//原画
+                        else skinView2.qhly_origin_setBackgroundImage(prefix + name + '.jpg');//原画
+                      }
+                      /* taffy分界线 */
                       else skinView2.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
                     }
                   })

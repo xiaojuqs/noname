@@ -2,16 +2,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 	return {
 		name: "永雏塔菲",
 		content: function (config, pack) {
+      const characterList = Object.keys(lib.characterPack.taffy_character)
 			// 武将评级：垃圾junk，精品rare，史诗epic，传说legend
-			lib.rank.rarity.legend.addArray(['shenxushao', 'oldwu_zhugeliang', 'shiguanning', 'acetaffy', 'minitaffy', 'shixushao', 'spshenxushao', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'shenyuji', 'junko', 'huiwansunquan', 'huiwansunquanplus', 'taffyboss_lvbu1', 'shoushen_caocao', 'taffybaby_shen_simayi', 'shenduyu', 'shenchengui', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'shenshiguanning', 'taffyre_xushao', 'taffyold_sb_caopi', 'ruijier', 'boss_xushao', 'taffyold_yuantanyuanshang', 'taffyold_zhanghua']);
+			lib.rank.rarity.legend.addArray(characterList);
 			// 适配千幻聆音换肤
 			if (!lib.qhlypkg) {
 				lib.qhlypkg = [];
 			}
 			lib.qhlypkg.push({
-				isExt: true,
+				isExt: false,
 				filterCharacter: function (name) {
-					return name.includes('taffy');
+          if (characterList.includes(name)) return true;
 				},
 				isLutou: lib.config.xwLutou,
 				prefix: 'extension/永雏塔菲/image/character/',
@@ -21,6 +22,20 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					lutou: 'extension/永雏塔菲/skin/lutou/',
 				},
 				audioOrigin: 'extension/永雏塔菲/audio/',
+				audio: 'extension/永雏塔菲/skin/audio/',
+			}, {
+				isExt: false,
+				filterCharacter: function (name) {
+          if (!characterList.includes(name)) return true;
+				},
+				isLutou: lib.config.xwLutou,
+				prefix: 'image/character/',
+				lutouPrefix: 'extension/永雏塔菲/image/character/lutou/',
+				skin: {
+					standard: 'extension/永雏塔菲/skin/standard/',
+					lutou: 'extension/永雏塔菲/skin/lutou/',
+				},
+				audioOrigin: 'audio/die/',
 				audio: 'extension/永雏塔菲/skin/audio/',
 			});
 		},
@@ -5983,7 +5998,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						},
 						characterTitle: {
 							shenxushao: '#gViridian',
-							shiguanning: '#gViridian',
 							acetaffy: '#gViridian',
 							minitaffy: '#gViridian',
 							shixushao: '#gViridian',
@@ -6335,7 +6349,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-01-22",
+				name: "更新日期: 2024-01-23",
 			},
 			github: {
 				clear: true,
