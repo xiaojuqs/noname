@@ -1028,9 +1028,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		guojia: { //郭嘉
 			一世风华: {
 				name: '郭嘉/一世风华/daiji2',
-				x: [0, 0.42],
-				y: [0, 0.47],
-				scale: 0.8,
+				x: [0, 0.45],
+				y: [0, 0.55],
+				scale: 0.7,
 				angle: 0,
 				//speed: 1,
 				shizhounian: true,
@@ -4562,8 +4562,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		ol_xunyu: decadeUI.dynamicSkin.xunyu,
 		re_xunyu: decadeUI.dynamicSkin.xunyu,
 
-    // 袁谭袁尚
-    taffyold_yuantanyuanshang: decadeUI.dynamicSkin.yuantanyuanshang,
+		// 袁谭袁尚
+		taffyold_yuantanyuanshang: decadeUI.dynamicSkin.yuantanyuanshang,
 
 		//于吉
 		xin_yuji: decadeUI.dynamicSkin.yuji,
