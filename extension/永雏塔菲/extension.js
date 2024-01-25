@@ -5601,7 +5601,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 										filter: function (event, player) {
 											return game.hasPlayer(target => {
 												if (player.countMark('taffyold_sbxingshang') > 1) return true;
-												return player.countMark('sbxingshang') && (target.isLinked() || target.isTurnedOver());
+												return player.countMark('taffyold_sbxingshang') && (target.isLinked() || target.isTurnedOver());
 											});
 										},
 										usable: 2,
@@ -5969,6 +5969,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							},
 							taffyold_sbsongwei: {
 								audio: 'sbsongwei',
+                init: (player) => {
+                  player.addSkill('taffyold_sbsongwei_delete');
+                },
 								trigger: {
 									player: 'phaseUseBegin'
 								},
@@ -5981,13 +5984,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								async content(event, trigger, player) {
 									player.addMark('taffyold_sbxingshang', game.countPlayer(target => target.group == 'wei' && target != player));
 								},
-								group: 'taffyold_sbsongwei_delete',
 								subSkill: {
 									delete: {
 										audio: 'taffyold_sbsongwei',
 										enable: 'phaseUse',
 										filter: function (event, player) {
-											return !player.storage.taffyold_sbsongwei_delete && game.hasPlayer(target => lib.skill.taffyold_sbsongwei.subSkill.delete.filterTarget(null, player, target));
+											return game.hasPlayer(target => lib.skill.taffyold_sbsongwei.subSkill.delete.filterTarget(null, player, target));
 										},
 										filterTarget: function (card, player, target) {
 											return target != player && target.group == 'wei' && target.getStockSkills(false, true).length;
@@ -5995,7 +5997,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 										skillAnimation: true,
 										animationColor: 'thunder',
 										async content(event, trigger, player) {
-											player.storage.taffyold_sbsongwei_delete = true;
 											player.awakenSkill('taffyold_sbsongwei_delete');
 											event.target.removeSkillLog(event.target.getStockSkills(false, true));
 										},
