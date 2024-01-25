@@ -4412,6 +4412,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		jsp_guanyu: decadeUI.dynamicSkin.guanyu,
 		jsrg_guanyu: decadeUI.dynamicSkin.guanyu,
 		sb_guanyu: decadeUI.dynamicSkin.guanyu,
+		taffyold_sb_guanyu: decadeUI.dynamicSkin.guanyu,
 
 		//关索
 		dc_guansuo: decadeUI.dynamicSkin.guansuo,
@@ -4611,6 +4612,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		jsrg_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+		taffyold_sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+		taffyold_sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 
 		//左慈
 		re_zuoci: decadeUI.dynamicSkin.zuoci,
