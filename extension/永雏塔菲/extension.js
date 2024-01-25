@@ -6041,6 +6041,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									cardEnabled: function (card, player) {
 										if (['trick', 'equip'].contains(get.type(card, 'trick'))) return false;
 									},
+                  cardSavable:function(card,player){
+                    if(['trick','equip'].includes(get.type(card,'trick'))) return false;
+                  },
 									cardUsable: function (card, player, num) {
 										if (card.name == 'sha') {
 											return num + player.countMark('taffyold_neifa_basic') * Math.min(5, player.countCards('h', function (cardx) {
@@ -6091,6 +6094,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									cardEnabled: function (card, player) {
 										if (get.type(card) == 'basic') return false;
 									},
+                  cardSavable:function(card,player){
+                    if(get.type(card)=='basic') return false;
+                  },
 								},
 								intro: {
 									name: '内伐 - 非基本牌',
@@ -6135,6 +6141,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									}
 								},
 								group: 'taffyold_neifa_use',
+                ai:{
+                  reverseOrder:true,
+                  effect:{
+                    target:function(card,player,target){
+                      if(player==target&&get.type(card)=='equip') return [1,3];
+                    },
+                  },
+                },
 							},
 							taffyold_neifa_use: {
 								audio: 'neifa',
