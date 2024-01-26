@@ -1931,43 +1931,43 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									switch (triggerName) {
 										// 评荐：回合开始前
 										case 'phaseBefore':
-											result = '<div class="skill" style="width:115px!important;">【回合开始前】</div><div style="width:calc(100% - 115px);">翻面状态下可触发的时机 如:卑弥呼〖纵傀〗</div>';
+											result = '<div class="skill" style="width:115px!important;">【回合开始前】</div><div style="width:calc(100% - 115px);">翻面状态下可触发的时机 如:卑弥呼〖纵傀〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseBegin':
-											result = '<div class="skill" style="width:115px!important;">【回合开始时】</div><div style="width:calc(100% - 115px);">翻面状态下无法触发的时机 如:周宣〖寤寐〗</div>';
+											result = '<div class="skill" style="width:115px!important;">【回合开始时】</div><div style="width:calc(100% - 115px);">翻面状态下无法触发的时机 如:周宣〖寤寐〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseChange':
-											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗</div>';
+											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseZhunbei':
-											result = '<div class="skill" style="width:100px!important;">【准备阶段】</div><div style="width:calc(100% - 100px);">准备阶段开始前至准备阶段结束后的时机 如:牛辅〖熊扰〗</div>';
+											result = '<div class="skill" style="width:100px!important;">【准备阶段】</div><div style="width:calc(100% - 100px);">准备阶段开始前至准备阶段结束后的时机 如:手杀杨彪〖昭汉〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseJudge':
-											result = '<div class="skill" style="width:100px!important;">【判定阶段】</div><div style="width:calc(100% - 100px);">判定阶段开始前至判定阶段结束后的时机 如:合诸葛亮〖问天〗</div>';
+											result = '<div class="skill" style="width:100px!important;">【判定阶段】</div><div style="width:calc(100% - 100px);">判定阶段开始前至判定阶段结束后的时机 如:合诸葛亮〖问天〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseDraw':
-											result = '<div class="skill" style="width:100px!important;">【摸牌阶段】</div><div style="width:calc(100% - 100px);">摸牌阶段开始前至摸牌阶段结束后的时机 如:高达一号〖绝境〗</div>';
+											result = '<div class="skill" style="width:100px!important;">【摸牌阶段】</div><div style="width:calc(100% - 100px);">摸牌阶段开始前至摸牌阶段结束后的时机 如:高达一号〖绝境〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseUseBegin':
-											result = '<div class="skill" style="width:130px!important;">【出牌阶段开始】</div><div style="width:calc(100% - 130px);">出牌阶段开始前至出牌阶段开始时的时机 如:谋关羽〖武圣〗</div>';
+											result = '<div class="skill" style="width:130px!important;">【出牌阶段开始】</div><div style="width:calc(100% - 130px);">出牌阶段开始前至出牌阶段开始时的时机 如:谋关羽〖武圣〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 											// 评荐：结束阶段开始前
 										case 'phaseJieshu':
-											result = '<div class="skill" style="width:100px!important;">【结束阶段】</div><div style="width:calc(100% - 100px);">结束阶段开始前至结束阶段结束后的时机<br/>如:曹华〖彩翼〗</div>';
+											result = '<div class="skill" style="width:100px!important;">【结束阶段】</div><div style="width:calc(100% - 100px);">结束阶段开始前至结束阶段结束后的时机<br/>如:曹华〖彩翼〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseEnd':
-											result = '<div class="skill" style="width:100px!important;">【回合结束】</div><div style="width:calc(100% - 100px);">回合结束时至回合结束后的时机<br/>如:吕玲绮〖妆戎〗</div>';
+											result = '<div class="skill" style="width:100px!important;">【回合结束】</div><div style="width:calc(100% - 100px);">回合结束时至回合结束后的时机<br/>如:神司马懿〖连破〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 											// 评荐：当你即将受到伤害前
 										case 'damageBegin':
-											result = '<div class="skill" style="width:110px!important;">【受到伤害前】</div><div style="width:calc(100% - 110px);">当你即将受到伤害前至当你受到伤害时的时机<br/>如:司马徽〖隐士〗</div>';
+											result = '<div class="skill" style="width:110px!important;">【受到伤害前】</div><div style="width:calc(100% - 110px);">当你即将受到伤害前至当你受到伤害时的时机<br/>如:司马徽〖隐士〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'damageEnd':
-											result = '<div class="skill" style="width:110px!important;">【受到伤害后】</div><div style="width:calc(100% - 110px);">当你受到伤害的点数确定时至当你受到伤害后的时机<br/>如:曹丕〖放逐〗</div>';
+											result = '<div class="skill" style="width:110px!important;">【受到伤害后】</div><div style="width:calc(100% - 110px);">当你受到伤害的点数确定时至当你受到伤害后的时机<br/>如:曹丕〖放逐〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 											// 评荐：共用选项
 										default:
-											result = '<div class="skill">【以上所有技能发动时机】</div>';
+											result = '<div class="skill">【以上所有时机范围】</div>';
 											break;
 									}
 									return result;
@@ -2092,7 +2092,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												triggerOptions = ['damageBegin', 'damageEnd'];
 											}
 											var next = player.chooseButton(true, [
-												'评荐：选择任意个要检索的技能发动时机',
+												'评荐：选择任意个要检索的时机范围',
 												[triggerOptions.map(i => [
 													i,
 													'<div class="popup text" style="width:calc(100% - 25px);display:inline-block">' + lib.skill.spshenpingjian.getTriggerTranlation(i) + '</div>',
@@ -2160,7 +2160,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												game.expandSkills(list2);
 												for (let k = 0; k < list2.length; k++) {
 													var info = lib.skill[list2[k]];
-													if (!info || !info.trigger) continue;
+                          if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 													if (info.trigger.player) {
 														if ((name3.length === 0 ? name2.includes(info.trigger.player) : name3.includes(info.trigger.player)) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name3.length === 0 ? name2 : name3)) {
 															if (info.filter) {
@@ -2231,7 +2231,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info || !info.trigger) continue;
+                            if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 														if (info.trigger.player) {
 															if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name2)) {
 																if (info.filter) {
@@ -2381,20 +2381,20 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									let result;
 									switch (triggerName) {
 										case 'phaseUse':
-											result = '<div class="skill" style="width:100px!important;">【出牌阶段】</div><div style="width:calc(100% - 100px);">出牌阶段至出牌阶段结束后的时机 如:经典刘备〖仁德〗</div>';
+											result = '<div class="skill" style="width:100px!important;">【出牌阶段】</div><div style="width:calc(100% - 100px);">出牌阶段至出牌阶段结束后的时机 如:经典刘备〖仁德〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseChange':
-											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗</div>';
+											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'phaseDiscard':
-											result = '<div class="skill" style="width:100px!important;">【弃牌阶段】</div><div style="width:calc(100% - 100px);">弃牌阶段开始前至弃牌阶段结束后的时机 如:滕芳兰〖哀尘〗</div>';
+											result = '<div class="skill" style="width:100px!important;">【弃牌阶段】</div><div style="width:calc(100% - 100px);">弃牌阶段开始前至弃牌阶段结束后的时机 如:滕芳兰〖哀尘〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
 											break;
 										case 'random':
-											result = '<div class="skill" style="width:100px!important;">【任意时机】</div><div style="width:calc(100% - 100px);">随机检索任意技能</div>';
+											result = '<div class="skill" style="width:100px!important;">【任意时机】</div><div style="width:calc(100% - 100px);">随机检索任意技能（可检索主公技，限定技，觉醒技，隐匿技、使命技等特殊技能）</div>';
 											break;
 											// 评荐：共用选项
 										default:
-											result = '<div class="skill">【以上所有技能发动时机】</div>';
+											result = '<div class="skill">【以上所有时机范围】</div>';
 											break;
 									}
 									return result;
@@ -2470,7 +2470,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											// 玩家可主动选择具体时机
 											let triggerOptions = ['phaseUse', 'phaseChange', 'phaseDiscard', 'random'];
 											var next = player.chooseButton(true, [
-												'评荐：选择任意个要检索的技能发动时机',
+												'评荐：选择任意个要检索的时机范围',
 												[triggerOptions.map(i => [
 													i,
 													'<div class="popup text" style="width:calc(100% - 25px);display:inline-block">' + lib.skill.spshenpingjian_use.getTriggerTranlation(i) + '</div>',
@@ -2547,7 +2547,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 														skills.add(skills2[j]);
 														break;
 													}
-													if (!info || (!info.trigger && !info.enable)) continue;
+                          if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 													if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
 														if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
 															if (info.filter) {
@@ -2652,7 +2652,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info || (!info.trigger && !info.enable)) continue;
+                            if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 														if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
 															if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
 																if (info.filter) {
@@ -5720,7 +5720,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (var k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+														if (!info) continue;
 														list.add(name);
 														if (!map[name]) map[name] = [];
 														map[name].push(skills2[j]);
@@ -7494,11 +7494,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							spshenxushao: '神许劭',
 							spshenxushao_prefix: '神',
 							spshenpingjian: '评荐',
-							spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张“评荐关系”中对应的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
+							spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并在“评荐关系”中声明任意个时机范围。然后令系统随机检索出2<span class=greentext>X</span>+1张拥有该时机范围内的发动时机的武将牌并获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 							spshenpingjian_use: '评荐',
 							spshenpingjian_append: '<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
 							spshenpingjian_faq: '关于评荐关系',
-							spshenpingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能的武将牌。<br>出牌阶段限一次：任意/拥有发动时机为出牌阶段至弃牌阶段结束后的技能的武将牌。',
+							spshenpingjian_faq_info: '根据〖评荐〗①的发动时机，你可以声明以下任意个时机范围：<br>回合开始前：【回合开始前】【回合开始时】【阶段改变前】【准备阶段】【判定阶段】【摸牌阶段】【出牌阶段开始】。<br>结束阶段开始前：【结束阶段】【回合结束】。<br>当你即将受到伤害前：【受到伤害前】【受到伤害后】。<br>出牌阶段限一次：【出牌阶段】【阶段改变前】【弃牌阶段】【任意时机】。',
 							oldtw_niufudongxie: '旧牛辅董翓',
 							oldtw_niufudongxie_prefix: '旧',
 							oldbaonvezhi_faq: '关于暴虐值',
@@ -7625,11 +7625,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyre_xushao: '界许劭',
 							taffyre_xushao_prefix: '界',
 							taffyre_pingjian: '评荐',
-							taffyre_pingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张“评荐关系”中对应的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外）。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
+							taffyre_pingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张“评荐关系”中对应的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 							taffyre_pingjian_use: '评荐',
 							taffyre_pingjian_append: '<span style="font-family: yuanli">一人说尽千秋业，半纸雅评万世人。</span>',
 							taffyre_pingjian_faq: '关于评荐关系',
-							taffyre_pingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能的武将牌。<br>出牌阶段限一次：任意武将牌。',
+							taffyre_pingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：<br>回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）的武将牌。<br>出牌阶段限一次：任意武将牌。（可检索主公技，限定技，觉醒技，隐匿技、使命技等特殊技能）',
 							taffyold_sb_caopi: '旧谋曹丕',
 							taffyold_sb_caopi_prefix: '旧谋',
 							taffyold_sbxingshang: '行殇',
