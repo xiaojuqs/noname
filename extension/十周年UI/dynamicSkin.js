@@ -872,31 +872,16 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		guanyu: { //关羽
-			明良千古: {
-				name: '关羽/明良千古/XingXiang',
-				x: [0, 0],
-				y: [0, -0.1],
-				scale: 0.6,
-				angle: 0,
-				//speed: 1,
-				//action: 'DaiJi',
-				beijing: {
-					name: '关羽/明良千古/BeiJing',
-					scale: 0.3,
-					x: [0, 0.4],
-					y: [0, 0.5]
-				},
-			},
 			啸风从龙: {
-				name: '关羽/啸风从龙/XingXiang',
-				x: [0, 0.2],
-				y: [0, 0.35],
-				scale: 0.4,
+				name: '关羽/以身证道/XingXiang',
+				x: [0, 0.3],
+				y: [0, 0],
+				scale: 0.65,
 				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
 				beijing: {
-					name: '关羽/啸风从龙/BeiJing',
+					name: '关羽/以身证道/BeiJing',
 					scale: 0.3,
 					x: [0, 0.4],
 					y: [0, 0.5]

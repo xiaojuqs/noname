@@ -193,6 +193,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						skill: {
 							// 评世雕龙
 							shenpingjian: {
+								derivation: 'shenpingjian_faq',
 								initList: function () {
 									var list = [];
 									if (_status.connectMode) var list = get.charactersOL();
@@ -1900,6 +1901,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							},
 							// 神许劭
 							spshenpingjian: {
+								derivation: 'spshenpingjian_faq',
 								initList: function () {
 									var list = [];
 									if (_status.connectMode) var list = get.charactersOL();
@@ -2090,7 +2092,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												triggerOptions = ['damageBegin', 'damageEnd'];
 											}
 											var next = player.chooseButton(true, [
-												'评荐：选择要检索的技能发动时机',
+												'评荐：选择任意个要检索的技能发动时机',
 												[triggerOptions.map(i => [
 													i,
 													'<div class="popup text" style="width:calc(100% - 25px);display:inline-block">' + lib.skill.spshenpingjian.getTriggerTranlation(i) + '</div>',
@@ -2375,6 +2377,50 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								enable: 'phaseUse',
 								usable: 1,
 								prompt: () => lib.translate.spshenpingjian_info,
+								getTriggerTranlation: function (triggerName) {
+									let result;
+									switch (triggerName) {
+										case 'phaseUse':
+											result = '<div class="skill" style="width:100px!important;">【出牌阶段】</div><div style="width:calc(100% - 100px);">出牌阶段至出牌阶段结束后的时机 如:经典刘备〖仁德〗</div>';
+											break;
+										case 'phaseChange':
+											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗</div>';
+											break;
+										case 'phaseDiscard':
+											result = '<div class="skill" style="width:100px!important;">【弃牌阶段】</div><div style="width:calc(100% - 100px);">弃牌阶段开始前至弃牌阶段结束后的时机 如:滕芳兰〖哀尘〗</div>';
+											break;
+										case 'random':
+											result = '<div class="skill" style="width:100px!important;">【任意时机】</div><div style="width:calc(100% - 100px);">随机检索任意技能</div>';
+											break;
+											// 评荐：共用选项
+										default:
+											result = '<div class="skill">【以上所有技能发动时机】</div>';
+											break;
+									}
+									return result;
+								},
+								getRelatedTriggers: function (triggerName, parentTriggerName) {
+									let result;
+									switch (triggerName) {
+										case 'phaseUse':
+											result = ['phaseUseEnd', 'phaseUseAfter'];
+											break;
+										case 'phaseChange':
+											result = ['phaseChange'];
+											break;
+										case 'phaseDiscard':
+											result = ['phaseDiscardBefore', 'phaseDiscardBegin', 'phaseDiscard', 'phaseDiscardEnd', 'phaseDiscardAfter'];
+											break;
+										case 'random':
+											result = ['random'];
+											break;
+											// 评荐：默认选项
+										default:
+											result = ['phaseUseEnd', 'phaseUseAfter', 'phaseChange', 'phaseDiscardBefore', 'phaseDiscardBegin', 'phaseDiscard', 'phaseDiscardEnd', 'phaseDiscardAfter'];
+											break;
+									}
+									return result;
+								},
 								content: function () {
 									'step 0'
 									if (!player.storage.spshenpingjianX && player.storage.spshenpingjianX !== 0) player.storage.spshenpingjianX = 0;
@@ -2420,31 +2466,182 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												player.removeSkill(result.links[i]);
 												game.log(player, '失去了技能', '#g【' + get.translation(result.links[i]) + '】');
 											}
-											var list = [];
-											var skills = [];
-											var map = [];
-											if (!_status.characterlist) {
-												lib.skill.spshenpingjian.initList();
-											}
-											var allList = _status.characterlist.slice(0);
-											game.countPlayer(function (current) {
-												if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
-												if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
-												if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
+											event.taffyLostSkillNum = result.links.length;
+											// 玩家可主动选择具体时机
+											let triggerOptions = ['phaseUse', 'phaseChange', 'phaseDiscard', 'random'];
+											var next = player.chooseButton(true, [
+												'评荐：选择任意个要检索的技能发动时机',
+												[triggerOptions.map(i => [
+													i,
+													'<div class="popup text" style="width:calc(100% - 25px);display:inline-block">' + lib.skill.spshenpingjian_use.getTriggerTranlation(i) + '</div>',
+												]), 'textbutton'],
+											]);
+											next.set('selectButton', [0, triggerOptions.length]);
+											next.set('ai', function (button) {
+												return Math.random();
 											});
-											allList.randomSort();
-											for (var i = 0; i < allList.length; i++) {
+										}
+									}
+									'step 2'
+									if (result.bool) {
+										var name2;
+										if (result.links.length === 0) {
+											name2 = lib.skill.spshenpingjian_use.getRelatedTriggers('all');
+										} else {
+											let triggerList = [];
+											for (let i = 0; i < result.links.length; i++) {
+												triggerList.push(...lib.skill.spshenpingjian_use.getRelatedTriggers(result.links[i]));
+											}
+											name2 = triggerList;
+										}
+										if (!_status.characterlist) {
+											lib.skill.spshenpingjian.initList();
+										}
+										var allList = _status.characterlist.slice(0);
+										game.countPlayer(function (current) {
+											if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
+											if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
+											if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
+										});
+										var list = [];
+										var skills = [];
+										var map = [];
+										var evt = event.getParent(2);
+										let name3 = [];
+										allList.randomSort();
+										for (let i = 0; i < allList.length; i++) {
+											var name = allList[i];
+											if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1) continue;
+											var skills2 = lib.character[name][3];
+											for (let j = 0; j < skills2.length; j++) {
+												var playerSkills = player.getSkills(null, false, false).filter(skill => {
+													var info = get.info(skill);
+													if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+													return true;
+												});
+												if (playerSkills.includes(skills2[j])) continue;
+												if (name3.length !== 0) {
+													list.add(name);
+													if (!map[name]) map[name] = [];
+													map[name].push(skills2[j]);
+													skills.add(skills2[j]);
+													continue;
+												}
+												var info = lib.translate[skills2[j] + '_info'];
+												if (skills.includes(skills2[j]) || ((name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd')) && info && info.indexOf('当你于出牌阶段') != -1 && info.indexOf('当你于出牌阶段外') == -1)) {
+													list.add(name);
+													if (!map[name]) map[name] = [];
+													map[name].push(skills2[j]);
+													skills.add(skills2[j]);
+													continue;
+												}
+												var list2 = [skills2[j]];
+												game.expandSkills(list2);
+												for (let k = 0; k < list2.length; k++) {
+													var info = lib.skill[list2[k]];
+													if (name2.includes('random')) {
+														if (!info) continue;
+														list.add(name);
+														if (!map[name]) map[name] = [];
+														map[name].push(skills2[j]);
+														skills.add(skills2[j]);
+														break;
+													}
+													if (!info || (!info.trigger && !info.enable)) continue;
+													if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
+														if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
+															if (info.filter) {
+																try {
+																	var bool = info.filter(evt, player);
+																	if (!bool) continue;
+																} catch (e) {
+																	continue;
+																}
+															} else if (info.viewAs && typeof info.viewAs != 'function') {
+																try {
+																	if (evt.filterCard && !evt.filterCard(info.viewAs, player, evt)) continue;
+																	if (info.viewAsFilter && info.viewAsFilter(player) == false) continue;
+																} catch (e) {
+																	continue;
+																}
+															}
+															list.add(name);
+															if (!map[name]) map[name] = [];
+															map[name].push(skills2[j]);
+															skills.add(skills2[j]);
+															break;
+														}
+													} else if (info.trigger) {
+														if (info.trigger.player) {
+															if ((name3.length === 0 ? name2.includes(info.trigger.player) : name3.includes(info.trigger.player)) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name3.length === 0 ? name2 : name3)) {
+																if (info.filter && !name2.includes('phaseDiscard') && !name2.includes('phaseChange')) {
+																	try {
+																		var bool = info.filter(trigger, player);
+																		if (!bool) continue;
+																	} catch (e) {
+																		continue;
+																	}
+																}
+																list.add(name);
+																if (!map[name]) map[name] = [];
+																map[name].push(skills2[j]);
+																skills.add(skills2[j]);
+																break;
+															}
+														}
+														if (info.trigger.global) {
+															if ((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || Array.isArray(info.trigger.global) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3)) {
+																if (info.filter && !name2.includes('phaseDiscard') && !name2.includes('phaseChange')) {
+																	try {
+																		var bool = info.filter(trigger, player);
+																		if (!bool) continue;
+																	} catch (e) {
+																		continue;
+																	}
+																}
+																list.add(name);
+																if (!map[name]) map[name] = [];
+																map[name].push(skills2[j]);
+																skills.add(skills2[j]);
+																break;
+															}
+														}
+													}
+												}
+											}
+											// 如果有抽到该武将牌，则将时机改为以上所有时机再重新遍历一次
+											if (list.includes(name) && name3.length === 0) {
+												name3 = lib.skill.spshenpingjian_use.getRelatedTriggers('all');
+												i--;
+												continue;
+											} else {
+												name3 = [];
+											}
+											if (list.length >= 2 * (event.taffyLostSkillNum + player.storage.spshenpingjianX) + 1) break;
+										}
+										if (list.length < 2 * (event.taffyLostSkillNum + player.storage.spshenpingjianX) + 1) {
+											name2 = lib.skill.spshenpingjian_use.getRelatedTriggers('all');
+											name3 = [];
+											for (let i = 0; i < allList.length; i++) {
 												var name = allList[i];
 												if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1) continue;
 												var skills2 = lib.character[name][3];
-												for (var j = 0; j < skills2.length; j++) {
+												for (let j = 0; j < skills2.length; j++) {
 													var playerSkills = player.getSkills(null, false, false).filter(skill => {
 														var info = get.info(skill);
 														if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 														return true;
 													});
 													if (playerSkills.includes(skills2[j])) continue;
-													if (skills.includes(skills2[j]) || lib.skill.spshenpingjian.phaseUse_special.includes(skills2[j])) {
+													if (name3.length !== 0) {
+														list.add(name);
+														if (!map[name]) map[name] = [];
+														map[name].push(skills2[j]);
+														skills.add(skills2[j]);
+														continue;
+													}
+													var info = lib.translate[skills2[j] + '_info'];
+													if (skills.includes(skills2[j]) || ((name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd')) && info && info.indexOf('当你于出牌阶段') != -1 && info.indexOf('当你于出牌阶段外') == -1)) {
 														list.add(name);
 														if (!map[name]) map[name] = [];
 														map[name].push(skills2[j]);
@@ -2453,103 +2650,165 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													}
 													var list2 = [skills2[j]];
 													game.expandSkills(list2);
-													for (var k = 0; k < list2.length; k++) {
+													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info) continue;
-														list.add(name);
-														if (!map[name]) map[name] = [];
-														map[name].push(skills2[j]);
-														skills.add(skills2[j]);
-														break;
-													}
-												}
-												if (list.length >= 2 * (result.links.length + player.storage.spshenpingjianX) + 1) break;
-											}
-											if (skills.length) {
-												event.list = list;
-												if (player.isUnderControl()) {
-													game.swapPlayerAuto(player);
-												}
-												var switchToAuto = function () {
-													_status.imchoosing = false;
-													event._result = {
-														bool: true,
-														skills: skills.randomGets(result.links.length + player.storage.spshenpingjianX),
-													};
-													if (event.dialog) event.dialog.close();
-													if (event.control) event.control.close();
-												};
-												var chooseButton = function (list, skills, result, player) {
-													var event = _status.event;
-													if (!event._result) event._result = {};
-													event._result.skills = [];
-													var rSkill = event._result.skills;
-													var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage.spshenpingjianX) + '个技能', [list, 'character'], 'hidden');
-													event.dialog = dialog;
-													var table = document.createElement('div');
-													table.classList.add('add-setting');
-													table.style.margin = '0';
-													table.style.width = '100%';
-													table.style.position = 'relative';
-													for (var i = 0; i < skills.length; i++) {
-														var td = ui.create.div('.shadowed.reduce_radius.pointerdiv.tdnode');
-														td.link = skills[i];
-														table.appendChild(td);
-														td.innerHTML = '<span>' + get.translation(skills[i]) + '</span>';
-														td.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
-															if (_status.dragged) return;
-															if (_status.justdragged) return;
-															_status.tempNoButton = true;
-															setTimeout(function () {
-																_status.tempNoButton = false;
-															}, 500);
-															var link = this.link;
-															if (!this.classList.contains('bluebg')) {
-																if (rSkill.length >= result.links.length + player.storage.spshenpingjianX) return;
-																rSkill.add(link);
-																this.classList.add('bluebg');
-															} else {
-																this.classList.remove('bluebg');
-																rSkill.remove(link);
+														if (!info || (!info.trigger && !info.enable)) continue;
+														if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
+															if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
+																if (info.filter) {
+																	try {
+																		var bool = info.filter(evt, player);
+																		if (!bool) continue;
+																	} catch (e) {
+																		continue;
+																	}
+																} else if (info.viewAs && typeof info.viewAs != 'function') {
+																	try {
+																		if (evt.filterCard && !evt.filterCard(info.viewAs, player, evt)) continue;
+																		if (info.viewAsFilter && info.viewAsFilter(player) == false) continue;
+																	} catch (e) {
+																		continue;
+																	}
+																}
+																list.add(name);
+																if (!map[name]) map[name] = [];
+																map[name].push(skills2[j]);
+																skills.add(skills2[j]);
+																break;
 															}
-														});
+														} else if (info.trigger) {
+															if (info.trigger.player) {
+																if ((name3.length === 0 ? name2.includes(info.trigger.player) : name3.includes(info.trigger.player)) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name3.length === 0 ? name2 : name3)) {
+																	if (info.filter) {
+																		try {
+																			var bool = info.filter(trigger, player);
+																			if (!bool) continue;
+																		} catch (e) {
+																			continue;
+																		}
+																	}
+																	list.add(name);
+																	if (!map[name]) map[name] = [];
+																	map[name].push(skills2[j]);
+																	skills.add(skills2[j]);
+																	break;
+																}
+															}
+															if (info.trigger.global) {
+																if ((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || Array.isArray(info.trigger.global) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3)) {
+																	if (info.filter) {
+																		try {
+																			var bool = info.filter(trigger, player);
+																			if (!bool) continue;
+																		} catch (e) {
+																			continue;
+																		}
+																	}
+																	list.add(name);
+																	if (!map[name]) map[name] = [];
+																	map[name].push(skills2[j]);
+																	skills.add(skills2[j]);
+																	break;
+																}
+															}
+														}
 													}
-													dialog.content.appendChild(table);
-													dialog.add('　　');
-													dialog.open();
-													event.switchToAuto = function () {
-														event.dialog.close();
-														event.control.close();
-														game.resume();
-														_status.imchoosing = false;
-													};
-													event.control = ui.create.control('ok', function (link) {
-														event.dialog.close();
-														event.control.close();
-														game.resume();
-														_status.imchoosing = false;
-													});
-													for (var i = 0; i < event.dialog.buttons.length; i++) {
-														event.dialog.buttons[i].classList.add('selectable');
-													}
-													game.pause();
-													game.countChoose();
-												};
-												if (event.isMine()) {
-													chooseButton(list, skills, result, player);
-												} else if (event.isOnline()) {
-													event.player.send(chooseButton, list, skills, result, player);
-													event.player.wait();
-													game.pause();
-												} else {
-													switchToAuto();
 												}
-											} else {
-												event.finish();
+												// 如果有抽到该武将牌，则将时机改为以上所有时机再重新遍历一次
+												if (list.includes(name) && name3.length === 0) {
+													name3 = lib.skill.spshenpingjian_use.getRelatedTriggers('all');
+													i--;
+													continue;
+												} else {
+													name3 = [];
+												}
+												if (list.length >= 2 * (event.taffyLostSkillNum + player.storage.spshenpingjianX) + 1) break;
 											}
 										}
+										if (skills.length) {
+											event.list = list;
+											if (player.isUnderControl()) {
+												game.swapPlayerAuto(player);
+											}
+											var switchToAuto = function () {
+												_status.imchoosing = false;
+												event._result = {
+													bool: true,
+													skills: skills.randomGets(event.taffyLostSkillNum + player.storage.spshenpingjianX),
+												};
+												if (event.dialog) event.dialog.close();
+												if (event.control) event.control.close();
+											};
+											var chooseButton = function (list, skills, result, player) {
+												var event = _status.event;
+												if (!event._result) event._result = {};
+												event._result.skills = [];
+												var rSkill = event._result.skills;
+												var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(event.taffyLostSkillNum + player.storage.spshenpingjianX) + '个技能', [list, 'character'], 'hidden');
+												event.dialog = dialog;
+												var table = document.createElement('div');
+												table.classList.add('add-setting');
+												table.style.margin = '0';
+												table.style.width = '100%';
+												table.style.position = 'relative';
+												for (var i = 0; i < skills.length; i++) {
+													var td = ui.create.div('.shadowed.reduce_radius.pointerdiv.tdnode');
+													td.link = skills[i];
+													table.appendChild(td);
+													td.innerHTML = '<span>' + get.translation(skills[i]) + '</span>';
+													td.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
+														if (_status.dragged) return;
+														if (_status.justdragged) return;
+														_status.tempNoButton = true;
+														setTimeout(function () {
+															_status.tempNoButton = false;
+														}, 500);
+														var link = this.link;
+														if (!this.classList.contains('bluebg')) {
+															if (rSkill.length >= event.taffyLostSkillNum + player.storage.spshenpingjianX) return;
+															rSkill.add(link);
+															this.classList.add('bluebg');
+														} else {
+															this.classList.remove('bluebg');
+															rSkill.remove(link);
+														}
+													});
+												}
+												dialog.content.appendChild(table);
+												dialog.add('　　');
+												dialog.open();
+												event.switchToAuto = function () {
+													event.dialog.close();
+													event.control.close();
+													game.resume();
+													_status.imchoosing = false;
+												};
+												event.control = ui.create.control('ok', function (link) {
+													event.dialog.close();
+													event.control.close();
+													game.resume();
+													_status.imchoosing = false;
+												});
+												for (var i = 0; i < event.dialog.buttons.length; i++) {
+													event.dialog.buttons[i].classList.add('selectable');
+												}
+												game.pause();
+												game.countChoose();
+											};
+											if (event.isMine()) {
+												chooseButton(list, skills, result, player);
+											} else if (event.isOnline()) {
+												event.player.send(chooseButton, list, skills, result, player);
+												event.player.wait();
+												game.pause();
+											} else {
+												switchToAuto();
+											}
+										} else {
+											event.finish();
+										}
 									}
-									'step 2'
+									'step 3'
 									var map = event.result || result;
 									if (map && map.skills && map.skills.length) {
 										for (var i of map.skills) {
@@ -5116,6 +5375,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							},
 							// 界许劭
 							taffyre_pingjian: {
+								derivation: 'taffyre_pingjian_faq',
 								initList: function () {
 									var list = [];
 									if (_status.connectMode) var list = get.charactersOL();
@@ -5969,9 +6229,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							},
 							taffyold_sbsongwei: {
 								audio: 'sbsongwei',
-                init: (player) => {
-                  player.addSkill('taffyold_sbsongwei_delete');
-                },
+								init: (player) => {
+									player.addSkill('taffyold_sbsongwei_delete');
+								},
 								trigger: {
 									player: 'phaseUseBegin'
 								},
@@ -6042,9 +6302,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									cardEnabled: function (card, player) {
 										if (['trick', 'equip'].contains(get.type(card, 'trick'))) return false;
 									},
-                  cardSavable:function(card,player){
-                    if(['trick','equip'].includes(get.type(card,'trick'))) return false;
-                  },
+									cardSavable: function (card, player) {
+										if (['trick', 'equip'].includes(get.type(card, 'trick'))) return false;
+									},
 									cardUsable: function (card, player, num) {
 										if (card.name == 'sha') {
 											return num + player.countMark('taffyold_neifa_basic') * Math.min(5, player.countCards('h', function (cardx) {
@@ -6095,9 +6355,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									cardEnabled: function (card, player) {
 										if (get.type(card) == 'basic') return false;
 									},
-                  cardSavable:function(card,player){
-                    if(get.type(card)=='basic') return false;
-                  },
+									cardSavable: function (card, player) {
+										if (get.type(card) == 'basic') return false;
+									},
 								},
 								intro: {
 									name: '内伐 - 非基本牌',
@@ -6142,14 +6402,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									}
 								},
 								group: 'taffyold_neifa_use',
-                ai:{
-                  reverseOrder:true,
-                  effect:{
-                    target:function(card,player,target){
-                      if(player==target&&get.type(card)=='equip') return [1,3];
-                    },
-                  },
-                },
+								ai: {
+									reverseOrder: true,
+									effect: {
+										target: function (card, player, target) {
+											if (player == target && get.type(card) == 'equip') return [1, 3];
+										},
+									},
+								},
 							},
 							taffyold_neifa_use: {
 								audio: 'neifa',
@@ -7195,9 +7455,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						translate: {
 							shenxushao: '评世雕龙',
 							shenpingjian: '评荐',
-							shenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2X+3张拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至回合结束后/当你即将受到伤害前至当你受到伤害后的技能的武将牌，然后你可以获得其中至多X+1个技能。②出牌阶段限一次，你可以选择一项：⒈失去X个非Charlotte技能并令系统随机检索出2X+1张武将牌，然后你可以选择其中至多X张并获得其所有技能。⒉失去X个非Charlotte技能并令系统随机检索出2X+3张武将牌，然后你可以获得其中至多X+1个技能。',
+							shenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2X+3张“评荐关系”中对应的武将牌，然后你可以获得其中至多X+1个技能。②出牌阶段限一次，你可以选择一项：⒈失去X个非Charlotte技能并令系统随机检索出2X+1张武将牌，然后你可以选择其中至多X张并获得其所有技能。⒉失去X个非Charlotte技能并令系统随机检索出2X+3张武将牌，然后你可以获得其中至多X+1个技能。',
 							shenpingjian_append: '<span style="font-family: yuanli">玩这么阴间的武将，你良心不会痛吗？</span>',
 							shenpingjian_use: '评荐',
+							shenpingjian_faq: '关于评荐关系',
+							shenpingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：<br>回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能的武将牌。',
 							oldwu_zhugeliang: '旧武诸葛亮',
 							oldwu_zhugeliang_prefix: '旧武',
 							olddcqingshi: '情势',
@@ -7232,9 +7494,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							spshenxushao: '神许劭',
 							spshenxushao_prefix: '神',
 							spshenpingjian: '评荐',
-							spshenpingjian_info: '①出牌阶段限一次/回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌/拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至回合结束后/当你即将受到伤害前至当你受到伤害后的技能的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
+							spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张“评荐关系”中对应的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 							spshenpingjian_use: '评荐',
 							spshenpingjian_append: '<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
+							spshenpingjian_faq: '关于评荐关系',
+							spshenpingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能的武将牌。<br>出牌阶段限一次：任意/拥有发动时机为出牌阶段至弃牌阶段结束后的技能的武将牌。',
 							oldtw_niufudongxie: '旧牛辅董翓',
 							oldtw_niufudongxie_prefix: '旧',
 							oldbaonvezhi_faq: '关于暴虐值',
@@ -7361,9 +7625,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyre_xushao: '界许劭',
 							taffyre_xushao_prefix: '界',
 							taffyre_pingjian: '评荐',
-							taffyre_pingjian_info: '①出牌阶段限一次/回合开始前/结束阶段开始前/当你即将受到伤害前，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张武将牌/拥有发动时机为回合开始前至出牌阶段开始时/结束阶段开始前至回合结束后/当你即将受到伤害前至当你受到伤害后的技能的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外）。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
+							taffyre_pingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张“评荐关系”中对应的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外）。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 							taffyre_pingjian_use: '评荐',
 							taffyre_pingjian_append: '<span style="font-family: yuanli">一人说尽千秋业，半纸雅评万世人。</span>',
+							taffyre_pingjian_faq: '关于评荐关系',
+							taffyre_pingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能的武将牌。<br>出牌阶段限一次：任意武将牌。',
 							taffyold_sb_caopi: '旧谋曹丕',
 							taffyold_sb_caopi_prefix: '旧谋',
 							taffyold_sbxingshang: '行殇',
