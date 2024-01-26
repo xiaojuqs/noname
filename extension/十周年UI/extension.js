@@ -6065,18 +6065,34 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 					set:function(value){
 						this._connectMode = value;
 						if (!value || !lib.extensions) return;
-						const decadeExtension = lib.extensions.find(value => value[0] == decadeUIName);
-						if (!decadeExtension) return;
-
+						// taffy: 注释extension.js原版代码喵
+						// const decadeExtension = lib.extensions.find(value => value[0] == decadeUIName);
+						// if (!decadeExtension) return;
+						/* taffy分界线 */
+						// taffy: 联机模式导入所有扩展喵
+            const extensions = lib.extensions;
+						/* taffy分界线 */
 						const startBeforeFunction = lib.init.startBefore;
 						lib.init.startBefore = function(){
 							try {
-								_status.extension = decadeExtension[0];
-								_status.evaluatingExtension = decadeExtension[3];
-								decadeExtension[1](decadeExtension[2], decadeExtension[4]);
-								delete _status.extension;
-								delete _status.evaluatingExtension;
-								console.log(`%c${decadeUIName}: 联机成功`, 'color:blue');
+								// taffy: 注释extension.js原版代码喵
+								// _status.extension = decadeExtension[0];
+								// _status.evaluatingExtension = decadeExtension[3];
+								// decadeExtension[1](decadeExtension[2], decadeExtension[4]);
+								// delete _status.extension;
+								// delete _status.evaluatingExtension;
+								// console.log(`%c${decadeUIName}: 联机成功`, 'color:blue');
+								/* taffy分界线 */
+								// taffy: 联机模式导入所有扩展喵
+								extensions.forEach(ext => {
+									_status.extension = ext[0];
+									_status.evaluatingExtension = ext[3];
+									ext[1](ext[2], ext[4]);
+									delete _status.extension;
+									delete _status.evaluatingExtension;
+									console.log(`%c${ext[0]}: 联机成功`, 'color:blue');
+								});
+								/* taffy分界线 */
 							} catch(e) {
 								console.log(e);
 							}
