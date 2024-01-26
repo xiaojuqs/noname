@@ -1931,39 +1931,39 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									switch (triggerName) {
 										// 评荐：回合开始前
 										case 'phaseBefore':
-											result = '<div class="skill" style="width:115px!important;">【回合开始前】</div><div style="width:calc(100% - 115px);">翻面状态下可触发的时机 如:卑弥呼〖纵傀〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:115px!important;">【回合开始前】</div><div style="width:calc(100% - 115px);">翻面状态下可触发的时机 如:卑弥呼〖纵傀〗（特殊技能除外）</div>';
 											break;
 										case 'phaseBegin':
-											result = '<div class="skill" style="width:115px!important;">【回合开始时】</div><div style="width:calc(100% - 115px);">翻面状态下无法触发的时机 如:周宣〖寤寐〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:115px!important;">【回合开始时】</div><div style="width:calc(100% - 115px);">翻面状态下无法触发的时机 如:周宣〖寤寐〗（特殊技能除外）</div>';
 											break;
 										case 'phaseChange':
-											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗（特殊技能除外）</div>';
 											break;
 										case 'phaseZhunbei':
-											result = '<div class="skill" style="width:100px!important;">【准备阶段】</div><div style="width:calc(100% - 100px);">准备阶段开始前至准备阶段结束后的时机 如:手杀杨彪〖昭汉〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:100px!important;">【准备阶段】</div><div style="width:calc(100% - 100px);">准备阶段开始前至准备阶段结束后的时机 如:手杀杨彪〖昭汉〗（特殊技能除外）</div>';
 											break;
 										case 'phaseJudge':
-											result = '<div class="skill" style="width:100px!important;">【判定阶段】</div><div style="width:calc(100% - 100px);">判定阶段开始前至判定阶段结束后的时机 如:合诸葛亮〖问天〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:100px!important;">【判定阶段】</div><div style="width:calc(100% - 100px);">判定阶段开始前至判定阶段结束后的时机 如:合诸葛亮〖问天〗（特殊技能除外）</div>';
 											break;
 										case 'phaseDraw':
-											result = '<div class="skill" style="width:100px!important;">【摸牌阶段】</div><div style="width:calc(100% - 100px);">摸牌阶段开始前至摸牌阶段结束后的时机 如:高达一号〖绝境〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:100px!important;">【摸牌阶段】</div><div style="width:calc(100% - 100px);">摸牌阶段开始前至摸牌阶段结束后的时机 如:高达一号〖绝境〗（特殊技能除外）</div>';
 											break;
 										case 'phaseUseBegin':
-											result = '<div class="skill" style="width:130px!important;">【出牌阶段开始】</div><div style="width:calc(100% - 130px);">出牌阶段开始前至出牌阶段开始时的时机 如:谋关羽〖武圣〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:130px!important;">【出牌阶段开始】</div><div style="width:calc(100% - 130px);">出牌阶段开始前至出牌阶段开始时的时机 如:谋关羽〖武圣〗（特殊技能除外）</div>';
 											break;
 											// 评荐：结束阶段开始前
 										case 'phaseJieshu':
-											result = '<div class="skill" style="width:100px!important;">【结束阶段】</div><div style="width:calc(100% - 100px);">结束阶段开始前至结束阶段结束后的时机<br/>如:曹华〖彩翼〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:100px!important;">【结束阶段】</div><div style="width:calc(100% - 100px);">结束阶段开始前至结束阶段结束后的时机<br/>如:曹华〖彩翼〗（特殊技能除外）</div>';
 											break;
 										case 'phaseEnd':
-											result = '<div class="skill" style="width:100px!important;">【回合结束】</div><div style="width:calc(100% - 100px);">回合结束时至回合结束后的时机<br/>如:神司马懿〖连破〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:100px!important;">【回合结束】</div><div style="width:calc(100% - 100px);">回合结束时至回合结束后的时机<br/>如:神司马懿〖连破〗（特殊技能除外）</div>';
 											break;
 											// 评荐：当你即将受到伤害前
 										case 'damageBegin':
-											result = '<div class="skill" style="width:110px!important;">【受到伤害前】</div><div style="width:calc(100% - 110px);">当你即将受到伤害前至当你受到伤害时的时机<br/>如:司马徽〖隐士〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:110px!important;">【受到伤害前】</div><div style="width:calc(100% - 110px);">当你即将受到伤害前至当你受到伤害时的时机<br/>如:司马徽〖隐士〗（特殊技能除外）</div>';
 											break;
 										case 'damageEnd':
-											result = '<div class="skill" style="width:110px!important;">【受到伤害后】</div><div style="width:calc(100% - 110px);">当你受到伤害的点数确定时至当你受到伤害后的时机<br/>如:曹丕〖放逐〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:110px!important;">【受到伤害后】</div><div style="width:calc(100% - 110px);">当你受到伤害的点数确定时至当你受到伤害后的时机<br/>如:曹丕〖放逐〗（特殊技能除外）</div>';
 											break;
 											// 评荐：共用选项
 										default:
@@ -2381,13 +2381,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									let result;
 									switch (triggerName) {
 										case 'phaseUse':
-											result = '<div class="skill" style="width:100px!important;">【出牌阶段】</div><div style="width:calc(100% - 100px);">出牌阶段至出牌阶段结束后的时机 如:经典刘备〖仁德〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:100px!important;">【出牌阶段】</div><div style="width:calc(100% - 100px);">出牌阶段至出牌阶段结束后的时机 如:经典刘备〖仁德〗（特殊技能除外）</div>';
 											break;
 										case 'phaseChange':
-											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:115px!important;">【阶段改变前】</div><div style="width:calc(100% - 115px);">任意两个阶段之间的时机 如:族吴苋〖贵相〗（特殊技能除外）</div>';
 											break;
 										case 'phaseDiscard':
-											result = '<div class="skill" style="width:100px!important;">【弃牌阶段】</div><div style="width:calc(100% - 100px);">弃牌阶段开始前至弃牌阶段结束后的时机 如:滕芳兰〖哀尘〗<br>（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）</div>';
+											result = '<div class="skill" style="width:100px!important;">【弃牌阶段】</div><div style="width:calc(100% - 100px);">弃牌阶段开始前至弃牌阶段结束后的时机 如:滕芳兰〖哀尘〗（特殊技能除外）</div>';
 											break;
 										case 'random':
 											result = '<div class="skill" style="width:100px!important;">【任意时机】</div><div style="width:calc(100% - 100px);">随机检索任意技能（可检索主公技，限定技，觉醒技，隐匿技、使命技等特殊技能）</div>';
@@ -7629,7 +7629,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyre_pingjian_use: '评荐',
 							taffyre_pingjian_append: '<span style="font-family: yuanli">一人说尽千秋业，半纸雅评万世人。</span>',
 							taffyre_pingjian_faq: '关于评荐关系',
-							taffyre_pingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：<br>回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能（主公技，限定技，觉醒技，隐匿技、使命技等特殊技能除外）的武将牌。<br>出牌阶段限一次：任意武将牌。（可检索主公技，限定技，觉醒技，隐匿技、使命技等特殊技能）',
+							taffyre_pingjian_faq_info: '根据〖评荐〗①的发动时机，系统会分别检索以下武将牌：<br>回合开始前：拥有发动时机为回合开始前至出牌阶段开始时的技能（特殊技能除外）的武将牌。<br>结束阶段开始前：拥有发动时机为结束阶段开始前至回合结束后的技能（特殊技能除外）的武将牌。<br>当你即将受到伤害前：拥有发动时机为当你即将受到伤害前至当你受到伤害后的技能（特殊技能除外）的武将牌。<br>出牌阶段限一次：任意武将牌。（可检索主公技，限定技，觉醒技，隐匿技、使命技等特殊技能）',
 							taffyold_sb_caopi: '旧谋曹丕',
 							taffyold_sb_caopi_prefix: '旧谋',
 							taffyold_sbxingshang: '行殇',
