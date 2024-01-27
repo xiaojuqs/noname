@@ -438,7 +438,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 									}
 									if(ph-1===num) return 'h';
 									return false;
-								}()
+								}(),
 							});
 							'step 1'
 							if(result.bool){
