@@ -2160,7 +2160,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												game.expandSkills(list2);
 												for (let k = 0; k < list2.length; k++) {
 													var info = lib.skill[list2[k]];
-                          if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+													if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 													if (info.trigger.player) {
 														if ((name3.length === 0 ? name2.includes(info.trigger.player) : name3.includes(info.trigger.player)) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name3.length === 0 ? name2 : name3)) {
 															if (info.filter) {
@@ -2231,7 +2231,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-                            if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+														if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 														if (info.trigger.player) {
 															if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name2)) {
 																if (info.filter) {
@@ -2547,7 +2547,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 														skills.add(skills2[j]);
 														break;
 													}
-                          if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+													if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 													if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
 														if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
 															if (info.filter) {
@@ -2652,7 +2652,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-                            if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+														if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
 														if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
 															if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
 																if (info.filter) {
@@ -7494,7 +7494,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							spshenxushao: '神许劭',
 							spshenxushao_prefix: '神',
 							spshenpingjian: '评荐',
-							spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并在“评荐关系”中声明任意个时机范围。然后令系统随机检索出2<span class=greentext>X</span>+1张拥有该时机范围内的发动时机的武将牌并获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
+							spshenpingjian_info: '①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并根据“评荐关系”声明任意个时机范围。然后令系统随机检索出2<span class=greentext>X</span>+1张拥有该时机范围内的发动时机的武将牌并获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。',
 							spshenpingjian_use: '评荐',
 							spshenpingjian_append: '<span style="font-family: yuanli">我以月旦为料饵，钓尽世间功与名！</span>',
 							spshenpingjian_faq: '关于评荐关系',
