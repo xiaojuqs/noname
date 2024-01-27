@@ -5112,6 +5112,9 @@ export let CONTENT = function (config, pack) {
         }
       }
       if (this.classList.contains('qh-must-replace') || (!this.classList.contains('qh-not-replace') && (lib.config.qhly_forceall || (this.classList.contains('avatar') || this.classList.contains('avatar2'))))) {
+        // taffy: 修复千幻与皮切bug喵
+        let that = this;
+        /* taffy分界线 */
         //判断当前的div是否是人物avatar。
         var setByName = function (cname, opath) {
           if (lib.config.qhly_skinset.skin[cname]) {
@@ -5155,7 +5158,26 @@ export let CONTENT = function (config, pack) {
                 destpath = dp;
               }
             }
-            this.qhly_origin_setBackgroundImage(destpath);
+            // taffy: 注释content.js原版代码喵
+            // this.qhly_origin_setBackgroundImage(destpath);
+            /* taffy分界线 */
+            // taffy: 修复千幻与皮切bug喵
+            game.qhly_checkFileExist(destpath, function (s) {
+              if (s) {
+                that.qhly_origin_setBackgroundImage(destpath);
+              } else {
+                var prefix = skinPackage.prefix;
+                if (typeof prefix == 'function') {
+                  prefix = prefix(cname);
+                }
+                if (lib.config.qhly_noSkin == 'origin') {
+                  if (prefix.includes('.jpg')) that.qhly_origin_setBackgroundImage(prefix);//原画
+                  else that.qhly_origin_setBackgroundImage(prefix + cname + '.jpg');//原画
+                }
+                else that.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
+              }
+            })
+            /* taffy分界线 */
             return true;
           }
         }.bind(this);
