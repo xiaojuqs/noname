@@ -249,7 +249,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(!result.bool) return;
 					player.logSkill('tamo');
 					const resultList=result.moved[0].map(info=>{
-						return parseInt(info.split('|')[0]);
+						return info&&parseInt(info.split('|')[0]);
 					});
 					const toSwapList=[];
 					const cmp=(a,b)=>{
@@ -257,7 +257,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 					for(let i in toSortPlayers){
 						for(let j in toSortPlayers){
-							if(cmp(toSortPlayers[i].getSeatNum(),toSortPlayers[j].getSeatNum())<0){
+							if(toSortPlayers[i]&&toSortPlayers[j]&&typeof(toSortPlayers[i])=='object'&&typeof(toSortPlayers[j])=='object'&&cmp(toSortPlayers[i].getSeatNum(),toSortPlayers[j].getSeatNum())<0){
 								toSwapList.push([toSortPlayers[i],toSortPlayers[j]]);
 								[toSortPlayers[i],toSortPlayers[j]]=[toSortPlayers[j],toSortPlayers[i]];
 							}
