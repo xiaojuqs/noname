@@ -45,6 +45,42 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				link.rel = 'icon';
 				link.href = `${lib.assetURL}extension/永雏塔菲/image/icon.png`;
 				document.head.appendChild(link);
+
+        // 联机模式导入所有扩展喵
+        Object.defineProperties(_status, {
+          connectMode: {
+            configurable: true,
+            get:function(){
+              return this._connectMode;
+            },
+            set:function(value){
+              this._connectMode = value;
+              if (!value || !lib.extensions) return;
+              const extensions = lib.extensions;
+              const startBeforeFunction = lib.init.startBefore;
+              lib.init.startBefore = function(){
+                try {
+                  extensions.forEach(ext => {
+                    _status.extension = ext[0];
+                    _status.evaluatingExtension = ext[3];
+                    ext[1](ext[2], ext[4]);
+                    delete _status.extension;
+                    delete _status.evaluatingExtension;
+                    console.log(`%c${ext[0]}: 联机成功喵~`, 'color:pink');
+                  });
+                } catch(e) {
+                  console.log(e);
+                }
+                if (startBeforeFunction) startBeforeFunction.apply(this, arguments);
+              };
+            }
+          },
+          _connectMode: {
+            value: false,
+            writable: true
+          }
+        });
+
 				// 一些prefix样式补充
 				lib.namePrefix.set('旧武', {
 					/**
