@@ -171,6 +171,16 @@ export class Player extends HTMLDivElement {
 		 */
 		// @ts-ignore
 		this.outCount;
+		/**
+		 * @type { number }
+		 */
+		// @ts-ignore
+		this.maxHp;
+		/**
+		 * @type { number }
+		 */
+		// @ts-ignore
+		this.hp;
 		throw new Error('Do not call this method');
 	}
 	build(noclick) {
@@ -2127,9 +2137,6 @@ export class Player extends HTMLDivElement {
 		}
 	}
 	uninit() {
-		this.expandedSlots = {};
-		this.disabledSlots = {};
-
 		delete this.name;
 		delete this.name1;
 		delete this.tempname;
@@ -2138,21 +2145,14 @@ export class Player extends HTMLDivElement {
 		delete this.hp;
 		delete this.maxHp;
 		delete this.hujia;
-		this.clearSkills(true);
 
 		if (this.name2) {
 			delete this.singleHp;
 			delete this.name2;
 		}
-		for (var mark in this.marks) {
-			this.marks[mark].remove();
-		}
-		ui.updatem(this);
 
 		this.skipList = [];
-		this.skills = this.skills.filter(skill => {
-			return lib.skill[skill] && lib.skill[skill].superCharlotte;
-		});
+		this.clearSkills(true);
 		this.initedSkills = [];
 		this.additionalSkills = {};
 		this.disabledSkills = {};
@@ -2164,6 +2164,8 @@ export class Player extends HTMLDivElement {
 		this.tempSkills = {};
 		this.storage = {};
 		this.marks = {};
+		this.expandedSlots = {};
+		this.disabledSlots = {};
 		this.ai = { friend: [], enemy: [], neutral: [] };
 
 		this.$uninit();
@@ -2171,18 +2173,18 @@ export class Player extends HTMLDivElement {
 		return this;
 	}
 	$uninit() {
+		this.$syncExpand();
 		this.$syncDisable();
-		if (this.isDisabledJudge()) {
-			game.broadcastAll(function (player) {
-				player.storage._disableJudge = false;
-				for (var i = 0; i < player.node.judges.childNodes.length; i++) {
-					if (player.node.judges.childNodes[i].name == 'disable_judge') {
-						player.node.judges.removeChild(player.node.judges.childNodes[i]);
-						break;
-					}
+		game.broadcastAll(function (player) {
+			delete player.storage._disableJudge;
+			for (var i = 0; i < player.node.judges.childNodes.length; i++) {
+				if (player.node.judges.childNodes[i].name == 'disable_judge') {
+					player.node.judges.removeChild(player.node.judges.childNodes[i]);
+					break;
 				}
-			}, this);
-		}
+			}
+		}, this);
+
 		this.node.avatar.hide();
 		this.node.count.hide();
 		if (this.node.wuxing) {
@@ -2701,6 +2703,10 @@ export class Player extends HTMLDivElement {
 		if (count > num) this.removeMark(name, count - num, log);
 		else if (count < num) this.addMark(name, num - count, log);
 	}
+	/**
+	 * @param {*} i 
+	 * @returns { number }
+	 */
 	countMark(i) {
 		if (this.storage[i] == undefined) return 0;
 		if (typeof this.storage[i] == 'number') return this.storage[i];
@@ -5691,6 +5697,9 @@ export class Player extends HTMLDivElement {
 		};
 		return next;
 	}
+	/**
+	 * @returns { boolean }
+	 */
 	canAddJudge(card) {
 		if (this.isDisabledJudge()) return false;
 		let name;
@@ -6249,7 +6258,7 @@ export class Player extends HTMLDivElement {
 		return value;
 	}
 	getStorage(name, defaultValue = []) {
-		return this.hasStorage(name) ? this.storage[name] : defaultValue;
+		return this.storage[name] || defaultValue;
 	}
 	hasStorage(name, value) {
 		if (!(name in this.storage)) return false;
@@ -6584,7 +6593,7 @@ export class Player extends HTMLDivElement {
 		var range;
 		var select = get.copy(info.selectTarget);
 		if (select == undefined) {
-			if (info.filterTarget == undefined) return true;
+			if (info.filterTarget == undefined) return 1;
 			range = [1, 1];
 		}
 		else if (typeof select == 'number') range = [select, select];
@@ -7178,39 +7187,52 @@ export class Player extends HTMLDivElement {
 		return skill;
 	}
 	addTempSkill(skill, expire, checkConflict) {
-		if (this.hasSkill(skill) && this.tempSkills[skill] == undefined) return;
-		this.addSkill(skill, checkConflict, true, true);
-
-		if (!expire) expire = { global: ['phaseAfter', 'phaseBeforeStart'] };
-		else if (typeof expire == 'string' || Array.isArray(expire)) expire = { global: expire };
-		this.tempSkills[skill] = expire;
-
-		if (get.objtype(expire) == 'object') {
-			const roles = ['player', 'source', 'target', 'global'];
-			for (const i of roles) {
-				let triggers = expire[i];
-				if (!Array.isArray(triggers)) triggers = [triggers];
-				triggers.forEach(trigger => lib.hookmap[trigger] = true);
+		if (Array.isArray(skill)) {
+			for (var i = 0; i < skill.length; i++) {
+				this.addTempSkill(skill[i], expire, checkConflict);
 			}
 		}
-
+		else{
+			if (this.hasSkill(skill) && this.tempSkills[skill] == undefined) return;
+			this.addSkill(skill, checkConflict, true, true);
+	
+			if (!expire) expire = { global: ['phaseAfter', 'phaseBeforeStart'] };
+			else if (typeof expire == 'string' || Array.isArray(expire)) expire = { global: expire };
+			this.tempSkills[skill] = expire;
+	
+			if (get.objtype(expire) == 'object') {
+				const roles = ['player', 'source', 'target', 'global'];
+				for (const i of roles) {
+					let triggers = expire[i];
+					if (!Array.isArray(triggers)) triggers = [triggers];
+					triggers.forEach(trigger => lib.hookmap[trigger] = true);
+				}
+			}
+		}
 		return skill;
 	}
 	tempBanSkill(skill, expire, log) {
-		if (this.isTempBanned(skill)) return;
-		this.setStorage(`temp_ban_${skill}`, true);
-
-		if (log !== false && this.hasSkill(skill)) game.log(this, '的技能', `#g【${get.translation(skill)}】`, '暂时失效了');
-
-		if (!expire) expire = { global: ['phaseAfter', 'phaseBeforeStart'] };
-		else if (typeof expire == 'string' || Array.isArray(expire)) expire = { global: expire };
-		this.when(expire).assign({
-			firstDo: true,
-		}).vars({
-			bannedSkill: skill,
-		}).then(() => {
-			delete player.storage[`temp_ban_${bannedSkill}`];
-		});
+		if (Array.isArray(skill)) {
+			for (var i = 0; i < skill.length; i++) {
+				this.tempBanSkill(skill[i], expire, log);
+			}
+		}
+		else{
+			if (this.isTempBanned(skill)) return;
+			this.setStorage(`temp_ban_${skill}`, true);
+	
+			if (log !== false && this.hasSkill(skill)) game.log(this, '的技能', `#g【${get.translation(skill)}】`, '暂时失效了');
+	
+			if (!expire) expire = { global: ['phaseAfter', 'phaseBeforeStart'] };
+			else if (typeof expire == 'string' || Array.isArray(expire)) expire = { global: expire };
+			this.when(expire).assign({
+				firstDo: true,
+			}).vars({
+				bannedSkill: skill,
+			}).then(() => {
+				delete player.storage[`temp_ban_${bannedSkill}`];
+			});
+		}
 		return skill;
 	}
 	isTempBanned(skill) {

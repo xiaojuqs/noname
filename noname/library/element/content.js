@@ -682,7 +682,7 @@ export const Content = {
 					game.resume();
 					_status.imchoosing = false;
 					if (roundmenu) ui.roundmenu.style.display = '';
-					if (ui.backgroundMusic) ui.backgroundMusic.play();
+					if (ui.backgroundMusic && !isNaN(ui.backgroundMusic.duration)) ui.backgroundMusic.play();
 					hitsound_audio.remove();
 				}, 1000);
 			};
@@ -870,7 +870,7 @@ export const Content = {
 			if (dialog) {
 				dialog.close();
 			}
-			if (ui.backgroundMusic) ui.backgroundMusic.play();
+			if (ui.backgroundMusic && !isNaN(ui.backgroundMusic.duration)) ui.backgroundMusic.play();
 		}, event.videoId, event.time);
 		var result = event.result || result;
 		event.result = result;
@@ -1372,7 +1372,9 @@ export const Content = {
 		if (!evt.orderingCards) evt.orderingCards = [];
 		if (!evt.noOrdering && !evt.cardsOrdered) {
 			evt.cardsOrdered = true;
-			var next = game.createEvent('orderingDiscard', false, evt.getParent());
+			var next = game.createEvent('orderingDiscard', false);
+			event.next.remove(next);
+			evt.after.push(next);
 			next.relatedEvent = evt;
 			next.setContent('orderingDiscard');
 		}
@@ -2036,10 +2038,7 @@ export const Content = {
 			event.doing = doingList.shift();
 			while(true){
 				if (trigger.filterStop && trigger.filterStop()) return;
-				const usableSkills = event.doing.todoList.filter(info => {
-					if (!lib.filter.filterTrigger(trigger, info.player, event.triggername, info.skill)) return false;
-					return lib.skill.global.includes(info.skill) || info.player.hasSkill(info.skill, true);
-				});
+				const usableSkills = event.doing.todoList.filter(info => lib.filter.filterTrigger(trigger, info.player, event.triggername, info.skill));
 				if (usableSkills.length == 0){
 					break;
 				}
@@ -7539,7 +7538,9 @@ export const Content = {
 			if (!evt.orderingCards) evt.orderingCards = [];
 			if (!evt.noOrdering && !evt.cardsOrdered) {
 				evt.cardsOrdered = true;
-				var next = game.createEvent('orderingDiscard', false, evt.getParent());
+				var next = game.createEvent('orderingDiscard', false);
+				event.next.remove(next);
+				evt.after.push(next);
 				next.relatedEvent = evt;
 				next.setContent('orderingDiscard');
 			}

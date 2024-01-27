@@ -3921,8 +3921,8 @@ export class Library extends Uninstantable {
 					item: {
 						'6': '6',
 						'12': '12',
-						'20': '24',
-						'30': '36',
+						'20': '20',
+						'30': '30',
 					},
 					unfrequent: true
 				},
@@ -9715,7 +9715,7 @@ export class Library extends Uninstantable {
 				console.error(new ReferenceError('缺少info的技能:', skill));
 				return false;
 			}
-			if (!game.expandSkills(player.getSkills(true).concat(lib.skill.global)).includes(skill)) return false;
+			if (!game.expandSkills(player.getSkills('invisible').concat(lib.skill.global)).includes(skill)) return false;
 			if (!game.expandSkills(player.getSkills(false).concat(lib.skill.global)).includes(skill)) {//hiddenSkills
 				if (get.mode() != 'guozhan') return false;
 				if (info.noHidden) return false;
