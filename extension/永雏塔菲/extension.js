@@ -3873,12 +3873,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									}).set('prompt', '选择一个形态');
 									'step 2'
 									var hp = player.hp;
-									player.removeSkill('boss_baonu', true);
+									player.removeSkill('taffyboss_baonu', true);
 									if (result.control == '暴怒战神') {
-										player.uninit();
 										player.init('boss_lvbu2');
 									} else {
-										player.uninit();
 										player.init('boss_lvbu3');
 									}
 									if (hp > 6) {
