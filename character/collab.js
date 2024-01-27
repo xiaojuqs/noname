@@ -1524,7 +1524,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
 						usable:1,
 						filter(event,player){
-							return player.isTurnedOver()&&player!=_status.currentPhase&&event.getg(player).length>0;
+							return player.isTurnedOver()&&_status.currentPhase&&player!=_status.currentPhase&&event.getg(player).length>0;
 						},
 						check(event,player){
 							return get.attitude(player,_status.currentPhase)>0;

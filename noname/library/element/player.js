@@ -9196,27 +9196,17 @@ export class Player extends HTMLDivElement {
 			})){
 				const card = game.createCard('empty_equip' + i,'', '');
 				card.fix();
-				console.log('add '+card.name);
+				//console.log('add '+card.name);
 				card.style.transform = '';
 				card.classList.remove('drawinghidden');
 				card.classList.add('emptyequip');
 				card.classList.add('hidden');
 				delete card._transform;
-				const equipNum = get.equipNum(card);
-				let equipped = false;
-				for (let j = 0; j < player.node.equips.childNodes.length; j++) {
-					if (get.equipNum(player.node.equips.childNodes[j]) >= equipNum) {
-						player.node.equips.insertBefore(card, player.node.equips.childNodes[j]);
-						equipped = true;
-						break;
-					}
+				player.node.equips.appendChild(card);
+				if (_status.discarded) {
+					_status.discarded.remove(card);
 				}
-				if (!equipped) {
-					player.node.equips.appendChild(card);
-					if (_status.discarded) {
-						_status.discarded.remove(card);
-					}
-				}
+				player.SortEquipNodes();
 			}
 		}
 	}

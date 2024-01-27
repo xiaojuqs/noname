@@ -121,7 +121,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				forced:true,
 				content:function*(event,map){
 					var player=map.player,trigger=map.trigger;
-					if(!trigger.card||!trigger.cards.length){
+					if(!trigger.card||!(trigger.cards&&trigger.cards.length)){
 						trigger.num++;
 						event.finish();
 						return;
@@ -1623,8 +1623,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var list,skills=[];
 					if(get.mode()=='guozhan'){
 						list=[];
-						for(var i in lib.characterPack.mode_guozhan){
-							if(lib.character[i])list.push(i);
+						for(var i in lib.characterPack.mode_guozhan){ 
+							if (lib.character[i]) list.push(i);
 						}
 					}
 					else if(_status.connectMode) list=get.charactersOL();
