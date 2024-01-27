@@ -1,4 +1,4 @@
-'use strict';
+import { game } from '../noname.js';
 game.import('character',function(lib,game,ui,get,ai,_status){
 	return {
 		name:'jsrg',
@@ -62,7 +62,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			jsrg_simayi:['male','wei',4,['jsrgyingshi','jsrgtuigu']],
 			jsrg_guoxun:['male','wei',4,['jsrgeqian','jsrgfusha']],
 			jsrg_sunlubansunluyu:['female','wu',3,['jsrgdaimou','jsrgfangjie']],
-			jsrg_caofang:['male','wei','3/4',['jsrgzhaotu','jsrgjingju','jsrgweizhui']],
+			jsrg_caofang:['male','wei','3/4',['jsrgzhaotu','jsrgjingju','jsrgweizhui'],['zhu']],
 			jsrg_sunjun:['male','wu',4,['jsrgyaoyan','jsrgbazheng']],
 			jsrg_liuyong:['male','shu',3,['jsrgdanxin','jsrgfengxiang']],
 			jsrg_weiwenzhugezhi:['male','wu',4,['jsrgfuhai']],
@@ -612,7 +612,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				enable:'phaseUse',
 				filter(event,player){
 					return !player.hasCard(card=>{
-						return player.hasUseTarget(card);
+						return player.hasUseTarget(card,true,true);
 					});
 				},
 				async content(event,trigger,player){
@@ -1214,6 +1214,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				enable:'chooseToUse',
 				viewAs:{name:'lebu'},
 				position:'hes',
+				round:1,
 				viewAsFilter(player){
 					return player.countCards('hes');
 				},
@@ -1806,23 +1807,15 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				frequent:true,
 				async content(event,trigger,player){
-					player.judge().set('callback',()=>{
-						const red=[],black=[];
-						game.getGlobalHistory('cardMove',evt=>{
-							if(evt.name!='cardsDiscard'){
-								if(evt.name!='lose'||evt.position!=ui.discardPile) return false;
-							}
-							const cards=evt.cards.filter(card=>get.position(card,true)=='d');
-							red.addArray(cards.filter(i=>get.color(i,false)=='red'));
-							black.addArray(cards.filter(i=>get.color(i,false)=='black'));
-						});
-						if(event.judgeResult.color=='red'&&red.length){
-							player.draw(red.length);
+					const {result} = await player.judge();
+					let num = 0;
+					game.getGlobalHistory('cardMove',evt=>{
+						if(evt.name!='cardsDiscard'){
+							if(evt.name!='lose'||evt.position!=ui.discardPile) return false;
 						}
-						else if(event.judgeResult.color=='black'&&black.length){
-							player.draw(black.length);
-						}
-					})
+						num += (evt.cards.filter(i=>get.color(i,false) == result.color).length);
+					});
+					if (num > 0) player.draw(num);
 				},
 			},
 			jsrgzunwei:{
@@ -8208,6 +8201,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			jsrg_fanjiangzhangda_prefix:'转',
 			jsrgfushan:'负山',
 			jsrgfushan_info:'出牌阶段开始时，所有其他角色可以依次交给你一张牌并令你此阶段使用【杀】的次数上限+1。此阶段结束时，若你使用【杀】的次数未达到上限且此阶段以此法交给你牌的角色均存活，你失去2点体力，否则你将手牌摸至体力上限。',
+			//江山如故·合
 			jsrg_zhugeliang:'梦诸葛亮',
 			jsrg_zhugeliang_prefix:'梦',
 			jsrgwentian:'问天',
@@ -8250,7 +8244,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			jsrgeqian_info:'①结束阶段，你可以蓄谋任意次。②当你使用【杀】或蓄谋牌指定其他角色为唯一目标后，你可以令此牌不计入次数限制并获得目标一张牌，然后其可以令你本回合至其的距离+2。',
 			jsrgfusha:'伏杀',
 			jsrgfusha_info:'限定技。出牌阶段，若你的攻击范围内仅有一名角色，你可以对其造成X点伤害（X为你的攻击范围，至多为游戏人数）。',
-			jsrg_sunlubansunluyu:'合孙鲁班孙鲁育',
+			jsrg_sunlubansunluyu:'合大小虎',
 			jsrg_sunlubansunluyu_prefix:'合',
 			jsrgdaimou:'殆谋',
 			jsrgdaimou_info:'每回合各限一次。当一名角色使用【杀】指定其他角色/你为目标时，你可以用牌堆顶的牌蓄谋/你须弃置你区域里的一张蓄谋牌。',
