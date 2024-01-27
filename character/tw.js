@@ -1,4 +1,4 @@
-'use strict';
+import { game } from '../noname.js';
 game.import('character',function(lib,game,ui,get,ai,_status){
 	return {
 		name:'tw',
@@ -4773,15 +4773,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 3'
 					if(result.bool) target.addExpose(0.1);
 					else{
-						var next=game.createEvent('twdingzhen_addSkill');
-						event.next.remove(next);
-						trigger.after.push(next);
-						next.target=target;
-						next.player=player;
-						next.setContent(function(){
-							target.addSkill('twdingzhen_target');
-							target.markAuto('twdingzhen_target',[player]);
-						})
+						target.addSkill('twdingzhen_target');
+						target.markAuto('twdingzhen_target',[player]);
 					}
 					'step 4'
 					if(event.num<event.targets.length-1){
@@ -13660,7 +13653,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return (get.suit(card)!=_status.event.suit?9:6)-get.value(card);
 					}).set('num',num);
 					if(lib.suit.includes(suit)){
-						next.set('prompt2','若弃置的是'+get.suit(suit)+'牌，则改为'+get.translation(player)+'获得之');
+						next.set('prompt2','若弃置的是'+get.translation(suit)+'牌，则改为'+get.translation(player)+'获得之');
 						next.set('suit',suit);
 					}
 					'step 1'
