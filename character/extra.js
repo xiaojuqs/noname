@@ -255,11 +255,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					const cmp=(a,b)=>{
 						return resultList.indexOf(a)-resultList.indexOf(b);
 					}
-					for(let i in toSortPlayers){
-						for(let j in toSortPlayers){
-							if(toSortPlayers[i]&&toSortPlayers[j]&&typeof(toSortPlayers[i])=='object'&&typeof(toSortPlayers[j])=='object'&&cmp(toSortPlayers[i].getSeatNum(),toSortPlayers[j].getSeatNum())<0){
-								toSwapList.push([toSortPlayers[i],toSortPlayers[j]]);
-								[toSortPlayers[i],toSortPlayers[j]]=[toSortPlayers[j],toSortPlayers[i]];
+					for(let i of toSortPlayers){
+						for(let j of toSortPlayers){
+							if(cmp(i.getSeatNum(),j.getSeatNum())<0){
+								toSwapList.push([i,j]);
+								[i,j]=[j,i];
 							}
 						}
 					}
@@ -5843,17 +5843,6 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								}
 								return 0.7;
 							}
-						},
-						player:function(card,player){
-							if(_status.currentPhase!=player) return;
-							if(_status.event.name!='chooseToUse'||_status.event.player!=player) return;
-							if(get.type(card)=='basic') return;
-							if(get.tag(card,'gain')) return;
-							if(get.value(card,player,'raw')>=7) return;
-							if(player.hp<=2) return;
-							if(!player.hasSkill('jilue')||player.storage.renjie==0){
-								return 'zeroplayertarget';
-							}
 						}
 					}
 				}
@@ -5862,7 +5851,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				mod:{
 					aiOrder:(player,card,num)=>{
-						if(num<=0||typeof card!=='object'||!player.isPhaseUsing()) return 0;
+						if(num<=0||typeof card!=='object'||!player.isPhaseUsing()) return num;
 						if(player.awakenedSkills.includes('sbaiyin')){
 							if(player.countMark('renjie')<3&&player.getUseValue(card)<Math.min(1.8,0.18*player.hp*player.hp)) return 0;
 						}
@@ -6043,7 +6032,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						player:1
 					},
 					effect:{
-						player:(card,player,target)=>{
+						player(card,player,target){
 							if(target&&player.hasSkill('rewansha')&&target.hp<=1&&get.tag(card,'damage')) return [1,0,1.5,-1.5];
 						}
 					}
