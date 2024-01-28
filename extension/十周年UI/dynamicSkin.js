@@ -4280,48 +4280,19 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					y: [0, 0.5]
 				},
 			},
-			战场荣耀: {
-				name: '诸葛亮/战场荣耀/daiji2',
-				play2: 'play2',
-				shan: 'play3',
-				x: [0, 0.5],
-				y: [0, 0.55],
-				scale: 0.75,
+			国之柱石: {
+				name: '诸葛亮/国之柱石/XingXiang',
+				x: [0, -0.1],
+				y: [0, 0.15],
+				scale: 0.5,
 				angle: 0,
 				//speed: 1,
-				shizhounian: true,
-				chuchang: {
-					name: '诸葛亮/战场荣耀/chuchang',
-					action: 'play',
-					scale: 0.9,
-				},
-				gongji: {
-					name: '诸葛亮/战场荣耀/chuchang2',
-					action: 'gongji',
-					scale: 0.7,
-				},
-				teshu: {
-					name: '诸葛亮/战场荣耀/chuchang2',
-					action: 'jineng',
-					scale: 0.7,
-				},
+				//action: 'DaiJi',
 				beijing: {
-					name: '诸葛亮/战场荣耀/beijing',
-					x: [0, 0.5],
-					y: [0, 0.5],
+					name: '诸葛亮/国之柱石/BeiJing',
 					scale: 0.3,
-				},
-				zhishixian: {
-					name: '诸葛亮/战场荣耀/shouji2',
-					scale: 0.5,
-					speed: 1.2,
-					delay: 0.3,
-					effect: {
-						name: '诸葛亮/战场荣耀/shouji',
-						scale: 0.6,
-						speed: 0.6,
-						delay: 0.7,
-					},
+					x: [0, 0.4],
+					y: [0, 0.5]
 				},
 			},
 		},
