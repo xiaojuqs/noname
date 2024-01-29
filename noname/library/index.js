@@ -31,7 +31,7 @@ export class Library extends Uninstantable {
 	static updateURLS = updateURLs;
 	static updateURL = updateURLs.github;
 	static mirrorURL = updateURLs.coding;
-	static hallURL = '47.99.105.222';
+	static hallURL = '127.0.0.1';
 	static assetURL = assetURL;
 	static userAgent = userAgent;
 	static characterDefaultPicturePath = characterDefaultPicturePath;
@@ -9763,11 +9763,11 @@ export class Library extends Uninstantable {
 			if (info.round && (info.round - (game.roundNumber - player.storage[skill + '_roundcount']) > 0)) return false;
 			for (const item in player.storage) {
 				if (item.startsWith('temp_ban_')) {
-					if (player.storage[item] !== true) continue;
+					if(player.storage[item] !== true) continue;
 					const skillName = item.slice(9);
 					if (lib.skill[skillName]) {
-						const skills = game.expandSkills([skillName]);
-						if (skills.includes(skill)) return false;
+						const skills=game.expandSkills([skillName]);
+						if(skills.includes(skill)) return false;
 					}
 				}
 			}
@@ -11327,7 +11327,7 @@ export class Library extends Uninstantable {
 			priority: 100,
 			firstDo: true,
 			popup: false,
-			silent: true,
+			silent:true,
 			filter: function (event, player) {
 				return player.hp >= player.maxHp;
 			},
@@ -11416,7 +11416,7 @@ export class Library extends Uninstantable {
 			popup: false,
 			priority: -100,
 			lastDo: true,
-			silent: true,
+			silent:true,
 			filter: function (event) {
 				return !event._cleared && event.card.name != 'wuxie';
 			},
@@ -11433,7 +11433,7 @@ export class Library extends Uninstantable {
 			popup: false,
 			priority: -100,
 			lastDo: true,
-			silent: true,
+			silent:true,
 			filter: function (event) {
 				return ui.todiscard[event.discardid] ? true : false;
 			},
@@ -11463,7 +11463,7 @@ export class Library extends Uninstantable {
 			priority: 5,
 			forced: true,
 			popup: false,
-			silent: true,
+			silent:true,
 			filter: function (event, player) {
 				//if(!event.player.isDying()) return false;
 				//if(event.source&&event.source.isIn()&&event.source!=player) return false;
@@ -11617,7 +11617,7 @@ export class Library extends Uninstantable {
 			popup: false,
 			logv: false,
 			forceDie: true,
-			silent: true,
+			silent:true,
 			//priority:-5,
 			content: function () {
 				"step 0";
@@ -11646,7 +11646,7 @@ export class Library extends Uninstantable {
 			forced: true,
 			popup: false,
 			forceDie: true,
-			silent: true,
+			silent:true,
 			filter: function (event, player) {
 				var evt = event.getParent();
 				return evt && evt.name == 'damage' && evt.hasNature('linked') && player.isLinked();

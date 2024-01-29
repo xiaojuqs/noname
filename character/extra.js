@@ -252,9 +252,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					const {result}=await next;
 					if(!result.bool) return;
 					player.logSkill('tamo');
-					console.log(result.moved)
 					const resultList=result.moved[0].map(info=>{
-						return parseInt(info.split('|')[0]);
+						return info&&parseInt(info.split('|')[0]);
 					});
 					const toSwapList=[];
 					const cmp=(a,b)=>{
@@ -6186,7 +6185,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				ai:{
 					effect:{
 						target(card,player,target,current){
-							if(get.tag(card,'respondSha')&&current<0) return 0.6
+							if(get.tag(card,'respondSha')&&current<0) return 0.6;
 						}
 					},
 					directHit_ai:true,
@@ -7305,8 +7304,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						ai:{
 							effect:{
 								target(card,player,target,current){
-									if(get.tag(card,'respondSha')&&current<0) return 0.6
-								}
+									if(get.tag(card,'respondSha')&&current<0) return 0.6;
+								},
+								player:function(card,player,target,current){
+									var type=get.type(card);
+									if (player.getCards('h').length-player.getHandcardLimit()<=0){
+										if(type=='trick'||type=='delay') return 'zeroplayertarget';
+									}
+								},
 							},
 							respondSha:true,
 							order:0,
@@ -7329,7 +7334,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						ai:{
 							effect:{
 								target(card,player,target,current){
-									if(get.tag(card,'respondSha')&&current<0) return 0.6
+									if(get.tag(card,'respondSha')&&current<0) return 0.6;
 								}
 							},
 							respondSha:true,
