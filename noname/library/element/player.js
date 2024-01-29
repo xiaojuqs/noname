@@ -1246,6 +1246,9 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
+		// taffy: 修复player is undefined问题
+		let player = this;
+		/* taffy分界线 */
 		player.SortEquipNodes();
 	}
 	//以下函数涉及到本次更新内容而进行修改

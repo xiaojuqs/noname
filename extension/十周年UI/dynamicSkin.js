@@ -140,6 +140,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		bianxi: { //卞喜
+			夺关袭寨: {
+				name: '卞喜/夺关袭寨/daiji2',
+				x: [0, 0.55],
+				y: [0, 0.45],
+				scale: 0.8,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '卞喜/夺关袭寨/chuchang',
+					scale: 0.8,
+					action: 'play',
+				},
+				gongji: {
+					name: '卞喜/夺关袭寨/chuchang',
+					scale: 1,
+					action: 'play',
+				},
+				beijing: {
+					name: '卞喜/夺关袭寨/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.4,
+				},
+			},
+		},
 		caocao: { //曹操
 			雄吞天下: {
 				name: '曹操/雄吞天下/XingXiang',
@@ -432,6 +459,23 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '曹丕/气荡山河/BeiJing',
 					scale: 0.3,
 					x: [0, 1.7],
+					y: [0, 0.5]
+				},
+			},
+		},
+		caoren: { //曹仁
+			国之柱石: {
+				name: '曹仁/国之柱石/XingXiang',
+				x: [0, 0.1],
+				y: [0, 0.5],
+				scale: 0.35,
+				angle: 0,
+				//speed: 1,
+				//action: 'DaiJi',
+				beijing: {
+					name: '曹仁/国之柱石/BeiJing',
+					scale: 0.4,
+					x: [0, 0.5],
 					y: [0, 0.5]
 				},
 			},
@@ -1387,6 +1431,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		liuyong: { //刘永
+			仗剑诛邪: {
+				name: '刘永/仗剑诛邪/daiji2',
+				x: [0, 0.4],
+				y: [0, 0.55],
+				scale: 0.65,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '刘永/仗剑诛邪/chuchang',
+					scale: 1,
+					action: 'play',
+				},
+				gongji: {
+					name: '刘永/仗剑诛邪/chuchang',
+					scale: 1.2,
+					action: 'play',
+				},
+				beijing: {
+					name: '刘永/仗剑诛邪/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+			},
+		},
 		liuzan: { //留赞
 			高歌陷陈: {
 				name: '留赞/高歌陷陈/daiji2',
@@ -2078,6 +2149,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					scale: 0.3,
 					x: [0, 0.4],
 					y: [0, 0.5]
+				},
+			},
+		},
+		shen_guanyu: { //神关羽
+			链狱鬼神: {
+				name: '神关羽/链狱鬼神/daiji2',
+				x: [0, 0.45],
+				y: [0, 0.55],
+				scale: 0.65,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '神关羽/链狱鬼神/chuchang',
+					scale: 0.7,
+					action: 'play',
+				},
+				gongji: {
+					name: '神关羽/链狱鬼神/chuchang',
+					scale: 0.9,
+					action: 'play',
+				},
+				beijing: {
+					name: '神关羽/链狱鬼神/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
 				},
 			},
 		},
@@ -3120,6 +3218,23 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '武诸葛亮/经典形象/wumiao_zhugeliang',
 					action: ['play2'],
 					scale: 0.5,
+				},
+			},
+		},
+		xiahoushi: { //夏侯氏
+			明良千古: {
+				name: '夏侯氏/明良千古/XingXiang',
+				x: [0, 0.35],
+				y: [0, 0.25],
+				scale: 0.5,
+				angle: 0,
+				//speed: 1,
+				//action: 'DaiJi',
+				beijing: {
+					name: '夏侯氏/明良千古/BeiJing',
+					scale: 0.3,
+					x: [0, 1.8],
+					y: [0, 0.5]
 				},
 			},
 		},
@@ -4331,6 +4446,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		sb_caopi: decadeUI.dynamicSkin.caopi,
 		taffyold_sb_caopi: decadeUI.dynamicSkin.caopi,
 
+		//曹仁
+		old_caoren: decadeUI.dynamicSkin.caoren,
+		sp_caoren: decadeUI.dynamicSkin.caoren,
+		sb_caoren: decadeUI.dynamicSkin.caoren,
+		star_caoren: decadeUI.dynamicSkin.caoren,
+
 		//大乔
 		re_daqiao: decadeUI.dynamicSkin.daqiao,
 		sb_daqiao: decadeUI.dynamicSkin.daqiao,
@@ -4410,6 +4531,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		dc_liubei: decadeUI.dynamicSkin.liubei,
 		jsrg_liubei: decadeUI.dynamicSkin.liubei,
 
+		// 刘永
+		jsrg_liuyong: decadeUI.dynamicSkin.liubei,
+
 		//留赞
 		re_liuzan: decadeUI.dynamicSkin.liuzan,
 
@@ -4442,6 +4566,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 神曹操
 		old_caocao: decadeUI.dynamicSkin.shen_caocao,
 		shoushen_caocao: decadeUI.dynamicSkin.shen_caocao,
+
+		//神关羽
+		tw_shen_guanyu: decadeUI.dynamicSkin.shen_guanyu,
 
 		//神吕蒙
 		tw_shen_lvmeng: decadeUI.dynamicSkin.shen_lvmeng,
@@ -4497,6 +4624,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 武诸葛亮
 		oldwu_zhugeliang: decadeUI.dynamicSkin.wu_zhugeliang,
+
+		//夏侯氏
+		re_xiahoushi: decadeUI.dynamicSkin.xiahoushi,
+		sb_xiahoushi: decadeUI.dynamicSkin.xiahoushi,
+		sp_xiahoushi: decadeUI.dynamicSkin.xiahoushi,
 
 		//徐盛
 		re_xusheng: decadeUI.dynamicSkin.xusheng,
