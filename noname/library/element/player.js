@@ -1218,20 +1218,9 @@ export class Player extends HTMLDivElement {
 					card.classList.remove('drawinghidden');
 					card.classList.add('feichu');
 					delete card._transform;
-					const equipNum = get.equipNum(card);
-					let equipped = false;
-					for (let j = 0; j < this.node.equips.childNodes.length; j++) {
-						if (get.equipNum(this.node.equips.childNodes[j]) >= equipNum) {
-							this.node.equips.insertBefore(card, this.node.equips.childNodes[j]);
-							equipped = true;
-							break;
-						}
-					}
-					if (!equipped) {
-						this.node.equips.appendChild(card);
-						if (_status.discarded) {
-							_status.discarded.remove(card);
-						}
+					this.node.equips.appendChild(card);
+					if (_status.discarded) {
+						_status.discarded.remove(card);
 					}
 				}
 			}
@@ -1245,7 +1234,7 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
-		player.SortEquipNodes();
+		this.SortEquipNodes();
 	}
 	//以下函数涉及到本次更新内容而进行修改
 	/**
@@ -9551,7 +9540,6 @@ export class Player extends HTMLDivElement {
 			})){
 				const card = game.createCard('empty_equip' + i,'', '');
 				card.fix();
-				//console.log('add '+card.name);
 				card.style.transform = '';
 				card.classList.remove('drawinghidden');
 				card.classList.add('emptyequip');
