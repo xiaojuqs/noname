@@ -33,7 +33,7 @@ export function canUseHttpProtocol() {
 			try {
 				require('express');
 				return true;
-			} catch  {
+			} catch {
 				return false;
 			}
 		}
@@ -90,7 +90,7 @@ export async function boot() {
 
 	setWindowListener();
 	const promiseErrorHandler = await setOnError();
-	
+
 	// 无名杀更新日志
 	if (window.noname_update) {
 		Reflect.set(lib, 'version', window.noname_update.version);
@@ -121,7 +121,7 @@ export async function boot() {
 			window.onload = resolve;
 		} else resolve(void 0);
 	}).then(onWindowReady.bind(window));
-	
+
 
 	// 闭源客户端检测并提醒
 	if (lib.assetURL.includes('com.widget.noname.qingyao') || lib.assetURL.includes('online.nonamekill.android')) {
@@ -176,7 +176,7 @@ export async function boot() {
 	// 读取模式
 	if (config2.mode) config.set('mode', config2.mode);
 	if (config.get('mode_config')[config.get('mode')] === undefined)
-		 config.get('mode_config')[config.get('mode')] = {};
+		config.get('mode_config')[config.get('mode')] = {};
 
 	// 复制共有模式设置
 	for (const name in config.get('mode_config').global) {
@@ -500,7 +500,7 @@ export async function boot() {
 	if (extensionlist.length) {
 		_status.extensionLoading = [];
 		_status.extensionLoaded = [];
-		
+
 		const bannedExtensions = Reflect.get(window, 'bannedExtensions');
 
 		const extensionsLoading = [];
@@ -528,7 +528,7 @@ export async function boot() {
 		}
 		// await Promise.allSettled(_status.extensionLoading);
 
-		_status.extensionLoaded.filter(name=>game.hasExtension(name)).forEach((name) => {
+		_status.extensionLoaded.filter(name => game.hasExtension(name)).forEach((name) => {
 			lib.announce.publish("Noname.Init.Extension.onLoad", name);
 			lib.announce.publish(`Noname.Init.Extension.${name}.onLoad`, void 0);
 		});
@@ -893,9 +893,9 @@ async function setOnError() {
 			}
 			//解析parsex里的content fun内容(通常是技能content) 
 			// @ts-ignore
-			else if (err && err.stack && ['at Object.eval [as content]', 'at Proxy.content'].some(str =>{
+			else if (err && err.stack && ['at Object.eval [as content]', 'at Proxy.content'].some(str => {
 				let stackSplit1 = err.stack.split('\n')[1];
-				if(stackSplit1){
+				if (stackSplit1) {
 					return stackSplit1.trim().startsWith(str);
 				}
 				return false;
@@ -923,6 +923,7 @@ async function setOnError() {
 			game.loop();
 		}
 	};
+
 	return promiseErrorHandler;
 }
 

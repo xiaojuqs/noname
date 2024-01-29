@@ -22,17 +22,15 @@ import { Announce } from "./announce/index.js";
 import { Channel } from "./channel/index.js";
 import { Experimental } from "./experimental/index.js";
 import * as Element from "./element/index.js";
+import { updateURLs } from "./update-urls.js";
 
 
 export class Library extends Uninstantable {
 	static configprefix = 'noname_0.9_';
 	static versionOL = 27;
-	static updateURLS = {
-		coding: 'https://raw.githubusercontent.com/adeFuLoDgu/noname',
-		github: 'https://raw.githubusercontent.com/adeFuLoDgu/noname',
-	};
-	static updateURL = 'https://raw.githubusercontent.com/adeFuLoDgu/noname';
-	static mirrorURL = 'https://raw.githubusercontent.com/adeFuLoDgu/noname';
+	static updateURLS = updateURLs;
+	static updateURL = updateURLs.github;
+	static mirrorURL = updateURLs.coding;
 	static hallURL = '127.0.0.1';
 	static assetURL = assetURL;
 	static userAgent = userAgent;
@@ -1124,7 +1122,7 @@ export class Library extends Uninstantable {
 					init: 'github',
 					unfrequent: true,
 					item: {
-						coding: 'CSDN',
+						coding: 'URC',
 						github: 'GitHub',
 					},
 					onclick: function (item) {
@@ -9650,20 +9648,40 @@ export class Library extends Uninstantable {
 	static filter = {
 		all: () => true,
 		none: () => false,
-		//Check if the card does not count toward the player's hand limit
-		//检测此牌是否不计入此角色的手牌上限
+		/**
+		 * Check if the card does not count toward the player's hand limit
+		 *
+		 * 检测此牌是否不计入此角色的手牌上限
+		 * @param { Card } card
+		 * @param { Player } player
+		 * @returns { boolean }
+		 */
 		ignoredHandcard: (card, player) => game.checkMod(card, player, false, 'ignoredHandcard', player),
-		//Check if the card is giftable
-		//检测此牌是否可赠予
+		/**
+		 * Check if the card is giftable
+		 *
+		 * 检测此牌是否可赠予
+		 * @param { Card } card
+		 * @param { Player } player
+		 * @param { Player } target
+		 * @param { boolean } [strict]
+		 */
 		cardGiftable: (card, player, target, strict) => {
 			const mod = game.checkMod(card, player, target, 'unchanged', 'cardGiftable', player);
 			if (!mod || strict && (mod == 'unchanged' && (get.position(card) != 'h' || !get.cardtag(card, 'gifts')) || player == target)) return false;
 			return get.type(card, false) != 'equip' || target.canEquip(card, true);
 		},
-		//Check if the card is recastable
-		//检查此牌是否可重铸
-		cardRecastable: (card, player, source, strict) => {
-			if (typeof player == 'undefined') player = get.owner(card);
+		/**
+		 * Check if the card is recastable
+		 *
+		 * 检查此牌是否可重铸
+		 * @param { Card } card
+		 * @param { Player } player
+		 * @param { Player } [source]
+		 * @param { boolean } [strict]
+		 */
+		cardRecastable: (card, player = get.owner(card), source, strict) => {
+			// if (typeof player == 'undefined') player = get.owner(card);
 			const mod = game.checkMod(card, player, source, 'unchanged', 'cardRecastable', player);
 			if (!mod) return false;
 			if (strict && mod == 'unchanged') {
@@ -9674,6 +9692,11 @@ export class Library extends Uninstantable {
 			return true;
 		},
 		//装备栏相关
+		/**
+		 * @param { Card } card 
+		 * @param { Player } player 
+		 * @returns { boolean }
+		 */
 		canBeReplaced: function (card, player) {
 			var mod = game.checkMod(card, player, 'unchanged', 'canBeReplaced', player);
 			if (mod != 'unchanged') return mod;
@@ -10312,7 +10335,9 @@ export class Library extends Uninstantable {
 						if (game.hasPlayer(current => {
 							if (!player.canUse(card, current)) return false;
 							const storage = player.storage, zhibi = storage.zhibi;
-							return (zhibi && !zhibi.includes(current) || get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1)) && current.mayHaveShan(player, 'use') && player.hasSkill('jiu');
+							return (zhibi && !zhibi.includes(current) || get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1)) && current.mayHaveShan(player, 'use', current.getCards(i => {
+								return i.hasGaintag('sha_notshan');
+							})) && player.hasSkill('jiu');
 						})) return 1;
 						return 0;
 					}
@@ -10383,7 +10408,9 @@ export class Library extends Uninstantable {
 							if (game.hasPlayer(current => {
 								if (!player.canUse(card, current)) return false;
 								const storage = player.storage, zhibi = storage.zhibi;
-								return (zhibi && !zhibi.includes(current) || (get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1))) && current.mayHaveShan(player, 'use');
+								return (zhibi && !zhibi.includes(current) || (get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1))) && current.mayHaveShan(player, 'use', current.getCards(i => {
+									return i.hasGaintag('sha_notshan');
+								}));
 							})) return get.order(card, player) + 0.5;
 						}
 						else if (cardName == 'tao' && player.hp <= 2 && player.getDamagedHp() >= 2) return get.order(card, player) + 0.5;
@@ -11270,7 +11297,6 @@ export class Library extends Uninstantable {
 			charlotte: true,
 			priority: -100,
 			lastDo: true,
-			silent:true,
 			content: function () {
 				player.removeSkill('counttrigger');
 				delete player.storage.counttrigger;
