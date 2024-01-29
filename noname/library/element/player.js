@@ -1140,6 +1140,28 @@ export class Player extends HTMLDivElement {
 		return next;
 	}
 	/**
+	 * @author: adeFuLoDgu
+	 * @description: 装备栏排序
+	 */
+	SortEquipNodes() {
+		var player=this;
+		if (!player.node.equips.childNodes) return;
+		var childnodes_Array=[];
+		for (var i in player.node.equips.childNodes){
+			if (player.node.equips.childNodes[i].nodeType==1) childnodes_Array.push(player.node.equips.childNodes[i]);
+		}
+		childnodes_Array.sort(function(a,b){
+			var sort_equip_num=function(old_equip_num){
+				if (old_equip_num==5) return -1;
+				return old_equip_num;
+			}
+			return sort_equip_num(get.equipNum(a))-sort_equip_num(get.equipNum(b));
+		});
+		for (i=0;i<childnodes_Array.length;++i){
+			player.node.equips.appendChild(childnodes_Array[i]);
+		}
+	}
+	/**
 	 * 判断判定区是否被废除
 	 */
 	isDisabledJudge() {
