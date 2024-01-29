@@ -1,5 +1,5 @@
 window.noname_asset_list=[
-	'v1.10.6.2',
+	'v1.10.7',
 	/*audio start*/
 	'audio/background/aozhan_chaoming.mp3',
 	'audio/background/aozhan_online.mp3',
@@ -6824,6 +6824,7 @@ window.noname_asset_list=[
 	'image/character/clan_wangyun.jpg',
 	'image/character/clan_wuban.jpg',
 	'image/character/clan_wukuang.jpg',
+	'image/character/clan_wuqiao.jpg',
 	'image/character/clan_wuxian.jpg',
 	'image/character/clan_xuncai.jpg',
 	'image/character/clan_xuncan.jpg',
@@ -7710,6 +7711,7 @@ window.noname_asset_list=[
 	'image/character/ol_pengyang.jpg',
 	'image/character/ol_puyuan.jpg',
 	'image/character/ol_qianzhao.jpg',
+	'image/character/ol_sb_guanyu.jpg',
 	'image/character/ol_sb_jiangwei.jpg',
 	'image/character/ol_sp_zhugeliang.jpg',
 	'image/character/ol_sunjian.jpg',
