@@ -45,7 +45,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				link.rel = 'icon';
 				link.href = `${lib.assetURL}extension/永雏塔菲/image/icon.png`;
 				document.head.appendChild(link);
-
 				// 联机模式导入所有扩展喵
 				Object.defineProperties(_status, {
 					connectMode: {
@@ -80,7 +79,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						writable: true
 					}
 				});
-
 				// 一些prefix样式补充
 				lib.namePrefix.set('旧武', {
 					/**
@@ -2405,7 +2403,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								group: ['spshenpingjian_use'],
 								phaseUse_special: [],
 								ai: {
-									threaten: 100
+									threaten: 99
 								},
 							},
 							spshenpingjian_use: {
@@ -5666,7 +5664,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								group: ['taffyre_pingjian_use'],
 								phaseUse_special: [],
 								ai: {
-									threaten: 99
+									threaten: 50
 								},
 							},
 							taffyre_pingjian_use: {
@@ -7796,7 +7794,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-01-27",
+				name: "更新日期: 2024-01-29",
 			},
 			github: {
 				clear: true,
