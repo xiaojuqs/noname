@@ -6901,7 +6901,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						target.addAdditionalSkill('dczecai_effect','rejizhi');
 						target.addTempSkill('dczecai_effect','roundStart');
 						if(target==event.target){
-							var evt=trigger._trigger;
+							let evt=event._trigger;
 							target.insertPhase();
 							if(evt.player!=target&&!evt._finished){
 								evt.finish();

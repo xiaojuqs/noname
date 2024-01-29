@@ -14139,7 +14139,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						canvas2.height=249;
 						canvas2.style.border='3px solid';
 
-						var ctx=canvas.getContext('2d');
+						var ctx=canvas.getContext('2d', { willReadFrequently: true });
 						var ctx2=canvas2.getContext('2d');
 
 						var img=new Image();
