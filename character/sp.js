@@ -2577,7 +2577,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(event.list.includes(target.countCards('h'))) event.goto(2);
 				},
 				ai:{
-					combo:'olguangshu',
+					combo:'olgangshu',
 					maixie:true,
 				},
 			},
@@ -13583,7 +13583,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				direct:true,
 				filter:function(event,player){
-					return player!=event.player&&!event.player.isDisabledJudge()&&event.player.countCards('he')&&!event.player.countCards('j',{type:'delay'});
+					return player!=event.player&&!event.player.isDisabledJudge()&&event.player.countCards('he')&&!event.player.countCards('j',card=>get.type(card.viewAs||card.name)=='delay');
 				},
 				content:function(){
 					'step 0'
