@@ -4131,6 +4131,41 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		zhaoyǎn: { //赵俨
+			遐迩一体: {
+				name: '赵俨/遐迩一体/xingxiang',
+				version: "4.0",
+				json: true,
+				// shizhounian: true,
+				x: [0, 1],
+				y: [0, 0.25],
+				scale: 1,
+				angle: 0,
+				//speed: 1,
+				chuchang: {
+					name: '赵俨/遐迩一体/jineng01',
+					version: "4.0",
+					json: true,
+					scale: 1,
+					action: 'play',
+				},
+				gongji: {
+					name: '赵俨/遐迩一体/jineng01',
+					version: "4.0",
+					json: true,
+					scale: 1.2,
+					action: 'play',
+				},
+				beijing: {
+					name: '赵俨/遐迩一体/beijing',
+					version: "4.0",
+					json: true,
+					scale: 0.6,
+					x: [0, 0.7],
+					y: [0, 0.5]
+				},
+			},
+		},
 		zhaoyun: { // 赵云
 			金甲破阵: {
 				name: '赵云/金甲破阵/daiji2',
@@ -4532,7 +4567,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		jsrg_liubei: decadeUI.dynamicSkin.liubei,
 
 		// 刘永
-		jsrg_liuyong: decadeUI.dynamicSkin.liubei,
+		jsrg_liuyong: decadeUI.dynamicSkin.liuyong,
 
 		//留赞
 		re_liuzan: decadeUI.dynamicSkin.liuzan,
@@ -4673,6 +4708,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		//赵襄
 		dc_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
+
+		//赵俨
+		dc_zhaoyǎn: decadeUI.dynamicSkin.zhaoyǎn,
 
 		//赵云
 		ol_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
