@@ -5945,7 +5945,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 															return list;
 														}, []).sort((a, b) => b - a)[0];
 													case 2:
-														return Math.min(5, Math.max(2, game.dead.length));
+														let draw = Math.min(5, Math.max(2, game.dead.length));
+														return draw > 2 ? draw : 0;
 													case 3:
 														return game.filterPlayer().reduce((list, target) => {
 															list.push(get.recoverEffect(target, player, player));
@@ -6029,24 +6030,23 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 																}
 														}
 													},
-													ai: {
-														result: {
-															target: function (player, target) {
-																switch (lib.skill.taffyold_sbxingshang_use_backup.num) {
-																	case 1:
-																		let num = 0;
-																		if (target.isLinked()) num += 0.5;
-																		if (target.isTurnedOver()) num += 10;
-																		return num;
-																	case 2:
-																		return 1;
-																	case 3:
-																		return get.recoverEffect(target, player, player);
-																	case 4:
-																		return 1;
+													ai1: function () {
+														return 1;
+													},
+													ai2: function (target) {
+														let player = _status.event.player;
+														switch (lib.skill.taffyold_sbxingshang_use_backup.num) {
+															case 1:
+																if (get.attitude(player, target) > 0) {
+																	if (target.isLinked()) return 0.5;
+																	if (target.isTurnedOver()) return 10;
 																}
-															},
-														},
+																case 3:
+																	if (get.attitude(player, target) > 0) return get.recoverEffect(target, player, player);
+																case 2:
+																	if (get.attitude(player, target) > 0) return Math.min(5, Math.max(2, game.dead.length));
+														}
+														return 0;
 													},
 												}
 											},
@@ -6176,26 +6176,29 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 														}
 												}
 											},
-											ai: {
-												result: {
-													target: function (player, target) {
-														switch (lib.skill.taffyold_sbfangzhu_backup.num) {
-															case 1:
-																let num = 0;
-																if (target.name && lib.character[target.name]) num += get.rank(target.name, true);
-																if (target.name2 && lib.character[target.name2]) num += get.rank(target.name2, true);
-																return num;
-															case 2:
-																return 0;
-															case 3:
-																if (get.attitude(player, target) > 0 && target.isTurnedOver()) return 10 * target.countCards('hs') + 1;
-																if (get.attitude(player, target) < 0 && !target.isTurnedOver()) return -5 * target.countCards('hs') + 1;
-																return 0;
-															case 4:
-																return 0;
-														}
-													},
-												},
+											ai1: function () {
+												return 1;
+											},
+											ai2: function (target) {
+												let player = _status.event.player;
+												let num = 0;
+												switch (lib.skill.taffyold_sbfangzhu_backup.num) {
+													case 1:
+														if (get.attitude(player, target) < 0 && !target.hasSkill('baiban') && target.name && lib.character[target.name]) num += get.rank(target.name, true);
+														if (get.attitude(player, target) < 0 && !target.hasSkill('baiban') && target.name2 && lib.character[target.name2]) num += get.rank(target.name2, true);
+														return num;
+													case 2:
+														return 0;
+													case 3:
+														if (get.attitude(player, target) > 0 && target.isTurnedOver()) return 10 * target.countCards('hs') + 1;
+														if (get.attitude(player, target) < 0 && !target.isTurnedOver()) return -5 * target.countCards('hs') + 1;
+														return 0;
+													case 4:
+														if (get.attitude(player, target) < 0 && !target.hasSkill('taffyold_sbfangzhu_ban') && player.countMark('taffyold_sbxingshang') < 3 && target.name && lib.character[target.name]) num += get.rank(target.name, true) + 1;
+														if (get.attitude(player, target) < 0 && !target.hasSkill('taffyold_sbfangzhu_ban') && player.countMark('taffyold_sbxingshang') < 3 && target.name2 && lib.character[target.name2]) num += get.rank(target.name2, true) + 1;
+														return num;
+												}
+												return 0;
 											},
 										}
 									},
@@ -7794,7 +7797,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-01-29",
+				name: "更新日期: 2024-01-31",
 			},
 			github: {
 				clear: true,
