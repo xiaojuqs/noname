@@ -2577,7 +2577,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(event.list.includes(target.countCards('h'))) event.goto(2);
 				},
 				ai:{
-					combo:'olguangshu',
+					combo:'olgangshu',
 					maixie:true,
 				},
 			},
@@ -5479,7 +5479,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(!player.hasSkillTag('directHit_ai',true,{
 								target:target,
 								card:card,
-							},true)) odds-=0.7*target.mayHaveShan(player,'use',target.getCards(i=>{
+							},true)) odds-=0.7*target.mayHaveShan(player,'use',target.getCards('h',i=>{
 								return i.hasGaintag('sha_notshan');
 							}),'odds');
 							_status.event.putTempCache('sha_result','eff',{
@@ -7275,7 +7275,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						}
 						else{
 							var target=trigger.target;
-							if(trigger.targets.length>1||target.mayHaveShan(player,'use',target.getCards(i=>{
+							if(trigger.targets.length>1||target.mayHaveShan(player,'use',target.getCards('h',i=>{
 								return i.hasGaintag('sha_notshan');
 							}))) return 0;
 						}
@@ -13583,7 +13583,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				direct:true,
 				filter:function(event,player){
-					return player!=event.player&&!event.player.isDisabledJudge()&&event.player.countCards('he')&&!event.player.countCards('j',{type:'delay'});
+					return player!=event.player&&!event.player.isDisabledJudge()&&event.player.countCards('he')&&!event.player.countCards('j',card=>get.type(card.viewAs||card.name)=='delay');
 				},
 				content:function(){
 					'step 0'
@@ -14778,7 +14778,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							else if(get.tag(card,'respondShan')>0){
 								if(current<0&&used==target.getAttackRange()-1){
 									if(card.name==='sha'){
-										if(!target.mayHaveShan(player,'use',target.getCards(i=>{
+										if(!target.mayHaveShan(player,'use',target.getCards('h',i=>{
 											return i.hasGaintag('sha_notshan');
 										}))) return;
 									}

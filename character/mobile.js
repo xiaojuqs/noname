@@ -9146,7 +9146,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					]).set('ai',function(){
 						var target=_status.event.getTrigger().target;
 						var player=_status.event.player;
-						var num=target.mayHaveShan(player,'use',target.getCards(i=>{
+						var num=target.mayHaveShan(player,'use',target.getCards('h',i=>{
 							return i.hasGaintag('sha_notshan');
 						}))?0:1;
 						if(get.attitude(player,target)>0) num=1-num;
@@ -14139,7 +14139,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						canvas2.height=249;
 						canvas2.style.border='3px solid';
 
-						var ctx=canvas.getContext('2d');
+						var ctx=canvas.getContext('2d', { willReadFrequently: true });
 						var ctx2=canvas2.getContext('2d');
 
 						var img=new Image();

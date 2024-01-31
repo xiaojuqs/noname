@@ -3730,6 +3730,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 								else num=0;
 								if(strategy==2) num++;
 								if(strategy==3) num--;
+								if(game.zhu.hp>=3&&situation>1) num=6;
 								return num;
 							case 'commoner':
 								if(get.population('fan')+get.population('zhong')+get.population('mingzhong')==0) return -1;
@@ -3796,7 +3797,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				var zhuzhong=0,total=0,zhu,fan=0;
 				for(i=0;i<game.players.length;i++){
 					player=game.players[i];
-					var php=player.hp;
+					let php=player.hp;
+					let skill_score=0;
+					skill_score=get.rank(player,true);
 					if(player.hasSkill('benghuai')&&php>4){
 						php=4;
 					}
@@ -3807,6 +3810,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						php-=player.storage.tairan2;
 					}
 					j=player.countCards('h')+player.countCards('e')*1.5+php*2;
+					if(skill_score!=0) j+=skill_score;
 					if(player.identity=='zhu'){
 						zhuzhong+=j*1.2+5;
 						total+=j*1.2+5;
