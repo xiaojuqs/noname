@@ -10340,7 +10340,7 @@ export class Library extends Uninstantable {
 						if (game.hasPlayer(current => {
 							if (!player.canUse(card, current)) return false;
 							const storage = player.storage, zhibi = storage.zhibi;
-							return (zhibi && !zhibi.includes(current) || get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1)) && current.mayHaveShan(player, 'use', current.getCards(i => {
+							return (zhibi && !zhibi.includes(current) || get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1)) && current.mayHaveShan(player, 'use', current.getCards('h', i => {
 								return i.hasGaintag('sha_notshan');
 							})) && player.hasSkill('jiu');
 						})) return 1;
@@ -10413,7 +10413,7 @@ export class Library extends Uninstantable {
 							if (game.hasPlayer(current => {
 								if (!player.canUse(card, current)) return false;
 								const storage = player.storage, zhibi = storage.zhibi;
-								return (zhibi && !zhibi.includes(current) || (get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1))) && current.mayHaveShan(player, 'use', current.getCards(i => {
+								return (zhibi && !zhibi.includes(current) || (get.effect(current, card, player, player) >= 2 - Math.max(0, (storage.stratagem_fury || 0) - 1))) && current.mayHaveShan(player, 'use', current.getCards('h', i => {
 									return i.hasGaintag('sha_notshan');
 								}));
 							})) return get.order(card, player) + 0.5;

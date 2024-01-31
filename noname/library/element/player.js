@@ -1219,20 +1219,9 @@ export class Player extends HTMLDivElement {
 					card.classList.remove('drawinghidden');
 					card.classList.add('feichu');
 					delete card._transform;
-					const equipNum = get.equipNum(card);
-					let equipped = false;
-					for (let j = 0; j < this.node.equips.childNodes.length; j++) {
-						if (get.equipNum(this.node.equips.childNodes[j]) >= equipNum) {
-							this.node.equips.insertBefore(card, this.node.equips.childNodes[j]);
-							equipped = true;
-							break;
-						}
-					}
-					if (!equipped) {
-						this.node.equips.appendChild(card);
-						if (_status.discarded) {
-							_status.discarded.remove(card);
-						}
+					this.node.equips.appendChild(card);
+					if (_status.discarded) {
+						_status.discarded.remove(card);
 					}
 				}
 			}
@@ -1246,10 +1235,7 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
-		// taffy: 修复player is undefined问题
-		let player = this;
-		/* taffy分界线 */
-		player.SortEquipNodes();
+		this.SortEquipNodes();
 	}
 	//以下函数涉及到本次更新内容而进行修改
 	/**
@@ -8368,10 +8354,6 @@ export class Player extends HTMLDivElement {
 		return false;
 	}
 	hasSkillTag(tag, hidden, arg, globalskill) {
-		let cache = CacheContext.getCacheContext();
-		if(!cache){
-			cache = new CacheContext();
-		}
 		var skills = this.getSkills(hidden);
 		if (globalskill) {
 			skills.addArray(lib.skill.global);
@@ -8381,7 +8363,7 @@ export class Player extends HTMLDivElement {
 			var info = lib.skill[skills[i]];
 			if (info && info.ai) {
 				if (info.ai.skillTagFilter && info.ai[tag] &&
-					info.ai.skillTagFilter(cache.delegate(this), tag, arg) === false) continue;
+					info.ai.skillTagFilter(this, tag, arg) === false) continue;
 				if (typeof info.ai[tag] == 'string') {
 					if (info.ai[tag] == arg) return true;
 				}
@@ -8495,7 +8477,7 @@ export class Player extends HTMLDivElement {
 		else if (get.itemtype(ignore) === 'card') selected.add(ignore);
 		if (this === viewer || get.itemtype(viewer) == 'player') cards = this.getKnownCards(viewer);
 		else cards = this.getShownCards();
-		cards = cards.filter(card => {
+		count += cards.filter(card => {
 			if (selected.includes(card)) return false;
 			let name = get.name(card, this);
 			if (name == 'sha' || name == 'hufu' || name == 'yuchanqian') {
@@ -8504,8 +8486,7 @@ export class Player extends HTMLDivElement {
 				return true;
 			}
 			return false;
-		});
-		count += cards.length;
+		}).length;
 		if (count && rvt !== 'count') return rvt === 'odds' ? 1 : true;
 		let hs = this.getCards('hs').filter(i => !cards.includes(i)).length;
 		if (!hs) {
@@ -8540,7 +8521,7 @@ export class Player extends HTMLDivElement {
 		else if (get.itemtype(ignore) === 'card') selected.add(ignore);
 		if (this === viewer || get.itemtype(viewer) == 'player') cards = this.getKnownCards(viewer);
 		else cards = this.getShownCards();
-		cards = cards.filter(card => {
+		count += cards.filter(card => {
 			if (selected.includes(card)) return false;
 			let name = get.name(card, this);
 			if (name === 'shan' || name === 'hufu') {
@@ -8549,8 +8530,7 @@ export class Player extends HTMLDivElement {
 				return true;
 			}
 			return false;
-		});
-		count += cards.length;
+		}).length;
 		if (count && rvt !== 'count') return rvt === 'odds' ? 1 : true;
 		let hs = this.getCards('hs').filter(i => !cards.includes(i)).length;
 		if (!hs) {
@@ -9555,7 +9535,6 @@ export class Player extends HTMLDivElement {
 			})){
 				const card = game.createCard('empty_equip' + i,'', '');
 				card.fix();
-				//console.log('add '+card.name);
 				card.style.transform = '';
 				card.classList.remove('drawinghidden');
 				card.classList.add('emptyequip');

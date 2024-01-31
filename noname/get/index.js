@@ -4088,10 +4088,19 @@ export class Get extends Uninstantable {
 		if (aii && aii.value) value = aii.value;
 		else if (aii && aii.basic) value = aii.basic.value;
 		if (player == undefined || get.itemtype(player) != 'player') player = _status.event.player;
-		let cache = CacheContext.requireCacheContext();
-		player = cache.delegate(player);
+		//回滾緩存機制: 這緩存機制會使非自我對象player回傳NaN
+		//受影響: 贈與AI不分敵我贈予牌
+		//let cache = CacheContext.requireCacheContext();
+		//player = cache.delegate(player);
 		var geti = function () {
-			return player.getCardIndex('hs',card.name,card,5);
+			var num = 0, i;
+			var cards = player.getCards('hs', card.name);
+			if (cards.includes(card)) {
+				return cards.indexOf(card);
+			}
+			return cards.length;
+			//延續回滾緩存機制代碼
+			//return player.getCardIndex('hs',card.name,card,5);
 		};
 		if (typeof value == 'function') {
 			result = value(card, player, geti(), method);
