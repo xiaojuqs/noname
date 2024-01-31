@@ -6130,7 +6130,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													return list;
 												}, []).sort((a, b) => b - a)[0];
 											case 4:
-												return 0;
+												return game.filterPlayer(target => target != player && !target.hasSkill('taffyold_sbfangzhu_ban')).reduce((list, target) => {
+                          if (get.attitude(player, target) < 0 && !target.isTurnedOver()) list.push(5 * target.countCards('hs') + 1);
+                          else list.push(0);
+                          return list;
+                        }, []).sort((a, b) => b - a)[0];
 										}
 									},
 									backup: function (links, player) {
