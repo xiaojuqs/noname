@@ -709,3 +709,8 @@
   max-width: 140px;
 }
 /* taffy分界线 */
+/* taffy: 修复手气卡确认按钮过大的问题喵 */
+.control.huan {
+  max-width: 140px;
+}
+/* taffy分界线 */
