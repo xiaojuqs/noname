@@ -2,6 +2,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 	return {
 		name: "永雏塔菲",
 		content: function (config, pack) {
+			console.log(window.decadeUI);
 			const characterList = Object.keys(lib.characterPack.taffy_character)
 			// 武将评级：垃圾junk，精品rare，史诗epic，传说legend
 			lib.rank.rarity.legend.addArray(characterList);
@@ -38,6 +39,143 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				audioOrigin: 'audio/die/',
 				audio: 'extension/永雏塔菲/skin/audio/',
 			});
+			lib.skill._taffy_dieKillEffect = {
+				trigger: {
+					source: ['dieBegin']
+				},
+				forced: true,
+				popup: false,
+				priority: -99,
+				lastDo: true,
+				content: function () {
+					if (!(trigger.source && trigger.player)) return;
+					game.broadcastAll(function (source) {
+						if (!window.decadeUI) return;
+						var kill_count = 0
+						for (i = 0; i < source.stat.length; i++) {
+							if (source.stat[i].kill != undefined) kill_count += source.stat[i].kill;
+						}
+						if (kill_count + 1 == 1) {
+							source.$fullscreenpop('一破 · 卧龙出山', 'fire');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/01【播报】一破 卧龙出山.mp3');
+						}
+						if (kill_count + 1 == 2) {
+							source.$fullscreenpop('双连 · 一战成名', 'water');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/02【播报】双连 一战成名.mp3');
+						}
+						if (kill_count + 1 == 3) {
+							source.$fullscreenpop('三连 · 举世皆惊', 'thunder');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/03【播报】三连 举世皆惊.mp3');
+						}
+						if (kill_count + 1 == 4) {
+							source.$fullscreenpop('四连 · 天下无敌', 'fire');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/04【播报】四连 天下无敌.mp3');
+						}
+						if (kill_count + 1 == 5) {
+							source.$fullscreenpop('五连 · 诛天灭地', 'thunder');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/05【播报】五连 诛天灭地.mp3');
+						}
+						if (kill_count + 1 == 6) {
+							source.$fullscreenpop('六连 · 诛天灭地', 'water');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/06【播报】六连 诛天灭地.mp3');
+						}
+						if (kill_count + 1 == 7) {
+							source.$fullscreenpop('七连 · 诛天灭地', 'fire');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/07【播报】七连 诛天灭地.mp3');
+						}
+						if (kill_count + 1 > 7) {
+							source.$fullscreenpop('七连 · 诛天灭地', 'fire');
+							game.playAudio('../extension', '永雏塔菲', 'audio/shousha_audio/07【播报】七连 诛天灭地.mp3');
+						}
+					}, trigger.source);
+				}
+			};
+			lib.skill._jstx_recovertrigger = {
+				trigger: {
+					global: 'recoverEnd'
+				},
+				filter: function (event, player) {
+					if (_status.currentPhase != player) {
+						return event.player != event.source && event.source == player;
+					}
+					return true;
+				},
+				direct: true,
+				content: function () {
+					if (_status.currentPhase != player) {
+						if (player.storage.jstxyishugaochao == undefined) {
+							player.storage.jstxyishugaochao = trigger.num;
+						} else {
+							player.storage.jstxyishugaochao += trigger.num;
+						}
+						if (player.storage.jstxyishugaochao == undefined || player.storage.jstxyishugaochao < 3) {
+							game.broadcastAll(function (player) {
+								if (!window.decadeUI) return;
+								player.$fullscreenpop('妙手回春', 'water');
+								game.playAudio('../extension', '永雏塔菲', 'audio/jstx_audio/jstxmiaoshouhuichun.mp3');
+							}, player);
+						} else {
+							player.storage.jstxyishugaochao -= 3;
+							game.broadcastAll(function (player) {
+								if (!window.decadeUI) return;
+								player.$fullscreenpop('医术高超', 'water');
+								game.playAudio('../extension', '永雏塔菲', 'audio/jstx_audio/jstxyishugaochao.mp3');
+							}, player);
+						}
+					}
+				},
+				group: '_jstx_recovertrigger_Delete',
+				subSkill: {
+					Delete: {
+						trigger: {
+							player: 'phaseEnd'
+						},
+						direct: true,
+						content: function () {
+							delete player.storage.jstxyishugaochao;
+						},
+					}
+				}
+			};
+			lib.skill._taffy_onCause3Damage = {
+				trigger: {
+					source: 'damageBegin4',
+				},
+				forced: true,
+				popup: false,
+				priority: -100,
+				lastDo: true,
+				filter: function (event, player) {
+					return event.num == 3;
+				},
+				content: function () {
+					if (!(trigger.source && trigger.player)) return;
+					game.broadcastAll(function (source) {
+						if (!window.decadeUI) return;
+						source.$fullscreenpop('癫狂屠戮', 'fire');
+						game.playAudio('../extension', '永雏塔菲', 'audio/jstx_audio/diankuangtulu.mp3');
+					}, trigger.source);
+				},
+			};
+			lib.skill._taffy_onCause4Damage = {
+				trigger: {
+					source: 'damageBegin4',
+				},
+				forced: true,
+				priority: -100,
+				lastDo: true,
+				filter: function (event, player) {
+					return event.num >= 4;
+				},
+				content: function () {
+					if (!(trigger.source && trigger.player)) return;
+					game.broadcastAll(function (source) {
+						if (!window.decadeUI) return;
+						source.$fullscreenpop('无双  万军取首', 'fire');
+						game.playAudio('../extension', '永雏塔菲', 'audio/jstx_audio/jstx_jisha7.mp3');
+					}, trigger.source);
+				},
+			};
 		},
 		precontent: function (qs) {
 			if (qs.enable) {
@@ -6131,10 +6269,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												}, []).sort((a, b) => b - a)[0];
 											case 4:
 												return game.filterPlayer(target => target != player && !target.hasSkill('taffyold_sbfangzhu_ban')).reduce((list, target) => {
-                          if (get.attitude(player, target) < 0 && !target.isTurnedOver()) list.push(5 * target.countCards('hs') + 1);
-                          else list.push(0);
-                          return list;
-                        }, []).sort((a, b) => b - a)[0];
+													if (get.attitude(player, target) < 0 && !target.isTurnedOver()) list.push(5 * target.countCards('hs') + 1);
+													else list.push(0);
+													return list;
+												}, []).sort((a, b) => b - a)[0];
 										}
 									},
 									backup: function (links, player) {
@@ -7801,7 +7939,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-01-31",
+				name: "更新日期: 2024-02-02",
 			},
 			github: {
 				clear: true,

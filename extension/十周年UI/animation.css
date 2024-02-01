@@ -57,7 +57,7 @@
 		transform: translateX(-5px) rotate(0deg);
 	}
 
-	20%, 60% {
+	20%, 60% {;
 		transform: translate(-1px) rotate(0deg);
 	}
 
@@ -105,18 +105,6 @@
 	}
 }
 
-@keyframes open-fade-in {
-	from {
-		opacity: 0;
-		transform: scale(0.7);
-	}
-	
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
 @keyframes open-fade-in-out {
 	0% {
 		opacity: 0;
@@ -158,7 +146,7 @@
 }
 
 @keyframes fade-in-out-selectable {
-	0% {
+	0 {
 		opacity: 0;
 	}
 	50% {
@@ -182,45 +170,45 @@
 
 @keyframes kf-sprites-glow {
 	0% {
-        background-size: 2300px 100%;
+		background-size: 2300px 100%;
 		background-position: 0px 0px;
-    }
+	}
 
-    10.00% {
-        background-position: -230px 0px;
-    }
+	10.00% {
+		background-position: -230px 0px;
+	}
 
-    20.00% {
-        background-position: -460px 0px;
-    }
+	20.00% {
+		background-position: -460px 0px;
+	}
 
-    30.00% {
-        background-position: -690px 0px;
-    }
+	30.00% {
+		background-position: -690px 0px;
+	}
 
-    40.00% {
-        background-position: -920px 0px;
-    }
+	40.00% {
+		background-position: -920px 0px;
+	}
 
-    50.00% {
-        background-position: -1150px 0px;
-    }
+	50.00% {
+		background-position: -1150px 0px;
+	}
 
-    60.00% {
-        background-position: -1380px 0px;
-    }
+	60.00% {
+		background-position: -1380px 0px;
+	}
 
-    70.00% {
-        background-position: -1610px 0px;
-    }
+	70.00% {
+		background-position: -1610px 0px;
+	}
 
-    80.00% {
-        background-position: -1840px 0px;
-    }
+	80.00% {
+		background-position: -1840px 0px;
+	}
 	
-    90.00%,
-    100% {
-        background-size: 2300px 100%;
+	90.00%,
+	100% {
+		background-size: 2300px 100%;
 		background-position: -2070px 0px;
-    }
+	}
 }

@@ -2131,7 +2131,9 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
               },
               // 检查圆弧
               skinSwitchCheckYH: function (player, forces) {
-                  if (lib.config['extension_十周年UI_newDecadeStyle'] == "on") return;
+                  // taffy: 注释extension.js原版代码喵
+                  // if (lib.config['extension_十周年UI_newDecadeStyle'] == "on") return;
+                  /* taffy分界线 */
                   // taffy: 非十周年动皮添加圆弧喵
                   if (ui.arena.dataset.dynamicSkinOutcrop !== 'on') return
                   /* taffy分界线 */
