@@ -2,7 +2,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 	return {
 		name: "永雏塔菲",
 		content: function (config, pack) {
-			console.log(window.decadeUI);
 			const characterList = Object.keys(lib.characterPack.taffy_character)
 			// 武将评级：垃圾junk，精品rare，史诗epic，传说legend
 			lib.rank.rarity.legend.addArray(characterList);

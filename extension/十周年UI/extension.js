@@ -1,4 +1,7 @@
 import {ChildNodesWatcher} from '../../noname/library/cache/childNodesWatcher.js';
+// taffy: 修复contains函数报错问题喵
+Array.prototype.contains = Array.prototype.includes;//懒得一个个改了，直接用这个消去报错。
+/* taffy分界线 */
 game.import("extension", function (lib, game, ui, get, ai, _status) {
 	return {
 		name: "十周年UI",
@@ -1265,7 +1268,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							}
 							if (event.result.bool && event.animate !== false) {
 								for (var i = 0; i < event.result.targets.length; i++) {
-									event.result.targets[i].animate('target');
+                  // taffy: 注释extension.js原版代码喵
+									// event.result.targets[i].animate('target');
+                  /* taffy分界线 */
+                  // taffy: 修复animate函数报错问题喵
+                  event.result.targets[i].addTempClass('target');
+                  /* taffy分界线 */
 								}
 							}
 							if (event.dialog) event.dialog.close();

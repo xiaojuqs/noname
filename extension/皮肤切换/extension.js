@@ -1061,7 +1061,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               },
                               forced: true,
                               filter: function (event, player) {
-                                  return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
+                                  // taffy: 注释extension.js原版代码喵
+                                  // return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
+                                  /* taffy分界线 */
+                                  // taffy: 增加一些选项喵
+                                  return lib.config[skinSwitch.decadeKey.newDecadeStyle] !== "on" || lib.config[skinSwitch.configKey.taffy_open_circle_top]
+                                  /* taffy分界线 */
                               },
                               content: function () {
                                 skinSwitch.skinSwitchCheckYH(player)
@@ -1075,7 +1080,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                               },
                               forced: true,
                               filter: function (event, player) {
-                                  return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
+                                  // taffy: 注释extension.js原版代码喵
+                                  // return !(lib.config[skinSwitch.decadeKey.newDecadeStyle] === "on")
+                                  /* taffy分界线 */
+                                  // taffy: 增加一些选项喵
+                                  return lib.config[skinSwitch.decadeKey.newDecadeStyle] !== "on" || lib.config[skinSwitch.configKey.taffy_open_circle_top]
+                                  /* taffy分界线 */
                               },
                               content: function () {
                                 skinSwitch.skinSwitchCheckYH(player)
@@ -1924,7 +1934,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                       clipParent: true
                                   }
                                   // taffy: 非十周年动皮不裁剪背景喵
-                                  if (animation.player && animation.player.beijing && isCutBg && animation.player.shizhounian) {
+                                  if (animation.player && animation.player.beijing && isCutBg && (!lib.config[skinSwitch.configKey.taffy_cugDynamicBg] || (lib.config[skinSwitch.configKey.taffy_cugDynamicBg] && animation.player.shizhounian))) {
                                   /* taffy分界线 */
                                       animation.player.beijing.clip = {
                                           x: [0, deputy ? 0.5 : 0],
@@ -1936,7 +1946,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   }
                               } else {
                                   // taffy: 非十周年动皮不裁剪背景喵
-                                  if (animation.player && animation.player.beijing && isCutBg && animation.player.shizhounian) {
+                                  if (animation.player && animation.player.beijing && isCutBg && (!lib.config[skinSwitch.configKey.taffy_cugDynamicBg] || (lib.config[skinSwitch.configKey.taffy_cugDynamicBg] && animation.player.shizhounian))) {
                                   /* taffy分界线 */
                                       animation.player.beijing.clip = {
                                           x: 0,
@@ -2097,6 +2107,10 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                   'previewSkinsDynamic': 'extension_皮肤切换_previewSkinsDynamic',  // 预览动皮皮肤使用动皮
                   'clickPlayerDynamic': 'extension_皮肤切换_clickPlayerDynamic',  // 单击角色出现换肤功能
                   'czgEnable': 'extension_皮肤切换_czgEnable',  // 藏珍阁开启
+                  // taffy: 新增一些额外选项喵
+                  'taffy_cugDynamicBg': 'extension_皮肤切换_taffy_cugDynamicBg',
+                  'taffy_open_circle_top': 'extension_皮肤切换_taffy_open_circle_top',
+                  /* taffy分界线 */
               },
               // 十周年UI的配置key
               decadeKey: {
@@ -2135,7 +2149,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                   // if (lib.config['extension_十周年UI_newDecadeStyle'] == "on") return;
                   /* taffy分界线 */
                   // taffy: 非十周年动皮添加圆弧喵
-                  if (ui.arena.dataset.dynamicSkinOutcrop !== 'on') return
+                  if (lib.config['extension_十周年UI_newDecadeStyle'] == "on" && lib.config['extension_千幻聆音_enable'] || ui.arena.dataset.dynamicSkinOutcrop !== 'on' || !lib.config[skinSwitch.configKey.taffy_open_circle_top]) return;
                   /* taffy分界线 */
                   if (!player || get.itemtype(player) != 'player') return;
                   let group = forces || player.group || 'weizhi';
@@ -2148,13 +2162,11 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
 
                   let skinYh = player.getElementsByClassName("skinYh");
                   // taffy: 非十周年动皮添加圆弧喵
-                  if (lib.config[skinSwitch.configKey.cugDynamicBg]) {
-                    if (player.dynamic?.primary?.shizhounian) {
+                  if (lib.config[skinSwitch.configKey.cugDynamicBg] && (!lib.config[skinSwitch.configKey.taffy_cugDynamicBg] || lib.config[skinSwitch.configKey.taffy_cugDynamicBg] && player.dynamic?.primary?.shizhounian)) {
                       if (skinYh.length > 0) {
                         player.removeChild(skinYh[0]);
                       }
                       return
-                    }
                   }
                   /* taffy分界线 */
                   if (isYh && skinYh.length == 0) {
@@ -10185,6 +10197,18 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
               init:  false,
               intro: '点击开启后会加入右边菜单'
           },
+          // taffy: 提供一些额外选项
+          'taffy_cugDynamicBg': {
+            name: "非十周年动皮不裁剪背景",
+            "init": true,
+            "intro": "非十周年动皮动皮在待机处不裁剪动态背景",
+          },
+          "taffy_open_circle_top":{
+            name: "开启十周年圆顶",
+            "init": true,
+            "intro": "设置此选项，十周年样式角色框将会显示顶部圆弧。",
+          },
+          /* taffy分界线 */
 
       },
       help:{},

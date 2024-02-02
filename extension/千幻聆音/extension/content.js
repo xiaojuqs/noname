@@ -234,7 +234,12 @@ export let CONTENT = function (config, pack) {
               dstInfo.deputy = !isPrimary
               setTimeout(() => {
                 player.stopDynamic(isPrimary, !isPrimary)
-                player.playDynamic(dstInfo, !isPrimary);
+                // taffy: 注释contennt.js原版代码喵
+                // player.playDynamic(dstInfo, !isPrimary);
+                /* taffy分界线 */
+                // taffy: 修复变身后动态背景裁剪丢失的问题
+                player.playDynamic(dstInfo, !isPrimary, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+                /* taffy分界线 */
               }, (huanfuEff.delay || 0) * 1000)
               if (dstInfo.background) {
                 player.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + dstInfo.background + '")';
@@ -1756,6 +1761,25 @@ export let CONTENT = function (config, pack) {
             if (trigger.name == 'phase') player._qhly_gonnaChange[i] = 0;
             game.qhly_checkPlayerImageAudio(playerName, skin, player, function () {
               player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
+              // taffy: 注释content.js原版代码喵
+              // player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
+              /* taffy分界线 */
+              // taffy: 修复变身后原画消失的问题喵
+              game.qhly_checkFileExist(player._qhly_skinChange[i], function (s) {
+                if (s) {
+                  player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
+                } else {
+                  var prefix = game.qhly_foundPackage(playerName).prefix;
+                  if (typeof prefix == 'function') {
+                    prefix = prefix(playerName);
+                  }
+                  if (lib.config.qhly_noSkin == 'origin') {
+                    if (prefix.includes('.jpg')) player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(prefix);//原画
+                    else player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(prefix + playerName + '.jpg');//原画
+                  }
+                  else player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
+                }
+              })
               if (!_status.qhly_replaceSkin[playerName]) _status.qhly_replaceSkin[playerName] = {};
               _status.qhly_replaceSkin[playerName][skin] = player._qhly_skinChange[i];
               if (!player._qhlyIsChanged) player._qhlyIsChanged = [0, 0];
