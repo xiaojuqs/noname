@@ -4213,6 +4213,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+    zhaozhi: {  // 赵直
+      仙踪晓梦: {
+				name: '赵直/仙踪晓梦/daiji2',
+				x: [0, 0.45],
+				y: [0, 0.55],
+				scale: 0.7,
+				angle: 0,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '赵直/仙踪晓梦/chuchang',
+					scale: 0.7,
+					action: 'play',
+				},
+				gongji: {
+					name: '赵直/仙踪晓梦/chuchang',
+					scale: 0.9,
+					action: 'play',
+				},
+				beijing: {
+					name: '赵直/仙踪晓梦/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.4,
+				},
+			},
+    },
 		zhonghui: { //钟会
 			钟桂香蒲: { //出场错误
 				name: '钟会/钟桂香蒲/daiji2',
