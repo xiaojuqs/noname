@@ -42,6 +42,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				trigger: {
 					source: ['dieBegin']
 				},
+				filter: function () {
+					if (game.hasExtension('标记补充')) return false;
+				},
 				forced: true,
 				popup: false,
 				priority: -99,
@@ -94,6 +97,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					global: 'recoverEnd'
 				},
 				filter: function (event, player) {
+					if (game.hasExtension('标记补充')) return false;
 					if (_status.currentPhase != player) {
 						return event.player != event.source && event.source == player;
 					}
@@ -145,6 +149,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				priority: -100,
 				lastDo: true,
 				filter: function (event, player) {
+					if (game.hasExtension('标记补充')) return false;
 					return event.num == 3;
 				},
 				content: function () {
@@ -164,6 +169,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				priority: -100,
 				lastDo: true,
 				filter: function (event, player) {
+					if (game.hasExtension('标记补充')) return false;
 					return event.num >= 4;
 				},
 				content: function () {
@@ -7938,7 +7944,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-02-02",
+				name: "更新日期: 2024-02-03",
 			},
 			github: {
 				clear: true,

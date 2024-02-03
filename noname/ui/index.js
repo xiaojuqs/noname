@@ -9519,10 +9519,13 @@ class Create extends Uninstantable {
 		var addtional_extention_names=[
 			['十周年UI', true],
 			['挑战卡牌', true],
-			['MVP扩展', true],
 			['千幻聆音', true],
 			['皮肤切换', true],
 			['永雏塔菲', true],
+			['标记补充', true],
+			['手杀MVP', true],
+			['无名补丁', true],
+			['指示线', true],
 		];
 		var need_reload=false;
 		for(var i=0;i<addtional_extention_names.length;i++){
