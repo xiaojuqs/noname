@@ -30,7 +30,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             name: "../../../标记补充/animation/Xyishugaochao",
         },//医术高超
         effect_loseHp: {
-            name: "../../../标记补充/animation/effect_loseHp",
+            // taffy: 注释extension.js原版代码喵
+            // name: "../../../标记补充/animation/effect_loseHp",
+            /* taffy分界线 */
+            // taffy: 更换勾玉碎裂骨骼路径喵
+            name: "../../../标记补充/animation/taffy_effect_loseHp",
+            /* taffy分界线 */
             speed: 0.8,
         },//失去体力
         mianshang: {
@@ -406,7 +411,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //失去护甲特效
                     lib.skill._shiqihujia_ = {
                         trigger: {
-                            player: "damageBegin4",
+                            // taffy: 注释extension.js原版代码喵
+                            // player: "damageBegin4",
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: "damage",
+                            /* taffy分界线 */
                         },
                         silent: true,
                         charlotte: true,
@@ -1801,7 +1811,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(6);
+                            game.delay(5);
                             /* taffy分界线 */
                         }
                         //双连
@@ -1825,7 +1835,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(6);
+                            game.delay(5);
                             /* taffy分界线 */
                         }
                         //三连
@@ -1849,7 +1859,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(6);
+                            game.delay(5);
                             /* taffy分界线 */
                         }
                         //四连
@@ -1873,7 +1883,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(6);
+                            game.delay(5);
                             /* taffy分界线 */
                         }
                         //五连
@@ -1900,7 +1910,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(6);
+                            game.delay(5);
                             /* taffy分界线 */
                         }
                         //六连
@@ -1927,7 +1937,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(6);
+                            game.delay(5);
                             /* taffy分界线 */
                         }
                         //七连
@@ -1954,7 +1964,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(6);
+                            game.delay(5);
                             /* taffy分界线 */
                         }
                     },
@@ -1973,7 +1983,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //癫狂屠戮
                 lib.skill._diankuangtulu_gua = {
                     trigger: {
-                        source: 'damageBegin4',
+                        // taffy: 注释extension.js原版代码喵
+                        // source: 'damageBegin4',
+                        /* taffy分界线 */
+                        // taffy: 更正受伤时机喵
+                        source: 'damage',
+                        /* taffy分界线 */
                     },
                     charlotte: true,
                     forced: true,
@@ -1992,7 +2007,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //无双万军取首
                 lib.skill._wanjunqushou_gua = {
                     trigger: {
-                        source: 'damageBegin4',
+                        // taffy: 注释extension.js原版代码喵
+                        // source: 'damageBegin4',
+                        /* taffy分界线 */
+                        // taffy: 更正受伤时机喵
+                        source: 'damage',
+                        /* taffy分界线 */
                     },
                     charlotte: true,
                     forced: true,
@@ -2129,7 +2149,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数字2
                     lib.skill._player_baojiA = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2147,7 +2172,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数字3
                     lib.skill._player_baojiB = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2164,7 +2194,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数值4
                     lib.skill._player_baojiC = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2181,7 +2216,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数字5
                     lib.skill._player_baojiD = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2198,7 +2238,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数值6
                     lib.skill._player_baojiE = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2215,7 +2260,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数值7
                     lib.skill._player_baojiF = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2232,7 +2282,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数值8
                     lib.skill._player_baojiG = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2249,7 +2304,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //伤害数值9
                     lib.skill._player_baojiH = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         forced: true,
                         priority: 10,
@@ -2660,7 +2720,12 @@ if (get.subtype(trigger.card) == 'equip5') {
             if (lib.config['extension_标记补充_daojianfu'] == "shousha") {
             lib.skill._player_daojianfu_xxgg_fuzi_ = {
                 trigger: {
-                    player: 'damageBegin4'
+                    // taffy: 注释extension.js原版代码喵
+                    // player: 'damageBegin4'
+                    /* taffy分界线 */
+                    // taffy: 更正受伤时机喵
+                    player: 'damage'
+                    /* taffy分界线 */
                 },
                 charlotte: true,
                 forced: true,
@@ -2947,7 +3012,12 @@ if (get.subtype(trigger.card) == 'equip5') {
             } else if (lib.config['extension_标记补充_daojianfu'] == "4.5") {
             lib.skill._player_daojianfu_xxgg_fuzi_ = {
                 trigger: {
-                    player: 'damageBegin4'
+                    // taffy: 注释extension.js原版代码喵
+                    // player: 'damageBegin4'
+                    /* taffy分界线 */
+                    // taffy: 更正受伤时机喵
+                    player: 'damage'
+                    /* taffy分界线 */
                 },
                 charlotte: true,
                 forced: true,

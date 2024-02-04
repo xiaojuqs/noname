@@ -8330,6 +8330,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									card._tempName.dataset.name = cardname;
 									tempname = get.translation(cardname);
 								}
+                // taffy: 修复转化牌没有标签的问题喵
+                card._tempName.textContent = tempname;
+                /* taffy分界线 */
 							}
 
 							if (duicfg.cardUseEffect && event.card && (!event.card.cards || event.card.cards.length == 1)) {

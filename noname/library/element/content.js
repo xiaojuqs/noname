@@ -7804,10 +7804,16 @@ export const Content = {
 	loseHp: function () {
 		"step 0";
 		if (lib.config.background_audio) {
+			// taffy: 有标记补充就不播放默认音效喵
+			if (!game.hasExtension('标记补充'))
+			/* taffy分界线 */
 			game.playAudio('effect', 'loseHp');
 		}
 		game.broadcast(function () {
 			if (lib.config.background_audio) {
+			// taffy: 有标记补充就不播放默认音效喵
+			if (!game.hasExtension('标记补充'))
+			/* taffy分界线 */
 				game.playAudio('effect', 'loseHp');
 			}
 		});

@@ -142,7 +142,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			};
 			lib.skill._taffy_onCause3Damage = {
 				trigger: {
-					source: 'damageBegin4',
+					source: 'damage',
 				},
 				forced: true,
 				popup: false,
@@ -163,7 +163,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			};
 			lib.skill._taffy_onCause4Damage = {
 				trigger: {
-					source: 'damageBegin4',
+					source: 'damage',
 				},
 				forced: true,
 				priority: -100,
@@ -180,6 +180,22 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						game.playAudio('../extension', '永雏塔菲', 'audio/jstx_audio/jstx_jisha7.mp3');
 					}, trigger.source);
 				},
+			};
+			// 如果有标记补充的连杀动画就不播放十周年UI的连杀动画了
+			lib.skill._taffy_dieKillEffect_Delete = {
+				trigger: {
+					source: ['dieBefore']
+				},
+				forced: true,
+				popup: false,
+				priority: -100,
+				lastDo: true,
+				silent: true,
+				content: function () {
+					if (game.hasExtension('十周年UI') && game.hasExtension('标记补充')) {
+						lib.skill._decadeUI_dieKillEffect.content = function () {};
+					}
+				}
 			};
 		},
 		precontent: function (qs) {

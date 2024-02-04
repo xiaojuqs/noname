@@ -2896,6 +2896,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.45],
 				scale: 0.7,
 				angle: 0,
+				clipSlots: ["tengfanglan181", "tengfanglan180", "tengfanglan178", "tengfanglan179", "tengfanglan177", "tengfanglan169", "tengfanglan174", "tengfanglan173", "tengfanglan172", "tengfanglan171", "tengfanglan176", "tengfanglan175", "tengfanglan170", "tengfanglan168", "tengfanglan167", "tengfanglan166", "tengfanglan165", "tengfanglan164", "tengfanglan163", "tengfanglan162", "tengfanglan161", "tengfanglan160", "tengfanglan159", "tengfanglan158", "tengfanglan157", "tengfanglan156", "tengfanglan155", "tengfanglan154", "tengfanglan153", "tengfanglan152", "tengfanglan151"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				chuchang: {
 					name: '滕芳兰/脂车香姝/jineng01',
