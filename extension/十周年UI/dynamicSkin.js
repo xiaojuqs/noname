@@ -3133,11 +3133,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.5],
 				scale: 0.6,
 				angle: 0,
+				clipSlots: ['longmao', 'longshen', 'longxu01', 'longxu02', 'longhoutui', 'longqiantui', 'longtou', 'longzui', 'fengchiyou', 'fengwei01', 'fengwei02', 'fengchiyou02', 'fengchizuo', 'fengnaodai'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				beijing: {
 					name: '卧龙凤雏/赤壁链火/beijing',
 					version: "4.0",
-					scale: 0.6,
+					scale: 0.8,
 					x: [0, 0.5],
 					y: [0, 0.5]
 				},
