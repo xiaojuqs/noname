@@ -1813,7 +1813,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(5);
+                            game.delay(4.6);
                             /* taffy分界线 */
                         }
                         //双连
@@ -1861,7 +1861,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(5);
+                            game.delay(5.2);
                             /* taffy分界线 */
                         }
                         //四连
@@ -1885,7 +1885,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(5);
+                            game.delay(5.6);
                             /* taffy分界线 */
                         }
                         //五连
@@ -1912,7 +1912,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(5);
+                            game.delay(6);
                             /* taffy分界线 */
                         }
                         //六连
@@ -1939,7 +1939,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(5);
+                            game.delay(6);
                             /* taffy分界线 */
                         }
                         //七连
@@ -1966,7 +1966,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             // game.delay(4.2);
                             /* taffy分界线 */
                             // taffy: 延迟播放动画喵
-                            game.delay(5);
+                            game.delay(5.8);
                             /* taffy分界线 */
                         }
                     },

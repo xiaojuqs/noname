@@ -197,6 +197,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					}
 				}
 			};
+			// 骨骼播放暂停
+			lib.skill._taffy_player_baoji_delay = {
+				trigger: {
+					player: 'damage'
+				},
+				forced: true,
+				priority: -100,
+				filter: function (event) {
+					if (!game.hasExtension('标记补充')) return false;
+					return event.num > 2;
+				},
+				content: function () {
+					if (!trigger.source) return;
+					if (trigger.num === 3) {
+						game.delay(2.5);
+					} else if (trigger.num > 3) {
+						game.delay(5.8);
+					}
+				},
+			};
 		},
 		precontent: function (qs) {
 			if (qs.enable) {
@@ -7960,7 +7980,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-02-03",
+				name: "更新日期: 2024-02-05",
 			},
 			github: {
 				clear: true,
