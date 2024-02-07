@@ -2969,7 +2969,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							target.$gain2(result.links[0]);
 							target.gain(result.links[0],'log');
 						}
-						else trigger.player.gain(result.links[0],'gain2');
+						else target.gain(result.links[0],'gain2');
 						cards.remove(result.links[0]);
 						if(cards.length) player.gain(cards,'gain2');
 					}
