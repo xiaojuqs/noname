@@ -469,23 +469,27 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								let player=_status.event.player;
 								switch(button.link){
 									case 1:
-										return game.filterPlayer(current=>get.attitude(player,current)>0).reduce((list,target)=>{
+										return game.filterPlayer(current=>get.attitude(player,current)>3).reduce((list,target)=>{
 											let num=0;
-											if(target.isLinked()) num+=0.5;
+											if(target.isLinked()) num+=5;
 											if(target.isTurnedOver()) num+=10;
 											list.push(num);
 											return list;
 										},[]).sort((a,b)=>b-a)[0];
 									case 2:
 										let draw=Math.min(5,Math.max(1,game.dead.length));
-										return draw>1?draw:0;
+										return game.filterPlayer().reduce((list,target)=>{
+											list.push(draw>1&&get.attitude(player,target)>3?draw:0);
+											return list;
+										},[]).sort((a,b)=>b-a)[0];
 									case 3:
 										return game.filterPlayer().reduce((list,target)=>{
-											list.push(get.recoverEffect(target,player,player));
+											list.push(get.recoverEffect(target,player,player)&&get.attitude(player,target)>3?get.recoverEffect(target,player,player):0);
 											return list;
 										},[]).sort((a,b)=>b-a)[0];
 									case 4:
-										return game.dead.reduce((list,target)=>{
+										let start=Math.min(5,Math.max(1,game.dead.length))<2&&game.players.length<4;
+										return start&&game.dead.reduce((list,target)=>{
 											let num=0;
 											if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
 											if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
@@ -565,14 +569,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 										let player=_status.event.player;
 										switch(lib.skill.sbxingshang_use_backup.num){
 											case 1:
-												if(get.attitude(player,target)>0){
-													if(target.isLinked()) return 0.5;
+												if(get.attitude(player,target)>3){
+													if(target.isLinked()) return 5;
 													if(target.isTurnedOver()) return 10;
 												}
-											case 3:
-												if(get.attitude(player,target)>0) return get.recoverEffect(target,player,player);
 											case 2:
-												if(get.attitude(player,target)>0) return Math.min(5,Math.max(1,game.dead.length));
+												if(get.attitude(player,target)>3) return Math.min(5,Math.max(1,game.dead.length));
+											case 3:
+												if(get.attitude(player,target)>3) return get.recoverEffect(target,player,player);
 										}
 										return 0;
 									},
@@ -627,9 +631,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						switch(button.link){
 							case 1:
 								return game.filterPlayer(current=>get.attitude(player,current)<0).reduce((list,target)=>{
+									let active_skills=target.getStockSkills(false);
 									let num=0;
-									if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
-									if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+									if(active_skills.length>0){
+										if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+										if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+									}
 									list.push(num);
 									return list;
 								},[]).sort((a,b)=>b-a)[0];
@@ -637,8 +644,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								return 0;
 							case 3:
 								return game.filterPlayer(target=>target!=player&&!target.hasSkill('sbfangzhu_ban')).reduce((list,target)=>{
-									if(get.attitude(player,target)>0&&target.isTurnedOver()) list.push(10*target.countCards('hs')+1);
-									else if(get.attitude(player,target)<0&&!target.isTurnedOver()) list.push(5*target.countCards('hs')+1);
+									if(get.attitude(player,target)>3&&target.isTurnedOver()) list.push(2*target.countCards('hs')+1);
+									else if(get.attitude(player,target)<0&&!target.isTurnedOver()) list.push(target.countCards('hs'));
 									else list.push(0);
 									return list;
 								},[]).sort((a,b)=>b-a)[0];
@@ -683,15 +690,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								let player=_status.event.player;
 								switch(lib.skill.sbfangzhu_backup.num){
 									case 1:
+										let active_skills=target.getStockSkills(false);
 										let num=0;
-										if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
-										if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
-										return num;
+										if(active_skills.length>0){
+											if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+											if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+										}
+										return get.attitude(player,target)<0?num:0;
 									case 2:
 										return 0;
 									case 3:
-										if(get.attitude(player,target)>0&&target.isTurnedOver()) return 10*target.countCards('hs')+1;
-										if(get.attitude(player,target)<0&&!target.isTurnedOver()) return -5*target.countCards('hs')+1;
+										if(get.attitude(player,target)>3&&target.isTurnedOver()) return 2*target.countCards('hs')+1;
+										if(get.attitude(player,target)<0&&!target.isTurnedOver()) return target.countCards('hs');
 										return 0;
 									case 4:
 										return 0;
@@ -714,7 +724,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:9,
+					order:8,
 					result:{player:1},
 				},
 				subSkill:{

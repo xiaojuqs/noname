@@ -3816,8 +3816,9 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 				for(i=0;i<game.players.length;i++){
 					player=game.players[i];
 					let php=player.hp;
+					let active_skills=player.getStockSkills(false);
 					let skill_score=0;
-					skill_score=get.rank(player,true);
+					if(active_skills.length>0) skill_score=get.rank(player,true);
 					if(player.hasSkill('benghuai')&&php>4){
 						php=4;
 					}

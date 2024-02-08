@@ -308,6 +308,9 @@ export class LibInit extends Uninstantable {
 			sScriptURL = url + str;
 		}
 		const oReq = new XMLHttpRequest();
+		if (typeof onload == 'function') oReq.addEventListener("load", onload);
+		//以下造成無法檢查素材更新
+		/*
 		if (typeof onload == 'function') oReq.addEventListener("load", result => {
 			if (![0, 200].includes(oReq.status)) {
 				// @ts-ignore
@@ -316,6 +319,7 @@ export class LibInit extends Uninstantable {
 			}
 			onload(result);
 		});
+		*/
 		if (typeof onerror == 'function') oReq.addEventListener("error", onerror);
 		oReq.open("GET", sScriptURL);
 		oReq.send();
