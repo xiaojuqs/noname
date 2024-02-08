@@ -51,6 +51,7 @@ export class Library extends Uninstantable {
 	static characterFilter = {};
 	static characterSort = {};
 	static characterReplace = {};
+	static characterInitFilter = {};
 	static characterGuozhanFilter = ["mode_guozhan"];
 	static dynamicTranslate = {};
 	static cardPack = {};
@@ -9411,7 +9412,14 @@ export class Library extends Uninstantable {
 		charge: '蓄力值',
 		expandedSlots: '扩展装备栏',
 		stratagem_fury: '怒气',
-		_stratagem_add_buff: '强化'
+		_stratagem_add_buff: '强化',
+
+		phaseZhunbei: '准备阶段',
+		phaseJudge: '判定阶段',
+		phaseDraw: '摸牌阶段',
+		phaseUse: '出牌阶段',
+		phaseDiscard: '弃牌阶段',
+		phaseJieshu: '结束阶段',
 	};
 
 	static experimental = Experimental
@@ -9681,7 +9689,10 @@ export class Library extends Uninstantable {
 		 * @param { boolean } [strict]
 		 */
 		cardRecastable: (card, player = get.owner(card), source, strict) => {
-			// if (typeof player == 'undefined') player = get.owner(card);
+			if (!player) {
+				if (player === null) console.trace(`cardRecastable的player参数不应传入null,可以用void 0或undefined占位`);
+				player = get.owner(card);
+			}
 			const mod = game.checkMod(card, player, source, 'unchanged', 'cardRecastable', player);
 			if (!mod) return false;
 			if (strict && mod == 'unchanged') {
@@ -9978,8 +9989,10 @@ export class Library extends Uninstantable {
 		targetEnabledx: function (card, player, target) {
 			if (!card) return false;
 			if (!target || !target.isIn()) return false;
-			var event = _status.event;
-			if (event._backup && event._backup.filterCard == lib.filter.filterCard && (!lib.filter.cardEnabled(card, player, event) || !lib.filter.cardUsable(card, player, event))) return false;
+			let event = _status.event, evt = event.getParent('chooseToUse');
+			if(get.itemtype(evt) !== 'event') evt = event;
+			if (event._backup && event._backup.filterCard == lib.filter.filterCard &&
+				(!lib.filter.cardEnabled(card, player, event) || !lib.filter.cardUsable(card, player, evt))) return false;
 			if (event.addCount_extra) {
 				if (!lib.filter.cardUsable2(card, player) && !game.checkMod(card, player, target, false, 'cardUsableTarget', player)) return false;
 			}
@@ -13114,6 +13127,12 @@ export class Library extends Uninstantable {
 			 * @returns {string}
 			 */
 			getSpan: () => `${get.prefixSpan('新杀')}${get.prefixSpan('谋')}`
+		}],
+		['经典神', {
+			/**
+			 * @returns {string}
+			 */
+			getSpan: () => `${get.prefixSpan('经典')}${get.prefixSpan('神')}`
 		}]
 	]);
 	static groupnature = {
@@ -13168,6 +13187,10 @@ export class Library extends Uninstantable {
 	];
 	static other = {
 		ignore: () => void 0
+	};
+	static InitFilter = {
+		'noZhuHp': '不享受主公的额外体力上限',
+		'noZhuSkill': '不享受地主的额外技能',
 	};
 }
 
