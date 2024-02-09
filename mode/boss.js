@@ -522,7 +522,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					order:12,
 					result:{
 						target:function(player,target){
-							return -2;
+							let active_skills=target.getStockSkills(false);
+							return active_skills.length>0?-2:0;
 						}
 					}
 				}

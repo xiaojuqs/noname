@@ -273,12 +273,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},
 				},
 				ai:{
-					order:function(item,player){
-						return 10;
-					},
+					order:10,
 					respondShan:true,
 					respondSha:true,
-					skillTagFilter:function(player,tag){
+					skillTagFilter:function(player,tag,arg){
+						if(arg=='respond') return false;
 						var hs=player.getCards('h');
 						if(hs.length!=Math.max(0,hs.length)) return false;
 						if(hs.length>1){
@@ -2969,7 +2968,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							target.$gain2(result.links[0]);
 							target.gain(result.links[0],'log');
 						}
-						else trigger.player.gain(result.links[0],'gain2');
+						else target.gain(result.links[0],'gain2');
 						cards.remove(result.links[0]);
 						if(cards.length) player.gain(cards,'gain2');
 					}

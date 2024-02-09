@@ -54,6 +54,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				sb_tong:['liucheng','sp_yangwan','sb_xiahoushi','sb_zhangfei','sb_zhaoyun','sb_sunce','sb_zhurong','sb_xiaoqiao'],
 				sb_yu:['sb_yujin','sb_lvmeng','sb_huangzhong','sb_huanggai','sb_zhouyu','sb_caoren','sb_ganning','sb_yl_luzhi','sb_huangyueying'],
 				sb_neng:['sb_huaxiong','sb_sunshangxiang','sb_jiangwei','sb_yuanshao','sb_menghuo','sb_guanyu'],
+				sb_waitforsort:['sb_xunyu'],
 			}
 		},
 		skill:{
@@ -468,23 +469,27 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								let player=_status.event.player;
 								switch(button.link){
 									case 1:
-										return game.filterPlayer(current=>get.attitude(player,current)>0).reduce((list,target)=>{
+										return game.filterPlayer(current=>get.attitude(player,current)>3).reduce((list,target)=>{
 											let num=0;
-											if(target.isLinked()) num+=0.5;
+											if(target.isLinked()) num+=5;
 											if(target.isTurnedOver()) num+=10;
 											list.push(num);
 											return list;
 										},[]).sort((a,b)=>b-a)[0];
 									case 2:
 										let draw=Math.min(5,Math.max(1,game.dead.length));
-										return draw>1?draw:0;
+										return game.filterPlayer().reduce((list,target)=>{
+											list.push(draw>1&&get.attitude(player,target)>3?draw:0);
+											return list;
+										},[]).sort((a,b)=>b-a)[0];
 									case 3:
 										return game.filterPlayer().reduce((list,target)=>{
-											list.push(get.recoverEffect(target,player,player));
+											list.push(get.recoverEffect(target,player,player)&&get.attitude(player,target)>3?get.recoverEffect(target,player,player):0);
 											return list;
 										},[]).sort((a,b)=>b-a)[0];
 									case 4:
-										return game.dead.reduce((list,target)=>{
+										let start=Math.min(5,Math.max(1,game.dead.length))<2&&game.players.length<4;
+										return start&&game.dead.reduce((list,target)=>{
 											let num=0;
 											if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
 											if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
@@ -564,14 +569,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 										let player=_status.event.player;
 										switch(lib.skill.sbxingshang_use_backup.num){
 											case 1:
-												if(get.attitude(player,target)>0){
-													if(target.isLinked()) return 0.5;
+												if(get.attitude(player,target)>3){
+													if(target.isLinked()) return 5;
 													if(target.isTurnedOver()) return 10;
 												}
-											case 3:
-												if(get.attitude(player,target)>0) return get.recoverEffect(target,player,player);
 											case 2:
-												if(get.attitude(player,target)>0) return Math.min(5,Math.max(1,game.dead.length));
+												if(get.attitude(player,target)>3) return Math.min(5,Math.max(1,game.dead.length));
+											case 3:
+												if(get.attitude(player,target)>3) return get.recoverEffect(target,player,player);
 										}
 										return 0;
 									},
@@ -626,9 +631,12 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						switch(button.link){
 							case 1:
 								return game.filterPlayer(current=>get.attitude(player,current)<0).reduce((list,target)=>{
+									let active_skills=target.getStockSkills(false);
 									let num=0;
-									if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
-									if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+									if(active_skills.length>0){
+										if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+										if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+									}
 									list.push(num);
 									return list;
 								},[]).sort((a,b)=>b-a)[0];
@@ -636,8 +644,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								return 0;
 							case 3:
 								return game.filterPlayer(target=>target!=player&&!target.hasSkill('sbfangzhu_ban')).reduce((list,target)=>{
-									if(get.attitude(player,target)>0&&target.isTurnedOver()) list.push(10*target.countCards('hs')+1);
-									else if(get.attitude(player,target)<0&&!target.isTurnedOver()) list.push(5*target.countCards('hs')+1);
+									if(get.attitude(player,target)>3&&target.isTurnedOver()) list.push(2*target.countCards('hs')+1);
+									else if(get.attitude(player,target)<0&&!target.isTurnedOver()) list.push(target.countCards('hs'));
 									else list.push(0);
 									return list;
 								},[]).sort((a,b)=>b-a)[0];
@@ -682,15 +690,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								let player=_status.event.player;
 								switch(lib.skill.sbfangzhu_backup.num){
 									case 1:
+										let active_skills=target.getStockSkills(false);
 										let num=0;
-										if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
-										if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
-										return num;
+										if(active_skills.length>0){
+											if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+											if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+										}
+										return get.attitude(player,target)<0?num:0;
 									case 2:
 										return 0;
 									case 3:
-										if(get.attitude(player,target)>0&&target.isTurnedOver()) return 10*target.countCards('hs')+1;
-										if(get.attitude(player,target)<0&&!target.isTurnedOver()) return -5*target.countCards('hs')+1;
+										if(get.attitude(player,target)>3&&target.isTurnedOver()) return 2*target.countCards('hs')+1;
+										if(get.attitude(player,target)<0&&!target.isTurnedOver()) return target.countCards('hs');
 										return 0;
 									case 4:
 										return 0;
@@ -713,7 +724,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					}
 				},
 				ai:{
-					order:9,
+					order:8,
 					result:{player:1},
 				},
 				subSkill:{
@@ -806,7 +817,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				direct:true,
 				content:function*(event,map){
 					var player=map.player;
-					var result=yield player.chooseTarget(get.prompt('sbwusheng'),'选择一名非主公的其他角色，本阶段对其使用【杀】无距离和次数限制，使用【杀】指定其为目标后摸一张牌，对其使用'+(get.mode()==='identity'?'五':'三')+'张【杀】后不能对其使用【杀】',(card,player,target)=>{
+					var result=yield player.chooseTarget(get.prompt('sbwusheng'),'选择一名非主公的其他角色，本阶段对其使用【杀】无距离和次数限制，使用【杀】指定其为目标后摸'+(get.mode()==='identity'?'两':'一')+'张牌，对其使用三张【杀】后不能对其使用【杀】',(card,player,target)=>{
 						return target!=player&&!target.isZhu2();
 					}).set('ai',target=>{
 						var player=_status.event.player;
@@ -909,7 +920,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							},
 							playerEnabled:function(card,player,target){
 								if(card.name!='sha'||typeof player.storage.sbwusheng_effect[target.playerid]!='number') return;
-								if(player.storage.sbwusheng_effect[target.playerid]>=(get.mode()==='identity'?5:3)) return false;
+								if(player.storage.sbwusheng_effect[target.playerid]>=3) return false;
 							},
 						},
 						audio:'sbwusheng',
@@ -927,7 +938,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							}
 							else{
 								player.logSkill('sbwusheng_effect',trigger.target);
-								player.draw();
+								player.draw(get.mode()==='identity'?2:1);
 							}
 						},
 					},
@@ -955,7 +966,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						charlotte:true,
 						onremove:true,
 						audio:'sbyijue',
-						trigger:{player:'useCardToPlayered'},
+						trigger:{player:'useCardToPlayer'},
 						filter:function(event,player){
 							return player.getStorage('sbyijue_effect').includes(event.target);
 						},
@@ -1392,7 +1403,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						},
 						replace:{
 							button:function(button){
-								const event=get.event();
+								const event=get.event(),sum=event.sum;
 								if(!event.isMine()) return;
 								if(button.classList.contains('selectable')==false) return;
 								if(ui.selected.buttons.length>=sum) return false;
@@ -1414,7 +1425,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 								game.check();
 							},
 						}
-					});
+					}).set('sum',sum)
 					if(result.bool){
 						var names=result.links.map(link=>link[2]);
 						storage[0]-=names.length;
@@ -6711,9 +6722,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			sbwusheng:'武圣',
 			sbwusheng_wusheng_backup:'武圣',
 			sbwusheng_info:'你可以将一张手牌当作任意【杀】使用或打出。出牌阶段开始时，你可以选择一名非主公的其他角色，本阶段对其使用【杀】无距离和次数限制，使用【杀】指定其为目标后摸一张牌，对其使用三张【杀】后不能对其使用【杀】。',
-			sbwusheng_info_identity:'你可以将一张手牌当作任意【杀】使用或打出。出牌阶段开始时，你可以选择一名非主公的其他角色，本阶段对其使用【杀】无距离和次数限制，使用【杀】指定其为目标后摸一张牌，对其使用五张【杀】后不能对其使用【杀】。',
+			sbwusheng_info_identity:'你可以将一张手牌当作任意【杀】使用或打出。出牌阶段开始时，你可以选择一名非主公的其他角色，本阶段对其使用【杀】无距离和次数限制，使用【杀】指定其为目标后摸两张牌，对其使用三张【杀】后不能对其使用【杀】。',
 			sbyijue:'义绝',
-			sbyijue_info:'锁定技，每名角色每局游戏限一次，当你对一名角色造成大于等于其体力值的伤害时，你防止此伤害，且本回合你使用牌指定其为目标后，取消之。',
+			sbyijue_info:'锁定技，每名角色每局游戏限一次，当你对一名角色造成大于等于其体力值的伤害时，你防止此伤害，且本回合你使用牌指定其为目标时，此牌对其无效。',
 			sb_caopi:'谋曹丕',
 			sb_caopi_prefix:'谋',
 			sbxingshang:'行殇',
@@ -6734,6 +6745,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			sb_tong:'谋攻篇·同',
 			sb_yu:'谋攻篇·虞',
 			sb_neng:'谋攻篇·能',
+			sb_waitforsort:'等待分包',
 		},
 	};
 });
