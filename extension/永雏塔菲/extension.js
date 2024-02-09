@@ -12,7 +12,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			lib.qhlypkg.push({
 				isExt: false,
 				filterCharacter: function (name) {
-					if (characterList.includes(name)) return true;
+					if (characterList.includes(name) && !lib.characterSort.taffy_character.taffy_old.includes(name) && name !== 'shoushen_caocao') return true;
 				},
 				isLutou: lib.config.xwLutou,
 				prefix: 'extension/永雏塔菲/image/character/',
@@ -26,7 +26,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			}, {
 				isExt: false,
 				filterCharacter: function (name) {
-					if (!characterList.includes(name)) return true;
+					if (!characterList.includes(name) || lib.characterSort.taffy_character.taffy_old.includes(name) || name === 'shoushen_caocao') return true;
 				},
 				isLutou: lib.config.xwLutou,
 				prefix: 'image/character/',
@@ -7980,7 +7980,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-02-07",
+				name: "更新日期: 2024-02-09",
 			},
 			github: {
 				clear: true,
