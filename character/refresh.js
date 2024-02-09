@@ -2406,7 +2406,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					'step 0'
-					player.chooseTarget([1,player.getHistory('skipped').length],get.prompt2('repingkou'),'对至多'+get.cnNumber(num)+'名其他角色各造成1点伤害。若你选择的角色数小于最大角色数，则你可以弃置其中一名目标角色装备区内的一张牌',function(card,player,target){
+					player.chooseTarget([1,player.getHistory('skipped').length],get.prompt2('repingkou'),'对至多'+get.cnNumber(player.getHistory('skipped').length)+'名其他角色各造成1点伤害。若你选择的角色数小于最大角色数，则你可以弃置其中一名目标角色装备区内的一张牌',function(card,player,target){
 						return target!=player;
 					}).set('ai',function(target){
 						var player=_status.event.player;
@@ -4065,23 +4065,34 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			decadejinjiu:{
 				global:'decadejinjiu_global',
 				mod:{
-					cardname:function(card){
+					cardname(card){
 						if(card.name=='jiu') return 'sha';
 					},
-					cardnumber:function(card){
+					cardnumber(card){
 						if(card.name=='jiu') return 13;
 					},
 				},
+				audio:2,
+				audioname2:{
+					ol_gaoshun:'rejinjiu',
+				},
+				trigger:{player:['useCard1','respond']},
+				filter(event,player){
+					return event.card.name=='sha'&&!event.skill&&event.cards&&event.cards.length==1&&event.cards[0].name=='jiu';
+				},
+				forced:true,
+				firstDo:true,
+				content(){},
 				subSkill:{
 					global:{
 						mod:{
-							cardEnabled:function(card,player){
+							cardEnabled(card,player){
 								if(card.name=='jiu'){
 									var source=_status.currentPhase;
 									if(source&&source!=player&&source.hasSkill('decadejinjiu')) return false;
 								}
 							},
-							cardSavable:function(card,player){
+							cardSavable(card,player){
 								if(card.name=='jiu'){
 									var source=_status.currentPhase;
 									if(source&&source!=player&&source.hasSkill('decadejinjiu')) return false;
