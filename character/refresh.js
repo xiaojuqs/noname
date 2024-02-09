@@ -2406,7 +2406,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content:function(){
 					'step 0'
-					player.chooseTarget([1,player.getHistory('skipped').length],get.prompt2('repingkou'),'对至多'+get.cnNumber(num)+'名其他角色各造成1点伤害。若你选择的角色数小于最大角色数，则你可以弃置其中一名目标角色装备区内的一张牌',function(card,player,target){
+					player.chooseTarget([1,player.getHistory('skipped').length],get.prompt2('repingkou'),'对至多'+get.cnNumber(player.getHistory('skipped').length)+'名其他角色各造成1点伤害。若你选择的角色数小于最大角色数，则你可以弃置其中一名目标角色装备区内的一张牌',function(card,player,target){
 						return target!=player;
 					}).set('ai',function(target){
 						var player=_status.event.player;
