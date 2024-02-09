@@ -211,7 +211,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				content: function () {
 					if (!trigger.source) return;
 					if (trigger.num === 3) {
-						game.delay(2.5);
+						game.delay(3.5);
 					} else if (trigger.num > 3) {
 						game.delay(5.8);
 					}
@@ -7980,7 +7980,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-02-05",
+				name: "更新日期: 2024-02-07",
 			},
 			github: {
 				clear: true,

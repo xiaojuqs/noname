@@ -2002,7 +2002,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     content: function () {
                         //   decadeUI.animation.playSpine({ name:'diankuangtulu',scale: 0.5,});
                         dcdAnim.loadSpine(xixiguagua.diankuangtulu.name, "skel", function () {
-                            dcdAnim.playSpine(xixiguagua.diankuangtulu, { scale: 0.55,y: [0, 0.47] });
+                            // taffy: 注释extension.js原版代码喵
+                            // dcdAnim.playSpine(xixiguagua.diankuangtulu, { scale: 0.55,y: [0, 0.47] });
+                            /* taffy分界线 */
+                            // taffy: 放慢骨骼喵
+                            dcdAnim.playSpine(xixiguagua.diankuangtulu, { speed: 0.75,scale: 0.55,y: [0, 0.47] });
+                            /* taffy分界线 */
                         });
                         game.playAudio('../extension/标记补充/audio/diankuangtulu.mp3');
                     },

@@ -115,9 +115,7 @@
 	left: 16px;
 	top: 18px;
 	line-height: 24px;
-  /* taffy: 注释boss.css原版代码喵 */
-	/* white-space: normal; */
-  /* taffy分界线 */
+	white-space: normal;
 }
 
 .player.bossplayer>.hp {
