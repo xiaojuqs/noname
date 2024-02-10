@@ -539,7 +539,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 														}
 													}
 													if (info.trigger.global) {
-														if (name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
+														if ((name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) && (!info.trigger.player || info.trigger.player !== 'enterGame' || (Array.isArray(info.trigger.player) && !info.trigger.player.includes('enterGame')))) {
 															if (info.filter) {
 																try {
 																	var bool = info.filter(trigger, player);
@@ -2373,7 +2373,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												game.expandSkills(list2);
 												for (let k = 0; k < list2.length; k++) {
 													var info = lib.skill[list2[k]];
-													if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+													if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) {
+														if (k === 0) break;
+														else continue;
+													}
 													if (info.trigger.player) {
 														if ((name3.length === 0 ? name2.includes(info.trigger.player) : name3.includes(info.trigger.player)) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name3.length === 0 ? name2 : name3)) {
 															if (info.filter) {
@@ -2444,7 +2447,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+														if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) {
+															if (k === 0) break;
+															else continue;
+														}
 														if (info.trigger.player) {
 															if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.player, name2)) {
 																if (info.filter) {
@@ -2760,7 +2766,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 														skills.add(skills2[j]);
 														break;
 													}
-													if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+													if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) {
+														if (k === 0) break;
+														else continue;
+													}
 													if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
 														if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
 															if (info.filter) {
@@ -2803,7 +2812,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 															}
 														}
 														if (info.trigger.global) {
-															if ((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || Array.isArray(info.trigger.global) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3)) {
+															if (((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || Array.isArray(info.trigger.global) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3)) && (!info.trigger.player || info.trigger.player !== 'enterGame' || (Array.isArray(info.trigger.player) && !info.trigger.player.includes('enterGame')))) {
 																if (info.filter && !name2.includes('phaseDiscard') && !name2.includes('phaseChange')) {
 																	try {
 																		var bool = info.filter(trigger, player);
@@ -2865,7 +2874,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+														if (!info || (!info.trigger && !info.enable) || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) {
+															if (k === 0) break;
+															else continue;
+														}
 														if (info.enable && (name2.includes('phaseUseEnd') || name3.includes('phaseUseEnd'))) {
 															if ((info.enable == 'phaseUse' || (Array.isArray(info.enable) && info.enable.includes('phaseUse'))) || (info.enable == 'chooseToUse' || (Array.isArray(info.enable) && info.enable.includes('chooseToUse')))) {
 																if (info.filter) {
@@ -2908,7 +2920,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 																}
 															}
 															if (info.trigger.global) {
-																if ((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || Array.isArray(info.trigger.global) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3)) {
+																if (((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || Array.isArray(info.trigger.global) && lib.skill.spshenpingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3)) && (!info.trigger.player || info.trigger.player !== 'enterGame' || (Array.isArray(info.trigger.player) && !info.trigger.player.includes('enterGame')))) {
 																	if (info.filter) {
 																		try {
 																			var bool = info.filter(trigger, player);
@@ -5698,7 +5710,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (var k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) continue;
+														if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) {
+															if (k === 0) break;
+															else continue;
+														}
 														if (name2 === 'phaseBeforeStart') {
 															name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
 														} else if (name2 === 'damageBefore') {
@@ -5724,7 +5739,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 															}
 														}
 														if (info.trigger.global) {
-															if (name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) {
+															if ((name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && hasCommonElement(info.trigger.global, name2)) && (!info.trigger.player || info.trigger.player !== 'enterGame' || (Array.isArray(info.trigger.player) && !info.trigger.player.includes('enterGame')))) {
 																if (info.filter) {
 																	try {
 																		var bool = info.filter(trigger, player);
@@ -7980,7 +7995,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-02-09",
+				name: "更新日期: 2024-02-10",
 			},
 			github: {
 				clear: true,

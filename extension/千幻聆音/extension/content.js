@@ -238,7 +238,7 @@ export let CONTENT = function (config, pack) {
                 // player.playDynamic(dstInfo, !isPrimary);
                 /* taffy分界线 */
                 // taffy: 修复变身后动态背景裁剪丢失的问题
-                player.playDynamic(dstInfo, !isPrimary, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+                player.playDynamic(dstInfo, !isPrimary, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_qhly_ignoreClips']);
                 /* taffy分界线 */
               }, (huanfuEff.delay || 0) * 1000)
               if (dstInfo.background) {
@@ -437,7 +437,12 @@ export let CONTENT = function (config, pack) {
                     }
                   }
                 }
-                player.playDynamic(skinCopy, i == 1, cutdybg, lib.config['extension_千幻聆音_ignoreClips']);
+                // taffy: 注释content.js原版代码喵
+                // player.playDynamic(skinCopy, i == 1, cutdybg, lib.config['extension_千幻聆音_ignoreClips']);
+                /* taffy分界线 */
+                // taffy: 修复忽略clipSlots选项失效的问题喵
+                player.playDynamic(skinCopy, i == 1, cutdybg, lib.config['extension_千幻聆音_qhly_ignoreClips']);
+                /* taffy分界线 */
                 if (i == 0 && skinCopy.decade) res2.zhu = "decade";
                 else if (skinCopy.decade) res2.fu = "decade";
                 res2.status = true;
@@ -1219,7 +1224,12 @@ export let CONTENT = function (config, pack) {
                 skinCopy.beijing.angle = resetBeijing.angle;
               }
             }
-            this.playDynamic(skinCopy, i == 1, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+            // taffy: 注释content.js原版代码喵
+            // this.playDynamic(skinCopy, i == 1, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+            /* taffy分界线 */
+            // taffy: 修复忽略clipSlots选项失效的问题喵
+            this.playDynamic(skinCopy, i == 1, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_qhly_ignoreClips']);
+            /* taffy分界线 */
             // 修改3 start  此处修改是因为动皮和背景加载需要时间, 在动皮加载好之前用一个默认背景代替, 防止武将框黑一片
             if (i == 0 || !this.dynamic.primary) {
               if (skinCopy.background) {
@@ -1550,7 +1560,12 @@ export let CONTENT = function (config, pack) {
             decadeUI.CUR_DYNAMIC--;
           }
           if (skin) {
-            this.playDynamic(skinCopy, deputy, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+            // taffy: 注释content.js原版代码喵
+            // this.playDynamic(skinCopy, deputy, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+            /* taffy分界线 */
+            // taffy: 修复忽略clipSlots选项失效的问题喵
+            this.playDynamic(skinCopy, deputy, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_qhly_ignoreClips']);
+            /* taffy分界线 */
             decadeUI.CUR_DYNAMIC++;
           }
           var forces = 'qun';
@@ -1561,7 +1576,12 @@ export let CONTENT = function (config, pack) {
             decadeUI.CUR_DYNAMIC--;
           }
           if (skin) {
-            this.playDynamic(skinCopy, false, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+            // taffy: 注释content.js原版代码喵
+            // this.playDynamic(skinCopy, false, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
+            /* taffy分界线 */
+            // taffy: 修复忽略clipSlots选项失效的问题喵
+            this.playDynamic(skinCopy, false, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_qhly_ignoreClips']);
+            /* taffy分界线 */
             decadeUI.CUR_DYNAMIC++;
             this.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skin.background + '")';
           }
@@ -2213,7 +2233,12 @@ export let CONTENT = function (config, pack) {
             } else {
               if (skinCopy.dybg) skinCopy.dybg.clip = undefined;
             }
-            node.playDynamic(skinCopy, bool2, cutdybg, lib.config['extension_千幻聆音_ignoreClips']);
+            // taffy: 注释content.js原版代码喵
+            // node.playDynamic(skinCopy, bool2, cutdybg, lib.config['extension_千幻聆音_ignoreClips']);
+            /* taffy分界线 */
+            // taffy: 修复忽略clipSlots选项失效的问题喵
+            node.playDynamic(skinCopy, bool2, cutdybg, lib.config['extension_千幻聆音_qhly_ignoreClips']);
+            /* taffy分界线 */
             node.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skinCopy.background + '")';
             game.qhly_checkYH(node);
             // player.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skinCopy.background + '")';
@@ -2226,7 +2251,12 @@ export let CONTENT = function (config, pack) {
           } else {
             skinCopy.player = skinCopy;
             // 动态背景切 2  -> start, 此处需要把cutdybg参数提到外面初始化
-            node.playDynamic(skinCopy, bool2, cutdybg, lib.config['extension_千幻聆音_ignoreClips']);
+            // taffy: 注释content.js原版代码喵
+            // node.playDynamic(skinCopy, bool2, cutdybg, lib.config['extension_千幻聆音_ignoreClips']);
+            /* taffy分界线 */
+            // taffy: 修复忽略clipSlots选项失效的问题喵
+            node.playDynamic(skinCopy, bool2, cutdybg, lib.config['extension_千幻聆音_qhly_ignoreClips']);
+            /* taffy分界线 */
             // 动态背景切 2  -> end
             //if (get.itemtype(node) != 'player' && !_status.qhly_dynamic[character][skinCopy.name]) _status.qhly_dynamic[character][skinCopy.name] = node.dynamic;
             if (skinCopy.background) {
