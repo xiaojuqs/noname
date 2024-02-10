@@ -1,0 +1,139 @@
+
+shouji.png
+size: 1807,1807
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_22
+  rotate: false
+  xy: 383, 5
+  size: 293, 214
+  orig: 475, 386
+  offset: 106, 91
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_23
+  rotate: false
+  xy: 764, 27
+  size: 351, 242
+  orig: 475, 386
+  offset: 106, 63
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_24
+  rotate: false
+  xy: 455, 1426
+  size: 446, 379
+  orig: 475, 386
+  offset: 19, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_25
+  rotate: false
+  xy: 2, 1426
+  size: 451, 379
+  orig: 475, 386
+  offset: 16, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_26
+  rotate: false
+  xy: 903, 1426
+  size: 414, 379
+  orig: 475, 386
+  offset: 17, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_27
+  rotate: false
+  xy: 1319, 1426
+  size: 414, 379
+  orig: 475, 386
+  offset: 17, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_28
+  rotate: true
+  xy: 2, 1012
+  size: 412, 379
+  orig: 475, 386
+  offset: 19, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_29
+  rotate: true
+  xy: 2, 600
+  size: 410, 379
+  orig: 475, 386
+  offset: 21, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_30
+  rotate: true
+  xy: 2, 188
+  size: 410, 379
+  orig: 475, 386
+  offset: 21, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_31
+  rotate: false
+  xy: 383, 1045
+  size: 410, 379
+  orig: 475, 386
+  offset: 21, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_32
+  rotate: false
+  xy: 795, 1045
+  size: 410, 379
+  orig: 475, 386
+  offset: 21, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_33
+  rotate: false
+  xy: 1207, 1045
+  size: 410, 379
+  orig: 475, 386
+  offset: 21, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_34
+  rotate: true
+  xy: 383, 633
+  size: 410, 379
+  orig: 475, 386
+  offset: 21, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_35
+  rotate: true
+  xy: 383, 221
+  size: 410, 379
+  orig: 475, 386
+  offset: 21, 2
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_37
+  rotate: false
+  xy: 764, 674
+  size: 405, 369
+  orig: 475, 386
+  offset: 21, 7
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_39
+  rotate: false
+  xy: 1171, 674
+  size: 405, 369
+  orig: 475, 386
+  offset: 21, 7
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_41
+  rotate: true
+  xy: 764, 271
+  size: 401, 361
+  orig: 475, 386
+  offset: 21, 11
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_43
+  rotate: true
+  xy: 1127, 274
+  size: 398, 355
+  orig: 475, 386
+  offset: 21, 14
+  index: -1
+vx/vx_chusha/vx_cs_hit/vx_chusha_hit_45
+  rotate: true
+  xy: 1484, 290
+  size: 382, 321
+  orig: 475, 386
+  offset: 21, 31
+  index: -1

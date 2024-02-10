@@ -2385,6 +2385,52 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		shen_xuzhu: { // 神许褚
+			龙腾虎跃: {
+				name: '神许褚/龙腾虎跃/daiji2',
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.5],
+				y: [0, 0.5],
+				scale: 0.75,
+				angle: 0,
+				// speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '神许褚/龙腾虎跃/chuchang',
+					action: 'play',
+					scale: 0.9,
+				},
+				gongji: {
+					name: '神许褚/龙腾虎跃/chuchang2',
+					action: 'gongji',
+					scale: 0.7,
+				},
+				teshu: {
+					name: '神许褚/龙腾虎跃/chuchang2',
+					action: 'jineng',
+					scale: 0.7,
+				},
+				beijing: {
+					name: '神许褚/龙腾虎跃/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: '神许褚/龙腾虎跃/shouji2',
+					scale: 0.5,
+					speed: 1.2,
+					delay: 0.3,
+					effect: {
+						name: '神许褚/龙腾虎跃/shouji',
+						scale: 0.6,
+						speed: 0.6,
+						delay: 0.7,
+					},
+				},
+			},
+		},
 		shen_xunyu: { // 神荀彧
 			匡汉延祚: {
 				name: '神荀彧/匡汉延祚/XingXiang',
@@ -3288,6 +3334,52 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		xuelingyun: { // 薛灵芸
+			金蛟巧刻: {
+				name: '薛灵芸/金蛟巧刻/daiji2',
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.5],
+				y: [0, 0.5],
+				scale: 0.75,
+				angle: 0,
+				// speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '薛灵芸/金蛟巧刻/chuchang',
+					action: 'play',
+					scale: 0.9,
+				},
+				gongji: {
+					name: '薛灵芸/金蛟巧刻/chuchang2',
+					action: 'gongji',
+					scale: 0.7,
+				},
+				teshu: {
+					name: '薛灵芸/金蛟巧刻/chuchang2',
+					action: 'jineng',
+					scale: 0.7,
+				},
+				beijing: {
+					name: '薛灵芸/金蛟巧刻/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: '薛灵芸/金蛟巧刻/shouji2',
+					scale: 0.5,
+					speed: 1.2,
+					delay: 0.3,
+					effect: {
+						name: '薛灵芸/金蛟巧刻/shouji',
+						scale: 0.6,
+						speed: 0.6,
+						delay: 0.7,
+					},
+				},
+			},
+		},
 		xusheng: { // 徐盛
 			破军杀将: {
 				name: '徐盛/破军杀将/XingXiang',
@@ -4165,41 +4257,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
-		zhaoyǎn: { // 赵俨
-			遐迩一体: {
-				name: '赵俨/遐迩一体/xingxiang',
-				version: "4.0",
-				json: true,
-				// shizhounian: true,
-				x: [0, 1],
-				y: [0, 0.25],
-				scale: 1,
-				angle: 0,
-				// speed: 1,
-				chuchang: {
-					name: '赵俨/遐迩一体/jineng01',
-					version: "4.0",
-					json: true,
-					scale: 1,
-					action: 'play',
-				},
-				gongji: {
-					name: '赵俨/遐迩一体/jineng01',
-					version: "4.0",
-					json: true,
-					scale: 1.2,
-					action: 'play',
-				},
-				beijing: {
-					name: '赵俨/遐迩一体/beijing',
-					version: "4.0",
-					json: true,
-					scale: 0.6,
-					x: [0, 0.7],
-					y: [0, 0.5]
-				},
-			},
-		},
 		zhaoyun: { // 赵云
 			金甲破阵: {
 				name: '赵云/金甲破阵/daiji2',
@@ -4770,9 +4827,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 赵襄
 		dc_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
-
-		// 赵俨
-		dc_zhaoyǎn: decadeUI.dynamicSkin.zhaoyǎn,
 
 		// 赵云
 		ol_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
