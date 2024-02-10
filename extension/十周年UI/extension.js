@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 'use strict';
-import {nonameInitialized} from '../../noname/util/index.js'
-game.import('extension', (lib, game, ui, get, ai, _status) => {
+import {nonameInitialized} from '../../noname/util/index.js';
+game.import('extension', async function(lib, game, ui, get, ai, _status){
 	const decadeUIName = '十周年UI', decadeUIResolvePath=`${nonameInitialized}extension/${decadeUIName}/`, decadeUIPath = window.decadeUIPath = `${lib.assetURL}extension/${decadeUIName}/`, Mixin = window.Mixin = {
 		/**
 		 * @overload
@@ -5916,7 +5916,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 			decadeUI.init();
 			console.timeEnd(decadeUIName);
 		},
-		precontent:()=>{
+		precontent:async function(){
 			if (lib.config[`extension_${decadeUIName}_eruda`]) {
 				const script = document.createElement('script');
 				script.src = decadeUIPath + 'eruda.js';
@@ -5950,15 +5950,6 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 					this.css(`${decadeUIPath}layout.css`);
 					this.css(`${decadeUIPath}player.css`);
 
-					this.js(`${decadeUIPath}animation.js`);
-					this.js(`${decadeUIPath}component.js`);
-					this.js(`${decadeUIPath}content.js`);
-					this.js(`${decadeUIPath}dynamicSkin.js`);
-					this.js(`${decadeUIPath}dynamicSkinTemplate.js`);
-					this.js(`${decadeUIPath}effect.js`);
-					this.js(`${decadeUIPath}menu.js`);
-					this.js(`${decadeUIPath}skill.js`);
-					this.js(`${decadeUIPath}spine.js`);
 					const decadeExtCardImage = lib.decade_extCardImage || (lib.decade_extCardImage = {});
 					if (window.fs) new Promise((resolve, reject) => fs.readdir(`${__dirname}/${decadeUIPath}image/card/`, (errnoException, files) => {
 						if (errnoException) reject(errnoException);
@@ -5977,27 +5968,72 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 					}));
 					return this;
 				};
-				decadeModule.js = function (path) {
-					if (!path) return console.error('path');
-					
+				decadeModule.init2 = function(){
+					return Promise.all([
+					this.asyncJs(`${decadeUIPath}animation.js`),
+					this.asyncJs(`${decadeUIPath}component.js`),
+					this.asyncJs(`${decadeUIPath}content.js`),
+					this.asyncJs(`${decadeUIPath}dynamicSkin.js`),
+					this.asyncJs(`${decadeUIPath}dynamicSkinTemplate.js`),
+					this.asyncJs(`${decadeUIPath}effect.js`),
+					this.asyncJs(`${decadeUIPath}menu.js`),
+					this.asyncJs(`${decadeUIPath}skill.js`),
+					this.asyncJs(`${decadeUIPath}spine.js`)
+					]);
+				};
+				decadeModule.asyncJs = async function(path){
+					return new Promise((resolve,reject)=>{
+						decadeModule.js(path,ret=>{
+							resolve();
+						});
+					});
+				};
+				decadeModule.asyncCss = async function(path){
+					return new Promise((resolve,reject)=>{
+						decadeModule.css(path,ret=>{
+							resolve();
+						});
+					});
+				};
+				decadeModule.js = function (path,callback) {
+					if (!path) {
+						//alert(path+"加载失败！");
+						if(callback)callback(false);
+						return console.error('path');
+					}
+
 					const script = document.createElement('script');
 					script.onload = function () {
 						this.remove();
+						if(callback)callback(true);
 					};
 					script.onerror = function () {
 						this.remove();
+						//alert(path+"加载失败！");
 						console.error(`${this.src}not found`);
+						if(callback)callback(false);
 					};
 					script.src = `${path}?v=${version}`;
 					document.head.appendChild(script);
 					return script;
 				};
-				decadeModule.css = function (path) {
-					if (!path) return console.error('path');
+				decadeModule.css = function (path,callback) {
+					if (!path){
+						if(callback){
+							callback(false);
+						}
+						return console.error('path');
+					}
 					const link = document.createElement('link');
 					link.rel = 'stylesheet';
 					link.href = `${path}?v=${version}`;
 					document.head.appendChild(link);
+					link.onload = function(){
+						if(callback)callback(true);
+					};
+					link.onerror = function(){
+						if(callback)callback(false);
+					}
 					return link;
 				};
 				decadeModule.import = function (module) {
@@ -6007,6 +6043,7 @@ game.import('extension', (lib, game, ui, get, ai, _status) => {
 				};
 				return decadeModule.init();
 			}({});
+			await window.decadeModule.init2();
 
 			Object.defineProperties(_status, {
 				connectMode: {
