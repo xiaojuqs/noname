@@ -89,7 +89,7 @@ new Promise(resolve => {
 	const supportMap = {
 		"firefox": [60, 0, 0],
 		"chrome": [61, 0, 0],
-		"safari": [14, 5, 0]
+		"safari": [14.5, 0, 0]
 	}
 	const versions = [major, minor, patch]
 
