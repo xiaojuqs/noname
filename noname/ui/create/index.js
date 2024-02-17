@@ -2568,6 +2568,7 @@ export class Create extends Uninstantable {
 			delete node.activate;
 		};
 		_status.prebutton.push(node);
+		if (window.decadeUI&&position) position.appendChild(node);
 		return node;
 	}
 	static buttonPresets = {
