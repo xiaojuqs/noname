@@ -78,12 +78,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			shen_zhangliao:['ol_zhangliao','shen_zhangliao'],
 			shen_zhugeliang:['shen_zhugeliang','mini_zhugeliang'],
 			shen_lvbu:['shen_lvbu','mini_lvbu'],
-			shen_zhaoyun:['shen_zhaoyun','old_shen_zhaoyun','boss_zhaoyun'],
+			shen_zhaoyun:['shen_zhaoyun','dc_zhaoyun','old_shen_zhaoyun','boss_zhaoyun'],
 			shen_guanyu:['shen_guanyu','tw_shen_guanyu'],
 			shen_sunquan:['shen_sunquan','junk_sunquan'],
 			shen_lvmeng:['shen_lvmeng','tw_shen_lvmeng','mini_lvmeng'],
 			shen_machao:['shen_machao','ps_shen_machao'],
 			shen_jiaxu:['le_shen_jiaxu','shen_jiaxu'],
+			shen_caocao:['shen_caocao','old_caocao'],
+			shen_zhangjiao:['shen_zhangjiao','junk_zhangjiao'],
 		},
 		characterFilter:{
 			shen_diaochan(mode){
@@ -160,7 +162,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						current.addMark('zhengqing',num);
 					})
 					if(onlyMe&&isMax){
-						player.draw(num);
+						player.draw(Math.min(5,num));
 						player.getHistory('custom').push({zhengqing_count:num});
 					}
 					else{
@@ -183,6 +185,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				onChooseToUse(event){
 					if(!game.online&&!event.zhuangpo_cards){
 						event.set('zhuangpo_cards',event.player.getCards('hes',card=>{
+							if(get.name(card,event.player)=='sha') return true;
 							const str=lib.skill.shencai.getStr(card);
 							return str.includes('【杀】');
 						}));
@@ -1003,12 +1006,13 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					var target=trigger.player;
 					player.awakenSkill('jxzhaoluan');
 					trigger.cancel();
-					target.getSkills(null,false,false).forEach(skill=>{
+					const skills = target.getSkills(null,false,false).filter(skill=>{
 						var info=get.info(skill);
 						if(info&&!info.charlotte&&!get.is.locked(skill)){
-							target.removeSkill(skill);
+							return true;
 						}
 					});
+					if(skills.length) yield target.removeSkills(skills);
 					yield target.gainMaxHp(3);
 					var num=3-target.getHp(true);
 					if(num>0) yield target.recover(num);
@@ -1635,7 +1639,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 0'
 					player.awakenSkill('dcqijing');
 					player.loseMaxHp();
-					player.addSkillLog('dccuixin');
+					player.addSkills('dccuixin');
 					'step 1'
 					if(game.countPlayer()>2){
 						if(player==trigger.player&&!trigger.skill){
@@ -1937,7 +1941,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter(event,player){
 					return player.countMark('yizhao')>ui.cardPile.childNodes.length;
 				},
-				check:()=>true,
+				check(event,player){
+					return ui.cardPile.childNodes.length;
+				},
 				content(){
 					'step 0'
 					player.removeMark('yizhao',player.countMark('yizhao'));
@@ -3204,7 +3210,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return info&&!info.charlotte&&!get.is.locked(i);
 					});
 					if(skills.length){
-						for(var i of skills) player.removeSkill(i);
+						player.removeSkills(skills);
 					}
 					//初始化技能库
 					var list1=['dili_shengzhi','dili_chigang','dili_qionglan','dili_quandao','dili_jiaohui','dili_yuanlv'];
@@ -3256,7 +3262,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						skills.add(fullskills.randomRemove(1)[0]);
 					}
 					for(var i of skills){
-						player.addSkillLog(i);
+						player.addSkills(i);
 					}
 					player.markAuto('yuheng',skills);
 				},
@@ -3445,10 +3451,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					},'请选择火【杀】的目标（'+(event.num==9?'⑨':event.num)+'/9）',false);
 					'step 2'
 					if(result.bool&&event.num<9) event.goto(1);
-					else{
-						player.removeSkill('jiufa');
-						player.addSkill('pingxiang_effect');
-					}
+					else player.removeSkills('jiufa');
+					'step 3'
+					player.addSkill('pingxiang_effect');
 				},
 				ai:{
 					order(){
@@ -4114,7 +4119,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						content(){
 							game.log(player,'成功完成使命');
 							player.awakenSkill('tspowei');
-							player.addSkillLog('shenzhu');
+							player.addSkills('shenzhu');
 						},
 					},
 					fail:{
@@ -4356,7 +4361,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						var target=result.targets[0];
 						player.line(target,'green');
 						target.storage.zuoxing=player;
-						target.addSkill('zuoxing');
+						target.addSkills('zuoxing');
 					}
 				},
 				derivation:'zuoxing',
@@ -4950,7 +4955,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						if(lib.character[target.name]) list.addArray(lib.character[target.name][3]);
 						if(lib.character[target.name1]) list.addArray(lib.character[target.name1][3]);
 						if(lib.character[target.name2]) list.addArray(lib.character[target.name2][3]);
-						player.addSkill(list);
+						player.addSkills(list);
 						game.broadcastAll(function(list){
 							lib.character.key_shiki[3].addArray(list);
 							game.expandSkills(list);
@@ -5273,8 +5278,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content(){
 					player.awakenSkill(event.name);
-					player.addSkill('tianxing');
-					player.addSkill('new_rejianxiong');
+					player.addSkills(['tianxing','new_rejianxiong']);
 					player.loseMaxHp();
 					player.gain(player.getExpansions('chuyuan'),'gain2','fromStorage');
 				},
@@ -5296,7 +5300,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					player.loseMaxHp();
 					player.gain(player.getExpansions('chuyuan'),'gain2','fromStorage');
 					"step 1"
-					player.removeSkill('chuyuan');
+					player.removeSkills('chuyuan');
 					player.chooseControl('rerende','rezhiheng','olluanji','caopi_xingdong').set('prompt','选择获得一个技能').set('ai',function(){
 						var player=_status.event.player;
 						if(!player.hasSkill('luanji')&&!player.hasSkill('olluanji')&&player.getUseValue({name:'wanjian'})>4) return 'olluanji';
@@ -5305,7 +5309,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						return 'rerende';
 					});
 					'step 2'
-					player.addSkillLog(result.control);
+					player.addSkills(result.control);
 				},
 			},
 			olzhiti:{
@@ -5722,7 +5726,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				content(){
 					player.removeMark('baonu',2);
-					player.addTempSkill('wushuang');
+					player.addTempSkills('wushuang');
 					player.popup('无双');
 					game.log(player,'获得了技能','#g【无双】');
 					target.addTempSkill('ol_wuqian_targeted');
@@ -6080,9 +6084,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					return player.countMark('renjie')>=4;
 				},
 				content(){
-					player.loseMaxHp();
-					player.addSkill('jilue');
 					player.awakenSkill('sbaiyin');
+					player.loseMaxHp();
+					player.addSkills('jilue');
 				},
 				ai:{
 					effect:{
@@ -7825,7 +7829,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				forced:true,
 				popup:false,
 				content(){
-					player.removeSkill(player.storage.drlt_duorui[0]);
+					player.removeSkills(player.storage.drlt_duorui[0]);
 					delete player.storage.drlt_duorui_player;
 					player.storage.drlt_duorui=[];
 				},
@@ -8851,9 +8855,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			shen_xuzhu:'神许褚',
 			shen_xuzhu_prefix:'神',
 			zhengqing:'争擎',
-			zhengqing_info:'锁定技。一轮游戏开始时，你移去所有角色的“擎”标记，令上一轮于一回合内造成伤害值最多的角色各获得X枚“擎”，且你与这些角色各摸一张牌（X为这些角色该回合内造成的伤害值）。若该角色为你且本次获得的“擎”数为本局游戏最多的一次，你改为摸X张牌。',
+			zhengqing_info:'锁定技。一轮游戏开始时，你移去所有角色的“擎”标记，令上一轮于一回合内造成伤害值最多的角色各获得X枚“擎”，且你与这些角色各摸一张牌（X为这些角色该回合内造成的伤害值）。若该角色为你且本次获得的“擎”数为本局游戏最多的一次，你改为摸X张牌（至多摸五张）。',
 			zhuangpo:'壮魄',
-			zhuangpo_info:'你可以将牌面信息中包含“【杀】”的牌当【决斗】使用，然后你获得如下效果：1.当此【决斗】指定目标后，若你有“擎”，你可以移去任意枚“擎”，令目标角色弃置等量的牌；2.当你造成渠道为此牌的伤害时，若此牌的所有目标角色中存在有“擎”的角色，此伤害+1。',
+			zhuangpo_info:'你可以将牌名为【杀】或牌面信息中包含“【杀】”的牌当【决斗】使用，然后你获得如下效果：1.当此【决斗】指定目标后，若你有“擎”，你可以移去任意枚“擎”，令目标角色弃置等量的牌；2.当你造成渠道为此牌的伤害时，若此牌的所有目标角色中存在有“擎”的角色，此伤害+1。',
 			
 
 			extra_feng:'神话再临·风',
