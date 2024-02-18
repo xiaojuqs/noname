@@ -1581,7 +1581,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 						var loser=result.bool?target:player;
 						var cards=[];
 						game.getGlobalHistory('cardMove',evt=>{
-							if(evt.getParent(2)==event) cards.addArray(evt.cards.filter(i=>{
+							if(evt.getParent(3)==event) cards.addArray(evt.cards.filter(i=>{
 								return get.position(i,true)=='d'&&get.type(i,null,false)!='basic';
 							}));
 						});
