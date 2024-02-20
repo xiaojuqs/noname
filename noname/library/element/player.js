@@ -7329,7 +7329,7 @@ export class Player extends HTMLDivElement {
 		next.forceDie = true;
 		next.addSkill = addSkill.slice(0).unique();
 		next.removeSkill = removeSkill.slice(0).unique();
-		next.setContent('changeSkills');
+		next.setContents('changeSkills');
 		return next;
 	}
 	addSkill(skill, checkConflict, nobroadcast, addToSkills) {
@@ -7847,7 +7847,7 @@ export class Player extends HTMLDivElement {
 				this.removeAdditionalSkill(i);
 			}
 		}
-		this[all ? 'removeSkill' : 'removeSkillLog'](list);
+		this[all ? 'removeSkill' : 'removeSkills'](list);
 		this.checkConflict();
 		this.checkMarks();
 		return list;

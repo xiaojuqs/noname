@@ -11466,27 +11466,14 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					result:{
 						target:function(player,target){
 							var att=get.attitude(player,target);
-							var max=0;
-							var min=1;
-							target.countCards('e',function(card){
-								var val=get.value(card,target);
-								if(val>max) max=val;
-								if(val<min) min=val;
+							let bad_equip_num=target.countCards('e',function(card){
+								return get.equipValue(card)<0;
 							});
-							if(att>0&&min<=0) return target.hasSkillTag('noe')?3:1;
-							if(att<=0&&max>0){
-								if(target.hasSkillTag('noe')) return max>6?(-max/3):0;
-								return -max;
-							}
-							if(player===target&&!player.hasSha()){
-								let ph=player.countCards('h');
-								if(game.hasPlayer(i=>{
-									if(!player.canUse('sha',i,true,true)||get.effect(i,{name:'sha'},player,player)<=0) return false;
-									return !ph||!i.mayHaveShan(player,'use',i.getCards('h',i=>{
-										return i.hasGaintag('sha_notshan');
-									}));
-								})) return 1;
-							}
+							let good_equip_num=target.countCards('e',function(card){
+								return get.equipValue(card)>=0;
+							});
+							if(att>0&&bad_equip_num>0) return target.hasSkillTag('noe')?3:1;
+							if(att<=0&&good_equip_num>0&&get.effect(target,{name:'sha'},player,player)>0&&!target.hasSkillTag('noe')) return -1;
 							return 0;
 						},
 					},
