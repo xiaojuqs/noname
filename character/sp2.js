@@ -1174,12 +1174,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				filter:function(event,player){
 					return player.countCards('h')>player.hp;
 				},
-				content:function(){
-					'step 0'
-					player.loseMaxHp();
-					'step 1'
-					player.recover(player.maxHp-player.hp);
-					player.addSkills(['mashu','dcnuchen']);
+				async content(event, trigger, player){
+					player.awakenSkill('dcdanji');
+					await player.loseMaxHp();
+					await player.recover(player.maxHp-player.hp);
+					await player.addSkills(['mashu','dcnuchen']);
 				},
 				ai:{
 					maixie:true,

@@ -728,7 +728,10 @@ export class Player extends HTMLDivElement {
 			virtualCard.init(['', '', card, info && info.cardnature]);
 		}
 		else if (get.itemtype(card) == 'card') executeDelayCardEffect.card = card;
-		else _status.event.next.remove(executeDelayCardEffect);
+		else {
+			_status.event.next.remove(executeDelayCardEffect);
+			executeDelayCardEffect.resolve();
+		}
 		executeDelayCardEffect.judge = judge;
 		executeDelayCardEffect.judge2 = judge2;
 		executeDelayCardEffect.setContent('executeDelayCardEffect');
@@ -759,7 +762,10 @@ export class Player extends HTMLDivElement {
 		const isArray = Array.isArray(cards);
 		if (cards && !isArray) gift.cards = [cards];
 		else if (isArray && cards.length) gift.cards = cards;
-		else _status.event.next.remove(gift);
+		else {
+			_status.event.next.remove(gift);
+			gift.resolve();
+		}
 		gift.deniedGifts = [];
 		gift.setContent('gift');
 		gift._args = Array.from(arguments);
@@ -837,7 +843,10 @@ export class Player extends HTMLDivElement {
 		const isArray = Array.isArray(cards);
 		if (cards && !isArray) recast.cards = [cards];
 		else if (isArray && cards.length) recast.cards = cards;
-		else _status.event.next.remove(recast);
+		else {
+			_status.event.next.remove(recast);
+			recast.resolve();
+		}
 		if (typeof recastingLose != 'function') {
 			if (recastingLose === null) console.trace(`recast的recastingLose参数不应传入null,可以用void 0或undefined占位`);
 			recastingLose = (player, cards) => player.loseToDiscardpile(cards).log = false;
@@ -1085,6 +1094,7 @@ export class Player extends HTMLDivElement {
 		if (!next.source) next.source = _status.event.player;
 		if (!next.slots.length) {
 			_status.event.next.remove(next);
+			next.resolve();
 		}
 		next.setContent('disableEquip');
 		return next;
@@ -1122,6 +1132,7 @@ export class Player extends HTMLDivElement {
 		if (!next.source) next.source = _status.event.player;
 		if (!next.slots.length) {
 			_status.event.next.remove(next);
+			next.resolve();
 		}
 		next.setContent('enableEquip');
 		return next;
@@ -1159,6 +1170,7 @@ export class Player extends HTMLDivElement {
 		if (!next.source) next.source = _status.event.player;
 		if (!next.slots.length) {
 			_status.event.next.remove(next);
+			next.resolve();
 		}
 		next.setContent('expandEquip');
 		return next;
@@ -4789,7 +4801,10 @@ export class Player extends HTMLDivElement {
 		}
 		if (get.itemtype(cards) == 'card') next.cards = [cards];
 		else if (get.itemtype(cards) == 'cards') next.cards = cards.slice(0);
-		else _status.event.next.remove(next);
+		else {
+			_status.event.next.remove(next);
+			next.resolve();
+		}
 		next.setContent('showCards');
 		next._args = Array.from(arguments);
 		return next;
@@ -5146,7 +5161,10 @@ export class Player extends HTMLDivElement {
 			}
 		}
 		if (next.num == undefined) next.num = 1;
-		if (next.num <= 0) _status.event.next.remove(next);
+		if (next.num <= 0) {
+			_status.event.next.remove(next);
+			next.resolve();
+		}
 		next.setContent('draw');
 		if (lib.config.mode == 'stone' && _status.mode == 'deck' &&
 			next.drawDeck == undefined && !next.player.isMin() && next.num > 1) {
@@ -5230,7 +5248,10 @@ export class Player extends HTMLDivElement {
 				next.notBySelf = true;
 			}
 		}
-		if (next.cards == undefined) _status.event.next.remove(next);
+		if (next.cards == undefined) {
+			_status.event.next.remove(next);
+			next.resolve();
+		}
 		next.setContent('discard');
 		return next;
 	}
@@ -5264,7 +5285,10 @@ export class Player extends HTMLDivElement {
 				next.blank = true;
 			}
 		}
-		if (next.cards == undefined) _status.event.next.remove(next);
+		if (next.cards == undefined) {
+			_status.event.next.remove(next);
+			next.resolve();
+		}
 		next.setContent('loseToDiscardpile');
 		return next;
 	}
@@ -5644,6 +5668,7 @@ export class Player extends HTMLDivElement {
 		}
 		if (!next.cards || !next.cards.length) {
 			_status.event.next.remove(next);
+			next.resolve();
 		}
 		else {
 			if (next.position == undefined) next.position = ui.discardPile;
@@ -5761,7 +5786,10 @@ export class Player extends HTMLDivElement {
 		if (next.cards == undefined && !nocard) next.cards = event.cards;
 		if (next.source == undefined && !nosource) next.source = event.customSource || event.player;
 		if (next.num == undefined) next.num = (event.baseDamage || 1) + (event.extraDamage || 0);
-		if (next.num <= 0) _status.event.next.remove(next);
+		if (next.num <= 0) {
+			_status.event.next.remove(next);
+			next.resolve();
+		}
 		next.setContent('recover');
 		return next;
 	}
@@ -7486,7 +7514,7 @@ export class Player extends HTMLDivElement {
 		const player = this, skills = this.getRemovableAdditionalSkills(skill, target);
 		if(skills.length){
 			player.removeSkill(skills);
-			if (player.additionalSkills[skill]&&player.additionalSkills[skill].length) delete player.additionalSkills[skill];
+			if (player.additionalSkills[skill]&&!player.additionalSkills[skill].length) delete player.additionalSkills[skill];
 		}
 		_status.event.clearStepCache();
 		return this;
@@ -7499,7 +7527,7 @@ export class Player extends HTMLDivElement {
 					return '#g【' + get.translation(i) + '】';
 				}));
 				player.removeSkill(skills);
-				if (player.additionalSkills[skill]&&player.additionalSkills[skill].length) delete player.additionalSkills[skill];
+				if (player.additionalSkills[skill]&&!player.additionalSkills[skill].length) delete player.additionalSkills[skill];
 			});
 		}
 	}
