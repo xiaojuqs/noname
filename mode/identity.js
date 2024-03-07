@@ -777,7 +777,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					}
 				}
 				else if(me.identity=='nei'){
-						if(game.players.length==(1+game.players.filter(i=>i.identity=='commoner').length)&&me.isAlive()){
+					if(game.players.length==(1+game.players.filter(i=>i.identity=='commoner').length)&&me.isAlive()){
 						game.over(true);
 					}
 					else{
@@ -2768,7 +2768,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 						game.countPlayer(function(current){
 							var identity=current.identity.slice(1);
 							if(identity!='Zhu'){
-								if(current.identity.indexOf('r')==0)	red.push(current);
+								if(current.identity.indexOf('r')==0) red.push(current);
 								else blue.push(current);
 							}
 						});
@@ -3691,7 +3691,7 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 									}
 									if(fan){
 										if(to.hp>1&&to.hp>fan.hp&&to.countCards('he')>fan.countCards('he')){
-											return -3;
+											return -1.7;
 										}
 									}
 									return 0;
@@ -3964,7 +3964,8 @@ game.import('mode',function(lib,game,ui,get,ai,_status){
 					'step 2'
 					player.recover();
 					player.draw();
-					const skills = player.getStockSkills(true,true).forEach(stockSkill=>{
+					'step 3'
+					const skills = player.getStockSkills(true,true).filter(stockSkill=>{
 						if(player.hasSkill(stockSkill)) return;
 						var info=get.info(stockSkill);
 						if(!info||!info.zhuSkill) return;
