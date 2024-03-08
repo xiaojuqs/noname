@@ -5792,7 +5792,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 							if(name=='sha'){
 								if(event.filterCard(get.autoViewAs({name},'unsure'),player,event)) list.push(['基本','','sha']);
 								for(var nature of lib.inpile_nature){
-									if(event.filterCard(get.autoViewAs({name,nature},'unsure'),player,event)) list.push(['基本','','sha',j]);
+									if(event.filterCard(get.autoViewAs({name,nature},'unsure'),player,event)) list.push(['基本','','sha',nature]);
 								}
 							}
 							else if(get.type2(name)=='trick'&&event.filterCard(get.autoViewAs({name},'unsure'),player,event)) list.push(['锦囊','',name]);
