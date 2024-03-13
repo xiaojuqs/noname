@@ -3248,11 +3248,11 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				audio:2,
 				enable:'chooseToUse',
 				hiddenCard:function(player,name){
-					if(name!='wuxie'&&lib.inpile.includes(name)&&lib.skill.olqifan.getNum()) return true;
+					if(name!='wuxie'&&lib.inpile.includes(name)) return true;
 				},
 				getNum:()=>game.getGlobalHistory('useCard').reduce((list,evt)=>list.add(get.type2(evt.card)),[]).length,
 				filter:function(event,player){
-					if(event.responded||event.type=='wuxie'||event.olqifan||!lib.skill.olqifan.getNum()) return false;
+					if(event.responded||event.type=='wuxie'||event.olqifan) return false;
 					for(var i of lib.inpile){
 						if(i!='wuxie'&&event.filterCard(get.autoViewAs({name:i},'unsure'),player,event)) return true;
 					}
@@ -3263,7 +3263,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					'step 0'
 					var evt=event.getParent(2);
 					evt.set('olqifan',true);
-					var cards=get.bottomCards(lib.skill.olqifan.getNum(),true);
+					var cards=get.bottomCards(lib.skill.olqifan.getNum()+1,true);
 					var aozhan=player.hasSkill('aozhan');
 					player.chooseButton(['嚣翻：选择要使用的牌',cards]).set('filterButton',function(button){
 						return _status.event.cards.includes(button.link);
@@ -15739,8 +15739,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(get.attitude(player,event.player)>=0) return false;
 					var e2=player.getEquip(2);
 					if(e2){
-						if(e2.name=='tengjia') return true;
-						if(e2.name=='bagua') return true;
+						if(e2.name=='tengjia'||e2.name=='rewrite_tengjia') return true;
+						if(e2.name=='bagua'||e2.name=='rewrite_bagua') return true;
 					}
 					return event.player.countCards('h')>event.player.hp;
 				},
@@ -20035,6 +20035,18 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 				},
 				ai:{
 					respondShan:true,
+					freeShan:true,
+					skillTagFilter(player,tag,arg){
+						if(tag!=='respondShan'&&tag!=='freeShan') return;
+						if(!player.hasEmptySlot(2)||player.hasSkillTag('unequip2')) return false;
+						if(!arg||!arg.player) return true;
+						if(arg.player.hasSkillTag('unequip',false,{
+							target:player
+						})||arg.player.hasSkillTag('unequip_ai',false,{
+							target:player
+						})) return false;
+						return true;
+					},
 					effect:{
 						target:function(card,player,target){
 							if(player==target&&get.subtype(card)=='equip2'){
@@ -20493,8 +20505,8 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 					if(get.attitude(player,event.player)>=0) return false;
 					var e2=player.getEquip(2);
 					if(e2){
-						if(e2.name=='tengjia') return true;
-						if(e2.name=='bagua') return	true;
+						if(e2.name=='tengjia'||e2.name=='rewrite_tengjia') return true;
+						if(e2.name=='bagua'||e2.name=='rewrite_bagua') return true;
 					}
 					return player.countCards('h','shan')>0;
 				},
@@ -26385,7 +26397,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 		characterReplace:{
 			guanyinping:['guanyinping','old_guanyinping'],
 			shixie:['shixie','dc_shixie','old_shixie'],
-			caoshuang:['caoshuang','ns_caoshuang'],
+			caoshuang:['caoshuang','dc_caoshuang','ns_caoshuang'],
 			caoang:['caoang','yj_caoang','tw_caoang'],
 			caohong:['caohong','tw_re_caohong','tw_caohong','yj_caohong'],
 			xiahouba:['xiahouba','dc_xiahouba','tw_xiahouba'],
@@ -26397,7 +26409,7 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			sunluyu:['sunluyu','re_sunluyu','mb_sunluyu'],
 			jin_simazhao:['jin_simazhao','simazhao','sp_simazhao'],
 			jin_wangyuanji:['jin_wangyuanji','wangyuanji','sp_wangyuanji'],
-			wangyun:['wangyun','dc_wangyun','re_wangyun','jsrg_wangyun','old_wangyun','pe_wangyun'],
+			wangyun:['clan_wangyun','wangyun','dc_wangyun','re_wangyun','jsrg_wangyun','old_wangyun','pe_wangyun'],
 			zhangliang:['xin_zhangliang','re_zhangliang','zhangliang'],
 			lingju:['lingju','old_lingju'],
 			guansuo:['guansuo','dc_guansuo'],
@@ -27595,10 +27607,9 @@ game.import('character',function(lib,game,ui,get,ai,_status){
 			olgangshu_info:'①当你使用非基本牌结算结束后，你可以令以下一项数值+1（每项至多加至5）：1.攻击范围；2.受〖刚述〗影响的下个摸牌阶段摸牌数；3.使用【杀】的次数上限。②当有牌被你抵消后，重置你〖刚述①〗增加的所有数值。',
 			oljianxuan:'谏旋',
 			oljianxuan_info:'当你受到伤害后，你可以令一名角色摸一张牌，然后若其手牌数等于你〖刚述①〗中的任意一项对应的数值，其重复此流程。',
-			ol_pengyang:'OL彭羕',
-			ol_pengyang_prefix:'OL',
+			ol_pengyang:'彭羕',
 			olqifan:'嚣翻',
-			olqifan_info:'当你需要使用不为【无懈可击】的牌时，你可以观看牌堆底的X张牌并使用其中的一张。此牌结算结束时，你依次弃置以下前X个区域中的所有牌：⒈判定区、⒉装备区、⒊手牌区（X为本回合使用过的牌中包含的类型数）。',
+			olqifan_info:'当你需要使用不为【无懈可击】的牌时，你可以观看牌堆底的X+1张牌并使用其中的一张。此牌结算结束时，你依次弃置以下前X个区域中的所有牌：⒈判定区、⒉装备区、⒊手牌区（X为本回合使用过的牌中包含的类型数）。',
 			oltuishi:'侻失',
 			oltuishi_info:'锁定技。①你不能使用【无懈可击】。②当你使用点数为字母的牌时，你令此牌无效并摸一张牌，且你对手牌数小于你的角色使用的下一张牌无距离和次数限制。',
 			ol_tw_zhangji:'张既',
