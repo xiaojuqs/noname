@@ -1175,7 +1175,7 @@ game.import("character", function () {
 									case 1:
 										return game.filterPlayer(current=>get.attitude(player,current)>3).reduce((list,target)=>{
 											let num=0;
-											if (target.isLinked()) num+=5;
+											if (target.isLinked()&&!target.hasSkill("nzry_jieying")) num+=5;
 											if (target.isTurnedOver()) num+=10;
 											list.push(num);
 											return list;
@@ -1293,14 +1293,14 @@ game.import("character", function () {
 										let player=_status.event.player;
 										switch(lib.skill.sbxingshang_use_backup.num){
 											case 1:
-												if(get.attitude(player,target)>3){
-													if(target.isLinked()) return 5;
-													if(target.isTurnedOver()) return 10;
+												if (get.attitude(player,target)>3){
+													if (target.isLinked()&&!target.hasSkill("nzry_jieying")) return 5;
+													if (target.isTurnedOver()) return 10;
 												}
 											case 2:
-												if(get.attitude(player,target)>3) return Math.min(5,Math.max(1,game.dead.length));
+												if (get.attitude(player,target)>3) return Math.min(5,Math.max(1,game.dead.length));
 											case 3:
-												if(get.attitude(player,target)>3) return get.recoverEffect(target,player,player);
+												if (get.attitude(player,target)>3) return get.recoverEffect(target,player,player);
 										}
 										return 0;
 									},
@@ -1477,9 +1477,9 @@ game.import("character", function () {
 									case 2:
 										let active_skills=target.getStockSkills(false);
 										let num=0;
-										if(active_skills.length>0){
-											if(target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
-											if(target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+										if (active_skills.length>0){
+											if (target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+											if (target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
 										}
 										return get.attitude(player,target)<0?num:0;
 									case 1:
@@ -1488,8 +1488,8 @@ game.import("character", function () {
 									case 6:
 										return 0;
 									case 4:
-										if(get.attitude(player,target)>3&&target.isTurnedOver()) return 2*target.countCards('hs')+1;
-										if(get.attitude(player,target)<0&&!target.isTurnedOver()) return target.countCards('hs');
+										if (get.attitude(player,target)>3&&target.isTurnedOver()) return 2*target.countCards('hs')+1;
+										if (get.attitude(player,target)<0&&!target.isTurnedOver()) return target.countCards('hs');
 										return 0;
 								}
 								return 0;

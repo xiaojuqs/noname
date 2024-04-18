@@ -226,7 +226,8 @@ game.import("card", function () {
 						keepAI: true,
 						target: function (player, target) {
 							var cards = target.getCards("e"),
-								js = target.getCards("j");
+								js = target.getCards("j"),
+								val = 0;
 							for (var i=0;i<cards.length;i++){
 								val+=get.equipValue(cards[i]);
 							}

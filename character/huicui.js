@@ -7987,7 +7987,7 @@ game.import("character", function () {
 				},
 				async content(event, trigger, player) {
 					if (event.cards && event.cards.length) {
-						await player.dicard(cards);
+						await player.discard(event.cards);
 						lib.skill.dcxieshou.change(player, 1);
 					} else {
 						player.drawTo(player.maxHp);
@@ -12968,40 +12968,28 @@ game.import("character", function () {
 					);
 				},
 				usable: 1,
-				async cost(event, trigger, player) {
-					"step 0";
-					var num = player.getFriends().length;
-					if (
-						!game.hasPlayer(function (current) {
-							return current != player && current.getFriends().length > num;
-						})
-					) {
-						player
-							.chooseToDiscard(
-								"h",
-								get.prompt("rewangzu"),
-								"弃置一张牌并令伤害-1",
-								"chooseonly"
-							)
-							.set("ai", function (card) {
-								return 7 - get.value(card);
-							});
+				content: function() {
+					'step 0'
+					var num=player.getFriends().length;
+					if (!game.hasPlayer(function(current){
+						return current!=player&&current.getFriends().length>num;
+					})){
+						player.chooseToDiscard('h',get.prompt('rewangzu'),'弃置一张牌并令伤害-1').set('ai',function(card){
+							return 7-get.value(card);
+						}).logSkill='rewangzu';
 					} else {
-						player.chooseBool(get.prompt("rewangzu"), "随机弃置一张牌并令伤害-1");
+						player.chooseBool(get.prompt('rewangzu'),'随机弃置一张牌并令伤害-1');
 					}
-					"step 1";
-					event.result = result;
-				},
-				async content(event, trigger, player) {
-					trigger.num--;
-					if (!event.cards || !event.cards.length) {
-						const cards = player.getCards("h", (card) =>
-							lib.filter.cardDiscardable(card, player, "rewangzu")
-						);
-						if (cards.length) player.discard(cards.randomGet());
-					} else {
-						player.discard(event.cards);
+					'step 1'
+					if (result.bool){
+						trigger.num--;
+						if (!result.cards||!result.cards.length){
+							player.logSkill('rewangzu');
+							var cards=player.getCards('h',(card)=>lib.filter.cardDiscardable(card,player,'rewangzu'));
+							if (cards.length) player.discard(cards.randomGet());
+						}
 					}
+					else player.storage.counttrigger.rewangzu--;
 				},
 			},
 			//万年公主

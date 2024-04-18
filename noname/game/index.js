@@ -959,16 +959,29 @@ export class Game {
 		let n = updates.length;
 		for (let i = 0; i < updates.length; i++) {
 			if (lib.node && lib.node.fs) {
-				lib.node.fs.access(__dirname + "/" + updates[i], (err) => {
-					if (!err) {
-						let stat = lib.node.fs.statSync(__dirname + "/" + updates[i]);
-						// @ts-ignore
-						if (stat.size == 0) err = true;
+				lib.node.fs.access(__dirname + "/" + updates[i], (function (entry) {
+					return function (err) {
+						if (!err) {
+							let stat = lib.node.fs.statSync(__dirname + "/" + entry);
+							if (stat.size == 0) {
+								err = true;
+							}
+						}
+						if (err) {
+							n--;
+							if (n == 0) {
+								proceed();
+							}
+						}
+						else {
+							n--;
+							updates.remove(entry);
+							if (n == 0) {
+								proceed();
+							}
+						}
 					}
-					n--;
-					if (!err) updates.remove(updates[i]);
-					if (n == 0) proceed();
-				});
+				}(updates[i])));
 			} else {
 				window.resolveLocalFileSystemURL(
 					nonameInitialized + updates[i],
