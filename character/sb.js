@@ -1200,6 +1200,7 @@ game.import("character", function () {
 											list.push(num);
 											return list;
 										},[]).sort((a,b)=>b-a)[0];
+								}
 							},
 							backup(links, player) {
 								return {

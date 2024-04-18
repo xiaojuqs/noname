@@ -2202,7 +2202,7 @@ game.import('extension', async function(lib, game, ui, get, ai, _status){
 						'',
 						/\s*var\s*addv\s*=\s*function\s*\(\s*\)\s*{[\s\S]*?}\s*;/,
 						'',
-						/(?=\s*if\s*\(\s*event\s*\.\s*animate\s*==\s*'draw'\s*\)\s*{)/,
+						/(?=\s*if\s*\(\s*event\s*\.\s*animate\s*==\s*"draw"\s*\)\s*{)/,
 						(event, player, dui, fragment, handcards, broadcast) => {
 							var gainTo = function (cards, nodelay) {
 								cards.duiMod = event.source;

@@ -5213,7 +5213,7 @@ export class Player extends HTMLDivElement {
 					if (
 						aimTargets.some((current2) => {
 							if (withatt) {
-								if (get.sgn(get..equipValue(es[i])) != -att) return false;
+								if (get.sgn(get.equipValue(es[i])) != -att) return false;
 								var att2 = get.sgn(get.attitude(player, current2));
 								if (
 									!canReplace ||
