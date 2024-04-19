@@ -782,19 +782,11 @@ game.import("card", function () {
 					player.gift(cards, target);
 				},
 				ai: {
-					order: (item, player) =>
-						player.hasCard(
-							(card) =>
-								game.hasPlayer(
-									(current) =>
-										player.canGift(card, current, true) &&
-										!current.refuseGifts(card, player) &&
-										get.effect(current, card, player, player) > 0
-								),
-							"h"
-						)
-							? 7
-							: 0.51,
+					order: function(item,player) {
+						if (player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0&&get.type(card,false)=='equip'),'h')) return 7;
+						if (player.hasCard(card=>game.hasPlayer(current=>player.canGift(card,current,true)&&!current.refuseGifts(card,player)&&get.effect(current,card,player,player)>0),'h')) return 1;
+						return 0.51;
+					},
 					result: {
 						target: (player, target) => {
 							const result = ui.selected.cards.map((value) =>
