@@ -183,7 +183,7 @@ window.noname_asset_list = [
 	
 	"audio/card/female/fudichouxin.mp3",
 	"audio/card/female/toulianghuanzhu.mp3",
-	"audio/card/female/wangmeizhike.mp3",
+	//"audio/card/female/wangmeizhike.mp3",
 	/*cardaudio end*/
 
 	/*dieaudio begin*/
