@@ -611,18 +611,18 @@ game.import("character", function () {
 										if (
 											player.hp < 2 ||
 											target.hp +
-												target.countCards("h", (card) =>
-													target.canSaveCard(card, target)
-												) <=
-												1 +
-													trigger.targets.some((current) =>
-														current.hasMark("zhengqing")
-													)
+											target.countCards("h", (card) =>
+												target.canSaveCard(card, target)
+											) <=
+											1 +
+											trigger.targets.some((current) =>
+												current.hasMark("zhengqing")
+											)
 										)
 											allIn = true;
 										if (
 											cards.map((card) => get.value(card)).reduce((p, c) => p + c, 0) /
-												cards.length >
+											cards.length >
 											5
 										)
 											allIn = true;
@@ -762,9 +762,18 @@ game.import("character", function () {
 				changeSeat: true,
 				derivation: "tamo_faq",
 				async content(event, trigger, player) {
-					const toSortPlayers = game.filterPlayer((current) => !current.isZhu2());
+					const toSortPlayers = game.filterPlayer((current) => {
+						return (
+							!current.isZhu2() ||
+							get.mode() == "doudizhu" && current.getSeatNum() == 3
+						);
+					});
 					toSortPlayers.sortBySeat(game.findPlayer2((current) => current.getSeatNum() == 1, true));
-					const next = player.chooseToMove("榻谟：是否分配所有角色的座次？");
+					const next = player.chooseToMove("榻谟：是否分配" +
+						(game.countPlayer() > toSortPlayers.length ?
+							"除主公" + (get.mode() == "doudizhu" ? "和三号位外" : "外") : "") +
+						"所有角色的座次？"
+					);
 					next.set("list", [
 						[
 							"（以下排列的顺序即为发动技能后角色的座次顺序）",
@@ -927,8 +936,8 @@ game.import("character", function () {
 				trigger: { player: "phaseAfter" },
 				filter(event, player) {
 					return game.hasPlayer(target => {
-						if(target==player||target.countCards('h')+player.countCards('h')==0) return false;
-						return get.mode()=='identity'||target.countCards('h')<=player.countCards('h')+1;
+						if (target == player || target.countCards('h') + player.countCards('h') == 0) return false;
+						return get.mode() == 'identity' || target.countCards('h') <= player.countCards('h') + 1;
 					});
 				},
 				direct: true,
@@ -940,8 +949,8 @@ game.import("character", function () {
 							get.prompt("zhimeng"),
 							"与一名其他角色平分手牌",
 							(card, player, target) => {
-								if(target==player||target.countCards('h')+player.countCards('h')==0) return false;
-								return get.mode()=='identity'||target.countCards('h')<=player.countCards('h')+1;
+								if (target == player || target.countCards('h') + player.countCards('h') == 0) return false;
+								return get.mode() == 'identity' || target.countCards('h') <= player.countCards('h') + 1;
 							}
 						)
 						.set("ai", (target) => {
@@ -1645,9 +1654,8 @@ game.import("character", function () {
 							var bodies = _status.event.player
 								.getStorage("jxzhaoluan_effect")
 								.filter((i) => i.isIn());
-							return `选择一名角色，你令${get.translation(bodies)}${
-								bodies.length > 1 ? "中的一人" : ""
-							}减1点体力上限，然后你对选择的角色造成1点伤害。`;
+							return `选择一名角色，你令${get.translation(bodies)}${bodies.length > 1 ? "中的一人" : ""
+								}减1点体力上限，然后你对选择的角色造成1点伤害。`;
 						},
 						delay: false,
 						content() {
@@ -1764,9 +1772,9 @@ game.import("character", function () {
 							.chooseButton(
 								[
 									"挈挟：选择" +
-										(num > 1 ? "至多" : "") +
-										get.cnNumber(num) +
-										"张武将置入武器栏",
+									(num > 1 ? "至多" : "") +
+									get.cnNumber(num) +
+									"张武将置入武器栏",
 									[
 										list,
 										function (item, type, position, noclick, node) {
@@ -1842,8 +1850,7 @@ game.import("character", function () {
 							`<div class="text" data-nature=${get.groupnature(
 								info[1],
 								"raw"
-							)}m style="font-family: ${
-								lib.config.name_font || "xinwei"
+							)}m style="font-family: ${lib.config.name_font || "xinwei"
 							},xinwei">${skillstr}</div>`,
 							node
 						);
@@ -1870,18 +1877,18 @@ game.import("character", function () {
 								if (lib.skill[skills[i]] && lib.skill[skills[i]].nobracket) {
 									uiintro.add(
 										'<div><div class="skilln">' +
-											get.translation(skills[i]) +
-											"</div><div>" +
-											get.skillInfoTranslation(skills[i]) +
-											"</div></div>"
+										get.translation(skills[i]) +
+										"</div><div>" +
+										get.skillInfoTranslation(skills[i]) +
+										"</div></div>"
 									);
 								} else {
 									uiintro.add(
 										'<div><div class="skill">【' +
-											translation +
-											"】</div><div>" +
-											get.skillInfoTranslation(skills[i]) +
-											"</div></div>"
+										translation +
+										"】</div><div>" +
+										get.skillInfoTranslation(skills[i]) +
+										"</div></div>"
 									);
 								}
 								if (lib.translate[skills[i] + "_append"]) {
@@ -2432,10 +2439,10 @@ game.import("character", function () {
 					)
 						return false;
 					var card = {
-							name: event.card.name,
-							nature: event.card.nature,
-							isCard: true,
-						},
+						name: event.card.name,
+						nature: event.card.nature,
+						isCard: true,
+					},
 						list = event._dccuixin;
 					for (var target of list) {
 						var targetx = player[target]();
@@ -2462,10 +2469,10 @@ game.import("character", function () {
 						player
 							.chooseBool(
 								"摧心：是否视为对" +
-									get.translation(list[0]) +
-									"使用" +
-									get.translation(card) +
-									"？"
+								get.translation(list[0]) +
+								"使用" +
+								get.translation(card) +
+								"？"
 							)
 							.set("goon", get.effect(list[0], card, player, player) > 0)
 							.set("ai", () => _status.event.goon);
@@ -3308,8 +3315,8 @@ game.import("character", function () {
 							return 15;
 						})
 						.set("forceDie", true).judge2 = function (result) {
-						return result.bool;
-					};
+							return result.bool;
+						};
 					"step 1";
 					var num = game.countPlayer(function (current) {
 						return current != player && current.hasMark("twwuhun");
@@ -3601,15 +3608,15 @@ game.import("character", function () {
 							evt.set(
 								"openskilldialog",
 								"选择" +
-									get.translation(name) +
-									"（" +
-									get.translation(result.links[0]) +
-									"）的目标"
+								get.translation(name) +
+								"（" +
+								get.translation(result.links[0]) +
+								"）的目标"
 							);
 							evt.set("norestore", true);
 							evt.set("custom", {
 								add: {},
-								replace: { window() {} },
+								replace: { window() { } },
 							});
 						} else {
 							delete evt.result.skill;
@@ -3794,11 +3801,11 @@ game.import("character", function () {
 							return [
 								1,
 								0.8 *
-									game.countPlayer((current) => {
-										return current.countCards("e", (card) => {
-											return get.suit(card, current) == suit;
-										});
-									}),
+								game.countPlayer((current) => {
+									return current.countCards("e", (card) => {
+										return get.suit(card, current) == suit;
+									});
+								}),
 							];
 						},
 						target: (card, player, target) => {
@@ -4812,9 +4819,9 @@ game.import("character", function () {
 									return (
 										numx +
 										num *
-											game.countPlayer(function (current) {
-												return current.hasSkill("yingba");
-											})
+										game.countPlayer(function (current) {
+											return current.hasSkill("yingba");
+										})
 									);
 							},
 						},
@@ -5539,10 +5546,10 @@ game.import("character", function () {
 						.chooseTarget(
 							get.prompt("dangmo"),
 							"为" +
-								get.translation(trigger.card) +
-								"增加至多" +
-								get.translation(num) +
-								"个目标",
+							get.translation(trigger.card) +
+							"增加至多" +
+							get.translation(num) +
+							"个目标",
 							[1, num],
 							function (card, player, target) {
 								var evt = _status.event.getTrigger();
@@ -5588,8 +5595,8 @@ game.import("character", function () {
 							return 1;
 						})
 						.set("callback", lib.skill.reshuishi.callback).judge2 = function (result) {
-						return result.bool ? true : false;
-					};
+							return result.bool ? true : false;
+						};
 					"step 2";
 					var cards = cards.filterInD();
 					if (cards.length)
@@ -6195,10 +6202,10 @@ game.import("character", function () {
 							.chooseCard(
 								"h",
 								"交给" +
-									get.translation(player) +
-									"一张" +
-									get.translation(suit) +
-									"花色的手牌",
+								get.translation(player) +
+								"一张" +
+								get.translation(suit) +
+								"花色的手牌",
 								true,
 								function (card, player) {
 									return get.suit(card, player) == _status.event.suit;
@@ -6474,10 +6481,10 @@ game.import("character", function () {
 							.set(
 								"prompt",
 								"把" +
-									get.translation(card) +
-									"移动到" +
-									(event.index2 == 0 ? "弃" : "") +
-									"牌堆的..."
+								get.translation(card) +
+								"移动到" +
+								(event.index2 == 0 ? "弃" : "") +
+								"牌堆的..."
 							);
 					}
 					"step 5";
@@ -6503,13 +6510,13 @@ game.import("character", function () {
 								.set(
 									"prompt",
 									"把" +
-										get.translation(card) +
-										"移动到" +
-										get.translation(event.target2) +
-										"的..."
+									get.translation(card) +
+									"移动到" +
+									get.translation(event.target2) +
+									"的..."
 								).ai = function () {
-								return 0;
-							};
+									return 0;
+								};
 						}
 					}
 					"step 6";
@@ -6847,8 +6854,8 @@ game.import("character", function () {
 						num == 3
 							? event.numFixed
 							: !game.hasPlayer(function (current) {
-									return current.hasEnabledSlot();
-							  })
+								return current.hasEnabledSlot();
+							})
 					)
 						return false;
 					return (
@@ -7221,12 +7228,12 @@ game.import("character", function () {
 								!target._new_guixin_eff &&
 								get.tag(card, "damage") &&
 								target.hp >
-									(player.hasSkillTag("damageBonus", true, {
-										card: card,
-										target: target,
-									})
-										? 2
-										: 1)
+								(player.hasSkillTag("damageBonus", true, {
+									card: card,
+									target: target,
+								})
+									? 2
+									: 1)
 							) {
 								if (player.hasSkillTag("jueqing", false, target)) return [1, -2];
 								target._new_guixin_eff = true;
@@ -8194,12 +8201,12 @@ game.import("character", function () {
 								!target._guixin_eff &&
 								get.tag(card, "damage") &&
 								target.hp >
-									(player.hasSkillTag("damageBonus", true, {
-										card: card,
-										target: target,
-									})
-										? 2
-										: 1)
+								(player.hasSkillTag("damageBonus", true, {
+									card: card,
+									target: target,
+								})
+									? 2
+									: 1)
 							) {
 								if (player.hasSkillTag("jueqing", false, target)) return [1, -2];
 								target._guixin_eff = true;
@@ -8398,10 +8405,10 @@ game.import("character", function () {
 						.set(
 							"allUse",
 							player.getExpansions("qixing").length >=
-								game.countPlayer(function (current) {
-									return get.attitude(player, current) > 4;
-								}) *
-									2
+							game.countPlayer(function (current) {
+								return get.attitude(player, current) > 4;
+							}) *
+							2
 						);
 					"step 1";
 					if (result.bool) {
@@ -8679,10 +8686,10 @@ game.import("character", function () {
 						)
 					) {
 						let suits = player.getDiscardableCards(player, "h").reduce((map, card) => {
-								const suit = get.suit(card, player);
-								if (!map[suit]) map[suit] = [];
-								return map;
-							}, {}),
+							const suit = get.suit(card, player);
+							if (!map[suit]) map[suit] = [];
+							return map;
+						}, {}),
 							cards = [];
 						Object.keys(suits).forEach((i) => {
 							suits[i].addArray(
@@ -8692,11 +8699,11 @@ game.import("character", function () {
 						});
 						return (
 							player.hp +
-								player.countCards(
-									"h",
-									(card) => !cards.includes(card) && player.canSaveCard(card, player)
-								) -
-								3 >
+							player.countCards(
+								"h",
+								(card) => !cards.includes(card) && player.canSaveCard(card, player)
+							) -
+							3 >
 							0
 						);
 					}
@@ -9734,9 +9741,9 @@ game.import("character", function () {
 					return (
 						player.storage.nzry_junlve >= num &&
 						num ==
-							game.countPlayer(function (current) {
-								return get.attitude(player, current) < 0;
-							})
+						game.countPlayer(function (current) {
+							return get.attitude(player, current) < 0;
+						})
 					);
 				},
 				filterTarget(card, player, target) {
@@ -9761,8 +9768,8 @@ game.import("character", function () {
 							return _status.event.targets.includes(target);
 						})
 						.set("targets", targets).ai = function () {
-						return 1;
-					};
+							return 1;
+						};
 					"step 2";
 					if (result.bool) {
 						result.targets[0].damage("fire", "nocard");
@@ -11147,12 +11154,14 @@ game.import("character", function () {
 			tamo: "榻谟",
 			tamo_info:
 				"游戏开始时，你可以重新分配除主公外所有角色的座次。",
+			tamo_info_doudizhu:
+				"游戏开始时，你可以重新分配除主公和三号位外所有角色的座次。",
 			tamo_faq: "FAQ",
 			tamo_faq_info:
 				"<br><li>Q：在一号位不为主公的情况下，〖榻谟〗如何结算？</li><li>A：该角色可以正常进行座次交换。若受此技能影响导致一号位角色发生了变化，则以排列后的一号位角色为起始角色开始本局游戏。</li>",
 			zhimeng: "智盟",
-			zhimeng_info_identity:'回合结束后，你可以选择一名其他角色。若如此做，你与其将各自所有手牌置于处理区，然后你随机获得这些牌中的一半（向上取整），其获得剩余的牌。',
-			zhimeng_info:'回合结束后，你可以选择一名手牌数不大于Y的其他角色（Y为你的手牌数+1）。若如此做，你与其将各自所有手牌置于处理区，然后你随机获得这些牌中的一半（向上取整），其获得剩余的牌。',
+			zhimeng_info_identity: '回合结束后，你可以选择一名其他角色。若如此做，你与其将各自所有手牌置于处理区，然后你随机获得这些牌中的一半（向上取整），其获得剩余的牌。',
+			zhimeng_info: '回合结束后，你可以选择一名手牌数不大于Y的其他角色（Y为你的手牌数+1）。若如此做，你与其将各自所有手牌置于处理区，然后你随机获得这些牌中的一半（向上取整），其获得剩余的牌。',
 			shen_xuzhu: "神许褚",
 			shen_xuzhu_prefix: "神",
 			zhengqing: "争擎",
