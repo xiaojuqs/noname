@@ -4049,6 +4049,7 @@ game.import("character", function () {
 					result: {
 						player: 1,
 					},
+					combo: "zyquanji"
 				},
 			},
 			//孙綝
@@ -6963,6 +6964,9 @@ game.import("character", function () {
 					player.addTempSkill("sptuji2");
 					player.loseToDiscardpile(cards);
 					if (num <= 1) player.draw();
+				},
+				ai: {
+					combo: "spyicong"
 				},
 			},
 			sptuji2: {
