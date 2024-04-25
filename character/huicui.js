@@ -12977,28 +12977,38 @@ game.import("character", function () {
 					);
 				},
 				usable: 1,
-				content: function() {
-					'step 0'
-					var num=player.getFriends().length;
-					if (!game.hasPlayer(function(current){
-						return current!=player&&current.getFriends().length>num;
-					})){
-						player.chooseToDiscard('h',get.prompt('rewangzu'),'弃置一张牌并令伤害-1').set('ai',function(card){
-							return 7-get.value(card);
-						}).logSkill='rewangzu';
+				async cost(event, trigger, player) {
+					var num = player.getFriends().length;
+					if (
+						!game.hasPlayer(function (current) {
+							return current != player && current.getFriends().length > num;
+						})
+					) {
+						event.result = await player
+							.chooseToDiscard(
+								"h",
+								get.prompt("rewangzu"),
+								"弃置一张牌并令伤害-1",
+								"chooseonly"
+							)
+							.set("ai", function (card) {
+								return 7 - get.value(card);
+							})
+							.forResult();
 					} else {
-						player.chooseBool(get.prompt('rewangzu'),'随机弃置一张牌并令伤害-1');
+						event.result = await player.chooseBool(get.prompt("rewangzu"), "随机弃置一张牌并令伤害-1").forResult();
 					}
-					'step 1'
-					if (result.bool){
-						trigger.num--;
-						if (!result.cards||!result.cards.length){
-							player.logSkill('rewangzu');
-							var cards=player.getCards('h',(card)=>lib.filter.cardDiscardable(card,player,'rewangzu'));
-							if (cards.length) player.discard(cards.randomGet());
-						}
+				},
+				async content(event, trigger, player) {
+					trigger.num--;
+					if (!event.cards || !event.cards.length) {
+						const cards = player.getCards("h", (card) =>
+							lib.filter.cardDiscardable(card, player, "rewangzu")
+						);
+						if (cards.length) player.discard(cards.randomGet());
+					} else {
+						player.discard(event.cards);
 					}
-					else player.storage.counttrigger.rewangzu--;
 				},
 			},
 			//万年公主
