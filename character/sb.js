@@ -1181,7 +1181,7 @@ game.import("character", function () {
 											return list;
 										},[]).sort((a,b)=>b-a)[0];
 									case 2:
-										let draw=Math.min(5,Math.max(1,game.dead.length));
+										let draw=Math.min(5,Math.max(2,game.dead.length));
 										return game.filterPlayer().reduce((list,target)=>{
 											list.push(draw>1&&get.attitude(player,target)>3?draw:0);
 											return list;
@@ -1298,7 +1298,7 @@ game.import("character", function () {
 													if (target.isTurnedOver()) return 10;
 												}
 											case 2:
-												if (get.attitude(player,target)>3) return Math.min(5,Math.max(1,game.dead.length));
+												if (get.attitude(player,target)>3) return Math.min(5,Math.max(2,game.dead.length));
 											case 3:
 												if (get.attitude(player,target)>3) return get.recoverEffect(target,player,player);
 										}
@@ -8204,6 +8204,7 @@ game.import("character", function () {
 					lib.skill.sbliegong.updateBlocker(target);
 				},
 				updateBlocker: function (player) {
+					if (!player) return;
 					var list = [],
 						storage = player.storage.sbliegong_block;
 					if (storage && storage.length) {
