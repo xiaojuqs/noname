@@ -9768,7 +9768,7 @@ window.noname_asset_list = [
 	"extension/MVP扩展/images/piaodai_you.png",
 	"extension/MVP扩展/images/piaodai_zuo.png",
 	"extension/MVP扩展/images/quanchangzuijia.png",
-	
+
 	"extension/十周年UI/assets/animation/effect_baguazhen.atlas",
 	"extension/十周年UI/assets/animation/effect_baguazhen.png",
 	"extension/十周年UI/assets/animation/effect_baguazhen.skel",
@@ -10519,6 +10519,8 @@ window.noname_asset_list = [
 	"extension/十周年UI/image/decoration/dead_zeishou.png",
 	"extension/十周年UI/image/decoration/dead_zhong.png",
 	"extension/十周年UI/image/decoration/dead_zhu.png",
+	"extension/十周年UI/image/decoration/default_silhouette_female.jpg",
+	"extension/十周年UI/image/decoration/default_silhouette_male.jpg",
 	"extension/十周年UI/image/decoration/dialog.png",
 	"extension/十周年UI/image/decoration/identity_boss.png",
 	"extension/十周年UI/image/decoration/identity_cai.png",
