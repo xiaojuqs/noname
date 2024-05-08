@@ -40,7 +40,7 @@ const skills = {
 						}
 						return list;
 					}, []);
-					return Math[att > 0 ? "max" : "min"].apply(Math, effs);
+					return Math[att > 0 ? "max" : "min"];
 				})
 				.forResult();
 		},
@@ -10742,6 +10742,7 @@ const skills = {
 			trigger.cancel();
 		},
 		ai: {
+			respondShan: true,
 			effect: {
 				target: function (card, player, target) {
 					if (card.name != "sha") return;
@@ -16625,7 +16626,7 @@ const skills = {
 			var prompt = "即将失去" + get.translation(trigger.result.cards) + "，是否发动【挽危】？";
 			var next = player.choosePlayerCard(player, prompt, trigger.position);
 			next.set("ai", function (button) {
-				return 20 - get.value(button.link);
+				return get.effect(player,button.link,player,player)<0?20-get.effect(player,button.link,player,player):20-get.value(button.link);
 			});
 			next.filterButton = trigger.filterButton;
 			next.selectButton = trigger.result.cards.length;
@@ -18928,7 +18929,12 @@ const skills = {
 					})
 					.set("ai", function (target) {
 						var trigger = _status.event.getTrigger();
-						return get.effect(target, trigger.card, trigger.player, _status.event.player);
+						var eff=-get.effect(target,trigger.card,trigger.player,_status.event.player);
+						if (eff==0&&get.tag(trigger.card,'damage')) eff=get.tag(trigger.card,'damage')*get.attitude(target,_status.event.player);
+						if (eff==0&&get.tag(trigger.card,'draw')) eff=-get.tag(trigger.card,'draw')*get.attitude(target,_status.event.player);
+						if (eff==0&&get.tag(trigger.card,'recover')) eff=-get.tag(trigger.card,'recover')*get.attitude(target,_status.event.player);
+						if (eff==0&&trigger.card.name=='tiesuo') eff=get.attitude(target,_status.event.player);
+						return -eff;
 					});
 			} else {
 				player
@@ -18937,7 +18943,12 @@ const skills = {
 					})
 					.set("ai", function (target) {
 						var trigger = _status.event.getTrigger();
-						return -get.effect(target, trigger.card, trigger.player, _status.event.player);
+						var eff=-get.effect(target,trigger.card,trigger.player,_status.event.player);
+						if (eff==0&&get.tag(trigger.card,'damage')) eff=get.tag(trigger.card,'damage')*get.attitude(target,_status.event.player);
+						if (eff==0&&get.tag(trigger.card,'draw')) eff=-get.tag(trigger.card,'draw')*get.attitude(target,_status.event.player);
+						if (eff==0&&get.tag(trigger.card,'recover')) eff=-get.tag(trigger.card,'recover')*get.attitude(target,_status.event.player);
+						if (eff==0&&trigger.card.name=='tiesuo') eff=get.attitude(target,_status.event.player);
+						return eff;
 					})
 					.set("targets", trigger.targets);
 			}
@@ -19981,6 +19992,11 @@ const skills = {
 		position: "he",
 		check: function (card) {
 			var player = _status.event.player;
+			if (!game.hasPlayer(function(current){
+				return get.attitude(player,current)<0;
+			})){
+				return 0;
+			}
 			if (player.hp < 3) return 0;
 			var type = get.type(card, "trick");
 			if (type == "trick") {
@@ -26514,6 +26530,7 @@ const skills = {
 					return 0;
 				},
 				target: function (player, target) {
+					if (get.mode()=='identity'&&player.hasUnknown(2)) return 0;
 					if (target.countCards("h") > target.hp) return target.hp - target.countCards("h");
 					return 0;
 				},
@@ -27038,7 +27055,7 @@ const skills = {
 			result: {
 				target: function (player, target) {
 					if (
-						(player.countMark("xinfu_xionghuo") >= 2 ||
+						(player.countMark("xinfu_xionghuo") >= (player.hp>1?2:0) ||
 							!game.hasPlayer(function (current) {
 								return current != player && get.attitude(player, current) < 0 && current.hasMark("xinfu_xionghuo");
 							})) &&
@@ -27048,23 +27065,14 @@ const skills = {
 								player.canUse(card, target, null, true) &&
 								player.getUseValue(card) > 0 &&
 								get.effect_use(target, card, player) > 0 &&
-								target.hasSkillTag("filterDamage", null, {
+								!target.hasSkillTag("filterDamage", null, {
 									player: player,
 									card: card,
 								})
 							);
 						})
 					)
-						return 3 / Math.max(1, target.hp);
-					if (
-						(!player.hasUnknown() &&
-							game.countPlayer(function (current) {
-								return get.attitude(player, current) < 0;
-							}) <= 1) ||
-						player.countMark("xinfu_xionghuo") >= 2
-					) {
-						return -1;
-					}
+						return player.hp>1?-3/Math.max(1,target.hp):-1;
 					return 0;
 				},
 			},
@@ -27337,9 +27345,15 @@ const skills = {
 					result: {
 						target: function (player, target) {
 							if (ui.selected.targets.length == 0) {
-								return get.attitude(player, target) < 0 ? -999 : -3;
+								if (get.attitude(player,target)<0){
+									return -999;
+								}
+								else if (get.attitude(player,target)>0){
+									return target.countCards("h")>2?-3:999;
+								}
+								return -3;
 							} else {
-								return target.countCards("h") + 1;
+								return target.countCards("h")>2?999:target.countCards("h")+1;
 							}
 						},
 					},
@@ -27529,6 +27543,12 @@ const skills = {
 			notrick: true,
 			nofire: true,
 			nothunder: true,
+			skillTagFilter: function(player,tag) {
+				if (tag=='notrick'||tag=='nofire'||tag=='nothunder'){
+					if (player.hasSkill('smh_huoji')||player.hasSkill('smh_lianhuan')) return false;
+					if (!player.isEmpty(2)) return false;
+				}
+			},
 			effect: {
 				target: function (card, player, target, current) {
 					const skill = lib.skill.jianjie;

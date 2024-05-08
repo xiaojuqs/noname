@@ -1693,7 +1693,7 @@ const skills = {
 					cardUsable: function (card, player, target) {
 						if (card.name != "sha" || !card.cards) return;
 						for (var i of card.cards) {
-							if (i.hasGaintag("kousheng")) return Infinity;
+							if (get.itemtype(card)=='card' && i.hasGaintag("kousheng")) return Infinity;
 						}
 					},
 					cardname: function (card) {
@@ -2066,8 +2066,11 @@ const skills = {
 			order: 1,
 			result: {
 				target: function (player, target) {
-					if (get.attitude(player, target) > 0) {
-						return Math.sqrt(target.countCards("he"));
+					if (get.attitude(player,target)>0&&target.countCards('h')>2&&target.hp>2){
+						return 2+Math.sqrt(target.countCards('he'));
+					}
+					else if (get.attitude(player,target)<0){
+						return -Math.sqrt(target.countCards('he'));
 					}
 					return 0;
 				},
@@ -2967,6 +2970,19 @@ const skills = {
 			"step 2";
 			var num = 4 - target.countCards("h");
 			if (num) target.draw(num);
+		},
+		ai:{
+			order:2,
+			expose:0.3,
+			threaten:1.8,
+			result:{
+				target:function(player,target){
+					if(target.hasSkillTag('noturn')) return 0;
+					if(target.countCards('h')<3) return 0;
+					if(target.isTurnedOver()) return 2;
+					return -1/(target.countCards('h')+1);
+				}
+			}
 		},
 	},
 	xinzhige: {
@@ -3928,6 +3944,12 @@ const skills = {
 			} else return event.cards.filterInD("od").length > 0;
 		},
 		logTarget: "player",
+		check: function(event,player) {
+			if (get.attitude(player,event.player)>=0) return true;
+			if (player.hasSkill('funan_jiexun')) return true;
+			if (event.cards.length>1) return true;
+			return event.cards.length>0&&event.respondTo.length>1&&get.value(event.cards[0])>get.value(event.respondTo[1]);
+		},
 		content: function () {
 			"step 0";
 			if (!player.hasSkill("funan_jiexun")) {
@@ -5513,7 +5535,12 @@ const skills = {
 			} else {
 				event.type = 1;
 				player.chooseControlList(get.prompt("caishi"), "令自己的手牌上限+1", "回复1点体力，然后本回合你的牌不能对自己使用", function () {
-					return 1;
+					if (player.hp<=2){
+						if (player.countCards('h','tao')>=2) return;
+						return 1;
+					} else {
+						return (player.skipList.includes('phaseUse')||player.needsToDiscard()>0||player.getHandcardLimit()<=0)?0:1;
+					}
 				});
 			}
 			"step 1";
@@ -6657,8 +6684,11 @@ const skills = {
 			order: 1,
 			result: {
 				target: function (player, target) {
-					if (get.attitude(player, target) > 0) {
-						return Math.sqrt(target.countCards("he"));
+					if (get.attitude(player,target)>0&&target.countCards('h')>2&&target.hp>2){
+						return 2+Math.sqrt(target.countCards('he'));
+					}
+					else if (get.attitude(player,target)<0){
+						return -Math.sqrt(target.countCards('he'));
 					}
 					return 0;
 				},
@@ -8969,6 +8999,7 @@ const skills = {
 		ai: {
 			damage: true,
 			order: 1,
+			nokeep: true,
 			effect: {
 				player: function (card, player, target) {
 					if (_status.event.skill == "zhanjue") {
@@ -9865,6 +9896,9 @@ const skills = {
 		ai: {
 			maixie: true,
 			maixie_hp: true,
+			threaten: function(player,target) {
+				return target.hp>1||target.hujia?0.8:1;
+			}
 		},
 	},
 	duodao: {
@@ -13876,11 +13910,14 @@ const skills = {
 					var num = player.maxHp - player.hp;
 					var players = game.filterPlayer();
 					for (var i = 0; i < players.length; i++) {
+						var has_bad_equip=players[i].countCards('e',function(card){return get.equipValue(card)<=0;})>0;
 						if (get.attitude(player, players[i]) > 0) list1.push(players[i]);
-						else if (get.attitude(player, players[i]) < 0) list2.push(players[i]);
+						else if (get.attitude(player, players[i]) < 0 && !has_bad_equip) list2.push(players[i]);
 					}
 					list1.sort(function (a, b) {
-						return a.countCards("e") - b.countCards("e");
+						if (a.countCards('e',function(card){return get.equipValue(card)<=0;})>0) return -1;
+						if (b.countCards('e',function(card){return get.equipValue(card)<=0;})>0) return -1;
+						return a.countCards('e',function(card){return get.equipValue(card)>0;})-b.countCards('e',function(card){return get.equipValue(card)>0;});
 					});
 					list2.sort(function (a, b) {
 						return b.countCards("e") - a.countCards("e");

@@ -931,12 +931,37 @@ const skills = {
 						}
 					},
 					check(button) {
-						const player = get.event("player"),
-							info = get.info("sbxingshang");
-						let list = Array.from({ length: 4 }).map((_, i) => i + 1);
-						list = list.filter(num => player.countMark("sbxingshang") >= info.getNum(num));
-						const num = list.sort((a, b) => info.getEffect(player, b) - info.getEffect(player, a))[0];
-						return button.link == num ? 10 : 0;
+						let player=_status.event.player;
+						switch(button.link){
+							case 1:
+								return game.filterPlayer(current=>get.attitude(player,current)>3).reduce((list,target)=>{
+									let num=0;
+									if (target.isLinked()&&!target.hasSkill("nzry_jieying")) num+=5;
+									if (target.isTurnedOver()) num+=10;
+									list.push(num);
+									return list;
+								},[]).sort((a,b)=>b-a)[0];
+							case 2:
+								let draw=Math.min(5,Math.max(2,game.dead.length));
+								return game.filterPlayer().reduce((list,target)=>{
+									list.push(draw>1&&get.attitude(player,target)>3?draw:0);
+									return list;
+								},[]).sort((a,b)=>b-a)[0];
+							case 3:
+								return game.filterPlayer().reduce((list,target)=>{
+									list.push(get.recoverEffect(target,player,player)&&get.attitude(player,target)>3?get.recoverEffect(target,player,player):0);
+									return list;
+								},[]).sort((a,b)=>b-a)[0];
+							case 4:
+								let start=Math.min(5,Math.max(1,game.dead.length))<2&&game.players.length<4;
+								return start&&game.dead.reduce((list,target)=>{
+									let num=0;
+									if (target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+									if (target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+									list.push(num);
+									return list;
+								},[]).sort((a,b)=>b-a)[0];
+						}
 					},
 					backup(links, player) {
 						return {
@@ -1013,28 +1038,23 @@ const skills = {
 									}
 								}
 							},
-							ai: {
-								result: {
-									target(player, target) {
-										switch (lib.skill.sbxingshang_use_backup.num) {
-											case 1: {
-												let num = 0;
-												if (target.isLinked() && !target.hasSkill("nzry_jieying")) num += 0.5;
-												if (target.isTurnedOver()) num += 10;
-												return num;
-											}
-											case 2: {
-												return get.effect(target, { name: "draw" }, player, player);
-											}
-											case 3: {
-												return Math.max(0, get.recoverEffect(target, player, player)) + get.attitude(player, target);
-											}
-											case 4: {
-												return 1;
-											}
+							ai1:function(){
+								return 1;
+							},
+							ai2:function(target){
+								let player=_status.event.player;
+								switch(lib.skill.sbxingshang_use_backup.num){
+									case 1:
+										if (get.attitude(player,target)>3){
+											if (target.isLinked()&&!target.hasSkill("nzry_jieying")) return 5;
+											if (target.isTurnedOver()) return 10;
 										}
-									},
-								},
+									case 2:
+										if (get.attitude(player,target)>3) return Math.min(5,Math.max(2,game.dead.length));
+									case 3:
+										if (get.attitude(player,target)>3) return get.recoverEffect(target,player,player);
+								}
+								return 0;
 							},
 						};
 					},
@@ -1105,12 +1125,32 @@ const skills = {
 				});
 			},
 			check(button) {
-				const player = get.event("player"),
-					info = get.info("sbxingshang");
-				let list = Array.from({ length: 6 }).map((_, i) => i + 1);
-				list = list.filter(num => player.countMark("sbxingshang") >= info.getNum(num + 4));
-				const num = list.sort((a, b) => info.getEffect(player, b + 4) - info.getEffect(player, a + 4))[0] - 4;
-				return button.link == num ? 10 : 0;
+				let player=_status.event.player;
+				switch(button.link){
+					case 2:
+						return game.filterPlayer(current=>get.attitude(player,current)<0).reduce((list,target)=>{
+							let active_skills=target.getStockSkills(false);
+							let num=0;
+							if (active_skills.length>0){
+								if (target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+								if (target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
+							}
+							list.push(num);
+							return list;
+						},[]).sort((a,b)=>b-a)[0];
+					case 1:
+					case 3:
+					case 5:
+					case 6:
+						return 0;
+					case 4:
+						return game.filterPlayer(target=>target!=player&&!target.hasSkill('sbfangzhu_ban')).reduce((list,target)=>{
+							if (get.attitude(player,target)>3&&target.isTurnedOver()) list.push(2*target.countCards('hs')+1);
+							else if (get.attitude(player,target)<0&&!target.isTurnedOver()) list.push(target.countCards('hs'));
+							else list.push(0);
+							return list;
+						},[]).sort((a,b)=>b-a)[0];
+				}
 			},
 			backup(links, player) {
 				return {
@@ -1152,29 +1192,31 @@ const skills = {
 							}
 						}
 					},
-					ai: {
-						result: {
-							target(player, target) {
-								switch (lib.skill.sbfangzhu_backup.num) {
-									case 1:
-										return -target.countCards("h", card => get.type(card) != "basic") - 1;
-									case 2:
-										return -target.getSkills(null, null, false).reduce((sum, skill) => {
-											return sum + Math.max(get.skillRank(skill, "out"), get.skillRank(skill, "in"));
-										}, 0);
-									case 3:
-										return 0;
-									case 4:
-										if (get.attitude(player, target) > 0 && target.isTurnedOver()) return 10 * target.countCards("hs") + 1;
-										if (get.attitude(player, target) < 0 && !target.isTurnedOver()) return -5 * target.countCards("hs") + 1;
-										return 0;
-									case 5:
-										return -target.countCards("h", card => get.type(card) != "equip") - 3;
-									case 6:
-										return -target.countCards("h", card => get.type2(card) != "trick") - 2;
+					ai1:function(){
+						return 1;
+					},
+					ai2:function(target){
+						let player=_status.event.player;
+						switch(lib.skill.sbfangzhu_backup.num){
+							case 2:
+								let active_skills=target.getStockSkills(false);
+								let num=0;
+								if (active_skills.length>0){
+									if (target.name&&lib.character[target.name]) num+=get.rank(target.name,true);
+									if (target.name2&&lib.character[target.name2]) num+=get.rank(target.name2,true);
 								}
-							},
-						},
+								return get.attitude(player,target)<0?num:0;
+							case 1:
+							case 3:
+							case 5:
+							case 6:
+								return 0;
+							case 4:
+								if (get.attitude(player,target)>3&&target.isTurnedOver()) return 2*target.countCards('hs')+1;
+								if (get.attitude(player,target)<0&&!target.isTurnedOver()) return target.countCards('hs');
+								return 0;
+						}
+						return 0;
 					},
 				};
 			},
@@ -2735,6 +2777,7 @@ const skills = {
 			player.draw();
 		},
 		ai: {
+			nokeep: true,
 			effect: {
 				target: function (card, player, target) {
 					if (card.name == "sha" && get.color(card) == "red") return [1, 0.6];
@@ -3147,9 +3190,7 @@ const skills = {
 				temp;
 			for (let i of game.players) {
 				if (player === i) continue;
-				let vplayer = ui.create.player(i);
-				temp = get.effect(i, new lib.element.VCard({ name: "juedou", isCard: true }), vplayer, i);
-				vplayer.remove();
+				temp=get.effect(i,new lib.element.VCard({name:'juedou',isCard:true}),get.copy(i),i);
 				if (temp) {
 					let att = get.attitude(event.player, i);
 					if ((!att && sbbiyue) || att * temp > 0) targets.push([i, temp, att]);
@@ -4123,7 +4164,8 @@ const skills = {
 			result: {
 				player: function (player) {
 					if (_status.event.dying) {
-						return get.attitude(player, _status.event.dying);
+						let taos=player.getCards('h',i=>get.name(i)==='tao');
+						return _status.event.dying.hp+taos.length+1>0?get.attitude(player,_status.event.dying):0;
 					}
 					return _status.event.type == "phase" && player.countMark("sbrende") <= 2 ? 0 : 1;
 				},
@@ -5607,7 +5649,7 @@ const skills = {
 		},
 		content: function () {
 			"step 0";
-			if (!lib.inpile.contains("taipingyaoshu")) {
+			if (!lib.inpile.includes("taipingyaoshu")) {
 				lib.inpile.push("taipingyaoshu");
 			}
 			event.card = game.createCard2("taipingyaoshu", "heart", 3);
@@ -6963,6 +7005,7 @@ const skills = {
 			lib.skill.sbliegong.updateBlocker(target);
 		},
 		updateBlocker: function (player) {
+			if (!player) return;
 			var list = [],
 				storage = player.storage.sbliegong_block;
 			if (storage && storage.length) {

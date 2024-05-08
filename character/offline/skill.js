@@ -2577,14 +2577,14 @@ const skills = {
 				content: function () {
 					trigger.cancel();
 				},
-				ai: {
-					effect: {
-						target: function (card, player, target, current) {
-							if (player.getStorage("psliushang_prevent").includes(target) && get.tag(card, "damage")) {
-								return "zeroplayertarget";
-							}
-						},
-					},
+			},
+		},
+		ai: {
+			effect: {
+				target: function (card, player, target, current) {
+					if (player.getStorage("psliushang_prevent").includes(target) && get.tag(card, "damage")) {
+						return "zeroplayertarget";
+					}
 				},
 			},
 		},
@@ -4856,6 +4856,7 @@ const skills = {
 		ai: {
 			respondSha: true,
 			respondShan: true,
+			nokeep: true,
 			skillTagFilter: function (player) {
 				return player.countCards("h") > 0;
 			},
@@ -5878,7 +5879,12 @@ const skills = {
 					return _status.event.targets.includes(target);
 				})
 				.set("ai", function (target) {
-					return -get.effect(target, trigger.card, trigger.player, _status.event.player);
+					var eff=-get.effect(target,trigger.card,trigger.player,_status.event.player);
+					if (eff==0&&get.tag(trigger.card,'damage')) eff=get.tag(trigger.card,'damage')*get.attitude(target,_status.event.player);
+					if (eff==0&&get.tag(trigger.card,'draw')) eff=-get.tag(trigger.card,'draw')*get.attitude(target,_status.event.player);
+					if (eff==0&&get.tag(trigger.card,'recover')) eff=-get.tag(trigger.card,'recover')*get.attitude(target,_status.event.player);
+					if (eff==0&&trigger.card.name=='tiesuo') eff=get.attitude(target,_status.event.player);
+					return eff;
 				})
 				.set("targets", trigger.targets);
 			"step 1";
@@ -5887,6 +5893,10 @@ const skills = {
 				trigger.excluded.addArray(result.targets);
 				player.draw();
 			}
+		},
+		ai:{
+			expose:0.2,
+			threaten:1.5
 		},
 	},
 	spyicong: {
@@ -7134,15 +7144,7 @@ const skills = {
 				target: function (card, player, target, current) {
 					if (get.tag(card, "damage")) {
 						if (player.hasSkillTag("jueqing", false, target)) return [1, -2];
-						if (get.attitude(player, target) > 0) return [0, 0];
-						var eff = get.damageEffect(target.storage.shichou_target, player, target);
-						if (eff > 0) {
-							return [0, 1];
-						} else if (eff < 0) {
-							return [0, -2];
-						} else {
-							return [0, 0];
-						}
+						if (get.attitude(player,target.storage.shichou_target)>0&&target.storage.shichou_target.hp<3&&player.countCards('h','tao')<=0) return [0, 0];
 					}
 				},
 			},

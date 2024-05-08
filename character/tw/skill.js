@@ -2073,7 +2073,7 @@ const skills = {
 					.set("choiceList", ["将手牌数摸至与" + str + "相同", "观看" + str + "的手牌并获得其一种花色的所有手牌"])
 					.set("ai", () => {
 						var player = _status.event.player;
-						var target = _status.event.target;
+						var target = _status.event.getParent().target;
 						if (target.countCards("h") - player.countCards("h") > target.countCards("h") / 4 || get.attitude(player, target) > 0) return 0;
 						return 1;
 					})
@@ -9883,7 +9883,7 @@ const skills = {
 		logTarget: "player",
 		content: function () {
 			trigger.cancel();
-			player
+			event.player
 				.damage(trigger.source ? trigger.source : "nosource", trigger.nature, trigger.num)
 				.set("card", trigger.card)
 				.set("cards", trigger.cards).twgonghuan = true;
@@ -12000,7 +12000,7 @@ const skills = {
 						player
 							.chooseBool("征建：是否对" + get.translation(target) + "造成1点伤害？")
 							.set("ai", () => _status.event.goon)
-							.set("goon", get.damageEffect(target, player, _status.event.player) > 0);
+							.set("goon", get.damageEffect(target, player, _status.event.player) > 0 && get.attitude(target,player)<0);
 					} else {
 						target.chooseCard("he", true, "交给" + get.translation(player) + "一张牌");
 					}
@@ -12052,7 +12052,7 @@ const skills = {
 						player
 							.chooseBool("征建：是否对" + get.translation(target) + "造成1点伤害？")
 							.set("ai", () => _status.event.goon)
-							.set("goon", get.damageEffect(target, player, _status.event.player) > 0);
+							.set("goon", get.damageEffect(target, player, _status.event.player) > 0 && get.attitude(target,player)<0);
 					} else {
 						target.chooseCard("he", true, "交给" + get.translation(player) + "一张牌");
 					}
@@ -16629,7 +16629,7 @@ const skills = {
 			"step 3";
 			if (target.isDamaged() && target.hp <= player.hp) {
 				player.chooseBool("是否令" + get.translation(target) + "回复1点体力？").set("ai", function () {
-					return get.recoverEffect(target, player, player);
+					return get.recoverEffect(target, player, player) && get.attitude(target,player)>0;
 				});
 			}
 			"step 4";
@@ -16639,7 +16639,7 @@ const skills = {
 			order: 8,
 			result: {
 				target: function (player, target) {
-					var eff = target.isDamaged() && target.hp <= player.hp ? get.recoverEffect(target, player, target) : 0;
+					var eff = target.isDamaged() && get.attitude(target,player)>0 ? get.recoverEffect(target, player, target) : 0;
 					if (eff <= 0 && !player.countGainableCards(target, "e")) return -1;
 					return eff;
 				},
@@ -16730,7 +16730,7 @@ const skills = {
 			},
 		},
 		check: function (card) {
-			return 7 - get.value(card);
+			return 10 - get.value(card);
 		},
 		ai: {
 			order: function () {
@@ -16738,7 +16738,7 @@ const skills = {
 			},
 			result: {
 				target: function (player, target) {
-					return get.effect(target, { name: "sha" }, player, player);
+					if (get.attitude(player,target)<0&&get.effect(target,{name:'sha'},player,player)>0) return -1;
 				},
 			},
 		},

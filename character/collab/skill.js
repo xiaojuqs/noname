@@ -1790,7 +1790,7 @@ const skills = {
 				},
 				usable: 1,
 				filter(event, player) {
-					return player.isTurnedOver() && player != _status.currentPhase && event.getg(player).length > 0;
+					return player.isTurnedOver() && _status.currentPhase && player != _status.currentPhase && event.getg(player).length > 0;
 				},
 				check(event, player) {
 					return get.attitude(player, _status.currentPhase) > 0;
@@ -1813,7 +1813,7 @@ const skills = {
 					if (event.name == "gain" && player == event.player) return false;
 					var evt = event.getl(player);
 					if (!evt || !evt.cards2 || !evt.cards2.length) return false;
-					return player.isTurnedOver() && player != _status.currentPhase && _status.currentPhase.countCards("he") > 0;
+					return player.isTurnedOver() && _status.currentPhase && player != _status.currentPhase && _status.currentPhase.countCards("he") > 0;
 				},
 				check(event, player) {
 					var target = _status.currentPhase;

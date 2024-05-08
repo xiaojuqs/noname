@@ -340,6 +340,10 @@ const skills = {
 	//界司马朗
 	requji: {
 		inherit: "quji",
+		selectCard: function () {
+			var player=_status.event.player;
+			return [1,player.getDamagedHp()];
+		},
 		content: function () {
 			"step 0";
 			target.recover();
@@ -2338,7 +2342,7 @@ const skills = {
 		content: function () {
 			"step 0";
 			player
-				.chooseTarget([1, player.getHistory("skipped").length], get.prompt2("repingkou"), "对至多" + get.cnNumber(num) + "名其他角色各造成1点伤害。若你选择的角色数小于最大角色数，则你可以弃置其中一名目标角色装备区内的一张牌", function (card, player, target) {
+				.chooseTarget([1, player.getHistory("skipped").length], get.prompt2("repingkou"), "对至多" + get.cnNumber(player.getHistory('skipped').length) + "名其他角色各造成1点伤害。若你选择的角色数小于最大角色数，则你可以弃置其中一名目标角色装备区内的一张牌", function (card, player, target) {
 					return target != player;
 				})
 				.set("ai", function (target) {
@@ -2491,7 +2495,7 @@ const skills = {
 				) {
 					return true;
 				}
-				return Math.random() < 0.5;
+				return evt.player.countCards('h')>3?true:false;
 			};
 			"step 2";
 			if (result.bool) {
@@ -2766,6 +2770,7 @@ const skills = {
 		},
 		ai: {
 			order: 1,
+			nokeep: true,
 			tag: {
 				respond: 2,
 				respondSha: 2,
@@ -10001,6 +10006,7 @@ const skills = {
 			order: 14,
 			result: {
 				player: function (player) {
+					if (get.mode()=='identity'&&player.hasUnknown(2)) return 0;
 					if (player.hp < 3) return false;
 					var mindist = player.hp;
 					if (player.countCards("hs", card => player.canSaveCard(card, player))) mindist++;
@@ -13773,6 +13779,16 @@ const skills = {
 			player.loseMaxHp();
 			player.chooseDrawRecover(2, true);
 			player.addSkills("gongxin");
+		},
+		ai: {
+			effect: {
+				player: function(card,player,target,current) {
+					var draw_two_cards=get.tag(card,'draw')>1;
+					if (player.hasSkill('keji')&&!player.hasSkill('gongxin')&&!draw_two_cards){
+						return 'zeroplayertarget';
+					}
+				}
+			}
 		},
 	},
 	qingjian: {

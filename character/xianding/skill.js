@@ -14471,46 +14471,33 @@ const skills = {
 		enable: "phaseUse",
 		usable: 1,
 		filter: function (event, player) {
-			let storage = player.getStorage("zunwei");
-			return (
-				storage.length < 3 &&
-				game.hasPlayer(current => {
-					return (player.isDamaged() && current.getHp() > player.getHp() && !storage.includes(0)) || (current.countCards("h") > player.countCards("h") && !storage.includes(1)) || (current.countCards("e") > player.countCards("e") && !storage.includes(2));
-				})
-			);
+			return !player.storage.zunwei||player.storage.zunwei.length<3;
 		},
 		chooseButton: {
 			dialog: function (event, player) {
 				var list = ["选择体力值大于你的一名角色", "选择手牌数大于你的一名角色", "选择装备数大于你的一名角色"];
-				var choiceList = ui.create.dialog("尊位：请选择一项", "forcebutton", "hidden");
-				choiceList.add([
-					list.map((item, i) => {
-						if (player.getStorage("zunwei").includes(i)) item = `<span style="text-decoration: line-through;">${item}</span>`;
-						return [i, item];
-					}),
-					"textbutton",
-				]);
+				var choiceList=ui.create.dialog('尊位：清选择一项','forcebutton','hidden');
+				for (var i=0;i<list.length;i++){
+					if (player.storage.zunwei&&player.storage.zunwei.contains(i)) continue;
+					var bool=game.hasPlayer(function(current){
+						return current!=player&&lib.skill.zunwei.backups[i].filterTarget(null,player,current);
+					});
+					var str='<div class="popup text" style="width:calc(100% - 10px);display:inline-block">';
+					if (!bool) str+='<div style="opacity:0.5">';
+					str+=list[i];
+					if(!bool) str+='</div>';
+					str+='</div>';
+					var next=choiceList.add(str);
+					next.firstChild.addEventListener(lib.config.touchscreen?'touchend':'click',ui.click.button);
+					next.firstChild.link=i;
+					next.firstChild._filterButton=bool;
+					Object.setPrototypeOf(next,lib.element.Button.prototype);
+					choiceList.buttons.add(next.firstChild);
+				}
 				return choiceList;
 			},
 			filter: function (button) {
-				const player = get.player();
-				if (player.getStorage("zunwei").includes(button.link)) return false;
-				if (button.link == 0) {
-					if (!player.isDamaged()) return false;
-					return game.hasPlayer(current => {
-						return current.getHp() > player.getHp();
-					});
-				}
-				if (button.link == 1) {
-					return game.hasPlayer(current => {
-						return current.countCards("h") > player.countCards("h");
-					});
-				}
-				if (button.link == 2) {
-					return game.hasPlayer(current => {
-						return current.countCards("e") > player.countCards("e");
-					});
-				}
+				return button._filterButton;
 			},
 			backup: function (links) {
 				var next = get.copy(lib.skill.zunwei.backups[links[0]]);
@@ -14863,7 +14850,7 @@ const skills = {
 		audio: 2,
 		trigger: { player: "shiyuanBegin" },
 		filter: function (event, player) {
-			return _status.currentPhase.group == "qun";
+			return _status.currentPhase && _status.currentPhase.group == "qun";
 		},
 		zhuSkill: true,
 		forced: true,
