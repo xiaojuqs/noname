@@ -1008,6 +1008,7 @@ game.import("card", function () {
 							});
 							game.loseAsync({
 								lose_list: lose_list,
+								visible: true,
 							}).setContent("chooseToCompareLose");
 						}
 						if (cards2.length) game.cardsGotoOrdering(cards2);
