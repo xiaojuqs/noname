@@ -1,0 +1,216 @@
+
+shouji.png
+size: 1923,1923
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effects/chusa/shenbo/souji/01/00057
+  rotate: false
+  xy: 1396, 0
+  size: 362, 355
+  orig: 545, 439
+  offset: 93, 80
+  index: -1
+effects/chusa/shenbo/souji/01/00059
+  rotate: false
+  xy: 0, 1161
+  size: 343, 297
+  orig: 545, 439
+  offset: 99, 103
+  index: -1
+effects/chusa/shenbo/souji/01/00061
+  rotate: false
+  xy: 1372, 1691
+  size: 343, 232
+  orig: 545, 439
+  offset: 99, 108
+  index: -1
+effects/chusa/shenbo/souji/01/00063
+  rotate: false
+  xy: 1029, 1692
+  size: 343, 231
+  orig: 545, 439
+  offset: 99, 108
+  index: -1
+effects/chusa/shenbo/souji/01/00065
+  rotate: false
+  xy: 0, 1697
+  size: 343, 226
+  orig: 545, 439
+  offset: 99, 110
+  index: -1
+effects/chusa/shenbo/souji/01/00067
+  rotate: false
+  xy: 343, 1697
+  size: 343, 226
+  orig: 545, 439
+  offset: 99, 109
+  index: -1
+effects/chusa/shenbo/souji/01/00069
+  rotate: false
+  xy: 686, 1697
+  size: 343, 226
+  orig: 545, 439
+  offset: 99, 111
+  index: -1
+effects/chusa/shenbo/souji/01/00071
+  rotate: false
+  xy: 0, 1458
+  size: 343, 239
+  orig: 545, 439
+  offset: 99, 105
+  index: -1
+effects/chusa/shenbo/souji/01/00073
+  rotate: false
+  xy: 343, 1444
+  size: 343, 253
+  orig: 545, 439
+  offset: 99, 99
+  index: -1
+effects/chusa/shenbo/souji/01/00075
+  rotate: false
+  xy: 686, 1431
+  size: 343, 266
+  orig: 545, 439
+  offset: 99, 94
+  index: -1
+effects/chusa/shenbo/souji/01/00077
+  rotate: false
+  xy: 1029, 1413
+  size: 343, 279
+  orig: 545, 439
+  offset: 99, 88
+  index: -1
+effects/chusa/shenbo/souji/01/00079
+  rotate: false
+  xy: 1372, 1402
+  size: 343, 289
+  orig: 545, 439
+  offset: 99, 84
+  index: -1
+effects/chusa/shenbo/souji/01/00081
+  rotate: false
+  xy: 343, 1145
+  size: 342, 299
+  orig: 545, 439
+  offset: 100, 80
+  index: -1
+effects/chusa/shenbo/souji/01/00083
+  rotate: false
+  xy: 685, 1124
+  size: 342, 307
+  orig: 545, 439
+  offset: 100, 77
+  index: -1
+effects/chusa/shenbo/souji/01/00085
+  rotate: true
+  xy: 1027, 1105
+  size: 308, 309
+  orig: 545, 439
+  offset: 116, 77
+  index: -1
+effects/chusa/shenbo/souji/02/00057
+  rotate: false
+  xy: 1336, 1053
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00059
+  rotate: false
+  xy: 0, 796
+  size: 377, 349
+  orig: 545, 439
+  offset: 81, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00061
+  rotate: false
+  xy: 377, 775
+  size: 371, 349
+  orig: 545, 439
+  offset: 84, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00063
+  rotate: false
+  xy: 748, 756
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00065
+  rotate: false
+  xy: 1098, 704
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00067
+  rotate: false
+  xy: 1448, 704
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00069
+  rotate: false
+  xy: 0, 447
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00071
+  rotate: false
+  xy: 350, 426
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00073
+  rotate: false
+  xy: 700, 407
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00075
+  rotate: false
+  xy: 1050, 355
+  size: 350, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00077
+  rotate: false
+  xy: 1400, 355
+  size: 349, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00079
+  rotate: false
+  xy: 0, 98
+  size: 349, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00081
+  rotate: false
+  xy: 349, 77
+  size: 349, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00083
+  rotate: false
+  xy: 698, 58
+  size: 349, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1
+effects/chusa/shenbo/souji/02/00085
+  rotate: false
+  xy: 1047, 6
+  size: 349, 349
+  orig: 545, 439
+  offset: 92, 37
+  index: -1

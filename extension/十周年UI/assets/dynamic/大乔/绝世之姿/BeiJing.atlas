@@ -1,0 +1,461 @@
+
+BeiJing.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijing
+  rotate: false
+  xy: 2, 272
+  size: 577, 750
+  orig: 577, 750
+  offset: 0, 0
+  index: -1
+effect/beijing/2yanwu/2yanwu_00000
+  rotate: false
+  xy: 96, 169
+  size: 78, 50
+  orig: 103, 57
+  offset: 21, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00004
+  rotate: false
+  xy: 93, 117
+  size: 78, 50
+  orig: 103, 57
+  offset: 21, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00008
+  rotate: false
+  xy: 89, 64
+  size: 78, 51
+  orig: 103, 57
+  offset: 21, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00012
+  rotate: true
+  xy: 581, 661
+  size: 80, 52
+  orig: 103, 57
+  offset: 19, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00016
+  rotate: true
+  xy: 581, 579
+  size: 80, 52
+  orig: 103, 57
+  offset: 19, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00020
+  rotate: true
+  xy: 581, 743
+  size: 83, 52
+  orig: 103, 57
+  offset: 16, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00024
+  rotate: false
+  xy: 2, 64
+  size: 85, 52
+  orig: 103, 57
+  offset: 14, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00028
+  rotate: false
+  xy: 2, 10
+  size: 85, 52
+  orig: 103, 57
+  offset: 14, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00032
+  rotate: false
+  xy: 581, 919
+  size: 87, 52
+  orig: 103, 57
+  offset: 12, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00036
+  rotate: false
+  xy: 2, 118
+  size: 89, 50
+  orig: 103, 57
+  offset: 10, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00040
+  rotate: true
+  xy: 581, 828
+  size: 89, 50
+  orig: 103, 57
+  offset: 10, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00044
+  rotate: false
+  xy: 96, 221
+  size: 91, 49
+  orig: 103, 57
+  offset: 8, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00048
+  rotate: false
+  xy: 2, 221
+  size: 92, 49
+  orig: 103, 57
+  offset: 7, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00052
+  rotate: false
+  xy: 581, 973
+  size: 92, 49
+  orig: 103, 57
+  offset: 7, 2
+  index: -1
+effect/beijing/2yanwu/2yanwu_00056
+  rotate: false
+  xy: 2, 170
+  size: 92, 49
+  orig: 103, 57
+  offset: 7, 2
+  index: -1
+effect/beijing/shuye/shiye_00000
+  rotate: true
+  xy: 149, 20
+  size: 42, 24
+  orig: 54, 59
+  offset: 8, 23
+  index: -1
+effect/beijing/shuye/shiye_00001
+  rotate: true
+  xy: 991, 989
+  size: 33, 31
+  orig: 54, 59
+  offset: 11, 17
+  index: -1
+effect/beijing/shuye/shiye_00002
+  rotate: true
+  xy: 209, 38
+  size: 25, 42
+  orig: 54, 59
+  offset: 11, 10
+  index: -1
+effect/beijing/shuye/shiye_00003
+  rotate: false
+  xy: 635, 594
+  size: 33, 43
+  orig: 54, 59
+  offset: 9, 9
+  index: -1
+effect/beijing/shuye/shiye_00004
+  rotate: true
+  xy: 175, 22
+  size: 42, 32
+  orig: 54, 59
+  offset: 6, 14
+  index: -1
+effect/beijing/shuye/shiye_00005
+  rotate: false
+  xy: 209, 13
+  size: 41, 23
+  orig: 54, 59
+  offset: 7, 15
+  index: -1
+effect/beijing/shuye/shiye_00006
+  rotate: true
+  xy: 639, 516
+  size: 33, 31
+  orig: 54, 59
+  offset: 13, 13
+  index: -1
+effect/beijing/shuye/shiye_00007
+  rotate: false
+  xy: 639, 551
+  size: 25, 41
+  orig: 54, 59
+  offset: 21, 10
+  index: -1
+effect/beijing/shuye/shiye_00008
+  rotate: true
+  xy: 214, 65
+  size: 35, 41
+  orig: 54, 59
+  offset: 12, 10
+  index: -1
+effect/beijing/shuye/shiye_00009
+  rotate: false
+  xy: 169, 66
+  size: 43, 34
+  orig: 54, 59
+  offset: 7, 14
+  index: -1
+effect/beijing/taiy/taiy_00000
+  rotate: true
+  xy: 89, 5
+  size: 57, 58
+  orig: 73, 82
+  offset: 9, 12
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00000
+  rotate: false
+  xy: 176, 156
+  size: 83, 25
+  orig: 103, 42
+  offset: 9, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00004
+  rotate: true
+  xy: 635, 639
+  size: 94, 26
+  orig: 103, 42
+  offset: 9, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00008
+  rotate: true
+  xy: 635, 735
+  size: 96, 25
+  orig: 103, 42
+  offset: 7, 6
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00012
+  rotate: true
+  xy: 611, 269
+  size: 100, 26
+  orig: 103, 42
+  offset: 3, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00016
+  rotate: true
+  xy: 581, 371
+  size: 102, 26
+  orig: 103, 42
+  offset: 1, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00020
+  rotate: false
+  xy: 400, 244
+  size: 103, 26
+  orig: 103, 42
+  offset: 0, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00024
+  rotate: true
+  xy: 611, 475
+  size: 102, 26
+  orig: 103, 42
+  offset: 0, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00028
+  rotate: true
+  xy: 609, 371
+  size: 102, 26
+  orig: 103, 42
+  offset: 0, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00032
+  rotate: false
+  xy: 505, 244
+  size: 101, 26
+  orig: 103, 42
+  offset: 0, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00036
+  rotate: false
+  xy: 189, 213
+  size: 99, 26
+  orig: 103, 42
+  offset: 1, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00040
+  rotate: false
+  xy: 670, 905
+  size: 98, 26
+  orig: 103, 42
+  offset: 1, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00044
+  rotate: true
+  xy: 633, 833
+  size: 84, 25
+  orig: 103, 42
+  offset: 15, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00048
+  rotate: false
+  xy: 173, 129
+  size: 83, 25
+  orig: 103, 42
+  offset: 14, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00052
+  rotate: true
+  xy: 756, 821
+  size: 82, 25
+  orig: 103, 42
+  offset: 15, 5
+  index: -1
+effect/beijing/tyyanwu/yangguangyanwu_00056
+  rotate: false
+  xy: 173, 102
+  size: 81, 25
+  orig: 103, 42
+  offset: 15, 5
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00000
+  rotate: false
+  xy: 149, 5
+  size: 23, 13
+  orig: 35, 24
+  offset: 5, 2
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00008
+  rotate: false
+  xy: 688, 742
+  size: 23, 13
+  orig: 35, 24
+  offset: 5, 3
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00015
+  rotate: false
+  xy: 713, 743
+  size: 23, 12
+  orig: 35, 24
+  offset: 5, 5
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00023
+  rotate: false
+  xy: 662, 742
+  size: 24, 13
+  orig: 35, 24
+  offset: 5, 6
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00030
+  rotate: true
+  xy: 261, 158
+  size: 23, 14
+  orig: 35, 24
+  offset: 5, 8
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00038
+  rotate: false
+  xy: 639, 500
+  size: 23, 14
+  orig: 35, 24
+  offset: 5, 8
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00045
+  rotate: false
+  xy: 639, 485
+  size: 23, 13
+  orig: 35, 24
+  offset: 5, 7
+  index: -1
+effect/beijing/xiaoniao/xiaoniao_00053
+  rotate: true
+  xy: 277, 188
+  size: 23, 12
+  orig: 35, 24
+  offset: 5, 5
+  index: -1
+effect/beijing/yanwu1/yanwu1_00000
+  rotate: false
+  xy: 662, 786
+  size: 91, 27
+  orig: 104, 35
+  offset: 12, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00004
+  rotate: false
+  xy: 662, 757
+  size: 91, 27
+  orig: 104, 35
+  offset: 12, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00008
+  rotate: false
+  xy: 662, 815
+  size: 92, 28
+  orig: 104, 35
+  offset: 12, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00012
+  rotate: false
+  xy: 660, 875
+  size: 94, 28
+  orig: 104, 35
+  offset: 10, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00016
+  rotate: false
+  xy: 660, 845
+  size: 94, 28
+  orig: 104, 35
+  offset: 10, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00020
+  rotate: true
+  xy: 581, 272
+  size: 97, 28
+  orig: 104, 35
+  offset: 7, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00024
+  rotate: false
+  xy: 670, 933
+  size: 99, 28
+  orig: 104, 35
+  offset: 5, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00028
+  rotate: false
+  xy: 176, 183
+  size: 99, 28
+  orig: 104, 35
+  offset: 5, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00032
+  rotate: false
+  xy: 675, 963
+  size: 100, 28
+  orig: 104, 35
+  offset: 4, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00036
+  rotate: true
+  xy: 581, 475
+  size: 102, 28
+  orig: 104, 35
+  offset: 2, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00040
+  rotate: false
+  xy: 887, 994
+  size: 102, 28
+  orig: 104, 35
+  offset: 2, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00044
+  rotate: false
+  xy: 295, 242
+  size: 103, 28
+  orig: 104, 35
+  offset: 1, 4
+  index: -1
+effect/beijing/yanwu1/yanwu1_00048
+  rotate: false
+  xy: 675, 993
+  size: 104, 29
+  orig: 104, 35
+  offset: 0, 3
+  index: -1
+effect/beijing/yanwu1/yanwu1_00052
+  rotate: false
+  xy: 189, 241
+  size: 104, 29
+  orig: 104, 35
+  offset: 0, 3
+  index: -1
+effect/beijing/yanwu1/yanwu1_00056
+  rotate: false
+  xy: 781, 994
+  size: 104, 28
+  orig: 104, 35
+  offset: 0, 4
+  index: -1

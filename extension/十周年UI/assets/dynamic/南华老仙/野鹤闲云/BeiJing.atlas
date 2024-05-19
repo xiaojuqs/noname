@@ -1,0 +1,461 @@
+
+BeiJing.png
+size: 1736,1736
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijin_108
+  rotate: false
+  xy: 2, 932
+  size: 1562, 802
+  orig: 1562, 804
+  offset: 0, 2
+  index: -1
+shan_107
+  rotate: false
+  xy: 2, 165
+  size: 1562, 765
+  orig: 1562, 765
+  offset: 0, 0
+  index: -1
+vfx/fasan2_00
+  rotate: false
+  xy: 2, 4
+  size: 54, 54
+  orig: 58, 58
+  offset: 2, 2
+  index: -1
+vfx/guang_00
+  rotate: false
+  xy: 1274, 77
+  size: 86, 86
+  orig: 92, 92
+  offset: 4, 4
+  index: -1
+vfx/teshu/baodian_00
+  rotate: false
+  xy: 1362, 80
+  size: 85, 83
+  orig: 108, 108
+  offset: 13, 15
+  index: -1
+vfx/teshu/baodian_01
+  rotate: false
+  xy: 1185, 78
+  size: 87, 85
+  orig: 108, 108
+  offset: 12, 14
+  index: -1
+vfx/teshu/baodian_02
+  rotate: false
+  xy: 799, 76
+  size: 90, 87
+  orig: 108, 108
+  offset: 11, 13
+  index: -1
+vfx/teshu/baodian_03
+  rotate: false
+  xy: 1566, 721
+  size: 90, 90
+  orig: 108, 108
+  offset: 11, 11
+  index: -1
+vfx/teshu/baodian_04
+  rotate: false
+  xy: 609, 70
+  size: 92, 93
+  orig: 108, 108
+  offset: 10, 9
+  index: -1
+vfx/teshu/baodian_05
+  rotate: true
+  xy: 511, 69
+  size: 94, 96
+  orig: 108, 108
+  offset: 9, 7
+  index: -1
+vfx/teshu/baodian_06
+  rotate: true
+  xy: 410, 68
+  size: 95, 99
+  orig: 108, 108
+  offset: 8, 5
+  index: -1
+vfx/teshu/baodian_07
+  rotate: true
+  xy: 308, 66
+  size: 97, 100
+  orig: 108, 108
+  offset: 7, 4
+  index: -1
+vfx/teshu/baodian_08
+  rotate: false
+  xy: 1566, 1419
+  size: 97, 102
+  orig: 108, 108
+  offset: 7, 3
+  index: -1
+vfx/teshu/baodian_09
+  rotate: false
+  xy: 1566, 1523
+  size: 99, 103
+  orig: 108, 108
+  offset: 6, 2
+  index: -1
+vfx/teshu/baodian_10
+  rotate: false
+  xy: 104, 60
+  size: 99, 103
+  orig: 108, 108
+  offset: 6, 2
+  index: -1
+vfx/teshu/baodian_11
+  rotate: false
+  xy: 2, 60
+  size: 100, 103
+  orig: 108, 108
+  offset: 5, 3
+  index: -1
+vfx/teshu/baodian_12
+  rotate: false
+  xy: 205, 66
+  size: 101, 97
+  orig: 108, 108
+  offset: 5, 9
+  index: -1
+vfx/teshu/baodian_13
+  rotate: true
+  xy: 1566, 1316
+  size: 101, 97
+  orig: 108, 108
+  offset: 5, 9
+  index: -1
+vfx/teshu/baodian_14
+  rotate: true
+  xy: 1566, 1212
+  size: 102, 95
+  orig: 108, 108
+  offset: 4, 10
+  index: -1
+vfx/teshu/baodian_15
+  rotate: true
+  xy: 1566, 1109
+  size: 101, 93
+  orig: 108, 108
+  offset: 3, 11
+  index: -1
+vfx/teshu/baodian_16
+  rotate: true
+  xy: 1566, 1006
+  size: 101, 89
+  orig: 108, 108
+  offset: 3, 13
+  index: -1
+vfx/teshu/baodian_17
+  rotate: true
+  xy: 1566, 906
+  size: 98, 87
+  orig: 108, 108
+  offset: 4, 16
+  index: -1
+vfx/teshu/baodian_18
+  rotate: false
+  xy: 703, 76
+  size: 94, 87
+  orig: 108, 108
+  offset: 6, 17
+  index: -1
+vfx/teshu/baodian_19
+  rotate: true
+  xy: 1566, 813
+  size: 91, 88
+  orig: 108, 108
+  offset: 9, 17
+  index: -1
+vfx/teshu/baodian_20
+  rotate: false
+  xy: 1566, 632
+  size: 89, 87
+  orig: 108, 108
+  offset: 9, 18
+  index: -1
+vfx/teshu/baodian_21
+  rotate: true
+  xy: 1657, 1017
+  size: 90, 77
+  orig: 108, 108
+  offset: 8, 19
+  index: -1
+vfx/teshu/baodian_22
+  rotate: true
+  xy: 1566, 342
+  size: 92, 78
+  orig: 108, 108
+  offset: 8, 18
+  index: -1
+vfx/teshu/baodian_23
+  rotate: false
+  xy: 1088, 85
+  size: 95, 78
+  orig: 108, 108
+  offset: 7, 17
+  index: -1
+vfx/teshu/baodian_24
+  rotate: true
+  xy: 1566, 534
+  size: 96, 78
+  orig: 108, 108
+  offset: 7, 17
+  index: -1
+vfx/teshu/baodian_25
+  rotate: false
+  xy: 990, 85
+  size: 96, 78
+  orig: 108, 108
+  offset: 7, 17
+  index: -1
+vfx/teshu/baodian_26
+  rotate: false
+  xy: 891, 85
+  size: 97, 78
+  orig: 108, 108
+  offset: 7, 17
+  index: -1
+vfx/teshu/baodian_27
+  rotate: true
+  xy: 1566, 436
+  size: 96, 78
+  orig: 108, 108
+  offset: 8, 17
+  index: -1
+vfx/teshu/chongji_00
+  rotate: true
+  xy: 410, 2
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_01
+  rotate: false
+  xy: 1566, 154
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_02
+  rotate: true
+  xy: 660, 4
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_03
+  rotate: true
+  xy: 473, 2
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_04
+  rotate: false
+  xy: 722, 13
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_05
+  rotate: false
+  xy: 788, 13
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_06
+  rotate: false
+  xy: 1566, 279
+  size: 66, 61
+  orig: 108, 108
+  offset: 24, 19
+  index: -1
+vfx/teshu/chongji_07
+  rotate: true
+  xy: 854, 10
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_08
+  rotate: false
+  xy: 1449, 103
+  size: 66, 60
+  orig: 108, 108
+  offset: 24, 19
+  index: -1
+vfx/teshu/chongji_09
+  rotate: false
+  xy: 272, 4
+  size: 66, 60
+  orig: 108, 108
+  offset: 24, 19
+  index: -1
+vfx/teshu/chongji_10
+  rotate: false
+  xy: 916, 22
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_11
+  rotate: false
+  xy: 982, 22
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_12
+  rotate: false
+  xy: 1180, 17
+  size: 64, 59
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_13
+  rotate: false
+  xy: 1312, 15
+  size: 63, 60
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_14
+  rotate: false
+  xy: 1246, 15
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_15
+  rotate: false
+  xy: 1449, 41
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_16
+  rotate: true
+  xy: 1667, 1562
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_17
+  rotate: false
+  xy: 1667, 1500
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_18
+  rotate: false
+  xy: 1048, 22
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_19
+  rotate: false
+  xy: 1114, 22
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_20
+  rotate: false
+  xy: 1377, 17
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_21
+  rotate: false
+  xy: 205, 2
+  size: 65, 62
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_22
+  rotate: false
+  xy: 340, 4
+  size: 65, 60
+  orig: 108, 108
+  offset: 24, 19
+  index: -1
+vfx/teshu/chongji_23
+  rotate: true
+  xy: 536, 2
+  size: 65, 60
+  orig: 108, 108
+  offset: 24, 19
+  index: -1
+vfx/teshu/chongji_24
+  rotate: false
+  xy: 1566, 216
+  size: 65, 61
+  orig: 108, 108
+  offset: 24, 19
+  index: -1
+vfx/teshu/chongji_25
+  rotate: false
+  xy: 1665, 1312
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/teshu/chongji_26
+  rotate: true
+  xy: 598, 2
+  size: 65, 60
+  orig: 108, 108
+  offset: 24, 19
+  index: -1
+vfx/teshu/chongji_27
+  rotate: false
+  xy: 1663, 1250
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_28
+  rotate: false
+  xy: 1663, 1188
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_29
+  rotate: false
+  xy: 1665, 1437
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_30
+  rotate: false
+  xy: 1665, 1374
+  size: 64, 61
+  orig: 108, 108
+  offset: 25, 18
+  index: -1
+vfx/teshu/chongji_31
+  rotate: false
+  xy: 1661, 1126
+  size: 64, 60
+  orig: 108, 108
+  offset: 25, 19
+  index: -1
+vfx/yun_00
+  rotate: false
+  xy: 1566, 1628
+  size: 118, 106
+  orig: 144, 144
+  offset: 15, 19
+  index: -1

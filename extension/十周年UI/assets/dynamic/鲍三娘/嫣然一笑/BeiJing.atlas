@@ -1,0 +1,76 @@
+
+BeiJing.png
+size: 1444,1541
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijing
+  rotate: false
+  xy: 2, 786
+  size: 1085, 753
+  orig: 1085, 753
+  offset: 0, 0
+  index: -1
+bgshu1
+  rotate: false
+  xy: 767, 75
+  size: 587, 709
+  orig: 723, 719
+  offset: 0, 10
+  index: -1
+bgshu2
+  rotate: false
+  xy: 1089, 892
+  size: 247, 647
+  orig: 247, 647
+  offset: 0, 0
+  index: -1
+bgshu3
+  rotate: false
+  xy: 2, 34
+  size: 763, 750
+  orig: 888, 750
+  offset: 0, 0
+  index: -1
+guangshu
+  rotate: false
+  xy: 1338, 848
+  size: 104, 691
+  orig: 104, 740
+  offset: 0, 49
+  index: -1
+niao1
+  rotate: false
+  xy: 1089, 814
+  size: 41, 33
+  orig: 41, 33
+  offset: 0, 0
+  index: -1
+niao2
+  rotate: true
+  xy: 58, 2
+  size: 30, 16
+  orig: 30, 16
+  offset: 0, 0
+  index: -1
+niao3
+  rotate: false
+  xy: 767, 41
+  size: 54, 32
+  orig: 55, 32
+  offset: 1, 0
+  index: -1
+niao4
+  rotate: false
+  xy: 2, 7
+  size: 54, 25
+  orig: 54, 25
+  offset: 0, 0
+  index: -1
+niao5
+  rotate: false
+  xy: 1089, 849
+  size: 75, 41
+  orig: 75, 41
+  offset: 0, 0
+  index: -1

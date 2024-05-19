@@ -1,0 +1,195 @@
+
+shouji.png
+size: 1606,1606
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+texiao/shouji00
+  rotate: false
+  xy: 654, 479
+  size: 419, 273
+  orig: 650, 304
+  offset: 125, 31
+  index: -1
+texiao/shouji01
+  rotate: true
+  xy: 1286, 526
+  size: 496, 288
+  orig: 650, 304
+  offset: 74, 11
+  index: -1
+texiao/shouji02
+  rotate: false
+  xy: 2, 158
+  size: 603, 290
+  orig: 650, 304
+  offset: 38, 11
+  index: -1
+texiao/shouji03
+  rotate: true
+  xy: 1306, 1024
+  size: 580, 279
+  orig: 650, 304
+  offset: 50, 8
+  index: -1
+texiao/shouji04
+  rotate: false
+  xy: 2, 450
+  size: 622, 283
+  orig: 650, 304
+  offset: 25, 4
+  index: -1
+texiao/shouji05
+  rotate: false
+  xy: 2, 735
+  size: 650, 287
+  orig: 650, 304
+  offset: 0, 2
+  index: -1
+texiao/shouji06
+  rotate: false
+  xy: 654, 1316
+  size: 650, 288
+  orig: 650, 304
+  offset: 0, 1
+  index: -1
+texiao/shouji07
+  rotate: false
+  xy: 2, 1315
+  size: 650, 289
+  orig: 650, 304
+  offset: 0, 0
+  index: -1
+texiao/shouji08
+  rotate: false
+  xy: 2, 1024
+  size: 650, 289
+  orig: 650, 304
+  offset: 0, 0
+  index: -1
+texiao/shouji09
+  rotate: false
+  xy: 654, 1027
+  size: 650, 287
+  orig: 650, 304
+  offset: 0, 1
+  index: -1
+texiao/shouji10
+  rotate: false
+  xy: 654, 754
+  size: 630, 271
+  orig: 650, 304
+  offset: 20, 8
+  index: -1
+texiao/shouji11
+  rotate: true
+  xy: 1075, 389
+  size: 363, 167
+  orig: 650, 304
+  offset: 176, 76
+  index: -1
+texiao/shouji12
+  rotate: false
+  xy: 626, 311
+  size: 362, 166
+  orig: 650, 304
+  offset: 177, 75
+  index: -1
+texiao/shouji13
+  rotate: false
+  xy: 726, 3
+  size: 359, 153
+  orig: 650, 304
+  offset: 177, 90
+  index: -1
+texiao/shouji14
+  rotate: false
+  xy: 726, 3
+  size: 359, 153
+  orig: 650, 304
+  offset: 177, 90
+  index: -1
+texiao/shouji15
+  rotate: false
+  xy: 2, 2
+  size: 360, 154
+  orig: 650, 304
+  offset: 179, 89
+  index: -1
+texiao/shouji16
+  rotate: false
+  xy: 364, 2
+  size: 360, 154
+  orig: 650, 304
+  offset: 180, 89
+  index: -1
+texiao/shouji17
+  rotate: false
+  xy: 1244, 370
+  size: 360, 154
+  orig: 650, 304
+  offset: 180, 88
+  index: -1
+texiao/shouji18
+  rotate: true
+  xy: 1087, 36
+  size: 351, 152
+  orig: 650, 304
+  offset: 181, 89
+  index: -1
+texiao/shouji19
+  rotate: false
+  xy: 607, 158
+  size: 266, 151
+  orig: 650, 304
+  offset: 181, 89
+  index: -1
+texiao/shouji20
+  rotate: false
+  xy: 607, 158
+  size: 266, 151
+  orig: 650, 304
+  offset: 181, 89
+  index: -1
+texiao/shouji21
+  rotate: false
+  xy: 1241, 218
+  size: 259, 150
+  orig: 650, 304
+  offset: 181, 89
+  index: -1
+texiao/shouji22
+  rotate: false
+  xy: 1244, 604
+  size: 38, 148
+  orig: 650, 304
+  offset: 285, 90
+  index: -1
+texiao/shouji23
+  rotate: false
+  xy: 990, 337
+  size: 36, 140
+  orig: 650, 304
+  offset: 286, 92
+  index: -1
+texiao/shouji24
+  rotate: true
+  xy: 1087, 2
+  size: 32, 131
+  orig: 650, 304
+  offset: 288, 94
+  index: -1
+texiao/shouji25
+  rotate: false
+  xy: 626, 708
+  size: 25, 25
+  orig: 650, 304
+  offset: 292, 97
+  index: -1
+texiao/shouji26
+  rotate: false
+  xy: 626, 708
+  size: 25, 25
+  orig: 650, 304
+  offset: 292, 97
+  index: -1

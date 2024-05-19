@@ -1,0 +1,20 @@
+
+BeiJing.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bgshan
+  rotate: false
+  xy: 1, 1
+  size: 1687, 293
+  orig: 1687, 293
+  offset: 0, 0
+  index: -1
+tiankong
+  rotate: false
+  xy: 1, 295
+  size: 1687, 906
+  orig: 1687, 906
+  offset: 0, 0
+  index: -1

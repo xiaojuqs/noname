@@ -1,0 +1,125 @@
+
+beijing.png
+size: 895,895
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijing
+  rotate: false
+  xy: 2, 87
+  size: 570, 806
+  orig: 570, 806
+  offset: 0, 0
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_00
+  rotate: false
+  xy: 728, 8
+  size: 123, 125
+  orig: 133, 152
+  offset: 5, 3
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_02
+  rotate: false
+  xy: 718, 741
+  size: 128, 152
+  orig: 133, 152
+  offset: 5, 0
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_04
+  rotate: false
+  xy: 718, 587
+  size: 128, 152
+  orig: 133, 152
+  offset: 5, 0
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_06
+  rotate: false
+  xy: 574, 170
+  size: 128, 152
+  orig: 133, 152
+  offset: 5, 0
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_08
+  rotate: true
+  xy: 574, 41
+  size: 127, 152
+  orig: 133, 152
+  offset: 6, 0
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_10
+  rotate: false
+  xy: 718, 433
+  size: 128, 152
+  orig: 133, 152
+  offset: 5, 0
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_12
+  rotate: false
+  xy: 704, 285
+  size: 123, 146
+  orig: 133, 152
+  offset: 5, 3
+  index: -1
+tx/daiji/houchenghuoyan/huoyan_14
+  rotate: false
+  xy: 728, 135
+  size: 118, 148
+  orig: 133, 152
+  offset: 5, 3
+  index: -1
+zhouyu_huo01
+  rotate: true
+  xy: 693, 482
+  size: 27, 20
+  orig: 27, 20
+  offset: 0, 0
+  index: -1
+zhouyu_huo02
+  rotate: false
+  xy: 155, 37
+  size: 57, 48
+  orig: 57, 48
+  offset: 0, 0
+  index: -1
+zhouyu_huo04
+  rotate: false
+  xy: 214, 61
+  size: 39, 24
+  orig: 39, 24
+  offset: 0, 0
+  index: -1
+zhouyu_huo06
+  rotate: true
+  xy: 155, 2
+  size: 33, 25
+  orig: 33, 25
+  offset: 0, 0
+  index: -1
+zhouyu_huo07
+  rotate: true
+  xy: 848, 841
+  size: 52, 31
+  orig: 52, 31
+  offset: 0, 0
+  index: -1
+zhouyu_huo08
+  rotate: false
+  xy: 574, 324
+  size: 117, 185
+  orig: 120, 185
+  offset: 0, 0
+  index: -1
+zhouyu_huo09
+  rotate: true
+  xy: 574, 511
+  size: 382, 142
+  orig: 383, 145
+  offset: 1, 1
+  index: -1
+zhouyu_huo10
+  rotate: true
+  xy: 2, 4
+  size: 81, 151
+  orig: 81, 155
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,90 @@
+
+shouji.png
+size: 690,690
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effects/chusha/hit/hit_30
+  rotate: true
+  xy: 201, 2
+  size: 150, 151
+  orig: 200, 200
+  offset: 25, 26
+  index: -1
+effects/chusha/hit/hit_31
+  rotate: true
+  xy: 354, 2
+  size: 150, 151
+  orig: 200, 200
+  offset: 25, 26
+  index: -1
+effects/chusha/hit/hit_33
+  rotate: false
+  xy: 402, 520
+  size: 181, 168
+  orig: 200, 200
+  offset: 10, 18
+  index: -1
+effects/chusha/hit/hit_35
+  rotate: false
+  xy: 2, 102
+  size: 197, 191
+  orig: 200, 200
+  offset: 0, 7
+  index: -1
+effects/chusha/hit/hit_37
+  rotate: false
+  xy: 201, 496
+  size: 199, 192
+  orig: 200, 200
+  offset: 0, 4
+  index: -1
+effects/chusha/hit/hit_39
+  rotate: false
+  xy: 2, 295
+  size: 197, 195
+  orig: 200, 200
+  offset: 0, 3
+  index: -1
+effects/chusha/hit/hit_41
+  rotate: false
+  xy: 2, 492
+  size: 197, 196
+  orig: 200, 200
+  offset: 0, 4
+  index: -1
+effects/chusha/hit/hit_43
+  rotate: false
+  xy: 201, 316
+  size: 191, 178
+  orig: 200, 200
+  offset: 2, 11
+  index: -1
+effects/chusha/hit/hit_45
+  rotate: false
+  xy: 201, 154
+  size: 175, 160
+  orig: 200, 200
+  offset: 12, 21
+  index: -1
+effects/chusha/hit/hit_47
+  rotate: false
+  xy: 402, 365
+  size: 180, 153
+  orig: 200, 200
+  offset: 4, 26
+  index: -1
+effects/chusha/hit/hit_49
+  rotate: false
+  xy: 394, 220
+  size: 152, 143
+  orig: 200, 200
+  offset: 25, 31
+  index: -1
+effects/glowb
+  rotate: false
+  xy: 585, 638
+  size: 50, 50
+  orig: 50, 50
+  offset: 0, 0
+  index: -1

@@ -21,6 +21,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                   for (let k in skinSwitch.saveSkinParams) {
                       // 只更新存在key的数据
                       for (let m in skinSwitch.saveSkinParams[k]) {
+                          console.log(decadeUI.dynamicSkin);
                           if (decadeUI.dynamicSkin[k] && decadeUI.dynamicSkin[k][m]) {
                               let gongji = decadeUI.dynamicSkin[k][m].gongji
                               if (skinSwitch.saveSkinParams[k][m].gongji) {

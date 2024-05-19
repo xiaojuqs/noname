@@ -1,0 +1,20 @@
+
+beijing.png
+size: 1149,1149
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+daqiao_bg
+  rotate: false
+  xy: 2, 329
+  size: 643, 818
+  orig: 643, 818
+  offset: 0, 0
+  index: -1
+daqiao_yue
+  rotate: true
+  xy: 647, 632
+  size: 515, 500
+  orig: 523, 501
+  offset: 0, 1
+  index: -1

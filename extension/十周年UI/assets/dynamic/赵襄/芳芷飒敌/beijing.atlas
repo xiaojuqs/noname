@@ -1,0 +1,104 @@
+
+beijing.png
+size: 1248,751
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+chutu/1_00000
+  rotate: false
+  xy: 935, 2
+  size: 246, 215
+  orig: 268, 273
+  offset: 15, 40
+  index: -1
+chutu/glow_00000
+  rotate: false
+  xy: 2, 3
+  size: 28, 29
+  orig: 31, 31
+  offset: 2, 1
+  index: -1
+zhaoxiang_beijing
+  rotate: false
+  xy: 2, 34
+  size: 931, 715
+  orig: 1009, 717
+  offset: 1, 0
+  index: -1
+zhaoxiang_dengguang
+  rotate: false
+  xy: 935, 490
+  size: 299, 259
+  orig: 431, 340
+  offset: 48, 81
+  index: -1
+zhaoxiang_denglong
+  rotate: true
+  xy: 935, 307
+  size: 181, 282
+  orig: 181, 282
+  offset: 0, 0
+  index: -1
+zhaoxiang_denglong22
+  rotate: true
+  xy: 935, 219
+  size: 86, 263
+  orig: 92, 263
+  offset: 6, 0
+  index: -1
+zhaoxiang_denglong3
+  rotate: false
+  xy: 1183, 16
+  size: 63, 201
+  orig: 63, 201
+  offset: 0, 0
+  index: -1
+zhaoxiang_guai
+  rotate: false
+  xy: 1236, 748
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+zhaoxiang_piaodai1
+  rotate: false
+  xy: 1236, 748
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+zhaoxiang_piaodai2
+  rotate: false
+  xy: 1236, 748
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+zhaoxiang_piaodai3
+  rotate: false
+  xy: 1236, 748
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+zhaoxiang_piaodai4
+  rotate: false
+  xy: 1236, 748
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+zhaoxiang_piaodai5
+  rotate: false
+  xy: 1236, 748
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+zhaoxiang_piaodai7
+  rotate: false
+  xy: 1236, 748
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

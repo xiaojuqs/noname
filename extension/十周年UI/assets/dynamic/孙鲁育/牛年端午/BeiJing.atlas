@@ -1,0 +1,223 @@
+
+BeiJing.png
+size: 922,922
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/shuihua_00
+  rotate: false
+  xy: 388, 35
+  size: 185, 61
+  orig: 216, 83
+  offset: 18, 10
+  index: -1
+effect/shuihua_01
+  rotate: false
+  xy: 731, 794
+  size: 188, 62
+  orig: 216, 83
+  offset: 18, 10
+  index: -1
+effect/shuihua_02
+  rotate: true
+  xy: 603, 281
+  size: 188, 61
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_03
+  rotate: true
+  xy: 665, 474
+  size: 188, 61
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_04
+  rotate: true
+  xy: 540, 279
+  size: 189, 61
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_05
+  rotate: true
+  xy: 668, 664
+  size: 189, 61
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_06
+  rotate: true
+  xy: 540, 663
+  size: 190, 62
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_07
+  rotate: false
+  xy: 730, 858
+  size: 190, 62
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_08
+  rotate: true
+  xy: 604, 664
+  size: 189, 62
+  orig: 216, 83
+  offset: 19, 10
+  index: -1
+effect/shuihua_09
+  rotate: false
+  xy: 731, 730
+  size: 188, 62
+  orig: 216, 83
+  offset: 19, 10
+  index: -1
+effect/shuihua_10
+  rotate: false
+  xy: 731, 666
+  size: 188, 62
+  orig: 216, 83
+  offset: 19, 10
+  index: -1
+effect/shuihua_11
+  rotate: false
+  xy: 540, 855
+  size: 188, 65
+  orig: 216, 83
+  offset: 19, 8
+  index: -1
+effect/shuihua_12
+  rotate: true
+  xy: 729, 287
+  size: 186, 61
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_13
+  rotate: false
+  xy: 540, 216
+  size: 184, 61
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_14
+  rotate: true
+  xy: 638, 30
+  size: 184, 60
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_15
+  rotate: true
+  xy: 700, 30
+  size: 184, 60
+  orig: 216, 83
+  offset: 19, 11
+  index: -1
+effect/shuihua_16
+  rotate: true
+  xy: 855, 291
+  size: 185, 61
+  orig: 216, 83
+  offset: 18, 10
+  index: -1
+effect/shuihua_17
+  rotate: false
+  xy: 388, 98
+  size: 185, 62
+  orig: 216, 83
+  offset: 19, 10
+  index: -1
+effect/shuihua_18
+  rotate: true
+  xy: 728, 475
+  size: 187, 62
+  orig: 216, 83
+  offset: 18, 10
+  index: -1
+effect/shuihua_19
+  rotate: true
+  xy: 792, 290
+  size: 186, 61
+  orig: 216, 83
+  offset: 18, 11
+  index: -1
+effect/shuihua_20
+  rotate: true
+  xy: 575, 29
+  size: 185, 61
+  orig: 216, 83
+  offset: 18, 11
+  index: -1
+effect/shuihua_21
+  rotate: true
+  xy: 856, 478
+  size: 186, 61
+  orig: 216, 83
+  offset: 17, 11
+  index: -1
+effect/shuihua_22
+  rotate: true
+  xy: 666, 284
+  size: 188, 61
+  orig: 216, 83
+  offset: 17, 11
+  index: -1
+effect/shuihua_23
+  rotate: false
+  xy: 2, 31
+  size: 191, 62
+  orig: 216, 83
+  offset: 17, 11
+  index: -1
+effect/shuihua_24
+  rotate: false
+  xy: 195, 98
+  size: 191, 62
+  orig: 216, 83
+  offset: 17, 11
+  index: -1
+effect/shuihua_25
+  rotate: false
+  xy: 195, 35
+  size: 191, 61
+  orig: 216, 83
+  offset: 17, 12
+  index: -1
+effect/shuihua_26
+  rotate: false
+  xy: 2, 95
+  size: 191, 65
+  orig: 216, 83
+  offset: 17, 8
+  index: -1
+effect/shuihua_27
+  rotate: true
+  xy: 540, 470
+  size: 191, 61
+  orig: 216, 83
+  offset: 17, 11
+  index: -1
+effect/shuihua_28
+  rotate: true
+  xy: 603, 471
+  size: 190, 60
+  orig: 216, 83
+  offset: 18, 11
+  index: -1
+effect/shuihua_29
+  rotate: true
+  xy: 792, 478
+  size: 186, 62
+  orig: 216, 83
+  offset: 18, 10
+  index: -1
+slybeijing
+  rotate: false
+  xy: 2, 162
+  size: 536, 758
+  orig: 536, 758
+  offset: 0, 0
+  index: -1

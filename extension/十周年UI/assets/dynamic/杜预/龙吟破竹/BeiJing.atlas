@@ -1,0 +1,139 @@
+
+BeiJing.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: false
+  xy: 2, 1270
+  size: 1540, 753
+  orig: 1540, 753
+  offset: 0, 0
+  index: -1
+bgshan
+  rotate: true
+  xy: 1058, 1053
+  size: 58, 283
+  orig: 58, 284
+  offset: 0, 0
+  index: -1
+bgtx1
+  rotate: false
+  xy: 2, 413
+  size: 332, 855
+  orig: 332, 855
+  offset: 0, 0
+  index: -1
+bgtx2
+  rotate: false
+  xy: 2, 2
+  size: 178, 409
+  orig: 184, 484
+  offset: 3, 74
+  index: -1
+bgtx3
+  rotate: false
+  xy: 1880, 1633
+  size: 123, 390
+  orig: 123, 391
+  offset: 0, 0
+  index: -1
+bgtx4
+  rotate: false
+  xy: 688, 892
+  size: 368, 376
+  orig: 368, 376
+  offset: 0, 0
+  index: -1
+bgtx6
+  rotate: false
+  xy: 336, 439
+  size: 189, 28
+  orig: 189, 29
+  offset: 0, 1
+  index: -1
+bgxx1
+  rotate: false
+  xy: 688, 522
+  size: 174, 368
+  orig: 174, 368
+  offset: 0, 0
+  index: -1
+bgxx2
+  rotate: false
+  xy: 1058, 1113
+  size: 381, 155
+  orig: 381, 155
+  offset: 0, 0
+  index: -1
+bgyueliang
+  rotate: false
+  xy: 1711, 1458
+  size: 34, 79
+  orig: 35, 79
+  offset: 1, 0
+  index: -1
+bgyun1
+  rotate: false
+  xy: 1544, 1286
+  size: 149, 42
+  orig: 153, 42
+  offset: 2, 0
+  index: -1
+bgyun2
+  rotate: false
+  xy: 688, 485
+  size: 61, 35
+  orig: 64, 37
+  offset: 2, 1
+  index: -1
+bgyun3
+  rotate: false
+  xy: 1441, 1246
+  size: 71, 22
+  orig: 76, 24
+  offset: 2, 0
+  index: -1
+bgyun4
+  rotate: false
+  xy: 336, 469
+  size: 350, 799
+  orig: 351, 799
+  offset: 1, 0
+  index: -1
+bgyun5
+  rotate: false
+  xy: 1711, 1539
+  size: 167, 484
+  orig: 168, 484
+  offset: 0, 0
+  index: -1
+bgyun6
+  rotate: true
+  xy: 864, 645
+  size: 245, 131
+  orig: 254, 133
+  offset: 4, 1
+  index: -1
+bgyun7
+  rotate: true
+  xy: 1058, 982
+  size: 69, 254
+  orig: 69, 257
+  offset: 0, 0
+  index: -1
+bgyun8
+  rotate: false
+  xy: 182, 68
+  size: 149, 343
+  orig: 149, 344
+  offset: 0, 0
+  index: -1
+bgyun9
+  rotate: true
+  xy: 1544, 1330
+  size: 693, 165
+  orig: 695, 165
+  offset: 0, 0
+  index: -1

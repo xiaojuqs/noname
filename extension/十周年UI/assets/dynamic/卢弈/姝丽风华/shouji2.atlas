@@ -1,0 +1,83 @@
+
+shouji2.png
+size: 782,782
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_000
+  rotate: true
+  xy: 599, 6
+  size: 286, 69
+  orig: 798, 126
+  offset: 489, 25
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_001
+  rotate: true
+  xy: 695, 20
+  size: 365, 77
+  orig: 798, 126
+  offset: 414, 21
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_002
+  rotate: false
+  xy: 2, 28
+  size: 433, 83
+  orig: 798, 126
+  offset: 349, 18
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_003
+  rotate: false
+  xy: 2, 113
+  size: 522, 89
+  orig: 798, 126
+  offset: 263, 13
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_004
+  rotate: false
+  xy: 2, 204
+  size: 595, 88
+  orig: 798, 126
+  offset: 192, 15
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_005
+  rotate: false
+  xy: 2, 294
+  size: 691, 91
+  orig: 798, 126
+  offset: 96, 13
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_006
+  rotate: false
+  xy: 2, 691
+  size: 777, 89
+  orig: 798, 126
+  offset: 10, 15
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_007
+  rotate: false
+  xy: 2, 605
+  size: 778, 84
+  orig: 798, 126
+  offset: 9, 18
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_008
+  rotate: false
+  xy: 2, 528
+  size: 737, 75
+  orig: 798, 126
+  offset: 50, 21
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_009
+  rotate: false
+  xy: 2, 459
+  size: 726, 67
+  orig: 798, 126
+  offset: 54, 26
+  index: -1
+vx/chusha/vx_cs_tuowei/vx_cs_tuowei_010
+  rotate: false
+  xy: 2, 387
+  size: 721, 70
+  orig: 798, 126
+  offset: 61, 24
+  index: -1
