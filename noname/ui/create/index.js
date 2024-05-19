@@ -3015,7 +3015,7 @@ export class Create {
 		var addtional_extention_names=[
 			['十周年UI', true],
 			['挑战卡牌', true],
-			['千幻聆音', true],
+			// ['千幻聆音', true],
 			['皮肤切换', true],
 			['永雏塔菲', true],
 			['标记补充', true],
