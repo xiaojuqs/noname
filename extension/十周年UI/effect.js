@@ -1,11 +1,11 @@
 'use strict';
-decadeModule.import(function(lib, game, ui, get, ai, _status){
+decadeModule.import(function (lib, game, ui, get, ai, _status) {
 	decadeUI.effect = {
-		dialog:{
-			create:function(titleText){
+		dialog: {
+			create: function (titleText) {
 				return decadeUI.dialog.create('effect-dialog dui-dialog');
 			},
-			compare:function(source, target){
+			compare: function (source, target) {
 				var dialog = this.create();
 
 				dialog.characters = [
@@ -14,10 +14,10 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 				];
 
 				decadeUI.dialog.create('back', dialog.characters[0]),
-				decadeUI.dialog.create('back', dialog.characters[1]),
+					decadeUI.dialog.create('back', dialog.characters[1]),
 
-				dialog.content = decadeUI.dialog.create('content', dialog),
-				dialog.buttons = decadeUI.dialog.create('buttons', dialog.content)
+					dialog.content = decadeUI.dialog.create('content', dialog),
+					dialog.buttons = decadeUI.dialog.create('buttons', dialog.content)
 
 				dialog.cards = [
 					decadeUI.dialog.create('player1 card', dialog.buttons),
@@ -33,7 +33,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 				dialog.names[0].innerHTML = get.translation(source) + '发起';
 				dialog.names[1].innerHTML = get.translation(target);
 
-				dialog.set = function(attr, value){
+				dialog.set = function (attr, value) {
 					switch (attr) {
 						case 'player1':
 						case 'source':
@@ -44,7 +44,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 							}
 
 							var avatar = value.isUnseen(0) ? value.node.avatar2 : value.node.avatar;
-							dialog.characters[0].firstChild.style.backgroundImage =  avatar.style.backgroundImage;
+							dialog.characters[0].firstChild.style.backgroundImage = avatar.style.backgroundImage;
 							dialog.names[0].innerHTML = get.translation(value) + '发起';
 							break;
 
@@ -57,7 +57,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 							}
 
 							var avatar = value.isUnseen(0) ? value.node.avatar2 : value.node.avatar;
-							dialog.characters[1].firstChild.style.backgroundImage =  avatar.style.backgroundImage;
+							dialog.characters[1].firstChild.style.backgroundImage = avatar.style.backgroundImage;
 							dialog.names[1].innerHTML = get.translation(value);
 							break;
 
@@ -80,13 +80,13 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 					return true;
 				},
 
-				dialog.set('source', source);
+					dialog.set('source', source);
 				dialog.set('target', target);
 				return dialog;
 			},
 		},
-		line:function(dots){
-			decadeUI.animate.add(function(source, target, e){
+		line: function (dots) {
+			decadeUI.animate.add(function (source, target, e) {
 				var ctx = e.context;
 				ctx.shadowColor = 'yellow';
 				ctx.shadowBlur = 1;
@@ -115,7 +115,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 			}, true, { x: dots[0], y: dots[1] }, { x: dots[2], y: dots[3] });
 		},
 
-		kill:function(source, target){
+		kill: function (source, target) {
 			if (get.itemtype(source) != 'player' || get.itemtype(target) != 'player') throw 'arguments';
 			if (source == target) return;
 
@@ -154,7 +154,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 				victim.rout2.classList.add('shadow');
 				ui.window.appendChild(effect);
 				var height = ui.window.offsetHeight;
-				var x, y , scale;
+				var x, y, scale;
 				for (var i = 0; i < 10; i++) {
 					x = decadeUI.getRandom(0, 100) + 'px';
 					y = decadeUI.getRandom(0, height / 4) + 'px';
@@ -162,7 +162,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 					y = decadeUI.getRandom(0, 1) == 1 ? y : '-' + y;
 					scale = decadeUI.getRandom(1, 10) / 10;
 
-					setTimeout(function(mx, my, mscale, meffect){
+					setTimeout(function (mx, my, mscale, meffect) {
 						var light = decadeUI.dialog.create('li', meffect);
 						light.style.transform = 'translate(' + mx + ', ' + my + ')' + 'scale(' + mscale + ')';
 					}, decadeUI.getRandom(50, 300), x, y, scale, effect);
@@ -181,7 +181,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 			effect = null;
 		},
 
-		skill:function(player, skillName, vice){
+		skill: function (player, skillName, vice) {
 			if (get.itemtype(player) != 'player') return console.error('player');
 
 			var animation = decadeUI.animation;
@@ -259,11 +259,17 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 				bgImage.src = decadeUIPath + 'assets/image/bg_xianding_' + camp + '.png';
 			};
 
-			if(url.indexOf("url(\"") == 0){
-                image.src = url.slice(5, url.indexOf("\")"));
-            }else if(url.indexOf("url('") == 0){
-                image.src = url.slice(5, url.indexOf("\')"));
-            }
+			image.onerror = function () {
+				image.onerror = void 0;
+				image.src = lib.assetURL + 'imagearacter/default_silhouette_' + (player.sex == 'female' ? 'female' : 'male') + '.jpg';
+			};
+
+			if (url.indexOf("url(\"") == 0) {
+				image.src = url.slice(5, url.indexOf("\")"));
+			}
+			else if (url.indexOf("url('") == 0) {
+				image.src = url.slice(5, url.indexOf("\')"));
+			}
 		},
 
 	};
