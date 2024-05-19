@@ -21,7 +21,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                   for (let k in skinSwitch.saveSkinParams) {
                       // 只更新存在key的数据
                       for (let m in skinSwitch.saveSkinParams[k]) {
-                          console.log(decadeUI.dynamicSkin);
                           if (decadeUI.dynamicSkin[k] && decadeUI.dynamicSkin[k][m]) {
                               let gongji = decadeUI.dynamicSkin[k][m].gongji
                               if (skinSwitch.saveSkinParams[k][m].gongji) {
@@ -1893,6 +1892,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                           };
 
                           Player.playDynamic = function (animation, deputy) {
+                              console.log('played')
                               deputy = deputy === true;
                               if (animation == undefined) return console.error('playDynamic: 参数1不能为空');
                               var dynamic = this.dynamic;
@@ -1965,7 +1965,7 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   animation.player.isMobile = skinSwitch.isMobile()
                               }
                               var avatar = dynamic.play(animation);
-
+                              console.log(avatar);
                               if (deputy === true) {
                                   dynamic.deputy = avatar;
                               } else {
