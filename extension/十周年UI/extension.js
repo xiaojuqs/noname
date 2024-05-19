@@ -11770,21 +11770,35 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					const script = document.createElement('script');
 					script.onload = function () {
 						this.remove();
+						if(callback)callback(true);
 					};
 					script.onerror = function () {
 						this.remove();
+						//alert(path+"加载失败！");
 						console.error(`${this.src}not found`);
+						if(callback)callback(false);
 					};
 					script.src = `${path}?v=${version}`;
 					document.head.appendChild(script);
 					return script;
 				};
-				decadeModule.css = function (path) {
-					if (!path) return console.error('path');
+				decadeModule.css = function (path,callback) {
+					if (!path){
+						if(callback){
+							callback(false);
+						}
+						return console.error('path');
+					}
 					const link = document.createElement('link');
 					link.rel = 'stylesheet';
 					link.href = `${path}?v=${version}`;
 					document.head.appendChild(link);
+					link.onload = function(){
+						if(callback)callback(true);
+					};
+					link.onerror = function(){
+						if(callback)callback(false);
+					}
 					return link;
 				};
 				decadeModule.import = function (module) {
@@ -11794,6 +11808,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				};
 				return decadeModule.init();
 			}({});
+			await window.decadeModule.init2();
 
 			Object.defineProperties(_status, {
 				connectMode: {
