@@ -4,7 +4,7 @@ export const updateURLs = {
 	// github: 'https://raw.githubusercontent.com/libccy/noname'
 	/* taffy分界线 */
 	// taffy: 更改updateURLs
-	coding: 'https://raw.githubusercontent.com/Viridian8520/noname',
-	github: 'https://raw.githubusercontent.com/Viridian8520/noname'
+	coding: "https://raw.githubusercontent.com/Viridian8520/noname",
+	github: "https://raw.githubusercontent.com/Viridian8520/noname",
 	/* taffy分界线 */
 };
