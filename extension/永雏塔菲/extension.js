@@ -193,7 +193,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				silent: true,
 				content: function () {
 					if (game.hasExtension('十周年UI') && game.hasExtension('标记补充')) {
-						lib.skill._decadeUI_dieKillEffect.content = function () {};
+						lib.skill.decadeUI_dieKillEffect.content = function () {};
 					}
 				}
 			};
