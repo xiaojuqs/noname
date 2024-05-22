@@ -4749,9 +4749,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 										next.target = trigger.player;
 										next.setContent(lib.skill.shendcyingtu.contentx);
 										event.finish();
-									} else if (targets) {
-										if (targets.length > 0) event.goto(1);
-									} else player.storage.counttrigger.shendcyingtu--;
+									}
+                  else player.storage.counttrigger.shendcyingtu--;
 								},
 								contentx: function () {
 									'step 0'
