@@ -4460,6 +4460,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		sb_caoren: decadeUI.dynamicSkin.caoren,
 		star_caoren: decadeUI.dynamicSkin.caoren,
 
+    // 曹爽
+    dc_caoshuang: decadeUI.dynamicSkin.caoshuang,
+
 		// 大乔
 		re_daqiao: decadeUI.dynamicSkin.daqiao,
 		sb_daqiao: decadeUI.dynamicSkin.daqiao,
