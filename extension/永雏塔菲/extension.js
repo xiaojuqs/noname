@@ -389,7 +389,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyold_sb_zhugeliang: ['male', 'shu', 3, ['taffyold_sbguanxing', 'taffyold_sbkongcheng'],
 								['character:sb_zhugeliang', 'die_audio:sb_zhugeliang']
 							],
-							taffyold_sb_guanyu: ['male', 'shu', 4, ['taffyold_sbwusheng', 'taffyold_sbyijue'],
+							taffyold_sb_guanyu: ['male', 'shu', 4, ['taffyold_sbwusheng', 'sbyijue'],
 								['character:sb_guanyu', 'die_audio:sb_guanyu']
 							],
 							taffyold_bailingyun: ['female', 'wei', 3, ['taffyold_dclinghui', 'dcxiace', 'dcyuxin'],
@@ -7361,6 +7361,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									if (result.bool) {
 										var target = result.targets[0];
 										player.logSkill('taffyold_sbwusheng', target);
+                    if (get.mode() !== "identity" || player.identity !== "nei") player.addExpose(0.25);
 										player.addTempSkill('taffyold_sbwusheng_effect', {
 											player: 'phaseUseAfter'
 										});
@@ -7376,12 +7377,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											return name == 'sha' && player.countCards('hs');
 										},
 										filter: function (event, player) {
-											return event.filterCard({
-												name: 'sha'
-											}, player, event) || lib.inpile_nature.some(nature => event.filterCard({
-												name: 'sha',
-												nature: nature
-											}, player, event));
+											return event.filterCard(get.autoViewAs({ name: "sha" }, "unsure"), player, event) || lib.inpile_nature.some(nature => event.filterCard(get.autoViewAs({ name: "sha", nature }, "unsure"), player, event));
 										},
 										chooseButton: {
 											dialog: function (event, player) {
@@ -7475,7 +7471,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												if (card.name == 'sha' && typeof player.storage.taffyold_sbwusheng_effect[target.playerid] == 'number') return true;
 											},
 											cardUsableTarget: function (card, player, target) {
-												if (card.name == 'sha' && typeof player.storage.taffyold_sbwusheng_effect[target.playerid] == 'number') return true;
+												if (card.name !== 'sha' && typeof player.storage.taffyold_sbwusheng_effect[target.playerid] !== 'number') return;
+                        return player.storage.taffyold_sbwusheng_effect[target.playerid] < 5;
 											},
 											playerEnabled: function (card, player, target) {
 												if (card.name != 'sha' || typeof player.storage.taffyold_sbwusheng_effect[target.playerid] != 'number') return;
@@ -7505,56 +7502,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								},
 								ai: {
 									threaten: 114514
-								},
-							},
-							taffyold_sbyijue: {
-								audio: 'sbyijue',
-								trigger: {
-									source: 'damageBegin2'
-								},
-								filter: function (event, player) {
-									return event.num >= event.player.hp && !player.getStorage('taffyold_sbyijue').includes(event.player);
-								},
-								forced: true,
-								logTarget: 'player',
-								content: function () {
-									trigger.cancel();
-									player.addTempSkill('taffyold_sbyijue_effect');
-									player.markAuto('taffyold_sbyijue', [trigger.player]);
-									player.markAuto('taffyold_sbyijue_effect', [trigger.player]);
-								},
-								marktext: '绝',
-								intro: {
-									content: '已放$一马'
-								},
-								subSkill: {
-									effect: {
-										charlotte: true,
-										onremove: true,
-										audio: 'taffyold_sbyijue',
-										trigger: {
-											player: 'useCardToPlayered'
-										},
-										filter: function (event, player) {
-											return player.getStorage('taffyold_sbyijue_effect').includes(event.target);
-										},
-										forced: true,
-										logTarget: 'target',
-										content: function () {
-											trigger.getParent().excluded.add(trigger.target);
-										},
-										ai: {
-											effect: {
-												player: function (card, player, target) {
-													if (player.getStorage('taffyold_sbyijue_effect').includes(target)) return 'zeroplayertarget';
-												},
-											},
-										},
-										marktext: '义',
-										intro: {
-											content: '本回合放$一马'
-										},
-									},
 								},
 							},
 							// 旧柏灵筠
@@ -8823,8 +8770,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyold_sbwusheng: '武圣',
 							taffyold_sbwusheng_wusheng_backup: '武圣',
 							taffyold_sbwusheng_info: '你可以将一张手牌当作任意【杀】使用或打出。出牌阶段开始时，你可以选择一名非主公的其他角色，本阶段对其使用【杀】无距离和次数限制，使用【杀】指定其为目标后摸一张牌，对其使用五张【杀】后不能对其使用【杀】。',
-							taffyold_sbyijue: '义绝',
-							taffyold_sbyijue_info: '锁定技，每名角色每局游戏限一次，当你对一名角色造成大于等于其体力值的伤害时，你防止此伤害，且本回合你使用牌指定其为目标后，取消之。',
 							taffyold_bailingyun: '旧柏灵筠',
 							taffyold_bailingyun_prefix: '旧',
 							taffyold_dclinghui: '灵慧',
