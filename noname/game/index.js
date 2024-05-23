@@ -1595,7 +1595,10 @@ export class Game {
 		}
 		else if (get.itemtype(player) === "player") {
 			// @ts-ignore
-			name = player.skin.name || player.name;
+      // taffy: 注释index.js原版代码喵
+			// name = player.skin.name || player.name;
+      /* taffy分界线 */
+      name = player.skin?.name || player.name;
 			rawName = player.name;
 		}
 		const info = get.character(name), datas = [];

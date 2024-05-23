@@ -1,10 +1,27 @@
 try {
 	const express = require("express");
-	const bodyParser = require('body-parser')
+	const minimist = require("minimist");
+	const bodyParser = require('body-parser');
 	const app = express();
 	const fs = require('fs');
 	const path = require('path');
 
+	const oneYear = 60 * 1000 * 60 * 24 * 365;
+
+	// 解析命令行参数
+	// 示例: -s --maxAge 100
+	const argv = minimist(process.argv.slice(2), {
+		alias: { "server": "s" },
+		default: { maxAge: oneYear }
+	});
+
+	app.use(bodyParser.json({
+		limit:'10240mb'
+	}));
+	app.use(bodyParser.urlencoded({
+		limit: "10240mb",
+		extended: true, //需明确设置
+	}));
 	function join(url) {
 		return path.join(__dirname, url);
 	}
@@ -12,8 +29,6 @@ try {
 	function isInProject(url) {
 		return path.normalize(join(url)).startsWith(__dirname);
 	}
-
-	app.use(express.static(__dirname));
 
 	// parse application/x-www-form-urlencoded
 	app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,6 +43,11 @@ try {
 		next()
 	});
 
+	// 根据参数设置 maxAge
+	const maxAge = argv.server ? argv.maxAge : 0;
+
+	app.use(express.static(__dirname, { maxAge: maxAge }));
+
 	app.get("/", (req, res) => {
 		res.send(fs.readFileSync(join('index.html')));
 	});
@@ -37,7 +57,27 @@ try {
 		if (!isInProject(dir)) {
 			throw new Error(`只能访问${ __dirname }的文件或文件夹`);
 		}
-		if (!fs.existsSync(join(dir))) fs.mkdirSync(join(dir), { recursive: true });
+		if (!fs.existsSync(join(dir))) {
+			fs.mkdirSync(join(dir), { recursive: true });
+		} else {
+			if (!fs.statSync(join(dir)).isDirectory()) {
+				throw new Error(`${join(dir)}不是文件夹`);
+			}
+		}
+		res.json(successfulJson(true));
+	});
+
+	app.get("/removeDir", (req, res) => {
+		const { dir } = req.query;
+		if (!isInProject(dir)) {
+			throw new Error(`只能访问${__dirname}的文件或文件夹`);
+		}
+		if (fs.existsSync(join(dir))) {
+			if (!fs.statSync(join(dir)).isDirectory()) {
+				throw new Error(`${join(dir)}不是文件夹`);
+			}
+			fs.rmdirSync(join(dir), { recursive: true });
+		}
 		res.json(successfulJson(true));
 	});
 
@@ -89,7 +129,7 @@ try {
 		if (!fs.existsSync(join(fileName))) {
 			throw new Error(`文件不存在`);
 		}
-		const stat = fs.lstatSync(join(fileName));
+		const stat = fs.statSync(join(fileName));
 		if (stat.isDirectory()) {
 			throw new Error("不能删除文件夹");
 		}
@@ -105,7 +145,7 @@ try {
 		if (!fs.existsSync(join(dir))) {
 			throw new Error(`文件夹不存在`);
 		}
-		const stat = fs.lstatSync(join(dir));
+		const stat = fs.statSync(join(dir));
 		if (stat.isFile()) {
 			throw new Error("getFileList只适用于文件夹而不是文件");
 		}
@@ -134,6 +174,38 @@ try {
 		}
 	});
 
+	app.get("/checkFile", (req, res) => {
+		const { fileName } = req.query;
+		if (!isInProject(fileName)) {
+			throw new Error(`只能访问${__dirname}的文件或文件夹`);
+		}
+		try {
+			if (fs.statSync(join(fileName)).isFile()) {
+				res.json(successfulJson());
+			} else {
+				res.json(failedJson(404, '不是一个文件'));
+			}
+		} catch (error) {
+			res.json(failedJson(404, '文件不存在或无法访问'));
+		}
+	});
+
+	app.get("/checkDir", (req, res) => {
+		const { dir } = req.query;
+		if (!isInProject(dir)) {
+			throw new Error(`只能访问${__dirname}的文件或文件夹`);
+		}
+		try {
+			if (fs.statSync(join(dir)).isDirectory()) {
+				res.json(successfulJson());
+			} else {
+				res.json(failedJson(404, '不是一个文件夹'));
+			}
+		} catch (error) {
+			res.json(failedJson(404, '文件夹不存在或无法访问'));
+		}
+	});
+
 	app.use((req, res, next) => {
 		res.status(404).send("Sorry can't find that!");
 	})
@@ -144,7 +216,7 @@ try {
 	});
 
 	app.listen(8089, () => {
-		console.log("应用正在监听 8089 端口 !");
+		console.log("应用正在使用 8089 端口以提供无名杀本地服务器功能!");
 		if (!process.argv[2]) require('child_process').exec('start http://localhost:8089/');
 	});
 
@@ -224,5 +296,6 @@ try {
 	}
 
 } catch (e) {
+	console.error("本地服务器启动失败: ");
 	console.error(e);
 }
