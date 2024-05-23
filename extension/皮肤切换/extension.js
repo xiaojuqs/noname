@@ -1892,7 +1892,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                           };
 
                           Player.playDynamic = function (animation, deputy) {
-                              console.log('played')
                               deputy = deputy === true;
                               if (animation == undefined) return console.error('playDynamic: 参数1不能为空');
                               var dynamic = this.dynamic;
@@ -1965,7 +1964,6 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   animation.player.isMobile = skinSwitch.isMobile()
                               }
                               var avatar = dynamic.play(animation);
-                              console.log(avatar);
                               if (deputy === true) {
                                   dynamic.deputy = avatar;
                               } else {
@@ -4567,6 +4565,11 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                           if (data.action === 'GongJi' || data.action === 'TeShu') {
                               // 音效默认寻找与待机动作同名的音效
                               let playName = avatar.player.name
+                              // taffy: 十周年动皮区分不同出框攻击的音效
+                              if (avatar.player.shizhounian) {
+                                playName = data.action === 'GongJi' ? avatar.player.gongji.audio : avatar.player.teshu.audio;
+                              }
+                              /* taffy分界线 */
                               // 暂时不区分不同出框攻击的音效.
                               // 开始播放音效, 音效名等同
                               // 优先播放十周年同名文件夹下同名的音效文件

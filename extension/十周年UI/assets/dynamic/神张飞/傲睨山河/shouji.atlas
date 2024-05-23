@@ -1,0 +1,97 @@
+
+shouji.png
+size: 1595,1595
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00000
+  rotate: false
+  xy: 2, 88
+  size: 175, 180
+  orig: 505, 446
+  offset: 176, 140
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00001
+  rotate: true
+  xy: 2, 270
+  size: 426, 402
+  orig: 505, 446
+  offset: 50, 20
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00002
+  rotate: false
+  xy: 2, 1155
+  size: 473, 438
+  orig: 505, 446
+  offset: 20, 8
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00003
+  rotate: false
+  xy: 477, 1155
+  size: 473, 438
+  orig: 505, 446
+  offset: 20, 8
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00004
+  rotate: false
+  xy: 952, 1155
+  size: 473, 438
+  orig: 505, 446
+  offset: 20, 8
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00005
+  rotate: true
+  xy: 406, 266
+  size: 445, 383
+  orig: 505, 446
+  offset: 35, 39
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00006
+  rotate: true
+  xy: 2, 698
+  size: 455, 379
+  orig: 505, 446
+  offset: 23, 29
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00007
+  rotate: false
+  xy: 1153, 387
+  size: 433, 379
+  orig: 505, 446
+  offset: 40, 19
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00008
+  rotate: true
+  xy: 773, 715
+  size: 438, 378
+  orig: 505, 446
+  offset: 40, 15
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00009
+  rotate: false
+  xy: 1142, 2
+  size: 422, 383
+  orig: 505, 446
+  offset: 56, 14
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00010
+  rotate: false
+  xy: 1153, 768
+  size: 429, 385
+  orig: 505, 446
+  offset: 51, 14
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00011
+  rotate: true
+  xy: 383, 713
+  size: 440, 388
+  orig: 505, 446
+  offset: 44, 15
+  index: -1
+tx/chusha/vx_cs_shouji/vx_cs_shouji_00012
+  rotate: true
+  xy: 791, 347
+  size: 366, 349
+  orig: 505, 446
+  offset: 37, 58
+  index: -1

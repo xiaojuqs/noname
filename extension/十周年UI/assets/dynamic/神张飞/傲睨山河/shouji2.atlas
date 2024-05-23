@@ -1,0 +1,118 @@
+
+shouji2.png
+size: 1021,1021
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00000
+  rotate: true
+  xy: 678, 104
+  size: 264, 157
+  orig: 812, 220
+  offset: 536, 23
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00001
+  rotate: false
+  xy: 636, 855
+  size: 354, 164
+  orig: 812, 220
+  offset: 396, 21
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00002
+  rotate: true
+  xy: 850, 411
+  size: 442, 169
+  orig: 812, 220
+  offset: 287, 19
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00003
+  rotate: true
+  xy: 678, 370
+  size: 483, 170
+  orig: 812, 220
+  offset: 229, 18
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00004
+  rotate: true
+  xy: 506, 149
+  size: 522, 170
+  orig: 812, 220
+  offset: 187, 17
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00005
+  rotate: true
+  xy: 334, 108
+  size: 563, 170
+  orig: 812, 220
+  offset: 143, 18
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00006
+  rotate: true
+  xy: 163, 69
+  size: 602, 169
+  orig: 812, 220
+  offset: 100, 19
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00007
+  rotate: false
+  xy: 2, 673
+  size: 618, 172
+  orig: 812, 220
+  offset: 57, 17
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00008
+  rotate: false
+  xy: 2, 847
+  size: 632, 172
+  orig: 812, 220
+  offset: 27, 17
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00009
+  rotate: true
+  xy: 2, 47
+  size: 624, 159
+  orig: 812, 220
+  offset: 23, 25
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00010
+  rotate: true
+  xy: 837, 14
+  size: 354, 98
+  orig: 812, 220
+  offset: 39, 61
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00011
+  rotate: false
+  xy: 334, 17
+  size: 270, 89
+  orig: 812, 220
+  offset: 110, 63
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00012
+  rotate: true
+  xy: 937, 146
+  size: 263, 74
+  orig: 812, 220
+  offset: 123, 67
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00013
+  rotate: false
+  xy: 606, 35
+  size: 146, 67
+  orig: 812, 220
+  offset: 138, 68
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00014
+  rotate: true
+  xy: 937, 49
+  size: 95, 66
+  orig: 812, 220
+  offset: 154, 71
+  index: -1
+tx/chusha/vx_cs_dandao/vx_cs_dandao_00015
+  rotate: true
+  xy: 754, 15
+  size: 87, 62
+  orig: 812, 220
+  offset: 172, 74
+  index: -1
