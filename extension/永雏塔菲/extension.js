@@ -4703,7 +4703,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							},
 							//神陈珪
 							shendcyingtu: {
-								audio: 'dcyingtu',
+								audio: 2,
 								trigger: {
 									global: ['gainAfter', 'loseAsyncAfter'],
 								},
@@ -4776,7 +4776,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								},
 							},
 							shendccongshi: {
-								audio: 'dccongshi',
+								audio: 2,
 								trigger: {
 									global: 'useCardAfter'
 								},
@@ -9133,7 +9133,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						},
 						shenchengui: {
 							character: 'ext:永雏塔菲/image/character/shenchengui.jpg',
-							die: 'die_audio:chengui',
+							die: 'die:ext:永雏塔菲/audio/die/shenchengui.mp3',
 						},
 						taffyre_xushao: {
 							character: 'ext:永雏塔菲/image/character/taffyre_xushao.jpg',
