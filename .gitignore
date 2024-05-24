@@ -27,7 +27,9 @@ Home
 jsconfig.json
 localStorage.json
 main.js
-node_modules
+# taffy: 自定义gitignore喵
+# node_modules
+# taffy分界线
 noname.ico
 package-lock.json
 package.json
