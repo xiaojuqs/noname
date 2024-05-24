@@ -3025,7 +3025,7 @@ export class Create {
 			['指示线', true],
 		];
 		var need_reload=false;
-		for(var i=0;i<addtional_extention_names.length;i++){
+		for(var i=addtional_extention_names.length - 1;i>=0;i--){
 			if(!lib.config.extensions.includes(addtional_extention_names[i][0])&&addtional_extention_names[i][1]){
 				var need_reload=true;
 				lib.config.extensions.add(addtional_extention_names[i][0]);
