@@ -271,12 +271,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					 */
 					getSpan: () => `${get.prefixSpan('旧')}${get.prefixSpan('TW')}`
 				});
-				lib.namePrefix.set('手杀神', {
-					/**
-					 * @returns {string}
-					 */
-					getSpan: () => `${get.prefixSpan('手杀')}${get.prefixSpan('神')}`
-				});
 				lib.namePrefix.set('欢杀', {
 					showName: '欢',
 				});
@@ -289,12 +283,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 				lib.namePrefix.set('面杀', {
 					showName: '面',
 				});
-				lib.namePrefix.set('面杀起', {
-					/**
-					 * @returns {string}
-					 */
-					getSpan: () => `${get.prefixSpan('面杀')}${get.prefixSpan('起')}`
-				});
 				lib.namePrefix.set('旧OL', {
 					/**
 					 * @returns {string}
@@ -306,12 +294,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 					 * @returns {string}
 					 */
 					getSpan: () => `${get.prefixSpan('新杀')}${get.prefixSpan('神')}`
-				});
-				lib.namePrefix.set('旧谋', {
-					/**
-					 * @returns {string}
-					 */
-					getSpan: () => `${get.prefixSpan('旧')}${get.prefixSpan('谋')}`
 				});
 				lib.namePrefix.set('旧族', {
 					/**
@@ -404,8 +386,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyold_shen_lusu: ['male', 'shen', 3, ['taffyold_tamo', 'taffyold_dingzhou', 'taffyold_zhimeng'],
 								['wu', 'character:shen_lusu', 'die_audio:shen_lusu']
 							],
-							taffyold_wu_guanyu: ["male", "shu", 5, ["taffyold_dcjuewu", "taffyold_dcwuyou", "taffyold_dcyixian"],
+							taffyold_wu_guanyu: ["male", "shu", 4, ["taffyold_dcjuewu", "taffyold_dcwuyou", "taffyold_dcyixian"],
 								["character:wu_guanyu", "die_audio:wu_guanyu"]
+							],
+							taffyold_dc_shen_huatuo: ["male", "shen", 3, ["taffyold_jingyu", "taffyold_lvxin", "huandao"],
+								["qun", "character:dc_shen_huatuo", "die_audio:dc_shen_huatuo"]
+							],
+							taffyold_shen_xuzhu: ["male", "shen", 5, ["taffyold_zhengqing", "zhuangpo"],
+								["wei", "character:shen_xuzhu", "die_audio:shen_xuzhu"]
 							],
 							aruijier: ['female', 'shen', '', [],
 								['unseen']
@@ -413,7 +401,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 						},
 						characterSort: {
 							taffy_character: {
-								taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'taffyold_sb_caopi', 'taffyold_yuantanyuanshang', 'taffyold_zhanghua', 'taffyold_ol_pengyang', 'taffyold_sb_sp_zhugeliang', 'taffyold_sb_zhugeliang', 'taffyold_sb_guanyu', 'taffyold_bailingyun', 'taffyold_clan_zhonghui', 'taffyold_ol_luyusheng', 'taffyold_shen_lusu', "taffyold_wu_guanyu"],
+								taffy_old: ['oldwu_zhugeliang', 'oldtw_niufudongxie', 'oldtw_zhangmancheng', 'oldruiji', 'oldtengfanglan', 'oldol_feiyi', 'taffyold_sb_caopi', 'taffyold_yuantanyuanshang', 'taffyold_zhanghua', 'taffyold_ol_pengyang', 'taffyold_sb_sp_zhugeliang', 'taffyold_sb_zhugeliang', 'taffyold_sb_guanyu', 'taffyold_bailingyun', 'taffyold_clan_zhonghui', 'taffyold_ol_luyusheng', 'taffyold_shen_lusu', "taffyold_wu_guanyu", "taffyold_dc_shen_huatuo", "taffyold_shen_xuzhu"],
 								taffy_ol: ['taffyboss_lvbu1'],
 								taffy_shou: ['shoushen_caocao'],
 								taffy_shi: ['shiguanning', 'shixushao'],
@@ -4749,8 +4737,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 										next.target = trigger.player;
 										next.setContent(lib.skill.shendcyingtu.contentx);
 										event.finish();
-									}
-                  else player.storage.counttrigger.shendcyingtu--;
+									} else player.storage.counttrigger.shendcyingtu--;
 								},
 								contentx: function () {
 									'step 0'
@@ -7361,7 +7348,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 									if (result.bool) {
 										var target = result.targets[0];
 										player.logSkill('taffyold_sbwusheng', target);
-                    if (get.mode() !== "identity" || player.identity !== "nei") player.addExpose(0.25);
+										if (get.mode() !== "identity" || player.identity !== "nei") player.addExpose(0.25);
 										player.addTempSkill('taffyold_sbwusheng_effect', {
 											player: 'phaseUseAfter'
 										});
@@ -7377,7 +7364,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											return name == 'sha' && player.countCards('hs');
 										},
 										filter: function (event, player) {
-											return event.filterCard(get.autoViewAs({ name: "sha" }, "unsure"), player, event) || lib.inpile_nature.some(nature => event.filterCard(get.autoViewAs({ name: "sha", nature }, "unsure"), player, event));
+											return event.filterCard(get.autoViewAs({
+												name: "sha"
+											}, "unsure"), player, event) || lib.inpile_nature.some(nature => event.filterCard(get.autoViewAs({
+												name: "sha",
+												nature
+											}, "unsure"), player, event));
 										},
 										chooseButton: {
 											dialog: function (event, player) {
@@ -7472,7 +7464,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											},
 											cardUsableTarget: function (card, player, target) {
 												if (card.name !== 'sha' && typeof player.storage.taffyold_sbwusheng_effect[target.playerid] !== 'number') return;
-                        return player.storage.taffyold_sbwusheng_effect[target.playerid] < 5;
+												return player.storage.taffyold_sbwusheng_effect[target.playerid] < 5;
 											},
 											playerEnabled: function (card, player, target) {
 												if (card.name != 'sha' || typeof player.storage.taffyold_sbwusheng_effect[target.playerid] != 'number') return;
@@ -8167,14 +8159,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 										usable: 1,
 										filter(event, player) {
 											if (!player.countCards("h")) return false;
-                      // taffy: 自己不能拜自己
-                      const list = game.filterPlayer(current => {
-                        return current.hasSkill("taffyold_dcwuyou");
-                      });
-                      const moreThanOne = list.length > 1,
-                      includesMe = list.includes(player);
-                      if (!moreThanOne && includesMe) return false;
-                      /* taffy分界线 */
+											// taffy: 自己不能拜自己
+											const list = game.filterPlayer(current => {
+												return current.hasSkill("taffyold_dcwuyou");
+											});
+											const moreThanOne = list.length > 1,
+												includesMe = list.includes(player);
+											if (!moreThanOne && includesMe) return false;
+											/* taffy分界线 */
 											return game.hasPlayer(current => {
 												return current.hasSkill("taffyold_dcwuyou");
 											});
@@ -8190,7 +8182,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											return count > 1 ? 1 : -1;
 										},
 										check(card) {
-                      const player = get.player();
+											const player = get.player();
 											const hasFriend = game.hasPlayer(current => {
 												return current.hasSkill("taffyold_dcwuyou") && get.attitude(player, current) > 0;
 											});
@@ -8324,51 +8316,53 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								limited: true,
 								skillAnimation: true,
 								animationColor: "metal",
-                filterCard: () => false,
-                selectCard: -1,
-                filterTarget: () => false,
-                selectTarget: -1,
-                async content(event, trigger, player) {
-                  player.awakenSkill("taffyold_dcyixian");
-                  const position = "field";
-                  let cards = [];
-                  cards.addArray(
-                    game
-                    .filterPlayer()
-                    .map(current => current.getGainableCards(player, "hes").filter(card => get.equipNum(card) == 1 || get.equipNum(card) == 2))
-                    .flat()
-                  );
-                  if (!cards.length) return;
-                  await player.gain(cards, "give");
-                  const pairs = game.filterPlayer().map(current => {
-                    let lostNum = 0;
-                    current.checkHistory("lose", evt => {
-                      if (evt.getParent(2) === event) lostNum += evt.cards2.length;
-                    });
-                    return [current, lostNum];
-                  });
-                  for (const pair of pairs) {
-                    const [target, num] = pair;
-                    if (!num) continue;
-                    const { result } = await player
-                      .chooseControl(`摸${get.cnNumber(num)}张牌`, "回复1点体力", "cancel2")
-                      .set("prompt", get.prompt("taffyold_dcyixian"))
-                      .set("prompt2", `令${get.translation(target)}执行一项`)
-                      .set("ai", function () {
-                        return Math.max(get.effect(target, {
-                          name: "draw"
-                        }, player, player), get.recoverEffect(target, player, player) / 5);
-                      })
-                    if (result.index === 0) {
-                      player.line(target, "green");
-                      await target.draw(num);
-                    } else if (result.index === 1) {
-                      player.line(target, "green");
-                      await target.recover();
-                    }
-                    if (!event.isMine() && !event.isOnline()) await game.asyncDelayx();
-                  }
-                },
+								filterCard: () => false,
+								selectCard: -1,
+								filterTarget: () => false,
+								selectTarget: -1,
+								async content(event, trigger, player) {
+									player.awakenSkill("taffyold_dcyixian");
+									const position = "field";
+									let cards = [];
+									cards.addArray(
+										game
+										.filterPlayer()
+										.map(current => current.getGainableCards(player, "hes").filter(card => get.equipNum(card) == 1 || get.equipNum(card) == 2))
+										.flat()
+									);
+									if (!cards.length) return;
+									await player.gain(cards, "give");
+									const pairs = game.filterPlayer().map(current => {
+										let lostNum = 0;
+										current.checkHistory("lose", evt => {
+											if (evt.getParent(2) === event) lostNum += evt.cards2.length;
+										});
+										return [current, lostNum];
+									});
+									for (const pair of pairs) {
+										const [target, num] = pair;
+										if (!num) continue;
+										const {
+											result
+										} = await player
+											.chooseControl(`摸${get.cnNumber(num)}张牌`, "回复1点体力", "cancel2")
+											.set("prompt", get.prompt("taffyold_dcyixian"))
+											.set("prompt2", `令${get.translation(target)}执行一项`)
+											.set("ai", function () {
+												return Math.max(get.effect(target, {
+													name: "draw"
+												}, player, player), get.recoverEffect(target, player, player) / 5);
+											})
+										if (result.index === 0) {
+											player.line(target, "green");
+											await target.draw(num);
+										} else if (result.index === 1) {
+											player.line(target, "green");
+											await target.recover();
+										}
+										if (!event.isMine() && !event.isOnline()) await game.asyncDelayx();
+									}
+								},
 								ai: {
 									order: 10,
 									threaten: 2.9,
@@ -8384,10 +8378,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											const val1 = game
 												.filterPlayer()
 												.map(current => {
-                          const cards = [];
-                          player.getEquip(1) && cards.push(player.getEquip(1));
-                          player.getEquip(2) && cards.push(player.getEquip(2));
-														att = get.sgnAttitude(player, current);
+													const cards = [];
+													player.getEquip(1) && cards.push(player.getEquip(1));
+													player.getEquip(2) && cards.push(player.getEquip(2));
+													att = get.sgnAttitude(player, current);
 													return cards
 														.map(card => {
 															return Math.max(player.hasSkill("taffyold_dcjuewu") ? 5 : 0, get.value(card, player)) - get.value(card, current) * att;
@@ -8398,6 +8392,277 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											return val1 > 10 ? 4 : 0;
 										},
 									},
+								},
+							},
+							// 旧十周年神华佗
+							taffyold_jingyu: {
+								audio: "jingyu",
+								trigger: {
+									global: ["useSkill", "logSkillBegin", "useCard", "respond"],
+								},
+								filter(event, player) {
+									if (["global", "equip"].includes(event.type)) return false;
+									let skill = event.sourceSkill || event.skill;
+									if (!skill || event.player === player) return false;
+									if (!player.storage.taffyold_jingyu_used) {
+										player
+											.when({
+												global: "phaseBefore"
+											})
+											.assign({
+												firstDo: true,
+											})
+											.then(() => delete player.storage.taffyold_jingyu_used);
+									}
+									if (skill === "jingyu" || skill === "taffyold_jingyu") {
+										if (!player.getStorage("taffyold_jingyu_used").includes(skill)) {
+											player.markAuto("taffyold_jingyu_used", skill);
+											return true;
+										} else {
+											return false;
+										}
+									}
+									let info = get.info(skill);
+									while (true) {
+										if (!info || info.charlotte || info.equipSkill) return false;
+										if (info && !info.sourceSkill) break;
+										skill = info.sourceSkill;
+										info = get.info(skill);
+									}
+									return !player.getStorage("taffyold_jingyu_used").includes(skill);
+								},
+								forced: true,
+								async content(event, trigger, player) {
+									let skill = trigger.sourceSkill || trigger.skill,
+										info = get.info(skill);
+									while (true) {
+										if (info && !info.sourceSkill) break;
+										skill = info.sourceSkill;
+										info = get.info(skill);
+									}
+									player.markAuto("taffyold_jingyu_used", skill);
+									await player.draw();
+								},
+								ai: {
+									threaten: 6,
+								},
+							},
+							taffyold_lvxin: {
+								audio: "lvxin",
+								enable: "phaseUse",
+								usable: 1,
+								filterCard: true,
+								filterTarget: lib.filter.notMe,
+								check(card) {
+									const round = game.roundNumber,
+										player = get.player();
+									let valueFix = 0;
+									if (["sha", "shan"].includes(get.name(card, false))) valueFix += 3;
+									if (
+										(round <= 2 &&
+											player.hasCard(card => {
+												return ["sha", "shan"].includes(get.name(card)) && get.value(card) <= 3;
+											})) ||
+										game.hasPlayer(current => {
+											return current !== player && get.attitude(player, current) > 0;
+										})
+									)
+										return 6 - get.value(card) + valueFix;
+									return 4.5 - get.value(card) + valueFix;
+								},
+								delay: false,
+								discard: false,
+								lose: false,
+								async content(event, trigger, player) {
+									const {
+										target,
+										cards
+									} = event,
+									round = game.roundNumber;
+									const name = get.translation(target);
+									await player.give(cards, target);
+									const result = await player
+										.chooseControl(["摸牌", "弃牌"])
+										.set("choiceList", [`令${name}摸${get.cnNumber(round)}张牌`, `令${name}随机弃置${get.cnNumber(round)}张手牌`])
+										.set("prompt", "滤心：请选择一项")
+										.set("ai", () => {
+											return get.event("choice");
+										})
+										.set("choice", get.attitude(player, target) > 0 ? "摸牌" : "弃牌")
+										.forResult();
+									let cards2 = [];
+									const makeDraw = result.index === 0;
+									if (makeDraw) {
+										cards2 = await target.draw(round).forResult();
+									} else {
+										const cards = target.getCards("h", card => {
+											return lib.filter.cardDiscardable(card, target, "taffyold_lvxin");
+										});
+										if (cards.length > 0) {
+											const evt = await target.discard(cards.randomGets(round)).set("discarder", target);
+											cards2 = evt.done.cards2;
+										}
+									}
+									const cardName = get.name(cards[0], player);
+									if (
+										cards2.some(card => {
+											return get.name(card, target) === cardName;
+										})
+									) {
+										const skillName = `taffyold_lvxin_${makeDraw ? "recover" : "lose"}`;
+										target.addSkill(skillName);
+										target.addMark(skillName, 1, false);
+									}
+								},
+								subSkill: {
+									recover: {
+										trigger: {
+											player: ["useSkill", "logSkillBegin", "useCard", "respond"],
+										},
+										filter(event, player) {
+											if (["global", "equip"].includes(event.type)) return false;
+											const skill = event.sourceSkill || event.skill;
+											const info = get.info(skill);
+											return info && !info.charlotte && !info.equipSkill;
+										},
+										forced: true,
+										onremove: true,
+										charlotte: true,
+										async content(event, trigger, player) {
+											player.recover(player.countMark("taffyold_lvxin_recover"));
+											player.removeSkill("taffyold_lvxin_recover");
+										},
+										intro: {
+											content: "下次发动技能时回复#点体力",
+										},
+									},
+									lose: {
+										trigger: {
+											player: ["useSkill", "logSkillBegin", "useCard", "respond"],
+										},
+										filter(event, player) {
+											if (["global", "equip"].includes(event.type)) return false;
+											const skill = event.sourceSkill || event.skill;
+											const info = get.info(skill);
+											return info && !info.charlotte && !info.equipSkill;
+										},
+										forced: true,
+										onremove: true,
+										charlotte: true,
+										async content(event, trigger, player) {
+											player.loseHp(player.countMark("taffyold_lvxin_lose"));
+											player.removeSkill("taffyold_lvxin_lose");
+										},
+										intro: {
+											content: "下次发动技能时失去#点体力",
+										},
+									},
+								},
+								ai: {
+									order: 5,
+									result: {
+										target(player, target) {
+											const round = game.roundNumber;
+											if (
+												round <= 2 &&
+												target.countCards("h") > round * 2 &&
+												player.getCards("h").some(card => {
+													return ["sha", "shan"].includes(get.name(card)) && get.value(card) <= 3;
+												})
+											)
+												return 1;
+											if (get.attitude(player, target) > 0) {
+												return round + Math.sqrt(1 + target.getDamagedHp());
+											}
+											return -(round + Math.sqrt(Math.max(0, 2 - target.getHp())));
+										},
+									},
+								},
+							},
+							// 旧神许褚
+							taffyold_zhengqing: {
+								audio: "zhengqing",
+								trigger: {
+									global: "roundStart"
+								},
+								forced: true,
+								filter() {
+									return (
+										game.hasPlayer(current => {
+											return current.countMark("taffyold_zhengqing");
+										}) || lib.skill.taffyold_zhengqing.getMostInfoLastRound()[0] > 0
+									);
+								},
+								getMostInfoLastRound() {
+									let max = -1,
+										players = [];
+									const history = game.getAllGlobalHistory();
+									if (history.length <= 2) return [max, players];
+									for (let i = history.length - 2; i >= 0; i--) {
+										const evts = history[i]["everything"].filter(evt => {
+											if (evt.name !== "damage") return false;
+											const source = evt.source;
+											return source && source.isIn();
+										});
+										if (evts.length) {
+											let curMax = -1,
+												curPlayers = [];
+											const map = {};
+											for (const evt of evts) {
+												const source = evt.source;
+												const id = source.playerid;
+												if (typeof map[id] !== "number") map[id] = 0;
+												map[id] += evt.num;
+												if (map[id] > curMax) {
+													curMax = map[id];
+													curPlayers = [source];
+												} else if (map[id] == curMax) {
+													curPlayers.add(source);
+												}
+											}
+											if (curMax > max) {
+												max = curMax;
+												players = curPlayers.slice();
+											} else if (curMax === max) {
+												players.addArray(curPlayers);
+											}
+										}
+										if (history[i].isRound) break;
+									}
+									return [max, players];
+								},
+								async content(event, trigger, player) {
+									game.countPlayer(current => {
+										if (current.hasMark("taffyold_zhengqing")) current.clearMark("taffyold_zhengqing");
+									});
+									const [num, players] = lib.skill.taffyold_zhengqing.getMostInfoLastRound();
+									player.line(players, "thunder");
+									const onlyMe = players.length === 1 && players[0] === player;
+									const isMax =
+										(player
+											.getAllHistory("custom", evt => evt && evt.taffyold_zhengqing_count)
+											.map(evt => evt.taffyold_zhengqing_count)
+											.sort((a, b) => b - a)[0] || 0) <= num;
+									players.forEach(current => {
+										current.addMark("taffyold_zhengqing", num);
+									});
+									if (onlyMe && isMax) {
+										player.draw(num);
+										player.getHistory("custom").push({
+											taffyold_zhengqing_count: num
+										});
+									} else {
+										const drawers = [player].concat(players).sortBySeat(trigger.player);
+										for (const drawer of drawers) {
+											await drawer.draw();
+										}
+									}
+								},
+								marktext: "擎",
+								intro: {
+									name: "争擎",
+									name2: "擎",
+									content: "mark",
 								},
 							},
 						},
@@ -8493,7 +8758,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							shenshiguanning: '#gViridian',
 							taffyre_xushao: '#gViridian',
 							taffyold_sb_caopi: '#gViridian',
-              taffyold_wu_guanyu: '#gViridian',
+							taffyold_wu_guanyu: '#gViridian',
+							taffyold_dc_shen_huatuo: '#gViridian',
 						},
 						characterFilter: {},
 						dynamicTranslate: {
@@ -8553,6 +8819,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							ol_luyusheng: ["ol_luyusheng", "luyusheng", "taffyold_ol_luyusheng"],
 							shen_lusu: ["shen_lusu", "taffyold_shen_lusu"],
 							wu_guanyu: ["wu_guanyu", "taffyold_wu_guanyu"],
+							shen_huatuo: ["dc_shen_huatuo", "shen_huatuo", "taffyold_dc_shen_huatuo"],
+							shen_xuzhu: ["shen_xuzhu", "taffyold_shen_xuzhu"],
 						},
 						translate: {
 							shenxushao: '评世雕龙',
@@ -8805,6 +9073,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 							taffyold_dcwuyou_info: "其他角色的出牌阶段限一次。其可以交给你一张手牌，你选择一个非装备牌牌名，然后可以交给其一张手牌，令此牌的牌名与属性视为与你选择的相同。",
 							taffyold_dcyixian: "义贤",
 							taffyold_dcyixian_info: "限定技。出牌阶段，你可以获得场上和其他角色手牌中的所有武器和防具牌。然后你可以依次对被你以此法获得牌的角色选择一项：⒈摸X张牌（X为其以此法失去的牌数）；⒉回复1点体力。",
+							taffyold_dc_shen_huatuo: "旧神华佗",
+							taffyold_dc_shen_huatuo_prefix: "旧神",
+							taffyold_jingyu: "静域",
+							taffyold_jingyu_info: "锁定技。每个技能每回合限一次，当一名其他角色发动技能时，你摸一张牌。",
+							taffyold_lvxin: "滤心",
+							taffyold_lvxin_info: "出牌阶段限一次。你可以交给一名其他角色一张手牌并选择一项：⒈令其摸X张牌；⒉令其随机弃置X张手牌（X为游戏轮数）。然后若其以此法得到/弃置了与你交给其的牌牌名相同的牌，其于其下次发动技能时回复/失去1点体力。",
+							taffyold_shen_xuzhu: "旧神许褚",
+							taffyold_shen_xuzhu_prefix: "旧神",
+							taffyold_zhengqing: "争擎",
+							taffyold_zhengqing_info: "锁定技。一轮游戏开始时，你移去所有角色的“擎”标记，令上一轮于一回合内造成伤害值最多的角色各获得X枚“擎”，且你与这些角色各摸一张牌（X为这些角色该回合内造成的伤害值）。若该角色为你且本次获得的“擎”数为本局游戏最多的一次，你改为摸X张牌。",
 
 							aruijier: '瑞吉儿',
 
@@ -8898,7 +9176,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 			version: {
 				nopointer: true,
 				clear: true,
-				name: "更新日期: 2024-05-22",
+				name: "更新日期: 2024-05-24",
 			},
 			github: {
 				clear: true,
