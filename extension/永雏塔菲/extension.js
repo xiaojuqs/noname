@@ -434,7 +434,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								},
 								audio: 4,
 								trigger: {
-									player: ['damageBefore', 'phaseJieshuBefore', 'phaseBeforeStart'],
+									player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
 								},
 								frequent: true,
 								content: function () {
@@ -523,7 +523,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 												for (var k = 0; k < list2.length; k++) {
 													var info = lib.skill[list2[k]];
 													if (!info || !info.trigger) continue;
-													if (name2 === 'phaseBeforeStart') {
+													if (name2 === 'phaseBefore') {
 														name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
 													} else if (name2 === 'damageBefore') {
 														name2 = ['damageBefore', 'damageBegin', 'damageBegin2', 'damageBegin3', 'damageBegin4', 'damage', 'damageSource', 'damageEnd', 'damageAfter']
@@ -2236,7 +2236,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											// 评荐：默认选项
 										default:
 											switch (parentTriggerName) {
-												case 'phaseBeforeStart':
+												case 'phaseBefore':
 													result = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin'];
 													break;
 												case 'phaseJieshuBefore':
@@ -2255,7 +2255,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								},
 								audio: 'shenpingjian',
 								trigger: {
-									player: ['damageBefore', 'phaseJieshuBefore', 'phaseBeforeStart'],
+									player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
 								},
 								frequent: true,
 								content: function () {
@@ -2306,7 +2306,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											event.taffyLostSkillNum = result.links.length;
 											// 玩家可主动选择具体时机
 											let triggerOptions = [];
-											if (event.triggername === 'phaseBeforeStart') {
+											if (event.triggername === 'phaseBefore') {
 												triggerOptions = ['phaseBefore', 'phaseBegin', 'phaseChange', 'phaseZhunbei', 'phaseJudge', 'phaseDraw', 'phaseUseBegin'];
 											} else if (event.triggername === 'phaseJieshuBefore') {
 												triggerOptions = ['phaseJieshu', 'phaseEnd'];
@@ -5624,7 +5624,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								},
 								audio: 'shenpingjian',
 								trigger: {
-									player: ['damageBefore', 'phaseJieshuBefore', 'phaseBeforeStart'],
+									player: ['damageBefore', 'phaseJieshuBefore', 'phaseBefore'],
 								},
 								frequent: true,
 								content: function () {
@@ -5721,7 +5721,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 															if (k === 0) break;
 															else continue;
 														}
-														if (name2 === 'phaseBeforeStart') {
+														if (name2 === 'phaseBefore') {
 															name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
 														} else if (name2 === 'damageBefore') {
 															name2 = ['damageBefore', 'damageBegin', 'damageBegin2', 'damageBegin3', 'damageBegin4', 'damage', 'damageSource', 'damageEnd', 'damageAfter']
