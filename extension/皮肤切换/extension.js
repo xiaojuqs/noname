@@ -2015,7 +2015,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                       }
                       let retryOverride = function (times, timer) {
                           if (times < 0) return
-                          if (!window.decadeUI || !lib.skill._decadeUI_usecardBegin) {
+                          // taffy: 注释extension.js原版代码喵
+                          // if (!window.decadeUI || !lib.skill._decadeUI_usecardBegin) {
+                          /* taffy分界线 */
+                          // taffy: 更正函数名称
+                          if (!window.decadeUI || !lib.skill.decadeUI_usecardBegin) {
+                          /* taffy分界线 */
                               console.log(`第${times}次尝试`)
                               let ti = setTimeout(() => {
                                   retryOverride(times-1, ti)
