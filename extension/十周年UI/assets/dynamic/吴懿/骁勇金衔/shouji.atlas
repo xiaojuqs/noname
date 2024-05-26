@@ -1,0 +1,76 @@
+
+shouji.png
+size: 1805,1805
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0000
+  rotate: false
+  xy: 2, 1228
+  size: 592, 575
+  orig: 620, 620
+  offset: 14, 20
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0002
+  rotate: true
+  xy: 2, 688
+  size: 538, 480
+  orig: 620, 620
+  offset: 41, 70
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0004
+  rotate: true
+  xy: 2, 205
+  size: 481, 445
+  orig: 620, 620
+  offset: 83, 93
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0006
+  rotate: true
+  xy: 1088, 1336
+  size: 467, 471
+  orig: 620, 620
+  offset: 92, 85
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0008
+  rotate: true
+  xy: 596, 811
+  size: 490, 488
+  orig: 620, 620
+  offset: 79, 75
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0010
+  rotate: true
+  xy: 596, 1303
+  size: 500, 490
+  orig: 620, 620
+  offset: 76, 75
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0012
+  rotate: true
+  xy: 1086, 789
+  size: 512, 473
+  orig: 620, 620
+  offset: 73, 79
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0014
+  rotate: true
+  xy: 484, 292
+  size: 517, 451
+  orig: 620, 620
+  offset: 71, 98
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0016
+  rotate: true
+  xy: 937, 346
+  size: 441, 451
+  orig: 620, 620
+  offset: 80, 99
+  index: -1
+effect/chusha/sgs_wuyi_cs_mz/sgs_wuyi_cs_mz_0018
+  rotate: false
+  xy: 1390, 359
+  size: 413, 428
+  orig: 620, 620
+  offset: 107, 124
+  index: -1

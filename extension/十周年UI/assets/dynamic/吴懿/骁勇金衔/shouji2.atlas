@@ -1,0 +1,27 @@
+
+shouji2.png
+size: 1247,1247
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/chusha/sgs_wuyi_cs_zd/sgs_wuyi_cs_zd_0000
+  rotate: false
+  xy: 2, 770
+  size: 769, 475
+  orig: 800, 560
+  offset: 17, 27
+  index: -1
+effect/chusha/sgs_wuyi_cs_zd/sgs_wuyi_cs_zd_0002
+  rotate: true
+  xy: 2, 2
+  size: 766, 473
+  orig: 800, 560
+  offset: 17, 26
+  index: -1
+effect/chusha/sgs_wuyi_cs_zd/sgs_wuyi_cs_zd_0004
+  rotate: true
+  xy: 477, 2
+  size: 766, 473
+  orig: 800, 560
+  offset: 17, 27
+  index: -1

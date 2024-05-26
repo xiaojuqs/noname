@@ -3212,6 +3212,52 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		wuyi: {
+			骁勇金衔: {
+				name: '吴懿/骁勇金衔/daiji2',
+				play2: 'play2',
+				shan: 'play3',
+				x: [0, 0.5],
+				y: [0, 0.5],
+				scale: 0.8,
+				angle: 0,
+				// speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: '吴懿/骁勇金衔/chuchang',
+					action: 'play',
+					scale: 0.9,
+				},
+				gongji: {
+					name: '吴懿/骁勇金衔/chuchang2',
+					action: 'gongji',
+					scale: 0.7,
+				},
+				teshu: {
+					name: '吴懿/骁勇金衔/chuchang2',
+					action: 'jineng',
+					scale: 0.7,
+				},
+				beijing: {
+					name: '吴懿/骁勇金衔/beijing',
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: '吴懿/骁勇金衔/shouji2',
+					scale: 0.5,
+					speed: 1.2,
+					delay: 0.3,
+					effect: {
+						name: '吴懿/骁勇金衔/shouji',
+						scale: 0.6,
+						speed: 0.6,
+						delay: 0.7,
+					},
+				},
+			},
+		},
 		wu_zhugeliang: { // 武诸葛亮
 			经典形象: {
 				name: '武诸葛亮/经典形象/wumiao_zhugeliang',
@@ -3323,7 +3369,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		xujing: { // 许靖
-			傲睨山河: {
+			丹枫盈瞳: {
 				name: '许靖/丹枫盈瞳/daiji2',
 				play2: 'play2',
 				shan: 'play3',
@@ -4550,6 +4596,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 陆郁生
 		ol_luyusheng: decadeUI.dynamicSkin.luyusheng,
+		taffyold_ol_luyusheng: decadeUI.dynamicSkin.luyusheng,
 
 		// 骆统
 		dc_luotong: decadeUI.dynamicSkin.luotong,
@@ -4639,6 +4686,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 吴苋
 		clan_wuxian: decadeUI.dynamicSkin.wuxian,
 
+		// 吴懿
+		re_wuyi: decadeUI.dynamicSkin.wuyi,
+		xin_wuyi: decadeUI.dynamicSkin.wuyi,
+		dc_wuyi: decadeUI.dynamicSkin.wuyi,
+
 		// 武诸葛亮
 		oldwu_zhugeliang: decadeUI.dynamicSkin.wu_zhugeliang,
 
@@ -4708,6 +4760,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		re_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		xin_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		clan_zhonghui: decadeUI.dynamicSkin.zhonghui,
+		taffyold_clan_zhonghui: decadeUI.dynamicSkin.zhonghui,
 
 		// 钟琰
 		clan_zhongyan: decadeUI.dynamicSkin.zhongyan,

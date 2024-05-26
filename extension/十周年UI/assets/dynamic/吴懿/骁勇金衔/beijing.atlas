@@ -1,0 +1,279 @@
+
+beijing.png
+size: 1987,1987
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0000
+  rotate: true
+  xy: 294, 634
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0002
+  rotate: false
+  xy: 718, 1177
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0004
+  rotate: true
+  xy: 294, 190
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0006
+  rotate: false
+  xy: 1174, 1388
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0008
+  rotate: false
+  xy: 1162, 1153
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0010
+  rotate: true
+  xy: 529, 634
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0012
+  rotate: true
+  xy: 529, 190
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0014
+  rotate: true
+  xy: 764, 733
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0016
+  rotate: true
+  xy: 764, 289
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0018
+  rotate: false
+  xy: 1092, 918
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0020
+  rotate: false
+  xy: 1092, 683
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0022
+  rotate: true
+  xy: 1536, 709
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0024
+  rotate: true
+  xy: 999, 231
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0026
+  rotate: true
+  xy: 1234, 239
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+effect/beijing/sgs_wuyi_bj_bjhy/sgs_wuyi_bj_bjhy_0028
+  rotate: true
+  xy: 1469, 239
+  size: 442, 233
+  orig: 442, 233
+  offset: 0, 0
+  index: -1
+pic_0
+  rotate: true
+  xy: 2, 161
+  size: 1249, 290
+  orig: 1249, 290
+  offset: 0, 0
+  index: -1
+pic_100
+  rotate: false
+  xy: 975, 27
+  size: 267, 202
+  orig: 268, 222
+  offset: 1, 0
+  index: -1
+pic_101
+  rotate: true
+  xy: 1244, 29
+  size: 72, 162
+  orig: 73, 162
+  offset: 1, 0
+  index: -1
+pic_102
+  rotate: true
+  xy: 1771, 709
+  size: 28, 198
+  orig: 28, 198
+  offset: 0, 0
+  index: -1
+pic_103
+  rotate: true
+  xy: 1771, 739
+  size: 85, 156
+  orig: 86, 156
+  offset: 1, 0
+  index: -1
+pic_104
+  rotate: false
+  xy: 1854, 1836
+  size: 129, 149
+  orig: 129, 149
+  offset: 0, 0
+  index: -1
+pic_106
+  rotate: true
+  xy: 1419, 118
+  size: 119, 158
+  orig: 119, 158
+  offset: 0, 0
+  index: -1
+pic_107
+  rotate: false
+  xy: 1854, 1688
+  size: 82, 146
+  orig: 131, 157
+  offset: 0, 0
+  index: -1
+pic_108
+  rotate: false
+  xy: 2, 36
+  size: 190, 123
+  orig: 190, 123
+  offset: 0, 0
+  index: -1
+pic_109a
+  rotate: true
+  xy: 764, 80
+  size: 207, 209
+  orig: 211, 217
+  offset: 4, 8
+  index: -1
+pic_111
+  rotate: false
+  xy: 2, 1412
+  size: 1170, 573
+  orig: 1170, 573
+  offset: 0, 0
+  index: -1
+pic_86
+  rotate: false
+  xy: 194, 58
+  size: 86, 101
+  orig: 86, 101
+  offset: 0, 0
+  index: -1
+pic_87
+  rotate: false
+  xy: 1244, 103
+  size: 173, 134
+  orig: 173, 134
+  offset: 0, 0
+  index: -1
+pic_88
+  rotate: false
+  xy: 1174, 1623
+  size: 678, 362
+  orig: 679, 363
+  offset: 0, 0
+  index: -1
+pic_90a
+  rotate: false
+  xy: 294, 1078
+  size: 422, 332
+  orig: 423, 332
+  offset: 0, 0
+  index: -1
+pic_91
+  rotate: true
+  xy: 393, 116
+  size: 72, 76
+  orig: 72, 77
+  offset: 0, 0
+  index: -1
+pic_92
+  rotate: false
+  xy: 1579, 133
+  size: 100, 104
+  orig: 101, 104
+  offset: 1, 0
+  index: -1
+pic_93
+  rotate: true
+  xy: 999, 675
+  size: 500, 91
+  orig: 500, 94
+  offset: 0, 0
+  index: -1
+pic_94a
+  rotate: false
+  xy: 1704, 72
+  size: 281, 295
+  orig: 281, 295
+  offset: 0, 0
+  index: -1
+pic_95
+  rotate: true
+  xy: 294, 113
+  size: 75, 97
+  orig: 80, 97
+  offset: 0, 0
+  index: -1
+pic_96
+  rotate: true
+  xy: 1704, 369
+  size: 338, 281
+  orig: 338, 281
+  offset: 0, 0
+  index: -1
+pic_97
+  rotate: true
+  xy: 1618, 1388
+  size: 233, 241
+  orig: 234, 241
+  offset: 1, 0
+  index: -1
+pic_98
+  rotate: false
+  xy: 1771, 826
+  size: 175, 336
+  orig: 175, 336
+  offset: 0, 0
+  index: -1
+pic_99
+  rotate: false
+  xy: 1606, 1164
+  size: 252, 222
+  orig: 253, 230
+  offset: 1, 8
+  index: -1

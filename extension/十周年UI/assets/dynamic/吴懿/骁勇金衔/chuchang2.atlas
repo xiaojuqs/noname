@@ -1,0 +1,956 @@
+
+chuchang2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0000
+  rotate: true
+  xy: 457, 1213
+  size: 444, 155
+  orig: 510, 270
+  offset: 17, 111
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0001
+  rotate: false
+  xy: 64, 953
+  size: 500, 258
+  orig: 510, 270
+  offset: 9, 3
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0002
+  rotate: true
+  xy: 406, 452
+  size: 499, 258
+  orig: 510, 270
+  offset: 9, 3
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0016
+  rotate: true
+  xy: 1826, 1240
+  size: 457, 213
+  orig: 510, 270
+  offset: 49, 9
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0022
+  rotate: true
+  xy: 1843, 181
+  size: 372, 203
+  orig: 510, 270
+  offset: 52, 24
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0000
+  rotate: false
+  xy: 406, 102
+  size: 348, 348
+  orig: 360, 360
+  offset: 6, 6
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0000
+  rotate: true
+  xy: 1862, 579
+  size: 325, 144
+  orig: 420, 210
+  offset: 50, 33
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0004
+  rotate: false
+  xy: 1408, 12
+  size: 408, 194
+  orig: 420, 210
+  offset: 7, 7
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0014
+  rotate: false
+  xy: 614, 1108
+  size: 402, 193
+  orig: 420, 210
+  offset: 9, 8
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0020
+  rotate: false
+  xy: 1004, 3
+  size: 389, 174
+  orig: 420, 210
+  offset: 12, 18
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0002
+  rotate: false
+  xy: 614, 1303
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0004
+  rotate: false
+  xy: 1018, 1301
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0006
+  rotate: false
+  xy: 1422, 1295
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0008
+  rotate: false
+  xy: 2, 549
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0010
+  rotate: false
+  xy: 2, 145
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0012
+  rotate: false
+  xy: 1018, 897
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0014
+  rotate: false
+  xy: 1422, 891
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0016
+  rotate: false
+  xy: 1004, 179
+  size: 402, 402
+  orig: 420, 420
+  offset: 9, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0002
+  rotate: false
+  xy: 1419, 555
+  size: 441, 334
+  orig: 450, 360
+  offset: 5, 22
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0004
+  rotate: false
+  xy: 1090, 1705
+  size: 439, 341
+  orig: 450, 360
+  offset: 6, 14
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0006
+  rotate: false
+  xy: 1531, 1699
+  size: 437, 347
+  orig: 450, 360
+  offset: 7, 8
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0008
+  rotate: true
+  xy: 666, 670
+  size: 436, 344
+  orig: 450, 360
+  offset: 7, 10
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0010
+  rotate: false
+  xy: 1408, 208
+  size: 433, 345
+  orig: 450, 360
+  offset: 9, 8
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0022
+  rotate: false
+  xy: 1012, 583
+  size: 405, 312
+  orig: 450, 360
+  offset: 16, 12
+  index: -1
+pic_20
+  rotate: false
+  xy: 1826, 906
+  size: 145, 332
+  orig: 150, 332
+  offset: 1, 0
+  index: -1
+pic_21
+  rotate: false
+  xy: 325, 118
+  size: 51, 25
+  orig: 54, 26
+  offset: 2, 1
+  index: -1
+pic_23
+  rotate: true
+  xy: 701, 4
+  size: 43, 48
+  orig: 43, 51
+  offset: 0, 0
+  index: -1
+pic_24
+  rotate: true
+  xy: 613, 1044
+  size: 62, 51
+  orig: 62, 54
+  offset: 0, 0
+  index: -1
+pic_25
+  rotate: true
+  xy: 2, 953
+  size: 19, 48
+  orig: 19, 52
+  offset: 0, 0
+  index: -1
+pic_26
+  rotate: true
+  xy: 666, 452
+  size: 55, 82
+  orig: 56, 89
+  offset: 1, 7
+  index: -1
+pic_30
+  rotate: false
+  xy: 64, 1659
+  size: 532, 387
+  orig: 534, 389
+  offset: 1, 1
+  index: -1
+pic_33
+  rotate: false
+  xy: 1970, 1727
+  size: 70, 92
+  orig: 71, 95
+  offset: 1, 2
+  index: -1
+pic_38
+  rotate: false
+  xy: 666, 509
+  size: 79, 159
+  orig: 80, 159
+  offset: 0, 0
+  index: -1
+pic_40
+  rotate: true
+  xy: 566, 953
+  size: 89, 86
+  orig: 89, 86
+  offset: 0, 0
+  index: -1
+pic_43
+  rotate: false
+  xy: 1973, 918
+  size: 55, 65
+  orig: 55, 65
+  offset: 0, 0
+  index: -1
+pic_44
+  rotate: false
+  xy: 2, 2
+  size: 29, 9
+  orig: 29, 9
+  offset: 0, 0
+  index: -1
+pic_45
+  rotate: false
+  xy: 2007, 1707
+  size: 39, 18
+  orig: 39, 18
+  offset: 0, 0
+  index: -1
+pic_46
+  rotate: false
+  xy: 2, 13
+  size: 321, 130
+  orig: 322, 131
+  offset: 1, 0
+  index: -1
+pic_48
+  rotate: true
+  xy: 566, 1060
+  size: 151, 45
+  orig: 152, 46
+  offset: 1, 1
+  index: -1
+pic_51
+  rotate: false
+  xy: 325, 17
+  size: 290, 83
+  orig: 290, 84
+  offset: 0, 1
+  index: -1
+pic_54
+  rotate: true
+  xy: 1970, 1954
+  size: 92, 76
+  orig: 93, 76
+  offset: 1, 0
+  index: -1
+pic_56
+  rotate: false
+  xy: 701, 49
+  size: 53, 51
+  orig: 53, 51
+  offset: 0, 0
+  index: -1
+pic_57
+  rotate: true
+  xy: 2, 974
+  size: 121, 41
+  orig: 128, 44
+  offset: 0, 3
+  index: -1
+pic_58
+  rotate: false
+  xy: 1970, 1699
+  size: 35, 26
+  orig: 35, 26
+  offset: 0, 0
+  index: -1
+pic_59
+  rotate: true
+  xy: 2030, 955
+  size: 28, 16
+  orig: 28, 16
+  offset: 0, 0
+  index: -1
+pic_60
+  rotate: false
+  xy: 968, 138
+  size: 30, 33
+  orig: 30, 33
+  offset: 0, 0
+  index: -1
+pic_61
+  rotate: false
+  xy: 1818, 2
+  size: 46, 36
+  orig: 46, 36
+  offset: 0, 0
+  index: -1
+pic_65
+  rotate: true
+  xy: 1818, 40
+  size: 139, 228
+  orig: 140, 228
+  offset: 1, 0
+  index: -1
+pic_67
+  rotate: true
+  xy: 1970, 1821
+  size: 131, 75
+  orig: 131, 75
+  offset: 0, 0
+  index: -1
+pic_69
+  rotate: true
+  xy: 1973, 985
+  size: 146, 58
+  orig: 146, 60
+  offset: 0, 0
+  index: -1
+pic_72
+  rotate: true
+  xy: 617, 2
+  size: 98, 82
+  orig: 98, 85
+  offset: 0, 3
+  index: -1
+pic_74
+  rotate: true
+  xy: 756, 9
+  size: 162, 210
+  orig: 162, 212
+  offset: 0, 0
+  index: -1
+pic_77a
+  rotate: false
+  xy: 598, 1707
+  size: 490, 339
+  orig: 490, 342
+  offset: 0, 0
+  index: -1
+pic_78
+  rotate: false
+  xy: 2, 1097
+  size: 60, 949
+  orig: 95, 949
+  offset: 35, 0
+  index: -1
+pic_80
+  rotate: true
+  xy: 1973, 1133
+  size: 105, 73
+  orig: 105, 73
+  offset: 0, 0
+  index: -1
+pic_84
+  rotate: true
+  xy: 756, 173
+  size: 495, 246
+  orig: 495, 246
+  offset: 0, 0
+  index: -1
+pic_85a
+  rotate: false
+  xy: 64, 1213
+  size: 391, 444
+  orig: 391, 445
+  offset: 0, 1
+  index: -1
+
+chuchang2_2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0004
+  rotate: false
+  xy: 826, 1788
+  size: 492, 258
+  orig: 510, 270
+  offset: 16, 3
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0006
+  rotate: false
+  xy: 1320, 1788
+  size: 481, 258
+  orig: 510, 270
+  offset: 27, 3
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0008
+  rotate: false
+  xy: 1305, 1529
+  size: 473, 257
+  orig: 510, 270
+  offset: 34, 3
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0010
+  rotate: true
+  xy: 340, 793
+  size: 467, 252
+  orig: 510, 270
+  offset: 39, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0012
+  rotate: false
+  xy: 766, 1346
+  size: 464, 245
+  orig: 510, 270
+  offset: 41, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0014
+  rotate: false
+  xy: 795, 798
+  size: 458, 231
+  orig: 510, 270
+  offset: 46, 6
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0018
+  rotate: true
+  xy: 594, 835
+  size: 460, 199
+  orig: 510, 270
+  offset: 50, 26
+  index: -1
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0020
+  rotate: true
+  xy: 1710, 510
+  size: 372, 201
+  orig: 510, 270
+  offset: 52, 25
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0004
+  rotate: false
+  xy: 995, 444
+  size: 352, 352
+  orig: 360, 360
+  offset: 4, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0006
+  rotate: false
+  xy: 674, 89
+  size: 352, 352
+  orig: 360, 360
+  offset: 4, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0008
+  rotate: false
+  xy: 320, 13
+  size: 352, 353
+  orig: 360, 360
+  offset: 4, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0010
+  rotate: false
+  xy: 1028, 90
+  size: 352, 352
+  orig: 360, 360
+  offset: 4, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0014
+  rotate: false
+  xy: 641, 443
+  size: 352, 353
+  orig: 360, 360
+  offset: 4, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0020
+  rotate: false
+  xy: 1803, 1810
+  size: 236, 236
+  orig: 360, 360
+  offset: 62, 62
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0002
+  rotate: false
+  xy: 1211, 1137
+  size: 407, 194
+  orig: 420, 210
+  offset: 7, 7
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0006
+  rotate: true
+  xy: 570, 1297
+  size: 408, 194
+  orig: 420, 210
+  offset: 7, 7
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0008
+  rotate: false
+  xy: 1232, 1333
+  size: 408, 194
+  orig: 420, 210
+  offset: 7, 7
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0010
+  rotate: false
+  xy: 1620, 1078
+  size: 405, 194
+  orig: 420, 210
+  offset: 9, 7
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0012
+  rotate: false
+  xy: 1642, 1274
+  size: 404, 194
+  orig: 420, 210
+  offset: 9, 7
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0016
+  rotate: false
+  xy: 1546, 884
+  size: 397, 192
+  orig: 420, 210
+  offset: 11, 9
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0018
+  rotate: true
+  xy: 1349, 481
+  size: 396, 186
+  orig: 420, 210
+  offset: 12, 12
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0022
+  rotate: true
+  xy: 392, 1262
+  size: 388, 176
+  orig: 420, 210
+  offset: 12, 17
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0024
+  rotate: true
+  xy: 1382, 94
+  size: 385, 176
+  orig: 420, 210
+  offset: 12, 17
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0026
+  rotate: true
+  xy: 1560, 108
+  size: 383, 177
+  orig: 420, 210
+  offset: 12, 17
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0028
+  rotate: true
+  xy: 1537, 493
+  size: 384, 171
+  orig: 420, 210
+  offset: 12, 17
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0030
+  rotate: true
+  xy: 1739, 132
+  size: 376, 171
+  orig: 420, 210
+  offset: 21, 17
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0000
+  rotate: false
+  xy: 2, 1652
+  size: 394, 394
+  orig: 420, 420
+  offset: 13, 13
+  index: -1
+effect/jineng/sgs_wuyi_jn_xl/sgs_wuyi_jn_xl_0018
+  rotate: false
+  xy: 2, 1262
+  size: 388, 388
+  orig: 420, 420
+  offset: 16, 16
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0000
+  rotate: true
+  xy: 340, 368
+  size: 423, 299
+  orig: 450, 360
+  offset: 15, 44
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0012
+  rotate: false
+  xy: 398, 1707
+  size: 426, 339
+  orig: 450, 360
+  offset: 12, 12
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0014
+  rotate: true
+  xy: 2, 845
+  size: 415, 336
+  orig: 450, 360
+  offset: 21, 12
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0016
+  rotate: true
+  xy: 2, 430
+  size: 413, 336
+  orig: 450, 360
+  offset: 18, 12
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0018
+  rotate: true
+  xy: 2, 13
+  size: 415, 316
+  orig: 450, 360
+  offset: 17, 14
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0020
+  rotate: false
+  xy: 795, 1031
+  size: 414, 313
+  orig: 450, 360
+  offset: 17, 14
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0024
+  rotate: true
+  xy: 1780, 1470
+  size: 316, 266
+  orig: 450, 360
+  offset: 80, 55
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0026
+  rotate: false
+  xy: 1255, 879
+  size: 289, 256
+  orig: 450, 360
+  offset: 109, 62
+  index: -1
+pic_18
+  rotate: true
+  xy: 1913, 575
+  size: 173, 131
+  orig: 173, 131
+  offset: 0, 0
+  index: -1
+pic_27
+  rotate: true
+  xy: 1739, 2
+  size: 128, 142
+  orig: 134, 142
+  offset: 5, 0
+  index: -1
+pic_29
+  rotate: false
+  xy: 1945, 962
+  size: 101, 114
+  orig: 101, 114
+  offset: 0, 0
+  index: -1
+pic_31
+  rotate: false
+  xy: 1028, 2
+  size: 87, 86
+  orig: 88, 88
+  offset: 1, 0
+  index: -1
+pic_35
+  rotate: true
+  xy: 1912, 143
+  size: 172, 134
+  orig: 172, 134
+  offset: 0, 0
+  index: -1
+pic_37
+  rotate: true
+  xy: 1117, 2
+  size: 86, 68
+  orig: 86, 68
+  offset: 0, 0
+  index: -1
+pic_39
+  rotate: false
+  xy: 826, 1593
+  size: 477, 193
+  orig: 477, 225
+  offset: 0, 32
+  index: -1
+pic_41
+  rotate: true
+  xy: 1913, 750
+  size: 132, 133
+  orig: 141, 133
+  offset: 2, 0
+  index: -1
+pic_47
+  rotate: false
+  xy: 674, 23
+  size: 139, 64
+  orig: 139, 64
+  offset: 0, 0
+  index: -1
+pic_49
+  rotate: false
+  xy: 1382, 5
+  size: 120, 87
+  orig: 122, 87
+  offset: 2, 0
+  index: -1
+pic_50
+  rotate: false
+  xy: 766, 1616
+  size: 55, 89
+  orig: 56, 89
+  offset: 0, 0
+  index: -1
+pic_53
+  rotate: false
+  xy: 398, 1657
+  size: 96, 48
+  orig: 96, 48
+  offset: 0, 0
+  index: -1
+pic_62
+  rotate: false
+  xy: 1560, 2
+  size: 172, 104
+  orig: 172, 104
+  offset: 0, 0
+  index: -1
+pic_71a
+  rotate: true
+  xy: 1912, 317
+  size: 191, 134
+  orig: 194, 136
+  offset: 2, 0
+  index: -1
+pic_75
+  rotate: true
+  xy: 1912, 26
+  size: 115, 134
+  orig: 115, 134
+  offset: 0, 0
+  index: -1
+pic_76
+  rotate: true
+  xy: 1211, 1092
+  size: 43, 42
+  orig: 44, 43
+  offset: 0, 1
+  index: -1
+pic_79
+  rotate: false
+  xy: 1255, 815
+  size: 90, 62
+  orig: 91, 63
+  offset: 1, 1
+  index: -1
+
+chuchang2_3.png
+size: 1072,1072
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/chusha/sgs_wuyi_cs_dg/sgs_wuyi_cs_dg_0024
+  rotate: true
+  xy: 708, 703
+  size: 367, 205
+  orig: 510, 270
+  offset: 56, 24
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0002
+  rotate: false
+  xy: 2, 365
+  size: 351, 351
+  orig: 360, 360
+  offset: 5, 5
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0012
+  rotate: false
+  xy: 2, 718
+  size: 352, 352
+  orig: 360, 360
+  offset: 4, 4
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0016
+  rotate: false
+  xy: 356, 720
+  size: 350, 350
+  orig: 360, 360
+  offset: 5, 5
+  index: -1
+effect/chusha/sgs_wuyi_cs_xl/sgs_wuyi_cs_xl_0018
+  rotate: false
+  xy: 2, 19
+  size: 344, 344
+  orig: 360, 360
+  offset: 8, 8
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0032
+  rotate: true
+  xy: 355, 340
+  size: 376, 163
+  orig: 420, 210
+  offset: 20, 18
+  index: -1
+effect/jineng/sgs_wuyi_jn_dmks/sgs_wuyi_jn_dmks_0034
+  rotate: true
+  xy: 520, 349
+  size: 369, 160
+  orig: 420, 210
+  offset: 23, 21
+  index: -1
+effect/jineng/sgs_wuyi_jn_zd/sgs_wuyi_jn_zd_0028
+  rotate: true
+  xy: 682, 415
+  size: 286, 251
+  orig: 450, 360
+  offset: 113, 63
+  index: -1
+pic_17
+  rotate: false
+  xy: 974, 47
+  size: 96, 111
+  orig: 96, 112
+  offset: 0, 0
+  index: -1
+pic_19
+  rotate: false
+  xy: 902, 303
+  size: 116, 110
+  orig: 116, 110
+  offset: 0, 0
+  index: -1
+pic_22
+  rotate: true
+  xy: 873, 49
+  size: 109, 99
+  orig: 113, 103
+  offset: 1, 1
+  index: -1
+pic_28
+  rotate: true
+  xy: 935, 462
+  size: 148, 131
+  orig: 148, 131
+  offset: 0, 0
+  index: -1
+pic_32
+  rotate: false
+  xy: 915, 705
+  size: 125, 102
+  orig: 137, 102
+  offset: 12, 0
+  index: -1
+pic_34
+  rotate: false
+  xy: 756, 303
+  size: 144, 110
+  orig: 146, 112
+  offset: 1, 0
+  index: -1
+pic_36
+  rotate: false
+  xy: 756, 50
+  size: 115, 112
+  orig: 115, 112
+  offset: 0, 0
+  index: -1
+pic_42
+  rotate: false
+  xy: 874, 160
+  size: 100, 141
+  orig: 100, 141
+  offset: 0, 0
+  index: -1
+pic_52
+  rotate: false
+  xy: 348, 4
+  size: 198, 95
+  orig: 204, 95
+  offset: 2, 0
+  index: -1
+pic_55
+  rotate: false
+  xy: 935, 612
+  size: 135, 91
+  orig: 136, 92
+  offset: 1, 1
+  index: -1
+pic_63
+  rotate: true
+  xy: 348, 101
+  size: 237, 196
+  orig: 237, 196
+  offset: 0, 0
+  index: -1
+pic_64
+  rotate: false
+  xy: 976, 197
+  size: 94, 104
+  orig: 94, 104
+  offset: 0, 0
+  index: -1
+pic_66
+  rotate: false
+  xy: 915, 809
+  size: 123, 261
+  orig: 125, 261
+  offset: 2, 0
+  index: -1
+pic_68
+  rotate: false
+  xy: 756, 164
+  size: 116, 137
+  orig: 116, 138
+  offset: 0, 1
+  index: -1
+pic_70
+  rotate: false
+  xy: 546, 122
+  size: 208, 225
+  orig: 208, 234
+  offset: 0, 0
+  index: -1
+pic_73a
+  rotate: false
+  xy: 548, 14
+  size: 191, 106
+  orig: 192, 106
+  offset: 1, 0
+  index: -1
