@@ -19196,72 +19196,74 @@ lib.skill.dcchaixie={
             lib.card.zhengsu_leijin = { fullskin: true }
             lib.card.zhengsu_mingzhi = { fullskin: true }
             lib.card.zhengsu_bianzhen = { fullskin: true }
-            //名称重置
-            //张仲景
-            lib.translate.zhangzhongjing = '张仲景';
-            lib.translate.old_zhangzhongjing = '旧张仲景';
-            //蔡文姬
-            lib.translate.caiwenji = '蔡文姬';
-            lib.translate.re_caiwenji = '界蔡文姬';
-            lib.translate.ol_caiwenji = 'ol蔡文姬';
-            lib.translate.sp_caiwenji = 'sp蔡文姬';
-            lib.translate.WEI_sp_caiwenji = '欢乐蔡文姬';
-            lib.translate.WEI_sp_caiwenji_ab = '蔡文姬';
-            //严白虎
-            lib.translate.yanbaihu = '严白虎';
-            //甄姬
-            lib.translate.zhenji = '甄姬';
-            lib.translate.re_zhenji = '界甄姬';
-            lib.translate.shen_zhenji = '神甄姬';
-            lib.translate.diy_zhenji = '甄姬';
-            //伏皇后
-            lib.translate.fuhuanghou = '伏皇后';
-            lib.translate.re_fuhuanghou = '新杀伏皇后';
-            lib.translate.xin_fuhuanghou = '界伏皇后';
-            lib.translate.sp_fuhuanghou = 'sp伏皇后';
-            lib.translate.old_fuhuanghou = '旧伏皇后';
-            //吉平
-            lib.translate.sp_jiben = 'sp吉平';
-            lib.translate.dc_jiben = '吉平';
-            //步练师
-            lib.translate.dc_bulianshi = '新杀步练师';
-            lib.translate.re_bulianshi = '界步练师';
-            //星武将
-            lib.translate.yj_zhanghe = "星张郃";
-            lib.translate.yj_xuhuang = "星徐晃";
-            lib.translate.yj_ganning = "星甘宁";
-            lib.translate.yj_huangzhong = "星黄忠";
-            lib.translate.yj_zhangliao = "星张辽";
-            //花鬘
-            lib.translate.sp_huaman = "花鬘";
-            lib.translate.huaman = "新杀花鬘";
-            //鲍三娘
-            lib.translate.re_baosanniang = "鲍三娘";
-            lib.translate.baosanniang = "ol鲍三娘";
-            lib.translate.xin_baosanniang = "新杀鲍三娘";
-            //骆统
-            lib.translate.dc_luotong = "新杀骆统";
-            //sp武将
-            lib.translate.sp_caoren = 'sp曹仁';
-            lib.translate.jsp_guanyu = 'sp关羽';
-            lib.translate.sp_jiangwei = 'sp姜维';
-            lib.translate.sp_jiaxu = 'sp贾诩';
-            lib.translate.sp_pangde = 'sp庞德';
-            lib.translate.sp_sunshangxiang = 'sp孙尚香';
-            lib.translate.sp_pangtong = 'sp庞统';
-            lib.translate.sp_diaochan = 'sp貂蝉';
-            lib.translate.sp_dongzhuo = 'sp董卓';
-            lib.translate.sp_fuhuanghou = 'sp伏皇后';
-            lib.translate.sp_fuwan = 'sp伏完';
-            lib.translate.jsp_huangyueying = 'sp黄月英';
-            lib.translate.sp_machao = 'sp马超';
-            lib.translate.sp_menghuo = 'sp孟获';
-            lib.translate.sp_taishici = 'sp太史慈';
-            lib.translate.sp_yuanshu = 'sp袁术';
-            lib.translate.sp_zhanghe = 'sp张郃';
-            lib.translate.sp_zhangliao = 'sp张辽';
-            lib.translate.sp_zhaoyun = 'sp赵云';
-            lib.translate.sp_ol_zhanghe = 'sp张郃';
+            // taffy: 注释extension.js原版代码
+            // //名称重置
+            // //张仲景
+            // lib.translate.zhangzhongjing = '张仲景';
+            // lib.translate.old_zhangzhongjing = '旧张仲景';
+            // //蔡文姬
+            // lib.translate.caiwenji = '蔡文姬';
+            // lib.translate.re_caiwenji = '界蔡文姬';
+            // lib.translate.ol_caiwenji = 'ol蔡文姬';
+            // lib.translate.sp_caiwenji = 'sp蔡文姬';
+            // lib.translate.WEI_sp_caiwenji = '欢乐蔡文姬';
+            // lib.translate.WEI_sp_caiwenji_ab = '蔡文姬';
+            // //严白虎
+            // lib.translate.yanbaihu = '严白虎';
+            // //甄姬
+            // lib.translate.zhenji = '甄姬';
+            // lib.translate.re_zhenji = '界甄姬';
+            // lib.translate.shen_zhenji = '神甄姬';
+            // lib.translate.diy_zhenji = '甄姬';
+            // //伏皇后
+            // lib.translate.fuhuanghou = '伏皇后';
+            // lib.translate.re_fuhuanghou = '新杀伏皇后';
+            // lib.translate.xin_fuhuanghou = '界伏皇后';
+            // lib.translate.sp_fuhuanghou = 'sp伏皇后';
+            // lib.translate.old_fuhuanghou = '旧伏皇后';
+            // //吉平
+            // lib.translate.sp_jiben = 'sp吉平';
+            // lib.translate.dc_jiben = '吉平';
+            // //步练师
+            // lib.translate.dc_bulianshi = '新杀步练师';
+            // lib.translate.re_bulianshi = '界步练师';
+            // //星武将
+            // lib.translate.yj_zhanghe = "星张郃";
+            // lib.translate.yj_xuhuang = "星徐晃";
+            // lib.translate.yj_ganning = "星甘宁";
+            // lib.translate.yj_huangzhong = "星黄忠";
+            // lib.translate.yj_zhangliao = "星张辽";
+            // //花鬘
+            // lib.translate.sp_huaman = "花鬘";
+            // lib.translate.huaman = "新杀花鬘";
+            // //鲍三娘
+            // lib.translate.re_baosanniang = "鲍三娘";
+            // lib.translate.baosanniang = "ol鲍三娘";
+            // lib.translate.xin_baosanniang = "新杀鲍三娘";
+            // //骆统
+            // lib.translate.dc_luotong = "新杀骆统";
+            // //sp武将
+            // lib.translate.sp_caoren = 'sp曹仁';
+            // lib.translate.jsp_guanyu = 'sp关羽';
+            // lib.translate.sp_jiangwei = 'sp姜维';
+            // lib.translate.sp_jiaxu = 'sp贾诩';
+            // lib.translate.sp_pangde = 'sp庞德';
+            // lib.translate.sp_sunshangxiang = 'sp孙尚香';
+            // lib.translate.sp_pangtong = 'sp庞统';
+            // lib.translate.sp_diaochan = 'sp貂蝉';
+            // lib.translate.sp_dongzhuo = 'sp董卓';
+            // lib.translate.sp_fuhuanghou = 'sp伏皇后';
+            // lib.translate.sp_fuwan = 'sp伏完';
+            // lib.translate.jsp_huangyueying = 'sp黄月英';
+            // lib.translate.sp_machao = 'sp马超';
+            // lib.translate.sp_menghuo = 'sp孟获';
+            // lib.translate.sp_taishici = 'sp太史慈';
+            // lib.translate.sp_yuanshu = 'sp袁术';
+            // lib.translate.sp_zhanghe = 'sp张郃';
+            // lib.translate.sp_zhangliao = 'sp张辽';
+            // lib.translate.sp_zhaoyun = 'sp赵云';
+            // lib.translate.sp_ol_zhanghe = 'sp张郃';
+            /* taffy分界线 */
 
         }, precontent: function () {
         }, config: {
