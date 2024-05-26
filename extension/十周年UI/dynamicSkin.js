@@ -4294,7 +4294,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				x: [0, -0.7],
 				y: [0, 0.3],
 				gongji: {
-					x: [0, 0],
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.5,
 				},
 				scale: 0.5,
 				angle: 0,

@@ -4508,7 +4508,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     });
                                 });
                                 game.playAudio('../extension/标记补充/audio/' + trigger.parent.name + '.mp3');
-                                if (trigger.num > 1) game.playAudio('../extension/标记补充/audio/damage2.mp3');
+                                // taffy: 注释extension.js原版代码
+                                // if (trigger.num > 1) game.playAudio('../extension/标记补充/audio/damage2.mp3');
+                                /* taffy分界线 */
                             } else if (trigger.parent && trigger.parent.name == 'shandian') {
                                 game.playAudio('../extension/标记补充/audio/' + trigger.parent.name + '.mp3');
                             }//受击特效结束01
@@ -4606,7 +4608,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     });
                                 });
                                 game.playAudio('../extension/标记补充/audio/' + trigger.parent.name + '.mp3');
-                                if (trigger.num > 1) game.playAudio('../extension/标记补充/audio/damage2.mp3');
+                                // taffy: 注释extension.js原版代码
+                                // if (trigger.num > 1) game.playAudio('../extension/标记补充/audio/damage2.mp3');
+                                /* taffy分界线 */
                             } else if (trigger.parent && trigger.parent.name == 'shandian') {
                                 game.playAudio('../extension/标记补充/audio/' + trigger.parent.name + '.mp3');
                             }//受击特效结束02
@@ -4709,7 +4713,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     });
                                 });
                                 game.playAudio('../extension/标记补充/audio/' + trigger.parent.name + '.mp3');
-                                if (trigger.num > 1) game.playAudio('../extension/标记补充/audio/damage2.mp3');
+                                // taffy: 注释extension.js原版代码
+                                // if (trigger.num > 1) game.playAudio('../extension/标记补充/audio/damage2.mp3');
+                                /* taffy分界线 */
                             } else if (trigger.parent && trigger.parent.name == 'shandian') {
                                 game.playAudio('../extension/标记补充/audio/' + trigger.parent.name + '.mp3');
                             }//受击特效结束03
