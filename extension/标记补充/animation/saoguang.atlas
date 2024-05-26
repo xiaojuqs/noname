@@ -1,0 +1,27 @@
+
+saoguang.png
+size: 550,495
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+baiseguang_00
+  rotate: false
+  xy: 456, 407
+  size: 66, 86
+  orig: 66, 86
+  offset: 0, 0
+  index: -1
+saoguang
+  rotate: false
+  xy: 2, 103
+  size: 452, 390
+  orig: 452, 390
+  offset: 0, 0
+  index: -1
+saoguang2
+  rotate: false
+  xy: 2, 2
+  size: 546, 99
+  orig: 546, 99
+  offset: 0, 0
+  index: -1

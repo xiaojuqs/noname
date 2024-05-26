@@ -1,0 +1,41 @@
+
+shandian.png
+size: 1460,498
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+4
+  rotate: false
+  xy: 2, 2
+  size: 481, 494
+  orig: 481, 494
+  offset: 0, 0
+  index: -1
+5
+  rotate: true
+  xy: 485, 178
+  size: 318, 575
+  orig: 318, 575
+  offset: 0, 0
+  index: -1
+guangquan
+  rotate: true
+  xy: 1062, 91
+  size: 405, 388
+  orig: 405, 388
+  offset: 0, 0
+  index: -1
+heidi
+  rotate: false
+  xy: 1452, 490
+  size: 6, 6
+  orig: 6, 6
+  offset: 0, 0
+  index: -1
+lantiao_00000
+  rotate: false
+  xy: 485, 112
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

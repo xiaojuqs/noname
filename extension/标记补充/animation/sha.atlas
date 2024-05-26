@@ -1,13 +1,146 @@
 
 sha.png
-size: 128,128
+size: 1119,1119
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-b
+sha_00
   rotate: false
-  xy: 2, 2
-  size: 102, 106
-  orig: 102, 106
-  offset: 0, 0
+  xy: 740, 599
+  size: 86, 98
+  orig: 350, 330
+  offset: 131, 97
+  index: -1
+sha_01
+  rotate: false
+  xy: 740, 699
+  size: 128, 144
+  orig: 350, 330
+  offset: 110, 74
+  index: -1
+sha_02
+  rotate: false
+  xy: 937, 206
+  size: 170, 193
+  orig: 350, 330
+  offset: 89, 49
+  index: -1
+sha_03
+  rotate: false
+  xy: 937, 16
+  size: 162, 188
+  orig: 350, 330
+  offset: 93, 49
+  index: -1
+sha_04
+  rotate: true
+  xy: 740, 67
+  size: 243, 195
+  orig: 350, 330
+  offset: 62, 51
+  index: -1
+sha_05
+  rotate: false
+  xy: 870, 634
+  size: 243, 206
+  orig: 350, 330
+  offset: 62, 46
+  index: -1
+sha_06
+  rotate: true
+  xy: 520, 602
+  size: 241, 218
+  orig: 350, 330
+  offset: 64, 42
+  index: -1
+sha_07
+  rotate: true
+  xy: 883, 842
+  size: 275, 234
+  orig: 350, 330
+  offset: 56, 36
+  index: -1
+sha_08
+  rotate: true
+  xy: 2, 294
+  size: 281, 251
+  orig: 350, 330
+  offset: 50, 30
+  index: -1
+sha_09
+  rotate: true
+  xy: 255, 297
+  size: 278, 256
+  orig: 350, 330
+  offset: 50, 28
+  index: -1
+sha_10
+  rotate: true
+  xy: 2, 13
+  size: 279, 260
+  orig: 350, 330
+  offset: 49, 27
+  index: -1
+sha_11
+  rotate: false
+  xy: 2, 851
+  size: 295, 266
+  orig: 350, 330
+  offset: 49, 25
+  index: -1
+sha_12
+  rotate: false
+  xy: 299, 845
+  size: 291, 272
+  orig: 350, 330
+  offset: 53, 23
+  index: -1
+sha_13
+  rotate: false
+  xy: 2, 577
+  size: 289, 272
+  orig: 350, 330
+  offset: 56, 23
+  index: -1
+sha_14
+  rotate: false
+  xy: 592, 845
+  size: 289, 272
+  orig: 350, 330
+  offset: 56, 23
+  index: -1
+sha_15
+  rotate: false
+  xy: 264, 23
+  size: 236, 272
+  orig: 350, 330
+  offset: 58, 23
+  index: -1
+sha_16
+  rotate: false
+  xy: 502, 23
+  size: 236, 272
+  orig: 350, 330
+  offset: 58, 23
+  index: -1
+sha_17
+  rotate: false
+  xy: 513, 312
+  size: 231, 267
+  orig: 350, 330
+  offset: 60, 25
+  index: -1
+sha_18
+  rotate: true
+  xy: 828, 401
+  size: 231, 267
+  orig: 350, 330
+  offset: 60, 25
+  index: -1
+sha_19
+  rotate: false
+  xy: 293, 581
+  size: 225, 259
+  orig: 350, 330
+  offset: 63, 28
   index: -1

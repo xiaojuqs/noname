@@ -140,11 +140,11 @@ height: 400px;
     background-repeat: no-repeat;
     background-image: url('image/dizhikuang_bg.png');    
     background-size: 100%;
-    width:47px;
-    height:50px;
-    left: 93.8px;
-    bottom: 133px;
-    z-index:79 !important;
+    width:43px;
+    height:48px;
+    left: 96.4px;
+    bottom: 136.5px;
+    z-index:888 !important;
    }
  
  
@@ -699,6 +699,76 @@ height: 400px;
      25% {opacity: 1;}  
      90% {opacity: 1;}     
     100% {opacity: 0;}
+}
+/*左手队友手牌*/
+.chakanshoupai{
+    background-color: none;
+    background-repeat: no-repeat;
+    background-image: url('image/card_tips_bg.png')!important;
+    background-size: 100% 100%;
+    opacity:0.6;
+    width:70px;
+    height:110px;
+    left: -60px;       
+    bottom: -60px;
+    padding:17px 2px 2px 2px;/*内边距*/
+    /*字体*/
+    text-align: center;
+    color: #FFFFCC;
+    text-shadow:-1.3px 0px 2.2px #000, 0px -1.3px 2.2px #000, 1.3px 0px 2.2px #000 ,0px 1.3px 2.2px #000;
+	font-family: shousha;
+	font-size:15px;
+	font-weight:900;	
+    z-index:8!important;
+}
+/*右手队友手牌*/
+.chakanshoupaix{
+    background-color: none;
+    background-repeat: no-repeat;
+    background-image: url('image/card_tips_bg.png')!important;
+    background-size: 100% 100%;
+    opacity:0.6;
+    width:70px;
+    height:110px;
+    left: 112px;       
+    bottom: -60px;
+    padding:17px 2px 2px 2px;/*内边距*/
+    /*字体*/
+    text-align: center;
+    color: #FFFFCC;
+    text-shadow:-1.3px 0px 2.2px #000, 0px -1.3px 2.2px #000, 1.3px 0px 2.2px #000 ,0px 1.3px 2.2px #000;
+	font-family: shousha;
+	font-size:15px;
+	font-weight:900;	
+    z-index:8!important;
+}
+/*虎队*/
+.game_friend_gua{
+    display: block;
+	position: absolute;
+    background-color: none;
+    background-repeat: no-repeat;
+    background-image: url('image/game_tiger_frame.png')!important;
+    background-size: 100% 100%;
+    top: -10px; 
+    left: -1px; 
+    height: 188px;
+    width: 140.5px;
+    z-index: 62!important;
+}
+/*龙队*/
+.game_enemy_gua{
+    display: block;
+	position: absolute;
+    background-color: none;
+    background-repeat: no-repeat;
+    background-image: url('image/game_dragon_frame.png')!important;
+    background-size: 100% 100%;
+    top: -10px; 
+    left: -1px; 
+    height: 189px;
+    width: 140px;
+    z-index: 62!important;
 }
 /*敌人标志底图*/
 .direnbiaozhi_bg{

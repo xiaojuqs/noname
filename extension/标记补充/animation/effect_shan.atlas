@@ -1,13 +1,146 @@
 
 effect_shan.png
-size: 128,128
+size: 910,910
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-a
+shan_00
+  rotate: false
+  xy: 2, 745
+  size: 256, 163
+  orig: 360, 200
+  offset: 79, 10
+  index: -1
+shan_01
+  rotate: false
+  xy: 260, 745
+  size: 250, 163
+  orig: 360, 200
+  offset: 69, 10
+  index: -1
+shan_02
+  rotate: false
+  xy: 512, 746
+  size: 248, 162
+  orig: 360, 200
+  offset: 59, 10
+  index: -1
+shan_03
+  rotate: false
+  xy: 512, 582
+  size: 246, 162
+  orig: 360, 200
+  offset: 61, 10
+  index: -1
+shan_04
+  rotate: true
+  xy: 2, 166
+  size: 246, 162
+  orig: 360, 200
+  offset: 61, 10
+  index: -1
+shan_05
+  rotate: false
+  xy: 2, 418
+  size: 246, 162
+  orig: 360, 200
+  offset: 60, 10
+  index: -1
+shan_06
+  rotate: false
+  xy: 250, 418
+  size: 243, 162
+  orig: 360, 200
+  offset: 63, 10
+  index: -1
+shan_07
+  rotate: true
+  xy: 166, 172
+  size: 244, 162
+  orig: 360, 200
+  offset: 62, 10
+  index: -1
+shan_08
   rotate: false
   xy: 2, 2
-  size: 79, 103
-  orig: 79, 103
-  offset: 0, 0
+  size: 246, 162
+  orig: 360, 200
+  offset: 59, 10
+  index: -1
+shan_09
+  rotate: false
+  xy: 250, 600
+  size: 244, 143
+  orig: 360, 200
+  offset: 61, 22
+  index: -1
+shan_10
+  rotate: false
+  xy: 250, 27
+  size: 244, 143
+  orig: 360, 200
+  offset: 61, 22
+  index: -1
+shan_11
+  rotate: true
+  xy: 762, 662
+  size: 246, 143
+  orig: 360, 200
+  offset: 59, 22
+  index: -1
+shan_12
+  rotate: true
+  xy: 760, 414
+  size: 246, 142
+  orig: 360, 200
+  offset: 58, 23
+  index: -1
+shan_13
+  rotate: true
+  xy: 474, 176
+  size: 240, 142
+  orig: 360, 200
+  offset: 60, 23
+  index: -1
+shan_14
+  rotate: true
+  xy: 330, 173
+  size: 243, 142
+  orig: 360, 200
+  offset: 60, 23
+  index: -1
+shan_15
+  rotate: false
+  xy: 2, 601
+  size: 246, 142
+  orig: 360, 200
+  offset: 56, 23
+  index: -1
+shan_16
+  rotate: false
+  xy: 495, 438
+  size: 239, 142
+  orig: 360, 200
+  offset: 59, 23
+  index: -1
+shan_17
+  rotate: false
+  xy: 496, 32
+  size: 237, 142
+  orig: 360, 200
+  offset: 63, 23
+  index: -1
+shan_18
+  rotate: true
+  xy: 618, 191
+  size: 221, 142
+  orig: 360, 200
+  offset: 72, 23
+  index: -1
+shan_19
+  rotate: true
+  xy: 762, 199
+  size: 213, 142
+  orig: 360, 200
+  offset: 76, 23
   index: -1

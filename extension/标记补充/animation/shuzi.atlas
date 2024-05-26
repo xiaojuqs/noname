@@ -67,3 +67,10 @@ pub_nums_9
   orig: 87, 112
   offset: 0, 0
   index: -1
+pub_nums_9
+  rotate: false
+  xy: 714, 2
+  size: 87, 112
+  orig: 87, 112
+  offset: 0, 0
+  index: -1

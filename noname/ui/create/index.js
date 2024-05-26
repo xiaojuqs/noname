@@ -3014,7 +3014,7 @@ export class Create {
 		//load custom extension start
 		var addtional_extention_names=[
 			['十周年UI', true],
-			['挑战卡牌', true],
+			['挑战卡牌', false],
 			['千幻聆音', true],
 			['皮肤切换', true],
 			['全能搜索', true],
@@ -3023,6 +3023,7 @@ export class Create {
 			['手杀MVP', true],
 			['无名补丁', true],
 			['指示线', true],
+			['拖拽指示线', true],
 		];
 		var need_reload=false;
 		for(var i=0;i<addtional_extention_names.length;i++){
