@@ -19,7 +19,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         },//伤害牌龙头
         diankuangtulu: {
             name: "../../../标记补充/animation/diankuangtulu",
-            speed: 2,
         },//癫狂屠戮
         wanjunqushou: {
             name: "../../../标记补充/animation/wanjunqushou",
