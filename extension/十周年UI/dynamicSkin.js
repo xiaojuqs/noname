@@ -455,7 +455,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.1],
 				scale: 0.55,
 				angle: 0,
-				// clipSlots: ['flag1'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['flag1'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				gongji: {
@@ -663,7 +663,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.25],
 				scale: 0.45,
 				angle: 0,
-				// clipSlots: ['san'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['san'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -975,7 +975,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0],
 				scale: 0.65,
 				angle: 0,
-				// clipSlots: ['zhangliao', 'xuhuang', 'vfx/daiji/zhangliao1_00', 'vfx/daiji/xuhuang1_00'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['zhangliao', 'xuhuang', 'vfx/daiji/zhangliao1_00', 'vfx/daiji/xuhuang1_00'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -1298,7 +1298,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.5],
 				scale: 0.45,
 				angle: 0,
-				// clipSlots: ['wuqi'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['wuqi'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -1421,7 +1421,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.35],
 				scale: 0.35,
 				angle: 0,
-				// clipSlots: ['lblongtou', 'lblongtoufa1', 'lblongtoufa2', 'lblongtoufa3', 'lblongtoufa5', 'lblongtoufa10', 'lblongtoufa11', 'lblongtoufa12', 'lblongtoufa13', 'lblongtoufa14', 'lblongtoufa15', 'lblongtoufa16', 'lblongtoufa17', 'lblongtoufa18', 'lblongtoufa19', 'lblongtoufa20', 'lblongjiao1', 'lblongjiao2', 'lblongshenti1', 'lblongshenti2', 'lblongshenti3'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['lblongtou', 'lblongtoufa1', 'lblongtoufa2', 'lblongtoufa3', 'lblongtoufa5', 'lblongtoufa10', 'lblongtoufa11', 'lblongtoufa12', 'lblongtoufa13', 'lblongtoufa14', 'lblongtoufa15', 'lblongtoufa16', 'lblongtoufa17', 'lblongtoufa18', 'lblongtoufa19', 'lblongtoufa20', 'lblongjiao1', 'lblongjiao2', 'lblongshenti1', 'lblongshenti2', 'lblongshenti3'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -1437,7 +1437,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.3],
 				scale: 0.45,
 				angle: 0,
-				// clipSlots: ['longshenti', 'longshenti01', 'bgyun6'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['longshenti', 'longshenti01', 'bgyun6'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -1813,7 +1813,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.2],
 				scale: 0.55,
 				angle: 0,
-				// clipSlots: ['JS_tou', 'JS_shen', 'JS_youtui', 'JS_zuotui'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['JS_tou', 'JS_shen', 'JS_youtui', 'JS_zuotui'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -2021,7 +2021,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.5],
 				scale: 0.7,
 				angle: 0,
-				// clipSlots: ['ruiji_mawei3', 'ruiji_mawei4', 'ruiji_mawei5', 'ruiji_mawei6', 'ruiji_mawei7'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['ruiji_mawei3', 'ruiji_mawei4', 'ruiji_mawei5', 'ruiji_mawei6', 'ruiji_mawei7'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				chuchang: {
 					name: '芮姬/玉芮花意/jineng01',
@@ -2062,7 +2062,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, -0.05],
 				scale: 0.6,
 				angle: 0,
-				// clipSlots: ['scc-shenxiang'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['scc-shenxiang'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				gongji: {
@@ -2180,7 +2180,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.45],
 				scale: 0.4,
 				angle: 0,
-				// clipSlots: ['yue', 'lun'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['yue', 'lun'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -2221,7 +2221,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.45],
 				scale: 0.4,
 				angle: 0,
-				// clipSlots: ['yue', 'yuelunzhuangshi1', 'yuelunzhuangshi2'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['yue', 'yuelunzhuangshi1', 'yuelunzhuangshi2'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				audio: {
@@ -2388,7 +2388,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				scale: 0.5,
 				angle: 0,
 				hideSlots: ['guangxian'], // 隐藏不需要的部件，想知道具体部件名称请使用SpineAltasSplit工具查看
-				// clipSlots: ['qiu'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['qiu'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -2924,7 +2924,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.45],
 				scale: 0.7,
 				angle: 0,
-				// clipSlots: ["tengfanglan181", "tengfanglan180", "tengfanglan178", "tengfanglan179", "tengfanglan177", "tengfanglan169", "tengfanglan174", "tengfanglan173", "tengfanglan172", "tengfanglan171", "tengfanglan176", "tengfanglan175", "tengfanglan170", "tengfanglan168", "tengfanglan167", "tengfanglan166", "tengfanglan165", "tengfanglan164", "tengfanglan163", "tengfanglan162", "tengfanglan161", "tengfanglan160", "tengfanglan159", "tengfanglan158", "tengfanglan157", "tengfanglan156", "tengfanglan155", "tengfanglan154", "tengfanglan153", "tengfanglan152", "tengfanglan151"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ["tengfanglan181", "tengfanglan180", "tengfanglan178", "tengfanglan179", "tengfanglan177", "tengfanglan169", "tengfanglan174", "tengfanglan173", "tengfanglan172", "tengfanglan171", "tengfanglan176", "tengfanglan175", "tengfanglan170", "tengfanglan168", "tengfanglan167", "tengfanglan166", "tengfanglan165", "tengfanglan164", "tengfanglan163", "tengfanglan162", "tengfanglan161", "tengfanglan160", "tengfanglan159", "tengfanglan158", "tengfanglan157", "tengfanglan156", "tengfanglan155", "tengfanglan154", "tengfanglan153", "tengfanglan152", "tengfanglan151"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				chuchang: {
 					name: '滕芳兰/脂车香姝/jineng01',
@@ -3117,7 +3117,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.5],
 				scale: 0.6,
 				angle: 0,
-				// clipSlots: ['longmao', 'longshen', 'longxu01', 'longxu02', 'longhoutui', 'longqiantui', 'longtou', 'longzui', 'fengchiyou', 'fengwei01', 'fengwei02', 'fengchiyou02', 'fengchizuo', 'fengnaodai'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['longmao', 'longshen', 'longxu01', 'longxu02', 'longhoutui', 'longqiantui', 'longtou', 'longzui', 'fengchiyou', 'fengwei01', 'fengwei02', 'fengchiyou02', 'fengchizuo', 'fengnaodai'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				beijing: {
 					name: '卧龙凤雏/赤壁链火/beijing',
@@ -3243,7 +3243,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.25],
 				scale: 0.5,
 				angle: 0,
-				// clipSlots: ['xhsyun1', 'xhsyun2', 'xhsyun3', 'xhsyun4', 'xhsyun5', 'xhsyun6', 'xhsyun7', 'xhsyun8', 'xhsyun9', 'xhsyun10', 'xhsyun11', 'xhsyun12', 'xhsyun13', 'xhsyun14', 'xhsyun15', 'xhsyun16', 'xhsyun17', 'xhsyun18', 'xhsyun19', 'xhsyun20', 'xhsyun21', 'xhsyun22', 'xhsyun23', 'xhsyun24', 'xhsyun25', 'xhsyun26', 'xhsyun27', 'xhsyun28', 'xhsyun29', 'xhsyun30', 'xhsyun31', 'xhsyun32', 'xhsyun33', 'xhsyun34'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['xhsyun1', 'xhsyun2', 'xhsyun3', 'xhsyun4', 'xhsyun5', 'xhsyun6', 'xhsyun7', 'xhsyun8', 'xhsyun9', 'xhsyun10', 'xhsyun11', 'xhsyun12', 'xhsyun13', 'xhsyun14', 'xhsyun15', 'xhsyun16', 'xhsyun17', 'xhsyun18', 'xhsyun19', 'xhsyun20', 'xhsyun21', 'xhsyun22', 'xhsyun23', 'xhsyun24', 'xhsyun25', 'xhsyun26', 'xhsyun27', 'xhsyun28', 'xhsyun29', 'xhsyun30', 'xhsyun31', 'xhsyun32', 'xhsyun33', 'xhsyun34'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -3632,7 +3632,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.08],
 				scale: 0.54,
 				angle: 0,
-				// clipSlots: ['hutou', 'hufa1', 'hufa2', 'hufa3', 'hufa4', 'hufa5', 'hufa6', 'hufa7'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['hutou', 'hufa1', 'hufa2', 'hufa3', 'hufa4', 'hufa5', 'hufa6', 'hufa7'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -4217,7 +4217,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0.3],
 				scale: 0.45,
 				angle: 0,
-				// clipSlots: ['ganzi1qizi'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				clipSlots: ['ganzi1qizi'], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {

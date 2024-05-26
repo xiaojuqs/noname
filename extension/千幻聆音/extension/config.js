@@ -1,3 +1,4 @@
+// @ts-ignore
 import {lib,get,_status,ui,game,ai} from './noname.js';
 
 export let CONFIG = {
@@ -21,7 +22,9 @@ export let CONFIG = {
       "item": {},
       "init": lib.config.qhly_currentViewSkin === undefined ? 'xuanwujianghu' : lib.config.qhly_currentViewSkin,
       onclick: function (item) {
+        // @ts-ignore
         if (lib.qhly_viewskin[item] && lib.qhly_viewskin[item].onchange) {
+          // @ts-ignore
           lib.qhly_viewskin[item].onchange();
         }
         game.saveConfig('qhly_currentViewSkin', item);
@@ -404,13 +407,17 @@ export let CONFIG = {
         game.saveConfig('extension_千幻聆音_qhly_autoChangeSkin', item);
         game.saveConfig('qhly_autoChangeSkin', item);
         if (open) {
+          // @ts-ignore
           if (game.qhly_autoChangeSkin) {
+            // @ts-ignore
             game.qhly_autoChangeSkin();
           } else {
             alert("打开扩展才生效。");
           }
         } else {
+          // @ts-ignore
           if (_status.qhly_changeSkinFunc) {
+            // @ts-ignore
             clearTimeout(_status.qhly_changeSkinFunc);
           }
         }
@@ -494,6 +501,7 @@ export let CONFIG = {
           if (!ori) {
             ori = "锁定技:blue;限定技:orange;觉醒技:red;使命技:gold;#出牌阶段:#00FF00;#摸牌阶段:#00FF00;#弃牌阶段:#00FF00;#准备阶段:#00FF00;#结束阶段:#00FF00;";
           }
+          // @ts-ignore
           game.qhly_editDialog("关键字高亮设置", "#开头为全部高亮，否则为首次出现高亮。", ori, function (value, dialog) {
             value = value.replaceAll("：", ":");
             value = value.replaceAll("；", ";");
@@ -502,6 +510,7 @@ export let CONFIG = {
             value = value.replaceAll(" ", "");
             game.saveConfig("qhly_keymark", value);
             dialog.delete();
+          // @ts-ignore
           }, function (dialog) {
             return true;
           });
@@ -532,10 +541,12 @@ export let CONFIG = {
         if (item === true) {
           if (game.players) {
             for (var i = 0; i < game.players.length; i++) {
+              // @ts-ignore
               if (game.players[i].stopDynamic) game.players[i].stopDynamic();
             }
           }
         } else {
+          // @ts-ignore
           if (!window.decadeUI) {
             alert("侦测到十周年UI未正常开启，无法使用动皮功能！");
             lib.config['extension_千幻聆音_qhly_decadeCloseDynamic'] = true;
@@ -869,7 +880,7 @@ export let CONFIG = {
     },
     "qhly_funcLoadInPrecontent": {
       "name": "预处理加载",
-      "intro": "设置此选项，将在预处理阶段加载此扩展的函数，可兼容《如真似幻》等美化扩展。",
+      "intro": "设置此选项，将在预处理阶段加载此扩展的函数，可兼容部分美化扩展。",
       "init": lib.config.qhly_funcLoadInPrecontent === undefined ? false : lib.config.qhly_funcLoadInPrecontent,
       onclick: function (item) {
         game.saveConfig('extension_千幻聆音_qhly_funcLoadInPrecontent', item);
@@ -915,7 +926,9 @@ export let CONFIG = {
       "name": "<b>点击设置插件</b>",
       "clear": true,
       onclick: function () {
+        // @ts-ignore
         if(window.qhly_openPluginWindow){
+          // @ts-ignore
           window.qhly_openPluginWindow();
         }
       }

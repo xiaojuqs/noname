@@ -1,4 +1,5 @@
 'use strict';
+// @ts-ignore
 window.qhly_import(function(lib, game, ui, get, ai, _status){
     game.qhly_initShoushaView = function (name, view, page, cplayer) {
         var currentViewSkin = lib.qhly_viewskin[lib.config.qhly_currentViewSkin];
@@ -55,7 +56,9 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
         var slimName = name.split('_');
         slimName = slimName[slimName.length - 1];
         if (get.mode() == 'guozhan' || game.thunderFileExist(lib.assetURL + 'image/character/gz_' + slimName + '.jpg') && name.indexOf('shen') < 0) hasGuozhan = true;
+        // @ts-ignore
         for (var i = 0; i < 3; i++) {
+          // @ts-ignore
           if (i == 0 || i == 1 && hasGuozhan || i == 2 && hasJjc) {
             skintype[i] = ui.create.div('.qh-shousha-skintype' + i, subView.skinType);
             skintype[i].id = 'qh_skintype' + i;
@@ -117,6 +120,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
         subView.hp = ui.create.div('.qh-hp', view);
         var dibuhuo = document.getElementsByClassName('qh-dibuhuo');
         if (dibuhuo) {
+          // @ts-ignore
           dibuhuo = dibuhuo[0];
           subView.lingyu = ui.create.div('.qh-lingyu', dibuhuo);
           subView.jianghun = ui.create.div('.qh-jianghun', dibuhuo);
@@ -260,6 +264,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
           this.hide()
           var currentSkin = state.mainView.page.skin.getCurrentSkin(name);
           if (currentSkin) {
+            // @ts-ignore
             game.qhly_setCurrentSkin(name, currentSkin.skinId, function () {
               _status.qhly_skillAudioWhich = {};
               state.mainView.page.skin.refresh(name, state);
@@ -278,9 +283,12 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
         ui.create.div('.qh-avatar-shiyong', shoushaButtons);
         ui.create.div('.qh-avatar-guofu', shoushaButtons);
         subView.star = ui.create.div('.qh-avatar-dragontailstar', subView.dragontail);
+        // @ts-ignore
         for (var i = 0; i < 4; i++) {
+          // @ts-ignore
           if (i >= 4 - game.qhly_getShoushajinjie(name)[0]) var starNode = ui.create.div('.qh-avatar-dragontailstartext.jinjie', subView.star);
           else var starNode = ui.create.div('.qh-avatar-dragontailstartext', subView.star);
+          // @ts-ignore
           starNode.id = 'qhly_shoushaStar' + (3 - i);
         }
         //subView.dragonhead = ui.create.div('.qh-avatar-dragonhead', subView.avatar);
@@ -298,6 +306,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
         var swipe_right = lib.config.swipe_right;
         lib.config.swipe_right = '';
         subView.backButton = document.getElementsByClassName('qh-back')[0];
+        // @ts-ignore
         subView.backButton.listen(function () {
           lib.config.swipe_up = swipe_up;
           lib.config.swipe_down = swipe_down;
@@ -314,6 +323,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
             cplayer.node[avatar].qhly_origin_setBackgroundImage(cplayer._qhly_skinChange[avatar == 'avatar2' ? 1 : 0]);
             if (!_status.qhly_replaceSkin[playerName]) _status.qhly_replaceSkin[playerName] = {};
             _status.qhly_replaceSkin[playerName][skin] = cplayer._qhly_skinChange[avatar == 'avatar2' ? 1 : 0];
+            // @ts-ignore
             if (window.decadeUI && !game.qhly_hasExtension('皮肤切换') && !game.qhly_hasExtension('EpicFX')) game.qhly_changeDynamicSkin(cplayer, undefined, undefined, avatar == 'avatar2');
           });
           if (subView.avatarImage.dynamic && subView.avatarImage.dynamic.renderer.postMessage) {
@@ -378,6 +388,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 subView.pageButton.introduce.appendChild(subView.pageButton.introduce.downButton);
               }
             },
+            // @ts-ignore
             init: function (name, state) {
               this.text = ui.create.div('.qh-page-introduce-text', this.pageView);
               if (lib.config.qhly_vMiddle === false && (currentViewSkin.isQiLayout || currentViewSkin.isLolBigLayout)) {
@@ -479,7 +490,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               if (cPlayer && lib.config.qhly_skillingame) {
                 var skills = cPlayer.getSkills(false, false);
                 for (var tskill of skills) {
-                  if (viewSkill.contains(tskill)) continue;
+                  if (viewSkill.includes(tskill)) continue;
                   var info = get.info(tskill);
                   if (!info) continue;
                   if (!lib.translate[tskill]) continue;
@@ -527,6 +538,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                               }
                             }
                           }
+                          // @ts-ignore
                           else if (!audioinfo.audio && (audioinfo.enable || audioinfo.trigger)) skillVoiceNum = 2;
                         }
                       }
@@ -598,6 +610,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                       count = 0;
                     }
                     _status.qhly_skillAudioWhich[skill]++;
+                    // @ts-ignore
                     window.qhly_TrySkillAudio(skill, { name: name }, null, count);
                   }
                   skilljishu++;
@@ -641,6 +654,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                     if (img) {
                       img.classList.add('qh-skillinfoimg');
                       ui.qhly_addListenFunc(img);
+                      // @ts-ignore
                       img.listen(function () {
                         if (this.classList.contains('sel')) return;
                         var buttons = document.getElementsByClassName('qh-skillinfohead');
@@ -660,6 +674,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                           count = 0;
                         }
                         _status.qhly_skillAudioWhich[skill]++;
+                        // @ts-ignore
                         window.qhly_TrySkillAudio(skill, { name: name }, null, count);
                         var skillSkin = game.qhly_getSkillSkin(name, game.qhly_getSkin(name), skill);
                         if (skillSkin) {
@@ -686,9 +701,10 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                         }
                       }
                       ui.qhly_initCheckBox(check, list.filter(function (sk) {
-                        return !lib.config.autoskilllist || !lib.config.autoskilllist.contains(sk);
+                        return !lib.config.autoskilllist || !lib.config.autoskilllist.includes(sk);
                       }).length != 0);
                       bindFunc(check, document.getElementById('qhly_autoskill_text_' + skill));
+                      // @ts-ignore
                       check.qhly_onchecked = function (checked) {
                         var list = [];
                         var info = get.info(skill);
@@ -732,9 +748,11 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
             getCurrentSkin: function (name) {
               var skinId = game.qhly_getSkin(name);
               for (var skin of this.skinList) {
+                // @ts-ignore
                 if (skin && skin.skinId == skinId) {
                   return skin;
                 }
+                // @ts-ignore
                 if (!skinId && !skin.skinId) {
                   return skin;
                 }
@@ -744,6 +762,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
             // getSkinAt: function (num) {
             //     return this.skinList[num + this.currentIndex];
             // },
+            // @ts-ignore
             onClickSkin: function (num, name, state) {
               var skin = this.skinList[num];
               if (!skin) {
@@ -768,6 +787,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               if (this.skinListGot) {
                 this.refreshAfterGot(name, state);
               } else {
+                // @ts-ignore
                 game.qhly_getSkinList(name, function (ret, list) {
                   this.afterGetSkinList(list, name, state);
                   this.refreshAfterGot(name, state);
@@ -788,14 +808,17 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 }
               };
               for (var skin of this.skinList) {
+                // @ts-ignore
                 if (!skin.skinId) {
                   var taici = game.qhly_getCharacterTaici(name, null, state.pkg);
                   if (taici) {
                     packObj.origin.skill = taici;
                   }
                 } else {
+                  // @ts-ignore
                   var skinInfo = game.qhly_getSkinInfo(name, skin.skinId, state.pkg);
                   if (skinInfo) {
+                    // @ts-ignore
                     packObj.skin[game.qhly_earse_ext(skin.skinId)] = skinInfo;
                   }
                 }
@@ -863,6 +886,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                       if (!err) {
                         alert("保存成功");
                         lib.qhly_dirskininfo[name] = obj;
+                        // @ts-ignore
                         that.refresh(name, state, true);
                         dialog.delete();
                       } else {
@@ -873,6 +897,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                     alert("保存失败：无法读取模板。");
                   }
                 });
+              // @ts-ignore
               }, function (dialog) {
                 return true;
               });
@@ -902,6 +927,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 this.firstRefresh = false;
                 const path = state.pkg.skin.standard;
                 for (var i = 0; i < this.skinList.length; i++) {
+                  // @ts-ignore
                   var skin = this.skinList[i].skinId;
                   var skinView = ui.create.div('.qh-skinchange-shousha-big-skin', content);
                   if (lib.config.qhly_lutouType && lib.config.qhly_lutouType == 'shousha') skinView.classList.add('shousha');
@@ -935,16 +961,19 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                         state.mainView.skinType.hide();
                         state.mainView.hp.hide();
                         state.mainView.hpWrap.show();
+                        // @ts-ignore
                         if (this.skinList[i].bothSkin) {
                           state.mainView.dynamicToggle.setAttribute('toggle', true);
                           if (lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][info.translation])) state.mainView.dynamicToggle.classList.remove('jing');
                           else state.mainView.dynamicToggle.classList.add('jing');
                         }
                         else state.mainView.dynamicToggle.setAttribute('toggle', false);
+                        // @ts-ignore
                         if (this.skinList[i].single && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//6
                       }
                     }
-                    if ((!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).contains(info.translation)) {
+                    // @ts-ignore
+                    if ((!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).includes(info.translation)) {
                       if (game.qhly_skinIs(name, skin)) {
                         currentSkinView = skinView;
                         game.qhly_changeDynamicSkin(state.mainView.avatarImage, info.translation, name);
@@ -959,7 +988,8 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                         }
                       }
                     }
-                    if (window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).contains(info.translation)) skinView.dynamicTrue.setAttribute('dynamic', true);
+                    // @ts-ignore
+                    if (window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).includes(info.translation)) skinView.dynamicTrue.setAttribute('dynamic', true);
                     else skinView.dynamicTrue.setAttribute('dynamic', false);
                   } else {
                     skinView.belowText.innerHTML = "经典形象";
@@ -969,19 +999,24 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                       state.mainView.skinType.show();
                       state.mainView.hp.show();
                       state.mainView.hpWrap.hide();
+                      // @ts-ignore
                       if (this.skinList[0].bothSkin) {
                         state.mainView.dynamicToggle.setAttribute('toggle', true);
                         if (lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象'])) state.mainView.dynamicToggle.classList.remove('jing');
                         else state.mainView.dynamicToggle.classList.add('jing');
                       }
                       else state.mainView.dynamicToggle.setAttribute('toggle', false);
+                      // @ts-ignore
                       if (this.skinList[0].skinId == null && this.skinList[0].bothSkin && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象'])) game.qhly_changeDynamicSkin(state.mainView.avatarImage, '经典形象', name);
                     }
-                    if (window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).contains('经典形象')) skinView.dynamicTrue.setAttribute('dynamic', true);
+                    // @ts-ignore
+                    if (window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).includes('经典形象')) skinView.dynamicTrue.setAttribute('dynamic', true);
                     else skinView.dynamicTrue.setAttribute('dynamic', false);
                   }
                   skinView.skinQua = ui.create.div('.qh-page-skinavatarlevel', skinView);
+                  // @ts-ignore
                   var level = this.skinList[i].skinInfo.level;
+                  // @ts-ignore
                   var style = this.skinList[i].skinInfo.levelStyle;
                   if (style) {
                     if (!skinView.skinQua.qh_savedStyle) {
@@ -1006,8 +1041,11 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                       }
                     }
                   }
+                  // @ts-ignore
                   if (this.skinList[i].skinId) {
+                    // @ts-ignore
                     if (lib.qhly_level[name + '_' + this.skinList[i].skinId]) {
+                      // @ts-ignore
                       level = lib.qhly_level[name + '_' + this.skinList[i].skinId];
                     }
                   }
@@ -1049,11 +1087,14 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                   if (game.qhly_skinIs(name, skin)) {
                     skinView.classList.add('sel');
                     currentIndex = i;
+                    // @ts-ignore
                     if (this.skinList[i].bothSkin) state.mainView.dynamicToggle.setAttribute('toggle', true);
                     //state.mainView.rank.style.backgroundImage = skinView.skinQua.style.backgroundImage;
                     if (skinView.offsetLeft > viewState.visibleWidth()) viewState.offset = viewState.visibleWidth() - (skinView.offsetLeft + 20 + viewState.skinPerWidth);
                     var extInfo = "";
+                    // @ts-ignore
                     if (this.skinList[i].skinInfo.info) {
+                      // @ts-ignore
                       extInfo = this.skinList[i].skinInfo.info;
                     } else {
                       if (state.pkg && state.pkg.originSkinInfo) {
@@ -1132,7 +1173,8 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                           state.mainView.skinType.hide();
                           state.mainView.hp.hide();
                           state.mainView.hpWrap.show();
-                          if ((!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][now.belowText.innerHTML]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).contains(now.belowText.innerHTML)) {
+                          // @ts-ignore
+                          if ((!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][now.belowText.innerHTML]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).includes(now.belowText.innerHTML)) {
                             game.qhly_changeDynamicSkin(state.mainView.avatarImage, now.belowText.innerHTML, name);
                             if (state.mainView.avatarImage.dynamic && state.mainView.avatarImage.dynamic.primary && state.mainView.avatarImage.dynamic.primary.name) _status.currentTexiao = state.mainView.avatarImage.dynamic.primary.name;
                             if (_status.currentTexiao) {
@@ -1145,7 +1187,8 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                             }
                           }
                           else if (state.mainView.avatarImage.stopDynamic) state.mainView.avatarImage.stopDynamic();
-                          if (that.skinList[now.id.slice(12)].bothSkin && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).contains(now.belowText.innerHTML)) {
+                          // @ts-ignore
+                          if (that.skinList[now.id.slice(12)].bothSkin && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).includes(now.belowText.innerHTML)) {
                             state.mainView.dynamicToggle.setAttribute('toggle', true);
                             if (lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][now.belowText.innerHTML])) state.mainView.dynamicToggle.classList.remove('jing');
                             else state.mainView.dynamicToggle.classList.add('jing');
@@ -1156,8 +1199,10 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                           state.mainView.skinType.show();
                           state.mainView.hp.show();
                           state.mainView.hpWrap.hide();
+                          // @ts-ignore
                           if (that.skinList[0].skinId == null && that.skinList[0].bothSkin && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象'])) game.qhly_changeDynamicSkin(state.mainView.avatarImage, '经典形象', name);
                           else if (state.mainView.avatarImage.stopDynamic) state.mainView.avatarImage.stopDynamic();
+                          // @ts-ignore
                           if (that.skinList[0].skinId == null && that.skinList[0].bothSkin) {
                             state.mainView.dynamicToggle.setAttribute('toggle', true);
                             if (lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象'])) state.mainView.dynamicToggle.classList.remove('jing');
@@ -1174,6 +1219,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                             count = 0;
                           }
                           _status.qhly_skillAudioWhich[skills[0]]++;
+                          // @ts-ignore
                           window.qhly_TrySkillAudio(skills[0], { name: name }, null, count);
                           state.mainView.page.config.refresh(name, state);
                           //that.refresh(name, state);
@@ -1220,9 +1266,11 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                     viewState.handleMouseDown(event.touches[0].clientX, event.touches[0].clientY);
                   }
                 });
+                // @ts-ignore
                 content.addEventListener('touchend', function (event) {
                   viewState.handleMouseUp();
                 });
+                // @ts-ignore
                 content.addEventListener('touchcancel', function (event) {
                   viewState.handleMouseUp();
                 });
@@ -1265,9 +1313,13 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               var Vicpath = `${state.pkg.audio}${game.qhly_getRealName(name)}/`;
               if (game.qhly_getSkin(name)) Vicpath += `${game.qhly_earse_ext(game.qhly_getSkin(name))}/`;
               var victoryBg = document.querySelector('#qh-victoryBg');
+              // @ts-ignore
               if (game.thunderFileExist(lib.assetURL + Vicpath + 'victory.mp3')) victoryBg.show();
+              // @ts-ignore
               else victoryBg.hide();
+              // @ts-ignore
               if (currentSkin && currentSkin.audios) {
+                // @ts-ignore
                 for (var audio of currentSkin.audios) {
                   var objx = this.packObject(name, state);
                   var initValuex = "";
@@ -1276,6 +1328,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                   var skillTaici = document.querySelectorAll("div[id^='qhly_skilltaici_" + audio.id + "']");
                   var trumpet = document.querySelectorAll("div[id^='qhly_skin_skill_" + audio.id + "']");
                   if (currentSkin.skinId) {
+                    // @ts-ignore
                     var skinInfox = objx.skin[game.qhly_earseExt(currentSkin.skinId)];
                     if (skinInfox && skinInfox.skill) {
                       if (skinInfox.skill[realSkill] && skinInfox.skill[realSkill].content) {
@@ -1304,9 +1357,12 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                   if (skillTaici) {
                     if (initValuex) {
                       if (initValuex.indexOf('/') != -1) {
+                        // @ts-ignore
                         initValuex = initValuex.split('/');
                       } else if (initValuex.indexOf('<br>') != -1) {
+                        // @ts-ignore
                         initValuex = initValuex.split('<br>');
+                      // @ts-ignore
                       } else initValuex = [initValuex]
                     }
                     for (var i = 0; i < skillTaici.length; i++) {
@@ -1317,11 +1373,13 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                   addButton.add(audio.id);
                 }
                 if (lib.config.qhly_skinconfig) {
+                  // @ts-ignore
                   if (currentSkin.skinId) {
                     var levelSelect = document.getElementById('qhconfig_level_select');
                     var opt = document.createElement('option');
                     opt.innerHTML = "默认";
                     opt.setAttribute('name', 'default');
+                    // @ts-ignore
                     levelSelect.appendChild(opt);
                     var levels = ['原画', '普通', '精良', '稀有', '史诗', '传说', '限定', '动态', '绝版'];
                     var map = {
@@ -1341,46 +1399,61 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                         levels.add(key);
                       }
                     }
+                    // @ts-ignore
                     if (!lib.qhly_level[name + '_' + currentSkin.skinId]) {
+                      // @ts-ignore
                       opt.selected = 'selected';
                     }
                     for (var l of levels) {
                       var opt = document.createElement('option');
                       opt.innerHTML = l;
                       opt.setAttribute('name', l);
+                      // @ts-ignore
                       if (lib.qhly_level[name + '_' + currentSkin.skinId] == l) {
+                        // @ts-ignore
                         opt.selected = 'selected';
                       }
+                      // @ts-ignore
                       levelSelect.appendChild(opt);
                     }
+                    // @ts-ignore
                     levelSelect.onchange = function (e) {
                       var event = e ? e : window.event;
+                      // @ts-ignore
                       if (event.target) {
+                        // @ts-ignore
                         var target = event.target;
+                        // @ts-ignore
                         var opt = target[target.selectedIndex];
                         if (opt) {
                           var l = opt.getAttribute('name');
                           if (l == 'default') {
+                            // @ts-ignore
                             delete lib.qhly_level[name + '_' + currentSkin.skinId];
                             game.saveConfig('qhly_level', lib.qhly_level);
                             return;
                           }
                           var lm = map[l];
                           if (lm) {
+                            // @ts-ignore
                             lib.qhly_level[name + '_' + currentSkin.skinId] = l;
                             game.saveConfig('qhly_level', lib.qhly_level);
                           }
                         }
+                        // @ts-ignore
                         if (currentSkinView) currentSkinView.campBack.setAttribute('data-pinzhi', game.qhly_getSkinLevel(name, currentSkin.skinId));
+                        // @ts-ignore
                         var level = lib.qhly_level[name + '_' + currentSkin.skinId];
                         if(level&& map[level] && map[level].startsWith("^^")){
                           var skinQua = document.getElementById('qhly_skinQua' + currentIndex);
                           if (skinQua) {
+                            // @ts-ignore
                             skinQua.setBackgroundImage('extension/千幻聆音/image/diylevels/' + map[level].replace("^^",""));
                           }
                         }else{
                           var skinQua = document.getElementById('qhly_skinQua' + currentIndex);
                           if (skinQua) {
+                            // @ts-ignore
                             skinQua.setBackgroundImage('extension/千幻聆音/image/' + game.qhly_getSkinLevel(name, currentSkin.skinId) + '.png');
                           }
                         }
@@ -1392,29 +1465,42 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                     var opt = document.createElement('option');
                     opt.innerHTML = "默认";
                     opt.setAttribute('order', 'default');
+                    // @ts-ignore
                     orderSelect.appendChild(opt);
+                    // @ts-ignore
                     if (lib.config.qhly_order[name + '-' + currentSkin.skinId] === undefined) {
+                      // @ts-ignore
                       opt.selected = 'selected';
                     }
                     for (var i = 0; i < 50; i++) {
                       var opt = document.createElement('option');
                       opt.innerHTML = "" + i;
+                      // @ts-ignore
                       opt.setAttribute('order', i);
+                      // @ts-ignore
                       if (lib.config.qhly_order[name + '-' + currentSkin.skinId] == i) {
+                        // @ts-ignore
                         opt.selected = 'selected';
                       }
+                      // @ts-ignore
                       orderSelect.appendChild(opt);
                     }
+                    // @ts-ignore
                     orderSelect.onchange = function (e) {
                       var event = e ? e : window.event;
+                      // @ts-ignore
                       if (event.target) {
+                        // @ts-ignore
                         var target = event.target;
+                        // @ts-ignore
                         var opt = target[target.selectedIndex];
                         if (opt) {
                           var o = opt.getAttribute('order');
                           if (o == 'default') {
+                            // @ts-ignore
                             game.qhly_setOrder(name, currentSkin.skinId);
                           } else {
+                            // @ts-ignore
                             game.qhly_setOrder(name, currentSkin.skinId, o);
                           }
                         }
@@ -1431,15 +1517,19 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                       checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
                     });
                   };
+                  // @ts-ignore
                   ui.qhly_initCheckBox(banInRandomCheckbox, game.qhly_skinIsBanned(name, currentSkin.skinId));
                   bindFunc(banInRandomCheckbox, document.getElementById('qhconfig_checkbox_banInRandom_text'));
+                  // @ts-ignore
                   banInRandomCheckbox.qhly_onchecked = function (checked) {
+                    // @ts-ignore
                     game.qhly_banSkin(name, currentSkin.skinId, checked);
                   };
                 }
                 if (!this.firstAddAudio) for (var vid of addButton) {
                   this.firstAddAudio = true;
                   //var img = document.getElementById('qhly_skin_skill_' + vid);
+                  // @ts-ignore
                   var img = document.querySelectorAll("div[id^='qhly_skin_skill_" + vid + "']");
                   if (img) {
                     // if (Array.isArray(img)) img.sort(function (a, b) {
@@ -1451,9 +1541,12 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                       (function (id) {
                         var vclick = function(){
                           that.consumeTextClick = true;
+                          // @ts-ignore
                           if (id == 'die') window.qhly_playDieAudio(name);
+                          // @ts-ignore
                           else if (id == 'victory') window.qhly_playVictoryAudio(name);
                           else {
+                            // @ts-ignore
                             window.qhly_TrySkillAudio(id, { name: name }, null, parseInt(this.id.substring(this.id.lastIndexOf('_') + 1) - 1));
                             var skillSkin = game.qhly_getSkillSkin(name, game.qhly_getSkin(name), id);
                             if (skillSkin) {
@@ -1462,6 +1555,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                               if (skillSkin === 1) {
                                 state.mainView.avatarImage.setBackground(name, 'character');
                               } else if (Array.isArray(skillSkin)) {
+                                // @ts-ignore
                                 state.mainView.avatarImage.setBackgroundImage(skillSkin[parseInt(this.id.substring(this.id.lastIndexOf('_') + 1) - 1) % skillSkin.length]);
                               } else {
                                 state.mainView.avatarImage.setBackgroundImage(skillSkin);
@@ -1477,6 +1571,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                           }else{
                             var imgi = img[i];
                             img[i].addEventListener('mousedown',function(e){
+                              // @ts-ignore
                               if(e.button==2){
                                 _status.qh_volmode = true;
                                 vclick.apply(imgi,[]);
@@ -1484,6 +1579,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                             });
                           }
                         }
+                        // @ts-ignore
                         img[i].listen(vclick);
                       })(vid);
                     }
@@ -1493,6 +1589,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                     if (imgEdit) {
                       ui.qhly_addListenFunc(imgEdit);
                       (function (id) {
+                        // @ts-ignore
                         imgEdit.listen(function () {
                           that.editOpen(name, _status.currentSkin.skinId, id, state);
                         });
@@ -1517,6 +1614,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 }
               }
               this.skinList = [];
+              // @ts-ignore
               this.skinList.push({
                 skinId: null,
                 skinInfo: game.qhly_getSkinInfo(name, null, state.pkg),
@@ -1530,30 +1628,40 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 return -1;
               });
               for (var r of retList) {
+                // @ts-ignore
                 this.skinList.push(r);
               }
               var dynamicSkinList = [];
+              // @ts-ignore
               if (window.decadeUI) {
+                // @ts-ignore
                 if (decadeUI.dynamicSkin && decadeUI.dynamicSkin[name]) dynamicSkinList = Object.keys(decadeUI.dynamicSkin[name]);
                 for (var i of this.skinList) {
+                  // @ts-ignore
                   if (i.skinId) {
+                    // @ts-ignore
                     var skin = i.skinId.substring(0, i.skinId.lastIndexOf('.'));
-                    if (dynamicSkinList.contains(skin)) i.bothSkin = true;
+                    // @ts-ignore
+                    if (dynamicSkinList.includes(skin)) i.bothSkin = true;
                   }
                 }
                 if (dynamicSkinList.length) {
                   var duibiList = [];
                   for (var i of this.skinList) {
+                    // @ts-ignore
                     if (i.skinId && i.skinId != null) duibiList.push(i.skinId.substring(0, i.skinId.lastIndexOf('.')));
                   }
+                  // @ts-ignore
                   for (var i of dynamicSkinList) {
                     if (i == '经典形象') {
+                      // @ts-ignore
                       this.skinList['0'].bothSkin = true;
                       subView.skinType.style.cssText += 'transform:translateY(32%);';
                     }
-                    else if (!duibiList.contains(i)) {
+                    else if (!duibiList.includes(i)) {
                       var dyskin = i + '.jpg';
                       var dyinfo = game.qhly_getSkinInfo(name, dyskin, state.pkg);
+                      // @ts-ignore
                       this.skinList.push({
                         order: dyinfo.order,
                         skinId: dyskin,
@@ -1569,6 +1677,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               this.skinListGot = true;
               if (dynamicSkinList && dynamicSkinList.length > 3) this.dynamicSkinMore = true;
             },
+            // @ts-ignore
             init: function (name, state) {
               /* this.text = ui.create.div('.qh-page-skin-text', this.pageView);
               lib.setScroll(this.text);
@@ -1620,6 +1729,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                   if (!this.offset) this.offset = content.offsetLeft;
                   this.tempoffset = this.offset;
                 },
+                // @ts-ignore
                 handleMouseMove: function (x, y) {
                   if (this.isTouching) {
                     var slideX = x - this.mouseDownX;
@@ -1720,7 +1830,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 var groupx = get.is.double(name, true);
                 group1 = groupx[0];
                 group2 = groupx[1];
-              } else if (groupList.contains(group)) {
+              } else if (groupList.includes(group)) {
                 group1 = group;
                 group2 = groupList[groupList.indexOf(group) + 1];
               } else {
@@ -1785,6 +1895,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 if (dwflip) {
                   ui.qhly_initCheckBox(dwflip, lib.config.qhly_shoushaBigFlip[name][game.qhly_getSkin(name)]);
                   bindFunc(dwflip, document.getElementById('qhconfig_checkbox_dwflip_text'));
+                  // @ts-ignore
                   dwflip.qhly_onchecked = function (check) {
                     if (!check) {
                       if (lib.config.qhly_shoushaBigFlip[name][game.qhly_getSkin(name)]) {
@@ -1801,6 +1912,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 if (changeSex) {
                   ui.qhly_initCheckBox(changeSex, lib.config.qhly_changeSex[name][game.qhly_getSkin(name)]);
                   bindFunc(changeSex, document.getElementById('qhconfig_checkbox_changeSex_text'));
+                  // @ts-ignore
                   changeSex.qhly_onchecked = function (check) {
                     if (!check) {
                       if (lib.config.qhly_changeSex && lib.config.qhly_changeSex[name] && lib.config.qhly_changeSex[name][game.qhly_getSkin(name)]) {
@@ -1817,11 +1929,12 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 }
               }
               var checkboxFav = document.getElementById('qhconfig_checkbox_fav');
-              ui.qhly_initCheckBox(checkboxFav, lib.config.favouriteCharacter && lib.config.favouriteCharacter.contains(name));
+              ui.qhly_initCheckBox(checkboxFav, lib.config.favouriteCharacter && lib.config.favouriteCharacter.includes(name));
               bindFunc(checkboxFav, document.getElementById('qhconfig_checkbox_text_fav'));
+              // @ts-ignore
               checkboxFav.qhly_onchecked = function (check) {
                 if (!check) {
-                  if (lib.config.favouriteCharacter && lib.config.favouriteCharacter.contains(name)) {
+                  if (lib.config.favouriteCharacter && lib.config.favouriteCharacter.includes(name)) {
                     lib.config.favouriteCharacter.remove(name);
                   }
                 } else {
@@ -1835,13 +1948,16 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               };
               var checkboxdG = document.getElementById('qhconfig_checkbox_doubleGroup');
               var dgselect = document.getElementById('qhly_dgselect');
-              if ((!lib.config.doubleGroupCharacter || lib.config.doubleGroupCharacter && !lib.config.doubleGroupCharacter.contains(name)) || get.is.double(name)) dgselect.classList.add('selectless');
-              ui.qhly_initCheckBox(checkboxdG, lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.contains(name) || get.is.double(name), get.is.double(name));
+              // @ts-ignore
+              if ((!lib.config.doubleGroupCharacter || lib.config.doubleGroupCharacter && !lib.config.doubleGroupCharacter.includes(name)) || get.is.double(name)) dgselect.classList.add('selectless');
+              ui.qhly_initCheckBox(checkboxdG, lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.includes(name) || get.is.double(name), get.is.double(name));
               bindFunc(checkboxdG, document.getElementById('qhconfig_checkbox_text_doubleGroup'), get.is.double(name));
+              // @ts-ignore
               checkboxdG.qhly_onchecked = function (check) {
                 if (!check) {
-                  if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.contains(name) && !get.is.double(name)) {
+                  if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.includes(name) && !get.is.double(name)) {
                     lib.config.doubleGroupCharacter.remove(name);
+                    // @ts-ignore
                     dgselect.classList.add('selectless');
                   }
                 } else if (!get.is.double(name)) {
@@ -1850,6 +1966,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                   } else {
                     lib.config.doubleGroupCharacter.add(name);
                   }
+                  // @ts-ignore
                   dgselect.classList.remove('selectless');
                 }
                 game.saveConfig('doubleGroupCharacter', lib.config.doubleGroupCharacter);
@@ -1858,32 +1975,44 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               var groupselcet1 = document.getElementById('qhly_dgselect' + group1 + '1');
               var groupselcet2 = document.getElementById('qhly_dgselect' + group2 + '2');
               if (groupselcet1) {
+                // @ts-ignore
                 groupselcet1.setAttribute('checked', true);
+                // @ts-ignore
                 if (document.getElementById('qhly_dgselect' + group1 + '2')) document.getElementById('qhly_dgselect' + group1 + '2').disabled = true;
               }
               else if (document.getElementById('qhly_dgselectwei1')) {
+                // @ts-ignore
                 document.getElementById('qhly_dgselectwei1').setAttribute('checked', true);
+                // @ts-ignore
                 if (document.getElementById('qhly_dgselectwei2')) document.getElementById('qhly_dgselectwei2').disabled = true;
               }
               if (groupselcet2) {
+                // @ts-ignore
                 groupselcet2.setAttribute('checked', true);
+                // @ts-ignore
                 if (document.getElementById('qhly_dgselect' + group2 + '1')) document.getElementById('qhly_dgselect' + group2 + '1').disabled = true;
               }
               else if (document.getElementById('qhly_dgselectshu2')) {
+                // @ts-ignore
                 document.getElementById('qhly_dgselectshu2').setAttribute('checked', true);
+                // @ts-ignore
                 if (document.getElementById('qhly_dgselectshu1')) document.getElementById('qhly_dgselectshu1').disabled = true;
               }
               let groups1 = document.getElementsByName('group1');
               if (groups1.length) groups1.forEach(v => {
                 v.addEventListener('change', function () {
+                  // @ts-ignore
                   group1 = this.value;
                   if (group1 == 'key') {
                     group2 = 'shen';
                   } else if (group2 == 'shen') {
                     group2 = groupList[groupList.indexOf(group1) + 1];
                   }
+                  // @ts-ignore
                   document.getElementById('qhly_dgselect' + group2 + '2').setAttribute('checked', true);
+                  // @ts-ignore
                   document.getElementsByName('group2').forEach(l => l.disabled = false);
+                  // @ts-ignore
                   if (document.querySelector('#qhly_dgselect' + this.value + '2')) document.querySelector('#qhly_dgselect' + this.value + '2').disabled = true;
                   lib.config.qhly_doubleGroup[name] = [group1, group2];
                   game.saveConfig('qhly_doubleGroup', lib.config.qhly_doubleGroup);
@@ -1893,14 +2022,18 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               let groups2 = document.getElementsByName('group2');
               if (groups2.length) groups2.forEach(v => {
                 v.addEventListener('change', function () {
+                  // @ts-ignore
                   group2 = this.value;
                   if (group2 == 'shen') {
                     group1 = 'key';
                   } else if (group1 == 'key') {
                     group1 = groupList[groupList.indexOf(group2) + 1];
                   }
+                  // @ts-ignore
                   document.getElementById('qhly_dgselect' + group1 + '1').setAttribute('checked', true);
+                  // @ts-ignore
                   document.getElementsByName('group1').forEach(l => l.disabled = false);
+                  // @ts-ignore
                   if (document.querySelector('#qhly_dgselect' + this.value + '1')) document.querySelector('#qhly_dgselect' + this.value + '1').disabled = true;
                   lib.config.qhly_doubleGroup[name] = [group1, group2];
                   game.saveConfig('qhly_doubleGroup', lib.config.qhly_doubleGroup);
@@ -1912,7 +2045,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               var allForbid = true;
               for (var mode in lib.mode) {
                 if (mode != 'connect') {
-                  if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(mode)) {
+                  if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(mode)) {
                     continue;
                   }
                   allForbid = false;
@@ -1922,6 +2055,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
 
               ui.qhly_initCheckBox(checkboxAll, allForbid);
               bindFunc(checkboxAll, document.getElementById('qhconfig_checkbox_text_all'));
+              // @ts-ignore
               checkboxAll.qhly_onchecked = function (check) {
                 if (check) {
                   for (var mode in lib.mode) {
@@ -1945,6 +2079,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
               ui.qhly_initCheckBox(checkboxBanai, game.qhly_isForbidAI(name));
 
               bindFunc(checkboxBanai, document.getElementById('qhconfig_checkbox_text_ai'));
+              // @ts-ignore
               checkboxBanai.qhly_onchecked = function (check) {
                 if (check) {
                   game.qhly_setForbidAI(name, true);
@@ -1957,13 +2092,14 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                   var checkbox = document.getElementById('qhconfig_checkbox_banned_mode_' + mode);
                   this['banned_checkbox_mode_' + mode] = checkbox;
                   if (checkbox) {
-                    ui.qhly_initCheckBox(checkbox, lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(name));
+                    ui.qhly_initCheckBox(checkbox, lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(name));
                     bindFunc(checkbox, document.getElementById('qhconfig_checkbox_text_' + mode));
                     (function (mode) {
+                      // @ts-ignore
                       checkbox.qhly_onchecked = function (checked) {
                         if (!checked) {
                           that.banned_checkbox_mode_all.qhly_setChecked(false, true);
-                          if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(name)) {
+                          if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(name)) {
                             lib.config[mode + '_banned'].remove(name);
                           }
                         } else {
@@ -2008,16 +2144,23 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 opt.innerHTML = r;
                 opt.setAttribute('rank', rankToEng[r]);
                 if (!rank && r == '默认') {
+                  // @ts-ignore
                   opt.selected = 'selected';
                 } else if (rankToEng[r] == rank) {
+                  // @ts-ignore
                   opt.selected = 'selected';
                 }
+                // @ts-ignore
                 rankSelect.appendChild(opt);
               }
+              // @ts-ignore
               rankSelect.onchange = function (e) {
                 var event = e ? e : window.event;
+                // @ts-ignore
                 if (event.target) {
+                  // @ts-ignore
                   var target = event.target;
+                  // @ts-ignore
                   var opt = target[target.selectedIndex];
                   if (opt) {
                     var rank = opt.getAttribute('rank');
@@ -2043,22 +2186,30 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
                 opt.innerHTML = "无";
                 opt.setAttribute('musicpath', '');
                 if (!currentMusic) {
+                  // @ts-ignore
                   opt.selected = 'selected';
                 }
+                // @ts-ignore
                 select.appendChild(opt);
                 for (var p in lib.qhlyMusic) {
                   var opt = document.createElement('option');
                   opt.innerHTML = lib.qhlyMusic[p].name;
                   opt.setAttribute('musicpath', p);
                   if (currentMusic == p) {
+                    // @ts-ignore
                     opt.selected = 'selected';
                   }
+                  // @ts-ignore
                   select.appendChild(opt);
                 }
+                // @ts-ignore
                 select.onchange = function (e) {
                   var event = e ? e : window.event;
+                  // @ts-ignore
                   if (event.target) {
+                    // @ts-ignore
                     var target = event.target;
+                    // @ts-ignore
                     var opt = target[target.selectedIndex];
                     if (opt) {
                       var path = opt.getAttribute('musicpath');
@@ -2087,6 +2238,7 @@ window.qhly_import(function(lib, game, ui, get, ai, _status){
           intro: get.character(name),
           mainView: subView,
         };
+        // @ts-ignore
         subView.menuCover.listen(function (current) {
           if (state.extraMenu) {
             state.extraMenu.delete();

@@ -1,13 +1,21 @@
+// @ts-nocheck
 import {lib,get,_status,ui,game,ai} from './noname.js';
-
+import {nonameInitialized} from '../../../noname/util/index.js'
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 export let CONTENT = function (config, pack) {
+    // @ts-ignore
     if((lib.config.qhly_funcLoadInPrecontent || game.qhly_hasExtension("如真似幻")) && !window.qhly_inPercontent){
       return;
     }
+    // @ts-ignore
+    var skinSwitch = window.skinSwitch;
     const qhlyLib = ['qhly_skinShare', 'qhly_skinEdit', 'qhly_skinChange', 'qhly_changeSkillSkin'];
     for (let l of qhlyLib) if (!lib[l]) lib[l] = {};
     var qhly_DynamicPlayer = (function () {
       function DynamicPlayer(pathPrefix) {
+        // @ts-ignore
         this.id = duilib.BUILT_ID++;
         this.dpr = 1;
         this.width = 120;
@@ -17,9 +25,11 @@ export let CONTENT = function (config, pack) {
         var offscreen = self.OffscreenCanvas != undefined;
         if (offscreen) {
           offscreen = false;
+          // @ts-ignore
           var workers = duilib.DynamicWorkers;
           for (var i = 0; i < workers.length; i++) {
             if (workers[i] == undefined) {
+              // @ts-ignore
               workers[i] = new Worker(lib.qhly_path + '/data/dw.js');
               workers[i].capacity = 0;
             } else if (workers[i].capacity >= 4) {
@@ -29,13 +39,16 @@ export let CONTENT = function (config, pack) {
             this.renderer = workers[i];
             this.canvas = document.createElement('canvas');
             this.canvas.className = 'animation-player';
+            // @ts-ignore
             duilib.observeSize(this.canvas, duilib.throttle(function (newSize) {
               this.height = Math.round(newSize.height);
               this.width = Math.round(newSize.width);
+              // @ts-ignore
               this.update();
             }, 100, this));
 
             var canvas = this.canvas.transferControlToOffscreen();
+            // @ts-ignore
             if (decadeUI.isMobile()) {
               pathPrefix = '../../..//十周年UI/' + pathPrefix
             } else {
@@ -54,9 +67,11 @@ export let CONTENT = function (config, pack) {
           }
         }
         if (!offscreen) {
+          // @ts-ignore
           var renderer = new duilib.AnimationPlayer(decadeUIPath + pathPrefix);
           this.canvas = renderer.canvas;
           this.renderer = renderer;
+          // @ts-ignore
           dui.bodySensor.addListener(duilib.throttle(function () {
             this.renderer.resized = false;
           }, 100, this), true);
@@ -70,6 +85,7 @@ export let CONTENT = function (config, pack) {
         if (this.offscreen) {
           if (!this.initialized) {
             this.initialized = true;
+            // @ts-ignore
             this.dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
             this.height = this.canvas.clientHeight;
             this.width = this.canvas.clientWidth;
@@ -83,7 +99,9 @@ export let CONTENT = function (config, pack) {
             id: this.id,
             dpr: this.dpr,
             dprAdaptive: this.dprAdaptive,
+            // @ts-ignore
             outcropMask: this.outcropMask,
+            // @ts-ignore
             useMipMaps: this.useMipMaps,
             width: this.width,
             height: this.height,
@@ -91,8 +109,10 @@ export let CONTENT = function (config, pack) {
           });
         } else {
           var dynamic = this.renderer;
+          // @ts-ignore
           dynamic.useMipMaps = this.useMipMaps;
           dynamic.dprAdaptive = this.dprAdaptive;
+          // @ts-ignore
           dynamic.outcropMask = this.outcropMask;
           var run = function () {
             var t = dynamic.playSpine(sprite);
@@ -138,12 +158,15 @@ export let CONTENT = function (config, pack) {
       DynamicPlayer.prototype.update = function (force) {
         if (!this.offscreen) {
           this.renderer.resized = false;
+          // @ts-ignore
           this.renderer.useMipMaps = this.useMipMaps;
           this.renderer.dprAdaptive = this.dprAdaptive;
+          // @ts-ignore
           this.renderer.outcropMask = this.outcropMask;
           return;
         }
 
+        // @ts-ignore
         this.dpr = Math.max(window.devicePixelRatio * (window.documentZoom ? window.documentZoom : 1), 1);
         if (force === false)
           return;
@@ -153,7 +176,9 @@ export let CONTENT = function (config, pack) {
           id: this.id,
           dpr: this.dpr,
           dprAdaptive: this.dprAdaptive,
+          // @ts-ignore
           outcropMask: this.outcropMask,
+          // @ts-ignore
           useMipMaps: this.useMipMaps,
           width: this.width,
           height: this.height,
@@ -161,12 +186,18 @@ export let CONTENT = function (config, pack) {
       }
       return DynamicPlayer;
     })();
+    // @ts-ignore
     lib.arenaReady.push(function () {
       const oldLogSkill = lib.element.player.logSkill;
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       lib.element.player.logSkill = function (name, targets, nature, logv) {
+        // @ts-ignore
         game.qhly_changeSkillSkin(this, name);
         oldLogSkill.apply(this, arguments);
       }
+      // @ts-ignore
       if (!window.decadeUI) {
         let viewConfig = lib.config['extension_千幻聆音_qhly_currentViewSkin'];
         if ((viewConfig == 'decade' || viewConfig == 'shousha') && !lib.config['extension_千幻聆音_qhly_decadeCloseDynamic']) {
@@ -181,8 +212,11 @@ export let CONTENT = function (config, pack) {
           }
         }
       } else {
+        // @ts-ignore
         decadeUI.animation.loadSpine(window.qhlyUI.assets.huanpifu.name, "skel");
+        // @ts-ignore
         decadeUI.animation.loadSpine(window.qhlyUI.assets.pinzhi.name, "skel");
+        // @ts-ignore
         decadeUI.animation.loadSpine(window.qhlyUI.assets.huanfu.name, "skel");
         if (!lib.config.qhly_mentionDynamic2) {
           let viewConfig = lib.config['extension_千幻聆音_qhly_currentViewSkin'];
@@ -194,12 +228,15 @@ export let CONTENT = function (config, pack) {
             }
           }
         }
-        if (game.qhly_hasExtension('皮肤切换') && lib.config[skinSwitch.configKey.useDynamic]) {
+        // @ts-ignore
+        if (game.qhly_hasExtension('皮肤切换') && window.skinSwitch && lib.config[window.skinSwitch.configKey.useDynamic]) {
+          // @ts-ignore
           window.dynamicExt = window.skinSwitch;
           skinSwitch.dynamic.transformDst = function (player, isPrimary, dstInfo, extraParams = { isOrigin: false, huanfuEffect: null }) {
             const avatar = isPrimary ? player.dynamic.primary : player.dynamic.deputy
             let { isOrigin, huanfuEffect } = extraParams
             // 标明这时转换播放骨骼
+            // @ts-ignore
             dstInfo = game.qhly_formatDS(dstInfo, player.name);
             dstInfo = Object.assign({}, dstInfo)
             dstInfo._transform = true
@@ -224,10 +261,12 @@ export let CONTENT = function (config, pack) {
                   if (huanfuEffect in changeEffects) {
                     huanfuEffect = changeEffects[huanfuEffect]
                   } else {
+                    // @ts-ignore
                     huanfuEffect = { name: huanfuEffect };
                   }
                 }
                 huanfuEff = Object.assign(huanfuEff, huanfuEffect)
+                // @ts-ignore
                 huanfuEff.name = '../../../皮肤切换/effects/transform/' + huanfuEffect.name
               }
               skinSwitch.chukuangWorkerApi.playEffect(huanfuEff, { parent: player })
@@ -247,18 +286,25 @@ export let CONTENT = function (config, pack) {
               player.classList.add(!isPrimary ? 'd-skin2' : 'd-skin');
               skinSwitch.dynamic.startPlay2Random(player)
               // 皮肤变化了, 修改编辑的全局变量
+              // @ts-ignore
               if (isPrimary && window.dynamicEditBox && player === game.me) {
+                // @ts-ignore
                 dynamicEditBox.updateGlobalParams()
               }
             }
           }
+        // @ts-ignore
         } else if (game.qhly_hasExtension('EpicFX') && lib.config['extension_EpicFX_skinEffects']) {
           //以下为适配EpicFX做的函数修改
+          // @ts-ignore
           window.dynamicExt = window.EpicFX;
+          // @ts-ignore
           window.qhly_newDynamicExt = true;
+          // @ts-ignore
           EpicFX.canAction2 = function (player, action) {
             let skin;
             let bool1 = false;
+            // @ts-ignore
             if (get.itemtype(player) == 'player') {
               if (!player.isUnseen(0) && player.skinPack.zhuSkinType == "decade") bool1 = true;
             } else bool1 = true;
@@ -274,6 +320,7 @@ export let CONTENT = function (config, pack) {
               return false;
             }
           };
+          // @ts-ignore
           EpicFX.playDynamic = (player, character, character2, play, transform, cutdybg) => {
             if (!cutdybg) cutdybg = ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on';
             let res2 = {
@@ -282,17 +329,23 @@ export let CONTENT = function (config, pack) {
               fu: "default"
             }
             if (get.mode() == "guozhan" && !play) return res2;
+            // @ts-ignore
             let CUR_DYNAMIC = decadeUI.CUR_DYNAMIC;
+            // @ts-ignore
             let MAX_DYNAMIC = decadeUI.MAX_DYNAMIC;
             if (player.dynamic && !play)
               player.stopDynamic();
+            // @ts-ignore
             var showDynamic = (player.dynamic || CUR_DYNAMIC < MAX_DYNAMIC) && duicfg.dynamicSkin;
+            // @ts-ignore
             if (showDynamic && _status.mode != null) {
               var skins;
+              // @ts-ignore
               var dskins = decadeUI.dynamicSkin;
               var avatars = player.doubleAvatar ? [character, character2] : [character];
               var increased;
               for (var i = 0; i < avatars.length; i++) {
+                // @ts-ignore
                 if (!play && EpicFX.hasHiddenSkill(avatars[i], player)) continue;
                 // if (get.mode() == 'guozhan' && lib.config['extension_千幻聆音_qhly_guozhanDS']) {
                 //     if (avatars[i] && avatars[i].indexOf('gz_') == 0) {
@@ -315,8 +368,9 @@ export let CONTENT = function (config, pack) {
                 var skin;
                 var namex = i == 0 ? character : character2;
                 if (transform) skin = transform;
-                else if (lib && lib.config && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && lib.config.extensions && lib.config.extensions.contains('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
+                else if (lib && lib.config && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && lib.config.extensions && lib.config.extensions.includes('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
                   skin = null;
+                  // @ts-ignore
                   var value = game.qhly_getSkin(namex);
                   if (value) value = value.substring(0, value.lastIndexOf('.'));
                   else value = '经典形象';
@@ -328,9 +382,11 @@ export let CONTENT = function (config, pack) {
                   }
                 } else skin = skins[Object.keys(skins)[0]];
                 if (skin == null) continue;
+                // @ts-ignore
                 skin = game.qhly_formatDS(skin, namex);
                 var editArgument1 = 'dynamic', editArgument2 = 'beijing';
                 skin.zhu = character == avatars[i];
+                // @ts-ignore
                 var skinCopy = game.qhly_deepClone(skin);
                 let hide = [];
                 if (lib.character[avatars[i]] && lib.character[avatars[i]][4]) hide = lib.character[avatars[i]][4];
@@ -342,11 +398,13 @@ export let CONTENT = function (config, pack) {
                 var forces = 'qun';
                 if (lib.character[character]) forces = lib.character[character][1];
                 var editArgument1 = 'dynamic', editArgument2 = 'beijing';
+                // @ts-ignore
                 if (game.qhly_getPlayerStatus(player, i == 1) == 2) {
                   editArgument1 = 'dynamic2';
                   editArgument2 = 'beijing2';
                 }
                 if (transform) {
+                  // @ts-ignore
                   dcdAnim.playSpine({
                     name: "SF_pifu_eff_juexing",
                     scale: 1,
@@ -359,17 +417,22 @@ export let CONTENT = function (config, pack) {
                     player._inits = [];
                   }
                   if (skinCopy.transform.skillName) {
+                    // @ts-ignore
                     if (!lib.skill[skinCopy.transform.skillName]) EpicFX.setTransformSkill(skinCopy.transform.skill);
                     if (player.hp !== undefined) {
                       player.addSkill(skinCopy.transform.skillName);
+                      // @ts-ignore
                       if (EpicFX.filterSkills.indexOf(skinCopy.transform.skillName) == -1) {
+                        // @ts-ignore
                         EpicFX.filterSkills.push(skinCopy.transform.skillName);
                       }
                     }
                     else {
                       player._inits.push(function (p) {
                         p.addSkill(skinCopy.transform.skillName);
+                        // @ts-ignore
                         if (EpicFX.filterSkills.indexOf(skinCopy.transform.skillName) == -1) {
+                          // @ts-ignore
                           EpicFX.filterSkills.push(skinCopy.transform.skillName);
                         }
                       })
@@ -385,36 +448,41 @@ export let CONTENT = function (config, pack) {
                     }
                   }
                 }
+                // @ts-ignore
                 var editSkin = game.qhly_getSkin(game.qhly_getRealName(avatars[i]));
                 var theme = ui.arena.dataset.newDecadeStyle == 'on' ? 'decade' : 'shousha';
+                // @ts-ignore
                 if (lib.config['extension_千幻聆音_qhly_editDynamic'] && lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])] && lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin] && lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin]['player'] && lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin]['player'][editArgument1] && lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin]['player'][editArgument1][theme]) {
+                  // @ts-ignore
                   var resetDynamic = lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin].player[editArgument1][theme];
                   skinCopy.x = resetDynamic.x;
                   skinCopy.y = resetDynamic.y;
                   skinCopy.scale = resetDynamic.scale;
                   skinCopy.angle = resetDynamic.angle;
+                  // @ts-ignore
                   if (skinCopy.dynamicBackground && lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin].player[editArgument2] && lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin].player[editArgument2][theme]) {
-                    var resetBeijing = lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin].player[editArgument2][theme];
+                    // @ts-ignore
+                    var resetBackground = lib.qhly_skinEdit[game.qhly_getRealName(avatars[i])][editSkin].player[editArgument2][theme];
                     if (typeof skinCopy.dynamicBackground === 'string') {
                       skinCopy.dybg = {
                         name: skinCopy.dynamicBackground,
                         zhu: skinCopy.zhu,
                         dybg: true,
                         loop: true,
-                        x: resetBeijing.x,
-                        y: resetBeijing.y,
-                        scale: resetBeijing.scale,
-                        angle: resetBeijing.angle,
+                        x: resetBackground.x,
+                        y: resetBackground.y,
+                        scale: resetBackground.scale,
+                        angle: resetBackground.angle,
                       };
                     } else {
                       skinCopy.dybg = skinCopy.dynamicBackground;
                       skinCopy.dybg.dybg = true;
                       skinCopy.dybg.loop = true;
                       skinCopy.dybg.zhu = skinCopy.zhu;
-                      skinCopy.dybg.x = resetBeijing.x;
-                      skinCopy.dybg.y = resetBeijing.y;
-                      skinCopy.dybg.scale = resetBeijing.scale;
-                      skinCopy.dybg.angle = resetBeijing.angle;
+                      skinCopy.dybg.x = resetBackground.x;
+                      skinCopy.dybg.y = resetBackground.y;
+                      skinCopy.dybg.scale = resetBackground.scale;
+                      skinCopy.dybg.angle = resetBackground.angle;
                     }
                   }
                 }
@@ -447,12 +515,14 @@ export let CONTENT = function (config, pack) {
                 else if (skinCopy.decade) res2.fu = "decade";
                 res2.status = true;
                 if (!isHide) {
+                  // @ts-ignore
                   game.qhly_checkYH(player, forces);
                 }
                 // player.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skinCopy.background + '")';
                 if (!skinCopy.dynamicBackground) player.$dynamicWrap.style.backgroundImage = `url(${lib.assetURL}extension/十周年UI/assets/dynamic/${skinCopy.background}`;
                 if (!increased) {
                   increased = true;
+                  // @ts-ignore
                   decadeUI.CUR_DYNAMIC++;
                 }
               }
@@ -460,24 +530,32 @@ export let CONTENT = function (config, pack) {
             }
             return res2;
           };
+          // @ts-ignore
           EpicFX.playDynamicEffect = (player, action, s, flip) => {
             if (!player && !action) return;
             function play(data) {
+              // @ts-ignore
               EpicFX.player.renderer.postMessage({
                 message: "PLAY",
                 id: player.dynamic.id,
                 sprite: data,
+                // @ts-ignore
                 skin: EpicFX.player.getSkinState(player.dynamic.id, data.name)
               });
               // game.playAudio("..", "extension", "D/audio/effect", data.name + ".mp3");
+              // @ts-ignore
               if (get.itemtype(player) == 'player') {
+                // @ts-ignore
                 if (EpicFX.attackings.length) {
+                  // @ts-ignore
                   for (let i = 0; i < EpicFX.attackings.length; i++) {
+                    // @ts-ignore
                     let temp = EpicFX.attackings[i];
                     if (temp.player == data.player) return game.playAudio(`../extension/EpicFX/asset/audio/effect/${temp.name}.mp3`);
                   }
                 }
                 game.playAudio(`../extension/EpicFX/asset/audio/effect/${data.name}.mp3`);
+                // @ts-ignore
                 EpicFX.attackings.push({
                   player: data.player,
                   zhu: data.zhu,
@@ -500,6 +578,7 @@ export let CONTENT = function (config, pack) {
             if (action == "GongJi") {
               if (sprite) {
                 function getGongJiPos() {
+                  // @ts-ignore
                   let width = EpicFX.player.canvas.clientWidth / 2;
                   let pos = getBackPos();
                   let isLeft = pos.x >= width ? false : true;
@@ -513,6 +592,7 @@ export let CONTENT = function (config, pack) {
                   if (me) {
                     return {
                       x: rect.left,
+                      // @ts-ignore
                       y: decadeUI.get.bodySize().height - rect.top,
                       width: rect.width,
                       height: rect.height
@@ -520,6 +600,7 @@ export let CONTENT = function (config, pack) {
                   } else {
                     return {
                       x: rect.left + (rect.width / 2),
+                      // @ts-ignore
                       y: decadeUI.get.bodySize().height - rect.bottom + (rect.height / 2),
                       width: rect.width,
                       height: rect.height
@@ -546,6 +627,7 @@ export let CONTENT = function (config, pack) {
                   sprite.x = pos.x;
                   sprite.y = pos.y;
                   if (sprite.mirror && pos.isLeft) {
+                    // @ts-ignore
                     if (get.itemtype(player) == 'player') sprite.flipX = pos.isLeft;
                     else sprite.flipX = flip;
                   }
@@ -560,6 +642,7 @@ export let CONTENT = function (config, pack) {
               }
             }
           }
+          // @ts-ignore
           EpicFX.playDynamicEffect2 = function (player, action, res, flip) {
             if (res) {
               // console.log(res)
@@ -578,6 +661,7 @@ export let CONTENT = function (config, pack) {
               if (!sprite.decade) sprite.decade = true;
               sprite.player = player.playerid;
               function getGongJiPos() {
+                // @ts-ignore
                 let width = EpicFX.player.canvas.clientWidth / 2;
                 let rect = player.getBoundingClientRect();
                 let isLeft = (rect.left + (rect.width / 2)) >= width ? false : true;
@@ -591,6 +675,7 @@ export let CONTENT = function (config, pack) {
                 if (me) {
                   return {
                     x: rect.left,
+                    // @ts-ignore
                     y: decadeUI.get.bodySize().height - rect.top,
                     width: rect.width,
                     height: rect.height
@@ -598,6 +683,7 @@ export let CONTENT = function (config, pack) {
                 } else {
                   return {
                     x: rect.left + (rect.width / 2),
+                    // @ts-ignore
                     y: decadeUI.get.bodySize().height - rect.bottom + (rect.height / 2),
                     width: rect.width,
                     height: rect.height
@@ -613,10 +699,12 @@ export let CONTENT = function (config, pack) {
                   }
                 } else {
                   let pos = getGongJiPos();
+                  // @ts-ignore
                   if (get.itemtype(player) != 'player') sprite.scale = sprite.scale * player.offsetHeight * 0.0035;
                   sprite.x = pos.x;
                   sprite.y = pos.y;
                   if (sprite.mirror && pos.isLeft) {
+                    // @ts-ignore
                     if (get.itemtype(player) == 'player') sprite.flipX = pos.isLeft;
                     else sprite.flipX = flip;
                   }
@@ -643,10 +731,12 @@ export let CONTENT = function (config, pack) {
               sprite.loop = false;
               sprite.zhu = res.zhu;
 
+              // @ts-ignore
               EpicFX.player.renderer.postMessage({
                 message: "PLAY2",
                 id: player.dynamic.id,
                 sprite: sprite,
+                // @ts-ignore
                 skin: EpicFX.player.getSkinState(player.dynamic.id, player.dynamic.primary.name)
               });
               if (player.dynamic.renderer.postMessage) player.dynamic.renderer.postMessage({
@@ -656,15 +746,20 @@ export let CONTENT = function (config, pack) {
                 zhu: sprite.zhu
               })
 
+              // @ts-ignore
               if (get.itemtype(player) == 'player') {
+                // @ts-ignore
                 if (EpicFX.attackings.length) {
+                  // @ts-ignore
                   for (let i = 0; i < EpicFX.attackings.length; i++) {
+                    // @ts-ignore
                     let temp = EpicFX.attackings[i];
                     if (temp.player == sprite.player && temp.action == action) return;
                   }
                 }
               }
 
+              // @ts-ignore
               EpicFX.attackings.push({
                 player: sprite.player,
                 zhu: sprite.zhu,
@@ -673,6 +768,7 @@ export let CONTENT = function (config, pack) {
               })
             }
           }
+          // @ts-ignore
           EpicFX.initAnimationMessage = (animationPlayer) => {
             if (!animationPlayer) return;
             let { renderer } = animationPlayer;
@@ -684,21 +780,30 @@ export let CONTENT = function (config, pack) {
                     return current.playerid == data.player;
                   })[0];
                   if (!player) {
+                    // @ts-ignore
                     player = document.getElementsByClassName('qh-isBigAvatar');
+                    // @ts-ignore
                     if (player.length) player = player[0];
                   }
+                  // @ts-ignore
                   if (player && player.dynamic) {
+                    // @ts-ignore
                     let { renderer: r } = player.dynamic;
+                    // @ts-ignore
                     if (EpicFX.attackings.length) {
+                      // @ts-ignore
                       for (let i = 0; i < EpicFX.attackings.length; i++) {
+                        // @ts-ignore
                         let temp = EpicFX.attackings[i];
                         if (temp.player == data.player && temp.zhu == data.zhu) {
+                          // @ts-ignore
                           EpicFX.attackings.splice(i, 1);
                         }
                       }
                     };
                     if (r.postMessage) r.postMessage({
                       message: "RECOVER",
+                      // @ts-ignore
                       id: player.dynamic.id,
                       zhu: data.zhu,
                       name: data.name
@@ -706,6 +811,7 @@ export let CONTENT = function (config, pack) {
                   }
                   return;
                 } else if (data.message == 'LINEDATA') {
+                  // @ts-ignore
                   EpicFX.lineBuffer.push(data.obj);
                   console.log(`%c${data.obj.name}\n%c loaded successfully!`, 'color: green; background: yellow; font-size: 30px', 'color: blue; font-size: 15px;',);
                 } else {
@@ -714,14 +820,20 @@ export let CONTENT = function (config, pack) {
               }
             }
           }
+          // @ts-ignore
           EpicFX.initAnimationMessage(EpicFX.player);
+          // @ts-ignore
           EpicFX.playAction = (player, action) => {
+            // @ts-ignore
             let res = EpicFX.canAction(false, player.dynamic.primary, player.dynamic.deputy, action);
             if (!res.ok) return;
             let id = player.playerid;
             // let index = game.players.indexOf(player);
+            // @ts-ignore
             if (EpicFX.attackings.length) {
+              // @ts-ignore
               for (let i = 0; i < EpicFX.attackings.length; i++) {
+                // @ts-ignore
                 let temp = EpicFX.attackings[i];
                 if (temp.player == id && (temp.zhu == res.zhu || temp.zhu == !res.fu)) {
                   return;
@@ -736,7 +848,9 @@ export let CONTENT = function (config, pack) {
               action: action
             })
           };
+          // @ts-ignore
           EpicFX.playAction2 = function (player, action) {
+            // @ts-ignore
             let res = EpicFX.canAction3(player, action);
             if (!res.ok && !(res.action1 || res.action2)) return;
             for (let i = 1; i < 3; i++) {
@@ -757,14 +871,26 @@ export let CONTENT = function (config, pack) {
           }
           //EpicFX的函数修改到此为止
         } else {
+          // @ts-ignore
           if (game.qhly_hasExtension('EngEX')) window.dynamicExt = window.eng;
+          // @ts-ignore
           else window.dynamicExt = null;
+          // @ts-ignore
           duilib.DynamicPlayer = qhly_DynamicPlayer;
         }
       }
+      // @ts-ignore
       if (window.decadeUI && !lib.config['extension_千幻聆音_qhly_decadeCloseDynamic'] && (lib.config.qhly_currentViewSkin == 'decade' || lib.config.qhly_currentViewSkin == 'shousha')) {
         if (Object.defineProperties) {
           Object.defineProperties(lib.element.player, {
+            $init:{
+              get: function(){
+                // @ts-ignore
+                return lib.element.player.qh_old_$init;
+              },
+              enumerable: true,
+              configurable: true,
+            },
             init: {
               get: function () {
                 return this.qhly_init || qhly_init;
@@ -833,10 +959,17 @@ export let CONTENT = function (config, pack) {
             },
           });
         } else {
+          // @ts-ignore
+          lib.element.player.$init = lib.element.player.qh_old_$init;
+          // @ts-ignore
           lib.element.player.init = qhly_init;
+          // @ts-ignore
           lib.element.player.uninit = qhly_uninit;
+          // @ts-ignore
           lib.element.player.reinit = qhly_reinit;
+          // @ts-ignore
           lib.element.player.playDynamic = qhly_playdynamic;
+          // @ts-ignore
           lib.element.player.stopDynamic = qhly_stopdynamic;
           lib.element.player.showCharacter = qhly_showcharacter;
         }
@@ -911,16 +1044,23 @@ export let CONTENT = function (config, pack) {
               },
             });
           } else {
+            // @ts-ignore
             game.players[i].init = qhly_init;
+            // @ts-ignore
             game.players[i].uninit = qhly_uninit;
+            // @ts-ignore
             game.players[i].reinit = qhly_reinit;
+            // @ts-ignore
             game.players[i].playDynamic = qhly_playdynamic;
+            // @ts-ignore
             game.players[i].stopDynamic = qhly_stopdynamic;
+            // @ts-ignore
             game.players[i].showCharacter = qhly_showcharacter;
           }
         }
       }
     });
+    /*
     var qhly_oldinit = function (character, character2, skill) {
       if (typeof character == 'string' && !lib.character[character]) {
         lib.character[character] = get.character(character);
@@ -948,13 +1088,13 @@ export let CONTENT = function (config, pack) {
       var skills = info[3].slice(0);
       this.clearSkills(true);
       this.classList.add('fullskin');
-      if (!game.minskin && get.is.newLayout() && !info[4].contains('minskin')) {
+      if (!game.minskin && get.is.newLayout() && !info[4].includes('minskin')) {
         this.classList.remove('minskin');
         this.node.avatar.setBackground(character, 'character');
       }
       else {
         this.node.avatar.setBackground(character, 'character');
-        if (info[4].contains('minskin')) {
+        if (info[4].includes('minskin')) {
           this.classList.add('minskin');
         }
         else if (game.minskin) {
@@ -987,7 +1127,7 @@ export let CONTENT = function (config, pack) {
       if (this.classList.contains('minskin') && this.node.name.querySelectorAll('br').length >= 4) {
         this.node.name.classList.add('long');
       }
-      if (info[4].contains('hiddenSkill') && !this.noclick) {
+      if (info[4].includes('hiddenSkill') && !this.noclick) {
         if (!this.hiddenSkills) this.hiddenSkills = [];
         this.hiddenSkills.addArray(skills);
         skills = [];
@@ -1054,7 +1194,7 @@ export let CONTENT = function (config, pack) {
           };
         }
         this.node.count.classList.add('p2');
-        if (info2[4].contains('hiddenSkill') && !this.noclick) {
+        if (info2[4].includes('hiddenSkill') && !this.noclick) {
           if (!this.hiddenSkills) this.hiddenSkills = [];
           this.hiddenSkills.addArray(info2[3]);
           this.classList.add(_status.video ? 'unseen2_v' : 'unseen2');
@@ -1095,45 +1235,69 @@ export let CONTENT = function (config, pack) {
       }
       this.update();
       return this;
-    };
+    };*/
+    // @ts-ignore
+    var qhly_oldinit = lib.element.player.qh_old_init;
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    var qhly_old$init = lib.element.player.qh_old_$init;
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     function qhly_init(character, character2, skill) {
+      // @ts-ignore
       var isYh = this.getElementsByClassName("skinYh");
       if (isYh.length > 0) {
         isYh[0].remove();
       }
+      // @ts-ignore
       var bj = this.getElementsByClassName("gain-skill flex");
       if (bj.length > 0) {
         bj[0].innerHTML = null;
       }
       this.doubleAvatar = (character2 && lib.character[character2]) != undefined;
 
+      // @ts-ignore
       var CUR_DYNAMIC = decadeUI.CUR_DYNAMIC;
+      // @ts-ignore
       var MAX_DYNAMIC = decadeUI.MAX_DYNAMIC;
       if (CUR_DYNAMIC == undefined) {
         CUR_DYNAMIC = 0;
+        // @ts-ignore
         decadeUI.CUR_DYNAMIC = CUR_DYNAMIC;
       }
       if (MAX_DYNAMIC == undefined) {
+        // @ts-ignore
         MAX_DYNAMIC = decadeUI.isMobile() ? 2 : 10;
         if (window.OffscreenCanvas)
           MAX_DYNAMIC += 8;
+        // @ts-ignore
         decadeUI.MAX_DYNAMIC = MAX_DYNAMIC;
       }
       var avatars = this.doubleAvatar ? [character, character2] : [character];
       for (var i = 0; i < avatars.length; i++) {
         if (get.mode() == 'guozhan' && lib.config['extension_千幻聆音_qhly_guozhanDS']) {
           if (avatars[i] && avatars[i].indexOf('gz_') == 0) {
+            // @ts-ignore
             let extend = { [avatars[i]]: decadeUI.dynamicSkin[avatars[i].slice(3)] };
+            // @ts-ignore
             decadeUI.get.extend(decadeUI.dynamicSkin, extend);
           }
         }
+        // @ts-ignore
         if (lib.qhly_skinShare[avatars[i]] && lib.qhly_skinShare[avatars[i]].name) {
+          // @ts-ignore
           let extend = { [avatars[i]]: decadeUI.dynamicSkin[lib.qhly_skinShare[avatars[i]].name] };
+          // @ts-ignore
           decadeUI.get.extend(decadeUI.dynamicSkin, extend);
         }
       }
+      // @ts-ignore
       if (window.qhly_newDynamicExt && lib.config['extension_EpicFX_skinEffects']) {
+        // @ts-ignore
         let res = EpicFX.playDynamic(this, character, character2, undefined, undefined, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on');
+        // @ts-ignore
         EpicFX.initSkinPackOrRefreshAll(this, {
           doubleAvatar: this.doubleAvatar,
           name: character,
@@ -1150,16 +1314,23 @@ export let CONTENT = function (config, pack) {
         }
         var forces = 'qun';
         if (lib.character[character]) forces = lib.character[character][1];
+        // @ts-ignore
         game.qhly_checkYH(this, forces);
       } else {
+        // @ts-ignore
         if (this.dynamic) {
+          // @ts-ignore
           if (this.dynamic.primary) this.stopDynamic(true, false)
+          // @ts-ignore
           if (this.dynamic.deputy) this.stopDynamic(false, true)
           // this.stopDynamic();
         }
+        // @ts-ignore
         var showDynamic = (this.dynamic || CUR_DYNAMIC < MAX_DYNAMIC) && duicfg.dynamicSkin;
+        // @ts-ignore
         if (showDynamic && _status.mode != null) {
           var skins;
+          // @ts-ignore
           var dskins = decadeUI.dynamicSkin;
           var increased;
           for (var i = 0; i < avatars.length; i++) {
@@ -1178,11 +1349,14 @@ export let CONTENT = function (config, pack) {
               continue;
             }
             var skin, skinName;
+            // @ts-ignore
             var realName = game.qhly_getRealName(avatars[i]);
-            if (lib && lib.config && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && lib.config.extensions && lib.config.extensions.contains('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
+            if (lib && lib.config && lib.config.qhly_skinset && lib.config.qhly_skinset.djtoggle && lib.config.extensions && lib.config.extensions.includes('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
               skin = null;
               var namex = avatars[i];
+              // @ts-ignore
               var value = game.qhly_getSkin(namex);
+              // @ts-ignore
               skinName = game.qhly_getSkin(namex);
               if (skinName == null) skinName = '经典形象.jpg';
               if (value) value = value.substring(0, value.lastIndexOf('.'));
@@ -1198,25 +1372,34 @@ export let CONTENT = function (config, pack) {
               }
             } else skin = skins[Object.keys(skins)[0]];
             if (skin == null) continue;
+            // @ts-ignore
             skin = game.qhly_formatDS(skin, avatars[i]);
+            // @ts-ignore
             var skinCopy = game.qhly_deepClone(skin);
             if (skinCopy.action && skinCopy.pos) skinCopy.action = "ChuChang";
             if (skinCopy.speed == undefined) skinCopy.speed = 1;
             if (!skinCopy.skinName) skinCopy.skinName = keys[i];
             skinCopy.player = skinCopy;
+            // @ts-ignore
             if (!this.doubleAvatar && dynamicExt) {
+              // @ts-ignore
               if (this == game.me) {
+                // @ts-ignore
                 if (dynamicExt.selectSkinData && dynamicExt.selectSkinData.value) dynamicExt.selectSkinData.value = keys[i];
               }
             }
             var theme = ui.arena.dataset.newDecadeStyle == 'on' ? 'decade' : 'shousha';
+            // @ts-ignore
             if (lib.config['extension_千幻聆音_qhly_editDynamic'] && lib.qhly_skinEdit[realName] && lib.qhly_skinEdit[realName][skinName] && lib.qhly_skinEdit[realName][skinName].player && lib.qhly_skinEdit[realName][skinName].player.dynamic && lib.qhly_skinEdit[realName][skinName].player.dynamic[theme]) {
+              // @ts-ignore
               var resetDynamic = lib.qhly_skinEdit[realName][skinName].player.dynamic[theme];
               skinCopy.x = resetDynamic.x;
               skinCopy.y = resetDynamic.y;
               skinCopy.scale = resetDynamic.scale;
               skinCopy.angle = resetDynamic.angle;
+              // @ts-ignore
               if (skinCopy.beijing && lib.qhly_skinEdit[realName][skinName].player.beijing && lib.qhly_skinEdit[realName][skinName].player.beijing[theme]) {
+                // @ts-ignore
                 var resetBeijing = lib.qhly_skinEdit[realName][skinName].player.beijing[theme];
                 skinCopy.beijing.x = resetBeijing.x;
                 skinCopy.beijing.y = resetBeijing.y;
@@ -1225,33 +1408,41 @@ export let CONTENT = function (config, pack) {
               }
             }
             // taffy: 注释content.js原版代码喵
+            // // @ts-ignore
             // this.playDynamic(skinCopy, i == 1, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
             /* taffy分界线 */
             // taffy: 修复忽略clipSlots选项失效的问题喵
+            // @ts-ignore
             this.playDynamic(skinCopy, i == 1, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_qhly_ignoreClips']);
             /* taffy分界线 */
             // 修改3 start  此处修改是因为动皮和背景加载需要时间, 在动皮加载好之前用一个默认背景代替, 防止武将框黑一片
+            // @ts-ignore
             if (i == 0 || !this.dynamic.primary) {
               if (skinCopy.background) {
+                // @ts-ignore
                 this.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skinCopy.background + '")';
               } else {
+                // @ts-ignore
                 this.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/皮肤切换/images/card/card.png")'
               }
             }
             // 修改3 end
             if (!increased) {
               increased = true;
+              // @ts-ignore
               decadeUI.CUR_DYNAMIC++;
             }
 
             var forces = 'qun';
             if (lib.character[character]) forces = lib.character[character][1];
             if (!isHide) {
+              // @ts-ignore
               game.qhly_checkYH(this, forces);
             }
 
           }
-          if (game.qhly_hasExtension('皮肤切换') && lib.config[skinSwitch.configKey.useDynamic]) {
+          // @ts-ignore
+          if (game.qhly_hasExtension('皮肤切换') && window.skinSwitch && lib.config[window.skinSwitch.configKey.useDynamic]) {
             // 开启自动播放play2模式
             skinSwitch.dynamic.startPlay2Random(this)
           }
@@ -1259,33 +1450,47 @@ export let CONTENT = function (config, pack) {
       }
       var timer = null;
       this.invisibleSkills = [];
+      // @ts-ignore
       this.node.avatar.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", function (e) {
         e.preventDefault();
         if (e.button && e.button != 0) return;
         clearTimeout(timer);
         this._qhlyClickTime = Date.now();
       });
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       this.node.avatar.addEventListener(lib.config.touchscreen ? "touchend" : "mouseup", function (e) {
         if (!this._qhlyClickTime || Date.now() - this._qhlyClickTime > 400 || this.parentNode.classList.contains('selectable') || this.parentNode.classList.contains('target') || this.parentNode.isUnseen(0)) return;
         timer = setTimeout(function () {
+          // @ts-ignore
           if (lib.config['extension_千幻聆音_qhly_playerwindow']) game.qhly_playerWindow(this);
         }.bind(this), 220);
       });
+      // @ts-ignore
       this.node.avatar2.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", function (e) {
         e.preventDefault();
+        // @ts-ignore
         if (!this.parentNode.doubleAvatar || e.button && e.button != 0) return;
         clearTimeout(timer);
         this._qhlyClickTime = Date.now();
       });
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       this.node.avatar2.addEventListener(lib.config.touchscreen ? "touchend" : "mouseup", function (e) {
         if (!this.parentNode.doubleAvatar || !this._qhlyClickTime || Date.now() - this._qhlyClickTime > 400 || this.parentNode.classList.contains('selectable') || this.parentNode.classList.contains('target') || this.parentNode.isUnseen(1)) return;
         timer = setTimeout(function () {
+          // @ts-ignore
           if (lib.config['extension_千幻聆音_qhly_playerwindow']) game.qhly_playerWindow(this);
         }.bind(this), 220);
       });
       var jie;
+      // @ts-ignore
       if (character && duicfg.showJieMark) {
+        // @ts-ignore
         if (lib.characterPack.refresh)
+          // @ts-ignore
           jie = lib.characterPack.refresh[character];
         if (jie == null) {
           jie = character.substr(0, 3);
@@ -1296,8 +1501,10 @@ export let CONTENT = function (config, pack) {
           jie = lib.translate[character][0];
           if (jie == '界') {
             if (this.$jieMark == undefined)
+              // @ts-ignore
               this.$jieMark = dui.element.create('jie-mark', this);
             else
+              // @ts-ignore
               this.appendChild(this.$jieMark);
           }
         }
@@ -1316,20 +1523,59 @@ export let CONTENT = function (config, pack) {
       return result;
     }
     function qhly_uninit() {
+      // @ts-ignore
       if (this.$jieMark) {
+        // @ts-ignore
         this.$jieMark.remove();
+        // @ts-ignore
         this.$jieMark.undefined;
       }
+      // @ts-ignore
       this.stopDynamic();
       this.doubleAvatar = false;
+      // @ts-ignore
       this.node.campWrap.dataset.camp = null;
+      // @ts-ignore
       this.node.campWrap.node.campName.innerHTML = '';
+      // @ts-ignore
       this.node.campWrap.node.campName.style.backgroundImage = '';
+      // @ts-ignore
+      this.node.name2.innerHTML = '';
+      // @ts-ignore
+      this.qh_old_uninit.call(this,...arguments);
+      var forces = 'qun';
+      // @ts-ignore
+      if (lib.character[this]) forces = lib.character[this][1];
+      // @ts-ignore
+      game.qhly_checkYH(this, forces);
+    }
+    /*
+    function qhly_uninit() {
+      // @ts-ignore
+      if (this.$jieMark) {
+        // @ts-ignore
+        this.$jieMark.remove();
+        // @ts-ignore
+        this.$jieMark.undefined;
+      }
+      // @ts-ignore
+      this.stopDynamic();
+      this.doubleAvatar = false;
+      // @ts-ignore
+      this.node.campWrap.dataset.camp = null;
+      // @ts-ignore
+      this.node.campWrap.node.campName.innerHTML = '';
+      // @ts-ignore
+      this.node.campWrap.node.campName.style.backgroundImage = '';
+      // @ts-ignore
       this.node.name2.innerHTML = '';
 
+      // @ts-ignore
       for (var i = 1; i < 6; i++) if (this.isDisabled(i)) this.$enableEquip('equip' + i);
 
+      // @ts-ignore
       if (this.storage._disableJudge) {
+        // @ts-ignore
         game.broadcastAll(function (player) {
           player.storage._disableJudge = false;
           for (var i = 0; i < player.node.judges.childNodes.length; i++) {
@@ -1340,18 +1586,28 @@ export let CONTENT = function (config, pack) {
           }
         }, this);
       }
+      // @ts-ignore
       this.node.avatar.hide();
+      // @ts-ignore
       this.node.count.hide();
+      // @ts-ignore
       if (this.node.wuxing) {
+        // @ts-ignore
         this.node.wuxing.hide();
       }
+      // @ts-ignore
       if (this.node.name_seat) {
+        // @ts-ignore
         this.node.name_seat.remove();
+        // @ts-ignore
         this.node.name_seat = undefined;
       }
 
+      // @ts-ignore
       if (this.storage.nohp) this.node.hp.show();
+      // @ts-ignore
       this.classList.remove('unseen');
+      // @ts-ignore
       this.classList.remove('unseen2');
       this.name = undefined;
       this.name1 = undefined;
@@ -1362,25 +1618,36 @@ export let CONTENT = function (config, pack) {
       this.hujia = undefined;
       this.tempname = undefined;
 
+      // @ts-ignore
       this.clearSkills(true);
+      // @ts-ignore
       this.node.identity.style.backgroundColor = '';
+      // @ts-ignore
       this.node.intro.innerHTML = '';
+      // @ts-ignore
       this.node.name.innerHTML = '';
+      // @ts-ignore
       this.node.hp.innerHTML = '';
+      // @ts-ignore
       this.node.count.innerHTML = '0';
       if (this.name2) {
         this.singleHp = undefined;
+        // @ts-ignore
         this.node.avatar2.hide();
+        // @ts-ignore
         this.node.name2.innerHTML = '';
+        // @ts-ignore
         this.classList.remove('fullskin2');
         this.name2 = undefined;
       }
 
+      // @ts-ignore
       for (var mark in this.marks) this.marks[mark].remove();
       ui.updatem(this);
 
       this.skipList = [];
-      this.skills = this.skills.contains('cangji_yozuru') ? ['cangji_yozuru'] : [];
+      // @ts-ignore
+      this.skills = this.skills.includes('cangji_yozuru') ? ['cangji_yozuru'] : [];
       this.initedSkills = [];
       this.additionalSkills = {};
       this.disabledSkills = {};
@@ -1401,10 +1668,12 @@ export let CONTENT = function (config, pack) {
         neutral: []
       };
       var forces = 'qun';
+      // @ts-ignore
       if (lib.character[this]) forces = lib.character[this][1];
+      // @ts-ignore
       game.qhly_checkYH(this, forces);
       return this;
-    }
+    }*/
     function qhly_reinit(from, to, maxHp, online) {
       var info1 = lib.character[from];
       var info2 = lib.character[to];
@@ -1416,16 +1685,23 @@ export let CONTENT = function (config, pack) {
       let data;
       if (get.mode() == 'guozhan' && lib.config['extension_千幻聆音_qhly_guozhanDS']) {
         if (to.indexOf('gz_') == 0) {
+          // @ts-ignore
           let extend = { [to]: decadeUI.dynamicSkin[to.slice(3)] };
+          // @ts-ignore
           decadeUI.get.extend(decadeUI.dynamicSkin, extend);
         }
       }
+      // @ts-ignore
       if (lib.qhly_skinShare[to] && lib.qhly_skinShare[to].name) {
+        // @ts-ignore
         let extend = { [to]: decadeUI.dynamicSkin[lib.qhly_skinShare[to].name] };
+        // @ts-ignore
         decadeUI.get.extend(decadeUI.dynamicSkin, extend);
       }
+      // @ts-ignore
       if (window.qhly_newDynamicExt) {
         data = {
+          // @ts-ignore
           doubleAvatar: this.doubleAvatar,
           name: this.name,
           name1: this.name1,
@@ -1435,51 +1711,74 @@ export let CONTENT = function (config, pack) {
       }
       if (this.name2 == from) {
         this.name2 = to;
+        // @ts-ignore
         if (this.isUnseen(0) && !this.isUnseen(1)) {
           this.sex = info2[0];
           this.name = to;
         }
+        // @ts-ignore
         if (smooth) this.smoothAvatar(true);
+        // @ts-ignore
         this.node.avatar2.setBackground(to, 'character');
+        // @ts-ignore
         this.node.name2.innerHTML = lib.qhly_slimName(to);
+        // @ts-ignore
         if (window.qhly_newDynamicExt) {
+          // @ts-ignore
           data.zhu = false;
+          // @ts-ignore
           data.to = to;
+          // @ts-ignore
           this.stopDynamic(false, true);
+          // @ts-ignore
           data.state = EpicFX.playDynamic(this, undefined, to, true, undefined, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on');
         }
       } else if (this.name == from || this.name1 == from) {
         if (this.name1 == from) {
           this.name1 = to;
         }
+        // @ts-ignore
         if (!this.classList.contains('unseen2')) {
           this.name = to;
           this.sex = info2[0];
         }
+        // @ts-ignore
         if (smooth) this.smoothAvatar(false);
+        // @ts-ignore
         this.node.avatar.setBackground(to, 'character');
+        // @ts-ignore
         this.node.name.innerHTML = lib.qhly_slimName(to);
 
+        // @ts-ignore
         if (this == game.me && ui.fakeme) {
+          // @ts-ignore
           ui.fakeme.style.backgroundImage = this.node.avatar.style.backgroundImage;
         }
+        // @ts-ignore
         if (window.qhly_newDynamicExt) {
+          // @ts-ignore
           data.zhu = true;
+          // @ts-ignore
           data.to = to;
+          // @ts-ignore
           this.stopDynamic(true, false);
+          // @ts-ignore
           data.state = EpicFX.playDynamic(this, to, undefined, true, undefined, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on');
         }
       } else {
         return this;
       }
+      // @ts-ignore
       if (window.qhly_newDynamicExt && lib.config['extension_EpicFX_skinEffects']) EpicFX.initSkinPackOrRefreshAll(this, data);
       if (online) {
         return;
       }
       for (var i = 0; i < info1[3].length; i++) {
+        // @ts-ignore
         this.removeSkill(info1[3][i]);
       }
       for (var i = 0; i < info2[3].length; i++) {
+        // @ts-ignore
         this.addSkill(info2[3][i]);
       }
       if (Array.isArray(maxHp)) {
@@ -1498,50 +1797,67 @@ export let CONTENT = function (config, pack) {
         if (typeof this.singleHp == 'boolean') {
           if (num % 2 != 0) {
             if (this.singleHp) {
+              // @ts-ignore
               this.maxHp += (num + 1) / 2;
               this.singleHp = false;
             } else {
+              // @ts-ignore
               this.maxHp += (num - 1) / 2;
               this.singleHp = true;
               if (!game.online) {
+                // @ts-ignore
                 this.doubleDraw();
               }
             }
           } else {
+            // @ts-ignore
             this.maxHp += num / 2;
           }
         } else {
+          // @ts-ignore
           this.maxHp += num;
         }
       }
+      // @ts-ignore
       game.broadcast(function (player, from, to, skills) {
         player.reinit(from, to, null, true);
         player.applySkills(skills);
       }, this, from, to, get.skillState(this));
+      // @ts-ignore
       game.addVideo('reinit3', this, {
         from: from,
         to: to,
         hp: this.maxHp,
         avatar2: this.name2 == to
       });
+      // @ts-ignore
       this.update();
+      // @ts-ignore
       if (!window.qhly_newDynamicExt) {
+        // @ts-ignore
         var skin = game.qhly_getDynamicSkin(null, to), skinName;
+        // @ts-ignore
         var realName = game.qhly_getRealName(to);
         if (skin) {
+          // @ts-ignore
           skinName = game.qhly_getSkin(to);
+          // @ts-ignore
           var skinCopy = game.qhly_deepClone(skin);
           if (skinCopy.action && skinCopy.pos) skinCopy.action = "ChuChang";
           if (skinCopy.speed == undefined) skinCopy.speed = 1;
           skinCopy.player = skinCopy;
           var theme = ui.arena.dataset.newDecadeStyle == 'on' ? 'decade' : 'shousha';
+          // @ts-ignore
           if (lib.config['extension_千幻聆音_qhly_editDynamic'] && lib.qhly_skinEdit[realName] && lib.qhly_skinEdit[realName][skinName] && lib.qhly_skinEdit[realName][skinName].player && lib.qhly_skinEdit[realName][skinName].player.dynamic && lib.qhly_skinEdit[realName][skinName].player.dynamic[theme]) {
+            // @ts-ignore
             var resetDynamic = lib.qhly_skinEdit[realName][skinName].player.dynamic[theme];
             skinCopy.x = resetDynamic.x;
             skinCopy.y = resetDynamic.y;
             skinCopy.scale = resetDynamic.scale;
             skinCopy.angle = resetDynamic.angle;
+            // @ts-ignore
             if (skinCopy.beijing && lib.qhly_skinEdit[realName][skinName].player.beijing && lib.qhly_skinEdit[realName][skinName].player.beijing[theme]) {
+              // @ts-ignore
               var resetBeijing = lib.qhly_skinEdit[realName][skinName].player.beijing[theme];
               skinCopy.beijing.x = resetBeijing.x;
               skinCopy.beijing.y = resetBeijing.y;
@@ -1550,44 +1866,59 @@ export let CONTENT = function (config, pack) {
             }
           }
         }
+        // @ts-ignore
         if (this.doubleAvatar) {
           let primary = true;
           let deputy = true;
           if (this.name2 == to) primary = false;
           else deputy = false;
+          // @ts-ignore
           if (this.dynamic) {
+            // @ts-ignore
             this.stopDynamic(primary, deputy);
+            // @ts-ignore
             decadeUI.CUR_DYNAMIC--;
           }
           if (skin) {
             // taffy: 注释content.js原版代码喵
+            // // @ts-ignore
             // this.playDynamic(skinCopy, deputy, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
             /* taffy分界线 */
             // taffy: 修复忽略clipSlots选项失效的问题喵
+            // @ts-ignore
             this.playDynamic(skinCopy, deputy, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_qhly_ignoreClips']);
             /* taffy分界线 */
+            // @ts-ignore
             decadeUI.CUR_DYNAMIC++;
           }
           var forces = 'qun';
           if (lib.character[this.name1]) forces = lib.character[this.name1][1];
         } else {
+          // @ts-ignore
           if (this.dynamic) {
+            // @ts-ignore
             this.stopDynamic();
+            // @ts-ignore
             decadeUI.CUR_DYNAMIC--;
           }
           if (skin) {
             // taffy: 注释content.js原版代码喵
+            // // @ts-ignore
             // this.playDynamic(skinCopy, false, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_ignoreClips']);
             /* taffy分界线 */
             // taffy: 修复忽略clipSlots选项失效的问题喵
+            // @ts-ignore
             this.playDynamic(skinCopy, false, ui.arena.dataset.dynamicSkinOutcrop == 'on' && ui.arena.dataset.newDecadeStyle == 'on', lib.config['extension_千幻聆音_qhly_ignoreClips']);
             /* taffy分界线 */
+            // @ts-ignore
             decadeUI.CUR_DYNAMIC++;
+            // @ts-ignore
             this.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skin.background + '")';
           }
           var forces = 'qun';
           if (lib.character[to]) forces = lib.character[to][1];
         }
+        // @ts-ignore
         game.qhly_checkYH(this, forces);
       }
     }
@@ -1620,22 +1951,32 @@ export let CONTENT = function (config, pack) {
       if (animation == undefined) return console.error('playDynamic: 参数1不能为空');
       var dynamic = this.dynamic;
       if (!dynamic) {
+        // @ts-ignore
         dynamic = new duilib.DynamicPlayer('assets/dynamic/');
+        // @ts-ignore
         dynamic.dprAdaptive = true;
         this.dynamic = dynamic;
+        // @ts-ignore
         this.$dynamicWrap.appendChild(dynamic.canvas);
       } else {
+        // @ts-ignore
         if (deputy && dynamic.deputy) {
+          // @ts-ignore
           dynamic.stop(dynamic.deputy);
+          // @ts-ignore
           dynamic.deputy = null;
+        // @ts-ignore
         } else if (!deputy && dynamic.primary) {
+          // @ts-ignore
           dynamic.stop(dynamic.primary);
+          // @ts-ignore
           dynamic.primary = null;
         }
       }
 
       if (typeof animation == 'string') animation = { name: animation };
       const dybgxishu = (lib.config.qhly_lutouType && lib.config.qhly_lutouType == 'shousha') ? 0.873 : 0.9;
+      // @ts-ignore
       if (this.doubleAvatar) {
         function clip(anim, cut) {
           if (Array.isArray(anim.x)) {
@@ -1657,6 +1998,7 @@ export let CONTENT = function (config, pack) {
             clipParent: true
           };
         }
+        // @ts-ignore
         if (window.qhly_newDynamicExt) {
           let num = (animation.dybg ? 2 : 1);
           for (let i = 0; i < num; i++) {
@@ -1677,31 +2019,44 @@ export let CONTENT = function (config, pack) {
           }
         }
       } else {
+        // @ts-ignore
         if (window.qhly_newDynamicExt && animation.dybg && cutdybg) animation.dybg.clip = { x: 0, y: 0, width: [0, 1], height: [0, dybgxishu], clipParent: true };//切动态背景
         else if (animation.player && animation.player.beijing && cutdybg) animation.player.beijing.clip = { x: 0, y: 0, width: [0, 1], height: [0, dybgxishu], clipParent: true } //切动态背景
         else if (animation.player && animation.player.beijing && !cutdybg) animation.player.beijing.clip = null;
       }
+      // @ts-ignore
       if (this.$dynamicWrap.parentNode != this) this.appendChild(this.$dynamicWrap);
 
+      // @ts-ignore
       dynamic.outcropMask = duicfg.dynamicSkinOutcrop;
       if (ignoreClip) animation.clipSlots = undefined;
+      // @ts-ignore
       var avatar = dynamic.play(animation, deputy);
       if (deputy === true) {
+        // @ts-ignore
         dynamic.deputy = avatar;
       } else {
+        // @ts-ignore
         dynamic.primary = avatar;
       }
+      // @ts-ignore
       this.classList.add(deputy ? 'd-skin2' : 'd-skin');
-      if (game.qhly_hasExtension('皮肤切换') && lib.config[skinSwitch.configKey.useDynamic]) {
+      // @ts-ignore
+      if (game.qhly_hasExtension('皮肤切换') && window.skinSwitch && lib.config[window.skinSwitch.configKey.useDynamic]) {
         skinSwitch.chukuangPlayerInit(this, !deputy, animation.player)
       }
     }
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     function qhly_showcharacter(num, log) {
       var toShow = [];
       if ((num == 0 || num == 2) && this.isUnseen(0)) toShow.add(this.name1);
       if ((num == 1 || num == 2) && this.isUnseen(1)) toShow.add(this.name2);
       if (!toShow.length) return;
+      // @ts-ignore
       if (window.qhly_newDynamicExt && lib.config['extension_EpicFX_skinEffects']) {
+        // @ts-ignore
         EpicFX.showCharacterSkin(this, num);
         if (this.skinPack && this.skinPack.btn && this != game.me) {
           if (!this.isUnseen()) {
@@ -1719,10 +2074,14 @@ export let CONTENT = function (config, pack) {
           return;
         }
         switch (num) {
+          // @ts-ignore
           case 0: game.qhly_changeDynamicSkin(this, undefined, this.name1); break;
+          // @ts-ignore
           case 1: game.qhly_changeDynamicSkin(this, undefined, this.name2, true); break;
           default: {
+            // @ts-ignore
             game.qhly_changeDynamicSkin(this, undefined, this.name1);
+            // @ts-ignore
             if (this.doubleAvatar) game.qhly_changeDynamicSkin(this, undefined, this.name2, true);
           }
         }
@@ -1731,14 +2090,20 @@ export let CONTENT = function (config, pack) {
       var next = game.createEvent('showCharacter', false);
       next.player = this;
       next.num = num;
+      // @ts-ignore
       next.toShow = toShow;
+      // @ts-ignore
       next._args = arguments;
       next.setContent('showCharacter');
+      // @ts-ignore
       game.qhly_checkYH(this);
       return next;
     }
+    // @ts-ignore
     lib.qhly_stopdynamic = qhly_stopdynamic;
+    // @ts-ignore
     lib.qhly_playdynamic = qhly_playdynamic;
+    // @ts-ignore
     lib.qhly_showcharacter = qhly_showcharacter;
     lib.skill._qhcreateYH = {
       trigger: {
@@ -1749,10 +2114,13 @@ export let CONTENT = function (config, pack) {
       charlotte: true,
       forceDie: true,
       filter: function () {
+        // @ts-ignore
         return window.decadeUI;
       },
       content: function () {
+        // @ts-ignore
         if (player.isDead()) player.stopDynamic();
+        // @ts-ignore
         game.qhly_checkYH(player);
       }
     }
@@ -1761,7 +2129,11 @@ export let CONTENT = function (config, pack) {
         player: 'changeHp',
         global: 'phaseEnd',
       },
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       filter: function (event, player) {
+        // @ts-ignore
         return lib.qhly_skinChange[game.qhly_getRealName(player.name1)] || lib.qhly_skinChange[game.qhly_getRealName(player.name2)];
       },
       direct: true,
@@ -1769,22 +2141,34 @@ export let CONTENT = function (config, pack) {
       charlotte: true,
       content: function () {
         for (let i = 0; i < 2; i++) {
+          // @ts-ignore
           if (!player['name' + (i + 1)]) continue;
+          // @ts-ignore
           let playerName = game.qhly_getRealName(player['name' + (i + 1)]);
+          // @ts-ignore
           let skin = game.qhly_getSkin(playerName);
+          // @ts-ignore
           if (lib.qhly_skinChange[playerName] && lib.qhly_skinChange[playerName][game.qhly_earse_ext(skin)] && lib.qhly_skinChange[playerName][game.qhly_earse_ext(skin)].source && lib.qhly_skinChange[playerName][game.qhly_earse_ext(skin)].source.indexOf('hp_') == 0) {
+            // @ts-ignore
             if (!player._qhly_gonnaChange) player._qhly_gonnaChange = [0, 0];
+            // @ts-ignore
             if (trigger.num > 0) {
+              // @ts-ignore
               player._qhly_gonnaChange[i] = 1;
             }
+            // @ts-ignore
             if (lib.qhly_skinChange[playerName][game.qhly_earse_ext(skin)].phase && trigger.name == 'recover' || trigger.name == 'phase' && player._qhly_gonnaChange[i] != 1) continue;
+            // @ts-ignore
             if (trigger.name == 'phase') player._qhly_gonnaChange[i] = 0;
+            // @ts-ignore
             game.qhly_checkPlayerImageAudio(playerName, skin, player, function () {
               player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
               // taffy: 注释content.js原版代码喵
+              // // @ts-ignore
               // player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
               /* taffy分界线 */
               // taffy: 修复变身后原画消失的问题喵
+              // @ts-ignore
               game.qhly_checkFileExist(player._qhly_skinChange[i], function (s) {
                 if (s) {
                   player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
@@ -1800,11 +2184,17 @@ export let CONTENT = function (config, pack) {
                   else player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
                 }
               })
+              /* taffy分界线 */
               if (!_status.qhly_replaceSkin[playerName]) _status.qhly_replaceSkin[playerName] = {};
+              // @ts-ignore
               _status.qhly_replaceSkin[playerName][skin] = player._qhly_skinChange[i];
+              // @ts-ignore
               if (!player._qhlyIsChanged) player._qhlyIsChanged = [0, 0];
+              // @ts-ignore
               if (trigger.num < 0) player._qhlyIsChanged[i] = 1;
+              // @ts-ignore
               else player._qhlyIsChanged[i] = 0;
+              // @ts-ignore
               if (window.decadeUI && !game.qhly_hasExtension('皮肤切换') && !game.qhly_hasExtension('EpicFX')) game.qhly_changeDynamicSkin(player, undefined, undefined, i == 1);
             });
           }
@@ -1813,16 +2203,24 @@ export let CONTENT = function (config, pack) {
     }
     lib.skill._qhlyChageKillingSkin = {
       trigger: { global: 'die' },
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       filter: function (event, player) {
+        // @ts-ignore
         if (!event.source || !event.source.name1 || event._qhlyChangeKillSkin) return false;
+        // @ts-ignore
         return lib.qhly_skinChange[game.qhly_getRealName(event.source.name1)] || lib.qhly_skinChange[game.qhly_getRealName(event.source.name2)];
       },
       direct: true,
       forced: true,
       charlotte: true,
       content: function () {
+        // @ts-ignore
         var current = trigger.source;
+        // @ts-ignore
         trigger._qhlyChangeKillSkin = true;
+        // @ts-ignore
         game.qhly_changeSkillSkin(current, 'kill');
       }
     }
@@ -1833,34 +2231,49 @@ export let CONTENT = function (config, pack) {
       charlotte: true,
       firstDo: true,
       content: function () {
+        // @ts-ignore
         game.qhly_checkYH(player);
+        // @ts-ignore
         if (lib.qhly_skinChange[player.name1] || lib.qhly_skinChange[player.name2]) {
+          // @ts-ignore
           if (!_status.qhly_replaceSkin) _status.qhly_replaceSkin = {};
+          // @ts-ignore
           var num = player.name2 == undefined ? 1 : 2;
           for (var i = 0; i < num; i++) {
+            // @ts-ignore
             game.qhly_setCurrentSkin(game.qhly_getRealName(player['name' + (i + 1)]), game.qhly_getSkin(game.qhly_getRealName(player['name' + (i + 1)])));
           }
         }
       }
     }
 
+    // @ts-ignore
     game.qhly_changeSkillSkin = function (player, skill) {
       if (!skill || !player) return;
       if (skill != 'kill') {
+        // @ts-ignore
         if (lib.qhly_changeSkillSkin[skill]) {
+          // @ts-ignore
           if (Date.now() - lib.qhly_changeSkillSkin[skill] < 400) {
+            // @ts-ignore
             lib.qhly_changeSkillSkin[skill] = Date.now();
             return;
           }
         }
+        // @ts-ignore
         lib.qhly_changeSkillSkin[skill] = Date.now();
       }
       for (let i = 0; i < 2; i++) {
+        // @ts-ignore
         let playerName = game.qhly_getRealName(player['name' + (i + 1)]);
         if (!playerName) continue;
+        // @ts-ignore
         let skin = game.qhly_getSkin(player['name' + (i + 1)]);
+        // @ts-ignore
         if (lib.qhly_skinChange[playerName] && lib.qhly_skinChange[playerName][game.qhly_earse_ext(skin)] && lib.qhly_skinChange[playerName][game.qhly_earse_ext(skin)].source && lib.qhly_skinChange[playerName][game.qhly_earse_ext(skin)].source == skill) {
+          // @ts-ignore
           game.qhly_setPlayerStatus(player, i == 1, 3 - game.qhly_getPlayerStatus(player, i == 1));
+          // @ts-ignore
           game.qhly_checkPlayerImageAudio(playerName, skin, player, function () {
             if (!player._qhlyIsChanged) player._qhlyIsChanged = [0, 0];
             player._qhlyIsChanged[i] = 1 - player._qhlyIsChanged[i];
@@ -1884,9 +2297,13 @@ export let CONTENT = function (config, pack) {
               }
             })
             /* taffy分界线 */
+            // @ts-ignore
             if (!_status.qhly_replaceSkin) _status.qhly_replaceSkin = {};
+            // @ts-ignore
             if (!_status.qhly_replaceSkin[playerName]) _status.qhly_replaceSkin[playerName] = {};
+            // @ts-ignore
             _status.qhly_replaceSkin[playerName][skin] = player._qhly_skinChange[i];
+            // @ts-ignore
             if (window.decadeUI && !game.qhly_hasExtension('皮肤切换') && !game.qhly_hasExtension('EpicFX')) game.qhly_changeDynamicSkin(player, undefined, undefined, i == 1);
           }, undefined);
         }
@@ -1896,11 +2313,13 @@ export let CONTENT = function (config, pack) {
       lib.config.qhly_decadeBigBak = 1;
       game.saveConfig('qhly_decadeBigBak', 1);
     }
+    // @ts-ignore
     game.thunderFileExist = function (url) {
       if (window.XMLHttpRequest) {
         var http = new XMLHttpRequest();
       }
       else {
+        // @ts-ignore
         var http = new ActiveXObject("Microsoft.XMLHTTP");
       }
       http.open('HEAD', url, false);
@@ -1913,20 +2332,28 @@ export let CONTENT = function (config, pack) {
     }
     if (lib.config.qhly_jianghun === undefined) lib.config.qhly_jianghun = 114514;
     if (!lib.config.qhly_shoushadengjie) lib.config.qhly_shoushadengjie = {};
+    // @ts-ignore
     _status.qhly_shoushajinjie = [100, 6300, 23600, 160000/* , 442000 */];
+    // @ts-ignore
     _status.qhly_jinjietiao = null;
+    // @ts-ignore
     game.qhly_getShoushajinjie = function (name) {
       if (!name || typeof name != 'string') return [0, 0, 0];
       if (!lib.config.qhly_shoushadengjie[name]) lib.config.qhly_shoushadengjie[name] = 0;
       var dengjie = 0, current = lib.config.qhly_shoushadengjie[name], need = 190000;
+      // @ts-ignore
       for (var i = 0; i < _status.qhly_shoushajinjie.length; i++) {
+        // @ts-ignore
         if (current >= _status.qhly_shoushajinjie[i]) {
           dengjie++;
+          // @ts-ignore
           current -= _status.qhly_shoushajinjie[i];
+          // @ts-ignore
           need -= _status.qhly_shoushajinjie[i];
         };
       }
       need -= current;
+      // @ts-ignore
       if (current == 0 && !_status.qhly_shoushajinjie[dengjie]) current = _status.qhly_shoushajinjie[dengjie - 1]
       return [dengjie, current, need];
     }
@@ -1942,6 +2369,7 @@ export let CONTENT = function (config, pack) {
       for (var i = 0; i < mvpplayers.length; i++) {
         list[i] = [mvpplayers[i]];
         var score = 0;
+        // @ts-ignore
         for (j = 0; j < mvpplayers[i].stat.length; j++) {
           if (mvpplayers[i].stat[j].damage != undefined) score += mvpplayers[i].stat[j].damage;
           if (mvpplayers[i].stat[j].damaged != undefined) score += mvpplayers[i].stat[j].damaged;
@@ -1952,12 +2380,15 @@ export let CONTENT = function (config, pack) {
           }
           if (mvpplayers[i].stat[j].kill != undefined) score += mvpplayers[i].stat[j].kill * 2;
         }
+        // @ts-ignore
         list[i].push(score);
       }
       list.sort(function (a, b) {
+        // @ts-ignore
         return b[1] - a[1];
       })
       while (result == !list[0][0].isFriendsOf(game.me) && list.length) list.shift();
+      // @ts-ignore
       if (list.length && list[0][1]) window.qhly_playVictoryAudio(list[0][0].name1);
     }
     lib.onover.push(jianghunUp);
@@ -1966,6 +2397,7 @@ export let CONTENT = function (config, pack) {
       if (!lib.config.qhly_skinset.djtoggle) lib.config.qhly_skinset.djtoggle = {}
       game.saveConfig('qhly_skinset', lib.config.qhly_skinset);
     }
+    // @ts-ignore
     game.qhly_getDengJie = function (name) { //十周年样式中通过game.getRarity获取css中的属性等阶
       var playerDengjie = 'one';
       if (!lib.config['extension_千幻聆音_qhly_decadeDengjie'] || lib.config['extension_千幻聆音_qhly_decadeDengjie'] == 'auto') {
@@ -1980,6 +2412,7 @@ export let CONTENT = function (config, pack) {
       else playerDengjie = lib.config['extension_千幻聆音_qhly_decadeDengjie'];
       return playerDengjie;
     }
+    // @ts-ignore
     game.qhly_getCurrentPlayer = function (str) {
       var list = [];
       var players = game.players.concat(game.dead);
@@ -1990,8 +2423,11 @@ export let CONTENT = function (config, pack) {
       if (list.length) return list;
       return [[null, 'name1']];
     }
+    // @ts-ignore
     game.qhly_hasDynamicSkin = function (character, name) {               //判断character的名为name的皮肤是否有动皮
+      // @ts-ignore
       if (!window.decadeUI) return false;
+      // @ts-ignore
       var dskins = decadeUI.dynamicSkin;
       var skins = dskins[character];
       if (skins == undefined) return false;
@@ -2002,6 +2438,7 @@ export let CONTENT = function (config, pack) {
       }
       return false;
     }
+    // @ts-ignore
     game.qhly_getSkinLevel = function (name, skin, decade, dongtai) {
       if (!skin) return decade ? 'yuanhua' : '原画';
       if (skin && skin.indexOf('.') == -1) skin += '.jpg';
@@ -2010,6 +2447,7 @@ export let CONTENT = function (config, pack) {
       if (!lib.config.qhly_level[name + '_' + skin] && decade) {
         if (skin && skin.indexOf('绝版') != -1) return 'jueban';
         var skinkey = skin.substring(0, skin.lastIndexOf('.'));
+        // @ts-ignore
         if (window.decadeUI && decadeUI.dynamicSkin[name] && decadeUI.dynamicSkin[name][skinkey]) return 'dongtai';
         return dongtai ? 'dongtai' : 'yuanhua';
       }
@@ -2026,10 +2464,13 @@ export let CONTENT = function (config, pack) {
         default: return decade ? 'dongtai' : '原画';
       }
     }
+    // @ts-ignore
     game.qhly_changeDynamicSkin = function (str, name, character, character2, play) {          //str主体，如果为字符串是名称中带有str的所有玩家，name指定更换为某种动皮，character玩家姓名id，character2是否为副将
+      // @ts-ignore
       if (!window.decadeUI) return;
       if (lib.config['extension_千幻聆音_qhly_decadeCloseDynamic']) return;
       let res2;
+      // @ts-ignore
       if (window.qhly_newDynamicExt) {
         res2 = {
           status: false,
@@ -2041,6 +2482,7 @@ export let CONTENT = function (config, pack) {
       var nodes;
       var increased;
       if (typeof str == 'object') nodes = [[str, character2 ? 'name2' : 'name1']];
+      // @ts-ignore
       else nodes = game.qhly_getCurrentPlayer(str);
       for (var dy = 0; dy < nodes.length; dy++) {
         var node = nodes[dy][0];
@@ -2051,6 +2493,7 @@ export let CONTENT = function (config, pack) {
         }
 
         if (!character) character = node[nodes[dy][1]];
+        // @ts-ignore
         var nodeType = get.itemtype(node) == 'player' ? 'player' : 'bigAvatar';
 
         var bool1 = true, bool2 = false;
@@ -2058,9 +2501,12 @@ export let CONTENT = function (config, pack) {
           bool1 = false, bool2 = true;
         } else if (nodes[dy][1] == 'name2') bool1 = false, bool2 = true;
         node.stopDynamic(bool1, bool2);
+        // @ts-ignore
         game.qhly_checkYH(node);
+        // @ts-ignore
         if (_status.mode != null) {
           var skins;
+          // @ts-ignore
           var dskins = decadeUI.dynamicSkin;
 
           skins = dskins[character];
@@ -2081,6 +2527,7 @@ export let CONTENT = function (config, pack) {
             }
           }
           else {
+            // @ts-ignore
             var value = game.qhly_getSkin(character);
             if (value) value = value.substring(0, value.lastIndexOf('.'));
             else value = '经典形象';
@@ -2090,7 +2537,9 @@ export let CONTENT = function (config, pack) {
             }
           }
           if (nodeType == 'player') {
+            // @ts-ignore
             if (window.dynamicExt && window.dynamicExt != window.skinSwitch) {
+              // @ts-ignore
               if (window.dynamicExt == window.eng) {
                 if (lib.config['extension_EngEX_dynamicSkin']) {
                   if (skin) lib.config['extension_EngEX_dynamicSkin'][character] = value;
@@ -2109,7 +2558,9 @@ export let CONTENT = function (config, pack) {
             }
           } else if (lib.config.qhly_smallwindowstyle == 'shousha') {
             if (skin && node.campBack && name) {
-              if (!['史诗', '传说'].contains(game.qhly_getSkinLevel(character, name))) node.campBack.setAttribute("data-pinzhi", '史诗');
+              // @ts-ignore
+              if (!['史诗', '传说'].includes(game.qhly_getSkinLevel(character, name))) node.campBack.setAttribute("data-pinzhi", '史诗');
+              // @ts-ignore
               else node.campBack.setAttribute("data-pinzhi", game.qhly_getSkinLevel(character, name));
               node.campBack.classList.add('dong');
             }
@@ -2122,8 +2573,10 @@ export let CONTENT = function (config, pack) {
             }
             return;
           }
+          // @ts-ignore
           skin = game.qhly_formatDS(skin, character);
           var editArgument1 = 'dynamic', editArgument2 = 'beijing';
+          // @ts-ignore
           if (game.qhly_getPlayerStatus(node, character2, character) == 2) {
             if (skin.special && skin.special.condition && (skin.special.condition.lowhp || skin.special.condition.juexingji)) {
               var value;
@@ -2146,6 +2599,7 @@ export let CONTENT = function (config, pack) {
             editArgument1 = 'dynamic2';
             editArgument2 = 'beijing2';
           }
+          // @ts-ignore
           var skinCopy = game.qhly_deepClone(skin);
           if (skinCopy.speed == undefined) skinCopy.speed = 1;
           skinCopy.zhu = !bool2;
@@ -2158,19 +2612,24 @@ export let CONTENT = function (config, pack) {
           }
           skinCopy.qhly_resizeRatio = node.offsetHeight * (1 / game.me.offsetHeight);
           // 动态背景切割 4 -> 判断提前 end
+          // @ts-ignore
           var editSkin = name || game.qhly_getSkin(character);
           if (editSkin == null) editSkin = '经典形象';
           if (editSkin.indexOf('.') < 0) editSkin += '.jpg';
           var themeType = ui.arena.dataset.newDecadeStyle == 'on' ? 'decade' : 'shousha';
           if (!node.classList.contains('qh-isBigAvatar') && nodeType != 'player') nodeType = 'player';
           var theme = nodeType == 'player' ? themeType : lib.config.qhly_currentViewSkin;
+          // @ts-ignore
           if (lib.config['extension_千幻聆音_qhly_editDynamic'] && lib.qhly_skinEdit[game.qhly_getRealName(character)] && lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin] && lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin][nodeType] && lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin][nodeType][editArgument1] && lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin][nodeType][editArgument1][theme]) {
+            // @ts-ignore
             var resetDynamic = lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin][nodeType][editArgument1][theme];
             skinCopy.x = resetDynamic.x;
             skinCopy.y = resetDynamic.y;
             skinCopy.scale = resetDynamic.scale * skinCopy.qhly_resizeRatio;
             skinCopy.angle = resetDynamic.angle;
+            // @ts-ignore
             if ((skinCopy.beijing || skinCopy.dynamicBackground) && lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin][nodeType][editArgument2] && lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin][nodeType][editArgument2][theme]) {
+              // @ts-ignore
               var resetBeijing = lib.qhly_skinEdit[game.qhly_getRealName(character)][editSkin][nodeType][editArgument2][theme];
               if (skinCopy.dynamicBackground) {
                 if (typeof skinCopy.dynamicBackground === 'string') {
@@ -2223,12 +2682,19 @@ export let CONTENT = function (config, pack) {
               }
             }
           }
+          // @ts-ignore
           if (window.qhly_newDynamicExt) {
+            // @ts-ignore
             if (bool1 && skinCopy.decade) res2.zhu = "decade";
+            // @ts-ignore
             else if (skinCopy.decade) res2.fu = "decade";
+            // @ts-ignore
             res2.status = true;
+            // @ts-ignore
             if (get.itemtype(node) == 'player') {
+              // @ts-ignore
               node.skinPack.zhuSkinType = res2.zhu;
+              // @ts-ignore
               node.skinPack.fuSkinType = res2.fu;
             } else {
               if (skinCopy.dybg) skinCopy.dybg.clip = undefined;
@@ -2240,11 +2706,13 @@ export let CONTENT = function (config, pack) {
             node.playDynamic(skinCopy, bool2, cutdybg, lib.config['extension_千幻聆音_qhly_ignoreClips']);
             /* taffy分界线 */
             node.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skinCopy.background + '")';
+            // @ts-ignore
             game.qhly_checkYH(node);
             // player.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/十周年UI/assets/dynamic/' + skinCopy.background + '")';
             if (!skinCopy.dynamicBackground) { } node.$dynamicWrap.style.backgroundImage = `url(${lib.assetURL}extension/十周年UI/assets/dynamic/${skinCopy.background}`;
             if (!increased) {
               increased = true;
+              // @ts-ignore
               decadeUI.CUR_DYNAMIC++;
             }
             return res2;
@@ -2277,15 +2745,19 @@ export let CONTENT = function (config, pack) {
             } else {
               node.$dynamicWrap.style.backgroundImage = 'url("' + lib.assetURL + 'extension/皮肤切换/images/card/card.png")'
             }
+            // @ts-ignore
             game.qhly_checkYH(node);
             // 修改9 start
-            if (game.qhly_hasExtension('皮肤切换') && lib.config[skinSwitch.configKey.useDynamic]) {
+            // @ts-ignore
+            if (game.qhly_hasExtension('皮肤切换') && window.skinSwitch && lib.config[window.skinSwitch.configKey.useDynamic]) {
               // 出框worker的初始化
               skinSwitch.chukuangPlayerInit(node, !bool2, skinCopy)
             }
             // 开启当前角色的定时播放动作
+            // @ts-ignore
             if (get.itemtype(node) == 'player') {
-              if (game.qhly_hasExtension('皮肤切换') && lib.config[skinSwitch.configKey.useDynamic]) {
+              // @ts-ignore
+              if (game.qhly_hasExtension('皮肤切换') && window.skinSwitch && lib.config[window.skinSwitch.configKey.useDynamic]) {
                 skinSwitch.dynamic.startPlay2Random(node)
               }
             }
@@ -2294,7 +2766,11 @@ export let CONTENT = function (config, pack) {
         }
       }
     }
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     game.qhly_checkPlayerImageAudio = function (name, skin, player, callbacka, callbackb, force) {
+      // @ts-ignore
       var skinName = game.qhly_earse_ext(skin);
       if (!player) {
         var players = game.filterPlayer(function (current) {
@@ -2305,81 +2781,114 @@ export let CONTENT = function (config, pack) {
       if (!player) return;
       var imageChanged = false;   //皮肤改变
       var audioChanged = false;   //语音映射改变
+      // @ts-ignore
       var pkg = game.qhly_foundPackage(name);
       var avatar2 = false;
+      // @ts-ignore
       if (get.itemtype(player) == 'player' && player.name2 && player.name2 == name) avatar2 = true;
+      // @ts-ignore
       var pkgPath = (pkg.isExt && game.qhly_getRealName(name) != name && skin) ? DEFAULT_PACKAGE.skin.standard : pkg.skin.standard;
+      // @ts-ignore
       if (lib.qhly_skinChange[name] && lib.qhly_skinChange[name][skinName] && lib.qhly_skinChange[name][skinName].source) {
         if (!player._qhly_skinChange) player._qhly_skinChange = ['', ''];
+        // @ts-ignore
         if (lib.qhly_skinChange[name][skinName].source.indexOf('hp_') == 0) {
+          // @ts-ignore
           let hp = parseInt(lib.qhly_skinChange[name][skinName].source.slice(3));
           if (player.hp <= hp) {
+            // @ts-ignore
             if (game.qhly_getPlayerStatus(player, avatar2) != 2) {
               imageChanged = true;
+              // @ts-ignore
               player._qhly_skinChange[avatar2 ? 1 : 0] = pkgPath + lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].image1;
             }
+            // @ts-ignore
             if (!window.qhly_audio_redirect[name + '-' + skinName] || window.qhly_audio_redirect[name + '-' + skinName] != lib.qhly_skinChange[name][skinName].audio1) {
               audioChanged = true;
+              // @ts-ignore
               window.qhly_audio_redirect[name + '-' + skinName] = lib.qhly_skinChange[name][skinName].audio1;
             }
           } else if (player.hp > hp) {
             if (player._qhly_gonnaChange && player._qhly_gonnaChange[avatar2 ? 1 : 0]) {
+              // @ts-ignore
               if (game.qhly_getPlayerStatus(player, avatar2) != 2) {
                 imageChanged = true;
+                // @ts-ignore
                 player._qhly_skinChange[avatar2 ? 1 : 0] = pkgPath + lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].image1;
               }
+              // @ts-ignore
               if (!window.qhly_audio_redirect[name + '-' + skinName] || window.qhly_audio_redirect[name + '-' + skinName] != lib.qhly_skinChange[name][skinName].audio1) {
                 audioChanged = true;
+                // @ts-ignore
                 window.qhly_audio_redirect[name + '-' + skinName] = lib.qhly_skinChange[name][skinName].audio1;
               }
             } else {
+              // @ts-ignore
               if (game.qhly_getPlayerStatus(player, avatar2) != 1) {
                 imageChanged = true;
+                // @ts-ignore
                 player._qhly_skinChange[avatar2 ? 1 : 0] = pkgPath + lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].image2;
               }
+              // @ts-ignore
               if (window.qhly_audio_redirect[name + '-' + skinName]) {
                 audioChanged = true;
+                // @ts-ignore
                 delete window.qhly_audio_redirect[name + '-' + skinName];
               }
             }
           }
         } else {
+          // @ts-ignore
           if (game.qhly_getPlayerStatus(player, avatar2) == 1) {
+            // @ts-ignore
             if (!player._qhly_skinChange[avatar2 ? 1 : 0] || player._qhly_skinChange[avatar2 ? 1 : 0] != pkgPath + lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].image2) {
               imageChanged = true;
+              // @ts-ignore
               player._qhly_skinChange[avatar2 ? 1 : 0] = pkgPath + lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].image2;
             }
+            // @ts-ignore
             if (window.qhly_audio_redirect[name + '-' + skinName]) {
               audioChanged = true;
+              // @ts-ignore
               delete window.qhly_audio_redirect[name + '-' + skinName];
             }
           } else {
+            // @ts-ignore
             if (!player._qhly_skinChange[avatar2 ? 1 : 0] || player._qhly_skinChange[avatar2 ? 1 : 0] != pkgPath + lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].image1) {
               imageChanged = true;
+              // @ts-ignore
               player._qhly_skinChange[avatar2 ? 1 : 0] = pkgPath + lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].image1;
             }
+            // @ts-ignore
             if (!window.qhly_audio_redirect[name + '-' + skinName] || window.qhly_audio_redirect[name + '-' + skinName] != lib.qhly_skinChange[name][skinName].audio1) {
               audioChanged = true;
+              // @ts-ignore
               window.qhly_audio_redirect[name + '-' + skinName] = lib.qhly_skinChange[name][skinName].audio1;
             }
           }
         }
       }
       if (imageChanged && callbacka) callbacka();
+      // @ts-ignore
       if (audioChanged) game.qhly_setCurrentSkin(name, skin, callbackb);
     }
+    // @ts-ignore
     game.qhly_getPlayerStatus = function (player, avatar2, name) {
       var num = 1;
+      // @ts-ignore
       if (name) name = game.qhly_getRealName(name);
+      // @ts-ignore
       else if (!name && get.itemtype(player) == 'player') name = game.qhly_getRealName(player['name' + (avatar2 ? '2' : '1')]);
       else if (!name) return 1;
       if (player) {
         if (player._qhly_skinStatus) return player._qhly_skinStatus[avatar2 ? 1 : 0];
         if (player._qhlyIsChanged && player._qhlyIsChanged[avatar2 ? 1 : 0]) return 2;
+        // @ts-ignore
         if (get.itemtype(player) == 'player') var node = player.node['avatar' + (avatar2 ? '2' : '')];
         else var node = player;
         const support = ['.jpg', '.png', '.webp'];
         const bg = node.style.backgroundImage || node.style.getPropertyValue('background-image');
+        // @ts-ignore
         if (lib.qhly_skinChange[name] && lib.qhly_skinChange[name][game.qhly_earse_ext(game.qhly_getSkin(name))]) {
           if (bg) {
             for (var s of support) {
@@ -2388,6 +2897,7 @@ export let CONTENT = function (config, pack) {
                 var frIndex = bg.indexOf(name);
                 if (frIndex > 0) {
                   var str = bg.slice(frIndex, index + 4);
+                  // @ts-ignore
                   if (lib.qhly_skinChange[name][game.qhly_earse_ext(game.qhly_getSkin(name))].image1 && str == lib.qhly_skinChange[name][game.qhly_earse_ext(game.qhly_getSkin(name))].image1) num = 2;
                 }
               }
@@ -2397,13 +2907,16 @@ export let CONTENT = function (config, pack) {
       }
       return num;
     }
+    // @ts-ignore
     game.qhly_setPlayerStatus = function (player, avatar2, num) {
       if (typeof player == 'object') {
         if (!player._qhly_skinStatus) player._qhly_skinStatus = [1, 1];
         player._qhly_skinStatus[avatar2 ? 1 : 0] = num;
       }
     }
+    // @ts-ignore
     game.qhly_deepClone = function (obj, newObj) {
+      // @ts-ignore
       var newObj = newObj || {};
       for (let key in obj) {
         if (Array.isArray(obj[key])) {
@@ -2414,6 +2927,7 @@ export let CONTENT = function (config, pack) {
             continue;
           }
           newObj[key] = {};
+          // @ts-ignore
           game.qhly_deepClone(obj[key], newObj[key]);
         } else {
           newObj[key] = obj[key]
@@ -2421,23 +2935,35 @@ export let CONTENT = function (config, pack) {
       }
       return newObj;
     }
+    // @ts-ignore
     lib.element.player.playChangeSkinEffect = function (avatar2) {
+      // @ts-ignore
       game.qhly_playQhlyAudio('qhly_voc_dec_fanshu', null, true);
+      // @ts-ignore
       if (!window.decadeUI) return;
       var str = 'huanpifu_', act = '';
       var huanfuType = lib.config['extension_十周年UI_newDecadeStyle'] == 'on' ? 'huanpifu' : 'huanfu';
+      // @ts-ignore
       if (!decadeUI.animation.hasSpine(window.qhlyUI.assets[huanfuType]['name'])) return;
       var currentScale = 0.7;
       var name = avatar2 ? this.name2 : this.name1;
       if (huanfuType == 'huanpifu') {
+        // @ts-ignore
         switch (game.qhly_getSkinLevel(name, game.qhly_getSkin(name), true)) {
+          // @ts-ignore
           case 'xiyou': str += 'purple'; act = 2; break;
+          // @ts-ignore
           case 'shishi': str += 'yellow'; act = 3; break;
           case 'putong': str += 'white'; break;
+          // @ts-ignore
           case 'yuanhua': str += 'white'; act = 6; break;
+          // @ts-ignore
           case 'chuanshuo': str += 'gules'; act = 4; break;
+          // @ts-ignore
           case 'xianding': str += 'gules'; act = 5; break;
+          // @ts-ignore
           case 'jueban': str += 'gules'; act = 7; break;
+          // @ts-ignore
           default: str += 'gules'; act = 8; break;
         }
       } else {
@@ -2445,9 +2971,11 @@ export let CONTENT = function (config, pack) {
         currentScale *= 0.65;
       }
       let bool1 = lib.config['extension_十周年UI_newDecadeStyle'] == 'on' ? true : false;
+      // @ts-ignore
       if (this.doubleAvatar) {
         var currentWidth = bool1 ? 0.068 : 0.06;
         if (avatar2) {   //副将
+          // @ts-ignore
           window.qhlyUI.assets[huanfuType].clip = {
             x: [0, this.offsetLeft / document.body.offsetWidth + currentWidth + (bool1 ? 0 : 0.02)],
             y: 0,
@@ -2455,9 +2983,12 @@ export let CONTENT = function (config, pack) {
             height: [0, 1],
             clipParent: true
           };
+          // @ts-ignore
           decadeUI.animation.playSpine({ name: window.qhlyUI.assets[huanfuType].name, action: str }, { scale: currentScale, y: [0, 0.5], parent: this });
+          // @ts-ignore
           decadeUI.animation.playSpine({ name: window.qhlyUI.assets.pinzhi.name, action: 'play' + act }, { scale: 0.3, x: [0, 0.75], y: [0, 0.15], parent: this });
         } else {   //主将
+          // @ts-ignore
           window.qhlyUI.assets[huanfuType].clip = {
             x: [0, this.offsetLeft / document.body.offsetWidth + (bool1 ? 0 : 0.02)],
             y: 0,
@@ -2465,24 +2996,32 @@ export let CONTENT = function (config, pack) {
             height: [0, 1],
             clipParent: true
           }
+          // @ts-ignore
           decadeUI.animation.playSpine({ name: window.qhlyUI.assets[huanfuType].name, action: str }, { scale: currentScale, x: [0, 0.5], y: [0, 0.5], parent: this });
+          // @ts-ignore
           decadeUI.animation.playSpine({ name: window.qhlyUI.assets.pinzhi.name, action: 'play' + act }, { scale: 0.3, x: [0, 0.25], y: [0, 0.15], parent: this });
         }
       } else {
+        // @ts-ignore
         decadeUI.animation.playSpine({ name: window.qhlyUI.assets[huanfuType].name, action: str }, { scale: currentScale, y: [0, 0.5], parent: this });
+        // @ts-ignore
         if (huanfuType == 'decade') decadeUI.animation.playSpine({ name: window.qhlyUI.assets.pinzhi.name, action: 'play' + act }, { scale: 0.5, y: [0, 0.15], parent: this });
       }
     }
 
+    // @ts-ignore
     game.qhly_getDynamicSkin = function (skinName, playerName) {
+      // @ts-ignore
       if (!window.decadeUI) return false;
       if (!playerName) return false;
+      // @ts-ignore
       var dskins = dui.dynamicSkin;
       var skins = dskins[playerName];
       if (skins) {
         if (skinName) return skins[skinName];
         else {
           var skin;
+          // @ts-ignore
           var value = game.qhly_getSkin(playerName);
           if (value) value = value.substring(0, value.lastIndexOf('.'));
           else value = '经典形象';
@@ -2497,9 +3036,11 @@ export let CONTENT = function (config, pack) {
         }
       } else return false;
     }
+    // @ts-ignore
     game.qhly_checkYH = function (player, group) {
       if(lib.config.qhly_close_circle_top === true)return;
       if (lib.config['extension_十周年UI_newDecadeStyle'] == "on") return;
+      // @ts-ignore
       if (!player || get.itemtype(player) != 'player') return;
       let gro = player.group || group;
       if (!gro) gro = 'weizhi';
@@ -2514,41 +3055,57 @@ export let CONTENT = function (config, pack) {
       if (isYh && skinYh.length == 0) {
         let yh = document.createElement("img");
         yh.classList.add("skinYh");
+        // @ts-ignore
         yh.src = lib.qhly_path + "image/border/" + gro + ".png";
         yh.onerror = function () {
+          // @ts-ignore
           yh.src = lib.qhly_path + "image/border/weizhi.png"
         }
         player.appendChild(yh);
       }
     }
+    // @ts-ignore
     game.playShoushaAvatar = function (node, flip, name) {
+      // @ts-ignore
       if (!lib.config['extension_千幻聆音_qhly_shoushaTexiao'] || !window.decadeUI) return;
+      // @ts-ignore
       if (window.dynamicExt == window.eng && !lib.config['extension_EngEX_SSSEffect']) return;
       var mainPlayer = document.getElementById('mainView');
+      // @ts-ignore
       if (!mainPlayer || !node.dynamic || !node.dynamic.primary || node.dynamic.primary.name != _status.currentTexiao || _status.bigEditing) {
+        // @ts-ignore
         clearInterval(_status.texiaoTimer);
+        // @ts-ignore
         clearTimeout(_status.texiaoTimer2);
         return;
       }
-      if (game.qhly_hasExtension('皮肤切换') && lib.config[skinSwitch.configKey.useDynamic]) {
+      // @ts-ignore
+      if (game.qhly_hasExtension('皮肤切换') && window.skinSwitch && lib.config[window.skinSwitch.configKey.useDynamic]) {
         node.isQhlx = true // 表示当前动皮角色是千幻雷修版本的
+        // @ts-ignore
         window.skinSwitch.postMsgApi.actionGongJi(node)  // 直接调用封装的播放动皮
       } else {
         let res;
+        // @ts-ignore
         if (window.qhly_newDynamicExt && lib.config['extension_EpicFX_skinEffects']) {
+          // @ts-ignore
           res = EpicFX.canAction4(node, "GongJi");
           if (!res.ok) return;
           if (res.skin1 && res.skin2) {
             let skin = res["skin" + (Math.ceil(2 * Math.random()))];
+            // @ts-ignore
             if (skin.decade) EpicFX.playDynamicEffect2(node, "gongji", skin, flip);
+            // @ts-ignore
             else EpicFX.playDynamicEffect(node, "GongJi", skin, flip);
           } else {
             for (let i = 1; i < 3; i++) {
               let skin = res["skin" + i];
               if (skin) {
                 if (skin.decade) {
+                  // @ts-ignore
                   EpicFX.playDynamicEffect2(node, "gongji", skin, flip);
                 } else {
+                  // @ts-ignore
                   EpicFX.playDynamicEffect(node, "GongJi", skin, flip);
                 }
               }
@@ -2584,6 +3141,9 @@ export let CONTENT = function (config, pack) {
                 renderer.onmessage = function (e) {
                   if (e.data) {
                     game.playAudio("..", "extension", "EngEX/audio/effect", res.dynamic.name + ".mp3");
+                    // @ts-ignore
+                    // @ts-ignore
+                    // @ts-ignore
                     renderer.onmessage = function (e) {
                       //if (dynamicWrap) dynamicWrap.style.zIndex = "62";
                       if (canvas) {
@@ -2607,10 +3167,14 @@ export let CONTENT = function (config, pack) {
             var tempY = node.dynamic.primary.y, chukuangY = tempY;
             var tempA = node.dynamic.primary.angle || 0, chukuangA = tempA;
             var tempS = node.dynamic.primary.scale || 1, chukuangS = tempS;
+            // @ts-ignore
             var realName = game.qhly_getRealName(name);
+            // @ts-ignore
             var skin = game.qhly_getSkin(name);
             var theme = lib.config.qhly_currentViewSkin;
+            // @ts-ignore
             if (lib.qhly_skinEdit[realName] && lib.qhly_skinEdit[realName][skin] && lib.qhly_skinEdit[realName][skin].bigAvatar && lib.qhly_skinEdit[realName][skin].bigAvatar.chukuang && lib.qhly_skinEdit[realName][skin].bigAvatar.chukuang[theme]) {
+              // @ts-ignore
               let res2 = lib.qhly_skinEdit[realName][skin].bigAvatar.chukuang[theme];
               if (res2.x != undefined) chukuangX = res2.x;
               if (res2.y != undefined) chukuangY = res2.y;
@@ -2636,10 +3200,12 @@ export let CONTENT = function (config, pack) {
         }
       }
     }
+    // @ts-ignore
     game.qhly_getRealName = function (name) {
       if (name === undefined) return undefined;
       if (!name) return;
       var realName = name;
+      // @ts-ignore
       if (lib.qhly_skinShare[name] && lib.qhly_skinShare[name].name) realName = lib.qhly_skinShare[name].name;
       // taffy: 修复nameinfo[4]中指定的原画路径信息无法被千幻聆音检测到的问题
       let nameinfo = get.character(realName);
@@ -2660,45 +3226,56 @@ export let CONTENT = function (config, pack) {
       /* taffy分界线 */
       return realName;
     }
+    // @ts-ignore
     game.qhly_getCoordinate = function (domNode, subtr) {
+      // @ts-ignore
       if (!domNode && !window.decadeUI) return false;
       var rect = domNode.getBoundingClientRect();
       return {
         x: rect.left,
+        // @ts-ignore
         y: decadeUI.get.bodySize().height - (subtr ? rect.bottom : 0),
         width: rect.width,
         height: rect.height
       };
     }
+    // @ts-ignore
     game.qhly_postMessage = function (node, data, mode, noAlert) {
       if (!node.dynamic || !node.dynamic.renderer) return;
       if (!node.dynamic.renderer.postMessage) {
         if (!noAlert) alert('开启过太多动皮，无法调整，请重启游戏！');
         return;
       }
+      // @ts-ignore
       switch (window.dynamicExt) {
+        // @ts-ignore
         case window.skinSwitch: {
           skinSwitch.postMsgApi.resizePos(node, mode, data);
         }
           break;
         default: {
           if (mode == 'daiji') node.dynamic.renderer.postMessage(data);
+          // @ts-ignore
           else if (window.qhly_newDynamicExt) {
             if (mode == 'beijing') node.dynamic.renderer.postMessage(data);
           }
         }
       }
     }
+    // @ts-ignore
     game.qhly_syncChangeSkinButton = function (name, skin, state) {
       var player = game.filterPlayer(function (current) {
         return current.name1 == name || current.name2 == name;
       })
+      // @ts-ignore
       if (player.length) player = player[0];
+      // @ts-ignore
       var skinName = game.qhly_earse_ext(skin), num = 0;
       for (var i = 0; i < 2; i++) {
         var button = document.getElementById('qhlySkinChangebutton' + i);
         if (button) button.remove();
       }
+      // @ts-ignore
       if (lib.qhly_skinChange[name] && lib.qhly_skinChange[name][skinName]) {
         if (!document.getElementById('qhlySkinChangebutton1')) {
           var buttons = [];
@@ -2712,46 +3289,66 @@ export let CONTENT = function (config, pack) {
               }
               this.classList.add('sel');
               var index = 2 - parseInt(this.id.slice(20));
+              // @ts-ignore
               window.qhly_audio_redirect[game.qhly_getRealName(name) + '-' + skinName] = lib.qhly_skinChange[game.qhly_getRealName(name)][skinName]['audio' + index];
+              // @ts-ignore
               game.qhly_setCurrentSkin(name, skin, function () {
+                // @ts-ignore
                 game.qhly_setOriginSkin(name, skin, state.mainView.avatarImage, state, this.id.slice(20) == '1');
               }.bind(this))
+              // @ts-ignore
               if (this.id == 'qhlySkinChangebutton1') game.qhly_setPlayerStatus(state.mainView.avatarImage, undefined, 2);
+              // @ts-ignore
               else game.qhly_setPlayerStatus(state.mainView.avatarImage, undefined, 1);
               if (lib.config.qhly_currentViewSkin == 'shousha') state.mainView.page.skin.refresh(name, state);
+              // @ts-ignore
               if (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][skinName]) game.qhly_changeDynamicSkin(state.mainView.avatarImage, skinName, name);
+              // @ts-ignore
               if (state.mainView.avatarImage.dynamic && state.mainView.avatarImage.dynamic.primary != null) _status.currentTexiao = state.mainView.avatarImage.dynamic.primary.name;
             })
           }
+          // @ts-ignore
           num = game.qhly_getPlayerStatus(state.mainView.avatarImage, null, name) == 2 ? 1 : 0;
           buttons[num].classList.add('sel');
         } else {
+          // @ts-ignore
           if (button && button.classList.contains('sel')) {
+            // @ts-ignore
             window.qhly_audio_redirect[game.qhly_getRealName(name) + '-' + skinName] = lib.qhly_skinChange[game.qhly_getRealName(name)][skinName].audio1;
           } else {
+            // @ts-ignore
             delete window.qhly_audio_redirect[game.qhly_getRealName(name) + '-' + skinName];
           }
+          // @ts-ignore
           game.qhly_setCurrentSkin(name, skin);
         }
       }
     }
     //--------------------------------------新增
+    // @ts-ignore
     if (!lib.qhly_callbackList) {
+      // @ts-ignore
       lib.qhly_callbackList = [];
     }
+    // @ts-ignore
     lib.qhly_dirskininfo = {};
     if (!lib.config.qhly_changeSex) lib.config.qhly_changeSex = {};
+    // @ts-ignore
     game.qhly_importSkinInfo = function (obj) {
+      // @ts-ignore
       lib.qhly_dirskininfo[obj.name] = obj;
     };
+    // @ts-ignore
     lib.qhly_filterPlainText = function (str) {
       if (!str) return "";
       var regex = /(<([^>]+)>)/ig;
       return str.replace(regex, "");
     };
+    // @ts-ignore
     lib.qhly_slimName = function(str){
       return get.slimName(str);
     };
+    // @ts-ignore
     lib.qhly_getSkillKeyWordColorList = function () {
       if (!lib.config.qhly_keymark) return null;
       if (lib.config.qhly_keymark.length == 0) return null;
@@ -2765,11 +3362,14 @@ export let CONTENT = function (config, pack) {
       }
       return obj;
     };
+    // @ts-ignore
     String.prototype.replaceAll = function (s1, s2) {
       return this.replace(new RegExp(s1, "gm"), s2);
     };
+    // @ts-ignore
     lib.qhly_keyMark = function (str) {
       if (!lib.config.qhly_keymarkopen) return str;
+      // @ts-ignore
       var obj = lib.qhly_getSkillKeyWordColorList();
       if (!obj) return str;
       for (var k in obj) {
@@ -2783,36 +3383,49 @@ export let CONTENT = function (config, pack) {
       }
       return str;
     };
+    // @ts-ignore
     game.qhly_earseExt = function (path) {
       if (!path) return null;
       var foundDot = path.lastIndexOf('.');
       if (foundDot < 0) return path;
       return path.slice(0, foundDot);
     };
+    // @ts-ignore
     window.qhly_createConfigWindow = function(title,buttonText,html,idList){
         var window = ui.create.div('.qh-config-win');
+        // @ts-ignore
         window.qhv = {};
+        // @ts-ignore
         window.qhv.title = ui.create.div('.qh-config-win-title',window);
+        // @ts-ignore
         window.qhv.title.innerHTML = title;
+        // @ts-ignore
         window.qhv.button = ui.create.div('.qh-config-win-button',window);
+        // @ts-ignore
         window.qhv.button.innerHTML = buttonText;
+        // @ts-ignore
         window.qhv.text = ui.create.div('.qh-config-win-text',window);
+        // @ts-ignore
         window.qhv.text.innerHTML = html;
+        // @ts-ignore
         lib.setScroll(window.qhv.text);
         document.body.appendChild(window);
         if(idList){
           for(var key of idList){
             (function(key){
               var m = document.getElementById(key);
+              // @ts-ignore
               window.qhv[key] = m;
             })(key);
           }
         }
         return window;
     };
+    // @ts-ignore
     window.qhly_openPluginWindow = function(){
       var html = "";
       var list = [];
+      // @ts-ignore
       var plugins = game.qhly_getPlugins(null,false);
       var count = 0;
       var map = {};
@@ -2845,17 +3458,21 @@ export let CONTENT = function (config, pack) {
           count++;
         })(plugin);
       }
+      // @ts-ignore
       var win = window.qhly_createConfigWindow("插件管理","",html,list);
       var qhv = win.qhv;
       qhv.button.setBackgroundImage('extension/千幻聆音/image/qhly_ok2.png');
       qhv.button.listen(function(){
         win.delete();
+        // @ts-ignore
         game.qhly_playQhlyAudio('qhly_voc_press', null, true);
       });
       var bindFunc = function (checkbox, text) {
         if (!text) return;
+        // @ts-ignore
         ui.qhly_addListenFunc(text);
         text.listen(function () {
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_check', null, true);
           checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
         });
@@ -2864,12 +3481,15 @@ export let CONTENT = function (config, pack) {
         (function(num){
           var plugin = map[num];
           var check = qhv['qhly_pluginwindow_plugin_'+num];
-          var isOpen = lib.config.qhly_disabledPlugins?(!lib.config.qhly_disabledPlugins.contains(game.qhly_getPluginId(plugin))):true;
+          // @ts-ignore
+          var isOpen = lib.config.qhly_disabledPlugins?(!lib.config.qhly_disabledPlugins.includes(game.qhly_getPluginId(plugin))):true;
+          // @ts-ignore
           ui.qhly_initCheckBox(check,isOpen);
           bindFunc(check,qhv['qhly_pluginwindow_plugin_text_'+num]);
           check.qhly_onchecked=function(check){
             if(check){
               if(lib.config.qhly_disabledPlugins){
+                // @ts-ignore
                 lib.config.qhly_disabledPlugins.remove(game.qhly_getPluginId(plugin));
                 game.saveConfig('qhly_disabledPlugins',lib.config.qhly_disabledPlugins);
               }
@@ -2877,6 +3497,7 @@ export let CONTENT = function (config, pack) {
               if(!lib.config.qhly_disabledPlugins){
                 lib.config.qhly_disabledPlugins = [];
               }
+              // @ts-ignore
               lib.config.qhly_disabledPlugins.push(game.qhly_getPluginId(plugin));
               game.saveConfig('qhly_disabledPlugins',lib.config.qhly_disabledPlugins);
             }
@@ -2885,11 +3506,15 @@ export let CONTENT = function (config, pack) {
       }
       return win;
     };
+    // @ts-ignore
     HTMLDivElement.prototype.qhly_listen = function (func) {
       if (lib.config.touchscreen) {
         this.addEventListener('touchend', function (e) {
           func.call(this, e);
         });
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         var fallback = function (e) {
           this.removeEventListener('click', fallback);
         }
@@ -2901,7 +3526,9 @@ export let CONTENT = function (config, pack) {
       return this;
     };
     game.saveConfig('qhly_forceall', true);
+    // @ts-ignore
     if (!lib.qhly_callbackList) {
+      // @ts-ignore
       lib.qhly_callbackList = [];
     }
     var originGetRarity = game.getRarity;
@@ -2924,6 +3551,7 @@ export let CONTENT = function (config, pack) {
       }
     }
 
+    // @ts-ignore
     ui.qhly_fixTextSize = function (node, size) {
       if (!size) size = 25;
       node.style.fontSize;
@@ -2947,6 +3575,7 @@ export let CONTENT = function (config, pack) {
       }
     };
     //判断文件、文件夹是否存在
+    // @ts-ignore
     game.qhly_checkFileExist = function (path, callback) {
       if (lib.node && lib.node.fs) {
         try {
@@ -2977,7 +3606,13 @@ export let CONTENT = function (config, pack) {
         }
       /* taffy分界线 */
       } else {
-        resolveLocalFileSystemURL(lib.assetURL + path, (function (name) {
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
+        resolveLocalFileSystemURL(nonameInitialized + path, (function (name) {
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           return function (entry) {
             callback(true);
           }
@@ -2986,9 +3621,11 @@ export let CONTENT = function (config, pack) {
         });
       }
     };
+    // @ts-ignore
     game.qhly_setOriginSkin = function (name, skin, node, state, skin2) {
       if (skin != null) {//国战兼容
         if (name.indexOf('gz_') == 0) {
+          // @ts-ignore
           if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanSkin(name)) {
             var subname = name.slice(3);
             if (get.character(subname)) {
@@ -2997,11 +3634,15 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       var realName = game.qhly_getRealName(name);
+      // @ts-ignore
       var originFrom = (state.pkg.isExt && realName != name && skin) ? DEFAULT_PACKAGE.skin.standard : state.pkg.skin.standard;
+      // @ts-ignore
       var originFrom1 = (state.pkg.isExt && realName != name && skin) ? DEFAULT_PACKAGE.skin.origin : state.pkg.skin.origin;
       var originFrom2;
       var position = '50%';
+      // @ts-ignore
       var setTrue = lib.qhly_skinChange[name] && lib.qhly_skinChange[name][game.qhly_earse_ext(skin)];
       if (skin) {
         if (skin2 && setTrue) {
@@ -3022,6 +3663,7 @@ export let CONTENT = function (config, pack) {
       let rarity = document.getElementsByClassName('qh-avatarrarity');
       image.onload = function () {
         let landscape = false;
+        // @ts-ignore
         if (this.width > this.height && theme) landscape = true;
         node.classList.remove('qh-image-lutou');
         node.classList.add('qh-image-standard');
@@ -3048,10 +3690,13 @@ export let CONTENT = function (config, pack) {
         node.style.backgroundImage = 'url(' + image.src + ')';
         node.style.backgroundSize = 'cover';
         var positionArgument = lib.config.qhly_currentViewSkin;
+        // @ts-ignore
         if (game.qhly_getPlayerStatus(state.mainView.avatarImage, null, state.name) == 2) {
           positionArgument = lib.config.qhly_currentViewSkin + '2';
         }
+        // @ts-ignore
         if (lib.qhly_skinEdit[realName] && lib.qhly_skinEdit[realName][skin] && lib.qhly_skinEdit[realName][skin][positionArgument]) {
+          // @ts-ignore
           position = lib.qhly_skinEdit[realName][skin][positionArgument];
         }
         node.style.setProperty('--p', position);
@@ -3072,22 +3717,28 @@ export let CONTENT = function (config, pack) {
           state.mainView.avatarBorder.classList.remove('noBorder');
         }
         if (skin2 && setTrue) {
+          // @ts-ignore
           node.qhly_origin_setBackgroundImage(originFrom + lib.qhly_skinChange[realName][game.qhly_earse_ext(skin)].image1);
           node.style.backgroundSize = 'cover';
         }
         else node.setBackground(name, 'character');
       }
     }
+    // @ts-ignore
     game.qhly_playerWindow = function (node) {
+      // @ts-ignore
       if (window.qhly_forbidPlayerWindow) return;             //给其他扩展一个变量接口，方便临时禁用单击武将弹出菜单功能（记得执行完你的功能后设为false哦）
       const player = node.parentNode;
       const playerName = node.className == 'primary-avatar' ? player.name1 : player.name2;
+      // @ts-ignore
       if (_status.qhly_open || _status.bigEditing || _status.qhly_playerWindowing) return;
+      // @ts-ignore
       _status.qhly_playerWindowing = true;
       function exit(e) {
         if (e) e.stopPropagation();
         var touch = document.getElementById('qhly_bigBackground');
         var black = document.getElementById('qhly_playerwindowbg');
+        // @ts-ignore
         _status.qhly_playerWindowing = false;
         if (touch) touch.remove();
         if (black) black.remove();
@@ -3109,13 +3760,16 @@ export let CONTENT = function (config, pack) {
         buttons[i].addEventListener(lib.config.touchscreen ? 'touchstart' : 'mousedown', function (e) {
           e.stopPropagation();
           exit();
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_dec_press', null, true);
           switch (this.id) {
             case 'qhly_playerwindowbtn0': {//武将信息
+              // @ts-ignore
               game.qhly_open_new(playerName, lib.config.qhly_doubledefaultpage ? lib.config.qhly_doubledefaultpage : 'skill', node);
             }
               break;
             case 'qhly_playerwindowbtn1': {//换肤小窗
+              // @ts-ignore
               game.qhly_open_small(playerName, null, node);
             }
               break;
@@ -3124,6 +3778,7 @@ export let CONTENT = function (config, pack) {
                 alert('双将暂不支持编辑动皮');
                 return;
               }
+              // @ts-ignore
               game.qhly_bigEdit(player);
             }
               break;
@@ -3131,6 +3786,7 @@ export let CONTENT = function (config, pack) {
         });
       }
     }
+    // @ts-ignore
     game.qhly_formatDS = function (obj, namex) {
       if (!lib.config['extension_千幻聆音_qhly_formatDS'] || obj._hasFormated) return obj;
       var keys = Object.keys(obj);
@@ -3183,7 +3839,9 @@ export let CONTENT = function (config, pack) {
             if (Array.isArray(str)) str = str[0];
             let To = obj.special[str].name ? obj.special[str].name : obj.name.slice(0, obj.name.lastIndexOf('/'));
             To = 'decadeUI.dynamicSkin.' + To.replace('/', '.');
+            // @ts-ignore
             let currentSkin = game.qhly_getSkin(namex);
+            // @ts-ignore
             if (currentSkin) currentSkin = game.qhly_earse_ext(currentSkin);
             let From = 'decadeUI.dynamicSkin.' + namex + '.' + currentSkin;
             obj.transform = {
@@ -3226,10 +3884,15 @@ export let CONTENT = function (config, pack) {
       obj._hasFormated = true;
       return obj;
     }
+    // @ts-ignore
     game.qhly_setDoubleGroup = function (state) {
+      let border = get.character(state.name);
+      if(border){
+        border = border.groupBorder;
+      }
       var group, dg;
       if (lib.config.qhly_doubleGroup && lib.config.qhly_doubleGroup[state.name]) {
-        if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.contains(state.name) || get.is.double(state.name)) {
+        if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.includes(state.name) || get.is.double(state.name)) {
           dg = true;
           group = lib.config.qhly_doubleGroup[state.name][0] + lib.config.qhly_doubleGroup[state.name][1];
         }
@@ -3239,14 +3902,15 @@ export let CONTENT = function (config, pack) {
         const groupList = ['jin', 'wei', 'shu', 'wu', 'qun', 'jin'];
         group = state.intro[1];
         state.group = group;
-        if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.contains(state.name) || get.is.double(state.name)) {
+        if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.includes(state.name) || get.is.double(state.name)) {
           dg = true;
           if (!lib.config.qhly_doubleGroup) game.saveConfig('qhly_doubleGroup', {});
           if (lib.config.qhly_doubleGroup[state.name]) group = lib.config.qhly_doubleGroup[state.name];
           else if (get.is.double(state.name)) {
+            // @ts-ignore
             group = get.is.double(state.name, true);
           } else {
-            if (groupList.contains(group)) group = [group, groupList[groupList.indexOf(group) + 1]];
+            if (groupList.includes(group)) group = [group, groupList[groupList.indexOf(group) + 1]];
             else group = ['jin', 'wei'];
           }
           state.group = [...group];
@@ -3260,18 +3924,30 @@ export let CONTENT = function (config, pack) {
         else if (dg) path = group;
       }
       if (path) {
-        var url1 = `url('${state.pkg.ssborder || 'shousha/'}${group}.png')`;
-        var url2 = `url('${state.pkg.ssborder || 'shousha/'}${group}_top.png')`;
+        var url1;
+        if(border){
+          url1 = `url('${state.pkg.ssborder || 'shousha/border2/'}${group}_zi.png'),url('${state.pkg.ssborder || 'shousha/border2/'}${border}_frame.png')`;
+        }else{
+          url1 = `url('${state.pkg.ssborder || 'shousha/'}${group}.png')`;
+        }
+        var url2;
+        if(border){
+          url2 = `url('${state.pkg.ssborder || 'shousha/'}${border}_top.png')`;
+        }else{
+          url2 = `url('${state.pkg.ssborder || 'shousha/'}${group}_top.png')`;
+        }
         state.mainView.avatarLabel.style.setProperty('--u', url2);
         state.mainView.avatarLabelOther.style.setProperty('--u', url1);
       }
+      // @ts-ignore
       game.qhly_refreshSShp(state);
     }
+    // @ts-ignore
     game.qhly_refreshSShp = function (state) {
       var hp = state.intro[2], group;
       if (state.group && Array.isArray(state.group)) group = state.group[1];
       else if (lib.config.qhly_doubleGroup && lib.config.qhly_doubleGroup[state.name]) {
-        if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.contains(state.name) || get.is.double(state.name)) {
+        if (lib.config.doubleGroupCharacter && lib.config.doubleGroupCharacter.includes(state.name) || get.is.double(state.name)) {
           group = lib.config.qhly_doubleGroup[state.name][1];
         }
         else group = state.intro[1];
@@ -3291,9 +3967,12 @@ export let CONTENT = function (config, pack) {
       if (typeof hp == 'string') {
         var hp2 = hp.split('/');
         if (hp2.length > 1) {
+          // @ts-ignore
           HP = hp2[0];
+          // @ts-ignore
           MAXHP = hp2[1];
         } else {
+          // @ts-ignore
           HP = hp2[0];
         }
       } else HP = hp;
@@ -3314,7 +3993,7 @@ export let CONTENT = function (config, pack) {
       slimName = slimName[slimName.length - 1];
       const excludeName = ['xiahouyuan', 'guanyu', 'sunjian', 'simashi', 'lvbu'];
       if (state.mainView.skinTypeGuozhan) {  //显示国战血量
-        if (get.mode() != 'guozhan' && excludeName.contains(slimName) && state.name != 're_lvbu') HP++;//非国战模式下除界吕布以外角色显示普通模式血量+1
+        if (get.mode() != 'guozhan' && excludeName.includes(slimName) && state.name != 're_lvbu') HP++;//非国战模式下除界吕布以外角色显示普通模式血量+1
         HP = HP *= 0.5;
         if (HP <= 5) {
           for (var i = 0; i < Math.floor(HP); i++) {
@@ -3330,13 +4009,27 @@ export let CONTENT = function (config, pack) {
             hpNode.style.setProperty('--ub', url2);
           }
         } else {
-          HP = HP + '';
+          // @ts-ignore
+          if(isFinite(HP)){
+            // @ts-ignore
+            HP = 'I';
+          }else{
+            // @ts-ignore
+            HP = HP + '';
+          }
           hpNode = ui.create.div('.qh-hptextnumber', state.mainView.hp);
+          // @ts-ignore
           for (var i = 0; i < HP.length; i++) {
             var hpNumber = ui.create.div('.qh-hpnumber', hpNode);
+            // @ts-ignore
             hpNumber.style.backgroundImage = 'url(' + lib.qhly_path + 'theme/shousha/hp_num_' + HP.substr(i, 1) + '.png)';
+            // @ts-ignore
+            if(HP == 'I'){
+              hpNumber.style.transform = "scale(1.5)";
+            }
           }
           hpNode = ui.create.div('.qh-hpGZtext', state.mainView.hp);
+          // @ts-ignore
           hpNode.style.backgroundImage = 'url(' + lib.qhly_path + 'theme/shousha/hp_num_x.png)';
           hpNode = ui.create.div('.qh-hpGZtext', state.mainView.hp);
           if (hpBorder) {
@@ -3353,25 +4046,55 @@ export let CONTENT = function (config, pack) {
           }
         }
         if (HP > 5 || MAXHP > 5) {
-          HP = HP + '';
-          if (MAXHP) MAXHP = MAXHP + '';
+          // @ts-ignore
+          if(!isFinite(HP) || HP == "infinity" || HP == "Infinity" || HP == "∞"){
+            // @ts-ignore
+            HP = 'I';
+          }else{
+            // @ts-ignore
+            HP = HP + '';
+          }
+          // @ts-ignore
+          if (MAXHP){
+            // @ts-ignore
+            if(!isFinite(MAXHP) || MAXHP == "infinity" || MAXHP == "Infinity" || MAXHP == "∞"){
+              // @ts-ignore
+              MAXHP = "I";
+            }else{
+              // @ts-ignore
+              MAXHP = MAXHP + '';
+            }
+          }
           hpNode = ui.create.div('.qh-hptextnumber', state.mainView.hp);
           if (MAXHP) {
+            // @ts-ignore
             for (var i = 0; i < MAXHP.length; i++) {
               var hpNumber = ui.create.div('.qh-hpnumber', hpNode);
+              // @ts-ignore
               hpNumber.style.backgroundImage = 'url(' + lib.qhly_path + 'theme/shousha/hp_num_' + MAXHP.substr(i, 1) + '.png)';
               hpNumber.style.setProperty('--w', getWidth(MAXHP, i));
+              // @ts-ignore
+              if(MAXHP == 'I'){
+                hpNumber.style.transform = "scale(1.5)";
+              }
             }
             ui.create.div('.qh-hpsplit', state.mainView.hp);
           }
           hpNode = ui.create.div('.qh-hptextnumber', state.mainView.hp);
+          // @ts-ignore
           for (var i = 0; i < HP.length; i++) {
             var hpNumber = ui.create.div('.qh-hpnumber', hpNode);
+            // @ts-ignore
             hpNumber.style.backgroundImage = 'url(' + lib.qhly_path + 'theme/shousha/hp_num_' + HP.substr(i, 1) + '.png)';
             hpNumber.style.setProperty('--w', getWidth(HP, i));
+            // @ts-ignore
+            if(HP == 'I'){
+              hpNumber.style.transform = "scale(1.5)";
+            }
           }
           if (!MAXHP) {
             hpNode = ui.create.div('.qh-hptext', state.mainView.hp);
+            // @ts-ignore
             hpNode.style.cssText = `width:1.5em;height:1.5em;margin-bottom:0.4em;background-image:url(${lib.qhly_path}theme/shousha/hp_num_x.png)`
           }
           hpNode = ui.create.div('.qh-hptext', state.mainView.hp);
@@ -3405,6 +4128,7 @@ export let CONTENT = function (config, pack) {
         }
       }
     }
+    // @ts-ignore
     window.qhly_checkObject = function (str, parent) {
       if (!parent) {
         parent = window;
@@ -3415,6 +4139,7 @@ export let CONTENT = function (config, pack) {
           return parent[str];
         }
         arr = str.split(".");
+        // @ts-ignore
         return window.qhly_checkObject(arr, parent);
       } else {
         arr = str;
@@ -3424,8 +4149,10 @@ export let CONTENT = function (config, pack) {
       var m = arr[0];
       var n = parent[m];
       if (!n) return false;
+      // @ts-ignore
       return window.qhly_checkObject(arr.slice(1), n);
     };
+    // @ts-ignore
     if (window.qhly_checkObject("configMenu.appearence.config.name_font.item", lib)) {
       var fontConfigs = [lib.configMenu.appearence.config.name_font.item,
       lib.configMenu.appearence.config.identity_font.item,
@@ -3454,18 +4181,30 @@ export let CONTENT = function (config, pack) {
     lib.config.qhly_newui = true;
     game.saveConfig('qhly_newui', true);
     //}
+    // @ts-ignore
     if (ui && ui.css && ui.css.fontsheet && ui.css.fontsheet.sheet && ui.css.fontsheet.sheet.insertRule) {
+      // @ts-ignore
       ui.css.fontsheet.sheet.insertRule("@font-face {font-family: 'qh_heiti';src: url('" + lib.qhly_path + "font/heiti.woff2');}", 0);
+      // @ts-ignore
       ui.css.fontsheet.sheet.insertRule("@font-face {font-family: 'qh_zhunyuan';src: url('" + lib.qhly_path + "font/zhunyuan.woff2');}", 0);
+      // @ts-ignore
       ui.css.fontsheet.sheet.insertRule("@font-face {font-family: 'qh_youyuan';src: url('" + lib.qhly_path + "font/youyuan.woff2');}", 0);
+      // @ts-ignore
       ui.css.fontsheet.sheet.insertRule("@font-face {font-family: 'qh_songhei';src: url('" + lib.qhly_path + "font/songhei.woff2');}", 0);
+      // @ts-ignore
       ui.css.fontsheet.sheet.insertRule("@font-face {font-family: 'qh_weili';src: url('" + lib.qhly_path + "font/weili.woff2');}", 0);
     } else {
+      // @ts-ignore
       if(!ui.qhlycss)ui.qhlycss = lib.init.sheet();
+      // @ts-ignore
       ui.qhlycss.sheet.insertRule("@font-face {font-family: 'qh_heiti';src: url('" + lib.qhly_path + "font/heiti.woff2');}", 0);
+      // @ts-ignore
       ui.qhlycss.sheet.insertRule("@font-face {font-family: 'qh_zhunyuan';src: url('" + lib.qhly_path + "font/zhunyuan.woff2');}", 0);
+      // @ts-ignore
       ui.qhlycss.sheet.insertRule("@font-face {font-family: 'qh_youyuan';src: url('" + lib.qhly_path + "font/youyuan.woff2');}", 0);
+      // @ts-ignore
       ui.qhlycss.sheet.insertRule("@font-face {font-family: 'qh_songhei';src: url('" + lib.qhly_path + "font/songhei.woff2');}", 0);
+      // @ts-ignore
       ui.qhlycss.sheet.insertRule("@font-face {font-family: 'qh_weili';src: url('" + lib.qhly_path + "font/weili.woff2');}", 0);
     }
     //关闭无名杀原有的换肤功能
@@ -3493,9 +4232,11 @@ export let CONTENT = function (config, pack) {
       game.saveConfig('skin', { 'qhly_config': 'yes' });
     }
 
+    // @ts-ignore
     lib.qhly_lihui = {};
 
     if (game.getFileList && lib.config.qhly_lihuiSupport) {
+      // @ts-ignore
       game.qhly_checkFileExist('extension/千幻聆音/lihui', function (s) {
         var earseExt = function (path) {
           if (!path) return null;
@@ -3504,9 +4245,13 @@ export let CONTENT = function (config, pack) {
           return path.slice(0, foundDot);
         };
         if (s) {
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           game.getFileList('extension/千幻聆音/lihui', function (folders, files) {
             if (files) {
               for (var file of files) {
+                // @ts-ignore
                 lib.qhly_lihui[earseExt(file)] = file;
               }
             }
@@ -3516,8 +4261,12 @@ export let CONTENT = function (config, pack) {
     }
     if (get.mode() == 'guozhan' && game.getFileList && lib.config.qhly_guozhan !== false) {
       var cpath = lib.config.qhly_originSkinPath == 'extension/千幻聆音/sanguolutouskin/' ? 'extension/千幻聆音/sanguolutouskin' : 'extension/千幻聆音/sanguoskin';
+      // @ts-ignore
       game.qhly_checkFileExist(cpath, function (s) {
         if (s) {
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           game.getFileList(cpath, function (folders, files) {
             lib.config.qhly_gzskinList = [];
             if (folders && folders.length) {
@@ -3531,8 +4280,12 @@ export let CONTENT = function (config, pack) {
           });
         }
       });
+      // @ts-ignore
       game.qhly_checkFileExist('extension/千幻聆音/sanguoaudio', function (s) {
         if (s) {
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           game.getFileList('extension/千幻聆音/sanguoaudio', function (folders, files) {
             lib.config.qhly_gzaudioList = [];
             if (folders && folders.length) {
@@ -3547,17 +4300,23 @@ export let CONTENT = function (config, pack) {
         }
       });
     }
+    // @ts-ignore
     game.qhly_hasGuozhanSkin = function (name) {
       if (lib.config.qhly_gzskinList && lib.config.qhly_guozhan !== false) {
-        return lib.config.qhly_gzskinList.contains(name);
+        return lib.config.qhly_gzskinList.includes(name);
       }
       return false;
     };
+    // @ts-ignore
     game.qhly_chooseDialog = function(title,detail,initValue,list,onok,onclose){
+      // @ts-ignore
       if (!_status.qhly_chooseDialogId) {
+        // @ts-ignore
         _status.qhly_chooseDialogId = 0;
       }
+      // @ts-ignore
       var id = _status.qhly_chooseDialogId;
+      // @ts-ignore
       _status.qhly_chooseDialogId++;
       if(!list)list = [];
       var dialog = ui.create.div('.qh-editdialog');
@@ -3570,7 +4329,9 @@ export let CONTENT = function (config, pack) {
       }
       text += '<select id="qhly_choose_' + id + '" style="width:100%;height:30px;"></select><br><br>'
       var belowButton = "";
+      // @ts-ignore
       belowButton += '<img src="' + lib.qhly_path + 'image/qhly_ok2.png" id="qhly_choose_okbutton' + id + '"/>&nbsp;&nbsp;&nbsp;&nbsp;';
+      // @ts-ignore
       belowButton += '<img src="' + lib.qhly_path + 'image/qhly_cancel2.png" id="qhly_choose_cancelbutton' + id + '"/>';
       content.innerHTML = text;
       below.innerHTML = belowButton;
@@ -3587,19 +4348,29 @@ export let CONTENT = function (config, pack) {
         opt.innerHTML = obj.name + (obj.label?('['+obj.label+']'):"");
         opt.setAttribute('select_id', obj.id);
         if(initValue == obj.id){
+          // @ts-ignore
           opt.selected = 'selected';
         }
+        // @ts-ignore
         input.appendChild(opt);
       }
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       var choose = {};
+      // @ts-ignore
       ui.qhly_addListenFunc(img1);
+      // @ts-ignore
       ui.qhly_addListenFunc(img2);
+      // @ts-ignore
       img1.listen(function () {
         if (onok) {
+          // @ts-ignore
           var opt = input.options[input.selectedIndex];
           onok(opt.getAttribute('select_id'), dialog);
         }
       });
+      // @ts-ignore
       img2.listen(function () {
         if (onclose) {
           if (onclose(dialog)) {
@@ -3609,14 +4380,20 @@ export let CONTENT = function (config, pack) {
           dialog.delete();
         }
       });
+      // @ts-ignore
       input.focus();
       return dialog;
     }
+    // @ts-ignore
     game.qhly_editDialog = function (title, detail, initValue, onok, onclose) {
+      // @ts-ignore
       if (!_status.qhly_editDialogId) {
+        // @ts-ignore
         _status.qhly_editDialogId = 0;
       }
+      // @ts-ignore
       var id = _status.qhly_editDialogId;
+      // @ts-ignore
       _status.qhly_editDialogId++;
 
       var dialog = ui.create.div('.qh-editdialog');
@@ -3629,7 +4406,9 @@ export let CONTENT = function (config, pack) {
       }
       text += '<textarea id="qhly_edit_text' + id + '" style="width:100%;height:80px;"></textarea><br><br>'
       var belowButton = "";
+      // @ts-ignore
       belowButton += '<img src="' + lib.qhly_path + 'image/qhly_ok2.png" id="qhly_edit_okbutton' + id + '"/>&nbsp;&nbsp;&nbsp;&nbsp;';
+      // @ts-ignore
       belowButton += '<img src="' + lib.qhly_path + 'image/qhly_cancel2.png" id="qhly_edit_cancelbutton' + id + '"/>';
       content.innerHTML = text;
       below.innerHTML = belowButton;
@@ -3637,14 +4416,20 @@ export let CONTENT = function (config, pack) {
       var img1 = document.getElementById('qhly_edit_okbutton' + id);
       var img2 = document.getElementById('qhly_edit_cancelbutton' + id);
       var input = document.getElementById('qhly_edit_text' + id);
+      // @ts-ignore
       if (initValue) input.value = initValue;
+      // @ts-ignore
       ui.qhly_addListenFunc(img1);
+      // @ts-ignore
       ui.qhly_addListenFunc(img2);
+      // @ts-ignore
       img1.listen(function () {
         if (onok) {
+          // @ts-ignore
           onok(input.value, dialog);
         }
       });
+      // @ts-ignore
       img2.listen(function () {
         if (onclose) {
           if (onclose(dialog)) {
@@ -3654,34 +4439,46 @@ export let CONTENT = function (config, pack) {
           dialog.delete();
         }
       });
+      // @ts-ignore
       input.focus();
       return dialog;
     };
+    // @ts-ignore
     game.qhly_hasGuozhanAudio = function (name) {
       if (lib.config.gzaudioList && lib.config.qhly_guozhan !== false) {
-        return lib.config.qhly_gzaudioList.contains(name);
+        return lib.config.qhly_gzaudioList.includes(name);
       }
       return false;
     };
     if (!lib.config.qhly_order) {
       game.saveConfig('qhly_order', {});
     }
+    // @ts-ignore
     game.qhly_handleRect = function (rect) {
+      // @ts-ignore
       if (game.qhly_hasExtension('十周年UI')) return rect;
       return {
+        // @ts-ignore
         width: rect.width / game.documentZoom,
+        // @ts-ignore
         height: rect.height / game.documentZoom,
+        // @ts-ignore
         left: rect.left / game.documentZoom,
+        // @ts-ignore
         top: rect.top / game.documentZoom,
+        // @ts-ignore
         bottom: rect.bottom / game.documentZoom,
+        // @ts-ignore
         right: rect.right / game.documentZoom,
       };
     };
+    // @ts-ignore
     game.qhly_isForbidAI = function (name) {
-      if (lib.config.forbidai && lib.config.forbidai.contains(name)) return true;
-      if (lib.config.forbidai_user && lib.config.forbidai_user.contains(name)) return true;
+      if (lib.config.forbidai && lib.config.forbidai.includes(name)) return true;
+      if (lib.config.forbidai_user && lib.config.forbidai_user.includes(name)) return true;
       return false;
     };
+    // @ts-ignore
     game.qhly_setForbidAI = function (name, forbid) {
       if (forbid !== false) {
         if (lib.config.forbidai) {
@@ -3709,7 +4506,9 @@ export let CONTENT = function (config, pack) {
       game.saveConfig('forbidai', lib.config.forbidai);
       game.saveConfig('forbidai_user', lib.config.forbidai_user);
     };
+    // @ts-ignore
     game.qhly_getSkillSkin = function (name, skin, skill, pkg) {
+      // @ts-ignore
       if (!pkg) pkg = game.qhly_foundPackage(name);
       if (!pkg) return null;
       if (!pkg.skillSkin) return null;
@@ -3718,28 +4517,34 @@ export let CONTENT = function (config, pack) {
       if (!ret) return null;
       return ret;
     };
+    // @ts-ignore
     game.qhly_getOrder = function (name, skin, pkg) {
       var ord = 0;
       if (lib.config.qhly_order[name + '-' + skin]) {
         ord = lib.config.qhly_order[name + '-' + skin];
       }
       if (ord !== 0) {
+        // @ts-ignore
         ord = parseInt(ord);
         if (!isNaN(ord)) {
           return ord;
         }
       }
+      // @ts-ignore
       if (!pkg) pkg = game.qhly_foundPackage(name);
+      // @ts-ignore
       var info = game.qhly_getSkinInfo(name, skin, pkg);
       if (info && info.order) {
         return info.order;
       }
+      // @ts-ignore
       ord = parseInt(game.qhly_earse_ext(skin));
       if (!isNaN(ord)) {
         return ord;
       }
       return 0;
     };
+    // @ts-ignore
     game.qhly_setOrder = function (name, skin, order) {
       if (order === undefined) {
         delete lib.config.qhly_order[name + '-' + skin];
@@ -3749,18 +4554,27 @@ export let CONTENT = function (config, pack) {
       lib.config.qhly_order[name + '-' + skin] = order;
       game.saveConfig('qhly_order', lib.config.qhly_order);
     };
+    // @ts-ignore
     game.qhly_genId = function () {
+      // @ts-ignore
       if (!_status.qhly_genId) {
+        // @ts-ignore
         _status.qhly_genId = 1;
       } else {
+        // @ts-ignore
         _status.qhly_genId++;
       }
+      // @ts-ignore
       return _status.qhly_genId;
     };
+    // @ts-ignore
     game.qhly_parseConfig = function (obj) {
+      // @ts-ignore
       if (!_status.qhly_config_selfedit_id) {
+        // @ts-ignore
         _status.qhly_config_selfedit_id = 1;
       } else {
+        // @ts-ignore
         _status.qhly_config_selfedit_id++;
       }
       var str = "";
@@ -3777,11 +4591,12 @@ export let CONTENT = function (config, pack) {
       var onfinish = function () {
 
       };
-      if (['checkboxList', '复选框'].contains(obj.type)) {
+      if (['checkboxList', '复选框'].includes(obj.type)) {
         var items = obj.items ? obj.items : [];
         var oncheck = obj.oncheck ? obj.oncheck : function () { };
         var checkboxRef = {};
         for (var item of items) {
+          // @ts-ignore
           var id = "qhly_selfedit_checkbox_" + game.qhly_genId();
           checkboxRef[id] = item;
           str += "<p><span style='display:inline-block;height:30px;'><img id='" + id + "'/><span id='" + id + "_text' style='display:inline-block;position:relative;bottom:25%;'>";
@@ -3794,12 +4609,17 @@ export let CONTENT = function (config, pack) {
         }
         var bindFunc = function (checkbox, text) {
           if (!text) return;
+          // @ts-ignore
           ui.qhly_addListenFunc(text);
           text.listen(function () {
+            // @ts-ignore
             game.qhly_playQhlyAudio('qhly_voc_check', null, true);
             checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
           });
         };
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         onfinish = function (view) {
           for (var id in checkboxRef) {
             var item = checkboxRef[id];
@@ -3809,18 +4629,24 @@ export let CONTENT = function (config, pack) {
             }
             var checkbox = document.getElementById(id);
             var checkboxText = document.getElementById(id + "_text");
+            // @ts-ignore
             ui.qhly_initCheckBox(checkbox, current ? true : false);
             bindFunc(checkbox, checkboxText);
             (function (checkbox, item) {
+              // @ts-ignore
               checkbox.qhly_onchecked = function (check) {
                 oncheck(item, check);
               };
             })(checkbox, item);
           }
         };
-      } else if (['selectList', '下拉列表'].contains(obj.type)) {
+      } else if (['selectList', '下拉列表'].includes(obj.type)) {
+        // @ts-ignore
         var id = "qhly_selfedit_select_" + game.qhly_genId();
         str += "<p><select style='font-size:22px;font-family:'qh_youyuan';' id='" + id + "'></select></p>";
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         onfinish = function (view) {
           var select = document.getElementById(id);
           var items = obj.items ? obj.items : {};
@@ -3830,14 +4656,20 @@ export let CONTENT = function (config, pack) {
             opt.innerHTML = items[key];
             opt.setAttribute('key', key);
             if (current == key) {
+              // @ts-ignore
               opt.selected = 'selected';
             }
+            // @ts-ignore
             select.appendChild(opt);
           }
+          // @ts-ignore
           select.onchange = function (e) {
             var event = e ? e : window.event;
+            // @ts-ignore
             if (event.target) {
+              // @ts-ignore
               target = event.target;
+              // @ts-ignore
               var opt = target[target.selectedIndex];
               if (opt) {
                 var key = opt.getAttribute('key');
@@ -3855,34 +4687,47 @@ export let CONTENT = function (config, pack) {
       };
     };
     //默认皮肤包
+    // @ts-ignore
     window.DEFAULT_PACKAGE = {
       isExt: false,//不是扩展武将
       fromExt: false,
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       filterCharacter: function (name) {
         return true;//对所有角色生效
       },
       skininfo: function (name, skinname) {
+        // @ts-ignore
         if (lib.qhly_sanguoskininfo) {
+          // @ts-ignore
           return lib.qhly_sanguoskininfo[name + '-' + skinname];
         }
         return null;
       },
       characterTaici: function (name) {
+        // @ts-ignore
         if (lib.qhly_sanguotaici) {
+          // @ts-ignore
           return lib.qhly_sanguotaici[name];
         }
         return null;
       },
       characterLihui: function (name, skin) {
         if (!lib.config.qhly_lihuiSupport) return null;
+        // @ts-ignore
         skin = game.qhly_earse_ext(skin);
         if (skin) {
+          // @ts-ignore
           if (lib.qhly_lihui[name + '-' + skin]) {
+            // @ts-ignore
             return 'extension/千幻聆音/lihui/' + lib.qhly_lihui[name + '-' + skin];
           }
           if (!lib.config.qhly_nolihuiOrigin) return null;
         }
+        // @ts-ignore
         if (lib.qhly_lihui[name]) {
+          // @ts-ignore
           return 'extension/千幻聆音/lihui/' + lib.qhly_lihui[name];
         }
         return null;
@@ -3898,15 +4743,21 @@ export let CONTENT = function (config, pack) {
     };
 
     //初始化一个皮肤包的数组，后面会经常扫描这个数组以找到武将的皮肤。
+    // @ts-ignore
     if (!lib.qhlypkg) {
+      // @ts-ignore
       lib.qhlypkg = [];
     }
 
+    // @ts-ignore
     if (!lib.qhlyMusic) {
+      // @ts-ignore
       lib.qhlyMusic = {};
     }
 
+    // @ts-ignore
     if (!lib.qhlyPlugins) {
+      // @ts-ignore
       lib.qhlyPlugins = [];
     }
     var systemMusics = {
@@ -3923,13 +4774,16 @@ export let CONTENT = function (config, pack) {
     };
 
     for (var k in systemMusics) {
+      // @ts-ignore
       lib.qhlyMusic['audio/background/' + k + '.mp3'] = {
         name: systemMusics[k],
         path: 'audio/background/' + k + '.mp3',
       };
     }
 
+    // @ts-ignore
     if (!lib.qhlyDefaultMusic) {
+      // @ts-ignore
       lib.qhlyDefaultMusic = {};
     }
 
@@ -3937,15 +4791,19 @@ export let CONTENT = function (config, pack) {
       lib.config.qhly_characterMusic = {};
     }
 
+    // @ts-ignore
     if (!lib.qhly_characterMusicMapper) {
+      // @ts-ignore
       lib.qhly_characterMusicMapper = [];
     }
 
+    // @ts-ignore
     lib.qhly_characterMusicMapper.push(function (name) {
       if (get.character(name, 1) == 'key') {
         return 'audio/background/aozhan_chaoming.mp3';
       }
     });
+    // @ts-ignore
     game.qhly_getCharacterPackage = function (name) {
       for (var i in lib.characterPack) {
         if (lib.characterPack[i] && lib.characterPack[i][name]) {
@@ -3955,11 +4813,14 @@ export let CONTENT = function (config, pack) {
       return null;
     };
 
+    // @ts-ignore
     game.qhly_getCharacterMusic = function (name) {
       var ret = lib.config.qhly_characterMusic[name];
       if (ret) return ret;
+      // @ts-ignore
       ret = lib.qhlyDefaultMusic[name];
       var priority = -Infinity;
+      // @ts-ignore
       for (var func of lib.qhly_characterMusicMapper) {
         var rf = func(name);
         if (!rf) continue;
@@ -3981,6 +4842,7 @@ export let CONTENT = function (config, pack) {
       return ret;
     };
 
+    // @ts-ignore
     game.qhly_getCurrentMusic = function () {
       var ret = null;
       if (lib.config['qhly_modemusicconfig_' + get.mode()] && lib.config['qhly_modemusicconfig_' + get.mode()] != 'system') {
@@ -3990,8 +4852,10 @@ export let CONTENT = function (config, pack) {
         if (game.me) {
           var m = null;
           if (game.me.name && game.me.name.indexOf('unknown') != 0) {
+            // @ts-ignore
             m = game.qhly_getCharacterMusic(game.me.name);
           } else if (game.me.name1) {
+            // @ts-ignore
             m = game.qhly_getCharacterMusic(game.me.name1);
           }
           if (m) {
@@ -4006,6 +4870,7 @@ export let CONTENT = function (config, pack) {
         return ret;
       }
       if (ret == 'random') {
+        // @ts-ignore
         return Object.keys(lib.qhlyMusic).randomGet();
       }
       return 'audio/background/music_default.mp3';
@@ -4013,25 +4878,32 @@ export let CONTENT = function (config, pack) {
 
     if (lib.config.qhly_enableCharacterMusic || lib.config.qhly_currentMusic != 'system') {
       game.playBackgroundMusic = function () {
+        // @ts-ignore
         if (!ui.qhly_backgroundMusic) {
+          // @ts-ignore
           ui.qhly_backgroundMusic = document.createElement('audio');
           if (ui.backgroundMusic) {
             ui.backgroundMusic.remove();
           }
+          // @ts-ignore
           ui.backgroundMusic = ui.qhly_backgroundMusic;
           ui.backgroundMusic.volume = lib.config.volumn_background / 8;
           ui.backgroundMusic.autoplay = true;
           ui.backgroundMusic.addEventListener('ended', game.playBackgroundMusic);
         }
+        // @ts-ignore
         if (_status.qhly_tempBgm) {
+          // @ts-ignore
           ui.backgroundMusic.src = lib.assetURL + _status.qhly_tempBgm;
         } else {
+          // @ts-ignore
           ui.backgroundMusic.src = lib.assetURL + game.qhly_getCurrentMusic();
         }
         //alert(ui.backgroundMusic.src);
       };
     }
 
+    // @ts-ignore
     get.qhly_urldecode = function (zipStr) {
       var uzipStr = '';
       for (var i = 0; i < zipStr.length; i += 1) {
@@ -4054,13 +4926,18 @@ export let CONTENT = function (config, pack) {
       return uzipStr;
     };
 
+    // @ts-ignore
     game.qhly_switchBgm = function (path, replay) {
       if (path) {
+        // @ts-ignore
         _status.qhly_tempBgm = path;
       } else {
+        // @ts-ignore
         delete _status.qhly_tempBgm;
+        // @ts-ignore
         path = game.qhly_getCurrentMusic();
       }
+      // @ts-ignore
       if (!replay && ui.backgroundMusic.src && get.qhly_urldecode(ui.backgroundMusic.src).endsWith(path)) {
         return;
       }
@@ -4074,38 +4951,63 @@ export let CONTENT = function (config, pack) {
       trigger: {
         global: 'gameStart',
       },
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       filter: function (event, player) {
+        // @ts-ignore
         if (event.qhly_bgmflag) return false;
         return lib.config.qhly_enableCharacterMusic;
       },
       content: function () {
+        // @ts-ignore
         trigger.qhly_bgmflag = true;
         game.playBackgroundMusic();
       }
     };
 
+    // @ts-ignore
     if (!lib.qhly_groupimage) {
+      // @ts-ignore
       lib.qhly_groupimage = {};
     }
+    // @ts-ignore
     lib.qhly_groupimage['wei'] = 'extension/千幻聆音/image/name_wei.webp';
+    // @ts-ignore
     lib.qhly_groupimage['shu'] = 'extension/千幻聆音/image/name_shu.webp';
+    // @ts-ignore
     lib.qhly_groupimage['wu'] = 'extension/千幻聆音/image/name_wu.webp';
+    // @ts-ignore
     lib.qhly_groupimage['qun'] = 'extension/千幻聆音/image/name_qun.webp';
+    // @ts-ignore
     lib.qhly_groupimage['jin'] = 'extension/千幻聆音/image/name_jin.webp';
+    // @ts-ignore
     lib.qhly_groupimage['shen'] = 'extension/千幻聆音/image/name_shen.webp';
+    // @ts-ignore
     lib.qhly_groupimage['daqin'] = 'extension/千幻聆音/image/name_daqin.webp';
+    // @ts-ignore
     lib.qhly_groupimage['key'] = 'extension/千幻聆音/image/name_key.webp';
 
+    // @ts-ignore
     if (!lib.qhly_groupcolor) {
+      // @ts-ignore
       lib.qhly_groupcolor = {};
     }
+    // @ts-ignore
     lib.qhly_groupcolor['wei'] = "#0000CD";
+    // @ts-ignore
     lib.qhly_groupcolor['shu'] = "#B22222";
+    // @ts-ignore
     lib.qhly_groupcolor['wu'] = "#32CD32";
+    // @ts-ignore
     lib.qhly_groupcolor['qun'] = "#B5B5B5";
+    // @ts-ignore
     lib.qhly_groupcolor['jin'] = "#68228B";
+    // @ts-ignore
     lib.qhly_groupcolor['shen'] = "#FFFF00";
+    // @ts-ignore
     lib.qhly_groupcolor['daqin'] = "#FFD700";
+    // @ts-ignore
     lib.qhly_groupcolor['key'] = "#9400D3";
 
 
@@ -4116,19 +5018,24 @@ export let CONTENT = function (config, pack) {
 
 
 
+    // @ts-ignore
     get.qhly_getIf = function (originValue, fallback) {
       if (originValue) return originValue;
       return fallback;
     };
 
+    // @ts-ignore
     game.qhly_changeViewSkin = function (view) {
+      // @ts-ignore
       var skin = lib.qhly_viewskin[lib.config.qhly_currentViewSkin];
       if (skin) {
         skin.changeViewSkin(view);
       }
     };
 
+    // @ts-ignore
     game.qhly_changeViewPageSkin = function (page, view) {
+      // @ts-ignore
       var skin = lib.qhly_viewskin[lib.config.qhly_currentViewSkin];
       if (skin) {
         skin.skinPage(page, view);
@@ -4136,10 +5043,14 @@ export let CONTENT = function (config, pack) {
     }
 
 
+    // @ts-ignore
     get.qhly_viewSkinSet = function () {
       var ret = {};
+      // @ts-ignore
       for (var k in lib.qhly_viewskin) {
+        // @ts-ignore
         if (lib.qhly_viewskin[k].name) {
+          // @ts-ignore
           ret[k] = lib.qhly_viewskin[k].name;
         } else {
           ret[k] = k;
@@ -4147,12 +5058,17 @@ export let CONTENT = function (config, pack) {
       }
       return ret;
     };
+    // @ts-ignore
     game.qhly_bigEdit = function (state, bg) {
+      // @ts-ignore
       _status.bigEditing = true;
+      // @ts-ignore
       const editObject = get.itemtype(state) == 'player' ? 'player' : 'bigAvatar';
+      // @ts-ignore
       var name = game.qhly_getRealName(state.name);
       const themeType = ui.arena.dataset.newDecadeStyle == 'on' ? 'decade' : 'shousha';
       const theme = editObject == 'player' ? themeType : lib.config.qhly_currentViewSkin;
+      // @ts-ignore
       var skin = game.qhly_getSkin(state.name);
       if (skin == null) {
         name = state.name;
@@ -4160,11 +5076,15 @@ export let CONTENT = function (config, pack) {
       }
       var editDynamic = true;//编辑动态还是静态
       var editMode = "daiji";//调整人物、背景还是出框
+      // @ts-ignore
       _status.qhly_editMode = editMode;
+      // @ts-ignore
       _status.qhly_disAble = true;//初始手势可调整距离，不可调整角度
+      // @ts-ignore
       _status.qhly_rotaAble = false;
       var gestureS, gestureA;
       var focus = editObject == 'player' ? state : state.mainView.avatarImage;
+      // @ts-ignore
       if (editObject != 'player') focus.style.setProperty('--w', (1 / game.documentZoom) + 'vw');//适配屏幕缩放
       var originPostion = focus.style.getPropertyValue('--p');
       var blackbg = ui.create.div('.qhly_blackbg', bg || document.body);
@@ -4179,10 +5099,12 @@ export let CONTENT = function (config, pack) {
       if (!focus.dynamic || focus.dynamic && focus.dynamic.primary == null) editDynamic = false;
       if (editDynamic) {
         var editArgument1 = 'dynamic', editArgument2 = 'beijing';
+        // @ts-ignore
         if (game.qhly_getPlayerStatus(focus, null, name) == 2) {
           editArgument1 = 'dynamic2';
           editArgument2 = 'beijing2';
         }
+        // @ts-ignore
         var pp = game.qhly_getCoordinate(focus, true);
         var canvas = focus.getElementsByClassName("animation-player")[0];
         temp.qhly_resizeRatio = focus.dynamic.primary.qhly_resizeRatio || 1;
@@ -4228,6 +5150,7 @@ export let CONTENT = function (config, pack) {
       var buttons = new Array(8);
       function enlarge() {
         temp[editMode].scale += 0.01;
+        // @ts-ignore
         game.qhly_postMessage(focus, {
           message: 'RESIZE',
           id: focus.dynamic.id,
@@ -4239,6 +5162,7 @@ export let CONTENT = function (config, pack) {
       }
       function shrink() {
         temp[editMode].scale -= 0.01;
+        // @ts-ignore
         game.qhly_postMessage(focus, {
           message: 'RESIZE',
           id: focus.dynamic.id,
@@ -4250,6 +5174,7 @@ export let CONTENT = function (config, pack) {
       }
       function clockwise() {
         temp[editMode].angle--;
+        // @ts-ignore
         game.qhly_postMessage(focus, {
           message: 'RESIZE',
           id: focus.dynamic.id,
@@ -4261,6 +5186,7 @@ export let CONTENT = function (config, pack) {
       }
       function anticlockwise() {
         temp[editMode].angle++;
+        // @ts-ignore
         game.qhly_postMessage(focus, {
           message: 'RESIZE',
           id: focus.dynamic.id,
@@ -4276,6 +5202,7 @@ export let CONTENT = function (config, pack) {
         if (!editDynamic && i < 6 || i == 5 && editObject == 'player') buttons[i].classList.add('forbid');
         buttons[i].addEventListener(lib.config.touchscreen ? 'touchstart' : 'mousedown', function () {
           if (this.classList.contains('forbid')) return;
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_click3', null, true);
           var currentType = null;
           switch (this.id) {
@@ -4312,8 +5239,11 @@ export let CONTENT = function (config, pack) {
                 this.classList.add('sel');
                 editMode = "beijing";
               }
+              // @ts-ignore
               if (game.qhly_hasExtension('皮肤切换')) skinSwitch.postMsgApi.debug(focus, editMode);
+              // @ts-ignore
               if (game.qhly_hasExtension('EpicFX') && lib.config['extension_EpicFX_skinEffects']) {
+                // @ts-ignore
                 game.qhly_postMessage(focus, {
                   message: 'RESIZE',
                   id: focus.dynamic.id,
@@ -4322,6 +5252,7 @@ export let CONTENT = function (config, pack) {
                   zhu: true,
                   dybg: undefined,
                 }, editMode);
+                // @ts-ignore
                 game.qhly_postMessage(focus, {
                   message: 'RESIZE',
                   id: focus.dynamic.id,
@@ -4331,6 +5262,7 @@ export let CONTENT = function (config, pack) {
                   dybg: true,
                 }, editMode);
               }
+              // @ts-ignore
               _status.qhly_editMode = editMode;
               break;
             }
@@ -4343,39 +5275,57 @@ export let CONTENT = function (config, pack) {
               if (this.classList.contains('sel')) {
                 this.classList.remove('sel');
                 if (btn) btn.classList.remove('forbid');
+                // @ts-ignore
                 editMode = _status.qhly_editMode;
                 if (canvas) canvas.style.position = 'absolute';
               }
               else {
                 this.classList.add('sel');
                 if (btn) btn.classList.add('forbid');
+                // @ts-ignore
                 _status.qhly_editMode = editMode;
                 editMode = "chukuang";
                 if (canvas) canvas.style.position = "fixed";
               }
+              // @ts-ignore
               if (game.qhly_hasExtension('皮肤切换')) skinSwitch.postMsgApi.debug(focus, editMode);
               break;
             }
             case 'qhly_bigedit6': {
               if (editDynamic) {
                 if (canvas) canvas.style.position = 'absolute';
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name]) lib.qhly_skinEdit[name] = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin]) lib.qhly_skinEdit[name][skin] = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin][editObject]) lib.qhly_skinEdit[name][skin][editObject] = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin][editObject][editArgument1]) lib.qhly_skinEdit[name][skin][editObject][editArgument1] = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin][editObject][editArgument1][theme]) lib.qhly_skinEdit[name][skin][editObject][editArgument1][theme] = {};
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject][editArgument1][theme].x = temp.daiji.x;
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject][editArgument1][theme].y = temp.daiji.y;
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject][editArgument1][theme].scale = temp.daiji.scale / temp.qhly_resizeRatio;
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject][editArgument1][theme].angle = temp.daiji.angle;
                 focus.dynamic.primary.scale = temp.daiji.scale;
                 focus.dynamic.primary.angle = temp.daiji.angle;
                 if (focus.dynamic.primary.beijing || focus.dynamic.primary.dybg) {
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin][editObject][editArgument2]) lib.qhly_skinEdit[name][skin][editObject][editArgument2] = {};
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin][editObject][editArgument2][theme]) lib.qhly_skinEdit[name][skin][editObject][editArgument2][theme] = {};
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject][editArgument2][theme].x = temp.beijing.x;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject][editArgument2][theme].y = temp.beijing.y;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject][editArgument2][theme].scale = temp.beijing.scale / temp.qhly_resizeRatio;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject][editArgument2][theme].angle = temp.beijing.angle;
                   if (focus.dynamic.primary.dybg) {
                     focus.dynamic.primary.dybg.scale = temp.beijing.scale;
@@ -4386,18 +5336,28 @@ export let CONTENT = function (config, pack) {
                   }
                 }
                 if (focus.dynamic.primary.gongji && editObject != 'player') {
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin].bigAvatar) lib.qhly_skinEdit[name][skin].bigAvatar = {};
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin].bigAvatar.chukuang) lib.qhly_skinEdit[name][skin].bigAvatar.chukuang = {};
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme]) lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme] = {};
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].x = temp.chukuang.x;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].y = temp.chukuang.y;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].scale = temp.chukuang.scale;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].angle = temp.chukuang.angle;
                   focus.dynamic.primary.gongji.scale = temp.chukuang.scale;
                   focus.dynamic.primary.gongji.angle = temp.chukuang.angle;
                 }
+                // @ts-ignore
                 if (game.qhly_hasExtension('皮肤切换')) skinSwitch.postMsgApi.debug(focus, 'daiji');
+                // @ts-ignore
                 if (game.qhly_hasExtension('EpicFX') && lib.config['extension_EpicFX_skinEffects']) {
+                  // @ts-ignore
                   game.qhly_postMessage(focus, {
                     message: 'RESIZE',
                     id: focus.dynamic.id,
@@ -4406,6 +5366,7 @@ export let CONTENT = function (config, pack) {
                     zhu: true,
                     dybg: undefined,
                   }, 'daiji');
+                  // @ts-ignore
                   game.qhly_postMessage(focus, {
                     message: 'RESIZE',
                     id: focus.dynamic.id,
@@ -4418,19 +5379,26 @@ export let CONTENT = function (config, pack) {
               } else {
                 originPostion = tempPosition;
                 var editArgument = theme;
+                // @ts-ignore
                 if (game.qhly_getPlayerStatus(focus, null, name) == 2) {
                   editArgument = theme + '2';
                 }
                 if (originPostion) {
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name]) lib.qhly_skinEdit[name] = {};
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin]) lib.qhly_skinEdit[name][skin] = {}
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editArgument] = originPostion;
                 }
               }
+              // @ts-ignore
               var strobj = JSON.stringify(lib.qhly_skinEdit, null, 4);
+              // @ts-ignore
               game.qhly_readFileAsText("extension/千幻聆音/data/skineditmodel.txt", function (ret, str) {
                 if (ret) {
                   str = str.replace("_REPLACE_OBJECT_", strobj);
+                  // @ts-ignore
                   game.qhly_writeTextFile(str, "extension/千幻聆音", "skinEdit.js", function (err) {
                     if (!err) {
                       console.log("保存成功");
@@ -4448,6 +5416,7 @@ export let CONTENT = function (config, pack) {
             case 'qhly_bigedit7': {
               if (editDynamic) {
                 if (canvas) canvas.style.position = 'absolute';
+                // @ts-ignore
                 game.qhly_postMessage(focus, {
                   message: 'RESIZE',
                   id: focus.dynamic.id,
@@ -4459,18 +5428,28 @@ export let CONTENT = function (config, pack) {
                   zhu: true,
                   dybg: undefined,
                 }, 'daiji', true);
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name]) lib.qhly_skinEdit[name] = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin]) lib.qhly_skinEdit[name][skin] = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin][editObject]) lib.qhly_skinEdit[name][skin][editObject] = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin][editObject].dynamic) lib.qhly_skinEdit[name][skin][editObject].dynamic = {};
+                // @ts-ignore
                 if (!lib.qhly_skinEdit[name][skin][editObject].dynamic[theme]) lib.qhly_skinEdit[name][skin][editObject].dynamic[theme] = {};
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject].dynamic[theme].x = dynamicX;
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject].dynamic[theme].y = dynamicY;
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject].dynamic[theme].scale = dynamicS / focus.offsetHeight / (1 / game.me.offsetHeight);
+                // @ts-ignore
                 lib.qhly_skinEdit[name][skin][editObject].dynamic[theme].angle = dynamicA;
                 focus.dynamic.primary.x = dynamicX;
                 focus.dynamic.primary.y = dynamicY;
                 if (focus.dynamic.primary.beijing || focus.dynamic.primary.dybg) {
+                  // @ts-ignore
                   game.qhly_postMessage(focus, {
                     message: 'RESIZE',
                     id: focus.dynamic.id,
@@ -4482,11 +5461,17 @@ export let CONTENT = function (config, pack) {
                     zhu: true,
                     dybg: true,
                   }, 'beijing', true);
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin][editObject].beijing) lib.qhly_skinEdit[name][skin][editObject].beijing = {};
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin][editObject].beijing[theme]) lib.qhly_skinEdit[name][skin][editObject].beijing[theme] = {};
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject].beijing[theme].x = beijingX;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject].beijing[theme].y = beijingY;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject].beijing[theme].scale = beijingS / focus.offsetHeight / (1 / game.me.offsetHeight);
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin][editObject].beijing[theme].angle = beijingA;
                   if (focus.dynamic.primary.dybg) {
                     focus.dynamic.primary.dybg.x = beijingX;
@@ -4498,6 +5483,7 @@ export let CONTENT = function (config, pack) {
 
                 }
                 if (focus.dynamic.primary.gongji) {
+                  // @ts-ignore
                   game.qhly_postMessage(focus, {
                     message: 'RESIZE',
                     id: focus.dynamic.id,
@@ -4509,18 +5495,28 @@ export let CONTENT = function (config, pack) {
                     zhu: true,
                     dybg: editMode == 'beijing' ? true : undefined,
                   }, 'chukuang', true);
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin].bigAvatar) lib.qhly_skinEdit[name][skin].bigAvatar = {};
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin].bigAvatar.chukuang) lib.qhly_skinEdit[name][skin].bigAvatar.chukuang = {};
+                  // @ts-ignore
                   if (!lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme]) lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme] = {};
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].x = chukuangX;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].y = chukuangY;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].scale = chukuangS;
+                  // @ts-ignore
                   lib.qhly_skinEdit[name][skin].bigAvatar.chukuang[theme].angle = chukuangA;
                   focus.dynamic.primary.gongji.x = chukuangX;
                   focus.dynamic.primary.gongji.y = chukuangY;
                 }
+                // @ts-ignore
                 if (game.qhly_hasExtension('皮肤切换')) skinSwitch.postMsgApi.debug(focus, 'daiji');
+                // @ts-ignore
                 if (game.qhly_hasExtension('EpicFX') && lib.config['extension_EpicFX_skinEffects']) {
+                  // @ts-ignore
                   game.qhly_postMessage(focus, {
                     message: 'RESIZE',
                     id: focus.dynamic.id,
@@ -4529,6 +5525,7 @@ export let CONTENT = function (config, pack) {
                     zhu: true,
                     dybg: undefined,
                   }, 'daiji');
+                  // @ts-ignore
                   game.qhly_postMessage(focus, {
                     message: 'RESIZE',
                     id: focus.dynamic.id,
@@ -4560,24 +5557,32 @@ export let CONTENT = function (config, pack) {
         distanceBtn.listen(function () {
           if (this.classList.contains('lock')) {
             this.classList.remove('lock');
+            // @ts-ignore
             game.qhly_playQhlyAudio('unlocked', null, true);
+            // @ts-ignore
             _status.qhly_disAble = true;
           } else {
             if (rotateBtn.classList.contains('lock')) return;
+            // @ts-ignore
             game.qhly_playQhlyAudio('locked', null, true);
             this.classList.add('lock');
+            // @ts-ignore
             _status.qhly_disAble = false;
           }
         });
         rotateBtn.listen(function () {
           if (this.classList.contains('lock')) {
             this.classList.remove('lock');
+            // @ts-ignore
             game.qhly_playQhlyAudio('unlocked', null, true);
+            // @ts-ignore
             _status.qhly_rotaAble = true;
           } else {
             if (distanceBtn.classList.contains('lock')) return;
+            // @ts-ignore
             game.qhly_playQhlyAudio('locked', null, true);
             this.classList.add('lock');
+            // @ts-ignore
             _status.qhly_rotaAble = false;
           }
         });
@@ -4600,6 +5605,7 @@ export let CONTENT = function (config, pack) {
         if (rotateBtn) rotateBtn.remove();
         blackbg.remove();
         focus.classList.remove('selected');
+        // @ts-ignore
         _status.bigEditing = false;
         return;
       }
@@ -4636,20 +5642,25 @@ export let CONTENT = function (config, pack) {
       }
       focus.mousegesture = function (x1, y1, x2, y2) {
         if (!editDynamic) return;
+        // @ts-ignore
         if (_status.qhly_disAble) {
           if (!this.qhly_distance) this.qhly_distance = getDistance(x1, y1, x2, y2);
           var scale = getDistance(x1, y1, x2, y2) - this.qhly_distance;
           gestureS = scale * 0.01;
         }
+        // @ts-ignore
         if (_status.qhly_rotaAble) {
           if (!this.qhly_angle) this.qhly_angle = getAngle(x1, y1, x2, y2);
           var angle = getAngle(x1, y1, x2, y2) - this.qhly_angle;
           gestureA = angle * 100;
         }
+        // @ts-ignore
         game.qhly_postMessage(focus, {
           message: 'RESIZE',
           id: focus.dynamic.id,
+          // @ts-ignore
           scale: _status.qhly_disAble ? (temp[editMode].scale + gestureS) : undefined,
+          // @ts-ignore
           angle: _status.qhly_rotaAble ? (temp[editMode].angle - gestureA) : undefined,
           player: pp,
           zhu: true,
@@ -4657,12 +5668,16 @@ export let CONTENT = function (config, pack) {
         }, editMode)
       }
       focus.mousemove = function (x, y) {
+        // @ts-ignore
         if (!this.qhly_isTouching) return;
+        // @ts-ignore
         var slideX = x - this.qhly_bigeditX;
+        // @ts-ignore
         var slideY = y - this.qhly_bigeditY;
         if (editDynamic) {
           temp[editMode].x[1] += slideX * 0.003;
           temp[editMode].y[1] -= slideY * 0.003;
+          // @ts-ignore
           game.qhly_postMessage(focus, {
             message: 'RESIZE',
             id: focus.dynamic.id,
@@ -4678,6 +5693,7 @@ export let CONTENT = function (config, pack) {
           position -= slideX * 0.5;
           if (position > 100) position = 100;
           if (position < 0) position = 0;
+          // @ts-ignore
           this.style.setProperty('--p', position + '%');
           tempPosition = position + '%';
         }
@@ -4686,7 +5702,9 @@ export let CONTENT = function (config, pack) {
       }
       focus.mouseup = function (event) {
         if (event.touches && event.touches.length == 1) {
+          // @ts-ignore
           if (this.qhly_distance) delete this.qhly_distance;
+          // @ts-ignore
           if (this.qhly_angle) delete this.qhly_angle;
           //if (this.qhly_newAngle) delete this.qhly_newAngle;
           if (gestureS) {
@@ -4712,10 +5730,13 @@ export let CONTENT = function (config, pack) {
     lib.extensionMenu['extension_千幻聆音']['qhly_currentViewSkin'] = {
       "name": "UI套装",
       "intro": "设置UI套装样式。",
+      // @ts-ignore
       "item": get.qhly_viewSkinSet(),
       "init": lib.config.qhly_currentViewSkin === undefined ? 'xuanwujianghu' : lib.config.qhly_currentViewSkin,
       onclick: function (item) {
+        // @ts-ignore
         if (lib.qhly_viewskin[item] && lib.qhly_viewskin[item].onchange) {
+          // @ts-ignore
           lib.qhly_viewskin[item].onchange();
         }
         game.saveConfig('qhly_currentViewSkin', item);
@@ -4731,14 +5752,20 @@ export let CONTENT = function (config, pack) {
       'random': '随机',
     };
 
+    // @ts-ignore
     for (var p in lib.qhlyMusic) {
+      // @ts-ignore
       bgmConfigs[p] = lib.qhlyMusic[p].name;
     }
 
+    // @ts-ignore
     lib.qhly_bgmConfigs = bgmConfigs;
 
+    // @ts-ignore
     game.qhly_refreshBgmConfigs = function () {
+      // @ts-ignore
       for (var p in lib.qhlyMusic) {
+        // @ts-ignore
         lib.qhly_bgmConfigs[p] = lib.qhlyMusic[p].name;
       }
     };
@@ -4747,10 +5774,12 @@ export let CONTENT = function (config, pack) {
       "name": "设置BGM",
       "intro": "设置此选项，可以选择游戏背景音乐。将覆盖系统的配置。",
       "init": lib.config.qhly_currentMusic ? lib.config.qhly_currentMusic : 'system',
+      // @ts-ignore
       "item": lib.qhly_bgmConfigs,
       onclick: function (item) {
         game.saveConfig('extension_千幻聆音_qhly_currentMusic', item);
         game.saveConfig('qhly_currentMusic', item);
+        // @ts-ignore
         game.qhly_switchBgm();
       }
     };
@@ -4762,19 +5791,24 @@ export let CONTENT = function (config, pack) {
       "name": "模式BGM",
       "intro": "设置当前模式的BGM。",
       "init": lib.config['qhly_modemusicconfig_' + get.mode()] ? lib.config['qhly_modemusicconfig_' + get.mode()] : 'system',
+      // @ts-ignore
       "item": lib.qhly_bgmConfigs,
       onclick: function (item) {
         game.saveConfig('extension_千幻聆音_qhly_modemusicconfig', item);
         game.saveConfig('qhly_modemusicconfig_' + get.mode(), item);
+        // @ts-ignore
         game.qhly_switchBgm();
       }
     };
 
 
+    // @ts-ignore
     if (lib.qhly_viewskin[lib.config.qhly_currentViewSkin] && lib.qhly_viewskin[lib.config.qhly_currentViewSkin].onchange) {
+      // @ts-ignore
       lib.qhly_viewskin[lib.config.qhly_currentViewSkin].onchange();
     }
 
+    // @ts-ignore
     lib.qhly_level = lib.config.qhly_level ? lib.config.qhly_level : {};
     //初始化千幻聆音皮肤相关的数据
     if (!lib.config.qhly_skinset) {
@@ -4800,6 +5834,7 @@ export let CONTENT = function (config, pack) {
       });
     }
 
+    // @ts-ignore
     game.qhly_recordGameOver = function (name, win, player) {
       if (win !== true && win !== false) return;
       var record = lib.config.qhly_winrecord[name];
@@ -4844,22 +5879,28 @@ export let CONTENT = function (config, pack) {
       }
       var name = game.me.name ? game.me.name : game.me.name1;
       if (name) {
+        // @ts-ignore
         game.qhly_recordGameOver(name, ret, game.me);
       }
       var name2 = game.me.name2;
       if (name2) {
+        // @ts-ignore
         game.qhly_recordGameOver(name2, ret, game.me);
       }
     });
 
     //持久化存储皮肤数据
+    // @ts-ignore
     game.qhlySyncConfig = function () {
       game.saveConfig('qhly_skinset', lib.config.qhly_skinset);
     };
 
     //修改播放音频的函数。
+    // @ts-ignore
     game.qhly_originPlayAudio = game.playAudio;
+    // @ts-ignore
     game.qhly_playAudioPlus = function(){
+      // @ts-ignore
       if(_status.video&&arguments[1]!='video'&&!_status.qh_volmode) return;
       var str='';
       var onerror=null;
@@ -4870,10 +5911,12 @@ export let CONTENT = function (config, pack) {
         else if(typeof arguments[i]=='function'){
           onerror=arguments[i]
         }
+        // @ts-ignore
         if(_status.video) break;
       }
-      if(!lib.config.repeat_audio&&_status.skillaudio.contains(str)) return;
+      if(!lib.config.repeat_audio&&_status.skillaudio.includes(str)) return;
       _status.skillaudio.add(str);
+      // @ts-ignore
       game.addVideo('playAudio',null,str);
       setTimeout(function(){
         _status.skillaudio.remove(str);
@@ -4899,13 +5942,17 @@ export let CONTENT = function (config, pack) {
       }
       audio.addEventListener('ended',function(){
         this.remove();
+        // @ts-ignore
         if(_status.qh_volmode){
+          // @ts-ignore
           game.qhly_openVolumnDialog('audio'+str);
+          // @ts-ignore
           _status.qh_volmode = false;
         }
       });
       audio.onerror=function(e){
         if(this._changed){
+          // @ts-ignore
           this.remove();
           if(onerror){
             onerror(e);
@@ -4918,12 +5965,17 @@ export let CONTENT = function (config, pack) {
       };
       //Some browsers do not support "autoplay", so "oncanplay" listening has been added
       audio.oncanplay=function(){
+        // @ts-ignore
         this.play();
       };
       ui.window.appendChild(audio);
       return audio;
     };
     game.playAudio = function () {
+      if(_status.event && _status.event.name === 'dcbenxi'){
+        // @ts-ignore
+        return game.qhly_originPlayAudio.apply(this, args);
+      }
       var string = '';
       var others = [];
       for (var arg of arguments) {//将参数拼接成一个字符串，方便查找映射
@@ -4940,28 +5992,36 @@ export let CONTENT = function (config, pack) {
       }
       var replace = string.slice(1);
       if (replace.length) {
+        // @ts-ignore
         if (lib.config.qhly_notbb && lib.config.qhly_notbb != 'none' && !_status.qhly_previewAudio) {
           var keySkill = replace;
+          // @ts-ignore
           while (keySkill.length && keySkill[keySkill.length - 1].charCodeAt() >= '0'.charCodeAt() && keySkill[keySkill.length - 1].charCodeAt() <= '9'.charCodeAt()) {
             keySkill = keySkill.slice(0, keySkill.length - 1);
           }
+          // @ts-ignore
           if (!_status.qhly_bbkey) {
+            // @ts-ignore
             _status.qhly_bbkey = {};
           }
           if (lib.config.qhly_notbb_range == 'all') {
             keySkill = 'all';
           } else {
             var playerP = game.findPlayer(function (current) {
+              // @ts-ignore
               return current.hasSkill(keySkill);
             });
             if (playerP) {
+              // @ts-ignore
               keySkill = playerP.playerid;
             }
           }
+          // @ts-ignore
           var time = _status.qhly_bbkey[keySkill];
           if (!time) time = 0;
           var ctime = (new Date()).valueOf();
           if (ctime - time > parseInt(lib.config.qhly_notbb) * 1000) {
+            // @ts-ignore
             _status.qhly_bbkey[keySkill] = ctime;
           } else {
             return;
@@ -4976,19 +6036,24 @@ export let CONTENT = function (config, pack) {
           var args = rp.split("/");
           args.addArray(others);
           if(lib.config.qhly_audioPlus){
+            // @ts-ignore
             game.qhly_playAudioPlus.apply(this, args);
           }else{
+            // @ts-ignore
             return game.qhly_originPlayAudio.apply(this, args);
           }
         }
       }
       if(lib.config.qhly_audioPlus){
+        // @ts-ignore
         game.qhly_playAudioPlus.apply(this, arguments);
       }else{
+        // @ts-ignore
         return game.qhly_originPlayAudio.apply(this, arguments);
       }
     };
 
+    // @ts-ignore
     game.qhly_playQhlyAudio = function (name, num, repeat) {
       if (lib.config.qhly_closeVoice) {
         return;
@@ -5001,14 +6066,18 @@ export let CONTENT = function (config, pack) {
         }
       } else {
         if (num === undefined || num === null) {
+          // @ts-ignore
           game.qhly_playAudioRepeatable('..', 'extension', '千幻聆音', 'audio', name);
         } else {
+          // @ts-ignore
           game.qhly_playAudioRepeatable('..', 'extension', '千幻聆音', 'audio', name + Math.ceil(Math.random() * num));
         }
       }
     };
 
+    // @ts-ignore
     game.qhly_playAudioRepeatable = function () {
+      // @ts-ignore
       if (_status.video && arguments[1] != 'video') return;
       var str = '';
       var onerror = null;
@@ -5019,10 +6088,12 @@ export let CONTENT = function (config, pack) {
         else if (typeof arguments[i] == 'function') {
           onerror = arguments[i]
         }
+        // @ts-ignore
         if (_status.video) break;
       }
-      //if(!lib.config.repeat_audio&&_status.skillaudio.contains(str)) return;
+      //if(!lib.config.repeat_audio&&_status.skillaudio.includes(str)) return;
       _status.skillaudio.add(str);
+      // @ts-ignore
       game.addVideo('playAudio', null, str);
       setTimeout(function () {
         _status.skillaudio.remove(str);
@@ -5041,6 +6112,7 @@ export let CONTENT = function (config, pack) {
       });
       audio.onerror = function () {
         if (this._changed) {
+          // @ts-ignore
           this.remove();
           if (onerror) {
             onerror();
@@ -5055,6 +6127,7 @@ export let CONTENT = function (config, pack) {
       return audio;
     };
 
+    // @ts-ignore
     game.qhly_originPlaySkillAudio = game.playSkillAudio;
     game.playSkillAudio = function (name, index) {
       var replaceKey = "skill/" + name;
@@ -5066,21 +6139,28 @@ export let CONTENT = function (config, pack) {
       if (rp) {
         var args = rp.split("/");
         if(lib.config.qhly_audioPlus){
+          // @ts-ignore
           return game.qhly_playAudioPlus.apply(this, args);
         }else{
+          // @ts-ignore
           return game.qhly_originPlayAudio.apply(this, args);
         }
       }
       if(lib.config.qhly_audioPlus){
+        // @ts-ignore
         return game.qhly_playAudioPlus.apply(this, arguments);
       }else{
+        // @ts-ignore
         return game.qhly_originPlaySkillAudio.apply(this, arguments);
       }
     };
 
     //在设置完皮肤后，刷新界面，检测场上的角色是否是设置的角色，并更换其皮肤。
+    // @ts-ignore
     game.qhly_refresh = function (name) {
+      // @ts-ignore
       if (_status.qh_sourceNode) {
+        // @ts-ignore
         _status.qh_sourceNode.setBackground(_status.qh_sourceNodeName, 'character');
       }
       var players = game.players;
@@ -5122,6 +6202,7 @@ export let CONTENT = function (config, pack) {
           if (player.node.qhly_skinButton1) {
             if (lib.config.qhly_dragButtonPosition === 'no') {
               var key = 'qhly_dragButtonPositionOf_' + player.name1;
+              // @ts-ignore
               var skin = game.qhly_getSkin(player.name1);
               if (skin) {
                 key = key + '_' + skin;
@@ -5139,6 +6220,7 @@ export let CONTENT = function (config, pack) {
           if (player.node.qhly_skinButton2) {
             if (lib.config.qhly_dragButtonPosition === 'no') {
               var key = 'qhly_dragButtonPositionOf_' + player.name2;
+              // @ts-ignore
               var skin = game.qhly_getSkin(player.name2);
               if (skin) {
                 key = key + '_' + skin;
@@ -5173,6 +6255,7 @@ export let CONTENT = function (config, pack) {
     };
 
     //修改设置背景图片的函数，以达到替换皮肤的效果。
+    // @ts-ignore
     HTMLDivElement.prototype.qhly_origin_setBackgroundImage = HTMLDivElement.prototype.setBackgroundImage;
     HTMLDivElement.prototype.setBackgroundImage = function (name) {
       // if (window.qhly_setBackground_inCharacter) {
@@ -5181,6 +6264,7 @@ export let CONTENT = function (config, pack) {
       // }
       if(lib.config.qhly_chooseButtonOrigin){
         if(this.classList.contains('character') && this.classList.contains('button')){
+          // @ts-ignore
           return this.qhly_origin_setBackgroundImage.apply(this, arguments);
         }
       }
@@ -5193,6 +6277,7 @@ export let CONTENT = function (config, pack) {
           if (lib.config.qhly_skinset.skin[cname]) {
             var skin = lib.config.qhly_skinset.skin[cname];
             if (!skin) return false;
+            // @ts-ignore
             var skinPackage = game.qhly_foundPackage(cname);
             if (opath) {
               var lutouPrefix = skinPackage.lutouPrefix;
@@ -5204,9 +6289,11 @@ export let CONTENT = function (config, pack) {
                 prefix = prefix(cname);
               }
               if (skinPackage.isLutou) {
+                // @ts-ignore
                 if (lutouPrefix + cname != game.qhly_earse_ext(opath) && prefix + cname != game.qhly_earse_ext(opath)) {
                   return false;
                 }
+              // @ts-ignore
               } else if (prefix + cname != game.qhly_earse_ext(opath)) {
                 return false;
               }
@@ -5283,14 +6370,17 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       this.qhly_origin_setBackgroundImage.apply(this, arguments);
     };
 
+    // @ts-ignore
     HTMLDivElement.prototype.qhly_origin_setBackground = HTMLDivElement.prototype.setBackground;
     HTMLDivElement.prototype.setBackground = function (name, type, ext, subfolder) {
       if(type == 'character'){
         if(lib.config.qhly_chooseButtonOrigin){
           if(this.classList.contains('character') && this.classList.contains('button')){
+            // @ts-ignore
             return this.qhly_origin_setBackground.apply(this, arguments);
           }
         }
@@ -5299,9 +6389,11 @@ export let CONTENT = function (config, pack) {
         let that = this;
         var setByName = function (cname) {
           if (lib.config.qhly_skinset.skin[cname]) {
+            // @ts-ignore
             var realName = game.qhly_getRealName(cname);
             var skin = lib.config.qhly_skinset.skin[cname];
             if (!skin) return false;
+            // @ts-ignore
             var skinPackage = game.qhly_foundPackage(realName);
             //获取相应的皮肤包，并修改图片路径。
             var dest = null;
@@ -5323,8 +6415,10 @@ export let CONTENT = function (config, pack) {
                 destpath = dp;
               }
             }
+            // @ts-ignore
             game.qhly_checkFileExist(destpath, function (s) {
               if (s) {
+                // @ts-ignore
                 that.qhly_origin_setBackgroundImage(destpath);
               } else {
                 var prefix = skinPackage.prefix;
@@ -5332,14 +6426,18 @@ export let CONTENT = function (config, pack) {
                   prefix = prefix(cname);
                 }
                 // taffy: 注释content.js原版代码喵
+                // @ts-ignore
                 // if (lib.config.qhly_noSkin == 'origin') that.qhly_origin_setBackgroundImage(prefix + realName + '.jpg');//原画
                 /* taffy分界线 */
                 // taffy: 修复千幻与皮切bug喵
                 if (lib.config.qhly_noSkin == 'origin') {
+                  // @ts-ignore
                   if (prefix.includes('.jpg')) that.qhly_origin_setBackgroundImage(prefix);//原画
+                  // @ts-ignore
                   else that.qhly_origin_setBackgroundImage(prefix + realName + '.jpg');//原画
                 }
                 /* taffy分界线 */
+                // @ts-ignore
                 else that.qhly_origin_setBackgroundImage('extension/千幻聆音/image/noSkin.png');//noskin
               }
             })
@@ -5348,13 +6446,16 @@ export let CONTENT = function (config, pack) {
           }
         };
         if (!setByName(name)) {
+          // @ts-ignore
           return that.qhly_origin_setBackground(name, type, ext, subfolder);
         }
         return this;
       } else {
+        // @ts-ignore
         return this.qhly_origin_setBackground(name, type, ext, subfolder);
       }
     };
+    // @ts-ignore
     game.qhly_banSkin = function (name, skin, ban) {
       if (ban === undefined) ban = true;
       if (!skin) {
@@ -5370,6 +6471,7 @@ export let CONTENT = function (config, pack) {
       }
       game.saveConfig('qhly_banskinlist', lib.config.qhly_banskinlist);
     };
+    // @ts-ignore
     game.qhly_skinIsBanned = function (name, skin) {
       if (!lib.config.qhly_banskinlist) {
         return false;
@@ -5377,11 +6479,13 @@ export let CONTENT = function (config, pack) {
       if (!skin) {
         skin = "[original]";
       }
-      return lib.config.qhly_banskinlist.contains(name + '-' + skin);
+      return lib.config.qhly_banskinlist.includes(name + '-' + skin);
     };
     //获取皮肤文件。参数为武将名称和皮肤名称。注意需要包含扩展名。
+    // @ts-ignore
     game.qhly_getSkinFile = function (name, skin) {
       if (name.indexOf('gz_') == 0) {
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanSkin(name)) {
           var subname = name.slice(3);
           if (get.character(subname)) {
@@ -5389,7 +6493,9 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       var realName = game.qhly_getRealName(name);
+      // @ts-ignore
       var skinPackage = game.qhly_foundPackage(realName);
       if (!skin) {
         return skinPackage.prefix + name + ".jpg";
@@ -5406,12 +6512,15 @@ export let CONTENT = function (config, pack) {
       if (skinPackage.replaceAvatarDestination) {
         var r = skinPackage.replaceAvatarDestination(realName, skin);
         if (r) return r;
+      // @ts-ignore
       } else if (lib.qhly_skinChange[realName] && _status.qhly_replaceSkin && _status.qhly_replaceSkin[realName] && _status.qhly_replaceSkin[realName][skin]) {
+        // @ts-ignore
         return _status.qhly_replaceSkin[realName][skin];
       }
       return dest + realName + "/" + skin;
     };
     //竖排文字原版
+    // @ts-ignore
     get.qhly_verticalStr=function(str,sp){
       if(typeof str!='string') return '';
       str=str.toUpperCase();
@@ -5432,8 +6541,10 @@ export let CONTENT = function (config, pack) {
       return str2;
   };
     //获取皮肤名称。
+    // @ts-ignore
     game.qhly_getSkin = function (name) {
       if (name.indexOf('gz_') == 0) {
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanSkin(name)) {
           var subname = name.slice(3);
           if (get.character(subname)) {
@@ -5446,20 +6557,25 @@ export let CONTENT = function (config, pack) {
       }
       return null;
     };
+    // @ts-ignore
     game.qhly_skinIs = function (name, skinname) {
+      // @ts-ignore
       var ret = game.qhly_getSkin(name);
       if (!ret && !skinname) return true;
       return skinname == ret;
     };
 
     //搜索武将的皮肤包。
+    // @ts-ignore
     game.qhly_foundPackage = function (name) {
       var skinPackage = null;
+      // @ts-ignore
       for (var pkg of lib.qhlypkg) {
         if (pkg.skinShare) {
+          // @ts-ignore
           lib.qhly_skinShare = Object.assign(lib.qhly_skinShare, pkg.skinShare);
         }
-        if (pkg.characterList && pkg.characterList.contains(name)) {
+        if (pkg.characterList && pkg.characterList.includes(name)) {
           skinPackage = pkg;
           break;
         }
@@ -5470,14 +6586,17 @@ export let CONTENT = function (config, pack) {
       }
       if (skinPackage == null) {
         if (lib.config.qhly_extcompat !== 'false') {
+          // @ts-ignore
           skinPackage = game.qhly_foundPackageExt(name);
         }
       }
       if (skinPackage == null) {
+        // @ts-ignore
         skinPackage = DEFAULT_PACKAGE;
       }
       return skinPackage;
     };
+    // @ts-ignore
     game.qhly_getAvatarSrc = function (name) {
       if (!name) return null;
       var src = null;
@@ -5497,7 +6616,7 @@ export let CONTENT = function (config, pack) {
                 name = name.slice(3, 11);
               }
               else {
-                if (lib.config.mode_config.guozhan.guozhanSkin && lib.character[name] && lib.character[name][4].contains('gzskin')) gzbool = true;
+                if (lib.config.mode_config.guozhan.guozhanSkin && lib.character[name] && lib.character[name][4].includes('gzskin')) gzbool = true;
                 name = name.slice(3);
               }
             }
@@ -5556,8 +6675,11 @@ export let CONTENT = function (config, pack) {
       }
       return src;
     };
+    // @ts-ignore
     game.qhly_foundPackageExt = function (name) {
+      // @ts-ignore
       var cp = game.qhly_getCharacterPackage(name);
+      // @ts-ignore
       var picSrc = game.qhly_getAvatarSrc(name);
       if (picSrc && picSrc.indexOf('image/character/') == 0) {
         return null;
@@ -5575,16 +6697,26 @@ export let CONTENT = function (config, pack) {
           filterCharacter: function (name) {
             return cpkg[name] !== false;
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           skininfo: function (name, skinname) {
             return null;
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           characterTaici: function (name) {
             return null;
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           characterLihui: function (name, skin) {
             return null;
           },
           prefix: function (cname) {
+            // @ts-ignore
             var src = game.qhly_getAvatarSrc(cname);
             if (src) {
               return src.replace(cname + '.jpg', '');
@@ -5629,8 +6761,10 @@ export let CONTENT = function (config, pack) {
       return null;
     };
 
+    // @ts-ignore
     game.qhly_findAdditionSkins = function (name) {
       var list = [];
+      // @ts-ignore
       for (var pkg of lib.qhlypkg) {
         if (pkg.getAdditionalSkins) {
           list.addArray(pkg.getAdditionalSkins(name));
@@ -5639,7 +6773,11 @@ export let CONTENT = function (config, pack) {
       return list;
     };
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     game.qhly_findAdditionSkinsName = function (name) {
+      // @ts-ignore
       var list = game.qhly_findAdditionSkins();
       var ret = [];
       for (var l of list) {
@@ -5648,7 +6786,9 @@ export let CONTENT = function (config, pack) {
       return ret;
     };
 
+    // @ts-ignore
     game.qhly_skinLock = function (name, skin) {
+      // @ts-ignore
       var pkg = game.qhly_foundPackage(name);
       if (pkg && pkg.lockSkin) {
         var ret = pkg.lockSkin(name, skin);
@@ -5659,7 +6799,9 @@ export let CONTENT = function (config, pack) {
       return false;
     };
     //获取某武将的皮肤列表。
+    // @ts-ignore
     game.qhly_getSkinAudioList = function (name, callback, locked) {
+      // @ts-ignore
       var pkg = game.qhly_foundPackage(name);
       if (!pkg.audio) {
         if (callback) {
@@ -5667,6 +6809,7 @@ export let CONTENT = function (config, pack) {
         }
         return;
       }
+      // @ts-ignore
       game.qhly_getSkinList(name, function (ret, list) {
         if (!ret || !list || !list.length) {
           if (callback) {
@@ -5675,14 +6818,17 @@ export let CONTENT = function (config, pack) {
           return;
         }
         var path = pkg.audio;
+        // @ts-ignore
         game.qhly_checkFileExist(path, function (s) {
           if (s) {
+            // @ts-ignore
             game.getFileList(path, function (folders) {
               var retList = [];
               var retList2 = [];
               for (var item of list) {
+                // @ts-ignore
                 var nm = game.qhly_earseExt(item);
-                if (folders.contains(nm)) {
+                if (folders.includes(nm)) {
                   retList.add(nm);
                   retList2.add(item);
                 }
@@ -5699,11 +6845,13 @@ export let CONTENT = function (config, pack) {
         });
       }, locked);
     };
+    // @ts-ignore
     game.qhly_getSkinList = function (name, callback, locked, loadInfoJs) {
       if (locked === undefined) {
         locked = true;
       }
       if (name.indexOf('gz_') == 0) {
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanSkin(name)) {
           var subname = name.slice(3);
           if (get.character(subname)) {
@@ -5711,7 +6859,9 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       var realName = game.qhly_getRealName(name);
+      // @ts-ignore
       var skinPackage = game.qhly_foundPackage(realName);
       //var skinPackageOrigin = game.qhly_foundPackage(name);
       var handleHide = function (list) {
@@ -5720,6 +6870,7 @@ export let CONTENT = function (config, pack) {
           if (skinPackage.hideSkin && skinPackage.hideSkin(name, skin)) {
             continue;
           }
+          // @ts-ignore
           if (!locked && game.qhly_skinLock(name, skin)) {
             continue;
           }
@@ -5737,7 +6888,9 @@ export let CONTENT = function (config, pack) {
         }
         return ret;
       };
+      // @ts-ignore
       if (_status.qhly_skinListCache) {
+        // @ts-ignore
         var list = _status.qhly_skinListCache[name];
         if (list) {
           var path = '';
@@ -5747,9 +6900,13 @@ export let CONTENT = function (config, pack) {
             path = skinPackage.skin.standard;
           }
           path = path + realName;
-          if (loadInfoJs && list.contains('skininfo.js') && !lib.qhly_dirskininfo[name]) {
+          // @ts-ignore
+          if (loadInfoJs && list.includes('skininfo.js') && !lib.qhly_dirskininfo[name]) {
             lib.init.js(lib.assetURL + path + "/skininfo.js", null, function () {
               callback(true, handleHide(list.slice(0)));
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             }, function (err) {
               callback(true, handleHide(list.slice(0)));
             });
@@ -5781,13 +6938,19 @@ export let CONTENT = function (config, pack) {
         //     path2 = path2 + name;
         //     lib.init.js(lib.assetURL + path2 + "/skininfo.js")
         // }
+        // @ts-ignore
         game.qhly_checkFileExist(path, function (s) {
           if (s) {
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             game.getFileList(path, function (folders, files) {
+              // @ts-ignore
               if (!_status.qhly_skinListCache) _status.qhly_skinListCache = {};
               var ret = files.slice(0);
+              // @ts-ignore
               _status.qhly_skinListCache[name] = ret;
-              if (loadInfoJs && files.contains('skininfo.js')) {
+              if (loadInfoJs && files.includes('skininfo.js')) {
                 lib.init.js(lib.assetURL + path + "/skininfo.js", null, function () {
                   callback(true, handleHide(files));
                 }, function () {
@@ -5798,28 +6961,39 @@ export let CONTENT = function (config, pack) {
               }
             });
           } else {
+            // @ts-ignore
             if (!_status.qhly_skinListCache) _status.qhly_skinListCache = {};
+            // @ts-ignore
             _status.qhly_skinListCache[name] = false;
             callback(false);
           }
         });
       } else {
+        // @ts-ignore
         if (!_status.qhly_skinListCache) _status.qhly_skinListCache = {};
+        // @ts-ignore
         _status.qhly_skinListCache[name] = false;
         callback(false);
       }
     };
+    // @ts-ignore
     game.qhly_getSkinModels = function(name,callback,locked,loadInfoJs){
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       game.qhly_getSkinList(name,function(ret, list){
+        // @ts-ignore
         let pkg = game.qhly_foundPackage(name);
         var retList = [];
         if (list) {
           list.forEach((skin)=>{
+            // @ts-ignore
             var info = game.qhly_getSkinInfo(name, skin,pkg);
             var obj = {
               order: info.order,
               skinId: skin,
               skinInfo: info,
+              // @ts-ignore
               audios: get.qhly_getAudioInfoInSkin(name,pkg, skin),
             };
             retList.push(obj);
@@ -5827,11 +7001,15 @@ export let CONTENT = function (config, pack) {
         }
         let skinList = [{
           skinId: null,
+          // @ts-ignore
           skinInfo: game.qhly_getSkinInfo(name,null,pkg),
+          // @ts-ignore
           audios: get.qhly_getAudioInfoInSkin(name,pkg,null),
         }];
         retList.sort(function (a, b) {
+          // @ts-ignore
           var orderA = game.qhly_getOrder(name, a.skinId, pkg);
+          // @ts-ignore
           var orderB = game.qhly_getOrder(name, b.skinId, pkg);
           if (orderA > orderB) return 1;
           if (orderA == orderB) return 0;
@@ -5839,31 +7017,40 @@ export let CONTENT = function (config, pack) {
         });
         retList.forEach(item=>{skinList.push(item)});
         let dynamicSkinList = [];
+        // @ts-ignore
         if (window.decadeUI) {
+          // @ts-ignore
           if (decadeUI.dynamicSkin && decadeUI.dynamicSkin[name]) dynamicSkinList = Object.keys(decadeUI.dynamicSkin[name]);
           for (var i of skinList) {
             if (i.skinId) {
+              // @ts-ignore
               var skin = i.skinId.substring(0, i.skinId.lastIndexOf('.'));
-              if (dynamicSkinList.contains(skin)) i.bothSkin = true;
+              if (dynamicSkinList.includes(skin)) i.bothSkin = true;
             }
           }
           if (dynamicSkinList.length) {
             var duibiList = [];
             for (var i of skinList) {
+              // @ts-ignore
               if (i.skinId && i.skinId != null) duibiList.push(i.skinId.substring(0, i.skinId.lastIndexOf('.')));
             }
+            // @ts-ignore
             for (var i of dynamicSkinList) {
+              // @ts-ignore
               if (i == '经典形象') {
                 skinList['0'].bothSkin = true;
-                subView.skinType.style.cssText += 'transform:translateY(32%);';
+                //subView.skinType.style.cssText += 'transform:translateY(32%);';
               }
-              else if (!duibiList.contains(i)) {
+              else if (!duibiList.includes(i)) {
                 var dyskin = i + '.jpg';
+                // @ts-ignore
                 var dyinfo = game.qhly_getSkinInfo(name,dyskin,pkg);
                 skinList.push({
                   order: dyinfo.order,
+                  // @ts-ignore
                   skinId: dyskin,
                   skinInfo: dyinfo,
+                  // @ts-ignore
                   audios: get.qhly_getAudioInfoInSkin(name,pkg,dyskin),
                   single: true,//11
                 })
@@ -5877,6 +7064,7 @@ export let CONTENT = function (config, pack) {
       },locked,loadInfoJs);
     };
     //根据武将ID，皮肤文件名，查找皮肤的翻译命名。
+    // @ts-ignore
     game.qhly_getSkinName = function (plname, filename, skinPackage) {
       var foundDot = filename.lastIndexOf('.');
       if (foundDot == -1) {
@@ -5888,6 +7076,7 @@ export let CONTENT = function (config, pack) {
       }
       if (!skinPackage) {
         //4VrLPyXM/UwVl3SXOMoDpBLQcoJHwBtPcxBNF1VM6oxC7qONebCO4KekZdetP8Zs
+        // @ts-ignore
         skinPackage = game.qhly_foundPackage(plname);
       }
       if (skinPackage.skininfo) {
@@ -5909,8 +7098,10 @@ export let CONTENT = function (config, pack) {
     };
 
     //获取皮肤信息。
+    // @ts-ignore
     game.qhly_getSkinInfo = function (plname, filename, skinPackage) {//direct控制直接读取name的台词
       if (plname.indexOf('gz_') == 0) {
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanSkin(plname)) {
           var subplname = plname.slice(3);
           if (get.character(subplname)) {
@@ -5918,6 +7109,7 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       var realName = game.qhly_getRealName(plname);
       if (!filename) {
         return {
@@ -5935,11 +7127,13 @@ export let CONTENT = function (config, pack) {
           translation: sname
         };
       }
+      // @ts-ignore
       var dinfo = lib.qhly_dirskininfo[realName];
       if (dinfo && dinfo.skin && dinfo.skin[sname]) {
         return dinfo.skin[sname];
       }
       if (!skinPackage) {
+        // @ts-ignore
         skinPackage = game.qhly_foundPackage(realName);
       }
       if (skinPackage.skininfo) {
@@ -5962,9 +7156,13 @@ export let CONTENT = function (config, pack) {
         translation: sname
       };
     };
+    // @ts-ignore
     game.qhly_getSkinImagePath = function (name, pkg) {
+      // @ts-ignore
       if (!pkg) pkg = game.qhly_foundPackage(name);
+      // @ts-ignore
       var realName = game.qhly_getRealName(name);
+      // @ts-ignore
       if (realName != name) pkg = game.qhly_foundPackage(realName);
       var path = null;
       if (pkg.isLutou) {
@@ -5976,6 +7174,7 @@ export let CONTENT = function (config, pack) {
       return path;
     };
     //将某个文件路径抹除扩展名。如file.txt -> file
+    // @ts-ignore
     game.qhly_earse_ext = function (path) {
       if (!path) return path;
       var foundDot = path.lastIndexOf('.');
@@ -5983,13 +7182,16 @@ export let CONTENT = function (config, pack) {
       return path.slice(0, foundDot);
     };
 
+    // @ts-ignore
     game.qhly_readFileAsText = function (path, callback) {
+      // @ts-ignore
       game.qhly_checkFileExist(path, function (ret) {
         if (!ret) {
           if (callback) {
             callback(false);
           }
         } else {
+          // @ts-ignore
           game.readFile(path, function (result) {
             if (callback) {
               if (lib.device) {
@@ -6007,19 +7209,26 @@ export let CONTENT = function (config, pack) {
         }
       });
     };
+    // @ts-ignore
     game.qhly_copyText = function(text){
       if(!navigator.clipboard){
         alert("你使用的游戏版本不支持复制字符串");
         return;
       }
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       navigator.clipboard.writeText(text).then(e => {
         alert("复制成功");
       });
     };
+    // @ts-ignore
     game.qhly_writeTextFile = function (str, path, filename, callback) {
       if (lib.device) {
+        // @ts-ignore
         game.ensureDirectory(path, function () {
-          window.resolveLocalFileSystemURL(lib.assetURL + path, function (entry) {
+          window.resolveLocalFileSystemURL(nonameInitialized + path, function (entry) {
+            // @ts-ignore
             entry.getFile(filename, { create: true }, function (fileEntry) {
               fileEntry.createWriter(function (fileWriter) {
                 fileWriter.onwriteend = function () {
@@ -6034,16 +7243,20 @@ export let CONTENT = function (config, pack) {
           });
         });
       } else if (typeof window.require == 'function') {
+        // @ts-ignore
         game.ensureDirectory(path, function () {
           lib.node.fs.writeFile(__dirname + '/' + path + '/' + filename, str, null, callback);
         });
       }
     };
 
+    // @ts-ignore
     game.qhly_writeImageFile = function (str, path, filename, callback) {
       if (lib.device) {
+        // @ts-ignore
         game.ensureDirectory(path, function () {
-          window.resolveLocalFileSystemURL(lib.assetURL + path, function (entry) {
+          window.resolveLocalFileSystemURL(nonameInitialized + path, function (entry) {
+            // @ts-ignore
             entry.getFile(filename, { create: true }, function (fileEntry) {
               fileEntry.createWriter(function (fileWriter) {
                 fileWriter.onwriteend = function () {
@@ -6062,12 +7275,15 @@ export let CONTENT = function (config, pack) {
         reader.readAsArrayBuffer(str);
         reader.onload = () => {
           const arr = reader.result;
+          // @ts-ignore
           game.ensureDirectory(path, function () {
+            // @ts-ignore
             lib.node.fs.writeFile(__dirname + '/' + path + '/' + filename, Buffer.from(arr), null, callback);
           });
         }
       }
     };
+    // @ts-ignore
     game.qhly_dom2image = function (from, name, node, path, state) {
       var zoom;
       switch (lib.config.ui_zoom) {
@@ -6079,9 +7295,11 @@ export let CONTENT = function (config, pack) {
         case 'ebig': zoom = 1.2; break;
         default: zoom = 1;
       }
+      // @ts-ignore
       game.documentZoom = game.deviceZoom * 0.8;
       ui.updatez();
       const parent = node.parentNode;
+      // @ts-ignore
       const realName = game.qhly_getRealName(name);
       const bg = ui.create.div('.qh-domtoimagebg', document.body);
       const text = ui.create.div('.qh-domtoimagenode', bg,);
@@ -6091,11 +7309,14 @@ export let CONTENT = function (config, pack) {
       // const change = from ? from : player.node.avatar;
       const bg2 = ui.create.div('.qh-domtoimagebg2', bg);
       const bg4 = ui.create.div('.qh-domtoimagebg4', bg2);
+      // @ts-ignore
       bg4.$dynamicWrap = ui.create.div('.qh-domtoimagebg3', bg4);
       let timer = null;
       bg2.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", function () {
         timer = setTimeout(function () {
+          // @ts-ignore
           if (_status.bigEditing) return;
+          // @ts-ignore
           game.qhly_bigEdit({ name: name, mainView: { avatarImage: bg4, nopoints: bg2 } }, bg);
         }, 800);
       });
@@ -6106,61 +7327,86 @@ export let CONTENT = function (config, pack) {
         clearTimeout(timer);
       });
       if (!lib.config.qhly_lutou) {
+        // @ts-ignore
         bg4.$dynamicWrap.style.setProperty('--h', '472px');
+        // @ts-ignore
         bg4.$dynamicWrap.classList.add('standard');
       }
       else if (lib.config.qhly_lutouType && lib.config.qhly_lutouType == 'shousha') {
         bg2.style.setProperty('--w', '276px');
         bg2.style.setProperty('--h', '506px');
+        // @ts-ignore
         bg4.$dynamicWrap.style.setProperty('--w', '276px');
+        // @ts-ignore
         bg4.$dynamicWrap.style.setProperty('--h', '442px');
+        // @ts-ignore
         bg4.$dynamicWrap.style.setProperty('--l', '0px');
+        // @ts-ignore
         bg4.$dynamicWrap.style.setProperty('--l', '0px');
+        // @ts-ignore
         bg4.$dynamicWrap.classList.add('shousha');
       }
       const fileName = parent.belowText.innerText.split('*')[0];
+      // @ts-ignore
       game.qhly_changeDynamicSkin(bg4, fileName, name);
       const btn1 = document.getElementById('qh-d2icreate');
+      // @ts-ignore
       btn1.onclick = function () {
         text.innerHTML = '正在生成静皮，请稍后。。。<br>请勿进行其他操作！！！<br>（依据机器性能不同，<br>此过程可能耗费较长时间）';
+        // @ts-ignore
         window.qhly_d2i.toBlob(bg4).then(function (url) {
+          // @ts-ignore
           game.qhly_writeImageFile(url, path + realName + '/', fileName + '.jpg', function () {
             //parent.insertBefore(that, sibling);
             parent.toImageBtn.setAttribute('single', false);
+            // @ts-ignore
             const file = game.qhly_getSkinFile(name, fileName + '.jpg');
             parent.avatar.qhly_origin_setBackgroundImage(file);
             parent.dynamicToggle && parent.dynamicToggle.setAttribute('toggle', true);
             if (state) {
               if (state.pkg.isExt) {
+                // @ts-ignore
                 if (realName != name && fileName != '经典形象') path = DEFAULT_PACKAGE.skin.standard;
               }
               if (state.mainView.dynamicToggle) state.mainView.dynamicToggle.setAttribute('toggle', true);
+              // @ts-ignore
               if (game.qhly_skinIs(name, fileName + '.jpg')) game.qhly_setOriginSkin(name, fileName + '.jpg', state.mainView.avatarImage, state, game.qhly_getPlayerStatus(state.mainView.avatarImage, null, state.name) == 2);
             }
+            // @ts-ignore
             if (from && game.qhly_skinIs(name, fileName + '.jpg')) from.qhly_origin_setBackgroundImage(file);
+            // @ts-ignore
             if (_status.qhly_skinListCache && _status.qhly_skinListCache[name]) delete _status.qhly_skinListCache[name];
             exit();
           })
         });
       }
       function exit() {
+        // @ts-ignore
         bg4.stopDynamic();
+        // @ts-ignore
         if (bg4.dynamic && bg4.dynamic.renderer.postMessage) {
+          // @ts-ignore
           bg4.dynamic.renderer.postMessage({
             message: "DESTROY",
+            // @ts-ignore
             id: bg4.dynamic.id,
           })
+          // @ts-ignore
           bg4.dynamic.renderer.capacity--;
         }
+        // @ts-ignore
         game.documentZoom = game.deviceZoom * zoom;
         ui.updatez();
         bg.remove();
       }
       const btn2 = document.getElementById('qh-d2icancel');
+      // @ts-ignore
       btn2.onclick = exit;
     }
 
+    // @ts-ignore
     game.qhly_isForbidEditTaici = function (name) {
+      // @ts-ignore
       var pkg = game.qhly_foundPackage(name);
       if (pkg && pkg.forbidEditTaici) {
         if (typeof pkg.forbidEditTaici == 'function') {
@@ -6170,6 +7416,7 @@ export let CONTENT = function (config, pack) {
       }
       return false;
     };
+    // @ts-ignore
     game.qhly_getViewSkills = function (name) {
       var viewSkills = [];
       var skills = get.character(name, 3);
@@ -6189,8 +7436,10 @@ export let CONTENT = function (config, pack) {
       return viewSkills;
     }
     //设置当前的皮肤。
+    // @ts-ignore
     game.qhly_setCurrentSkin = function (name, skin, callback, save) {
       if (name.indexOf('gz_') == 0) {//国战兼容
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanSkin(name)) {
           const subname = name.slice(3);
           if (get.character(subname)) {
@@ -6198,30 +7447,41 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       const realName = game.qhly_getRealName(name);//添加皮肤共享
+      // @ts-ignore
       const [skinPackage, skinPackage2] = [game.qhly_foundPackage(realName), game.qhly_foundPackage(name)];
       let extAudioPath = skinPackage2.audioOrigin;
       if (typeof extAudioPath == 'function') extAudioPath = extAudioPath(name);
       if (skin) {
         if (game.getFileList) {
           let path;
+          // @ts-ignore
           if (window.qhly_audio_redirect && window.qhly_audio_redirect[realName + "-" + game.qhly_earse_ext(skin)]) {
+            // @ts-ignore
             path = skinPackage.audio + realName + "/" + window.qhly_audio_redirect[realName + "-" + game.qhly_earse_ext(skin)];
           } else {
             path = skinPackage.audio + realName + "/" + skin;
+            // @ts-ignore
             path = game.qhly_earse_ext(path);
           }
+          // @ts-ignore
           game.qhly_checkFileExist(path, function (success) {
             if (success) {
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               game.getFileList(path, function (folders, files) {
-                if (files.contains('audio-redirect.js')) {
+                if (files.includes('audio-redirect.js')) {
                   lib.init.js(lib.assetURL + path + '/audio-redirect.js', null, function () {
+                    // @ts-ignore
                     game.qhly_setCurrentSkin(name, skin, callback);
                   });
                   return;
                 }
                 let arr = [];
                 let list = lib.config.qhly_skinset.skinAudioList[name];
+                // @ts-ignore
                 let diePath = game.qhly_getDieAudioOriginalPath(name);
                 if (list) {
                   for (let m of list) {
@@ -6243,6 +7503,7 @@ export let CONTENT = function (config, pack) {
                   delete lib.config.qhly_skinset.audioReplace['victory/' + name];
                 }
                 for (let file of files) {
+                  // @ts-ignore
                   file = game.qhly_earse_ext(file);
                   if (!skinPackage.isExt || realName != name) {
                     if (file == realName) {
@@ -6257,17 +7518,23 @@ export let CONTENT = function (config, pack) {
                       let skills = [], file2 = '', skillAudio = '', flag = false;
                       let str = file;
                       let fileNum = file.charAt(file.length - 1);
+                      // @ts-ignore
                       if (isNaN(fileNum)) {
                         str = file;
                         fileNum = ''
                       }
                       else str = file.slice(0, file.length - 1);
+                      // @ts-ignore
                       if (lib.qhly_skinShare[name] && lib.qhly_skinShare[name].skills) {
                         if (lib.character[name]) {
+                          // @ts-ignore
                           skills = game.qhly_getViewSkills(name);
                           for (let i of skills) {
+                            // @ts-ignore
                             if (lib.qhly_skinShare[name].skills[i]) {
+                              // @ts-ignore
                               skillAudio = game.qhly_getSkillAudioName(i, { name: name })
+                              // @ts-ignore
                               file2 = game.qhly_getSkillAudioName(lib.qhly_skinShare[name].skills[i], { name: realName });
 
                               if (file2 == str) {
@@ -6300,6 +7567,7 @@ export let CONTENT = function (config, pack) {
                       audioOrigin = audioOrigin(name);
                     }
                     if(file == name){
+                      // @ts-ignore
                       var diePathOrigin = game.qhly_getDieAudioOriginalPath(name);
                       arr.push(diePathOrigin);
                       lib.config.qhly_skinset.audioReplace[diePathOrigin] = "../" + path + "/" + file;
@@ -6312,15 +7580,20 @@ export let CONTENT = function (config, pack) {
                 }
                 lib.config.qhly_skinset.skinAudioList[name] = arr;
                 lib.config.qhly_skinset.skin[name] = skin;
+                // @ts-ignore
                 game.qhlySyncConfig();
+                // @ts-ignore
                 if (save) game.qhly_refresh(name, skin);
                 if(lib.announce){
+                  // @ts-ignore
                   lib.announce.publish('qhlyChangeSkin',{
                     characterName:name,
                     skinName:skin,
                   });
                 }
+                // @ts-ignore
                 if (lib.qhly_callbackList) {
+                  // @ts-ignore
                   for (var pubCallback of lib.qhly_callbackList) {
                     if (pubCallback.onChangeSkin) {
                       pubCallback.onChangeSkin(name, skin);
@@ -6340,19 +7613,25 @@ export let CONTENT = function (config, pack) {
                 }
               }
               //delete lib.config.qhly_skinset.audioReplace['die/' + name];
+              // @ts-ignore
               delete lib.config.qhly_skinset.audioReplace[game.qhly_getDieAudioOriginalPath(name)];
               //delete lib.config.qhly_skinset.audioReplace['victory/' + name];
               lib.config.qhly_skinset.skinAudioList[name] = arr;
               lib.config.qhly_skinset.skin[name] = skin;
+              // @ts-ignore
               game.qhlySyncConfig();
+              // @ts-ignore
               if (save) game.qhly_refresh(name, skin);
               if(lib.announce){
+                // @ts-ignore
                 lib.announce.publish('qhlyChangeSkin',{
                   characterName:name,
                   skinName:skin,
                 });
               }
+              // @ts-ignore
               if (lib.qhly_callbackList) {
+                // @ts-ignore
                 for (let pubCallback of lib.qhly_callbackList) {
                   if (pubCallback.onChangeSkin) {
                     pubCallback.onChangeSkin(name, skin);
@@ -6388,15 +7667,20 @@ export let CONTENT = function (config, pack) {
         }
         delete lib.config.qhly_skinset.skin[name];
         delete lib.config.qhly_skinset.skinAudioList[name];
+        // @ts-ignore
         game.qhlySyncConfig();
+        // @ts-ignore
         if (save) game.qhly_refresh(name, skin);
         if(lib.announce){
+          // @ts-ignore
           lib.announce.publish('qhlyChangeSkin',{
             characterName:name,
             skinName:skin,
           });
         }
+        // @ts-ignore
         if (lib.qhly_callbackList) {
+          // @ts-ignore
           for (let pubCallback of lib.qhly_callbackList) {
             if (pubCallback.onChangeSkin) {
               pubCallback.onChangeSkin(name, skin);
@@ -6408,12 +7692,15 @@ export let CONTENT = function (config, pack) {
         }
       }
     };
+    // @ts-ignore
     get.qhly_getCurrentViewSkinValue = function (name, fallback) {
+      // @ts-ignore
       var skin = lib.qhly_viewskin[lib.config.qhly_currentViewSkin];
       if (!skin) return fallback;
       if (!skin[name]) return fallback;
       return skin[name];
     };
+    // @ts-ignore
     game.qhly_getDieAudioOriginalPath = function(name){
       if(lib.character[name]&&lib.character[name][4].some(tag=>/^die:.+$/.test(tag))){
         const tag=lib.character[name][4].find(tag=>/^die:.+$/.test(tag));
@@ -6425,6 +7712,7 @@ export let CONTENT = function (config, pack) {
           return path;
         }
       }
+      // @ts-ignore
       var skinPackage = game.qhly_foundPackage(name);
       if (skinPackage.isExt) {
         var path = skinPackage.audioOrigin;
@@ -6442,7 +7730,9 @@ export let CONTENT = function (config, pack) {
       }
     };
     //播放死亡配音。
+    // @ts-ignore
     window.qhly_playDieAudio = function (name) {
+      // @ts-ignore
       if (_status.qhly_audioTry) _status.qhly_audioTry.remove();
       if(lib.character[name]&&lib.character[name][4].some(tag=>/^die:.+$/.test(tag))){
         const tag=lib.character[name][4].find(tag=>/^die:.+$/.test(tag));
@@ -6451,6 +7741,7 @@ export let CONTENT = function (config, pack) {
         if(match){
           let path=match[1];
           if(reg.test(path)) path=path.replace(reg,(_o,p)=>`../extension/${p}/`);
+          // @ts-ignore
           _status.qhly_audioTry = game.playAudio(path);
           return;
         }
@@ -6463,6 +7754,7 @@ export let CONTENT = function (config, pack) {
         return;
       }
       /* taffy分界线 */
+      // @ts-ignore
       var skinPackage = game.qhly_foundPackage(name);
       if (skinPackage.isExt) {
         var path = skinPackage.audioOrigin;
@@ -6473,17 +7765,24 @@ export let CONTENT = function (config, pack) {
         var arr = path.split("/");
         var params = [".."];
         params.addArray(arr);
+        // @ts-ignore
         _status.qhly_audioTry = game.playAudio.apply(game, params);
       } else {
+        // @ts-ignore
         _status.qhly_audioTry = game.playAudio("die", name, function () {
+          // @ts-ignore
           _status.qhly_audioTry = game.playAudio('die', name.slice(name.indexOf('_') + 1));
         });
       }
     };
     //播放胜利配音。
+    // @ts-ignore
     window.qhly_playVictoryAudio = function (name) {
+      // @ts-ignore
       var skinName = game.qhly_earse_ext(game.qhly_getSkin(name));
+      // @ts-ignore
       if (_status.qhly_audioTry) _status.qhly_audioTry.remove();
+      // @ts-ignore
       var skinPackage = game.qhly_foundPackage(name);
       if (skinPackage.isExt) {
         var path = skinPackage.audio;
@@ -6496,14 +7795,18 @@ export let CONTENT = function (config, pack) {
         var arr = path.split("/");
         var params = [".."];
         params.addArray(arr);
+        // @ts-ignore
         _status.qhly_audioTry = game.playAudio.apply(game, params);
       } else {
+        // @ts-ignore
         _status.qhly_audioTry = game.playAudio("victory", name, function () {
+          // @ts-ignore
           _status.qhly_audioTry = game.playAudio('victory', name.slice(name.indexOf('_') + 1));
         });
       }
     };
 
+    // @ts-ignore
     game.qhly_getSkillAudioName = function (skill, player) {//获取技能播放的技能语音名
       var info = get.info(skill);
       if (!info) return null;
@@ -6519,7 +7822,9 @@ export let CONTENT = function (config, pack) {
       }
       if (typeof audioinfo == 'string') {
         if (audioinfo.indexOf('ext:') == 0) {
+          // @ts-ignore
           audioinfo = audioinfo.split(':');
+          // @ts-ignore
           if (audioinfo.length == 3) return audioname;
 
         }
@@ -6529,19 +7834,20 @@ export let CONTENT = function (config, pack) {
         audioinfo = audioinfo[1];
       }
       if (Array.isArray(info.audioname) && player) {
-        if (info.audioname.contains(player.name)) {
+        if (info.audioname.includes(player.name)) {
           audioname += '_' + player.name;
         }
-        else if (info.audioname.contains(player.name1)) {
+        else if (info.audioname.includes(player.name1)) {
           audioname += '_' + player.name1;
         }
-        else if (info.audioname.contains(player.name2)) {
+        else if (info.audioname.includes(player.name2)) {
           audioname += '_' + player.name2;
         }
       }
       if (audioinfo) return audioname;
       else if (info.audio !== false) return audioname;
     }
+    // @ts-ignore
     window.qhly_getSkillAudioKey=function(skill,player,which){
       var info = get.info(skill);
       if (!info) return "";
@@ -6558,17 +7864,25 @@ export let CONTENT = function (config, pack) {
         }
         if (typeof audioinfo == 'string') {
           if (audioinfo.indexOf('ext:') == 0) {
+            // @ts-ignore
             audioinfo = audioinfo.split(':');
+            // @ts-ignore
             if (audioinfo.length == 3) {
+              // @ts-ignore
               if (audioinfo[2] == 'true') {
+                // @ts-ignore
                 return "../extension/"+audioinfo[1]+"/"+audioname;
               }
               else {
+                // @ts-ignore
                 audioinfo[2] = parseInt(audioinfo[2]);
+                // @ts-ignore
                 if (audioinfo[2]) {
                   if (typeof which == 'number') {
+                    // @ts-ignore
                     return "../extension/"+audioinfo[1]+"/"+audioname+(which % audioinfo[2] + 1);
                   } else {
+                    // @ts-ignore
                     return "../extension/"+audioinfo[1]+"/"+audioname+Math.ceil(audioinfo[2] * Math.random());
                   }
                 }
@@ -6582,13 +7896,13 @@ export let CONTENT = function (config, pack) {
           audioinfo = audioinfo[1];
         }
         if (Array.isArray(info.audioname) && player) {
-          if (info.audioname.contains(player.name)) {
+          if (info.audioname.includes(player.name)) {
             audioname += '_' + player.name;
           }
-          else if (info.audioname.contains(player.name1)) {
+          else if (info.audioname.includes(player.name1)) {
             audioname += '_' + player.name1;
           }
-          else if (info.audioname.contains(player.name2)) {
+          else if (info.audioname.includes(player.name2)) {
             audioname += '_' + player.name2;
           }
         }
@@ -6612,11 +7926,16 @@ export let CONTENT = function (config, pack) {
       return "";
     };
     //播放技能语音。
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     window.qhly_TrySkillAudio = function (skill, player, directaudio, which, skin) {
       //alert(skill+" "+player.name);
+      // @ts-ignore
       if (_status.qhly_viewRefreshing) return;
       var info = get.info(skill);
       if (!info) return;
+      // @ts-ignore
       _status.qhly_previewAudio = true;
       if (true) {
         var audioname = skill;
@@ -6631,23 +7950,32 @@ export let CONTENT = function (config, pack) {
         }
         if (typeof audioinfo == 'string') {
           if (audioinfo.indexOf('ext:') == 0) {
+            // @ts-ignore
             audioinfo = audioinfo.split(':');
+            // @ts-ignore
             if (audioinfo.length == 3) {
+              // @ts-ignore
               if (audioinfo[2] == 'true') {
+                // @ts-ignore
                 game.playAudio('..', 'extension', audioinfo[1], audioname);
               }
               else {
+                // @ts-ignore
                 audioinfo[2] = parseInt(audioinfo[2]);
+                // @ts-ignore
                 if (audioinfo[2]) {
                   if (typeof which == 'number') {
+                    // @ts-ignore
                     game.playAudio('..', 'extension', audioinfo[1], audioname + (which % audioinfo[2] + 1));
                   } else {
                     //4VrLPyXM/UwVl3SXOMoDpBLQcoJHwBtPcxBNF1VM6oxC7qONebCO4KekZdetP8Zs
+                    // @ts-ignore
                     game.playAudio('..', 'extension', audioinfo[1], audioname + Math.ceil(audioinfo[2] * Math.random()));
                   }
                 }
               }
             }
+            // @ts-ignore
             delete _status.qhly_previewAudio;
             return;
           }
@@ -6657,13 +7985,13 @@ export let CONTENT = function (config, pack) {
           audioinfo = audioinfo[1];
         }
         if (Array.isArray(info.audioname) && player) {
-          if (info.audioname.contains(player.name)) {
+          if (info.audioname.includes(player.name)) {
             audioname += '_' + player.name;
           }
-          else if (info.audioname.contains(player.name1)) {
+          else if (info.audioname.includes(player.name1)) {
             audioname += '_' + player.name1;
           }
-          else if (info.audioname.contains(player.name2)) {
+          else if (info.audioname.includes(player.name2)) {
             audioname += '_' + player.name2;
           }
         }
@@ -6685,8 +8013,10 @@ export let CONTENT = function (config, pack) {
         }
       }
     };
+    // @ts-ignore
     get.qhly_characterInfo = function (name) {
       var ret = '';
+      // @ts-ignore
       for (var obj of lib.qhlypkg) {
         if (obj.characterInfo) {
           var m = obj.characterInfo(name);
@@ -6702,6 +8032,7 @@ export let CONTENT = function (config, pack) {
       return ret;
     }
 
+    // @ts-ignore
     lib.qhly_getEventPosition = function (event) {
       var x = event.clientX;
       var y = event.clientY;
@@ -6709,25 +8040,33 @@ export let CONTENT = function (config, pack) {
         x = event.touches[0].clientX;
         y = event.touches[0].clientY;
       }
+      // @ts-ignore
       return { x: x / game.documentZoom, y: y / game.documentZoom };
     };
+    // @ts-ignore
     lib.qhly_computeDistance = function (x0, y0, x1, y1) {
       var dx = x0 - x1;
       var dy = y0 - y1;
       return Math.sqrt(dx * dx + dy * dy);
     };
+    // @ts-ignore
     lib.qhly_setPosition = function (div, x, y) {
       div.style.left = x.toFixed(3) + 'px';
       div.style.top = y.toFixed(3) + 'px';
     };
+    // @ts-ignore
     game.qhly_open_small_dragon = function (name, from, ingame) {
+      // @ts-ignore
       if (_status.qhly_open) return;
+      // @ts-ignore
       _status.qhly_open = true;
+      // @ts-ignore
       game.qhly_playQhlyAudio('qhly_voc_click3', null, true);
       var baseHeight = ui.window.offsetHeight * 0.7;
       if (lib.config.qhly_dragonsize) {
         baseHeight = baseHeight * parseFloat(lib.config.qhly_dragonsize);
       }
+      // @ts-ignore
       baseHeight = baseHeight.toFixed(3);
       var background = ui.create.div('.qhly-dragonwin-out');
       document.body.appendChild(background);
@@ -6752,10 +8091,12 @@ export let CONTENT = function (config, pack) {
           }
           if (player) {
             var rect = player.getBoundingClientRect();
+            // @ts-ignore
             rect = game.qhly_handleRect(rect);
             var posx = rect.left - baseHeight / 2 + rect.width / 2;
             var posy = rect.top - baseHeight / 2 + rect.height / 2;
             //lib.qhly_setPosition(dragonhead,posx,posy);
+            // @ts-ignore
             lib.qhly_setPosition(dragonwin, posx, posy);
           } else {
             dragonwin.style.left = 'calc(50% - ' + (baseHeight / 2).toFixed(2) + 'px)';
@@ -6795,6 +8136,7 @@ export let CONTENT = function (config, pack) {
         skinOrder: function (view) {
           if (view.skinOrder === undefined) {
             for (var i = 0; i < this.skinViews.length; i++) {
+              // @ts-ignore
               this.skinViews[i].skinOrder = i;
             }
           }
@@ -6815,11 +8157,16 @@ export let CONTENT = function (config, pack) {
           }
         },
         handleRect: function (rect) {
+          // @ts-ignore
           if (game.qhly_hasExtension('十周年UI')) return rect;
           return {
+            // @ts-ignore
             width: rect.width / game.documentZoom,
+            // @ts-ignore
             height: rect.height / game.documentZoom,
+            // @ts-ignore
             left: rect.left / game.documentZoom,
+            // @ts-ignore
             top: rect.top / game.documentZoom,
           };
         },
@@ -6846,6 +8193,7 @@ export let CONTENT = function (config, pack) {
           view.style.width = (this.skinWidthRate * rect.width).toFixed(3) + 'px';
           view.style.height = (this.skinHeightRate * rect.height).toFixed(3) + 'px';
           var skin = this.skins[this.skinOrder(view)];
+          // @ts-ignore
           var currentSkinId = game.qhly_getSkin(name);
           if (skin == currentSkinId || (!skin && !currentSkinId)) {
             view.setBackgroundImage('extension/千幻聆音/theme/shuimo/newui_skin_background_shuimo.png');
@@ -6870,17 +8218,24 @@ export let CONTENT = function (config, pack) {
           }
           return Math.abs((angle - this.fadeAngleAreaEnd) / (this.visibleAngleEnd - this.fadeAngleAreaEnd)) / 2;
         },
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         onClickSkin: function (event, name, skin, skinView) {
           if (this.opacity(skinView) != 1) return;
+          // @ts-ignore
           var currentSkinId = game.qhly_getSkin(name);
           if (skin == currentSkinId || (!skin && !currentSkinId)) {
             return;
           }
+          // @ts-ignore
           game.qhly_setCurrentSkin(name, skin, function () {
+            // @ts-ignore
             game.qhly_playQhlyAudio('qhly_voc_click2', null, true);
             this.refresh();
             if (lib.config.qhly_smallwinclosewhenchange) {
               background.delete();
+              // @ts-ignore
               _status.qhly_open = false;
             }
           }.bind(this), true);
@@ -6895,11 +8250,13 @@ export let CONTENT = function (config, pack) {
           return -(this.skins.length - 1) * this.perAngle();
         },
         onSpinBegin: function (e) {
+          // @ts-ignore
           var pos = lib.qhly_getEventPosition(e);
           var rect = dragonwin.getBoundingClientRect();
           rect = this.handleRect(rect);
           var centerX = rect.left + rect.width / 2;
           var centerY = rect.top + rect.height / 2;
+          // @ts-ignore
           var distance = lib.qhly_computeDistance(pos.x, pos.y, centerX, centerY);
           if (distance >= rect.width * 0.1717 && distance < rect.width * 0.3758) {
             e.stopPropagation();
@@ -6932,11 +8289,14 @@ export let CONTENT = function (config, pack) {
         },
         onSpinMove: function (e) {
           if (!this.isSpin) return;
+          // @ts-ignore
           var pos = lib.qhly_getEventPosition(e);
           var direction = this.computeSpinDirection(this.spinStartPosition, pos);
+          // @ts-ignore
           if (Math.abs(direction) >= 5) {
             this.lastSpinTime = (new Date()).valueOf();
           }
+          // @ts-ignore
           var newCur = this.curAngle - direction;
           if (this.skins.length <= 8) {
             while (newCur < -180) {
@@ -6969,6 +8329,7 @@ export let CONTENT = function (config, pack) {
           }
         },
         init: function () {
+          // @ts-ignore
           var currentSkinId = game.qhly_getSkin(name);
           if (!currentSkinId) {
             this.curAngle = -90;
@@ -6988,27 +8349,36 @@ export let CONTENT = function (config, pack) {
             this.skinHeightRate *= 1.2;
           }
           if (this.skins.length <= 8) {
+            // @ts-ignore
             dragonhead.style.zIndex = 4;
           } else {
+            // @ts-ignore
             dragonhead.style.zIndex = 10;
           }
           for (var i = 0; i < this.skins.length; i++) {
             var skinView = ui.create.div('.qhly-dragonskin');
+            // @ts-ignore
             this.skinViews.push(skinView);
             var skinCover = ui.create.div('.qhly-dragonskincover', skinView);
             skinCover.classList.add('qh-not-replace')
+            // @ts-ignore
             skinView.skinCover = skinCover;
+            // @ts-ignore
             skinView.skinOrder = i;
             skinView.hide();
             var skin = this.skins[i];
             if (skin) {
+              // @ts-ignore
               var file = game.qhly_getSkinFile(name, skin);
+              // @ts-ignore
               skinCover.qhly_origin_setBackgroundImage(file);
             } else {
+              // @ts-ignore
               skinCover.qhly_origin_setBackground(name, 'character');
             }
             var that = this;
             (function (name, skin, skinView) {
+              // @ts-ignore
               skinCover.qhly_listen(function (e) {
                 that.onClickSkin(e, name, skin, skinView);
               });
@@ -7019,37 +8389,50 @@ export let CONTENT = function (config, pack) {
         },
       };
       var clickOutBegin = function (event) {
+        // @ts-ignore
         var pos = lib.qhly_getEventPosition(event);
         var rect = dragonwin.getBoundingClientRect();
         rect = state.handleRect(rect);
         var centerX = rect.left + rect.width / 2;
         var centerY = rect.top + rect.height / 2;
+        // @ts-ignore
         var distance = lib.qhly_computeDistance(pos.x, pos.y, centerX, centerY);
         if (distance < rect.width * 0.3758) {
           return;
         }
+        // @ts-ignore
         background.qh_startClick = true;
       };
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       var clickOutLeave = function (event) {
+        // @ts-ignore
         delete background.qh_startClick;
       };
       var clickOutUp = function (event) {
+        // @ts-ignore
         if (background.qh_startClick || lib.config.touchscreen) {
           if (lib.config.touchscreen) {
+            // @ts-ignore
             var pos = lib.qhly_getEventPosition(event);
             var rect = dragonwin.getBoundingClientRect();
             rect = state.handleRect(rect);
             var centerX = rect.left + rect.width / 2;
             var centerY = rect.top + rect.height / 2;
+            // @ts-ignore
             var distance = lib.qhly_computeDistance(pos.x, pos.y, centerX, centerY);
             if (distance < rect.width * 0.3758) {
               return;
             }
           }
           background.delete();
+          // @ts-ignore
           _status.qhly_open = false;
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_click3', null, true);
         }
+        // @ts-ignore
         delete background.qh_startClick;
       };
       if (lib.config.touchscreen) {
@@ -7089,11 +8472,13 @@ export let CONTENT = function (config, pack) {
         });
       }
       dragonwin.listen(function (e) {
+        // @ts-ignore
         var pos = lib.qhly_getEventPosition(e);
         var rect = dragonwin.getBoundingClientRect();
         rect = state.handleRect(rect);
         var centerX = rect.left + rect.width / 2;
         var centerY = rect.top + rect.height / 2;
+        // @ts-ignore
         var distance = lib.qhly_computeDistance(centerX, centerY, pos.x, pos.y);
         if (distance < rect.width * 0.3758) {
           e.stopPropagation();
@@ -7104,7 +8489,9 @@ export let CONTENT = function (config, pack) {
         var time = (new Date()).valueOf();
         if (time - state.preclicktime < 250) {
           background.delete();
+          // @ts-ignore
           _status.qhly_open = false;
+          // @ts-ignore
           game.qhly_open_new(name, lib.config.qhly_doubledefaultpage ? lib.config.qhly_doubledefaultpage : 'skill', ingame);
         }
         state.preclicktime = time;
@@ -7112,11 +8499,14 @@ export let CONTENT = function (config, pack) {
       });
       if (lib.config.qhly_dragonlocation == 'drag' || lib.config.qhly_dragonlocation == 'head') {
         var dragMouseDown = function (e) {
+          // @ts-ignore
           var pos = lib.qhly_getEventPosition(e);
           var rect = dragonwin.getBoundingClientRect();
+          // @ts-ignore
           rect = game.qhly_handleRect(rect);
           var centerX = rect.left + rect.width / 2;
           var centerY = rect.top + rect.height / 2;
+          // @ts-ignore
           var distance = lib.qhly_computeDistance(centerX, centerY, pos.x, pos.y);
           if (distance < rect.width * 0.1717) {
             state.isDragging = true;
@@ -7132,7 +8522,9 @@ export let CONTENT = function (config, pack) {
         };
         var dragMouseMove = function (e) {
           if (state.isDragging) {
+            // @ts-ignore
             var pos = lib.qhly_getEventPosition(e);
+            // @ts-ignore
             if (lib.qhly_computeDistance(pos.x, pos.y, state.beginMousePosition.x, state.beginMousePosition.y) > 10) {
               var baisx = pos.x - state.beginMousePosition.x;
               var baisy = pos.y - state.beginMousePosition.y;
@@ -7148,6 +8540,7 @@ export let CONTENT = function (config, pack) {
         };
         var dragMouseUp = function (e) {
           if (state.isDragging) {
+            // @ts-ignore
             var pos = lib.qhly_getEventPosition(e);
             var baisx = pos.x - state.beginMousePosition.x;
             var baisy = pos.y - state.beginMousePosition.y;
@@ -7180,11 +8573,17 @@ export let CONTENT = function (config, pack) {
           dragonwin.addEventListener('mouseleave', dragMouseCancel);
         }
       }
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       game.qhly_getSkinList(name, function (ret, list) {
+        // @ts-ignore
         var pkg = game.qhly_foundPackage(name);
         if (!list) list = [];
         list.sort(function (a, b) {
+          // @ts-ignore
           var orderA = game.qhly_getOrder(name, a, pkg);
+          // @ts-ignore
           var orderB = game.qhly_getOrder(name, b, pkg);
           if (orderA > orderB) return 1;
           if (orderA == orderB) return 0;
@@ -7194,34 +8593,43 @@ export let CONTENT = function (config, pack) {
         if (list && list.length) {
           skinList.addArray(list);
         }
+        // @ts-ignore
         state.skins = skinList;
         state.init();
         state.refreshSkins();
       }, false);
 
     };
+    // @ts-ignore
     game.qhly_open_small = function (name, from, ingame) {
       if(!from){
+        // @ts-ignore
         from = game.qhly_getCurrentPlayer(name)[0][0];
       }
       if (lib.config.qhly_smallwindowstyle == 'dragon' || !lib.config.qhly_smallwindowstyle) {
+        // @ts-ignore
         game.qhly_open_small_dragon(name, from, ingame);
         return;
       }
-      if(!from && ['decade','shousha'].contains(lib.config.qhly_smallwindowstyle)){
+      if(!from && ['decade','shousha'].includes(lib.config.qhly_smallwindowstyle)){
+        // @ts-ignore
         game.qhly_open_small_dragon(name, from, ingame);
         return;
       }
       else if (lib.config.qhly_smallwindowstyle == 'decade') {
+        // @ts-ignore
         game.qhly_open_small_decade(name, from, ingame);
         return;
       }
       else if (lib.config.qhly_smallwindowstyle == 'shousha') {
+        // @ts-ignore
         game.qhly_open_small_shousha(name, from, ingame);
         return;
       }
       try {
+        // @ts-ignore
         if (_status.qhly_open) return;
+        // @ts-ignore
         _status.qhly_open = true;
         var background = ui.create.div('.qh-skinchange-background', document.body);
         var backgroundBack = ui.create.div('.qh-skinchange-background', background);
@@ -7243,9 +8651,12 @@ export let CONTENT = function (config, pack) {
           lib.config.swipe_down = swipe_down;
           lib.config.swipe_left = swipe_left;
           lib.config.swipe_right = swipe_right;
+          // @ts-ignore
           if (!_status.qhly_open) return;
           background.delete();
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_press', null, true);
+          // @ts-ignore
           delete _status.qhly_open;
         };
         var viewState = {
@@ -7268,6 +8679,7 @@ export let CONTENT = function (config, pack) {
             for (var i = 0; i < this.skinViews.length; i++) {
               var skinView = this.skinViews[i];
               var skin = this.skins[i];
+              // @ts-ignore
               if (game.qhly_skinIs(name, skin)) {
                 skinView.style.filter = "saturate(100%)";
                 skinView.belowText.style.textShadow = '.2rem 0rem .5rem red,-.2rem 0rem .5rem red,0rem .2rem .5rem red,0rem -.2rem .5rem red';
@@ -7286,6 +8698,9 @@ export let CONTENT = function (config, pack) {
             this.isTouching = true;
             this.cancelClick = false;
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           handleMouseMove: function (x, y) {
             if (this.isTouching) {
               var slideX = x - this.mouseDownX;
@@ -7329,9 +8744,15 @@ export let CONTENT = function (config, pack) {
               viewState.handleMouseDown(event.touches[0].clientX, event.touches[0].clientY);
             }
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content.addEventListener('touchend', function (event) {
             viewState.handleMouseUp();
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content.addEventListener('touchcancel', function (event) {
             viewState.handleMouseUp();
           });
@@ -7341,12 +8762,18 @@ export let CONTENT = function (config, pack) {
           });
         } else {
           content.addEventListener('mousewheel', function (event) {
+            // @ts-ignore
             viewState.handleMouseDown(event.clientX, event.clientY);
+            // @ts-ignore
             if (event.wheelDelta > 0) {
+              // @ts-ignore
               viewState.handleMouseMove(event.clientX - 30, event.clientY);
+              // @ts-ignore
               viewState.handleMouseUp(event.clientX - 30, event.clientY);
             } else {
+              // @ts-ignore
               viewState.handleMouseMove(event.clientX + 30, event.clientY);
+              // @ts-ignore
               viewState.handleMouseUp(event.clientX + 30, event.clientY);
             }
           });
@@ -7363,11 +8790,17 @@ export let CONTENT = function (config, pack) {
             viewState.handleMouseMove(event.clientX, event.clientY);
           });
         }
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         game.qhly_getSkinList(name, function (ret, list) {
+          // @ts-ignore
           var pkg = game.qhly_foundPackage(name);
           if (!list) list = [];
           list.sort(function (a, b) {
+            // @ts-ignore
             var orderA = game.qhly_getOrder(name, a, pkg);
+            // @ts-ignore
             var orderB = game.qhly_getOrder(name, b, pkg);
             if (orderA > orderB) return 1;
             if (orderA == orderB) return 0;
@@ -7377,15 +8810,18 @@ export let CONTENT = function (config, pack) {
           if (list && list.length) {
             skinList.addArray(list);
           }
+          // @ts-ignore
           viewState.skins = skinList;
           viewState.skinTotalWidth = (viewState.skinPerWidth + viewState.skinGap) * skinList.length - viewState.skinGap;
           for (var i = 0; i < skinList.length; i++) {
             var skin = skinList[i];
             var skinView = ui.create.div('.qh-skinchange-skin', content);
+            // @ts-ignore
             viewState.skinViews.push(skinView);
             skinView.style.left = Math.round((viewState.skinPerWidth + viewState.skinGap) * i) + "px";
             skinView.style.width = Math.round(viewState.skinPerWidth) + "px";
             skinView.classList.add('qh-not-replace');
+            // @ts-ignore
             skinView.belowText = ui.create.div('.qh-skinchange-skin-text', skinView);
             if (i != skinList.length - 1) {
               var border = ui.create.div('.qh-skinchange-border', content);
@@ -7393,25 +8829,34 @@ export let CONTENT = function (config, pack) {
               border.style.left = Math.round((viewState.skinPerWidth + viewState.skinGap) * i + viewState.skinPerWidth) + "px";
             }
             if (skin) {
+              // @ts-ignore
               var info = game.qhly_getSkinInfo(name, skin);
               if (info) {
+                // @ts-ignore
                 skinView.belowText.innerHTML = info.translation;
               }
             } else {
+              // @ts-ignore
               skinView.belowText.innerHTML = "初始皮肤";
             }
+            // @ts-ignore
             if (game.qhly_skinIs(name, skin)) {
               skinView.style.filter = "saturate(100%)";
+              // @ts-ignore
               skinView.belowText.style.textShadow = '.2rem 0rem .5rem red,-.2rem 0rem .5rem red,0rem .2rem .5rem red,0rem -.2rem .5rem red';
             } else {
               skinView.style.filter = "saturate(40%)";
+              // @ts-ignore
               skinView.belowText.style.textShadow = '.2rem 0rem .5rem blue,-.2rem 0rem .5rem blue,0rem .2rem .5rem blue,0rem -.2rem .5rem blue';
             }
             (function (name, skin, view) {
               view.listen(function () {
                 if (viewState.cancelClick) return;
+                // @ts-ignore
                 if (game.qhly_skinIs(name, skin)) return;
+                // @ts-ignore
                 game.qhly_playQhlyAudio('qhly_voc_fanshu', null, true);
+                // @ts-ignore
                 game.qhly_setCurrentSkin(name, skin, function () {
                   viewState.refreshSkins();
                   if (lib.config.qhly_smallwinclosewhenchange) {
@@ -7421,20 +8866,27 @@ export let CONTENT = function (config, pack) {
               });
             })(name, skin, skinView);
             if (skin) {
+              // @ts-ignore
               var file = game.qhly_getSkinFile(name, skin);
+              // @ts-ignore
               skinView.qhly_origin_setBackgroundImage(file);
             } else {
+              // @ts-ignore
               skinView.qhly_origin_setBackground(name, 'character');
             }
           }
           viewState.refresh();
         }, false);
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         backgroundBack.listen(function (event) {
           exitListener();
         });
         exit.listen(exitListener);
         enlarge.listen(function () {
           exitListener();
+          // @ts-ignore
           game.qhly_open_new(name, lib.config.qhly_doubledefaultpage ? lib.config.qhly_doubledefaultpage : 'skill', ingame);
         });
       } catch (e) {
@@ -7444,11 +8896,15 @@ export let CONTENT = function (config, pack) {
       }
     };
     //------------------------------十周年小窗口换肤--decadesmall-------------------------
+    // @ts-ignore
     game.qhly_open_small_decade = function (name, from, ingame) {
       try {
+        // @ts-ignore
         if (_status.qhly_open) return;
+        // @ts-ignore
         _status.qhly_open = true;
         var cPlayer = from;
+        // @ts-ignore
         if (!cPlayer) cPlayer = game.qhly_getCurrentPlayer(name)[0][0];
         //let rareceshi = ui.create.div('.qh-skinchange-rare', cPlayer);
         var background = ui.create.div('.qh-skinchange-background', document.body);
@@ -7458,6 +8914,7 @@ export let CONTENT = function (config, pack) {
         if (lib.config.qhly_lutou) dialog.setAttribute('data-outcrop-skin', 'on');
         //var exit = ui.create.div('.qh-skinchange-decade-exit', dialog);
         var cover = ui.create.div('.qh-skinchange-decade-cover', dialog);
+        // @ts-ignore
         cover.setAttribute('data-visible', 1);
         cover.id = 'data-cover';
         var content1 = ui.create.div('.qh-skinchange-decade-area1', cover);
@@ -7472,7 +8929,9 @@ export let CONTENT = function (config, pack) {
         ui.create.div('.qh-skinchange-decade-autoskinborder', autoskin);
         ui.create.div('.qh-skinchange-decade-autoskinitem', autoskin);
         var enlarge = ui.create.div('.qh-skinchange-decade-enlarge', dialog);
+        // @ts-ignore
         if (lib.config.qhly_autoChangeSkin == 'close' || !lib.config.qhly_autoChangeSkin) autoskin.setAttribute('data-auto', false);
+        // @ts-ignore
         else autoskin.setAttribute('data-auto', true);
         autoskin.listen(function () {
           var open = false, item = 'close';
@@ -7483,11 +8942,16 @@ export let CONTENT = function (config, pack) {
           game.saveConfig('extension_千幻聆音_qhly_autoChangeSkin', item);
           game.saveConfig('qhly_autoChangeSkin', item);
           if (open) {
+            // @ts-ignore
             autoskin.setAttribute('data-auto', true);
+            // @ts-ignore
             game.qhly_autoChangeSkin();
           } else {
+            // @ts-ignore
             autoskin.setAttribute('data-auto', false);
+            // @ts-ignore
             if (_status.qhly_changeSkinFunc) {
+              // @ts-ignore
               clearTimeout(_status.qhly_changeSkinFunc);
             }
           }
@@ -7496,13 +8960,16 @@ export let CONTENT = function (config, pack) {
         var zhuskinBut = ui.create.div('.qh-zhuskin', zhufu);
         var fuskinBut = ui.create.div('.qh-fuskin', zhufu);
         if (cPlayer && cPlayer.name2) {
+          // @ts-ignore
           dialog.setAttribute('data-double', true);
           if (cPlayer.name2 == name) {
             fuskinBut.classList.add('sel');
+            // @ts-ignore
             cover.setAttribute('data-visible', 2);
           }
           else {
             zhuskinBut.classList.add('sel');
+            // @ts-ignore
             cover.setAttribute('data-visible', 1);
           }
         }
@@ -7511,6 +8978,7 @@ export let CONTENT = function (config, pack) {
           if (cPlayer && cPlayer.classList.contains('unseen') && cPlayer != game.me) return;
           fuskinBut.classList.remove('sel');
           zhuskinBut.classList.add('sel');
+          // @ts-ignore
           cover.setAttribute('data-visible', 1);
           viewState1.refresh();
         })
@@ -7519,6 +8987,7 @@ export let CONTENT = function (config, pack) {
           if (cPlayer && cPlayer.classList.contains('unseen2') && cPlayer != game.me) return;
           zhuskinBut.classList.remove('sel');
           fuskinBut.classList.add('sel');
+          // @ts-ignore
           cover.setAttribute('data-visible', 2);
           viewState2.refresh();
         })
@@ -7535,29 +9004,40 @@ export let CONTENT = function (config, pack) {
           lib.config.swipe_down = swipe_down;
           lib.config.swipe_left = swipe_left;
           lib.config.swipe_right = swipe_right;
+          // @ts-ignore
           if (!_status.qhly_open) return;
           for (var i = 0; i < viewState1.skinViews.length; i++) {
+            // @ts-ignore
             if (viewState1.skinViews[i].dynamic && viewState1.skinViews[i].dynamic.renderer.postMessage) {
+              // @ts-ignore
               viewState1.skinViews[i].dynamic.renderer.postMessage({
                 message: "DESTROY",
+                // @ts-ignore
                 id: viewState1.skinViews[i].dynamic.id,
               })
+              // @ts-ignore
               viewState1.skinViews[i].dynamic.renderer.capacity--;
             }
           }
           if (cPlayer && cPlayer.name2) {
             for (var i = 0; i < viewState2.skinViews.length; i++) {
+              // @ts-ignore
               if (viewState2.skinViews[i].dynamic && viewState2.skinViews[i].dynamic.renderer.postMessage) {
+                // @ts-ignore
                 viewState2.skinViews[i].dynamic.renderer.postMessage({
                   message: "DESTROY",
+                  // @ts-ignore
                   id: viewState2.skinViews[i].dynamic.id,
                 })
+                // @ts-ignore
                 viewState2.skinViews[i].dynamic.renderer.capacity--;
               }
             }
           }
           background.delete();
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_dec_press', null, true);
+          // @ts-ignore
           delete _status.qhly_open;
         };
         var viewState1 = {
@@ -7576,14 +9056,18 @@ export let CONTENT = function (config, pack) {
           refresh: function () {
             content1.style.width = Math.round(this.skinTotalWidth) + 'px';
             content1.style.left = Math.round(this.offset) + "px";
+            // @ts-ignore
             if (this.skinTotalWidth + this.offset > 665 && this.cover.getAttribute('data-visible') == '1') this.rArrow.setAttribute('data-visiable', true);
             else {
               if (rTimer1) clearInterval(rTimer1);
+              // @ts-ignore
               this.rArrow.setAttribute('data-visiable', false);
             }
+            // @ts-ignore
             if (this.offset < 0 && this.cover.getAttribute('data-visible') == '1') this.lArrow.setAttribute('data-visiable', true);
             else {
               if (lTimer1) clearInterval(lTimer1);
+              // @ts-ignore
               this.lArrow.setAttribute('data-visiable', false);
             }
           },
@@ -7593,13 +9077,16 @@ export let CONTENT = function (config, pack) {
             for (var i = 0; i < this.skinViews.length; i++) {
               // var skinView = this.skinViews[i].avatar;
               var skin = this.skins[i];
+              // @ts-ignore
               if (cPlayer && game.qhly_skinIs(cPlayer.name1, skin)) {
                 //skinView.style.filter = "grayscale(0)";
                 //skinView.belowText.style.textShadow = '.2rem 0rem .5rem red,-.2rem 0rem .5rem red,0rem .2rem .5rem red,0rem -.2rem .5rem red';
+                // @ts-ignore
                 this.skinViews[i].defaultskin.setAttribute('data-sel', true);
               } else {
                 //skinView.style.filter = "grayscale(100%)";
                 //skinView.belowText.style.textShadow = '.2rem 0rem .5rem blue,-.2rem 0rem .5rem blue,0rem .2rem .5rem blue,0rem -.2rem .5rem blue';
+                // @ts-ignore
                 this.skinViews[i].defaultskin.setAttribute('data-sel', false);
               }
             }
@@ -7615,6 +9102,9 @@ export let CONTENT = function (config, pack) {
             if (!this.offset) this.offset = content1.offsetLeft;
             this.tempoffset = this.offset;
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           handleMouseMove: function (x, y) {
             if (this.isTouching) {
               var slideX = x - this.mouseDownX;
@@ -7625,9 +9115,13 @@ export let CONTENT = function (config, pack) {
                 this.tempoffset = -(this.skinTotalWidth - this.visibleWidth());
               }
               this.content1.style.left = Math.round(this.tempoffset) + "px";
+              // @ts-ignore
               if (this.skinTotalWidth + this.tempoffset > 665 && this.cover.getAttribute('data-visible') == '1') this.rArrow.setAttribute('data-visiable', true);
+              // @ts-ignore
               else this.rArrow.setAttribute('data-visiable', false);
+              // @ts-ignore
               if (this.tempoffset < 0 && this.cover.getAttribute('data-visible') == '1') this.lArrow.setAttribute('data-visiable', true);
+              // @ts-ignore
               else this.lArrow.setAttribute('data-visiable', false);
               return true;
             }
@@ -7673,14 +9167,18 @@ export let CONTENT = function (config, pack) {
             refresh: function () {
               content2.style.width = Math.round(this.skinTotalWidth) + 'px';
               content2.style.left = Math.round(this.offset) + "px";
+              // @ts-ignore
               if (this.skinTotalWidth + this.offset > 665 && this.cover.getAttribute('data-visible') == '2') this.rArrow.setAttribute('data-visiable', true);
               else {
                 if (rTimer2) clearInterval(rTimer2);
+                // @ts-ignore
                 this.rArrow.setAttribute('data-visiable', false);
               }
+              // @ts-ignore
               if (this.offset < 0 && this.cover.getAttribute('data-visible') == '2') this.lArrow.setAttribute('data-visiable', true);
               else {
                 if (lTimer2) clearInterval(lTimer2);
+                // @ts-ignore
                 this.lArrow.setAttribute('data-visiable', false);
               }
             },
@@ -7690,13 +9188,16 @@ export let CONTENT = function (config, pack) {
               for (var i = 0; i < this.skinViews.length; i++) {
                 // var skinView = this.skinViews[i].avatar;
                 var skin = this.skins[i];
+                // @ts-ignore
                 if (cPlayer && game.qhly_skinIs(cPlayer.name2, skin)) {
                   //skinView.style.filter = "grayscale(0)";
                   //skinView.belowText.style.textShadow = '.2rem 0rem .5rem red,-.2rem 0rem .5rem red,0rem .2rem .5rem red,0rem -.2rem .5rem red';
+                  // @ts-ignore
                   this.skinViews[i].defaultskin.setAttribute('data-sel', true);
                 } else {
                   //skinView.style.filter = "grayscale(100%)";
                   //skinView.belowText.style.textShadow = '.2rem 0rem .5rem blue,-.2rem 0rem .5rem blue,0rem .2rem .5rem blue,0rem -.2rem .5rem blue';
+                  // @ts-ignore
                   this.skinViews[i].defaultskin.setAttribute('data-sel', false);
                 }
               }
@@ -7712,6 +9213,9 @@ export let CONTENT = function (config, pack) {
               if (!this.offset) this.offset = content2.offsetLeft;
               this.tempoffset = this.offset;
             },
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             handleMouseMove: function (x, y) {
               if (this.isTouching) {
                 var slideX = x - this.mouseDownX;
@@ -7722,9 +9226,13 @@ export let CONTENT = function (config, pack) {
                   this.tempoffset = -(this.skinTotalWidth - this.visibleWidth());
                 }
                 this.content2.style.left = Math.round(this.tempoffset) + "px";
+                // @ts-ignore
                 if (this.skinTotalWidth + this.tempoffset > 665 && this.cover.getAttribute('data-visible') == '2') this.rArrow.setAttribute('data-visiable', true);
+                // @ts-ignore
                 else this.rArrow.setAttribute('data-visiable', false);
+                // @ts-ignore
                 if (this.tempoffset < 0 && this.cover.getAttribute('data-visible') == '2') this.lArrow.setAttribute('data-visiable', true);
+                // @ts-ignore
                 else this.lArrow.setAttribute('data-visiable', false);
                 return true;
               }
@@ -7814,9 +9322,15 @@ export let CONTENT = function (config, pack) {
               viewState1.handleMouseDown(event.touches[0].clientX, event.touches[0].clientY);
             }
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content1.addEventListener('touchend', function (event) {
             viewState1.handleMouseUp();
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content1.addEventListener('touchcancel', function (event) {
             viewState1.handleMouseUp();
           });
@@ -7829,9 +9343,15 @@ export let CONTENT = function (config, pack) {
               viewState2.handleMouseDown(event.touches[0].clientX, event.touches[0].clientY);
             }
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content2.addEventListener('touchend', function (event) {
             viewState2.handleMouseUp();
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content2.addEventListener('touchcancel', function (event) {
             viewState2.handleMouseUp();
           });
@@ -7841,12 +9361,18 @@ export let CONTENT = function (config, pack) {
           });
         } else {
           content1.addEventListener('mousewheel', function (event) {
+            // @ts-ignore
             viewState1.handleMouseDown(event.clientX, event.clientY);
+            // @ts-ignore
             if (event.wheelDelta > 0) {
+              // @ts-ignore
               viewState1.handleMouseMove(event.clientX - 30, event.clientY);
+              // @ts-ignore
               viewState1.handleMouseUp(event.clientX - 30, event.clientY);
             } else {
+              // @ts-ignore
               viewState1.handleMouseMove(event.clientX + 30, event.clientY);
+              // @ts-ignore
               viewState1.handleMouseUp(event.clientX + 30, event.clientY);
             }
           });
@@ -7863,12 +9389,18 @@ export let CONTENT = function (config, pack) {
             viewState1.handleMouseMove(event.clientX, event.clientY);
           });
           content2.addEventListener('mousewheel', function (event) {
+            // @ts-ignore
             viewState2.handleMouseDown(event.clientX, event.clientY);
+            // @ts-ignore
             if (event.wheelDelta > 0) {
+              // @ts-ignore
               viewState2.handleMouseMove(event.clientX - 30, event.clientY);
+              // @ts-ignore
               viewState2.handleMouseUp(event.clientX - 30, event.clientY);
             } else {
+              // @ts-ignore
               viewState2.handleMouseMove(event.clientX + 30, event.clientY);
+              // @ts-ignore
               viewState2.handleMouseUp(event.clientX + 30, event.clientY);
             }
           });
@@ -7889,11 +9421,17 @@ export let CONTENT = function (config, pack) {
         //-----------------------------------------主将---------------------------------------------
         var namex = cPlayer?cPlayer.name1:name;
         var playZhuDynamic = lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'always' ? false : true;
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         game.qhly_getSkinList(namex, function (ret, list) {
+          // @ts-ignore
           var pkg = game.qhly_foundPackage(namex);
           if (!list) list = [];
           list.sort(function (a, b) {
+            // @ts-ignore
             var orderA = game.qhly_getOrder(namex, a, pkg);
+            // @ts-ignore
             var orderB = game.qhly_getOrder(namex, b, pkg);
             if (orderA > orderB) return 1;
             if (orderA == orderB) return 0;
@@ -7905,13 +9443,16 @@ export let CONTENT = function (config, pack) {
             skinList.addArray(list);
           }
           var dynamicSkinList = [], bothSkin = [], singleDynamic = [];//2
+          // @ts-ignore
           if (window.decadeUI) {
+            // @ts-ignore
             if (decadeUI.dynamicSkin[namex]) dynamicSkinList = Object.keys(decadeUI.dynamicSkin[namex]);
             singleDynamic = [...dynamicSkinList];//单形态
             for (var i of skinList) {
               if (i) {
+                // @ts-ignore
                 let skin = i.substring(0, i.lastIndexOf('.'));
-                if (dynamicSkinList.contains(skin)) {
+                if (dynamicSkinList.includes(skin)) {
                   bothSkin.push(skin);//双形态
                   singleDynamic.remove(skin);
                 }
@@ -7919,18 +9460,24 @@ export let CONTENT = function (config, pack) {
             }
             if (dynamicSkinList) {
               if (lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'three' && dynamicSkinList.length > 3) playZhuDynamic = false;
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               dynamicSkinList.forEach(function (value, index, array) {
                 array[index] += '.jpg';
               });
               skinList = Array.from(new Set(skinList.concat(dynamicSkinList)));
+              // @ts-ignore
               skinList.remove('经典形象.jpg');
             }
           }
+          // @ts-ignore
           viewState1.skins = skinList;
           viewState1.skinTotalWidth = (viewState1.skinPerWidth + viewState1.skinGap) * skinList.length - viewState1.skinGap + 20;
           for (let i = 0; i < skinList.length; i++) {
             var skin = skinList[i];
             var skinView = ui.create.div('.qh-skinchange-decade-skin', content1);
+            // @ts-ignore
             skinView.avatar = ui.create.div('.primary-avatar', skinView);
             var campWrap = ui.create.div('.qhcamp-wrap', skinView);
             if(cPlayer){
@@ -7953,33 +9500,48 @@ export let CONTENT = function (config, pack) {
             ui.create.div('.qhcamp-back', campWrap);
             ui.create.div('.qhcamp-border', campWrap);
             var campName = ui.create.div('.qhcamp-name', campWrap);
+            // @ts-ignore
             campName.style.backgroundImage = 'url("' + lib.qhly_path + 'image/decoration/name_' + campWrap.getAttribute('data-camp') + '.png")';
             var avatarName = ui.create.div('.qhavatar-name', campWrap);
+            // @ts-ignore
             avatarName.innerHTML = lib.qhly_slimName(name);//.replace(/<br>/g, '\n');
             var hpWrap = ui.create.div('.qhhp-wrap', skinView);
             hpWrap.setAttribute("data-border-level", playerDengjie);
+            // @ts-ignore
             skinView.belowText = ui.create.div('.qh-skinchange-decade-skin-text', hpWrap);
+            // @ts-ignore
             viewState1.skinViews.push(skinView);
             skinView.style.left = Math.round((viewState1.skinPerWidth + viewState1.skinGap) * i + 16) + "px";
             skinView.style.width = Math.round(viewState1.skinPerWidth) + "px";
+            // @ts-ignore
             skinView.avatar.classList.add('qh-not-replace');
             //skinView.node = { avatar: skinView.avatar, name1: namex, avatar2: null, name2: null };
             //skinView.belowText = ui.create.div('.qh-skinchange-skin-text', skinView);
+            // @ts-ignore
             skinView.defaultskin = ui.create.div('.qh-skinchange-skin-default', skinView);
+            // @ts-ignore
             skinView.$dynamicWrap = ui.create.div('.qhdynamic-wrap', skinView);
+            // @ts-ignore
             skinView.toImageBtn = ui.create.div('.qh-domtoimage', skinView);
+            // @ts-ignore
             skinView.toImageBtn.addEventListener('click', function (e) {
               e.stopPropagation();
+              // @ts-ignore
               game.qhly_dom2image(ingame, namex, this, path);
             });//3
+            // @ts-ignore
             skinView.dynamicToggle = ui.create.div('.qh-skinchange-dynamicChange', skinView);
-            if (!skin && dynamicSkinList.contains('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
+            // @ts-ignore
+            if (!skin && dynamicSkinList.includes('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
             if (skin && lib.config.qhly_skinset.djtoggle[namex]) {
+              // @ts-ignore
               if (lib.config.qhly_skinset.djtoggle[namex][skin.substring(0, skin.lastIndexOf('.'))]) skinView.dynamicToggle.classList.add('jing');
             }
+            // @ts-ignore
             skinView.dynamicToggle.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
               if (this.classList.contains('jing')) {
                 this.classList.remove('jing');
+                // @ts-ignore
                 if (playZhuDynamic) game.qhly_changeDynamicSkin(this.parentNode, this.parentNode.belowText.innerText, namex);
                 //game.qhly_changeDynamicSkin(cPlayer, this.parentNode.belowText.innerText, namex);
                 if (lib.config.qhly_skinset.djtoggle[namex] && lib.config.qhly_skinset.djtoggle[namex][this.parentNode.belowText.innerText]) delete lib.config.qhly_skinset.djtoggle[namex][this.parentNode.belowText.innerText];
@@ -7993,35 +9555,49 @@ export let CONTENT = function (config, pack) {
                 if (!lib.config.qhly_skinset.djtoggle[namex]) lib.config.qhly_skinset.djtoggle[namex] = {};
                 lib.config.qhly_skinset.djtoggle[namex][this.parentNode.belowText.innerText] = true;
               }
+              // @ts-ignore
               game.qhlySyncConfig();
             });
             //var dynamicPlayer = ui.create.div('.animation-player', skinView.$dynamicWrap);
             if (skin) {
+              // @ts-ignore
               var str = skin.substring(0, skin.lastIndexOf('.'));
-              if (bothSkin.contains(str)) skinView.dynamicToggle.setAttribute('toggle', true);
-              if (singleDynamic.contains(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+              // @ts-ignore
+              if (bothSkin.includes(str)) skinView.dynamicToggle.setAttribute('toggle', true);
+              // @ts-ignore
+              if (singleDynamic.includes(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+              // @ts-ignore
               var info = game.qhly_getSkinInfo(namex, skin);
               if (info) {
+                // @ts-ignore
                 skinView.belowText.innerHTML = info.translation;
               }
-              if ((!lib.config.qhly_skinset.djtoggle[namex] || lib.config.qhly_skinset.djtoggle[namex] && !lib.config.qhly_skinset.djtoggle[namex][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namex] && Object.keys(decadeUI.dynamicSkin[namex]).contains(info.translation)) {
+              // @ts-ignore
+              if ((!lib.config.qhly_skinset.djtoggle[namex] || lib.config.qhly_skinset.djtoggle[namex] && !lib.config.qhly_skinset.djtoggle[namex][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namex] && Object.keys(decadeUI.dynamicSkin[namex]).includes(info.translation)) {
+                // @ts-ignore
                 if (playZhuDynamic) game.qhly_changeDynamicSkin(skinView, info.translation, namex);
               }
               //game.qhly_showSkinQua(skinView, skin);
 
               //if (info.translation == lib.config.qhly_skinset.skin[name].substring(0, 4)) game.qhly_changeDynamicSkin(skinView, name);
             } else {
+              // @ts-ignore
               skinView.belowText.innerHTML = "经典形象";
-              if (dynamicSkinList.contains('经典形象.jpg') && playZhuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namex);
+              // @ts-ignore
+              if (dynamicSkinList.includes('经典形象.jpg') && playZhuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namex);
             }
             var skinQua = ui.create.div('.qhly-skinQua-decade', skinView);
+            // @ts-ignore
             var skininfo = game.qhly_getSkinInfo(namex, skin, game.qhly_foundPackage(namex));
             var level = skininfo.level;
             var style = skininfo.levelStyle;
             if (style) {
+              // @ts-ignore
               if (!skinQua.qh_savedStyle) {
+                // @ts-ignore
                 skinQua.qh_savedStyle = {};
                 for (var m in skinQua.style) {
+                  // @ts-ignore
                   skinQua.qh_savedStyle[m] = skinQua.style[m];
                 }
               }
@@ -8035,14 +9611,19 @@ export let CONTENT = function (config, pack) {
                 }
               }
             } else {
+              // @ts-ignore
               if (skinQua.qh_savedStyle) {
+                // @ts-ignore
                 for (var m in skinQua.qh_savedStyle) {
+                  // @ts-ignore
                   skinQua.style[m] = skinQua.qh_savedStyle[m];
                 }
               }
             }
             if (skin) {
+              // @ts-ignore
               if (lib.qhly_level[namex + '_' + skin]) {
+                // @ts-ignore
                 level = lib.qhly_level[namex + '_' + skin];
               }
             }
@@ -8080,25 +9661,34 @@ export let CONTENT = function (config, pack) {
             // var skinQua = ui.create.div('', skinView);
             // skinQua.style.cssText = 'width:70%;height:29%;left:14%;top:61%;background-size:100% 100%;background-repeat:no-repeat;z-index:88;point-events:none';
             // skinQua.style['background-image'] = 'url(' + lib.qhly_path+'theme/decade/dc_' + game.qhly_getSkinLevel(namex, skin, true) + '.png)';
+            // @ts-ignore
             if (game.qhly_skinIs(namex, skin)) {
               //skinView.style.filter = "grayscale(0)";
               //skinView.belowText.style.textShadow = '.2rem 0rem .5rem red,-.2rem 0rem .5rem red,0rem .2rem .5rem red,0rem -.2rem .5rem red';
+              // @ts-ignore
               skinView.defaultskin.setAttribute('data-sel', true);
               if (skinView.offsetLeft > 600) viewState1.offset = 614 - skinView.offsetLeft;
             } else {
               //skinView.style.filter = "grayscale(100%)";
               //skinView.belowText.style.textShadow = '.2rem 0rem .5rem blue,-.2rem 0rem .5rem blue,0rem .2rem .5rem blue,0rem -.2rem .5rem blue';
+              // @ts-ignore
               skinView.defaultskin.setAttribute('data-sel', false);
             }
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             (function (name, skin, view) {
               view.listen(function () {
                 if (viewState1.cancelClick) return;
+                // @ts-ignore
                 game.qhly_setCurrentSkin(namex, skin, function () {
                   viewState1.refreshSkins();
                   //if (view.dynamicToggle && view.dynamicToggle.classList && !view.dynamicToggle.classList.contains('jing')) {
+                  // @ts-ignore
                   game.qhly_changeDynamicSkin(namex);
                   //}
                   if (lib.config['extension_千幻聆音_qhly_decadeChangeEffect'] && cPlayer) cPlayer.playChangeSkinEffect(false);
+                  // @ts-ignore
                   game.qhlySyncConfig();
                   if (lib.config.qhly_smallwinclosewhenchange) {
                     exitListener();
@@ -8108,8 +9698,11 @@ export let CONTENT = function (config, pack) {
               });
             })(namex, skin, skinView);
             if (skin) {
+              // @ts-ignore
               let file = game.qhly_getSkinFile(namex, skin);
+              // @ts-ignore
               let skinView2 = skinView.avatar;
+              // @ts-ignore
               game.qhly_checkFileExist(file, function (s) {
                 if (s) {
                   skinView2.qhly_origin_setBackgroundImage(file);
@@ -8131,6 +9724,7 @@ export let CONTENT = function (config, pack) {
                 }
               })
             } else {
+              // @ts-ignore
               skinView.avatar.qhly_origin_setBackground(namex, 'character');
             }
           }
@@ -8141,11 +9735,17 @@ export let CONTENT = function (config, pack) {
         if (cPlayer && cPlayer.name2) {
           var namey = cPlayer.name2;
           var playFuDynamic = lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'always' ? false : true;
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           game.qhly_getSkinList(namey, function (ret, list) {
+            // @ts-ignore
             var pkg = game.qhly_foundPackage(namey);
             if (!list) list = [];
             list.sort(function (a, b) {
+              // @ts-ignore
               var orderA = game.qhly_getOrder(namey, a, pkg);
+              // @ts-ignore
               var orderB = game.qhly_getOrder(namey, b, pkg);
               if (orderA > orderB) return 1;
               if (orderA == orderB) return 0;
@@ -8157,13 +9757,16 @@ export let CONTENT = function (config, pack) {
               skinList.addArray(list);
             }
             var dynamicSkinList = [], bothSkin = [], singleDynamic = [];
+            // @ts-ignore
             if (window.decadeUI) {
+              // @ts-ignore
               if (decadeUI.dynamicSkin[namey]) dynamicSkinList = Object.keys(decadeUI.dynamicSkin[namey]);
               singleDynamic = [...dynamicSkinList];//单形态
               for (var i of skinList) {
                 if (i) {
+                  // @ts-ignore
                   var skin = i.substring(0, i.lastIndexOf('.'));
-                  if (dynamicSkinList.contains(skin)) {
+                  if (dynamicSkinList.includes(skin)) {
                     bothSkin.push(skin);//双形态
                     singleDynamic.remove(skin);
                   }
@@ -8171,18 +9774,24 @@ export let CONTENT = function (config, pack) {
               }
               if (dynamicSkinList) {
                 if (lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'three' && dynamicSkinList.length > 3) playFuDynamic = false;
+                // @ts-ignore
+                // @ts-ignore
+                // @ts-ignore
                 dynamicSkinList.forEach(function (value, index, array) {
                   array[index] += '.jpg';
                 })
                 skinList = Array.from(new Set(skinList.concat(dynamicSkinList)));
+                // @ts-ignore
                 skinList.remove('经典形象.jpg');
               }
             }
+            // @ts-ignore
             viewState2.skins = skinList;
             viewState2.skinTotalWidth = (viewState2.skinPerWidth + viewState2.skinGap) * skinList.length - viewState2.skinGap + 20;
             for (let i = 0; i < skinList.length; i++) {
               var skin = skinList[i];
               var skinView = ui.create.div('.qh-skinchange-decade-skin', content2);
+              // @ts-ignore
               skinView.avatar = ui.create.div('.primary-avatar', skinView);
               var campWrap = ui.create.div('.qhcamp-wrap', skinView);
               if(cPlayer){
@@ -8205,35 +9814,51 @@ export let CONTENT = function (config, pack) {
               ui.create.div('.qhcamp-back', campWrap);
               ui.create.div('.qhcamp-border', campWrap);
               var campName = ui.create.div('.qhcamp-name', campWrap);
+              // @ts-ignore
               campName.style.backgroundImage = 'url("' + lib.qhly_path + 'image/decoration/name_' + campWrap.getAttribute('data-camp') + '.png")';
               var avatarName = ui.create.div('.qhavatar-name', campWrap);
+              // @ts-ignore
               avatarName.innerHTML = lib.qhly_slimName(namey);//.replace(/<br>/g, '\n');
               var hpWrap = ui.create.div('.qhhp-wrap', skinView);
               hpWrap.setAttribute("data-border-level", playerDengjie);
+              // @ts-ignore
               skinView.belowText = ui.create.div('.qh-skinchange-decade-skin-text', hpWrap);
 
+              // @ts-ignore
               viewState2.skinViews.push(skinView);
               skinView.style.left = Math.round((viewState2.skinPerWidth + viewState2.skinGap) * i + 16) + "px";
               skinView.style.width = Math.round(viewState2.skinPerWidth) + "px";
+              // @ts-ignore
               skinView.avatar.classList.add('qh-not-replace');
               //skinView.node = { avatar: skinView.avatar, name1: namey }
               //skinView.belowText = ui.create.div('.qh-skinchange-skin-text', skinView);
+              // @ts-ignore
               skinView.defaultskin = ui.create.div('.qh-skinchange-skin-default', skinView);
+              // @ts-ignore
               skinView.$dynamicWrap = ui.create.div('.qhdynamic-wrap', skinView);
+              // @ts-ignore
               skinView.toImageBtn = ui.create.div('.qh-domtoimage', skinView);
+              // @ts-ignore
               skinView.toImageBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
+                // @ts-ignore
                 game.qhly_dom2image(ingame, namey, this, path);
               });
+              // @ts-ignore
               skinView.dynamicToggle = ui.create.div('.qh-skinchange-dynamicChange', skinView);
-              if (skin && bothSkin.contains(skin.substring(0, skin.lastIndexOf('.')))) skinView.dynamicToggle.setAttribute('toggle', true);
-              if (!skin && dynamicSkinList.contains('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
+              // @ts-ignore
+              if (skin && bothSkin.includes(skin.substring(0, skin.lastIndexOf('.')))) skinView.dynamicToggle.setAttribute('toggle', true);
+              // @ts-ignore
+              if (!skin && dynamicSkinList.includes('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
               if (skin && lib.config.qhly_skinset.djtoggle[namey]) {
+                // @ts-ignore
                 if (lib.config.qhly_skinset.djtoggle[namey][skin.substring(0, skin.lastIndexOf('.'))]) skinView.dynamicToggle.classList.add('jing');
               }
+              // @ts-ignore
               skinView.dynamicToggle.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
                 if (this.classList.contains('jing')) {
                   this.classList.remove('jing');
+                  // @ts-ignore
                   if (playFuDynamic) game.qhly_changeDynamicSkin(this.parentNode, this.parentNode.belowText.innerText, namey);
                   //game.qhly_changeDynamicSkin(cPlayer, this.parentNode.belowText.innerText, namey, true);
                   if (lib.config.qhly_skinset.djtoggle[namey] && lib.config.qhly_skinset.djtoggle[namey][this.parentNode.belowText.innerText]) delete lib.config.qhly_skinset.djtoggle[namey][this.parentNode.belowText.innerText];
@@ -8247,36 +9872,49 @@ export let CONTENT = function (config, pack) {
                   if (!lib.config.qhly_skinset.djtoggle[namey]) lib.config.qhly_skinset.djtoggle[namey] = {};
                   lib.config.qhly_skinset.djtoggle[namey][this.parentNode.belowText.innerText] = true;
                 }
+                // @ts-ignore
                 game.qhlySyncConfig();
               });
 
               //var dynamicPlayer = ui.create.div('.animation-player', skinView.$dynamicWrap);
               if (skin) {
                 var str = skin.substring(0, skin.lastIndexOf('.'));
-                if (bothSkin.contains(str)) skinView.dynamicToggle.setAttribute('toggle', true);
-                if (singleDynamic.contains(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+                // @ts-ignore
+                if (bothSkin.includes(str)) skinView.dynamicToggle.setAttribute('toggle', true);
+                // @ts-ignore
+                if (singleDynamic.includes(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+                // @ts-ignore
                 var info = game.qhly_getSkinInfo(namey, skin);
                 if (info) {
+                  // @ts-ignore
                   skinView.belowText.innerHTML = info.translation;
                 }
-                if ((!lib.config.qhly_skinset.djtoggle[namey] || lib.config.qhly_skinset.djtoggle[namey] && !lib.config.qhly_skinset.djtoggle[namey][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namey] && Object.keys(decadeUI.dynamicSkin[namey]).contains(info.translation)) {
+                // @ts-ignore
+                if ((!lib.config.qhly_skinset.djtoggle[namey] || lib.config.qhly_skinset.djtoggle[namey] && !lib.config.qhly_skinset.djtoggle[namey][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namey] && Object.keys(decadeUI.dynamicSkin[namey]).includes(info.translation)) {
+                  // @ts-ignore
                   if (playFuDynamic) game.qhly_changeDynamicSkin(skinView, info.translation, namey, true);
                 }
                 //game.qhly_showSkinQua(skinView, skin);
 
                 //if (info.translation == lib.config.qhly_skinset.skin[name].substring(0, 4)) game.qhly_changeDynamicSkin(skinView, name);
               } else {
+                // @ts-ignore
                 skinView.belowText.innerHTML = "经典形象";
-                if (dynamicSkinList.contains('经典形象.jpg') && playFuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namey);
+                // @ts-ignore
+                if (dynamicSkinList.includes('经典形象.jpg') && playFuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namey);
               }
               var skinQua = ui.create.div('.qhly-skinQua-decade', skinView);
+              // @ts-ignore
               var skininfo = game.qhly_getSkinInfo(namey, skin, game.qhly_foundPackage(namey));
               var level = skininfo.level;
               var style = skininfo.levelStyle;
               if (style) {
+                // @ts-ignore
                 if (!skinQua.qh_savedStyle) {
+                  // @ts-ignore
                   skinQua.qh_savedStyle = {};
                   for (var m in skinQua.style) {
+                    // @ts-ignore
                     skinQua.qh_savedStyle[m] = skinQua.style[m];
                   }
                 }
@@ -8290,14 +9928,19 @@ export let CONTENT = function (config, pack) {
                   }
                 }
               } else {
+                // @ts-ignore
                 if (skinQua.qh_savedStyle) {
+                  // @ts-ignore
                   for (var m in skinQua.qh_savedStyle) {
+                    // @ts-ignore
                     skinQua.style[m] = skinQua.qh_savedStyle[m];
                   }
                 }
               }
               if (skin) {
+                // @ts-ignore
                 if (lib.qhly_level[namey + '_' + skin]) {
+                  // @ts-ignore
                   level = lib.qhly_level[namey + '_' + skin];
                 }
               }
@@ -8332,25 +9975,34 @@ export let CONTENT = function (config, pack) {
               } else {
                 skinQua.hide();
               }
+              // @ts-ignore
               if (game.qhly_skinIs(namey, skin)) {
                 //skinView.style.filter = "grayscale(0)";
                 //skinView.belowText.style.textShadow = '.2rem 0rem .5rem red,-.2rem 0rem .5rem red,0rem .2rem .5rem red,0rem -.2rem .5rem red';
+                // @ts-ignore
                 skinView.defaultskin.setAttribute('data-sel', true);
                 if (skinView.offsetLeft > 600) viewState2.offset = 614 - skinView.offsetLeft;
               } else {
                 //skinView.style.filter = "grayscale(100%)";
                 //skinView.belowText.style.textShadow = '.2rem 0rem .5rem blue,-.2rem 0rem .5rem blue,0rem .2rem .5rem blue,0rem -.2rem .5rem blue';
+                // @ts-ignore
                 skinView.defaultskin.setAttribute('data-sel', false);
               }
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               (function (name, skin, view) {
                 view.listen(function () {
                   if (viewState2.cancelClick) return;
+                  // @ts-ignore
                   game.qhly_setCurrentSkin(namey, skin, function () {
                     viewState2.refreshSkins();
                     //if (view.dynamicToggle && view.dynamicToggle.classList && !view.dynamicToggle.classList.contains('jing')) {
+                    // @ts-ignore
                     game.qhly_changeDynamicSkin(namey, null, null, true);
                     //}
                     if (lib.config['extension_千幻聆音_qhly_decadeChangeEffect'] && cPlayer) cPlayer.playChangeSkinEffect(true);
+                    // @ts-ignore
                     game.qhlySyncConfig();
                     if (lib.config.qhly_smallwinclosewhenchange) {
                       exitListener();
@@ -8360,8 +10012,11 @@ export let CONTENT = function (config, pack) {
                 });
               })(namey, skin, skinView);
               if (skin) {
+                // @ts-ignore
                 let file = game.qhly_getSkinFile(namey, skin);
+                // @ts-ignore
                 let skinView2 = skinView.avatar;
+                // @ts-ignore
                 game.qhly_checkFileExist(file, function (s) {
                   if (s) {
                     skinView2.qhly_origin_setBackgroundImage(file);
@@ -8383,6 +10038,7 @@ export let CONTENT = function (config, pack) {
                   }
                 })
               } else {
+                // @ts-ignore
                 skinView.avatar.qhly_origin_setBackground(namey, 'character');
               }
             }
@@ -8390,12 +10046,16 @@ export let CONTENT = function (config, pack) {
           }, false);
         }
 
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         backgroundBack.listen(function (event) {
           exitListener();
         });
         //exit.listen(exitListener);
         enlarge.listen(function () {
           exitListener();
+          // @ts-ignore
           game.qhly_open_new(name, 'skill', ingame);
         });
       } catch (e) {
@@ -8406,12 +10066,16 @@ export let CONTENT = function (config, pack) {
     };
 
     //------------------------------手杀小窗口换肤--decadesmall-------------------------
+    // @ts-ignore
     game.qhly_open_small_shousha = function (name, from, ingame) {
       try {
+        // @ts-ignore
         if (_status.qhly_open) return;
+        // @ts-ignore
         _status.qhly_open = true;
         var cPlayer = from;
         if (!cPlayer && ingame) cPlayer = ingame.parentNode;
+        // @ts-ignore
         else cPlayer = game.qhly_getCurrentPlayer(name)[0][0];
         var background = ui.create.div('.qh-skinchange-background', document.body);
         var backgroundBack = ui.create.div('.qh-skinchange-shousha-background', background);
@@ -8420,6 +10084,7 @@ export let CONTENT = function (config, pack) {
         if (lib.config.qhly_lutou) dialog.setAttribute('data-outcrop-skin', 'on');
         //var exit = ui.create.div('.qh-skinchange-shousha-exit', dialog);
         var cover = ui.create.div('.qh-skinchange-shousha-cover', dialog);
+        // @ts-ignore
         cover.setAttribute('data-visible', 1);
         cover.id = 'data-cover';
         var content1 = ui.create.div('.qh-skinchange-shousha-area1', cover);
@@ -8435,7 +10100,9 @@ export let CONTENT = function (config, pack) {
         ui.create.div('.qh-skinchange-shousha-autoskinitem', autoskin);
         var enlarge = ui.create.div('.qh-skinchange-shousha-enlarge', dialog);
         enlarge.innerHTML = '切换至大页面';
+        // @ts-ignore
         if (lib.config.qhly_autoChangeSkin == 'close' || !lib.config.qhly_autoChangeSkin) autoskin.setAttribute('data-auto', false);
+        // @ts-ignore
         else autoskin.setAttribute('data-auto', true);
         autoskin.listen(function () {
           var open = false, item = 'close';
@@ -8446,11 +10113,16 @@ export let CONTENT = function (config, pack) {
           game.saveConfig('extension_千幻聆音_qhly_autoChangeSkin', item);
           game.saveConfig('qhly_autoChangeSkin', item);
           if (open) {
+            // @ts-ignore
             autoskin.setAttribute('data-auto', true);
+            // @ts-ignore
             game.qhly_autoChangeSkin();
           } else {
+            // @ts-ignore
             autoskin.setAttribute('data-auto', false);
+            // @ts-ignore
             if (_status.qhly_changeSkinFunc) {
+              // @ts-ignore
               clearTimeout(_status.qhly_changeSkinFunc);
             }
           }
@@ -8459,39 +10131,54 @@ export let CONTENT = function (config, pack) {
         var zhuskinBut = ui.create.div('.qh-zhuskin', zhufu);
         var fuskinBut = ui.create.div('.qh-fuskin', zhufu);
         if (cPlayer && cPlayer.name2) {
+          // @ts-ignore
           dialog.setAttribute('data-double', true);
           if (cPlayer.name2 == name) {
             fuskinBut.classList.add('sel');
+            // @ts-ignore
             cover.setAttribute('data-visible', 2);
           }
           else {
             zhuskinBut.classList.add('sel');
+            // @ts-ignore
             cover.setAttribute('data-visible', 1);
           }
         }
         zhuskinBut.listen(function () {
           if (zhuskinBut.classList.contains('sel')) return;
           if (cPlayer && cPlayer.classList.contains('unseen') && cPlayer != game.me) return;
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_click2', null, true);
           fuskinBut.classList.remove('sel');
           zhuskinBut.classList.add('sel');
+          // @ts-ignore
           cover.setAttribute('data-visible', 1);
+          // @ts-ignore
           if (Math.round(viewState1.skinTotalWidth) >= viewState1.visibleWidth()) cover.setAttribute('data-overstep', true);
+          // @ts-ignore
           else cover.setAttribute('data-overstep', false);
+          // @ts-ignore
           lArrow2.setAttribute('data-visiable', false);
+          // @ts-ignore
           rArrow2.setAttribute('data-visiable', false);
           viewState1.refresh();
         })
         fuskinBut.listen(function () {
           if (fuskinBut.classList.contains('sel')) return;
           if (cPlayer && cPlayer.classList.contains('unseen2') && cPlayer != game.me) return;
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_click2', null, true);
           zhuskinBut.classList.remove('sel');
           fuskinBut.classList.add('sel');
+          // @ts-ignore
           cover.setAttribute('data-visible', 2);
+          // @ts-ignore
           if (Math.round(viewState2.skinTotalWidth) >= viewState2.visibleWidth()) cover.setAttribute('data-overstep', true);
+          // @ts-ignore
           else cover.setAttribute('data-overstep', false);
+          // @ts-ignore
           lArrow1.setAttribute('data-visiable', false);
+          // @ts-ignore
           rArrow1.setAttribute('data-visiable', false);
           viewState2.refresh();
         })
@@ -8508,29 +10195,40 @@ export let CONTENT = function (config, pack) {
           lib.config.swipe_down = swipe_down;
           lib.config.swipe_left = swipe_left;
           lib.config.swipe_right = swipe_right;
+          // @ts-ignore
           if (!_status.qhly_open) return;
           for (var i = 0; i < viewState1.skinViews.length; i++) {
+            // @ts-ignore
             if (viewState1.skinViews[i].dynamic && viewState1.skinViews[i].dynamic.renderer.postMessage) {
+              // @ts-ignore
               viewState1.skinViews[i].dynamic.renderer.postMessage({
                 message: "DESTROY",
+                // @ts-ignore
                 id: viewState1.skinViews[i].dynamic.id,
               })
+              // @ts-ignore
               viewState1.skinViews[i].dynamic.renderer.capacity--;
             }
           }
           if (cPlayer && cPlayer.name2) {
             for (var i = 0; i < viewState2.skinViews.length; i++) {
+              // @ts-ignore
               if (viewState2.skinViews[i].dynamic && viewState2.skinViews[i].dynamic.renderer.postMessage) {
+                // @ts-ignore
                 viewState2.skinViews[i].dynamic.renderer.postMessage({
                   message: "DESTROY",
+                  // @ts-ignore
                   id: viewState2.skinViews[i].dynamic.id,
                 });
+                // @ts-ignore
                 viewState2.skinViews[i].dynamic.renderer.capacity--;
               }
             }
           }
           background.delete();
+          // @ts-ignore
           game.qhly_playQhlyAudio('qhly_voc_dec_press', null, true);
+          // @ts-ignore
           delete _status.qhly_open;
         };
         var viewState1 = {
@@ -8550,14 +10248,18 @@ export let CONTENT = function (config, pack) {
             if (!this.offset) this.offset = 0;
             content1.style.width = Math.round(this.skinTotalWidth) + 'px';
             content1.style.left = Math.round(this.offset) + "px";
+            // @ts-ignore
             if (this.skinTotalWidth + this.offset > this.visibleWidth() && this.cover.getAttribute('data-visible') == '1') this.rArrow.setAttribute('data-visiable', true);
             else {
               if (rTimer1) clearInterval(rTimer1);
+              // @ts-ignore
               this.rArrow.setAttribute('data-visiable', false);
             }
+            // @ts-ignore
             if (this.offset < 0 && this.cover.getAttribute('data-visible') == '1') this.lArrow.setAttribute('data-visiable', true);
             else {
               if (lTimer1) clearInterval(lTimer1);
+              // @ts-ignore
               this.lArrow.setAttribute('data-visiable', false);
             }
           },
@@ -8566,9 +10268,12 @@ export let CONTENT = function (config, pack) {
           refreshSkins: function () {
             for (var i = 0; i < this.skinViews.length; i++) {
               var skin = this.skins[i];
+              // @ts-ignore
               if (cPlayer && game.qhly_skinIs(cPlayer.name1, skin)) {
+                // @ts-ignore
                 this.skinViews[i].defaultskin.setAttribute('data-sel', true);
               } else {
+                // @ts-ignore
                 this.skinViews[i].defaultskin.setAttribute('data-sel', false);
               }
             }
@@ -8584,6 +10289,9 @@ export let CONTENT = function (config, pack) {
             if (!this.offset) this.offset = content1.offsetLeft;
             this.tempoffset = this.offset;
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           handleMouseMove: function (x, y) {
             if (this.isTouching) {
               var slideX = x - this.mouseDownX;
@@ -8594,9 +10302,13 @@ export let CONTENT = function (config, pack) {
                 this.tempoffset = -(this.skinTotalWidth - this.visibleWidth());
               }
               this.content1.style.left = Math.round(this.tempoffset) + "px";
+              // @ts-ignore
               if (this.skinTotalWidth + this.tempoffset > this.visibleWidth() && this.cover.getAttribute('data-visible') == '1') this.rArrow.setAttribute('data-visiable', true);
+              // @ts-ignore
               else this.rArrow.setAttribute('data-visiable', false);
+              // @ts-ignore
               if (this.tempoffset < 0 && this.cover.getAttribute('data-visible') == '1') this.lArrow.setAttribute('data-visiable', true);
+              // @ts-ignore
               else this.lArrow.setAttribute('data-visiable', false);
               return true;
             }
@@ -8643,14 +10355,18 @@ export let CONTENT = function (config, pack) {
               if (!this.offset) this.offset = 0;
               content2.style.width = Math.round(this.skinTotalWidth) + 'px';
               content2.style.left = Math.round(this.offset) + "px";
+              // @ts-ignore
               if (this.skinTotalWidth + this.offset > this.visibleWidth() && this.cover.getAttribute('data-visible') == '2') this.rArrow.setAttribute('data-visiable', true);
               else {
                 if (rTimer2) clearInterval(rTimer2);
+                // @ts-ignore
                 this.rArrow.setAttribute('data-visiable', false);
               }
+              // @ts-ignore
               if (this.offset < 0 && this.cover.getAttribute('data-visible') == '2') this.lArrow.setAttribute('data-visiable', true);
               else {
                 if (lTimer2) clearInterval(lTimer2);
+                // @ts-ignore
                 this.lArrow.setAttribute('data-visiable', false);
               }
             },
@@ -8659,9 +10375,12 @@ export let CONTENT = function (config, pack) {
             refreshSkins: function () {
               for (var i = 0; i < this.skinViews.length; i++) {
                 var skin = this.skins[i];
+                // @ts-ignore
                 if (cPlayer && game.qhly_skinIs(cPlayer.name2, skin)) {
+                  // @ts-ignore
                   this.skinViews[i].defaultskin.setAttribute('data-sel', true);
                 } else {
+                  // @ts-ignore
                   this.skinViews[i].defaultskin.setAttribute('data-sel', false);
                 }
               }
@@ -8677,6 +10396,9 @@ export let CONTENT = function (config, pack) {
               if (!this.offset) this.offset = content2.offsetLeft;
               this.tempoffset = this.offset;
             },
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             handleMouseMove: function (x, y) {
               if (this.isTouching) {
                 var slideX = x - this.mouseDownX;
@@ -8688,9 +10410,13 @@ export let CONTENT = function (config, pack) {
                 }
 
                 this.content2.style.left = Math.round(this.tempoffset) + "px";
+                // @ts-ignore
                 if (this.skinTotalWidth + this.tempoffset > this.visibleWidth() && this.cover.getAttribute('data-visible') == '2') this.rArrow.setAttribute('data-visiable', true);
+                // @ts-ignore
                 else this.rArrow.setAttribute('data-visiable', false);
+                // @ts-ignore
                 if (this.tempoffset < 0 && this.cover.getAttribute('data-visible') == '2') this.lArrow.setAttribute('data-visiable', true);
+                // @ts-ignore
                 else this.lArrow.setAttribute('data-visiable', false);
                 return true;
               }
@@ -8779,9 +10505,15 @@ export let CONTENT = function (config, pack) {
               viewState1.handleMouseDown(event.touches[0].clientX, event.touches[0].clientY);
             }
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content1.addEventListener('touchend', function (event) {
             viewState1.handleMouseUp();
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content1.addEventListener('touchcancel', function (event) {
             viewState1.handleMouseUp();
           });
@@ -8794,9 +10526,15 @@ export let CONTENT = function (config, pack) {
               viewState2.handleMouseDown(event.touches[0].clientX, event.touches[0].clientY);
             }
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content2.addEventListener('touchend', function (event) {
             viewState2.handleMouseUp();
           });
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           content2.addEventListener('touchcancel', function (event) {
             viewState2.handleMouseUp();
           });
@@ -8806,12 +10544,18 @@ export let CONTENT = function (config, pack) {
           });
         } else {
           content1.addEventListener('mousewheel', function (event) {
+            // @ts-ignore
             viewState1.handleMouseDown(event.clientX, event.clientY);
+            // @ts-ignore
             if (event.wheelDelta > 0) {
+              // @ts-ignore
               viewState1.handleMouseMove(event.clientX - 30, event.clientY);
+              // @ts-ignore
               viewState1.handleMouseUp(event.clientX - 30, event.clientY);
             } else {
+              // @ts-ignore
               viewState1.handleMouseMove(event.clientX + 30, event.clientY);
+              // @ts-ignore
               viewState1.handleMouseUp(event.clientX + 30, event.clientY);
             }
           });
@@ -8828,12 +10572,18 @@ export let CONTENT = function (config, pack) {
             viewState1.handleMouseMove(event.clientX, event.clientY);
           });
           content2.addEventListener('mousewheel', function (event) {
+            // @ts-ignore
             viewState2.handleMouseDown(event.clientX, event.clientY);
+            // @ts-ignore
             if (event.wheelDelta > 0) {
+              // @ts-ignore
               viewState2.handleMouseMove(event.clientX - 30, event.clientY);
+              // @ts-ignore
               viewState2.handleMouseUp(event.clientX - 30, event.clientY);
             } else {
+              // @ts-ignore
               viewState2.handleMouseMove(event.clientX + 30, event.clientY);
+              // @ts-ignore
               viewState2.handleMouseUp(event.clientX + 30, event.clientY);
             }
           });
@@ -8854,11 +10604,17 @@ export let CONTENT = function (config, pack) {
         //-----------------------------------------主将---------------------------------------------
         var namex = cPlayer?cPlayer.name1:name;
         var playZhuDynamic = lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'always' ? false : true;
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         game.qhly_getSkinList(namex, function (ret, list) {
+          // @ts-ignore
           var pkg = game.qhly_foundPackage(namex);
           if (!list) list = [];
           list.sort(function (a, b) {
+            // @ts-ignore
             var orderA = game.qhly_getOrder(namex, a, pkg);
+            // @ts-ignore
             var orderB = game.qhly_getOrder(namex, b, pkg);
             if (orderA > orderB) return 1;
             if (orderA == orderB) return 0;
@@ -8870,13 +10626,16 @@ export let CONTENT = function (config, pack) {
             skinList.addArray(list);
           }
           var dynamicSkinList = [], bothSkin = [], singleDynamic = [];//2
+          // @ts-ignore
           if (window.decadeUI) {
+            // @ts-ignore
             if (decadeUI.dynamicSkin[namex]) dynamicSkinList = Object.keys(decadeUI.dynamicSkin[namex]);
             singleDynamic = [...dynamicSkinList];//单形态
             for (var i of skinList) {
               if (i) {
+                // @ts-ignore
                 var skin = i.substring(0, i.lastIndexOf('.'));
-                if (dynamicSkinList.contains(skin)) {
+                if (dynamicSkinList.includes(skin)) {
                   bothSkin.push(skin);//双形态
                   singleDynamic.remove(skin);
                 }
@@ -8884,51 +10643,74 @@ export let CONTENT = function (config, pack) {
             }
             if (dynamicSkinList) {
               if (lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'three' && dynamicSkinList.length > 3) playZhuDynamic = false;
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               dynamicSkinList.forEach(function (value, index, array) {
                 array[index] += '.jpg';
               })
               skinList = Array.from(new Set(skinList.concat(dynamicSkinList)));
+              // @ts-ignore
               skinList.remove('经典形象.jpg');
             }
           }
+          // @ts-ignore
           viewState1.skins = skinList;
           viewState1.skinTotalWidth = (viewState1.skinPerWidth + viewState1.skinGap) * skinList.length - viewState1.skinGap + 20;
           for (let i = 0; i < skinList.length; i++) {
             var skin = skinList[i];
             var skinView = ui.create.div('.qh-skinchange-shousha-skin', content1);
+            // @ts-ignore
             skinView.avatar = ui.create.div('.primary-avatar', skinView);
             var campWrap = ui.create.div('.qhcamp-wrap.shousha', skinView);
             if(cPlayer){
             campWrap.setAttribute("data-camp", cPlayer.group);
             }
+            // @ts-ignore
             skinView.campBack = ui.create.div('.qhcamp-shousha-back', skinView);
+            // @ts-ignore
             skinView.campBack.setAttribute('data-pinzhi', game.qhly_getSkinLevel(namex, skin));
             var campName = ui.create.div('.qhcamp-name', campWrap);
+            // @ts-ignore
             campName.style.backgroundImage = 'url("' + lib.qhly_path + 'image/decoration/name_' + campWrap.getAttribute('data-camp') + '.png")';
             var avatarName = ui.create.div('.qhavatar-name', campWrap);
+            // @ts-ignore
             avatarName.innerHTML = lib.qhly_slimName(namex);//.replace(/<br>/g, '\n');
             var hpWrap = ui.create.div('.qhhp-shousha-wrap', skinView);
+            // @ts-ignore
             skinView.belowText = ui.create.div('.qh-skinchange-shousha-skin-text', hpWrap);
+            // @ts-ignore
             viewState1.skinViews.push(skinView);
             skinView.style.left = Math.round((viewState1.skinPerWidth + viewState1.skinGap) * i + 16) + "px";
             skinView.style.width = Math.round(viewState1.skinPerWidth) + "px";
+            // @ts-ignore
             skinView.avatar.classList.add('qh-not-replace');
+            // @ts-ignore
             skinView.defaultskin = ui.create.div('.qh-skinchange-skin-shousha-default', skinView);
+            // @ts-ignore
             skinView.$dynamicWrap = ui.create.div('.qhdynamic-shousha-wrap', skinView);
+            // @ts-ignore
             skinView.toImageBtn = ui.create.div('.qh-domtoimage', skinView);
+            // @ts-ignore
             skinView.toImageBtn.addEventListener('click', function (e) {
               e.stopPropagation();
+              // @ts-ignore
               game.qhly_dom2image(ingame, namex, this, path);
             });//3
+            // @ts-ignore
             skinView.dynamicToggle = ui.create.div('.qh-skinchange-shousha-dynamicChange', skinView);
-            //if (skin && bothSkin.contains(skin.substring(0, skin.lastIndexOf('.')))) skinView.dynamicToggle.setAttribute('toggle', true);
-            if (!skin && dynamicSkinList.contains('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
+            //if (skin && bothSkin.includes(skin.substring(0, skin.lastIndexOf('.')))) skinView.dynamicToggle.setAttribute('toggle', true);
+            // @ts-ignore
+            if (!skin && dynamicSkinList.includes('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
             if (skin && lib.config.qhly_skinset.djtoggle[namex]) {
+              // @ts-ignore
               if (lib.config.qhly_skinset.djtoggle[namex][skin.substring(0, skin.lastIndexOf('.'))]) skinView.dynamicToggle.classList.add('jing');
             }
+            // @ts-ignore
             skinView.dynamicToggle.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
               if (this.classList.contains('jing')) {
                 this.classList.remove('jing');
+                // @ts-ignore
                 if (playZhuDynamic) game.qhly_changeDynamicSkin(this.parentNode, this.parentNode.belowText.innerText, namex);
                 if (lib.config.qhly_skinset.djtoggle[namex] && lib.config.qhly_skinset.djtoggle[namex][this.parentNode.belowText.innerText]) delete lib.config.qhly_skinset.djtoggle[namex][this.parentNode.belowText.innerText];
               }
@@ -8936,37 +10718,51 @@ export let CONTENT = function (config, pack) {
                 this.classList.add('jing');
                 if (playZhuDynamic && this.parentNode.stopDynamic) this.parentNode.stopDynamic();
                 if (lib.config.qhly_smallwindowstyle == 'shousha') {
+                  // @ts-ignore
                   this.parentNode.campBack.setAttribute("data-pinzhi", game.qhly_getSkinLevel(namex, skin));
                   this.parentNode.campBack.classList.remove('dong');
                 }
                 if (!lib.config.qhly_skinset.djtoggle[namex]) lib.config.qhly_skinset.djtoggle[namex] = {};
                 lib.config.qhly_skinset.djtoggle[namex][this.parentNode.belowText.innerText] = true;
               }
+              // @ts-ignore
               game.qhlySyncConfig();
             });
             if (skin) {
               var str = skin.substring(0, skin.lastIndexOf('.'));
-              if (bothSkin.contains(str)) skinView.dynamicToggle.setAttribute('toggle', true);
-              if (singleDynamic.contains(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+              // @ts-ignore
+              if (bothSkin.includes(str)) skinView.dynamicToggle.setAttribute('toggle', true);
+              // @ts-ignore
+              if (singleDynamic.includes(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+              // @ts-ignore
               var info = game.qhly_getSkinInfo(namex, skin);
               if (info) {
+                // @ts-ignore
                 skinView.belowText.innerHTML = info.translation;
               }
-              if ((!lib.config.qhly_skinset.djtoggle[namex] || lib.config.qhly_skinset.djtoggle[namex] && !lib.config.qhly_skinset.djtoggle[namex][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namex] && Object.keys(decadeUI.dynamicSkin[namex]).contains(info.translation)) {
+              // @ts-ignore
+              if ((!lib.config.qhly_skinset.djtoggle[namex] || lib.config.qhly_skinset.djtoggle[namex] && !lib.config.qhly_skinset.djtoggle[namex][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namex] && Object.keys(decadeUI.dynamicSkin[namex]).includes(info.translation)) {
+                // @ts-ignore
                 if (playZhuDynamic) game.qhly_changeDynamicSkin(skinView, info.translation, namex);
               }
             } else {
+              // @ts-ignore
               skinView.belowText.innerHTML = "经典形象";
-              if (dynamicSkinList.contains('经典形象.jpg') && playZhuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namex);
+              // @ts-ignore
+              if (dynamicSkinList.includes('经典形象.jpg') && playZhuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namex);
             }
             var skinQua = ui.create.div('.qhly-skinQua-shousha', skinView);
+            // @ts-ignore
             var skininfo = game.qhly_getSkinInfo(namex, skin, game.qhly_foundPackage(namex));
             var level = skininfo.level;
             var style = skininfo.levelStyle;
             if (style) {
+              // @ts-ignore
               if (!skinQua.qh_savedStyle) {
+                // @ts-ignore
                 skinQua.qh_savedStyle = {};
                 for (var m in skinQua.style) {
+                  // @ts-ignore
                   skinQua.qh_savedStyle[m] = skinQua.style[m];
                 }
               }
@@ -8980,14 +10776,19 @@ export let CONTENT = function (config, pack) {
                 }
               }
             } else {
+              // @ts-ignore
               if (skinQua.qh_savedStyle) {
+                // @ts-ignore
                 for (var m in skinQua.qh_savedStyle) {
+                  // @ts-ignore
                   skinQua.style[m] = skinQua.qh_savedStyle[m];
                 }
               }
             }
             if (skin) {
+              // @ts-ignore
               if (lib.qhly_level[namex + '_' + skin]) {
+                // @ts-ignore
                 level = lib.qhly_level[namex + '_' + skin];
               }
             }
@@ -9024,18 +10825,27 @@ export let CONTENT = function (config, pack) {
             }
             // var skinQua = ui.create.div('.qhly-skinQua-shousha', skinView);
             // skinQua.style['background-image'] = 'url(' + lib.qhly_path+'image/' + game.qhly_getSkinLevel(namex, skin) + '.png)';
+            // @ts-ignore
             if (game.qhly_skinIs(namex, skin)) {
+              // @ts-ignore
               skinView.defaultskin.setAttribute('data-sel', true);
               if (skinView.offsetLeft > viewState1.visibleWidth()) viewState1.offset = viewState1.visibleWidth() - (skinView.offsetLeft + viewState1.skinPerWidth);
             } else {
+              // @ts-ignore
               skinView.defaultskin.setAttribute('data-sel', false);
             }
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             (function (name, skin, view) {
               view.listen(function () {
                 if (viewState1.cancelClick) return;
+                // @ts-ignore
                 game.qhly_setCurrentSkin(namex, skin, function () {
                   viewState1.refreshSkins();
+                  // @ts-ignore
                   game.qhly_changeDynamicSkin(namex);
+                  // @ts-ignore
                   game.qhlySyncConfig();
                   if (lib.config['extension_千幻聆音_qhly_decadeChangeEffect'] && cPlayer) cPlayer.playChangeSkinEffect(false);
                   if (lib.config.qhly_smallwinclosewhenchange) {
@@ -9046,8 +10856,11 @@ export let CONTENT = function (config, pack) {
               });
             })(namex, skin, skinView);
             if (skin) {
+              // @ts-ignore
               let file = game.qhly_getSkinFile(namex, skin);
+              // @ts-ignore
               let skinView2 = skinView.avatar;
+              // @ts-ignore
               game.qhly_checkFileExist(file, function (s) {
                 if (s) {
                   skinView2.qhly_origin_setBackgroundImage(file);
@@ -9069,11 +10882,14 @@ export let CONTENT = function (config, pack) {
                 }
               })
             } else {
+              // @ts-ignore
               skinView.avatar.qhly_origin_setBackground(namex, 'character');
             }
           }
           if (cPlayer && cPlayer.name1 == name) {
+            // @ts-ignore
             if (Math.round(viewState1.skinTotalWidth) >= viewState1.visibleWidth()) cover.setAttribute('data-overstep', true);
+            // @ts-ignore
             else cover.setAttribute('data-overstep', false);
           }
           viewState1.refresh();
@@ -9083,11 +10899,17 @@ export let CONTENT = function (config, pack) {
         if (cPlayer && cPlayer.name2) {
           var namey = cPlayer.name2;
           var playFuDynamic = lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'always' ? false : true;
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           game.qhly_getSkinList(namey, function (ret, list) {
+            // @ts-ignore
             var pkg = game.qhly_foundPackage(namey);
             if (!list) list = [];
             list.sort(function (a, b) {
+              // @ts-ignore
               var orderA = game.qhly_getOrder(namey, a, pkg);
+              // @ts-ignore
               var orderB = game.qhly_getOrder(namey, b, pkg);
               if (orderA > orderB) return 1;
               if (orderA == orderB) return 0;
@@ -9099,13 +10921,16 @@ export let CONTENT = function (config, pack) {
               skinList.addArray(list);
             }
             var dynamicSkinList = [], bothSkin = [], singleDynamic = [];//2
+            // @ts-ignore
             if (window.decadeUI) {
+              // @ts-ignore
               if (decadeUI.dynamicSkin[namey]) dynamicSkinList = Object.keys(decadeUI.dynamicSkin[namey]);
               singleDynamic = [...dynamicSkinList];//单形态
               for (var i of skinList) {
                 if (i) {
+                  // @ts-ignore
                   var skin = i.substring(0, i.lastIndexOf('.'));
-                  if (dynamicSkinList.contains(skin)) {
+                  if (dynamicSkinList.includes(skin)) {
                     bothSkin.push(skin);//双形态
                     singleDynamic.remove(skin);
                   }
@@ -9113,51 +10938,74 @@ export let CONTENT = function (config, pack) {
               }
               if (dynamicSkinList) {
                 if (lib.config['extension_千幻聆音_qhly_decadeDynamic'] == 'three' && dynamicSkinList.length > 3) playFuDynamic = false;
+                // @ts-ignore
+                // @ts-ignore
+                // @ts-ignore
                 dynamicSkinList.forEach(function (value, index, array) {
                   array[index] += '.jpg';
                 })
                 skinList = Array.from(new Set(skinList.concat(dynamicSkinList)));
+                // @ts-ignore
                 skinList.remove('经典形象.jpg');
               }
             }
+            // @ts-ignore
             viewState2.skins = skinList;
             viewState2.skinTotalWidth = (viewState2.skinPerWidth + viewState2.skinGap) * skinList.length - viewState2.skinGap + 20;
             for (let i = 0; i < skinList.length; i++) {
               var skin = skinList[i];
               var skinView = ui.create.div('.qh-skinchange-shousha-skin', content2);
+              // @ts-ignore
               skinView.avatar = ui.create.div('.primary-avatar', skinView);
               var campWrap = ui.create.div('.qhcamp-wrap.shousha', skinView);
               if(cPlayer){
                 campWrap.setAttribute("data-camp", cPlayer.group);
               }
+              // @ts-ignore
               skinView.campBack = ui.create.div('.qhcamp-shousha-back', skinView);
+              // @ts-ignore
               skinView.campBack.setAttribute('data-pinzhi', game.qhly_getSkinLevel(namey, skin));
               var campName = ui.create.div('.qhcamp-name', campWrap);
+              // @ts-ignore
               campName.style.backgroundImage = 'url("' + lib.qhly_path + 'image/decoration/name_' + campWrap.getAttribute('data-camp') + '.png")';
               var avatarName = ui.create.div('.qhavatar-name', campWrap);
+              // @ts-ignore
               avatarName.innerHTML = lib.qhly_slimName(namey);//.replace(/<br>/g, '\n');
               var hpWrap = ui.create.div('.qhhp-shousha-wrap', skinView);
+              // @ts-ignore
               skinView.belowText = ui.create.div('.qh-skinchange-shousha-skin-text', hpWrap);
+              // @ts-ignore
               viewState2.skinViews.push(skinView);
               skinView.style.left = Math.round((viewState1.skinPerWidth + viewState1.skinGap) * i + 16) + "px";
               skinView.style.width = Math.round(viewState1.skinPerWidth) + "px";
+              // @ts-ignore
               skinView.avatar.classList.add('qh-not-replace');
+              // @ts-ignore
               skinView.defaultskin = ui.create.div('.qh-skinchange-skin-shousha-default', skinView);
+              // @ts-ignore
               skinView.$dynamicWrap = ui.create.div('.qhdynamic-shousha-wrap', skinView);
+              // @ts-ignore
               skinView.toImageBtn = ui.create.div('.qh-domtoimage', skinView);
+              // @ts-ignore
               skinView.toImageBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
+                // @ts-ignore
                 game.qhly_dom2image(ingame, namey, this, path);
               });//3
+              // @ts-ignore
               skinView.dynamicToggle = ui.create.div('.qh-skinchange-shousha-dynamicChange', skinView);
-              //if (skin && bothSkin.contains(skin.substring(0, skin.lastIndexOf('.')))) skinView.dynamicToggle.setAttribute('toggle', true);
-              if (!skin && dynamicSkinList.contains('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
+              //if (skin && bothSkin.includes(skin.substring(0, skin.lastIndexOf('.')))) skinView.dynamicToggle.setAttribute('toggle', true);
+              // @ts-ignore
+              if (!skin && dynamicSkinList.includes('经典形象.jpg')) skinView.dynamicToggle.setAttribute('toggle', true);
               if (skin && lib.config.qhly_skinset.djtoggle[namey]) {
+                // @ts-ignore
                 if (lib.config.qhly_skinset.djtoggle[namey][skin.substring(0, skin.lastIndexOf('.'))]) skinView.dynamicToggle.classList.add('jing');
               }
+              // @ts-ignore
               skinView.dynamicToggle.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
                 if (this.classList.contains('jing')) {
                   this.classList.remove('jing');
+                  // @ts-ignore
                   if (playFuDynamic) game.qhly_changeDynamicSkin(this.parentNode, this.parentNode.belowText.innerText, namey);
                   if (lib.config.qhly_skinset.djtoggle[namey] && lib.config.qhly_skinset.djtoggle[namey][this.parentNode.belowText.innerText]) delete lib.config.qhly_skinset.djtoggle[namey][this.parentNode.belowText.innerText];
                 }
@@ -9165,37 +11013,51 @@ export let CONTENT = function (config, pack) {
                   this.classList.add('jing');
                   if (playFuDynamic && this.parentNode.stopDynamic) this.parentNode.stopDynamic();
                   if (lib.config.qhly_smallwindowstyle == 'shousha') {
+                    // @ts-ignore
                     this.parentNode.campBack.setAttribute("data-pinzhi", game.qhly_getSkinLevel(namey, skin));
                     this.parentNode.campBack.classList.remove('dong');
                   }
                   if (!lib.config.qhly_skinset.djtoggle[namey]) lib.config.qhly_skinset.djtoggle[namey] = {};
                   lib.config.qhly_skinset.djtoggle[namey][this.parentNode.belowText.innerText] = true;
                 }
+                // @ts-ignore
                 game.qhlySyncConfig();
               });
               if (skin) {
                 var str = skin.substring(0, skin.lastIndexOf('.'));
-                if (bothSkin.contains(str)) skinView.dynamicToggle.setAttribute('toggle', true);
-                if (singleDynamic.contains(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+                // @ts-ignore
+                if (bothSkin.includes(str)) skinView.dynamicToggle.setAttribute('toggle', true);
+                // @ts-ignore
+                if (singleDynamic.includes(str) && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//打开快照
+                // @ts-ignore
                 var info = game.qhly_getSkinInfo(namey, skin);
                 if (info) {
+                  // @ts-ignore
                   skinView.belowText.innerHTML = info.translation;
                 }
-                if ((!lib.config.qhly_skinset.djtoggle[namey] || lib.config.qhly_skinset.djtoggle[namey] && !lib.config.qhly_skinset.djtoggle[namey][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namey] && Object.keys(decadeUI.dynamicSkin[namey]).contains(info.translation)) {
+                // @ts-ignore
+                if ((!lib.config.qhly_skinset.djtoggle[namey] || lib.config.qhly_skinset.djtoggle[namey] && !lib.config.qhly_skinset.djtoggle[namey][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[namey] && Object.keys(decadeUI.dynamicSkin[namey]).includes(info.translation)) {
+                  // @ts-ignore
                   if (playFuDynamic) game.qhly_changeDynamicSkin(skinView, info.translation, namey, true);
                 }
               } else {
+                // @ts-ignore
                 skinView.belowText.innerHTML = "经典形象";
-                if (dynamicSkinList.contains('经典形象.jpg') && playFuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namey);
+                // @ts-ignore
+                if (dynamicSkinList.includes('经典形象.jpg') && playFuDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', namey);
               }
               var skinQua = ui.create.div('.qhly-skinQua-shousha', skinView);
+              // @ts-ignore
               var skininfo = game.qhly_getSkinInfo(namey, skin, game.qhly_foundPackage(namey));
               var level = skininfo.level;
               var style = skininfo.levelStyle;
               if (style) {
+                // @ts-ignore
                 if (!skinQua.qh_savedStyle) {
+                  // @ts-ignore
                   skinQua.qh_savedStyle = {};
                   for (var m in skinQua.style) {
+                    // @ts-ignore
                     skinQua.qh_savedStyle[m] = skinQua.style[m];
                   }
                 }
@@ -9209,14 +11071,19 @@ export let CONTENT = function (config, pack) {
                   }
                 }
               } else {
+                // @ts-ignore
                 if (skinQua.qh_savedStyle) {
+                  // @ts-ignore
                   for (var m in skinQua.qh_savedStyle) {
+                    // @ts-ignore
                     skinQua.style[m] = skinQua.qh_savedStyle[m];
                   }
                 }
               }
               if (skin) {
+                // @ts-ignore
                 if (lib.qhly_level[namey + '_' + skin]) {
+                  // @ts-ignore
                   level = lib.qhly_level[namey + '_' + skin];
                 }
               }
@@ -9251,21 +11118,30 @@ export let CONTENT = function (config, pack) {
               } else {
                 skinQua.hide();
               }
+              // @ts-ignore
               if (game.qhly_skinIs(namey, skin)) {
+                // @ts-ignore
                 skinView.defaultskin.setAttribute('data-sel', true);
                 if (skinView.offsetLeft > viewState2.visibleWidth()) viewState2.offset = viewState2.visibleWidth() - (skinView.offsetLeft + viewState2.skinPerWidth);
               } else {
+                // @ts-ignore
                 skinView.defaultskin.setAttribute('data-sel', false);
               }
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               (function (name, skin, view) {
                 view.listen(function () {
                   if (viewState2.cancelClick) return;
+                  // @ts-ignore
                   game.qhly_setCurrentSkin(namey, skin, function () {
                     viewState2.refreshSkins();
                     //if (view.dynamicToggle && view.dynamicToggle.classList && !view.dynamicToggle.classList.contains('jing')) {
+                    // @ts-ignore
                     game.qhly_changeDynamicSkin(namey, null, null, true);
                     //}
                     if (lib.config['extension_千幻聆音_qhly_decadeChangeEffect'] && cPlayer) cPlayer.playChangeSkinEffect(true);
+                    // @ts-ignore
                     game.qhlySyncConfig();
                     if (lib.config.qhly_smallwinclosewhenchange) {
                       exitListener();
@@ -9274,8 +11150,11 @@ export let CONTENT = function (config, pack) {
                 });
               })(namey, skin, skinView);
               if (skin) {
+                // @ts-ignore
                 let file = game.qhly_getSkinFile(namey, skin);
+                // @ts-ignore
                 let skinView2 = skinView.avatar;
+                // @ts-ignore
                 game.qhly_checkFileExist(file, function (s) {
                   if (s) {
                     skinView2.qhly_origin_setBackgroundImage(file);
@@ -9297,22 +11176,29 @@ export let CONTENT = function (config, pack) {
                   }
                 })
               } else {
+                // @ts-ignore
                 skinView.avatar.qhly_origin_setBackground(namey, 'character');
               }
             }
             if (cPlayer && cPlayer.name2 == name) {
+              // @ts-ignore
               if (Math.round(viewState2.skinTotalWidth) >= viewState2.visibleWidth()) cover.setAttribute('data-overstep', true);
+              // @ts-ignore
               else cover.setAttribute('data-overstep', false);
             }
             viewState2.refresh();
           }, false);
         }
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         backgroundBack.listen(function (event) {
           exitListener();
         });
         //exit.listen(exitListener);
         enlarge.listen(function () {
           exitListener();
+          // @ts-ignore
           game.qhly_open_new(name, 'skill', ingame);
         });
       } catch (e) {
@@ -9385,34 +11271,51 @@ export let CONTENT = function (config, pack) {
       let newStr = str.slice(index0, index1) + "if(cardaudio)" + f.slice(19, f.length - 1) + str.slice(index2, index3);
       return newStr;
     }*/
+    // @ts-ignore
     lib.element.content.useSkill = new Function(qhly_changeUseSkill(lib.element.content.useSkill.toString()));
     //lib.element.content.useCard = new Function(qhly_changeUseCard(lib.element.content.useCard.toString()));
     var oldPlayCardAudio = game.playCardAudio;
     game.playCardAudio=function(card,player){
-      if(!_status.event || (!['useCard','respond'].contains(_status.event.name))){
+      if(!_status.event || (!['useCard','respond'].includes(_status.event.name))){
         return oldPlayCardAudio(card,player);
       }
       if (lib.config.background_audio) {
+        // @ts-ignore
         var sex = player.sex == 'female' ? 'female' : 'male';
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         var audioinfo = lib.card[card.name].audio;
+        // @ts-ignore
         var skin = game.qhly_getSkin(player.name1);
+        // @ts-ignore
         if (lib.config.qhly_changeSex && lib.config.qhly_changeSex[player.name1] && lib.config.qhly_changeSex[player.name1][skin]) sex = (sex == 'female' ? 'male' : 'female');
+        // @ts-ignore
         var pkg = game.qhly_foundPackage(player.name1);
+        // @ts-ignore
         var realName = game.qhly_getRealName(player.name1);
+        // @ts-ignore
         var pkgPath = (pkg.isExt && realName != player.name1 && skin) ? DEFAULT_PACKAGE.audio : pkg.audio;
         var exchangeCA = false;
+        // @ts-ignore
         var cardURL = pkgPath + (skin ? realName : player.name1) + '/' + game.qhly_earse_ext(skin) + '/';
+        // @ts-ignore
         if (lib.qhly_skinChange[realName] && lib.qhly_skinChange[realName][game.qhly_earse_ext(skin)] && lib.qhly_skinChange[realName][game.qhly_earse_ext(skin)].cardaudio) {
+          // @ts-ignore
           if (game.qhly_getPlayerStatus(player) == 2 && lib.qhly_skinChange[realName][game.qhly_earse_ext(skin)].audio1) cardURL = pkgPath + (skin ? realName : player.name1) + '/' + lib.qhly_skinChange[realName][game.qhly_earse_ext(skin)].audio1;
           exchangeCA = true;
         }
         if (exchangeCA) {
+          // @ts-ignore
           cardURL += card.name;
+          // @ts-ignore
           if (game.thunderFileExist(lib.assetURL + cardURL + '.mp3')) game.playAudio('..', cardURL);
           else{
+            // @ts-ignore
             return oldPlayCardAudio(card,sex);//game.playAudio('card', sex, card.name);
           }
         } else{
+          // @ts-ignore
           return oldPlayCardAudio(card,sex);
         }
       }
@@ -9513,7 +11416,7 @@ export let CONTENT = function (config, pack) {
           var next = owner.lose(cards, 'visible', ui.ordering).set('type', 'use');
           var directDiscard = [];
           for (var i = 0; i < cards.length; i++) {
-            if (!next.cards.contains(cards[i])) {
+            if (!next.cards.includes(cards[i])) {
               directDiscard.push(cards[i]);
             }
           }
@@ -9543,19 +11446,25 @@ export let CONTENT = function (config, pack) {
       game.delayx(0.5);
     }
     */
+    // @ts-ignore
     game.qhly_checkLoadSuccess = function(){
+      // @ts-ignore
       if(lib.config.qhly_currentViewSkin == 'shousha' && !game.qhly_initShoushaView){
         return false;
       }
       return true;
     };
     //打开选择皮肤界面。
+    // @ts-ignore
     game.qhly_open_new = function (name, page, ingame) {
-      try {
+      //try {
+        // @ts-ignore
         if(game.qhly_open_new_replace){
+          // @ts-ignore
           game.qhly_open_new_replace(name,page,ingame);
           return;
         }
+        // @ts-ignore
         if(!game.qhly_checkLoadSuccess()){
             return;
         }
@@ -9564,15 +11473,21 @@ export let CONTENT = function (config, pack) {
         //}
         var cplayer = null;
         if (ingame) {
+          // @ts-ignore
           if (get.itemtype(ingame) == 'player') {
             cplayer = ingame;
+          // @ts-ignore
           } else if (ingame.parentNode && get.itemtype(ingame.parentNode) == 'player') {
             cplayer = ingame.parentNode;
           }
         }
+        // @ts-ignore
         if (_status.qhly_open || _status.bigEditing) return;
+        // @ts-ignore
         _status.qhly_open = true;
+        // @ts-ignore
         _status.qhly_skillAudioWhich = {};
+        // @ts-ignore
         var currentViewSkin = lib.qhly_viewskin[lib.config.qhly_currentViewSkin];
         var gback = ui.create.div('.qh-background');
         var background = ui.create.div('.qh-window', gback);
@@ -9612,40 +11527,52 @@ export let CONTENT = function (config, pack) {
         };
         lib.onresize.push(resize);
         backButton.listen(function () {
+          // @ts-ignore
           game.qhly_playQhlyAudio(lib.config.qhly_currentViewSkin == 'decade' ? 'qhly_voc_dec_press' : 'qhly_voc_press', null, true);
           gback.delete(500, function () {
             lib.onresize.remove(resize);
             game.resume2();
+            // @ts-ignore
             _status.qhly_open = false;
           });
+          // @ts-ignore
           delete _status.qhly_skillAudioWhich;
+          // @ts-ignore
           if (window.inSplash && game.qhly_hasExtension("如真似幻")) {
             ui.window.remove();
           }
         });
         gback.hide();
         document.body.appendChild(gback);
+        // @ts-ignore
         if (lib.config.qhly_currentViewSkin == 'decade') game.qhly_initDecadeView(name, background, page, cplayer);
         else if (lib.config.qhly_currentViewSkin == 'shousha') {
+          // @ts-ignore
           if(game.qhly_initShoushaView){
+            // @ts-ignore
             game.qhly_initShoushaView(name, background, page, cplayer);
           }
         }
+        // @ts-ignore
         else if(game.qhly_initNewViewReplace){
+          // @ts-ignore
           game.qhly_initNewViewReplace(name, background, page, cplayer);
         }else{
+          // @ts-ignore
           game.qhly_initNewView(name, background, page, cplayer);
         }
         gback.show();
         game.pause2();
-      } catch (e) {
-        if (QHLY_DEBUGMODE) {
-          throw e;
-        }
-      }
+      // } catch (e) {
+      //   if (QHLY_DEBUGMODE) {
+      //     throw e;
+      //   }
+      // }
     };
+    // @ts-ignore
     get.qhly_getMp = function (name, pkg) {
       if (!pkg) {
+        // @ts-ignore
         pkg = game.qhly_foundPackage(name);
       }
       if (pkg && pkg.characterMp) {
@@ -9654,8 +11581,10 @@ export let CONTENT = function (config, pack) {
       }
       return null;
     };
+    // @ts-ignore
     get.qhly_getIntroduce = function (name, pkg) {
       if (!pkg) {
+        // @ts-ignore
         pkg = game.qhly_foundPackage(name);
       }
       if (pkg && pkg.characterInfo) {
@@ -9666,14 +11595,18 @@ export let CONTENT = function (config, pack) {
       }
       return get.characterIntro(name);
     };
+    // @ts-ignore
     ui.qhly_bindCheckBoxAndSpanText = function (checkbox, text) {
       if (!text) return;
+      // @ts-ignore
       ui.qhly_addListenFunc(text);
       text.listen(function () {
+        // @ts-ignore
         game.qhly_playQhlyAudio('qhly_voc_check', null, true);
         checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
       });
     };
+    // @ts-ignore
     ui.qhly_addListenFunc = function (view) {
       view.listen = function (func) {
         if (lib.config.touchscreen) {
@@ -9698,15 +11631,19 @@ export let CONTENT = function (config, pack) {
         return this;
       };
     };
+    // @ts-ignore
     ui.qhly_initCheckBox = function (view, checked, forbid) {
       view.style.width = '30px';
       view.style.height = '30px';
       view.style.display = 'inline';
       view.qhly_checked = checked;
+      // @ts-ignore
       ui.qhly_addListenFunc(view);
       if (view.qhly_checked) {
+        // @ts-ignore
         view.src = lib.assetURL + get.qhly_getIf(lib.qhly_viewskin[lib.config.qhly_currentViewSkin].checkBoxCheckedImage, 'extension/千幻聆音/image/newui_checkbox_checked.png');
       } else {
+        // @ts-ignore
         view.src = lib.assetURL + get.qhly_getIf(lib.qhly_viewskin[lib.config.qhly_currentViewSkin].checkBoxImage, 'extension/千幻聆音/image/newui_checkbox_unchecked.png');
       }
       view.qhly_setChecked = function (checked, trigger) {
@@ -9714,31 +11651,42 @@ export let CONTENT = function (config, pack) {
         if (checked != this.qhly_checked) {
           this.qhly_checked = checked;
           if (this.qhly_checked) {
+            // @ts-ignore
             this.src = lib.assetURL + get.qhly_getIf(lib.qhly_viewskin[lib.config.qhly_currentViewSkin].checkBoxCheckedImage, 'extension/千幻聆音/image/newui_checkbox_checked.png');
           } else {
+            // @ts-ignore
             this.src = lib.assetURL + get.qhly_getIf(lib.qhly_viewskin[lib.config.qhly_currentViewSkin].checkBoxImage, 'extension/千幻聆音/image/newui_checkbox_unchecked.png');
           }
+          // @ts-ignore
           if (trigger && this.qhly_onchecked) {
+            // @ts-ignore
             this.qhly_onchecked(this.qhly_checked);
           }
         }
       };
       view.listen(function () {
         if (forbid) return;
+        // @ts-ignore
         game.qhly_playQhlyAudio('qhly_voc_check', null, true);
         this.qhly_checked = !this.qhly_checked;
         if (this.qhly_checked) {
+          // @ts-ignore
           this.src = lib.assetURL + get.qhly_getIf(lib.qhly_viewskin[lib.config.qhly_currentViewSkin].checkBoxCheckedImage, 'extension/千幻聆音/image/newui_checkbox_checked.png');
         } else {
+          // @ts-ignore
           this.src = lib.assetURL + get.qhly_getIf(lib.qhly_viewskin[lib.config.qhly_currentViewSkin].checkBoxImage, 'extension/千幻聆音/image/newui_checkbox_unchecked.png');
         }
+        // @ts-ignore
         if (this.qhly_onchecked) {
+          // @ts-ignore
           this.qhly_onchecked(this.qhly_checked);
         }
       });
     };
+    // @ts-ignore
     game.qhly_getCharacterTaici = function (name, skin, pkg) {
       if (name.indexOf('gz_') == 0) {
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanAudio(name)) {
           var subname = name.slice(3);
           if (get.character(subname)) {
@@ -9746,10 +11694,13 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       var realName = game.qhly_getRealName(name);//添加皮肤共享
+      // @ts-ignore
       if (!pkg) pkg = game.qhly_foundPackage(pkg);
       var taici;
       if (!skin) {
+        // @ts-ignore
         var dinfo = lib.qhly_dirskininfo[realName];
         if (dinfo && dinfo.origin && dinfo.origin.skill) {
           taici = dinfo.origin.skill;
@@ -9758,8 +11709,13 @@ export let CONTENT = function (config, pack) {
         } else {
           taici = undefined;
         }
+        if(!taici){
+          // @ts-ignore
+          taici = game.qhly_getNonameTaici(name);
+        }
         return taici;
       } else {
+        // @ts-ignore
         var skinInfo = game.qhly_getSkinInfo(name, skin, pkg);
         if (skinInfo) {
           return skinInfo.skill;
@@ -9767,8 +11723,31 @@ export let CONTENT = function (config, pack) {
         return undefined;
       }
     };
+    // @ts-ignore
+    game.qhly_getNonameTaici = function(name){
+      // @ts-ignore
+      let skills = game.qhly_getViewSkills(name);
+      let ret = {};
+      skills.forEach((skill,i)=>{
+        let textMap = game.parseSkillTextMap(skill,name);
+        let content = textMap.filter(current=>current.text).reduce((previous,current,currentIndex,array)=>{
+          return previous+current.text+((currentIndex == array.length-1) ?"":"<br>");
+        },"");
+        ret[skill] = {
+          order:i,
+          content
+        };
+      });
+      ret['die'] = {
+        order:skills.length+1,
+        content:lib.translate[`#${name}:die`]
+      };
+      return ret;
+    };
+    // @ts-ignore
     get.qhly_getAudioInfoInSkin = function (name, pkg, skin) {
       if (name.indexOf('gz_') == 0) {
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanAudio(name)) {
           var subname = name.slice(3);
           if (get.character(subname)) {
@@ -9776,6 +11755,7 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       if (!pkg) pkg = game.qhly_foundPackage(name);
       var list = [];
       var skills = get.character(name, 3);
@@ -9804,6 +11784,7 @@ export let CONTENT = function (config, pack) {
       var ret = [];
       if (!skin) {
         var taici;
+        // @ts-ignore
         var dinfo = lib.qhly_dirskininfo[name];
         if (dinfo && dinfo.origin && dinfo.origin.skill) {
           taici = dinfo.origin.skill;
@@ -9812,6 +11793,11 @@ export let CONTENT = function (config, pack) {
         } else {
           taici = undefined;
         }
+        if(!taici){
+          // @ts-ignore
+          taici = game.qhly_getNonameTaici(name);
+        }
+        // @ts-ignore
         for (var skill of list) {
           if (!lib.translate[skill + "_info"]) continue;
           var obj = {
@@ -9861,7 +11847,9 @@ export let CONTENT = function (config, pack) {
         }
       } else {
         var taici;
+        // @ts-ignore
         var skinInfo = game.qhly_getSkinInfo(name, skin, pkg);
+        // @ts-ignore
         for (var skill of list) {
           if (!lib.translate[skill + "_info"]) continue;
           var obj = {
@@ -9913,6 +11901,7 @@ export let CONTENT = function (config, pack) {
       }
       return ret;
     };
+    // @ts-ignore
     game.qhly_getPluginId = function(plugin){
       var pluginId = plugin.id;
       if(!pluginId){
@@ -9926,10 +11915,12 @@ export let CONTENT = function (config, pack) {
       }
       return pluginId;
     };
+    // @ts-ignore
     game.qhly_pluginIsEnable = function(plugin){
+      // @ts-ignore
       var pluginId = game.qhly_getPluginId(plugin);
       if(pluginId === false)return false;
-      if(lib.config.qhly_disabledPlugins && lib.config.qhly_disabledPlugins.contains(pluginId)){
+      if(lib.config.qhly_disabledPlugins && lib.config.qhly_disabledPlugins.includes(pluginId)){
         return false;
       }
       if(!plugin.enable){
@@ -9940,13 +11931,16 @@ export let CONTENT = function (config, pack) {
       }
       return plugin.enable;
     };
+    // @ts-ignore
     game.qhly_getPlugins = function (type,enabledOnly) {
       if(enabledOnly === undefined){
         enabledOnly = true;
       }
       var ret = [];
+      // @ts-ignore
       for (var plugin of lib.qhlyPlugins) {
         if(enabledOnly){
+          // @ts-ignore
           if (!game.qhly_pluginIsEnable(plugin)) continue;
         }
         if (type && plugin.pluginType != type) continue;
@@ -9954,11 +11948,13 @@ export let CONTENT = function (config, pack) {
       }
       return ret;
     };
+    // @ts-ignore
     game.qhly_getIntroduceExtraPage = function (name, pkg) {
       if (lib.config.qhly_forbidExtPage) {
         return undefined;
       }
       var ret = [];
+      // @ts-ignore
       if (!pkg) pkg = game.qhly_foundPackage(name);
       if (pkg.characterIntroduceExtra) {
         var extra = pkg.characterIntroduceExtra(name);
@@ -9966,7 +11962,9 @@ export let CONTENT = function (config, pack) {
           ret.addArray(extra);
         }
       }
+      // @ts-ignore
       if (lib.qhlyPlugins) {
+        // @ts-ignore
         for (var plugin of game.qhly_getPlugins('角色介绍附加页')) {
           (function (name, plugin) {
             if (!plugin.characterFilter || plugin.characterFilter(name)) {
@@ -9991,6 +11989,7 @@ export let CONTENT = function (config, pack) {
         return ret;
       }
     };
+    // @ts-ignore
     game.qhly_getCharacterZhanjiPage = function (name) {
       var str = "";
       var record = lib.config.qhly_winrecord;
@@ -10064,21 +12063,28 @@ export let CONTENT = function (config, pack) {
       }
       return str;
     };
+    // @ts-ignore
     get.qhly_getOriginSkinInfo = function (name, pkg) {
+      // @ts-ignore
       if (!pkg) pkg = game.qhly_foundPackage(name);
       if (pkg.originSkinInfo) {
         return pkg.originSkinInfo(name);
       }
       return "";
     };
+    // @ts-ignore
     game.qhly_createBelowMenu = function (items, parent) {
       var menu = ui.create.div('.qh-below-menu', parent);
       var content = "";
+      // @ts-ignore
       if (!_status.qhly_belowMenuId) {
+        // @ts-ignore
         _status.qhly_belowMenuId = 1;
       } else {
+        // @ts-ignore
         _status.qhly_belowMenuId++;
       }
+      // @ts-ignore
       var id = _status.qhly_belowMenuId;
       content += "<table style='width:100%;height:auto;' border='0' frame='void' rules='none'>";
       var bid_i = 0;
@@ -10094,8 +12100,10 @@ export let CONTENT = function (config, pack) {
       for (var i = 0; i < bid_i; i++) {
         var td = document.getElementById('qhly_below_menu_' + id + "_" + i);
         if (td) {
+          // @ts-ignore
           ui.qhly_addListenFunc(td);
           (function (i, td) {
+            // @ts-ignore
             td.listen(function (e) {
               var item = items[i];
               if (item.onchange) {
@@ -10111,29 +12119,37 @@ export let CONTENT = function (config, pack) {
 
 
     //-------------------------------------------------------------thunder-----------------------------------------------
+    // @ts-ignore
     game.qhly_initDecadeView = function (name, view, page, cplayer) {
+      // @ts-ignore
       var currentViewSkin = lib.qhly_viewskin[lib.config.qhly_currentViewSkin];
       var subView = {};
       if (!page) {
         page = 'introduce';
       }
+      // @ts-ignore
       view.style['background-image'] = 'url(' + lib.qhly_path + 'theme/decade/background/' + lib.config.qhly_decadeBigBak + '.jpg)';
       ui.create.div('.qh-dcdaiji', view);
       var changeBgBtn = ui.create.div('.qh-dcchangebgbtn', view);
       changeBgBtn.listen(function () {
         var bgIndex = parseInt(lib.config.qhly_decadeBigBak);
         bgIndex++;
+        // @ts-ignore
         var path = lib.qhly_path + 'theme/decade/background/' + bgIndex + '.jpg';
+        // @ts-ignore
         if (!game.thunderFileExist(path)) bgIndex = 1;
         lib.config.qhly_decadeBigBak = bgIndex;
         game.saveConfig('qhly_decadeBigBak', bgIndex);
+        // @ts-ignore
         game.qhly_playQhlyAudio('qhly_voc_click3', null, true);
+        // @ts-ignore
         view.style['background-image'] = 'url(' + lib.qhly_path + 'theme/decade/background/' + lib.config.qhly_decadeBigBak + '.jpg)';
       })
       var refreshRank = function () { };
       subView.avatar = ui.create.div('.qh-shousha-big-avatar', view);
       if (lib.config.qhly_lutouType && lib.config.qhly_lutouType == 'shousha') subView.avatar.classList.add('shousha');
       subView.avatar.id = 'mainView';
+      // @ts-ignore
       subView.avatar.name = name;
       subView.avatar.hide();
       subView.pageButton = {
@@ -10158,72 +12174,98 @@ export let CONTENT = function (config, pack) {
       subView.menuCover = ui.create.div();
       subView.menuCover.style.width = "100%";
       subView.menuCover.style.height = "100%";
+      // @ts-ignore
       subView.menuCover.style.zIndex = 38;
       subView.nameTitle = ui.create.div('.qh-nametitle', view);
       subView.nameTitle.innerHTML = get.translation(name);
       subView.avatarImage = ui.create.div('.qh-image-standard', subView.avatar);
+      // @ts-ignore
       if (game.qhly_getPlayerStatus(cplayer, cplayer && cplayer.name2 && cplayer.name2 == name) == 2) game.qhly_setPlayerStatus(subView.avatarImage, undefined, 2);
+      // @ts-ignore
       subView.avatarImage.stopDynamic = qhly_stopdynamic;
       subView.avatarImage.classList.add('qh-must-replace');
       subView.avatarImage.classList.add('qh-isBigAvatar');
+      // @ts-ignore
       subView.avatarImage.setAttribute("data-border-level", game.qhly_getDengJie(name));
+      // @ts-ignore
       subView.avatarImage.$dynamicWrap = ui.create.div('.qhdynamic-decade-big-wrap', subView.avatarImage);
       var timer = null;
       subView.avatarImage.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", function (e) {
+        // @ts-ignore
         if (!subView.avatarImage.dynamic || subView.avatarImage.dynamic && subView.avatarImage.dynamic.primary == null) {
           if (!subView.avatarImage.classList.contains('decadeBig')) return;
         }
         timer = setTimeout(function () {
           e.preventDefault();
+          // @ts-ignore
           if (_status.bigEditing) return;
+          // @ts-ignore
           game.qhly_bigEdit(state);
         }, 800);
       });
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       subView.avatarImage.addEventListener(lib.config.touchscreen ? "touchmove" : 'mousemove', function (e) {
         clearTimeout(timer);
       });
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       subView.avatarImage.addEventListener(lib.config.touchscreen ? "touchend" : "mouseup", function (e) {
+        // @ts-ignore
         game.playShoushaAvatar(this, lib.config.qhly_shoushaBigFlip[name][game.qhly_getSkin(name)], name); //十周年还需要补充是否翻转X
         clearTimeout(timer);
       });
       subView.skinBar = ui.create.div('.qh-skinchange-big-skinBar', subView.avatar);
       subView.dynamicToggle = ui.create.div('.qh-skinchange-dynamicChange', subView.skinBar);
       subView.dynamicToggle.style.cssText += 'position:relative;top:-39%;width:' + document.body.offsetWidth * 0.08 + 'px;height:' + document.body.offsetWidth * 0.05 + 'px';
+      // @ts-ignore
       var skinStr = game.qhly_getSkin(name);
       if (skinStr == null) skinStr = '经典形象';
       else skinStr = skinStr.split('.')[0];
       if (lib.config.qhly_skinset.djtoggle[name] && lib.config.qhly_skinset.djtoggle[name][skinStr]) subView.dynamicToggle.classList.add('jing');
       subView.dynamicToggle.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
+        // @ts-ignore
         var skinStr = game.qhly_getSkin(name);
         if (skinStr == null) skinStr = '经典形象';
         else skinStr = skinStr.split('.')[0];
+        // @ts-ignore
         var djtoggle = document.getElementById('qhlydecadeBigdjtoggle' + game.qhly_getSkin(name));
         if (this.classList.contains('jing')) {
           this.classList.remove('jing');
           if (djtoggle) {
+            // @ts-ignore
             game.qhly_changeDynamicSkin(djtoggle.parentNode, skinStr, name);
             djtoggle.classList.remove('jing');
           }
+          // @ts-ignore
           game.qhly_changeDynamicSkin(state.mainView.avatarImage, skinStr, name);
           if (lib.config.qhly_skinset.djtoggle[name] && lib.config.qhly_skinset.djtoggle[name][skinStr]) delete lib.config.qhly_skinset.djtoggle[name][skinStr];
         }
         else {
           this.classList.add('jing');
           if (djtoggle) {
+            // @ts-ignore
             if (!djtoggle.parentNode.stopDynamic) djtoggle.parentNode.stopDynamic = qhly_stopdynamic;
+            // @ts-ignore
             djtoggle.parentNode.stopDynamic();
             djtoggle.classList.add('jing');
           }
+          // @ts-ignore
           if (state.mainView.avatarImage.stopDynamic) state.mainView.avatarImage.stopDynamic();
           if (!lib.config.qhly_skinset.djtoggle[name]) lib.config.qhly_skinset.djtoggle[name] = {};
           lib.config.qhly_skinset.djtoggle[name][skinStr] = true;
         }
+        // @ts-ignore
         game.qhlySyncConfig();
+        // @ts-ignore
         if (!_status['qhly_primarySkin_' + name] || _status['qhly_primarySkin_' + name] && _status['qhly_primarySkin_' + name] == game.qhly_getSkin(name)) game.qhly_changeDynamicSkin(name);
       });
       //subView.avatarImage.classList.add('avatar');
       subView.avatarBorder = ui.create.div('.qh-avatarother', subView.avatar);
       subView.rank = ui.create.div('.qh-avatarrarity', subView.avatar);
+      // @ts-ignore
       subView.rank.style['background-image'] = 'url(' + lib.qhly_path + 'theme/decade/rarity_' + game.getRarity(name) + '.png)';
       //subView.group = ui.create.div('.qh-avatar-label-group', subView.avatarLabel);
       //subView.rank = ui.create.div('.qh-avatar-label-rank', subView.avatarLabel);
@@ -10239,6 +12281,7 @@ export let CONTENT = function (config, pack) {
       subView.pageButton.skill.innerHTML = "技能";
       subView.pageButton.skin.innerHTML = "皮肤";
       subView.pageButton.config.innerHTML = "选项";
+      // @ts-ignore
       subView.pageButton.introduce.downButton = ui.create.div('.qh-otherinfoarrow', subView.pageButton.introduce);
       var swipe_up = lib.config.swipe_up;
       lib.config.swipe_up = '';
@@ -10249,20 +12292,27 @@ export let CONTENT = function (config, pack) {
       var swipe_right = lib.config.swipe_right;
       lib.config.swipe_right = '';
       subView.backButton = document.getElementsByClassName('qh-back')[0];
+      // @ts-ignore
       subView.backButton.listen(function () {
         lib.config.swipe_up = swipe_up;
         lib.config.swipe_down = swipe_down;
         lib.config.swipe_left = swipe_left;
         lib.config.swipe_right = swipe_right;
+        // @ts-ignore
         game.qhly_checkPlayerImageAudio(name, game.qhly_getSkin(name), cplayer, function () {
           let avatar;
+          // @ts-ignore
           let playerName = game.qhly_getRealName(name);
           if (cplayer && !cplayer.doubleAvatar) avatar = 'avatar';
           else avatar = cplayer.name1 == name ? 'avatar' : 'avatar2';
+          // @ts-ignore
           let skin = game.qhly_getSkin(name);
           cplayer.node[avatar].qhly_origin_setBackgroundImage(cplayer._qhly_skinChange[avatar == 'avatar2' ? 1 : 0]);
+          // @ts-ignore
           if (!_status.qhly_replaceSkin[playerName]) _status.qhly_replaceSkin[playerName] = {};
+          // @ts-ignore
           _status.qhly_replaceSkin[playerName][skin] = cplayer._qhly_skinChange[avatar == 'avatar2' ? 1 : 0];
+          // @ts-ignore
           if (window.decadeUI && !game.qhly_hasExtension('皮肤切换') && !game.qhly_hasExtension('EpicFX')) game.qhly_changeDynamicSkin(cplayer, undefined, undefined, avatar == 'avatar2');
         });
         if (subView.page.skin.viewState && subView.page.skin.viewState.skinViews) {
@@ -10276,6 +12326,7 @@ export let CONTENT = function (config, pack) {
             }
           }
         }
+        // @ts-ignore
         if (_status['qhly_primarySkin_' + name] !== undefined) game.qhly_setCurrentSkin(name, _status['qhly_primarySkin_' + name]);
         delete _status['qhly_primarySkin_' + name];
       });
@@ -10286,6 +12337,7 @@ export let CONTENT = function (config, pack) {
             subView.hp.hide();
             subView.mp.hide();
             subView.avatar.show();
+            // @ts-ignore
             game.qhly_changeViewPageSkin('introduce', this.pageView);
             if (!this.inited) this.init(name, state);
             var that = this;
@@ -10294,8 +12346,10 @@ export let CONTENT = function (config, pack) {
             };
             if (!state.introduceExtraPage || state.introduceExtraPage == '简介') {
               subView.pageButton.introduce.innerHTML = "简介";
+              // @ts-ignore
               var intro = get.qhly_getIntroduce(name, state.pkg);
               this.text.innerHTML = intro + "<br><br><br><br><br><br><br>";
+              // @ts-ignore
               subView.pageButton.introduce.appendChild(subView.pageButton.introduce.downButton);
             } else {
               var ret = '';
@@ -10332,10 +12386,14 @@ export let CONTENT = function (config, pack) {
               //     btname = btname.charAt(0) + ' ' + btname.charAt(1);
               // }
               subView.pageButton.introduce.innerHTML = btname;
+              // @ts-ignore
               subView.pageButton.introduce.appendChild(subView.pageButton.introduce.downButton);
             }
             //game.qhly_syncChangeSkinButton(name, game.qhly_getSkin(name), state);
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           init: function (name, state) {
             this.text = ui.create.div('.qh-page-introduce-text', this.pageView);
             if (lib.config.qhly_vMiddle === false && (currentViewSkin.isQiLayout || currentViewSkin.isLolBigLayout)) {
@@ -10343,6 +12401,7 @@ export let CONTENT = function (config, pack) {
               this.text.style.maxHeight = "none";
             }
             lib.setScroll(this.text);
+            // @ts-ignore
             ui.qhly_fixTextSize(this.text);
             this.inited = true;
           }
@@ -10354,6 +12413,7 @@ export let CONTENT = function (config, pack) {
             if (subView.mp.getAttribute('data-visiable') == 'true') subView.mp.show();
             subView.avatar.show();
             if (_status['qhly_primarySkin_' + name] !== undefined) {
+              // @ts-ignore
               game.qhly_setCurrentSkin(name, _status['qhly_primarySkin_' + name]);
             }
             if (!this.inited) this.init(name, state);
@@ -10372,6 +12432,7 @@ export let CONTENT = function (config, pack) {
               this.text.style.maxHeight = 'none';
               this.text.style.height = '100%';
             }
+            // @ts-ignore
             ui.qhly_fixTextSize(this.text);
             var skills = get.character(name, 3);
             var viewSkill = [];
@@ -10414,9 +12475,10 @@ export let CONTENT = function (config, pack) {
             }
             var tempSkill = [];
             if (cplayer && lib.config.qhly_skillingame) {
+              // @ts-ignore
               var skills = cplayer.getSkills(false, false);
               for (var tskill of skills) {
-                if (viewSkill.contains(tskill)) continue;
+                if (viewSkill.includes(tskill)) continue;
                 var info = get.info(tskill);
                 if (!info) continue;
                 if (!lib.translate[tskill]) continue;
@@ -10426,6 +12488,7 @@ export let CONTENT = function (config, pack) {
                 tempSkill.add(tskill);
               }
             }
+            // @ts-ignore
             for (var skill of viewSkill) {
               if (!lib.translate[skill + "_info"]) continue;
               var detail = get.translation(skill + "_info");
@@ -10441,6 +12504,7 @@ export let CONTENT = function (config, pack) {
                   if (dtrans) {
                     dtrans = dtrans(cplayer, skill);
                   }
+                  // @ts-ignore
                   if (dtrans && lib.qhly_filterPlainText(dtrans) != lib.qhly_filterPlainText(detail)) {
                     dynamicTranslate = dtrans;
                     content += "<span style=opacity:0.4>";
@@ -10452,6 +12516,7 @@ export let CONTENT = function (config, pack) {
                   // if (!cplayer.hasSkill(skill)) {
                   // }
                 }
+                // @ts-ignore
                 content += lib.qhly_keyMark(detail);
                 if (dynamicTranslate) {
                   content += "</span><br>";
@@ -10468,8 +12533,10 @@ export let CONTENT = function (config, pack) {
             }
             var bindFunc = function (checkbox, text) {
               if (!text) return;
+              // @ts-ignore
               ui.qhly_addListenFunc(text);
               text.listen(function () {
+                // @ts-ignore
                 game.qhly_playQhlyAudio('qhly_voc_check', null, true);
                 checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
               });
@@ -10480,16 +12547,24 @@ export let CONTENT = function (config, pack) {
                 (function (skill) {
                   var img = document.getElementById('qhly_skillv_' + skill);
                   if (img) {
+                    // @ts-ignore
                     img.src = lib.assetURL + get.qhly_getCurrentViewSkinValue('skillPagePlayAudioButtonImage', 'extension/千幻聆音/image/newui_playaudio.png');
+                    // @ts-ignore
                     ui.qhly_addListenFunc(img);
+                    // @ts-ignore
                     img.listen(function () {
+                      // @ts-ignore
                       var count = _status.qhly_skillAudioWhich[skill];
                       if (!count) {
+                        // @ts-ignore
                         _status.qhly_skillAudioWhich[skill] = 0;
                         count = 0;
                       }
+                      // @ts-ignore
                       _status.qhly_skillAudioWhich[skill]++;
+                      // @ts-ignore
                       window.qhly_TrySkillAudio(skill, { name: name }, null, count);
+                      // @ts-ignore
                       var skillSkin = game.qhly_getSkillSkin(name, game.qhly_getSkin(name), skill);
                       if (skillSkin) {
                         if (skillSkin === 1) {
@@ -10514,10 +12589,12 @@ export let CONTENT = function (config, pack) {
                         list.add(skill + "_" + sub);
                       }
                     }
+                    // @ts-ignore
                     ui.qhly_initCheckBox(check, list.filter(function (sk) {
-                      return !lib.config.autoskilllist || !lib.config.autoskilllist.contains(sk);
+                      return !lib.config.autoskilllist || !lib.config.autoskilllist.includes(sk);
                     }).length != 0);
                     bindFunc(check, document.getElementById('qhly_autoskill_text_' + skill));
+                    // @ts-ignore
                     check.qhly_onchecked = function (checked) {
                       var list = [];
                       var info = get.info(skill);
@@ -10547,6 +12624,7 @@ export let CONTENT = function (config, pack) {
                 })(skill);
               }
             }
+            // @ts-ignore
             game.qhly_changeViewPageSkin('skill', this.pageView);
             this.inited = true;
           }
@@ -10574,11 +12652,14 @@ export let CONTENT = function (config, pack) {
             // if (!skin) {
             //     return;
             // }
+            // @ts-ignore
             if (game.qhly_skinLock(name, skin.skinId)) {
+              // @ts-ignore
               var lock = game.qhly_skinLock(name, skin.skinId);
               if (lock.tryUnlock) {
                 lock.tryUnlock();
               }
+              // @ts-ignore
               if (game.qhly_skinLock(name, skin.skinId)) {
                 return;
               }
@@ -10587,15 +12668,20 @@ export let CONTENT = function (config, pack) {
               this.viewState.skinViews[i].defaultskin.setAttribute('data-sel', false);
             }
             if (father) father.setAttribute('data-sel', true);
+            // @ts-ignore
             game.qhly_playQhlyAudio('qhly_voc_dec_fanshu', null, true);
             var originSkin = skin.skinId;
+            // @ts-ignore
             game.qhly_setCurrentSkin(name, originSkin, function () {
+              // @ts-ignore
               _status.qhly_skillAudioWhich = {};
               this.refresh(name, state);
               if (state.onChangeSkin) {
                 state.onChangeSkin();
               }
+              // @ts-ignore
               game.qhly_changeDynamicSkin(name);
+              // @ts-ignore
               game.qhly_syncChangeSkinButton(name, originSkin, state);
               var rarity = document.getElementsByClassName('qh-avatarrarity');
               if (rarity) {
@@ -10605,19 +12691,28 @@ export let CONTENT = function (config, pack) {
               if (originSkin) {
                 var str = originSkin.substring(0, originSkin.length - 4);
                 if (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][str]) {
+                  // @ts-ignore
                   game.qhly_changeDynamicSkin(subView.avatarImage, str, name);
+                  // @ts-ignore
                   if (subView.avatarImage.dynamic && subView.avatarImage.dynamic.primary) _status.currentTexiao = subView.avatarImage.dynamic.primary.name;
                 }
+                // @ts-ignore
                 else if (subView.avatarImage.stopDynamic) subView.avatarImage.stopDynamic();
+              // @ts-ignore
               } else if (originSkin == null && window.decadeUI && decadeUI.dynamicSkin[name]) {
+                // @ts-ignore
                 var dyList = Object.keys(decadeUI.dynamicSkin[name]);
-                if (dyList && dyList.contains('经典形象') && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象']))
+                if (dyList && dyList.includes('经典形象') && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象']))
+                  // @ts-ignore
                   game.qhly_changeDynamicSkin(subView.avatarImage, '经典形象', name);
+                // @ts-ignore
                 else if (subView.avatarImage.stopDynamic) subView.avatarImage.stopDynamic();
               }
               if (state.mainView.avatarImage.dynamic && state.mainView.avatarImage.dynamic.primary != null) state.mainView.dynamicToggle.setAttribute('toggle', true);
               else state.mainView.dynamicToggle.setAttribute('toggle', false);
+              // @ts-ignore
               game.qhly_playQhlyAudio('qhly_voc_dec_fanshu', null, true);
+              // @ts-ignore
               _status['qhly_primarySkin_' + name] = game.qhly_getSkin(name);
               if (state.pkg.isLutou || lib.config.qhly_lutou) {
                 subView.avatarImage.classList.remove('qh-image-standard');
@@ -10629,6 +12724,7 @@ export let CONTENT = function (config, pack) {
               subView.avatar.classList.remove('noBorder');
               state.mainView.avatarImage.classList.remove('decadeBig');
               subView.avatarBorder.classList.remove('noBorder');
+              // @ts-ignore
               game.qhly_setOriginSkin(name, originSkin, state.mainView.avatarImage, state, game.qhly_getPlayerStatus(state.mainView.avatarImage, null, state.name) == 2);
             }.bind(this), true);
           },
@@ -10636,11 +12732,15 @@ export let CONTENT = function (config, pack) {
             subView.hp.hide();
             subView.mp.hide();
             subView.avatar.hide();
+            // @ts-ignore
             game.qhly_checkPlayerImageAudio(name, game.qhly_getSkin(name), cplayer);
             if (!this.inited) this.init(name, state);
             if (this.skinListGot) {
               this.refreshAfterGot(name, state);
             } else {
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               game.qhly_getSkinList(name, function (ret, list) {
                 this.afterGetSkinList(list, name, state);
                 this.refreshAfterGot(name, state);
@@ -10660,14 +12760,18 @@ export let CONTENT = function (config, pack) {
               }
             };
             for (var skin of this.skinList) {
+              // @ts-ignore
               if (!skin.skinId) {
+                // @ts-ignore
                 var taici = game.qhly_getCharacterTaici(name, null, state.pkg);
                 if (taici) {
                   packObj.origin.skill = taici;
                 }
               } else {
+                // @ts-ignore
                 var skinInfo = game.qhly_getSkinInfo(name, skin.skinId, state.pkg);
                 if (skinInfo) {
+                  // @ts-ignore
                   packObj.skin[game.qhly_earse_ext(skin.skinId)] = skinInfo;
                 }
               }
@@ -10680,8 +12784,10 @@ export let CONTENT = function (config, pack) {
             var detail = "编辑【" + ((skill == 'die') ? "阵亡" : get.translation(skill)) + "】的台词：";
             var initValue = "";
             var realSkill = skill;
+            // @ts-ignore
             if (lib.qhly_skinShare[name] && lib.qhly_skinShare[name].skills && lib.qhly_skinShare[name].skills[skill]) realSkill = lib.qhly_skinShare[name].skills[skill];
             if (skin) {
+              // @ts-ignore
               var skinInfo = obj.skin[game.qhly_earseExt(skin)];
               if (skinInfo && skinInfo.skill) {
                 if (skinInfo.skill[realSkill] && skinInfo.skill[realSkill].content) {
@@ -10697,6 +12803,7 @@ export let CONTENT = function (config, pack) {
               }
             }
             var that = this;
+            // @ts-ignore
             game.qhly_editDialog(title, detail, initValue, function (value, dialog) {
               if (!value) value = "";
               // while (value.indexOf("/") >= 0) {
@@ -10706,6 +12813,7 @@ export let CONTENT = function (config, pack) {
                 if (value.indexOf("+") >= 0) {
                   value = value.split('+');
                 }
+                // @ts-ignore
                 var m = obj.skin[game.qhly_earseExt(skin)];
                 if (m) {
                   if (!m.skill) m.skill = {};
@@ -10724,17 +12832,23 @@ export let CONTENT = function (config, pack) {
                 }
                 obj.origin.skill[realSkill].content = value;
               }
+              // @ts-ignore
               var realName = game.qhly_getRealName(name);
               var obj2 = Object.assign(obj, { name: realName });
               var strobj = JSON.stringify(obj2, null, 4);
+              // @ts-ignore
               game.qhly_readFileAsText("extension/千幻聆音/data/skininfomodel.txt", function (ret, str) {
                 if (ret) {
                   str = str.replace("_REPLACE_OBJECT_", strobj);
+                  // @ts-ignore
                   var path = game.qhly_getSkinImagePath(name, state.pkg);
+                  // @ts-ignore
                   game.qhly_writeTextFile(str, path + realName, "skininfo.js", function (err) {
                     if (!err) {
                       alert("保存成功");
+                      // @ts-ignore
                       lib.qhly_dirskininfo[name] = obj;
+                      // @ts-ignore
                       that.refresh(name, state, true);
                       dialog.delete();
                     } else {
@@ -10745,6 +12859,9 @@ export let CONTENT = function (config, pack) {
                   alert("保存失败：无法读取模板。");
                 }
               });
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             }, function (dialog) {
               return true;
             });
@@ -10760,43 +12877,65 @@ export let CONTENT = function (config, pack) {
               this.firstRefresh = false;
               for (var k = 0; k < this.skinList.length; k++) {
                 this.viewState.viewCurrentIndex = k;
+                // @ts-ignore
                 if (game.qhly_skinIs(name, this.skinList[k].skinId)) break;
               }
               for (var i = 0; i < this.skinList.length; i++) {
+                // @ts-ignore
                 var skin = this.skinList[i].skinId;
                 var skinView = ui.create.div('.qh-skinchange-decade-big-skin', content);
+                // @ts-ignore
                 if (game.qhly_getPlayerStatus(cplayer, cplayer && cplayer.name2 && cplayer.name2 == name) == 2) game.qhly_setPlayerStatus(skinView, undefined, 2);
+                // @ts-ignore
                 skinView.avatar = ui.create.div('.primary-avatar', skinView);
+                // @ts-ignore
                 skinView.avatar.id = 'qh-skillskin-' + i;
+                // @ts-ignore
                 skinView.belowText = ui.create.div('.qh-skinchange-decade-big-skin-text', skinView);
                 this.viewState.skinViews.push(skinView);
+                // @ts-ignore
                 skinView.avatar.classList.add('qh-not-replace');
                 //skinView.node = { avatar: skinView.avatar, name1: name }
+                // @ts-ignore
                 skinView.defaultskin = ui.create.div('.qh-skinchange-skin-big-default', skinView);
+                // @ts-ignore
                 skinView.defaultskin.id = 'qhly_bigSkin' + i;
+                // @ts-ignore
                 skinView.defaultskin.listen(function () {
                   if (this.getAttribute('data-sel') === 'true') return;
                   that.onClickSkin(parseInt(this.id.slice(12)), name, state, this);
                 });
+                // @ts-ignore
                 skinView.$dynamicWrap = ui.create.div('.qhdynamic-big-wrap', skinView);
+                // @ts-ignore
                 skinView.toImageBtn = ui.create.div('.qh-domtoimage', skinView);
+                // @ts-ignore
                 skinView.toImageBtn.addEventListener('click', function (e) {
                   e.stopPropagation();
+                  // @ts-ignore
                   game.qhly_dom2image(cplayer, name, this, path, state);
                 });//3
+                // @ts-ignore
                 skinView.dynamicToggle = ui.create.div('.qh-skinchange-big-dynamicChange', skinView);
+                // @ts-ignore
                 skinView.dynamicToggle.id = 'qhlydecadeBigdjtoggle' + skin;
+                // @ts-ignore
                 if (this.skinList[i].bothSkin) skinView.dynamicToggle.setAttribute('toggle', true);
+                // @ts-ignore
                 if (this.skinList[i].single && lib.config['extension_千幻聆音_qhly_dom2image']) skinView.toImageBtn.setAttribute('single', true);//6
                 if (skin && lib.config.qhly_skinset.djtoggle[name]) {
+                  // @ts-ignore
                   if (lib.config.qhly_skinset.djtoggle[name][skin.substring(0, skin.lastIndexOf('.'))]) skinView.dynamicToggle.classList.add('jing');
                 }
+                // @ts-ignore
                 skinView.dynamicToggle.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', function () {
                   var skinStr = this.parentNode.belowText.innerText.substring(0, this.parentNode.belowText.innerText.lastIndexOf('*'));
                   if (this.classList.contains('jing')) {
                     this.classList.remove('jing');
                     subView.dynamicToggle.classList.remove('jing');
+                    // @ts-ignore
                     if (playBigDynamic) game.qhly_changeDynamicSkin(this.parentNode, skinStr, name);
+                    // @ts-ignore
                     if (this.parentNode.avatar.id == 'qh-skillskin-0' && that.skinList[0].bothSkin || _status['qhly_primarySkin_' + name] && _status['qhly_primarySkin_' + name].substring(0, _status['qhly_primarySkin_' + name].length - 4) == skinStr) game.qhly_changeDynamicSkin(state.mainView.avatarImage, skinStr, name);
                     if (lib.config.qhly_skinset.djtoggle[name] && lib.config.qhly_skinset.djtoggle[name][skinStr]) delete lib.config.qhly_skinset.djtoggle[name][skinStr];
                   }
@@ -10804,34 +12943,49 @@ export let CONTENT = function (config, pack) {
                     this.classList.add('jing');
                     subView.dynamicToggle.classList.add('jing');
                     if (this.parentNode.stopDynamic) this.parentNode.stopDynamic();
+                    // @ts-ignore
                     if (this.parentNode.avatar.id == 'qh-skillskin-0' && that.skinList[0].bothSkin || _status['qhly_primarySkin_' + name] && _status['qhly_primarySkin_' + name].substring(0, _status['qhly_primarySkin_' + name].length - 4) == skinStr) state.mainView.avatarImage.stopDynamic();
                     if (!lib.config.qhly_skinset.djtoggle[name]) lib.config.qhly_skinset.djtoggle[name] = {};
                     lib.config.qhly_skinset.djtoggle[name][skinStr] = true;
                   }
+                  // @ts-ignore
                   game.qhlySyncConfig();
+                  // @ts-ignore
                   if (_status['qhly_primarySkin_' + name] && _status['qhly_primarySkin_' + name] == game.qhly_getSkin(name)) {
+                    // @ts-ignore
                     game.qhly_changeDynamicSkin(name);
                   }
                 });
                 if (skin) {
+                  // @ts-ignore
                   var info = game.qhly_getSkinInfo(name, skin);
                   if (info) {
+                    // @ts-ignore
                     skinView.belowText.innerText = info.translation + '*' + get.rawName2(name);
                   }
-                  if ((!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).contains(info.translation)) {
+                  // @ts-ignore
+                  if ((!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][skin.substring(0, skin.lastIndexOf('.'))]) && window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name] && Object.keys(decadeUI.dynamicSkin[name]).includes(info.translation)) {
+                    // @ts-ignore
                     if (playBigDynamic) game.qhly_changeDynamicSkin(skinView, info.translation, name);
                   }
                 } else {
+                  // @ts-ignore
                   skinView.belowText.innerText = "经典形象*" + get.rawName2(name);
+                  // @ts-ignore
                   if (this.skinList[0].skinId == null && this.skinList[0].bothSkin && playBigDynamic) game.qhly_changeDynamicSkin(skinView, '经典形象', name);
                 }
                 var skinQua = ui.create.div('.qh-page-skinavatarlevel', skinView);
+                // @ts-ignore
                 var level = this.skinList[i].skinInfo.level;
+                // @ts-ignore
                 var style = this.skinList[i].skinInfo.levelStyle;
                 if (style) {
+                  // @ts-ignore
                   if (!skinQua.qh_savedStyle) {
+                    // @ts-ignore
                     skinQua.qh_savedStyle = {};
                     for (var m in skinQua.style) {
+                      // @ts-ignore
                       skinQua.qh_savedStyle[m] = skinQua.style[m];
                     }
                   }
@@ -10845,14 +12999,20 @@ export let CONTENT = function (config, pack) {
                     }
                   }
                 } else {
+                  // @ts-ignore
                   if (skinQua.qh_savedStyle) {
+                    // @ts-ignore
                     for (var m in skinQua.qh_savedStyle) {
+                      // @ts-ignore
                       skinQua.style[m] = skinQua.qh_savedStyle[m];
                     }
                   }
                 }
+                // @ts-ignore
                 if (this.skinList[i].skinId) {
+                  // @ts-ignore
                   if (lib.qhly_level[name + '_' + this.skinList[i].skinId]) {
+                    // @ts-ignore
                     level = lib.qhly_level[name + '_' + this.skinList[i].skinId];
                   }
                 }
@@ -10891,11 +13051,15 @@ export let CONTENT = function (config, pack) {
                 //skinQua.style['background-image'] = 'url(' + lib.qhly_path+'theme/decade/dc_' + game.qhly_getSkinLevel(name, skin, true) + '.png)';
                 skinQua.id = 'qhly_skinQua' + i;
 
+                // @ts-ignore
                 if (game.qhly_skinIs(name, skin)) {
+                  // @ts-ignore
                   skinView.defaultskin.setAttribute('data-sel', true);
+                  // @ts-ignore
                   if (this.skinList[i].bothSkin) state.mainView.dynamicToggle.setAttribute('toggle', true);
                   else state.mainView.dynamicToggle.setAttribute('toggle', false);
                 } else {
+                  // @ts-ignore
                   skinView.defaultskin.setAttribute('data-sel', false);
                 }
                 this.viewState.offset = Math.round((98 - (this.viewState.skinPerWidth + this.viewState.skinGap) * this.viewState.viewCurrentIndex) * this.viewState.scale);
@@ -10903,11 +13067,16 @@ export let CONTENT = function (config, pack) {
                 skinView.style.width = Math.round(this.viewState.skinPerWidth * this.viewState.scale) + "px";
                 skinView.style.height = Math.round(396 * this.viewState.scale) + "px";
                 skinView.style.transform = 'scale(' + Math.max(0.3, 1 - 0.4 * Math.abs(i + (this.viewState.offset - 98 * this.viewState.scale) / ((this.viewState.skinPerWidth + this.viewState.skinGap) * this.viewState.scale))) + ')';
+                // @ts-ignore
                 skinView.style.zIndex = Math.round(Math.max(10, 15 - Math.abs(this.viewState.viewCurrentIndex - i)));
+                // @ts-ignore
                 skinView.style.opacity = Math.round(Math.min(1, 1.7 - Math.abs(i + (this.viewState.offset - 98 * this.viewState.scale) / ((this.viewState.skinPerWidth + this.viewState.skinGap) * this.viewState.scale))));
                 if (skin) {
+                  // @ts-ignore
                   let file = game.qhly_getSkinFile(name, skin);
+                  // @ts-ignore
                   let skinView2 = skinView.avatar;
+                  // @ts-ignore
                   game.qhly_checkFileExist(file, function (s) {
                     if (s) {
                       skinView2.qhly_origin_setBackgroundImage(file);
@@ -10929,11 +13098,15 @@ export let CONTENT = function (config, pack) {
                     }
                   })
                 } else {
+                  // @ts-ignore
                   skinView.avatar.qhly_origin_setBackground(name, 'character');
                 }
+                // @ts-ignore
                 if (game.qhly_skinLock(name, skin)) {
                   ui.create.div('.qh-lock', skinView);
+                  // @ts-ignore
                   skinView.isLocked = true;
+                  // @ts-ignore
                   this.skinList[i].isLocked = true;
                   skinView.style.filter = "grayscale(100%)";
                 } else {
@@ -10947,9 +13120,15 @@ export let CONTENT = function (config, pack) {
                     that.viewState.handleMouseDown(event.touches[0].clientX, event.touches[0].clientY);
                   }
                 });
+                // @ts-ignore
+                // @ts-ignore
+                // @ts-ignore
                 content.addEventListener('touchend', function (event) {
                   that.viewState.handleMouseUp();
                 });
+                // @ts-ignore
+                // @ts-ignore
+                // @ts-ignore
                 content.addEventListener('touchcancel', function (event) {
                   that.viewState.handleMouseUp();
                 });
@@ -10994,14 +13173,18 @@ export let CONTENT = function (config, pack) {
                 extInfo = currentSkin.skinInfo.info;
               } else {
                 if (state.pkg && state.pkg.originSkinInfo) {
+                  // @ts-ignore
                   var i = state.pkg.originSkinInfo(name);
                   if (i) {
+                    // @ts-ignore
                     extInfo = i;
                   }
                 }
               }
               this.viewState.skinInfoText.innerHTML = extInfo;
+              // @ts-ignore
               var Vicpath = `${state.pkg.audio}${game.qhly_getRealName(name)}/`;
+              // @ts-ignore
               if (game.qhly_getSkin(name)) Vicpath += `${game.qhly_earse_ext(game.qhly_getSkin(name))}/`;
               for (var audio of currentSkin.audios) {
                 var cskill;
@@ -11010,14 +13193,17 @@ export let CONTENT = function (config, pack) {
                 } else {
                   cskill = get.translation(audio.id);
                 }
+                // @ts-ignore
                 if (audio.id == 'victory' && !game.thunderFileExist(lib.assetURL + Vicpath + 'victory.mp3')) continue;
                 var skillAudioInfo = ui.create.div('.qh-skinchange-decade-big-skillaudioinfo', this.viewState.skinAudioList);
                 skillAudioInfo.innerHTML = cskill;
                 var huawen = ui.create.div('.qh-skinchange-decade-big-huawen', skillAudioInfo);
+                // @ts-ignore
                 if (lib.config.qhly_editmode && !game.qhly_isForbidEditTaici(name)) {
                   huawen.id = "qhly_skin_skill_edit_" + audio.id;
                 }
                 var skillaudioBar = document.createElement('img');
+                // @ts-ignore
                 skillaudioBar.src = lib.qhly_path + 'theme/decade/skillvoice2.png';
                 skillaudioBar.classList.add('qh-skinchange-decade-big-skillaudiobar');
                 skillaudioBar.id = 'qhly_skin_skill_' + audio.id;
@@ -11026,12 +13212,15 @@ export let CONTENT = function (config, pack) {
                 var objx = this.packObject(name, state);
                 var initValuex = "";
                 var realSkill = audio.id;
+                // @ts-ignore
                 if (lib.qhly_skinShare[name] && lib.qhly_skinShare[name].skills && lib.qhly_skinShare[name].skills[audio.id]) realSkill = lib.qhly_skinShare[name].skills[audio.id];
                 if (currentSkin.skinId) {
+                  // @ts-ignore
                   var skinInfox = objx.skin[game.qhly_earseExt(currentSkin.skinId)];
                   if (skinInfox && skinInfox.skill) {
                     if (skinInfox.skill[realSkill] && skinInfox.skill[realSkill].content) {
                       if (skinInfox.skill[realSkill].content2) {
+                        // @ts-ignore
                         initValuex = skinInfox.skill[realSkill]['content' + game.qhly_getPlayerStatus(cplayer, (cplayer && cplayer.name2 && cplayer.name2 == state.name), state.name)];
                       }
                       else initValuex = skinInfox.skill[realSkill].content;
@@ -11068,6 +13257,7 @@ export let CONTENT = function (config, pack) {
                   var opt = document.createElement('option');
                   opt.innerHTML = "默认";
                   opt.setAttribute('name', 'default');
+                  // @ts-ignore
                   levelSelect.appendChild(opt);
                   var levels = ['原画', '普通', '精良', '稀有', '史诗', '传说', '限定', '动态', '绝版'];
                   var map = {
@@ -11081,48 +13271,67 @@ export let CONTENT = function (config, pack) {
                     '动态': 'dongtai',
                     '绝版': 'jueban',
                   };
+                  // @ts-ignore
                   if(lib.qhly_diylevels){
+                    // @ts-ignore
                     for(var key in lib.qhly_diylevels){
+                      // @ts-ignore
                       map[key] = "^^"+lib.qhly_diylevels[key];
                       levels.add(key);
                     }
                   }
+                  // @ts-ignore
                   if (!lib.qhly_level[name + '_' + currentSkin.skinId]) {
+                    // @ts-ignore
                     opt.selected = 'selected';
                   }
                   for (var l of levels) {
                     var opt = document.createElement('option');
                     opt.innerHTML = l;
                     opt.setAttribute('name', l);
+                    // @ts-ignore
                     if (lib.qhly_level[name + '_' + currentSkin.skinId] == l) {
+                      // @ts-ignore
                       opt.selected = 'selected';
                     }
+                    // @ts-ignore
                     levelSelect.appendChild(opt);
                   }
+                  // @ts-ignore
                   levelSelect.onchange = function (e) {
                     var event = e ? e : window.event;
+                    // @ts-ignore
                     if (event.target) {
-                      target = event.target;
+                      // @ts-ignore
+                      let target = event.target;
+                      // @ts-ignore
                       var opt = target[target.selectedIndex];
                       if (opt) {
                         var l = opt.getAttribute('name');
                         if (l == 'default') {
+                          // @ts-ignore
                           delete lib.qhly_level[name + '_' + currentSkin.skinId];
+                          // @ts-ignore
                           game.saveConfig('qhly_level', lib.qhly_level);
                           return;
                         }
                         var lm = map[l];
                         if (lm) {
+                          // @ts-ignore
                           lib.qhly_level[name + '_' + currentSkin.skinId] = l;
+                          // @ts-ignore
                           game.saveConfig('qhly_level', lib.qhly_level);
                         }
                       }
+                      // @ts-ignore
                       var level = lib.qhly_level[name + '_' + currentSkin.skinId];
                       if(level&& map[level] && map[level].startsWith("^^")){
                         var skinQua = document.getElementById('qhly_skinQua' + that.viewState.viewCurrentIndex);
+                        // @ts-ignore
                         if (skinQua) skinQua.style['background-image'] = 'url(' + lib.qhly_path + 'image/diylevels/'+map[level].replace("^^","")+")";
                       }else{
                         var skinQua = document.getElementById('qhly_skinQua' + that.viewState.viewCurrentIndex);
+                        // @ts-ignore
                         if (skinQua) skinQua.style['background-image'] = 'url(' + lib.qhly_path + 'theme/decade/dc_' + game.qhly_getSkinLevel(name, currentSkin.skinId, true) + '.png)';
                       }
                     }
@@ -11132,29 +13341,40 @@ export let CONTENT = function (config, pack) {
                   var opt = document.createElement('option');
                   opt.innerHTML = "默认";
                   opt.setAttribute('order', 'default');
+                  // @ts-ignore
                   orderSelect.appendChild(opt);
                   if (lib.config.qhly_order[name + '-' + currentSkin.skinId] === undefined) {
+                    // @ts-ignore
                     opt.selected = 'selected';
                   }
                   for (var i = 0; i < 50; i++) {
                     var opt = document.createElement('option');
                     opt.innerHTML = "" + i;
+                    // @ts-ignore
                     opt.setAttribute('order', i);
                     if (lib.config.qhly_order[name + '-' + currentSkin.skinId] == i) {
+                      // @ts-ignore
                       opt.selected = 'selected';
                     }
+                    // @ts-ignore
                     orderSelect.appendChild(opt);
                   }
+                  // @ts-ignore
                   orderSelect.onchange = function (e) {
                     var event = e ? e : window.event;
+                    // @ts-ignore
                     if (event.target) {
+                      // @ts-ignore
                       target = event.target;
+                      // @ts-ignore
                       var opt = target[target.selectedIndex];
                       if (opt) {
                         var o = opt.getAttribute('order');
                         if (o == 'default') {
+                          // @ts-ignore
                           game.qhly_setOrder(name, currentSkin.skinId);
                         } else {
+                          // @ts-ignore
                           game.qhly_setOrder(name, currentSkin.skinId, o);
                         }
                       }
@@ -11165,28 +13385,38 @@ export let CONTENT = function (config, pack) {
                 var banInRandomCheckbox = document.getElementById('qhconfig_checkbox_banInRandom');
                 var bindFunc = function (checkbox, text) {
                   if (!text) return;
+                  // @ts-ignore
                   ui.qhly_addListenFunc(text);
                   text.listen(function () {
+                    // @ts-ignore
                     game.qhly_playQhlyAudio('qhly_voc_check', null, true);
                     checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
                   });
                 };
+                // @ts-ignore
                 ui.qhly_initCheckBox(banInRandomCheckbox, game.qhly_skinIsBanned(name, currentSkin.skinId));
                 bindFunc(banInRandomCheckbox, document.getElementById('qhconfig_checkbox_banInRandom_text'));
+                // @ts-ignore
                 banInRandomCheckbox.qhly_onchecked = function (checked) {
+                  // @ts-ignore
                   game.qhly_banSkin(name, currentSkin.skinId, checked);
                 };
                 if (currentSkin.skinId) {
                   var dwflip = document.getElementById('qhconfig_checkbox_dwflip');
                   if (dwflip) {
+                    // @ts-ignore
                     ui.qhly_initCheckBox(dwflip, lib.config.qhly_shoushaBigFlip[name][game.qhly_getSkin(name)]);
                     bindFunc(dwflip, document.getElementById('qhconfig_checkbox_dwflip_text'));
+                    // @ts-ignore
                     dwflip.qhly_onchecked = function (check) {
                       if (!check) {
+                        // @ts-ignore
                         if (lib.config.qhly_shoushaBigFlip[name][game.qhly_getSkin(name)]) {
+                          // @ts-ignore
                           lib.config.qhly_shoushaBigFlip[name][game.qhly_getSkin(name)] = false;
                         }
                       } else {
+                        // @ts-ignore
                         lib.config.qhly_shoushaBigFlip[name][game.qhly_getSkin(name)] = true;
                       }
                       game.saveConfig('qhly_shoushaBigFlip', lib.config.qhly_shoushaBigFlip);
@@ -11195,17 +13425,22 @@ export let CONTENT = function (config, pack) {
                   var changeSex = document.getElementById('qhconfig_checkbox_changeSex');
                   if (!lib.config.qhly_changeSex[name]) lib.config.qhly_changeSex[name] = {};
                   if (changeSex) {
+                    // @ts-ignore
                     ui.qhly_initCheckBox(changeSex, lib.config.qhly_changeSex[name][game.qhly_getSkin(name)]);
                     bindFunc(changeSex, document.getElementById('qhconfig_checkbox_changeSex_text'));
+                    // @ts-ignore
                     changeSex.qhly_onchecked = function (check) {
                       if (!check) {
+                        // @ts-ignore
                         if (lib.config.qhly_changeSex && lib.config.qhly_changeSex[name] && lib.config.qhly_changeSex[name][game.qhly_getSkin(name)]) {
+                          // @ts-ignore
                           lib.config.qhly_changeSex[name][game.qhly_getSkin(name)] = false;
                         }
                       } else {
                         if (!lib.config.qhly_changeSex[name]) {
                           lib.config.qhly_changeSex[name] = {};
                         }
+                        // @ts-ignore
                         lib.config.qhly_changeSex[name][game.qhly_getSkin(name)] = true;
                       }
                       game.saveConfig('qhly_changeSex', lib.config.qhly_changeSex);
@@ -11214,32 +13449,45 @@ export let CONTENT = function (config, pack) {
                 }
               }
               for (var vid of addButton) {
+                // @ts-ignore
                 var img = document.getElementById('qhly_skin_skill_' + vid);
                 if (img) {
+                  // @ts-ignore
                   ui.qhly_addListenFunc(img);
                   var that = this;
                   (function (id) {
+                    // @ts-ignore
                     img.listen(function () {
                       that.consumeTextClick = true;
+                      // @ts-ignore
                       if (id == 'die') window.qhly_playDieAudio(name);
+                      // @ts-ignore
                       else if (id == 'victory') window.qhly_playVictoryAudio(name);
                       else {
+                        // @ts-ignore
                         var count = _status.qhly_skillAudioWhich[id];
                         if (!count) {
+                          // @ts-ignore
                           _status.qhly_skillAudioWhich[id] = 0;
                           count = 0;
                         }
+                        // @ts-ignore
                         _status.qhly_skillAudioWhich[id]++;
+                        // @ts-ignore
                         window.qhly_TrySkillAudio(id, { name: name }, null, count);
+                        // @ts-ignore
                         var skillSkin = game.qhly_getSkillSkin(name, game.qhly_getSkin(name), id);
                         if (skillSkin) {
                           var currentAvatar = document.getElementById('qh-skillskin-' + that.viewState.viewCurrentIndex);
                           if (currentAvatar) {
                             if (skillSkin === 1) {
+                              // @ts-ignore
                               currentAvatar.setBackground(name, 'character');
                             } else if (Array.isArray(skillSkin)) {
+                              // @ts-ignore
                               currentAvatar.setBackgroundImage(skillSkin[count % skillSkin.length]);
                             } else {
+                              // @ts-ignore
                               currentAvatar.setBackgroundImage(skillSkin);
                             }
                           }
@@ -11248,11 +13496,14 @@ export let CONTENT = function (config, pack) {
                     });
                   })(vid);
                 }
+                // @ts-ignore
                 if (lib.config.qhly_editmode && !game.qhly_isForbidEditTaici(name)) {
                   var imgEdit = document.getElementById('qhly_skin_skill_edit_' + vid);
                   if (imgEdit) {
+                    // @ts-ignore
                     ui.qhly_addListenFunc(imgEdit);
                     (function (id) {
+                      // @ts-ignore
                       imgEdit.listen(function () {
                         that.editOpen(name, currentSkin.skinId, id, state);
                       });
@@ -11266,55 +13517,73 @@ export let CONTENT = function (config, pack) {
             var retList = [];
             if (list) {
               for (var skin of list) {
+                // @ts-ignore
                 var info = game.qhly_getSkinInfo(name, skin, state.pkg);
                 var obj = {
                   order: info.order,
                   skinId: skin,
                   skinInfo: info,
+                  // @ts-ignore
                   audios: get.qhly_getAudioInfoInSkin(name, state.pkg, skin),
                 };
                 retList.push(obj);
               }
             }
             this.skinList = [];
+            // @ts-ignore
             this.skinList.push({
               skinId: null,
+              // @ts-ignore
               skinInfo: game.qhly_getSkinInfo(name, null, state.pkg),
+              // @ts-ignore
               audios: get.qhly_getAudioInfoInSkin(name, state.pkg, null),
             });
             retList.sort(function (a, b) {
+              // @ts-ignore
               var orderA = game.qhly_getOrder(name, a.skinId, state.pkg);
+              // @ts-ignore
               var orderB = game.qhly_getOrder(name, b.skinId, state.pkg);
               if (orderA > orderB) return 1;
               if (orderA == orderB) return 0;
               return -1;
             });
             for (var r of retList) {
+              // @ts-ignore
               this.skinList.push(r);
             }
             let dynamicSkinList = [];
-            if (window.decadeUI) {
+            // @ts-ignore
+            if (window.decadeUI && window.decadeUI.dynamicSkin) {
+              // @ts-ignore
               if (decadeUI.dynamicSkin[name]) dynamicSkinList = Object.keys(decadeUI.dynamicSkin[name]);
               for (var i of this.skinList) {
+                // @ts-ignore
                 if (i.skinId) {
+                  // @ts-ignore
                   var skin = i.skinId.substring(0, i.skinId.lastIndexOf('.'));
-                  if (dynamicSkinList.contains(skin)) i.bothSkin = true;
+                  // @ts-ignore
+                  if (dynamicSkinList.includes(skin)) i.bothSkin = true;
                 }
               }
               if (dynamicSkinList.length) {
                 let duibiList = [];
                 for (let i of this.skinList) {
+                  // @ts-ignore
                   if (i.skinId && i.skinId != null) duibiList.push(i.skinId.substring(0, i.skinId.lastIndexOf('.')));
                 }
                 for (let i of dynamicSkinList) {
+                  // @ts-ignore
                   if (i == '经典形象') this.skinList['0'].bothSkin = true;
-                  else if (!duibiList.contains(i)) {
+                  else if (!duibiList.includes(i)) {
                     var dyskin = i + '.jpg';
+                    // @ts-ignore
                     var dyinfo = game.qhly_getSkinInfo(name, dyskin, state.pkg);
+                    // @ts-ignore
                     this.skinList.push({
                       order: dyinfo.order,
                       skinId: dyskin,
                       skinInfo: dyinfo,
+                      // @ts-ignore
                       audios: get.qhly_getAudioInfoInSkin(name, state.pkg, dyskin),
                       single: true,//11
                     })
@@ -11329,6 +13598,7 @@ export let CONTENT = function (config, pack) {
           init: function (name, state) {
             this.text = ui.create.div('.qh-page-skin-text', this.pageView);
             lib.setScroll(this.text);
+            // @ts-ignore
             ui.qhly_fixTextSize(this.text);
             var dialog = ui.create.div('.qh-skinchange-decade-big-dialog', this.pageView);
             if (lib.config.qhly_lutouType && lib.config.qhly_lutouType == 'shousha') dialog.classList.add('shousha');
@@ -11338,11 +13608,14 @@ export let CONTENT = function (config, pack) {
             var skinInfoText = ui.create.div('.qh-skinchange-decade-big-skininfo', this.text);
             var skinAudioList = ui.create.div('.qh-skinchange-decade-big-skinaudiolist', this.text);
             if (lib.config.qhly_lutou) dialog.setAttribute('data-outcrop-skin', 'on');
+            // @ts-ignore
             if (!_status['qhly_primarySkin_' + name]) _status['qhly_primarySkin_' + name] = game.qhly_getSkin(name);
             var autoskin = ui.create.div('.qh-skinchange-decade-big-autoskin', dialog);
             ui.create.div('.qh-skinchange-decade-big-autoskinborder', autoskin);
             ui.create.div('.qh-skinchange-decade-big-autoskinitem', autoskin);
+            // @ts-ignore
             if (lib.config.qhly_autoChangeSkin == 'close' || !lib.config.qhly_autoChangeSkin) autoskin.setAttribute('data-auto', false);
+            // @ts-ignore
             else autoskin.setAttribute('data-auto', true);
             autoskin.listen(function () {
               var open = false, item = 'close';
@@ -11353,11 +13626,16 @@ export let CONTENT = function (config, pack) {
               game.saveConfig('extension_千幻聆音_qhly_autoChangeSkin', item);
               game.saveConfig('qhly_autoChangeSkin', item);
               if (open) {
+                // @ts-ignore
                 autoskin.setAttribute('data-auto', true);
+                // @ts-ignore
                 game.qhly_autoChangeSkin();
               } else {
+                // @ts-ignore
                 autoskin.setAttribute('data-auto', false);
+                // @ts-ignore
                 if (_status.qhly_changeSkinFunc) {
+                  // @ts-ignore
                   clearTimeout(_status.qhly_changeSkinFunc);
                 }
               }
@@ -11394,6 +13672,7 @@ export let CONTENT = function (config, pack) {
                     tname = get.translation(cskin.skinId);
                   }
                   if (tname.indexOf('.') != -1) tname = tname.substring(0, tname.lastIndexOf('.'));
+                // @ts-ignore
                 } else var tname = '经典形象';
                 this.skinTitle.innerHTML = tname;
                 // if (that.currentIndex != this.viewCurrentIndex) {
@@ -11401,6 +13680,7 @@ export let CONTENT = function (config, pack) {
                 //     that.refresh(name, state);
                 // };
                 //if (!tname) game.qhly_setCurrentSkin(name, null);
+                // @ts-ignore
                 if (cskin) game.qhly_setCurrentSkin(name, cskin.skinId, function () {
                   that.refreshAfterGot(name, state);
                 });
@@ -11416,6 +13696,9 @@ export let CONTENT = function (config, pack) {
                 this.cancelClick = false;
                 this.tempoffset = this.offset;
               },
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               handleMouseMove: function (x, y) {
                 if (!this.isTouching) return;
                 var slideX = x - this.mouseDownX;
@@ -11430,12 +13713,18 @@ export let CONTENT = function (config, pack) {
                 this.viewCurrentIndex = -Math.round(current);
                 for (var i = 0; i < this.skinViews.length; i++) {
                   var zin = Math.max(10, 15 - Math.abs(i + Math.round(current)));
+                  // @ts-ignore
                   this.skinViews[i].style.transform = 'scale(' + Math.max(0.3, 1 - 0.4 * Math.abs(i + current)) + ')';
+                  // @ts-ignore
                   this.skinViews[i].style.zIndex = zin;
+                  // @ts-ignore
                   this.skinViews[i].style.opacity = Math.round(Math.min(1, 1.7 - Math.abs(i + current)));
                 }
                 return true;
               },
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               handleMouseUp: function (x, y) {
                 if (this.isTouching) {
                   this.isTouching = false;
@@ -11443,8 +13732,11 @@ export let CONTENT = function (config, pack) {
                   var current = (this.tempoffset - 98 * this.scale) / ((this.skinPerWidth + this.skinGap) * this.scale);
                   for (var i = 0; i < this.skinViews.length; i++) {
                     var zin = Math.max(10, 15 - Math.abs(i + Math.round(current)));
+                    // @ts-ignore
                     this.skinViews[i].style.transform = 'scale(' + Math.max(0.3, 1 - 0.4 * Math.abs(i + current)) + ')';
+                    // @ts-ignore
                     this.skinViews[i].style.zIndex = zin;
+                    // @ts-ignore
                     this.skinViews[i].style.opacity = Math.round(Math.min(1, 1.7 - Math.abs(i + current)));
                   }
 
@@ -11475,13 +13767,16 @@ export let CONTENT = function (config, pack) {
           },
           init: function (name, state) {
             this.innerConfig = ui.create.div('.qh-page-config-text', this.pageView);
+            // @ts-ignore
             ui.qhly_fixTextSize(this.innerConfig);
             var that = this;
             var content = "";
+            // @ts-ignore
             content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('favouriteImage', 'extension/千幻聆音/image/newui_fav.png') + "' style='width:50px;margin-bottom:-4px;'/>收藏设置</h2>";
             content += "<p>可以选择收藏此武将。进行自由选将操作时，可以更快找到此武将。</p>";
             content += "<p><span style='display:inline-block;height:30px;'><img id='qhconfig_checkbox_fav'/><span id='qhconfig_checkbox_text_fav' style='display:inline-block;position:relative;bottom:25%;'>收藏" + get.translation(name) + "</span></span></p>";
 
+            // @ts-ignore
             content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('forbidImage', 'extension/千幻聆音/image/newui_forbid.png') + "' style='width:50px;margin-bottom:-4px;'/>禁用设置</h2>";
             content += "<p>可以选择在某模式下禁用或启用该武将。该设置将在重启游戏后生效。</p>"
             content += "<p><span style='display:inline-block;height:30px;'><img id='qhconfig_checkbox_banned_mode_all'/><span id='qhconfig_checkbox_text_all' style='display:inline-block;position:relative;bottom:25%;'>所有模式禁用</span></span></p>";
@@ -11495,11 +13790,13 @@ export let CONTENT = function (config, pack) {
             }
             content += "<p><span style='display:inline-block;height:30px;'><img id='qhconfig_checkbox_banned_ai'/><span id='qhconfig_checkbox_text_ai' style='display:inline-block;position:relative;bottom:25%;'>仅自由选将可选</span></span></p>";
 
+            // @ts-ignore
             content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('rankImage', 'extension/千幻聆音/image/newui_rank_icon.png') + "' style='width:50px;margin-bottom:-4px;'/>等阶设置</h2>";
             content += "<p>可以设置" + get.translation(name) + "的等阶，重启后生效。</p>";
             content += "<p><select style='font-size:22px;font-family:'qh_youyuan';' id='qhconfig_rank_select'></select></p>";
 
             if (lib.config.qhly_enableCharacterMusic) {
+              // @ts-ignore
               content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('musicImage', 'extension/千幻聆音/image/newui_music_icon.png') + "' style='width:50px;margin-bottom:-4px;'/>音乐设置</h2>";
               content += "<p>可以设置" + get.translation(name) + "的专属背景音乐，在游戏开始时将自动切换。</p>";
               content += "<p><select style='font-size:22px;font-family:'qh_youyuan';' id='qhconfig_music_select'></select></p>";
@@ -11509,6 +13806,7 @@ export let CONTENT = function (config, pack) {
               var characterConfigExtra = state.pkg.characterConfigExtra(name);
               if (characterConfigExtra) {
                 for (var extc of characterConfigExtra) {
+                  // @ts-ignore
                   var extobj = game.qhly_parseConfig(extc);
                   content += extobj.content;
                   extraConfigs.push(extobj);
@@ -11524,18 +13822,22 @@ export let CONTENT = function (config, pack) {
             }
             var bindFunc = function (checkbox, text) {
               if (!text) return;
+              // @ts-ignore
               ui.qhly_addListenFunc(text);
               text.listen(function () {
+                // @ts-ignore
                 game.qhly_playQhlyAudio('qhly_voc_check', null, true);
                 checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
               });
             };
             var checkboxFav = document.getElementById('qhconfig_checkbox_fav');
-            ui.qhly_initCheckBox(checkboxFav, lib.config.favouriteCharacter && lib.config.favouriteCharacter.contains(name));
+            // @ts-ignore
+            ui.qhly_initCheckBox(checkboxFav, lib.config.favouriteCharacter && lib.config.favouriteCharacter.includes(name));
             bindFunc(checkboxFav, document.getElementById('qhconfig_checkbox_text_fav'));
+            // @ts-ignore
             checkboxFav.qhly_onchecked = function (check) {
               if (!check) {
-                if (lib.config.favouriteCharacter && lib.config.favouriteCharacter.contains(name)) {
+                if (lib.config.favouriteCharacter && lib.config.favouriteCharacter.includes(name)) {
                   lib.config.favouriteCharacter.remove(name);
                 }
               } else {
@@ -11551,7 +13853,7 @@ export let CONTENT = function (config, pack) {
             var allForbid = true;
             for (var mode in lib.mode) {
               if (mode != 'connect') {
-                if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(mode)) {
+                if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(mode)) {
                   continue;
                 }
                 allForbid = false;
@@ -11559,8 +13861,10 @@ export let CONTENT = function (config, pack) {
               }
             }
 
+            // @ts-ignore
             ui.qhly_initCheckBox(checkboxAll, allForbid);
             bindFunc(checkboxAll, document.getElementById('qhconfig_checkbox_text_all'));
+            // @ts-ignore
             checkboxAll.qhly_onchecked = function (check) {
               if (check) {
                 for (var mode in lib.mode) {
@@ -11581,13 +13885,17 @@ export let CONTENT = function (config, pack) {
             this.banned_checkbox_mode_all = checkboxAll;
             var checkboxBanai = document.getElementById('qhconfig_checkbox_banned_ai');
 
+            // @ts-ignore
             ui.qhly_initCheckBox(checkboxBanai, game.qhly_isForbidAI(name));
 
             bindFunc(checkboxBanai, document.getElementById('qhconfig_checkbox_text_ai'));
+            // @ts-ignore
             checkboxBanai.qhly_onchecked = function (check) {
               if (check) {
+                // @ts-ignore
                 game.qhly_setForbidAI(name, true);
               } else {
+                // @ts-ignore
                 game.qhly_setForbidAI(name, false);
               }
             };
@@ -11596,13 +13904,15 @@ export let CONTENT = function (config, pack) {
                 var checkbox = document.getElementById('qhconfig_checkbox_banned_mode_' + mode);
                 this['banned_checkbox_mode_' + mode] = checkbox;
                 if (checkbox) {
-                  ui.qhly_initCheckBox(checkbox, lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(name));
+                  // @ts-ignore
+                  ui.qhly_initCheckBox(checkbox, lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(name));
                   bindFunc(checkbox, document.getElementById('qhconfig_checkbox_text_' + mode));
                   (function (mode) {
+                    // @ts-ignore
                     checkbox.qhly_onchecked = function (checked) {
                       if (!checked) {
                         that.banned_checkbox_mode_all.qhly_setChecked(false, true);
-                        if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(name)) {
+                        if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(name)) {
                           lib.config[mode + '_banned'].remove(name);
                         }
                       } else {
@@ -11619,6 +13929,7 @@ export let CONTENT = function (config, pack) {
               }
             }
             lib.setScroll(this.innerConfig);
+            // @ts-ignore
             game.qhly_changeViewPageSkin('config', this.pageView);
             var rankSelect = document.getElementById('qhconfig_rank_select');
             var rankList = ['默认', '普通', '精品', '稀有', '史诗', '传说'];
@@ -11647,16 +13958,23 @@ export let CONTENT = function (config, pack) {
               opt.innerHTML = r + rankToIcon[r];
               opt.setAttribute('rank', rankToEng[r]);
               if (!rank && r == '默认') {
+                // @ts-ignore
                 opt.selected = 'selected';
               } else if (rankToEng[r] == rank) {
+                // @ts-ignore
                 opt.selected = 'selected';
               }
+              // @ts-ignore
               rankSelect.appendChild(opt);
             }
+            // @ts-ignore
             rankSelect.onchange = function (e) {
               var event = e ? e : window.event;
+              // @ts-ignore
               if (event.target) {
+                // @ts-ignore
                 target = event.target;
+                // @ts-ignore
                 var opt = target[target.selectedIndex];
                 if (opt) {
                   var rank = opt.getAttribute('rank');
@@ -11677,27 +13995,38 @@ export let CONTENT = function (config, pack) {
             };
             if (lib.config.qhly_enableCharacterMusic) {
               var select = document.getElementById('qhconfig_music_select');
+              // @ts-ignore
               var currentMusic = game.qhly_getCharacterMusic(name);
               var opt = document.createElement('option');
               opt.innerHTML = "无";
               opt.setAttribute('musicpath', '');
               if (!currentMusic) {
+                // @ts-ignore
                 opt.selected = 'selected';
               }
+              // @ts-ignore
               select.appendChild(opt);
+              // @ts-ignore
               for (var p in lib.qhlyMusic) {
                 var opt = document.createElement('option');
+                // @ts-ignore
                 opt.innerHTML = lib.qhlyMusic[p].name;
                 opt.setAttribute('musicpath', p);
                 if (currentMusic == p) {
+                  // @ts-ignore
                   opt.selected = 'selected';
                 }
+                // @ts-ignore
                 select.appendChild(opt);
               }
+              // @ts-ignore
               select.onchange = function (e) {
                 var event = e ? e : window.event;
+                // @ts-ignore
                 if (event.target) {
+                  // @ts-ignore
                   target = event.target;
+                  // @ts-ignore
                   var opt = target[target.selectedIndex];
                   if (opt) {
                     var path = opt.getAttribute('musicpath');
@@ -11707,6 +14036,7 @@ export let CONTENT = function (config, pack) {
                       delete lib.config.qhly_characterMusic[name];
                     }
                     game.saveConfig('qhly_characterMusic', lib.config.qhly_characterMusic);
+                    // @ts-ignore
                     game.qhly_switchBgm();
                   }
                 }
@@ -11722,10 +14052,14 @@ export let CONTENT = function (config, pack) {
         name: name,
         currentPage: page,
         skinScrollIndex: 0,
+        // @ts-ignore
         pkg: game.qhly_foundPackage(name),
         intro: get.character(name),
         mainView: subView,
       };
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       subView.menuCover.listen(function (current) {
         if (state.extraMenu) {
           state.extraMenu.delete();
@@ -11745,6 +14079,7 @@ export let CONTENT = function (config, pack) {
             subView.rank.hide();
           }
         }
+        // @ts-ignore
         subView.avatarImage.setAttribute('data-border-level', game.qhly_getDengJie(state.name));
       };
       var showPage = function (pagename) {
@@ -11783,6 +14118,7 @@ export let CONTENT = function (config, pack) {
                 state.extraMenu.delete();
                 delete state.extraMenu;
               }
+              // @ts-ignore
               game.qhly_playQhlyAudio('qhly_voc_dec_press', null, true);
             } else if (m == 'introduce') {
               if (state.extraMenu) {
@@ -11791,8 +14127,10 @@ export let CONTENT = function (config, pack) {
                 delete state.extraMenu;
               } else {
                 document.getElementsByClassName('qh-otherinfoarrow')[0].classList.add('sel');
+                // @ts-ignore
                 var extra = game.qhly_getIntroduceExtraPage(name, state.pkg);
                 if (extra) {
+                  // @ts-ignore
                   game.qhly_playQhlyAudio('qhly_voc_click2', null, true);
                   var arr = [{
                     name: '简介',
@@ -11829,6 +14167,7 @@ export let CONTENT = function (config, pack) {
                       });
                     })(obj);
                   }
+                  // @ts-ignore
                   state.extraMenu = game.qhly_createBelowMenu(arr, view);
                   view.appendChild(subView.menuCover);
                 }
@@ -11851,17 +14190,26 @@ export let CONTENT = function (config, pack) {
         //     if (_status.qhly_replaceSkin[name][game.qhly_getSkin(name)]) window.qhly_audio_redirect[name + '-' + game.qhly_earse_ext(game.qhly_getSkin(name))] = _status.qhly_replaceSkin[name][game.qhly_getSkin(name)];
         //     game.qhly_setCurrentSkin(name, game.qhly_getSkin(name));
         // }
+        // @ts-ignore
         game.qhly_checkPlayerImageAudio(name, game.qhly_getSkin(name));
+        // @ts-ignore
         game.qhly_setOriginSkin(name, game.qhly_getSkin(name), state.mainView.avatarImage, state, game.qhly_getPlayerStatus(state.mainView.avatarImage, null, state.name) == 2);
+        // @ts-ignore
         if (game.qhly_getSkin(name)) {
+          // @ts-ignore
           var str = game.qhly_getSkin(name).substring(0, game.qhly_getSkin(name).length - 4);
           if (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name][str]) {
+            // @ts-ignore
             game.qhly_changeDynamicSkin(subView.avatarImage, str, name);
+            // @ts-ignore
             if (subView.avatarImage.dynamic && subView.avatarImage.dynamic.primary) _status.currentTexiao = subView.avatarImage.dynamic.primary.name;
           }
-        } else if (window.decadeUI && decadeUI.dynamicSkin[name]) {
+        // @ts-ignore
+        } else if (window.decadeUI && decadeUI.dynamicSkin && decadeUI.dynamicSkin[name]) {
+          // @ts-ignore
           var dyList = Object.keys(decadeUI.dynamicSkin[name]);
-          if (dyList && dyList.contains('经典形象') && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象']))
+          if (dyList && dyList.includes('经典形象') && (!lib.config.qhly_skinset.djtoggle[name] || lib.config.qhly_skinset.djtoggle[name] && !lib.config.qhly_skinset.djtoggle[name]['经典形象']))
+            // @ts-ignore
             game.qhly_changeDynamicSkin(subView.avatarImage, '经典形象', name);
         }
         // }
@@ -11907,6 +14255,7 @@ export let CONTENT = function (config, pack) {
               ctitle = ctitle.slice(2);
             }
           }
+          // @ts-ignore
           subView.characterTitle.innerHTML = get.qhly_verticalStr(lib.qhly_filterPlainText(ctitle));
         };
         state.onChangeSkin();
@@ -11927,6 +14276,7 @@ export let CONTENT = function (config, pack) {
               case "full":
                 return get.slimNameHorizontal(name);
               case "full_pure":
+                // @ts-ignore
                 return lib.qhly_filterPlainText(get.slimNameHorizontal(name));
               case "raw":
                 return get.rawName(name);
@@ -11947,12 +14297,14 @@ export let CONTENT = function (config, pack) {
             chname = "未命名武将";
           }
         }
+        // @ts-ignore
         if (game.qhly_getIntroduceExtraPage(name, state.pkg)) {
           subView.pageButton.introduce.downButton.show();
         } else {
           subView.pageButton.introduce.downButton.hide();
         }
         subView.nameTitle.innerHTML = chname;
+        // @ts-ignore
         var vname = get.qhly_verticalStr(lib.qhly_filterPlainText(chname));
         subView.name.innerHTML = vname;
         if (chname.length == 5) {
@@ -11975,6 +14327,7 @@ export let CONTENT = function (config, pack) {
           } else {
             str = get.infoMaxHp(hp) + '';
           }
+          // @ts-ignore
           str += "&nbsp;&nbsp;&nbsp;<img style='height:20px;width:20px;' src='" + lib.qhly_path + "theme/decade/shield.png'/>";
           if (get.infoHujia(hp) > 1) {
             str += ("x" + get.infoHujia(hp));
@@ -11983,6 +14336,7 @@ export let CONTENT = function (config, pack) {
           subView.hpText.style.left = "calc(29%)";
           subView.hpText.style.width = "calc(90%)";
         }
+        // @ts-ignore
         var mp = get.qhly_getMp(state.name, state.pkg);
         if (mp === null || mp === undefined) {
           subView.mp.hide();
@@ -11990,6 +14344,7 @@ export let CONTENT = function (config, pack) {
           subView.mp.show();
           subView.mpText.innerHTML = mp + "";
         }
+        // @ts-ignore
         var mp = get.qhly_getMp(state.name, state.pkg);
         if (mp === null || mp === undefined) {
           subView.mp.setAttribute('data-visiable', false);
@@ -12002,15 +14357,20 @@ export let CONTENT = function (config, pack) {
 
       };
       refreshView(state, subView);
+      // @ts-ignore
       game.qhly_changeViewSkin(subView);
       showPage('skin');
       showPage(page);
+      // @ts-ignore
       game.qhly_syncChangeSkinButton(name, game.qhly_getSkin(name), state);
+      // @ts-ignore
       game.qhly_setOriginSkin(name, game.qhly_getSkin(name), state.mainView.avatarImage, state, game.qhly_getPlayerStatus(state.mainView.avatarImage, null, state.name) == 2);
     }
 
 
+    // @ts-ignore
     game.qhly_initNewView = function (name, view, page, cplayer) {
+      // @ts-ignore
       var currentViewSkin = lib.qhly_viewskin[lib.config.qhly_currentViewSkin];
       var subView = {};
       if (!page) {
@@ -12027,6 +14387,7 @@ export let CONTENT = function (config, pack) {
       subView.menuCover = ui.create.div();
       subView.menuCover.style.width = "100%";
       subView.menuCover.style.height = "100%";
+      // @ts-ignore
       subView.menuCover.style.zIndex = 38;
       if (currentViewSkin.isQiLayout) {
         subView.avatarImage = ui.create.div('.qh-image-standard', subView.avatar);
@@ -12052,6 +14413,7 @@ export let CONTENT = function (config, pack) {
         subView.mp = ui.create.div('.qh-mp');
         subView.mp.hide();
         subView.pageButton.introduce.innerHTML = "简介";
+        // @ts-ignore
         subView.pageButton.introduce.downButton = ui.create.div('.qh-otherinfoarrow', subView.pageButton.introduce);
         subView.pageButton.skill.innerHTML = "技能";
         subView.pageButton.skin.innerHTML = "皮肤";
@@ -12092,6 +14454,7 @@ export let CONTENT = function (config, pack) {
         subView.mp = ui.create.div('.qh-mp');
         subView.mp.hide();
         subView.pageButton.introduce.innerHTML = "简介";
+        // @ts-ignore
         subView.pageButton.introduce.downButton = ui.create.div('.qh-otherinfoarrow', subView.pageButton.introduce);
         subView.pageButton.skill.innerHTML = "技能";
         subView.pageButton.skin.innerHTML = "皮肤";
@@ -12117,6 +14480,7 @@ export let CONTENT = function (config, pack) {
         subView.dragonhead = ui.create.div('.qh-avatar-dragonhead', subView.avatar);
         subView.dragonhead.hide();
         subView.pageButton.introduce.innerHTML = "简 介";
+        // @ts-ignore
         subView.pageButton.introduce.downButton = ui.create.div('.qh-otherinfoarrow', subView.pageButton.introduce);
         subView.pageButton.skill.innerHTML = "技 能";
         subView.pageButton.skin.innerHTML = "皮 肤";
@@ -12132,6 +14496,7 @@ export let CONTENT = function (config, pack) {
               that.refresh(name,state);
             };
             if (!state.introduceExtraPage || state.introduceExtraPage == '简介') {
+              // @ts-ignore
               var intro = get.qhly_getIntroduce(name, state.pkg);
               this.text.innerHTML = "<br>" + intro + "<br><br><br><br><br><br><br>";
               if (currentViewSkin.buttonTextSpace === false) {
@@ -12139,6 +14504,7 @@ export let CONTENT = function (config, pack) {
               } else {
                 subView.pageButton.introduce.innerHTML = "简 介";
               }
+              // @ts-ignore
               subView.pageButton.introduce.appendChild(subView.pageButton.introduce.downButton);
             } else {
               var ret = '';
@@ -12175,9 +14541,13 @@ export let CONTENT = function (config, pack) {
                 btname = btname.charAt(0) + ' ' + btname.charAt(1);
               }
               subView.pageButton.introduce.innerHTML = btname;
+              // @ts-ignore
               subView.pageButton.introduce.appendChild(subView.pageButton.introduce.downButton);
             }
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           init: function (name, state) {
             this.text = ui.create.div('.qh-page-introduce-text', this.pageView);
             if (lib.config.qhly_vMiddle === false && (currentViewSkin.isQiLayout || currentViewSkin.isLolBigLayout)) {
@@ -12185,7 +14555,9 @@ export let CONTENT = function (config, pack) {
               this.text.style.maxHeight = "none";
             }
             lib.setScroll(this.text);
+            // @ts-ignore
             ui.qhly_fixTextSize(this.text);
+            // @ts-ignore
             game.qhly_changeViewPageSkin('introduce', this.pageView);
             this.inited = true;
           }
@@ -12202,6 +14574,7 @@ export let CONTENT = function (config, pack) {
               this.text.style.maxHeight = 'none';
               this.text.style.height = '100%';
             }
+            // @ts-ignore
             ui.qhly_fixTextSize(this.text);
             var skills = get.character(name, 3);
             var viewSkill = [];
@@ -12245,9 +14618,10 @@ export let CONTENT = function (config, pack) {
             }
             var tempSkill = [];
             if (cplayer && lib.config.qhly_skillingame) {
+              // @ts-ignore
               var skills = cplayer.getSkills(false, false);
               for (var tskill of skills) {
-                if (viewSkill.contains(tskill)) continue;
+                if (viewSkill.includes(tskill)) continue;
                 var info = get.info(tskill);
                 if (!info) continue;
                 if (!lib.translate[tskill]) continue;
@@ -12259,6 +14633,7 @@ export let CONTENT = function (config, pack) {
             }
             if (currentViewSkin.isQiLayout) {
               content += "<table border='2' frame='void' rules='none'>";
+              // @ts-ignore
               for (var skill of viewSkill) {
                 if (!lib.translate[skill + "_info"]) continue;
                 var detail = get.translation(skill + "_info");
@@ -12271,13 +14646,17 @@ export let CONTENT = function (config, pack) {
                       content += 'opacity:0.5;'
                     }
                   }
-                  content += "vertical-align:top;width:100px;height:100px;background-repeat:no-repeat;background-position:top left;background-size:100px 100px;background-image:url(" + lib.qhly_path + "theme/shuimo/newui_shuimo_skillname.png);";
+                  // @ts-ignore
+                  content += "vertical-align:top;width:100px;height:100px;background-repeat:no-repeat;background-position:top left;background-size:100px 100px;background-image:url(" + lib.qhly_path + get.qhly_getIf(currentViewSkin.skillNameImage, "theme/shuimo/newui_shuimo_skillname.png")+");";
                   content += "color:";
-                  if (derivation.contains(skill)) {
+                  if (derivation.includes(skill)) {
+                    // @ts-ignore
                     content += get.qhly_getIf(currentViewSkin.skillPageDerivationSkillColor, "#0000ff") + ";";
-                  } else if (tempSkill.contains(skill)) {
+                  } else if (tempSkill.includes(skill)) {
+                    // @ts-ignore
                     content += get.qhly_getIf(currentViewSkin.skillPageTempSkillColor, "#00FF00") + ";";
                   } else {
+                    // @ts-ignore
                     content += get.qhly_getIf(currentViewSkin.skillPageSkillNameColor, "#5B0F00") + ";";
                   }
                   if (cskill.length <= 2) {
@@ -12311,6 +14690,7 @@ export let CONTENT = function (config, pack) {
                     if (dtrans) {
                       dtrans = dtrans(cplayer, skill);
                     }
+                    // @ts-ignore
                     if (dtrans && lib.qhly_filterPlainText(dtrans) != lib.qhly_filterPlainText(detail)) {
                       dynamicTranslate = dtrans;
                       content += "style='opacity:0.5;text-decoration:line-through;'"
@@ -12321,6 +14701,7 @@ export let CONTENT = function (config, pack) {
                     }
                   }
                   content += '>';
+                  // @ts-ignore
                   content += lib.qhly_keyMark(detail);
                   content += "</span>";
                   if (dynamicTranslate) {
@@ -12340,6 +14721,7 @@ export let CONTENT = function (config, pack) {
               }
               content += "</table>";
             } else {
+              // @ts-ignore
               for (var skill of viewSkill) {
                 if (!lib.translate[skill + "_info"]) continue;
                 var detail = get.translation(skill + "_info");
@@ -12351,6 +14733,7 @@ export let CONTENT = function (config, pack) {
                     var str = "<span style='";
                     str += 'display:flex;justify-content:center;align-items: center;';
                     str += "background-image:url(";
+                    // @ts-ignore
                     str += lib.qhly_path + "theme/lolbig/newui_lol_skill_button.png";
                     str += ");";
                     str += 'font-size:15px;';
@@ -12365,11 +14748,14 @@ export let CONTENT = function (config, pack) {
                     skilltitle = str;
                   }
                   content += "<h3";
-                  if (derivation.contains(skill)) {
+                  if (derivation.includes(skill)) {
+                    // @ts-ignore
                     content += " style='color:" + get.qhly_getIf(currentViewSkin.skillPageDerivationSkillColor, "#0000ff") + ";";
-                  } else if (tempSkill.contains(skill)) {
+                  } else if (tempSkill.includes(skill)) {
+                    // @ts-ignore
                     content += " style='color:" + get.qhly_getIf(currentViewSkin.skillPageDerivationSkillColor, "#00ff00") + ";";
                   } else {
+                    // @ts-ignore
                     content += " style='color:" + get.qhly_getIf(currentViewSkin.skillPageSkillNameColor, "#5B0F00") + ";";
                   }
                   if (cplayer && lib.config.qhly_skillingame) {
@@ -12392,6 +14778,7 @@ export let CONTENT = function (config, pack) {
                     if (dtrans) {
                       dtrans = dtrans(cplayer, skill);
                     }
+                    // @ts-ignore
                     if (dtrans && lib.qhly_filterPlainText(dtrans) != lib.qhly_filterPlainText(detail)) {
                       dynamicTranslate = dtrans;
                       content += "opacity:0.5;text-decoration:line-through;"
@@ -12405,6 +14792,7 @@ export let CONTENT = function (config, pack) {
                     }
                   }
                   content += "'>";
+                  // @ts-ignore
                   content += lib.qhly_keyMark(detail);
                   content += "</span>";
                   if (dynamicTranslate) {
@@ -12425,28 +14813,39 @@ export let CONTENT = function (config, pack) {
 
             var bindFunc = function (checkbox, text) {
               if (!text) return;
+              // @ts-ignore
               ui.qhly_addListenFunc(text);
               text.listen(function () {
+                // @ts-ignore
                 game.qhly_playQhlyAudio('qhly_voc_check', null, true);
                 checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
               });
             };
+            // @ts-ignore
             for (var skill of viewSkill) {
               var detail = get.translation(skill + "_info");
               if (detail) {
                 (function (skill) {
                   var img = document.getElementById('qhly_skillv_' + skill);
                   if (img) {
+                    // @ts-ignore
                     img.src = lib.assetURL + get.qhly_getCurrentViewSkinValue('skillPagePlayAudioButtonImage', 'extension/千幻聆音/image/newui_playaudio.png');
+                    // @ts-ignore
                     ui.qhly_addListenFunc(img);
+                    // @ts-ignore
                     img.listen(function () {
+                      // @ts-ignore
                       var count = _status.qhly_skillAudioWhich[skill];
                       if (!count) {
+                        // @ts-ignore
                         _status.qhly_skillAudioWhich[skill] = 0;
                         count = 0;
                       }
+                      // @ts-ignore
                       _status.qhly_skillAudioWhich[skill]++;
+                      // @ts-ignore
                       window.qhly_TrySkillAudio(skill, { name: name }, null, count);
+                      // @ts-ignore
                       var skillSkin = game.qhly_getSkillSkin(name, game.qhly_getSkin(name), skill);
                       if (skillSkin) {
                         if (skillSkin === 1) {
@@ -12471,10 +14870,12 @@ export let CONTENT = function (config, pack) {
                         list.add(skill + "_" + sub);
                       }
                     }
+                    // @ts-ignore
                     ui.qhly_initCheckBox(check, list.filter(function (sk) {
-                      return !lib.config.autoskilllist || !lib.config.autoskilllist.contains(sk);
+                      return !lib.config.autoskilllist || !lib.config.autoskilllist.includes(sk);
                     }).length != 0);
                     bindFunc(check, document.getElementById('qhly_autoskill_text_' + skill));
+                    // @ts-ignore
                     check.qhly_onchecked = function (checked) {
                       var list = [];
                       var info = get.info(skill);
@@ -12504,6 +14905,7 @@ export let CONTENT = function (config, pack) {
                 })(skill);
               }
             }
+            // @ts-ignore
             game.qhly_changeViewPageSkin('skill', this.pageView);
             this.inited = true;
           }
@@ -12516,11 +14918,14 @@ export let CONTENT = function (config, pack) {
           firstRefresh: true,
           hideSkinMode: false,
           getCurrentSkin: function (name) {
+            // @ts-ignore
             var skinId = game.qhly_getSkin(name);
             for (var skin of this.skinList) {
+              // @ts-ignore
               if (skin && skin.skinId == skinId) {
                 return skin;
               }
+              // @ts-ignore
               if (!skinId && !skin.skinId) {
                 return skin;
               }
@@ -12536,20 +14941,27 @@ export let CONTENT = function (config, pack) {
             if (!skin) {
               return;
             }
+            // @ts-ignore
             if (skin.skinId == game.qhly_getSkin(name)) {
               return;
             }
+            // @ts-ignore
             if (game.qhly_skinLock(name, skin.skinId)) {
+              // @ts-ignore
               var lock = game.qhly_skinLock(name, skin.skinId);
               if (lock.tryUnlock) {
                 lock.tryUnlock();
               }
+              // @ts-ignore
               if (game.qhly_skinLock(name, skin.skinId)) {
                 return;
               }
             }
+            // @ts-ignore
             game.qhly_playQhlyAudio('qhly_voc_fanshu', null, true);
+            // @ts-ignore
             game.qhly_setCurrentSkin(name, skin.skinId, function () {
+              // @ts-ignore
               _status.qhly_skillAudioWhich = {};
               if (currentViewSkin.isLolBigLayout) {
                 that.currentIndex = that.currentIndex + num - 1;
@@ -12594,6 +15006,9 @@ export let CONTENT = function (config, pack) {
             if (this.skinListGot && !forced) {
               this.refreshAfterGot(name, state);
             } else {
+              // @ts-ignore
+              // @ts-ignore
+              // @ts-ignore
               game.qhly_getSkinList(name, function (ret, list) {
                 this.afterGetSkinList(list, name, state);
                 this.refreshAfterGot(name, state);
@@ -12613,14 +15028,18 @@ export let CONTENT = function (config, pack) {
               }
             };
             for (var skin of this.skinList) {
+              // @ts-ignore
               if (!skin.skinId) {
+                // @ts-ignore
                 var taici = game.qhly_getCharacterTaici(name, null, state.pkg);
                 if (taici) {
                   packObj.origin.skill = taici;
                 }
               } else {
+                // @ts-ignore
                 var skinInfo = game.qhly_getSkinInfo(name, skin.skinId, state.pkg);
                 if (skinInfo) {
+                  // @ts-ignore
                   packObj.skin[game.qhly_earse_ext(skin.skinId)] = skinInfo;
                 }
               }
@@ -12633,6 +15052,7 @@ export let CONTENT = function (config, pack) {
             var detail = "编辑【" + ((skill == 'die') ? "阵亡" : get.translation(skill)) + "】的台词：";
             var initValue = "";
             if (skin) {
+              // @ts-ignore
               var skinInfo = obj.skin[game.qhly_earseExt(skin)];
               if (skinInfo && skinInfo.skill) {
                 if (skinInfo.skill[skill] && skinInfo.skill[skill].content) {
@@ -12646,12 +15066,14 @@ export let CONTENT = function (config, pack) {
               }
             }
             var that = this;
+            // @ts-ignore
             game.qhly_editDialog(title, detail, initValue, function (value, dialog) {
               if (!value) value = "";
               while (value.indexOf("/") >= 0) {
                 value = value.replace("/", "<br>");
               }
               if (skin) {
+                // @ts-ignore
                 var m = obj.skin[game.qhly_earseExt(skin)];
                 if (m) {
                   if (!m.skill) m.skill = {};
@@ -12667,13 +15089,17 @@ export let CONTENT = function (config, pack) {
                 obj.origin.skill[skill].content = value;
               }
               var strobj = JSON.stringify(obj, null, 4);
+              // @ts-ignore
               game.qhly_readFileAsText("extension/千幻聆音/data/skininfomodel.txt", function (ret, str) {
                 if (ret) {
                   str = str.replace("_REPLACE_OBJECT_", strobj);
+                  // @ts-ignore
                   var path = game.qhly_getSkinImagePath(name, state.pkg);
+                  // @ts-ignore
                   game.qhly_writeTextFile(str, path + name, "skininfo.js", function (err) {
                     if (!err) {
                       alert("保存成功");
+                      // @ts-ignore
                       lib.qhly_dirskininfo[name] = obj;
                       that.refresh(name, state, true);
                       dialog.delete();
@@ -12685,6 +15111,9 @@ export let CONTENT = function (config, pack) {
                   alert("保存失败：无法读取模板。");
                 }
               });
+            // @ts-ignore
+            // @ts-ignore
+            // @ts-ignore
             }, function (dialog) {
               return true;
             });
@@ -12694,12 +15123,17 @@ export let CONTENT = function (config, pack) {
             if (this.firstRefresh) {
               var ret = false;
               for (var i = (currentViewSkin.isLolBigLayout ? -1 : 0); i < this.skinList.length; i++) {
+                // @ts-ignore
+                // @ts-ignore
+                // @ts-ignore
                 var skin = this.skinList[i];
                 this.currentIndex = i;
+                // @ts-ignore
                 if (this.canViewSkin(game.qhly_getSkin(name))) {
                   if (currentViewSkin.isLolBigLayout) {
                     for (var j = 0; j < 3; j++) {
                       var skinAt = this.getSkinAt(j);
+                      // @ts-ignore
                       if (skinAt && skinAt.skinId == game.qhly_getSkin(name)) {
                         this.currentIndex = i + j - 1;
                       }
@@ -12711,6 +15145,7 @@ export let CONTENT = function (config, pack) {
               }
               if (!ret) {
                 this.currentIndex = 0;
+                // @ts-ignore
                 game.qhly_setCurrentSkin(name, null, undefined, true);
               }
               this.firstRefresh = false;
@@ -12749,6 +15184,7 @@ export let CONTENT = function (config, pack) {
               } else {
                 this.rightArrow.hide();
               }
+              // @ts-ignore
               var currentSkin = game.qhly_getSkin(name);
               for (var i = 0; i < 3; i++) {
                 var currentSkinView = this['skin' + (i + 1)];
@@ -12757,7 +15193,9 @@ export let CONTENT = function (config, pack) {
                   if (currentViewSkin.isLolBigLayout) {
                     currentSkinView.qhBoard.show();
                   }
+                  // @ts-ignore
                   var skinId = this.getSkinAt(i).skinId;
+                  // @ts-ignore
                   if (game.qhly_skinLock(name, skinId)) {
                     currentSkinView.qh_setLock(true);
                     currentSkinView.style.filter = "grayscale(100%)";
@@ -12766,12 +15204,14 @@ export let CONTENT = function (config, pack) {
                     currentSkinView.style.filter = "grayscale(0%)";
                   }
                   if (skinId) {
+                    // @ts-ignore
                     currentSkinView.setBackgroundImage(game.qhly_getSkinFile(name, this.getSkinAt(i).skinId));
                   } else {
                     currentSkinView.setBackground(name, 'character');
                   }
                   currentSkinView.show();
                   if (currentViewSkin.isQiLayout) {
+                    // @ts-ignore
                     if (currentSkin == this.getSkinAt(i).skinId) {
                       currentSkinView.qhBoard.setBackgroundImage('extension/千幻聆音/theme/shuimo/newui_skin_background_shuimo.png');
                       currentSkinView.qhBoard.style.zIndex = 33;
@@ -12796,6 +15236,7 @@ export let CONTENT = function (config, pack) {
                   } else if (currentViewSkin.isLolBigLayout) {
 
                   } else {
+                    // @ts-ignore
                     if (currentSkin == this.getSkinAt(i).skinId) {
                       currentSkinView.qhCover.classList.add('selected');
                       currentSkinView.style.zIndex = 33;
@@ -12804,7 +15245,9 @@ export let CONTENT = function (config, pack) {
                       currentSkinView.style.zIndex = 34;
                     }
                   }
+                  // @ts-ignore
                   var level = this.getSkinAt(i).skinInfo.level;
+                  // @ts-ignore
                   var style = this.getSkinAt(i).skinInfo.levelStyle;
                   if (style) {
                     if (!levelView.qh_savedStyle) {
@@ -12829,8 +15272,11 @@ export let CONTENT = function (config, pack) {
                       }
                     }
                   }
+                  // @ts-ignore
                   if (this.getSkinAt(i).skinId) {
+                    // @ts-ignore
                     if (lib.qhly_level[name + '_' + this.getSkinAt(i).skinId]) {
+                      // @ts-ignore
                       level = lib.qhly_level[name + '_' + this.getSkinAt(i).skinId];
                     }
                   }
@@ -12896,6 +15342,7 @@ export let CONTENT = function (config, pack) {
               this.skinName.innerHTML = tname;
             }
             if (!currentViewSkin.isQiLayout && !currentViewSkin.isLolBigLayout) {
+              // @ts-ignore
               content += "<h2 style='color:" + get.qhly_getIf(currentViewSkin.skinPageHeadTitleColor, "#783f04") + "'>皮肤名称：<span style='color:" + get.qhly_getIf(currentViewSkin.skinPageHeadSkinNameColor, "black") + "'>" + tname + "</span></h2>";
             }
             var extInfo = "";
@@ -12903,6 +15350,7 @@ export let CONTENT = function (config, pack) {
               extInfo = "<h3>" + currentSkin.skinInfo.info + "</h3>";
             } else {
               if (state.pkg && state.pkg.originSkinInfo) {
+                // @ts-ignore
                 var i = state.pkg.originSkinInfo(name);
                 if (i) {
                   extInfo = "<h3>" + i + "</h3>";
@@ -12913,20 +15361,25 @@ export let CONTENT = function (config, pack) {
               content += extInfo;
             }
             var addButton = [];
+            // @ts-ignore
             var Vicpath = `${state.pkg.audio}${game.qhly_getRealName(name)}/`;
+            // @ts-ignore
             if (game.qhly_getSkin(name)) Vicpath += `${game.qhly_earse_ext(game.qhly_getSkin(name))}/`;
             if (currentViewSkin.isQiLayout) {
               content += "<table border='2' frame='void' rules='none'>";
               for (var audio of currentSkin.audios) {
+                // @ts-ignore
                 if (audio.id == 'victory' && !game.thunderFileExist(lib.assetURL + Vicpath + 'victory.mp3')) continue;
                 content += "<tr>";
                 content += "<td style='";
-                content += "text-align:center;vertical-align:top;width:100px;height:100px;background-repeat:no-repeat;background-position:top left;background-size:100px 100px;background-image:url(" + lib.qhly_path + "theme/shuimo/newui_shuimo_skillname.png);";
+                // @ts-ignore
+                content += "text-align:center;vertical-align:top;width:100px;height:100px;background-repeat:no-repeat;background-position:top left;background-size:100px 100px;background-image:url(" + lib.qhly_path + get.qhly_getIf(currentViewSkin.skillNameImage, "theme/shuimo/newui_shuimo_skillname.png")+");";
                 if (audio.id == 'die') {
                   content += "color:#ff0000;";
                 } else if (audio.id == 'victory') {
                   content += "color:#ffea34;";
                 } else {
+                  // @ts-ignore
                   content += "color:" + get.qhly_getIf(currentViewSkin.skinPageSkillNameColor, "#4169E1") + ";";
                 }
                 var cskill;
@@ -12954,8 +15407,11 @@ export let CONTENT = function (config, pack) {
                 content += "</td>";
 
                 content += "<td>";
+                // @ts-ignore
                 content += "<img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('skinPagePlayAudioButtonImage', 'extension/千幻聆音/image/qhly_pic_playaudiobutton.png') + "' style='height:40px;' id='qhly_skin_skill_" + audio.id + "'/>"
+                // @ts-ignore
                 if (lib.config.qhly_editmode && !game.qhly_isForbidEditTaici(name)) {
+                  // @ts-ignore
                   content += "<img src='" + lib.qhly_path + "image/qhly_editButton.png' style='height:25px;width:25px;'";
                   content += " id='qhly_skin_skill_edit_" + audio.id + "'";
                   content += "/>";
@@ -12972,12 +15428,14 @@ export let CONTENT = function (config, pack) {
               content += "</table>";
             } else {
               for (var audio of currentSkin.audios) {
+                // @ts-ignore
                 if (audio.id == 'victory' && !game.thunderFileExist(lib.assetURL + Vicpath + 'victory.mp3')) continue;
                 if (audio.id == 'die') {
                   content += "<h3 style='color:#ff0000'>【";
                 } else if (audio.id == 'victory') {
                   content += "<h3 style='color:#ffea34'>【";
                 } else {
+                  // @ts-ignore
                   content += "<h3 style='color:" + get.qhly_getIf(currentViewSkin.skinPageSkillNameColor, "#4169E1") + "'>【";
                 }
                 if (audio.name) {
@@ -12986,8 +15444,11 @@ export let CONTENT = function (config, pack) {
                   content += get.translation(audio.id);
                 }
                 content += "】"
+                // @ts-ignore
                 content += "&nbsp;&nbsp;&nbsp;<img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('skinPagePlayAudioButtonImage', 'extension/千幻聆音/image/qhly_pic_playaudiobutton.png') + "' style='height:23px;vertical-align:middle;' id='qhly_skin_skill_" + audio.id + "'/>"
+                // @ts-ignore
                 if (lib.config.qhly_editmode && !game.qhly_isForbidEditTaici(name)) {
+                  // @ts-ignore
                   content += "<img src='" + lib.qhly_path + "image/qhly_editButton.png' style='height:25px;width:25px;'";
                   content += " id='qhly_skin_skill_edit_" + audio.id + "'";
                   content += "/>";
@@ -13023,6 +15484,7 @@ export let CONTENT = function (config, pack) {
                 var opt = document.createElement('option');
                 opt.innerHTML = "默认";
                 opt.setAttribute('name', 'default');
+                // @ts-ignore
                 levelSelect.appendChild(opt);
                 var levels = ['普通', '精品', '史诗', '传说', '限定'];
                 var map = {
@@ -13032,33 +15494,46 @@ export let CONTENT = function (config, pack) {
                   '传说': 'chuanshuo',
                   '限定': 'xianding',
                 };
+                // @ts-ignore
                 if (!lib.qhly_level[name + '_' + currentSkin.skinId]) {
+                  // @ts-ignore
                   opt.selected = 'selected';
                 }
                 for (var l of levels) {
                   var opt = document.createElement('option');
                   opt.innerHTML = l;
                   opt.setAttribute('name', l);
+                  // @ts-ignore
                   if (lib.qhly_level[name + '_' + currentSkin.skinId] == l) {
+                    // @ts-ignore
                     opt.selected = 'selected';
                   }
+                  // @ts-ignore
                   levelSelect.appendChild(opt);
                 }
+                // @ts-ignore
                 levelSelect.onchange = function (e) {
                   var event = e ? e : window.event;
+                  // @ts-ignore
                   if (event.target) {
+                    // @ts-ignore
                     target = event.target;
+                    // @ts-ignore
                     var opt = target[target.selectedIndex];
                     if (opt) {
                       var l = opt.getAttribute('name');
                       if (l == 'default') {
+                        // @ts-ignore
                         delete lib.qhly_level[name + '_' + currentSkin.skinId];
+                        // @ts-ignore
                         game.saveConfig('qhly_level', lib.qhly_level);
                         return;
                       }
                       var lm = map[l];
                       if (lm) {
+                        // @ts-ignore
                         lib.qhly_level[name + '_' + currentSkin.skinId] = l;
+                        // @ts-ignore
                         game.saveConfig('qhly_level', lib.qhly_level);
                       }
                     }
@@ -13069,29 +15544,40 @@ export let CONTENT = function (config, pack) {
                 var opt = document.createElement('option');
                 opt.innerHTML = "默认";
                 opt.setAttribute('order', 'default');
+                // @ts-ignore
                 orderSelect.appendChild(opt);
                 if (lib.config.qhly_order[name + '-' + currentSkin.skinId] === undefined) {
+                  // @ts-ignore
                   opt.selected = 'selected';
                 }
                 for (var i = 0; i < 50; i++) {
                   var opt = document.createElement('option');
                   opt.innerHTML = "" + i;
+                  // @ts-ignore
                   opt.setAttribute('order', i);
                   if (lib.config.qhly_order[name + '-' + currentSkin.skinId] == i) {
+                    // @ts-ignore
                     opt.selected = 'selected';
                   }
+                  // @ts-ignore
                   orderSelect.appendChild(opt);
                 }
+                // @ts-ignore
                 orderSelect.onchange = function (e) {
                   var event = e ? e : window.event;
+                  // @ts-ignore
                   if (event.target) {
+                    // @ts-ignore
                     target = event.target;
+                    // @ts-ignore
                     var opt = target[target.selectedIndex];
                     if (opt) {
                       var o = opt.getAttribute('order');
                       if (o == 'default') {
+                        // @ts-ignore
                         game.qhly_setOrder(name, currentSkin.skinId);
                       } else {
+                        // @ts-ignore
                         game.qhly_setOrder(name, currentSkin.skinId, o);
                       }
                     }
@@ -13102,36 +15588,51 @@ export let CONTENT = function (config, pack) {
               var banInRandomCheckbox = document.getElementById('qhconfig_checkbox_banInRandom');
               var bindFunc = function (checkbox, text) {
                 if (!text) return;
+                // @ts-ignore
                 ui.qhly_addListenFunc(text);
                 text.listen(function () {
+                  // @ts-ignore
                   game.qhly_playQhlyAudio('qhly_voc_check', null, true);
                   checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
                 });
               };
+              // @ts-ignore
               ui.qhly_initCheckBox(banInRandomCheckbox, game.qhly_skinIsBanned(name, currentSkin.skinId));
               bindFunc(banInRandomCheckbox, document.getElementById('qhconfig_checkbox_banInRandom_text'));
+              // @ts-ignore
               banInRandomCheckbox.qhly_onchecked = function (checked) {
+                // @ts-ignore
                 game.qhly_banSkin(name, currentSkin.skinId, checked);
               };
             }
             for (var vid of addButton) {
+              // @ts-ignore
               var img = document.getElementById('qhly_skin_skill_' + vid);
               if (img) {
+                // @ts-ignore
                 ui.qhly_addListenFunc(img);
                 var that = this;
                 (function (id) {
+                  // @ts-ignore
                   img.listen(function () {
                     that.consumeTextClick = true;
+                    // @ts-ignore
                     if (id == 'die') window.qhly_playDieAudio(name);
+                    // @ts-ignore
                     else if (id == 'victory') window.qhly_playVictoryAudio(name);
                     else {
+                      // @ts-ignore
                       var count = _status.qhly_skillAudioWhich[id];
                       if (!count) {
+                        // @ts-ignore
                         _status.qhly_skillAudioWhich[id] = 0;
                         count = 0;
                       }
+                      // @ts-ignore
                       _status.qhly_skillAudioWhich[id]++;
+                      // @ts-ignore
                       window.qhly_TrySkillAudio(id, { name: name }, null, count);
+                      // @ts-ignore
                       var skillSkin = game.qhly_getSkillSkin(name, game.qhly_getSkin(name), id);
                       if (skillSkin) {
                         if (skillSkin === 1) {
@@ -13146,11 +15647,14 @@ export let CONTENT = function (config, pack) {
                   });
                 })(vid);
               }
+              // @ts-ignore
               if (lib.config.qhly_editmode && !game.qhly_isForbidEditTaici(name)) {
                 var imgEdit = document.getElementById('qhly_skin_skill_edit_' + vid);
                 if (imgEdit) {
+                  // @ts-ignore
                   ui.qhly_addListenFunc(imgEdit);
                   (function (id) {
+                    // @ts-ignore
                     imgEdit.listen(function () {
                       that.editOpen(name, currentSkin.skinId, id, state);
                     });
@@ -13163,30 +15667,38 @@ export let CONTENT = function (config, pack) {
             var retList = [];
             if (list) {
               for (var skin of list) {
+                // @ts-ignore
                 var info = game.qhly_getSkinInfo(name, skin, state.pkg);
                 var obj = {
                   order: info.order,
                   skinId: skin,
                   skinInfo: info,
+                  // @ts-ignore
                   audios: get.qhly_getAudioInfoInSkin(name, state.pkg, skin),
                 };
                 retList.push(obj);
               }
             }
             this.skinList = [];
+            // @ts-ignore
             this.skinList.push({
               skinId: null,
+              // @ts-ignore
               skinInfo: game.qhly_getSkinInfo(name, null, state.pkg),
+              // @ts-ignore
               audios: get.qhly_getAudioInfoInSkin(name, state.pkg, null),
             });
             retList.sort(function (a, b) {
+              // @ts-ignore
               var orderA = game.qhly_getOrder(name, a.skinId, state.pkg);
+              // @ts-ignore
               var orderB = game.qhly_getOrder(name, b.skinId, state.pkg);
               if (orderA > orderB) return 1;
               if (orderA == orderB) return 0;
               return -1;
             });
             for (var r of retList) {
+              // @ts-ignore
               this.skinList.push(r);
             }
             this.skinListGot = true;
@@ -13194,6 +15706,7 @@ export let CONTENT = function (config, pack) {
           init: function (name, state) {
             this.text = ui.create.div('.qh-page-skin-text', this.pageView);
             lib.setScroll(this.text);
+            // @ts-ignore
             ui.qhly_fixTextSize(this.text);
             if (currentViewSkin.isLolBigLayout) {
               this.skinName = ui.create.div('.qh-page-skin-name', this.pageView);
@@ -13291,6 +15804,7 @@ export let CONTENT = function (config, pack) {
               } else if (that.currentIndex > 0) {
                 that.currentIndex--;
                 that.refresh(name, state);
+                // @ts-ignore
                 game.qhly_playQhlyAudio('qhly_voc_press', null, true);
               }
             });
@@ -13302,6 +15816,7 @@ export let CONTENT = function (config, pack) {
               } else if (that.currentIndex < that.skinList.length) {
                 that.currentIndex++;
                 that.refresh(name, state);
+                // @ts-ignore
                 game.qhly_playQhlyAudio('qhly_voc_press', null, true);
               }
             });
@@ -13310,6 +15825,7 @@ export let CONTENT = function (config, pack) {
             this.hideButton.listen(function () {
               that.hideSkinMode = !that.hideSkinMode;
               that.refresh(name, state);
+              // @ts-ignore
               game.qhly_playQhlyAudio('qhly_voc_press', null, true);
             });
             this.text.listen(function () {
@@ -13323,6 +15839,7 @@ export let CONTENT = function (config, pack) {
                 that.refresh(name, state);
               }
             });
+            // @ts-ignore
             game.qhly_changeViewPageSkin('skin', this.pageView);
             this.inited = true;
           }
@@ -13334,13 +15851,16 @@ export let CONTENT = function (config, pack) {
           },
           init: function (name, state) {
             this.innerConfig = ui.create.div('.qh-page-config-text', this.pageView);
+            // @ts-ignore
             ui.qhly_fixTextSize(this.innerConfig);
             var that = this;
             var content = "";
+            // @ts-ignore
             content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('favouriteImage', 'extension/千幻聆音/image/newui_fav.png') + "' style='width:50px'/>收藏设置</h2>";
             content += "<p>可以选择收藏此武将。进行自由选将操作时，可以更快找到此武将。</p>";
             content += "<p><span style='display:inline-block;height:30px;'><img id='qhconfig_checkbox_fav'/><span id='qhconfig_checkbox_text_fav' style='display:inline-block;position:relative;bottom:25%;'>收藏" + get.translation(name) + "</span></span></p>";
 
+            // @ts-ignore
             content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('forbidImage', 'extension/千幻聆音/image/newui_forbid.png') + "' style='width:50px'/>禁用设置</h2>";
             content += "<p>可以选择在某模式下禁用或启用该武将。该设置将在重启游戏后生效。</p>"
             content += "<p><span style='display:inline-block;height:30px;'><img id='qhconfig_checkbox_banned_mode_all'/><span id='qhconfig_checkbox_text_all' style='display:inline-block;position:relative;bottom:25%;'>所有模式禁用</span></span></p>";
@@ -13354,11 +15874,13 @@ export let CONTENT = function (config, pack) {
             }
             content += "<p><span style='display:inline-block;height:30px;'><img id='qhconfig_checkbox_banned_ai'/><span id='qhconfig_checkbox_text_ai' style='display:inline-block;position:relative;bottom:25%;'>仅自由选将可选</span></span></p>";
 
+            // @ts-ignore
             content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('rankImage', 'extension/千幻聆音/image/newui_rank_icon.png') + "' style='width:50px'/>等阶设置</h2>";
             content += "<p>可以设置" + get.translation(name) + "的等阶，重启后生效。</p>";
             content += "<p><select style='font-size:22px;font-family:'qh_youyuan';' id='qhconfig_rank_select'></select></p>";
 
             if (lib.config.qhly_enableCharacterMusic) {
+              // @ts-ignore
               content += "<h2><img src='" + lib.assetURL + get.qhly_getCurrentViewSkinValue('musicImage', 'extension/千幻聆音/image/newui_music_icon.png') + "' style='width:50px'/>音乐设置</h2>";
               content += "<p>可以设置" + get.translation(name) + "的专属背景音乐，在游戏开始时将自动切换。</p>";
               content += "<p><select style='font-size:22px;font-family:'qh_youyuan';' id='qhconfig_music_select'></select></p>";
@@ -13368,6 +15890,7 @@ export let CONTENT = function (config, pack) {
               var characterConfigExtra = state.pkg.characterConfigExtra(name);
               if (characterConfigExtra) {
                 for (var extc of characterConfigExtra) {
+                  // @ts-ignore
                   var extobj = game.qhly_parseConfig(extc);
                   content += extobj.content;
                   extraConfigs.push(extobj);
@@ -13383,18 +15906,22 @@ export let CONTENT = function (config, pack) {
             }
             var bindFunc = function (checkbox, text) {
               if (!text) return;
+              // @ts-ignore
               ui.qhly_addListenFunc(text);
               text.listen(function () {
+                // @ts-ignore
                 game.qhly_playQhlyAudio('qhly_voc_check', null, true);
                 checkbox.qhly_setChecked(!checkbox.qhly_checked, true);
               });
             };
             var checkboxFav = document.getElementById('qhconfig_checkbox_fav');
-            ui.qhly_initCheckBox(checkboxFav, lib.config.favouriteCharacter && lib.config.favouriteCharacter.contains(name));
+            // @ts-ignore
+            ui.qhly_initCheckBox(checkboxFav, lib.config.favouriteCharacter && lib.config.favouriteCharacter.includes(name));
             bindFunc(checkboxFav, document.getElementById('qhconfig_checkbox_text_fav'));
+            // @ts-ignore
             checkboxFav.qhly_onchecked = function (check) {
               if (!check) {
-                if (lib.config.favouriteCharacter && lib.config.favouriteCharacter.contains(name)) {
+                if (lib.config.favouriteCharacter && lib.config.favouriteCharacter.includes(name)) {
                   lib.config.favouriteCharacter.remove(name);
                 }
               } else {
@@ -13410,7 +15937,7 @@ export let CONTENT = function (config, pack) {
             var allForbid = true;
             for (var mode in lib.mode) {
               if (mode != 'connect') {
-                if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(mode)) {
+                if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(mode)) {
                   continue;
                 }
                 allForbid = false;
@@ -13418,8 +15945,10 @@ export let CONTENT = function (config, pack) {
               }
             }
 
+            // @ts-ignore
             ui.qhly_initCheckBox(checkboxAll, allForbid);
             bindFunc(checkboxAll, document.getElementById('qhconfig_checkbox_text_all'));
+            // @ts-ignore
             checkboxAll.qhly_onchecked = function (check) {
               if (check) {
                 for (var mode in lib.mode) {
@@ -13440,13 +15969,17 @@ export let CONTENT = function (config, pack) {
             this.banned_checkbox_mode_all = checkboxAll;
             var checkboxBanai = document.getElementById('qhconfig_checkbox_banned_ai');
 
+            // @ts-ignore
             ui.qhly_initCheckBox(checkboxBanai, game.qhly_isForbidAI(name));
 
             bindFunc(checkboxBanai, document.getElementById('qhconfig_checkbox_text_ai'));
+            // @ts-ignore
             checkboxBanai.qhly_onchecked = function (check) {
               if (check) {
+                // @ts-ignore
                 game.qhly_setForbidAI(name, true);
               } else {
+                // @ts-ignore
                 game.qhly_setForbidAI(name, false);
               }
             };
@@ -13455,13 +15988,15 @@ export let CONTENT = function (config, pack) {
                 var checkbox = document.getElementById('qhconfig_checkbox_banned_mode_' + mode);
                 this['banned_checkbox_mode_' + mode] = checkbox;
                 if (checkbox) {
-                  ui.qhly_initCheckBox(checkbox, lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(name));
+                  // @ts-ignore
+                  ui.qhly_initCheckBox(checkbox, lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(name));
                   bindFunc(checkbox, document.getElementById('qhconfig_checkbox_text_' + mode));
                   (function (mode) {
+                    // @ts-ignore
                     checkbox.qhly_onchecked = function (checked) {
                       if (!checked) {
                         that.banned_checkbox_mode_all.qhly_setChecked(false, true);
-                        if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].contains(name)) {
+                        if (lib.config[mode + '_banned'] && lib.config[mode + '_banned'].includes(name)) {
                           lib.config[mode + '_banned'].remove(name);
                         }
                       } else {
@@ -13478,6 +16013,7 @@ export let CONTENT = function (config, pack) {
               }
             }
             lib.setScroll(this.innerConfig);
+            // @ts-ignore
             game.qhly_changeViewPageSkin('config', this.pageView);
             var rankSelect = document.getElementById('qhconfig_rank_select');
             var rankList = ['默认', '稀有', '史诗', '传说', '精品', '精良'];
@@ -13506,16 +16042,23 @@ export let CONTENT = function (config, pack) {
               opt.innerHTML = r + rankToIcon[r];
               opt.setAttribute('rank', rankToEng[r]);
               if (!rank && r == '默认') {
+                // @ts-ignore
                 opt.selected = 'selected';
               } else if (rankToEng[r] == rank) {
+                // @ts-ignore
                 opt.selected = 'selected';
               }
+              // @ts-ignore
               rankSelect.appendChild(opt);
             }
+            // @ts-ignore
             rankSelect.onchange = function (e) {
               var event = e ? e : window.event;
+              // @ts-ignore
               if (event.target) {
+                // @ts-ignore
                 var target = event.target;
+                // @ts-ignore
                 var opt = target[target.selectedIndex];
                 if (opt) {
                   var rank = opt.getAttribute('rank');
@@ -13536,27 +16079,38 @@ export let CONTENT = function (config, pack) {
             };
             if (lib.config.qhly_enableCharacterMusic) {
               var select = document.getElementById('qhconfig_music_select');
+              // @ts-ignore
               var currentMusic = game.qhly_getCharacterMusic(name);
               var opt = document.createElement('option');
               opt.innerHTML = "无";
               opt.setAttribute('musicpath', '');
               if (!currentMusic) {
+                // @ts-ignore
                 opt.selected = 'selected';
               }
+              // @ts-ignore
               select.appendChild(opt);
+              // @ts-ignore
               for (var p in lib.qhlyMusic) {
                 var opt = document.createElement('option');
+                // @ts-ignore
                 opt.innerHTML = lib.qhlyMusic[p].name;
                 opt.setAttribute('musicpath', p);
                 if (currentMusic == p) {
+                  // @ts-ignore
                   opt.selected = 'selected';
                 }
+                // @ts-ignore
                 select.appendChild(opt);
               }
+              // @ts-ignore
               select.onchange = function (e) {
                 var event = e ? e : window.event;
+                // @ts-ignore
                 if (event.target) {
+                  // @ts-ignore
                   target = event.target;
+                  // @ts-ignore
                   var opt = target[target.selectedIndex];
                   if (opt) {
                     var path = opt.getAttribute('musicpath');
@@ -13566,6 +16120,7 @@ export let CONTENT = function (config, pack) {
                       delete lib.config.qhly_characterMusic[name];
                     }
                     game.saveConfig('qhly_characterMusic', lib.config.qhly_characterMusic);
+                    // @ts-ignore
                     game.qhly_switchBgm();
                   }
                 }
@@ -13575,16 +16130,21 @@ export let CONTENT = function (config, pack) {
           }
         }
       };
+      // @ts-ignore
       subView.pageButton[page].setBackgroundImage(get.qhly_getIf(currentViewSkin.buttonPressedImage, 'extension/千幻聆音/image/newui_button_selected.png'));
       view.appendChild(subView.mp);
       var state = {
         name: name,
         currentPage: page,
         skinScrollIndex: 0,
+        // @ts-ignore
         pkg: game.qhly_foundPackage(name),
         intro: get.character(name),
         mainView: subView,
       };
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       subView.menuCover.listen(function (current) {
         if (state.extraMenu) {
           state.extraMenu.delete();
@@ -13622,8 +16182,10 @@ export let CONTENT = function (config, pack) {
         }
         for (var k in subView.pageButton) {
           if (k == pagename) {
+            // @ts-ignore
             subView.pageButton[k].setBackgroundImage(get.qhly_getIf(currentViewSkin.buttonPressedImage, 'extension/千幻聆音/image/newui_button_selected.png'));
           } else {
+            // @ts-ignore
             subView.pageButton[k].setBackgroundImage(get.qhly_getIf(currentViewSkin.buttonImage, 'extension/千幻聆音/image/newui_button.png'));
           }
         }
@@ -13699,14 +16261,17 @@ export let CONTENT = function (config, pack) {
                 state.extraMenu.delete();
                 delete state.extraMenu;
               }
+              // @ts-ignore
               game.qhly_playQhlyAudio('qhly_voc_press', null, true);
             } else if (m == 'introduce') {
               if (state.extraMenu) {
                 state.extraMenu.delete();
                 delete state.extraMenu;
               } else {
+                // @ts-ignore
                 var extra = game.qhly_getIntroduceExtraPage(name, state.pkg);
                 if (extra) {
+                  // @ts-ignore
                   game.qhly_playQhlyAudio('qhly_voc_click2', null, true);
                   var arr = [{
                     name: '简介',
@@ -13741,6 +16306,7 @@ export let CONTENT = function (config, pack) {
                       });
                     })(obj);
                   }
+                  // @ts-ignore
                   state.extraMenu = game.qhly_createBelowMenu(arr, view);
                   view.appendChild(subView.menuCover);
                 }
@@ -13828,26 +16394,31 @@ export let CONTENT = function (config, pack) {
                 subView.characterTitle.innerHTML = '';
               }
             } else if (lib.config.qhly_titlereplace == 'skin') {
+              // @ts-ignore
               var skinName = game.qhly_getSkin(name);
               if (!skinName && ctitle) {
                 subView.characterTitle.innerHTML = ctitle;
               } else {
+                // @ts-ignore
                 var ext = game.qhly_getSkinInfo(name, skinName);
                 if (ext) {
                   if (ext.translation) {
                     subView.characterTitle.innerHTML = ext.translation;
                   } else {
+                    // @ts-ignore
                     subView.characterTitle.innerHTML = game.qhly_earse_ext(skinName);
                   }
                 }
               }
             } else if (lib.config.qhly_titlereplace == 'pkg') {
+              // @ts-ignore
               var pname = game.qhly_getCharacterPackage(name);
               if (pname) {
                 subView.characterTitle.innerHTML = get.translation(pname + "_character_config");
               }
             }
           } else {
+            // @ts-ignore
             subView.characterTitle.innerHTML = get.qhly_verticalStr(lib.qhly_filterPlainText(ctitle));
           }
         };
@@ -13856,6 +16427,7 @@ export let CONTENT = function (config, pack) {
         if (get.is.double(state.name) && (currentViewSkin.isQiLayout || currentViewSkin.isLolBigLayout)) {
           subView.group.hide();
           subView.doublegroup.show();
+          // @ts-ignore
           var groups = get.is.double(state.name, true);
           subView.doublegroupA.innerHTML = get.translation(groups[0]);
           subView.doublegroupB.innerHTML = get.translation(groups[1]);
@@ -13866,8 +16438,10 @@ export let CONTENT = function (config, pack) {
           subView.group.show();
           if (currentViewSkin.isQiLayout || currentViewSkin.isLolBigLayout) {
             if (currentViewSkin.isLolBigLayout) {
+              // @ts-ignore
               if (lib.qhly_groupimage[group]) {
                 var groupHtml = "<img style='display:block;position:absolute;width:65%;height:65%;left:50%;top:50%;transform:translate(-50%,-50%);' ";
+                // @ts-ignore
                 groupHtml += "src='" + lib.assetURL + lib.qhly_groupimage[group] + "'/>";
                 subView.group.innerHTML = groupHtml;
               } else {
@@ -13879,13 +16453,17 @@ export let CONTENT = function (config, pack) {
               subView.group.innerHTML = get.translation(group);
             }
           } else {
+            // @ts-ignore
             if (lib.qhly_groupimage[group]) {
               subView.group.innerHTML = "";
+              // @ts-ignore
               subView.group.setBackgroundImage(lib.qhly_groupimage[group]);
             } else {
               subView.group.setBackgroundImage('');
               subView.group.innerHTML = get.translation(group);
+              // @ts-ignore
               if (lib.qhly_groupcolor[group]) {
+                // @ts-ignore
                 subView.group.style.color = lib.qhly_groupcolor[group];
               } else {
                 subView.group.style.color = 'yellow';
@@ -13910,6 +16488,7 @@ export let CONTENT = function (config, pack) {
               case "full":
                 return currentViewSkin.isQiLayout?get.slimNameHorizontal(name):get.slimName(name);
               case "full_pure":
+                // @ts-ignore
                 return lib.qhly_filterPlainText(get.slimName(name));
               case "raw":
                 return get.rawName(name);
@@ -13930,6 +16509,7 @@ export let CONTENT = function (config, pack) {
             chname = "未命名武将";
           }
         }
+        // @ts-ignore
         if (game.qhly_getIntroduceExtraPage(name, state.pkg)) {
           subView.pageButton.introduce.downButton.show();
         } else {
@@ -13943,7 +16523,9 @@ export let CONTENT = function (config, pack) {
           subView.name.style.writingMode = 'vertical-lr';
         }
         if (!currentViewSkin.isQiLayout && !currentViewSkin.isLolBigLayout) {
+          // @ts-ignore
           if (lib.qhly_groupcolor[group]) {
+            // @ts-ignore
             subView.name.style.textShadow = "2px 2px 2px " + lib.qhly_groupcolor[group];
           } else {
             subView.name.style.textShadow = "2px 2px 2px #FFFF00";
@@ -14093,6 +16675,7 @@ export let CONTENT = function (config, pack) {
           while (subView.mp.hasChildNodes()) {
             subView.mp.removeChild(subView.hp.lastChild);
           }
+          // @ts-ignore
           var mp = get.qhly_getMp(state.name, state.pkg);
           if (mp === null || mp === undefined) {
             subView.mp.hide();
@@ -14128,6 +16711,7 @@ export let CONTENT = function (config, pack) {
             } else {
               str = get.infoMaxHp(hp) + '';
             }
+            // @ts-ignore
             str += "&nbsp;&nbsp;&nbsp;<img style='height:40px;weight:40px;' src='" + lib.qhly_path + "image/qhly_hudun.png'/>";
             if (get.infoHujia(hp) > 1) {
               str += ("x" + get.infoHujia(hp));
@@ -14135,6 +16719,7 @@ export let CONTENT = function (config, pack) {
             subView.hpText.innerHTML = str;
             subView.hpText.style.left = "calc(30%)";
           }
+          // @ts-ignore
           var mp = get.qhly_getMp(state.name, state.pkg);
           if (mp === null || mp === undefined) {
             subView.mp.hide();
@@ -14145,16 +16730,20 @@ export let CONTENT = function (config, pack) {
         }
       };
       refreshView(state, subView);
+      // @ts-ignore
       game.qhly_changeViewSkin(subView);
       showPage(page);
     };
+    // @ts-ignore
     game.qhly_open = function (name, page, ingame) {
       if (name.indexOf('gz_') == 0) {
+        // @ts-ignore
         if (lib.config.qhly_guozhan === false || get.mode() != 'guozhan' || !game.qhly_hasGuozhanSkin(name)) {
           name = name.slice(3);
         }
       }
       if (lib.config.qhly_newui !== false && (lib.config.qhly_currentViewSkin != 'jingdian')) {
+        // @ts-ignore
         game.qhly_open_new(name, page ? page : 'skin', ingame);
         return;
       }
@@ -14164,6 +16753,7 @@ export let CONTENT = function (config, pack) {
         game.saveConfig('qhly_huaijiu_mentioned', true);
       }
       var background = ui.create.div('.qhly-chgskin-background', document.body);
+      // @ts-ignore
       background.animate('start');
       var avatar = ui.create.div('.qhly-skin', background);
       //avatar.setBackground(name,'character');
@@ -14187,18 +16777,23 @@ export let CONTENT = function (config, pack) {
         //refreshing:false,
       };
       okButton.listen(function () {
+        // @ts-ignore
         game.qhly_setCurrentSkin(name, viewAbstract.skin, undefined, true);
         //game.resume();
         background.delete();
       });
       var refreshView = function (name, viewAbstract) {
         avatar.show();
+        // @ts-ignore
         _status.qhly_viewRefreshing = true;
+        // @ts-ignore
         game.qhly_setCurrentSkin(name, viewAbstract.skin, function () {
+          // @ts-ignore
           _status.qhly_viewRefreshing = false;
         }, true);
         //viewAbstract.refreshing = true;
         if (viewAbstract.skin) {
+          // @ts-ignore
           avatar.setBackgroundImage(game.qhly_getSkinFile(name, viewAbstract.skin));
         } else {
           avatar.setBackground(name, 'character');
@@ -14215,15 +16810,19 @@ export let CONTENT = function (config, pack) {
         }
         var sname;
         if (viewAbstract.skin) {
+          // @ts-ignore
           sname = game.qhly_getSkinName(name, viewAbstract.skin, null);
         } else {
           sname = "标准皮肤";
         }
         headTitle.innerHTML = sname;
+        // @ts-ignore
         var info = game.qhly_getSkinInfo(name, viewAbstract.skin, null);
         if (viewAbstract.skin) {
           var title;
+          // @ts-ignore
           if (lib.qhly_level[name + "_" + viewAbstract.skin]) {
+            // @ts-ignore
             title = lib.qhly_level[name + "_" + viewAbstract.skin];
           }
           if (!title || title.length == 0) {
@@ -14231,7 +16830,7 @@ export let CONTENT = function (config, pack) {
           }
           if (title) {
             levelText.show();
-            if (['精品', '史诗', '传说', '限定'].contains(title)) {
+            if (['精品', '史诗', '传说', '限定'].includes(title)) {
               var obj = {
                 '精品': 'jingpin',
                 '史诗': 'shishi',
@@ -14251,7 +16850,9 @@ export let CONTENT = function (config, pack) {
           levelText.hide();
         }
         var str = "技能语音：<br><br>";
+        // @ts-ignore
         if (!window.qhly_audio_which) {
+          // @ts-ignore
           window.qhly_audio_which = {};
         }
         var skills = get.character(name, 3).slice(0);
@@ -14259,11 +16860,14 @@ export let CONTENT = function (config, pack) {
           skills.remove('xwjh_audiozhenwang');
           for (var skill of skills) {
             var infoString = "";
+            // @ts-ignore
             window.qhly_audio_which[skill] = 1;
             infoString += "【";
             infoString += get.translation(skill);
             infoString += "】";
+            // @ts-ignore
             if (window.qhly_TrySkillAudio) {
+              // @ts-ignore
               infoString += "<a style='color:#ffffff' href=\"javascript:window.qhly_TrySkillAudio('" + skill + "',{name:'" + name + "'},null,window.qhly_audio_which[\'" + skill + "\'],\'" + viewAbstract.skin + "\');window.qhly_audio_which[\'" + skill + "\']++;\"><img style=height:22px src=" + lib.assetURL + get.qhly_getCurrentViewSkinValue('skinPagePlayAudioButtonImage', 'extension/千幻聆音/image/qhly_pic_playaudiobutton.png') + "></a><br>";
             }
             infoString += "<br><br>";
@@ -14271,11 +16875,13 @@ export let CONTENT = function (config, pack) {
           }
         }
         str += "【阵亡】";
+        // @ts-ignore
         str += "<a style='color:#ffffff' href=\"javascript:window.qhly_playDieAudio(\'" + name + "\');\"><img style=height:22px src=" + lib.qhly_path + "image/qhly_pic_playaudiobutton.png></a><br>";
         if (info.info) {
           str += info.info;
         }
         if (!viewAbstract.skin) {
+          // @ts-ignore
           str += get.qhly_characterInfo(name);
         }
         infoText.innerHTML = str;
@@ -14312,12 +16918,16 @@ export let CONTENT = function (config, pack) {
             string = "###" + string + "###" + levelText.innerHTML;
           }
           game.prompt(string, false, function (str) {
+            // @ts-ignore
             lib.qhly_level[name + "_" + viewAbstract.skin] = str;
+            // @ts-ignore
             game.saveConfig('qhly_level', lib.qhly_level);
+            // @ts-ignore
             game.qhly_open(name);
           });
         });
       };
+      // @ts-ignore
       game.qhly_getSkinList(name, function (success, skinList) {
         if (!success) {
           viewAbstract.skinCount = 1;
@@ -14350,24 +16960,32 @@ export let CONTENT = function (config, pack) {
     var replaceCharacterCardFunction = function () {
       var clickListener = function () {
         if (arguments[1]) {
+          // @ts-ignore
           _status.qh_sourceNode = arguments[1];
+          // @ts-ignore
           _status.qh_sourceNodeName = arguments[0];
         } else {
+          // @ts-ignore
           delete _status.qh_sourceNode;
         }
         if (arguments[4]) {
           if (lib.config.qhly_replaceCharacterCard2 == 'window') {
             game.resume2();
+            // @ts-ignore
             game.qhly_open_small(arguments[0], null, arguments[4]);
           } else if (lib.config.qhly_currentViewSkin != 'jingdian') {
+            // @ts-ignore
             game.qhly_open_new(arguments[0], lib.config.qhly_doubledefaultpage ? lib.config.qhly_doubledefaultpage : 'skill', arguments[4]);
           } else {
+            // @ts-ignore
             game.qhly_open(arguments[0]);
           }
         } else {
           if (lib.config.qhly_currentViewSkin != 'jingdian') {
+            // @ts-ignore
             game.qhly_open_new(arguments[0], lib.config.qhly_listdefaultpage ? lib.config.qhly_listdefaultpage : 'introduce');
           } else {
+            // @ts-ignore
             game.qhly_open(arguments[0]);
           }
         }
@@ -14376,6 +16994,9 @@ export let CONTENT = function (config, pack) {
         clickListener.apply(null, arguments);
       } else {
         originCharacterCardFunciton.apply(this, arguments);
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         var name = arguments[0];
         var pastArg = arguments;
         if (ui.window.lastChild && ui.window.lastChild.lastChild) {
@@ -14383,6 +17004,7 @@ export let CONTENT = function (config, pack) {
           var largeButton = ui.create.div('.qhly-skin-button', ui.window.lastChild.lastChild);
           largeButton.addEventListener('click', function () {
             clickListener.apply(null, pastArg);
+            // @ts-ignore
             layer.click();
           });
         }
@@ -14394,6 +17016,9 @@ export let CONTENT = function (config, pack) {
           get: function () {
             return replaceCharacterCardFunction;
           },
+          // @ts-ignore
+          // @ts-ignore
+          // @ts-ignore
           set: function (value) {
             if (!lib.config.qhly_mentionConflitCC) {
               var ret = confirm("你安装的扩展中，有扩展试图修改ui.click.charactercard，此行为与《千幻聆音》冲突，你可以关闭有冲突的功能。若你点击【取消】，将不再对此消息进行提示。");
@@ -14439,8 +17064,10 @@ export let CONTENT = function (config, pack) {
     };*/
 
     //自动换肤逻辑。
+    // @ts-ignore
     game.qhly_autoChangeSkin = function () {
       if (lib.config.qhly_autoChangeSkin && lib.config.qhly_autoChangeSkin != 'close') {
+        // @ts-ignore
         _status.qhly_changeSkinFunc = function () {
           if (game && game.players && game.players.length) {
             var pls = game.players.slice(0);
@@ -14453,6 +17080,7 @@ export let CONTENT = function (config, pack) {
             var func = function (arr, f) {
               if (arr.length == 0) return;
               var n = arr.shift();
+              // @ts-ignore
               game.qhly_getSkinModels(n, function (list) {
                 if (list && list.length) {
                   list = list.map(item=>{
@@ -14462,20 +17090,23 @@ export let CONTENT = function (config, pack) {
                       return false;
                     }
                   });
+                  // @ts-ignore
                   var sk = game.qhly_getSkin(n);
                   var players = game.players.concat(game.dead);
                   var player;
                   for (var p of players) {
                     if (p.name1 == n || p.name2 == n) player = p;
                   }
+                  // @ts-ignore
                   var player = game.filterPlayer(function (c) { return c.name1 == n || c.name2 == n })[0];
-                  if (list.contains(sk)) {
+                  if (list.includes(sk)) {
                     list.remove(sk);
                   }
-                  if (sk && !list.contains(false)) {
+                  if (sk && !list.includes(false)) {
                     list.push(false);
                   }
                   list = list.filter(function (current) {
+                    // @ts-ignore
                     return !game.qhly_skinIsBanned(n, current);
                   });
                   if (list.length == 0) {
@@ -14483,10 +17114,13 @@ export let CONTENT = function (config, pack) {
                     return;
                   }
                   //game.me.say(get.translation(n)+sk+"....."+get.translation(list));
+                  // @ts-ignore
                   if (!_status.qhly_open && !_status.bigEditing && !_status.qhly_playerWindowing) game.qhly_setCurrentSkin(n, list.randomGet(), function () {
+                    // @ts-ignore
                     game.qhly_changeDynamicSkin(n);
                     if (player && lib.config['extension_千幻聆音_qhly_decadeChangeEffect'] && (lib.config.qhly_currentViewSkin == 'decade' || lib.config.qhly_currentViewSkin == 'shousha')) player.playChangeSkinEffect(player.name2 && player.name2 == n);
                   }, true);
+                  // @ts-ignore
                   game.qhly_autoChangeSkin();
                 } else {
                   f(arr, f);
@@ -14497,25 +17131,31 @@ export let CONTENT = function (config, pack) {
             func(names, func);
           }
         };
+        // @ts-ignore
         setTimeout(_status.qhly_changeSkinFunc, parseInt(lib.config.qhly_autoChangeSkin) * 1000);
       }
     };
+    // @ts-ignore
     game.qhly_createSilder = function (min, max, value) {
       //此方法代码来自十周年UI。
       var slider = document.createElement('input');
       var onchange = function () {
+        // @ts-ignore
         var percent = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
         slider.style.backgroundSize = percent + '% ' + '100%';
       };
       slider.style.width = "100%";
+      // @ts-ignore
       var valueProp = Object.getOwnPropertyDescriptor(slider.__proto__, 'value');
       Object.defineProperties(slider, {
         value: {
           configurable: true,
           get: function () {
+            // @ts-ignore
             return valueProp.get.call(this);
           },
           set: function (value) {
+            // @ts-ignore
             valueProp.set.call(this, value);
             onchange();
           }
@@ -14526,11 +17166,15 @@ export let CONTENT = function (config, pack) {
       slider.type = 'range';
       slider.addEventListener('input', onchange);
 
+      // @ts-ignore
       slider.min = (typeof min == 'number') ? min : 0;
+      // @ts-ignore
       slider.max = (typeof max == 'number') ? max : 100;
+      // @ts-ignore
       slider.value = (typeof value == 'number') ? value : ((max - min) * 0.5);
       return slider;
     };
+    // @ts-ignore
     game.qhly_openVolumnDialog = function(key){
       if(!key){
         alert("取键值发生错误。");
@@ -14547,6 +17191,7 @@ export let CONTENT = function (config, pack) {
         htmlContent += "<br>你可以为此技能设置其音量，仅对此技能有效。<br>文件名："+fn;
         content.innerHTML = htmlContent;
         var belowButton = "";
+        // @ts-ignore
         belowButton += '<img src="' + lib.qhly_path + 'image/qhly_ok2.png" id="qh_volumn_edit_okbutton"/>';
         below.innerHTML = belowButton;
         document.body.append(dialog);
@@ -14561,7 +17206,9 @@ export let CONTENT = function (config, pack) {
         if(!isNaN(vol)){
           vol = 4;
         }
+        // @ts-ignore
         var slider = game.qhly_createSilder(0,8,vol);
+        // @ts-ignore
         sliderP.appendChild(slider);
         slider.onchange=function(){
           if(!lib.config.qhly_volumnAudio){
@@ -14571,7 +17218,9 @@ export let CONTENT = function (config, pack) {
           game.saveConfig('qhly_volumnAudio',lib.config.qhly_volumnAudio);
         };
         var img1 = document.getElementById('qh_volumn_edit_okbutton');
+        // @ts-ignore
         ui.qhly_addListenFunc(img1);
+        // @ts-ignore
         img1.listen(function(){
           dialog.delete();
         });
@@ -14585,11 +17234,17 @@ export let CONTENT = function (config, pack) {
       trigger: {
         global: 'gameStart',
       },
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       filter: function (event, player) {
+        // @ts-ignore
         return !_status.qhly_autoChangeSkinSetted && lib.config.qhly_autoChangeSkin && lib.config.qhly_autoChangeSkin != 'close';
       },
       content: function () {
+        // @ts-ignore
         _status.qhly_autoChangeSkinSetted = true;
+        // @ts-ignore
         game.qhly_autoChangeSkin();
       }
     };
@@ -14599,11 +17254,16 @@ export let CONTENT = function (config, pack) {
       trigger: {
         global: 'gameStart',
       },
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       filter: function (event, player) {
         return lib.config.qhly_randskin;
       },
       content: function () {
+        // @ts-ignore
         if (player.name || player.name1) {
+          // @ts-ignore
           game.qhly_getSkinModels(player.name ? player.name : player.name1, function (list) {
             if (list && list.length) {
               list = list.map(item=>{
@@ -14615,14 +17275,18 @@ export let CONTENT = function (config, pack) {
               });
               //list.push(false);
               list = list.filter(function (current) {
+                // @ts-ignore
                 return !game.qhly_skinIsBanned(player.name ? player.name : player.name1, current);
               });
               if (list && list.length)
+                // @ts-ignore
                 game.qhly_setCurrentSkin(player.name, list.randomGet(), undefined, true);
             }
           }, false);
         }
+        // @ts-ignore
         if (player.name2) {
+          // @ts-ignore
           game.qhly_getSkinModels(player.name2, function (list) {
             if (list && list.length) {
               list = list.map(item=>{
@@ -14634,32 +17298,39 @@ export let CONTENT = function (config, pack) {
               });
               //list.push(false);
               list = list.filter(function (current) {
+                // @ts-ignore
                 return !game.qhly_skinIsBanned(player.name2, current);
               });
               if (list && list.length)
+                // @ts-ignore
                 game.qhly_setCurrentSkin(player.name2, list.randomGet(), undefined, true);
             }
           }, false);
         }
       }
     };
+    // @ts-ignore
     lib.qhly_relativePos = function (pos1, pos2) {
       return {
         x: pos2.x - pos1.x,
         y: pos2.y - pos1.y
       };
     };
+    // @ts-ignore
     lib.qhly_addPos = function (pos1, pos2) {
       return {
         x: pos1.x + pos2.x,
         y: pos1.y + pos2.y
       };
     };
+    // @ts-ignore
     game.qhly_addDrag = function (button, parent, dragCallback) {
       var state = {};
       button.style.transition = 'transform 0s';
       var boundControl = function (pos) {
+        // @ts-ignore
         var rect = game.qhly_handleRect(parent.getBoundingClientRect());
+        // @ts-ignore
         var rectb = game.qhly_handleRect(button.getBoundingClientRect());
         var x = pos.x;
         var y = pos.y;
@@ -14678,8 +17349,10 @@ export let CONTENT = function (config, pack) {
         return { x: x, y: y };
       };
       var onMouseDown = function (event) {
+        // @ts-ignore
         var pos = lib.qhly_getEventPosition(event);
         state.originPos = pos;
+        // @ts-ignore
         var rect = game.qhly_handleRect(button.getBoundingClientRect());
         state.originButtonPos = { x: rect.left, y: rect.top };
         state.isDragging = true;
@@ -14687,11 +17360,16 @@ export let CONTENT = function (config, pack) {
       var onMouseMove = function (event) {
         if (state.isDragging) {
           state.moved = true;
+          // @ts-ignore
           var pos = lib.qhly_getEventPosition(event);
+          // @ts-ignore
           var cpos = lib.qhly_relativePos(state.originPos, pos);
+          // @ts-ignore
           var npos = lib.qhly_addPos(cpos, state.originButtonPos);
           npos = boundControl(npos);
+          // @ts-ignore
           var rect = game.qhly_handleRect(parent.getBoundingClientRect());
+          // @ts-ignore
           var fpos = lib.qhly_relativePos({ x: rect.left, y: rect.top }, npos);
           button.style.left = fpos.x.toFixed(2) + 'px';
           button.style.top = fpos.y.toFixed(2) + 'px';
@@ -14702,11 +17380,16 @@ export let CONTENT = function (config, pack) {
       var onMouseUp = function (event) {
         if (state.isDragging) {
           if (state.moved) {
+            // @ts-ignore
             var pos = lib.qhly_getEventPosition(event);
+            // @ts-ignore
             var cpos = lib.qhly_relativePos(state.originPos, pos);
+            // @ts-ignore
             var npos = lib.qhly_addPos(cpos, state.originButtonPos);
             npos = boundControl(npos);
+            // @ts-ignore
             var rect = game.qhly_handleRect(parent.getBoundingClientRect());
+            // @ts-ignore
             var fpos = lib.qhly_relativePos({ x: rect.left, y: rect.top }, npos);
             button.style.left = fpos.x.toFixed(2) + 'px';
             button.style.top = fpos.y.toFixed(2) + 'px';
@@ -14739,12 +17422,16 @@ export let CONTENT = function (config, pack) {
       trigger: {
         global: 'gameStart',
       },
+      // @ts-ignore
+      // @ts-ignore
+      // @ts-ignore
       filter: function (event, player) {
         return lib.config.qhly_skinButton;
       },
       content: function () {
         var dragCallback = function (style, node) {
           if (lib.config.qhly_dragButtonPosition !== 'no') {
+            // @ts-ignore
             var arr = game.qhly_getAllButtons();
             for (var bt of arr) {
               for (var s in style) {
@@ -14754,6 +17441,7 @@ export let CONTENT = function (config, pack) {
             game.saveConfig('qhly_dragButtonPositionAll', style);
           } else {
             var key = 'qhly_dragButtonPositionOf_' + node.qhly_chname;
+            // @ts-ignore
             var skin = game.qhly_getSkin(node.qhly_chname);
             if (skin) {
               key = key + '_' + skin;
@@ -14761,8 +17449,11 @@ export let CONTENT = function (config, pack) {
             game.saveConfig(key, style);
           }
         };
+        // @ts-ignore
         if (player.name1 || player.name) {
+          // @ts-ignore
           var button = ui.create.div('.qhly_skinplayerbutton', player.node.avatar);
+          // @ts-ignore
           button.qhly_chname = player.name1 ? player.name1 : player.name;
           if (lib.config.qhly_dragButtonPosition !== 'no') {
             if (lib.config.qhly_dragButtonPositionAll) {
@@ -14771,7 +17462,9 @@ export let CONTENT = function (config, pack) {
               }
             }
           } else {
+            // @ts-ignore
             var key = 'qhly_dragButtonPositionOf_' + button.qhly_chname;
+            // @ts-ignore
             var skin = game.qhly_getSkin(button.qhly_chname);
             if (skin) {
               key = key + '_' + skin;
@@ -14782,60 +17475,82 @@ export let CONTENT = function (config, pack) {
               }
             }
           }
+          // @ts-ignore
           player.node.qhly_skinButton1 = button;
           button.listen(function () {
+            // @ts-ignore
             if (button.qhly_moveTime) {
               var ctime = (new Date()).valueOf();
+              // @ts-ignore
               if (ctime - button.qhly_moveTime <= 500) {
                 return;
               }
             }
+            // @ts-ignore
             if (player.isUnseen(0) && player != game.me) return;
             if (lib.config.qhly_smallwiningame) {
+              // @ts-ignore
               game.qhly_open_small(player.name1 ? player.name1 : player.name, player, player);
             } else {
+              // @ts-ignore
               game.qhly_open(player.name1 ? player.name1 : player.name, 'skin', player);
             }
           });
           if (lib.config.qhly_dragButton) {
+            // @ts-ignore
             game.qhly_addDrag(button, player.node.avatar, dragCallback);
           }
           if (lib.config.qhly_buttons_hide) {
             button.hide();
           }
         }
+        // @ts-ignore
         if (player.name2) {
+          // @ts-ignore
           var button = ui.create.div('.qhly_skinplayerbutton2', player.node.avatar2);
+          // @ts-ignore
           button.qhly_chname = player.name2;
+          // @ts-ignore
           player.node.qhly_skinButton2 = button;
           button.listen(function () {
+            // @ts-ignore
             if (player.isUnseen(1) && player != game.me) return;
             if (lib.config.qhly_smallwiningame) {
+              // @ts-ignore
               game.qhly_open_small(player.name2, player, player);
             } else {
+              // @ts-ignore
               game.qhly_open(player.name2, 'skin', player);
             }
           });
           if (lib.config.qhly_dragButton) {
+            // @ts-ignore
             game.qhly_addDrag(button, player.node.avatar2, dragCallback);
           }
           if (lib.config.qhly_buttons_hide) {
             button.hide();
           }
         }
+        // @ts-ignore
         if (player == game.me && !_status.qhly_initOk) {
+          // @ts-ignore
           _status.qhly_initOk = true;
+          // @ts-ignore
           _status.qhly_buttonShowing = !lib.config.qhly_buttons_hide;
           ui.create.system("显示/隐藏皮肤按钮", function () {
+            // @ts-ignore
             if (_status.qhly_buttonShowing) {
+              // @ts-ignore
               game.qhly_hideButtons();
             } else {
+              // @ts-ignore
               game.qhly_showButtons();
             }
           }, true);
         }
       }
     };
+    // @ts-ignore
     game.qhly_getAllButtons = function () {
       var btarr = [];
       if (game && game.players) {
@@ -14852,6 +17567,7 @@ export let CONTENT = function (config, pack) {
       }
       return btarr;
     };
+    // @ts-ignore
     game.qhly_hideButtons = function () {
       game.saveConfig('qhly_buttons_hide', true);
       if (game && game.players) {
@@ -14868,8 +17584,10 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       _status.qhly_buttonShowing = false;
     };
+    // @ts-ignore
     game.qhly_showButtons = function () {
       game.saveConfig('qhly_buttons_hide', false);
       if (game && game.players) {
@@ -14890,16 +17608,23 @@ export let CONTENT = function (config, pack) {
           }
         }
       }
+      // @ts-ignore
       _status.qhly_buttonShowing = true;
     };
 
+    // @ts-ignore
     game.qhly_checkFileExist('extension/千幻聆音/image/diylevels', function (s) {
       if (s && game.getFileList) {
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         game.getFileList('extension/千幻聆音/image/diylevels', function (folders, files) {
           if (files) {
+            // @ts-ignore
             lib.qhly_diylevels = {};
             for (var f of files) {
               if (f.endsWith('.jpg') || f.endsWith('.webp') || f.endsWith('.png')) {
+                // @ts-ignore
                 lib.qhly_diylevels[game.qhly_earse_ext(f)] = f;
               }
             }
@@ -14908,44 +17633,59 @@ export let CONTENT = function (config, pack) {
       }
     });
 
+    // @ts-ignore
     game.qhly_checkFileExist('extension/千幻聆音/music/', function (s) {
       if (s && game.getFileList) {
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         game.getFileList('extension/千幻聆音/music/', function (folders, files) {
           if (files) {
             for (var f of files) {
               if (f.endsWith('.mp3')) {
                 var path = 'extension/千幻聆音/music/' + f;
+                // @ts-ignore
                 var name = game.qhly_earse_ext(f);
+                // @ts-ignore
                 lib.qhlyMusic[path] = {
                   name: name,
                   path: path
                 };
               }
             }
+            // @ts-ignore
             game.qhly_refreshBgmConfigs();
           }
         });
       }
     });
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     game.getFileList('extension/千幻聆音/plugins', function (folders, files) {
       if (files) {
         for (var file of files) {
           if (file.endsWith('.js')) {
+            // @ts-ignore
             lib.init.js(lib.qhly_path + '/plugins/' + file);
           }
         }
       }
     });
 
+    // @ts-ignore
     game.qhly_refreshSuits = function(){
       lib.extensionMenu['extension_千幻聆音']['qhly_currentViewSkin'] = {
         "name": "UI套装",
         "intro": "设置UI套装样式。",
+        // @ts-ignore
         "item": get.qhly_viewSkinSet(),
         "init": lib.config.qhly_currentViewSkin === undefined ? 'xuanwujianghu' : lib.config.qhly_currentViewSkin,
         onclick: function (item) {
+          // @ts-ignore
           if (lib.qhly_viewskin[item] && lib.qhly_viewskin[item].onchange) {
+            // @ts-ignore
             lib.qhly_viewskin[item].onchange();
           }
           game.saveConfig('qhly_currentViewSkin', item);
@@ -14956,8 +17696,11 @@ export let CONTENT = function (config, pack) {
         }
       };
     };
+    // @ts-ignore
     _status.qianhuanLoaded = true;
+    // @ts-ignore
     if(Array.isArray(lib.doAfterQianhuanLoaded)){
+      // @ts-ignore
       for(let func of lib.doAfterQianhuanLoaded){
         if(typeof func == 'function'){
           func();

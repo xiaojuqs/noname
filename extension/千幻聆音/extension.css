@@ -1785,7 +1785,7 @@
   left: calc(50% - 25px);
   top: calc(50% - 30px);
   background-size: 100% 100%;
-  background-image: url(theme/shousha/bigEdit_info.png);
+  background-image: url(theme/shousha/bigedit_info.png);
   animation: qhly-playerwindowbtn0 0.1s linear forwards;
   position: absolute;
 }
