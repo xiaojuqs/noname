@@ -4715,6 +4715,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		spshenxushao: decadeUI.dynamicSkin.xushao,
 		boss_xushao: decadeUI.dynamicSkin.xushao,
 		taffyre_xushao: decadeUI.dynamicSkin.xushao,
+		taffyshen_xushao: decadeUI.dynamicSkin.xushao,
 
 		// 许攸
 		sp_xuyou: decadeUI.dynamicSkin.xuyou,
