@@ -461,13 +461,16 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				gongji: {
 					x: [0, 0.5],
 					y: [0, 0.5],
-					scale: 0.7,
+					scale: 0.5,
 				},
 				beijing: {
 					name: '曹丕/气荡山河/BeiJing',
 					scale: 0.3,
 					x: [0, 1.7],
 					y: [0, 0.5]
+				},
+				audio: {
+					skill: '曹丕/气荡山河/audio',
 				},
 			},
 		},
@@ -1123,29 +1126,28 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		guojia: { // 郭嘉
-			一世风华: {
-				name: '郭嘉/一世风华/daiji2',
-				x: [0, 0.45],
-				y: [0, 0.55],
-				scale: 0.7,
+			以身证道: {
+				name: '郭嘉/以身证道/XingXiang',
+				x: [0, -0.3],
+				y: [0, 0.6],
+				scale: 0.5,
 				angle: 0,
-				// speed: 1,
-				shizhounian: true,
-				chuchang: {
-					name: '郭嘉/一世风华/chuchang',
-					scale: 0.8,
-					action: 'play',
-				},
 				gongji: {
-					name: '郭嘉/一世风华/chuchang',
-					scale: 1,
-					action: 'play',
-				},
-				beijing: {
-					name: '郭嘉/一世风华/beijing',
-					x: [0, -0.1],
+					x: [0, 0.5],
 					y: [0, 0.5],
+					scale: 0.5,
+				},
+				// speed: 1,
+				// action: 'DaiJi',
+				beijing: {
+					name: '郭嘉/以身证道/BeiJing',
 					scale: 0.4,
+					x: [0, 0.5],
+					y: [0, 0.5]
+				},
+				audio: {
+					skill: '郭嘉/以身证道/audio',
+					card: '郭嘉/以身证道/audio',
 				},
 			},
 		},
@@ -1248,26 +1250,22 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					scale: 0.4,
 				},
 			},
-			依心缱绻: {
-				name: '花鬘/依心缱绻/XingXiang',
-				x: [0, 0.5],
-				y: [0, 0.4],
+			沙场蛮花: {
+				name: '花鬘/沙场蛮花/XingXiang',
+				x: [0, 0.55],
+				y: [0, 0.35],
 				scale: 0.4,
 				angle: 0,
-				gongji: {
-					action: 'TeShu',
-					scale: 0.6,
-					speed: 2,
-					x: [0, 0.8],
-					y: [0, 0.4]
-				},
 				// speed: 1,
-				action: 'DaiJi',
+				// action: 'DaiJi',
 				beijing: {
-					name: '花鬘/依心缱绻/BeiJing',
-					scale: 0.3,
-					x: [0, 0.7],
+					name: '花鬘/沙场蛮花/BeiJing',
+					scale: 0.4,
+					x: [0, 0.5],
 					y: [0, 0.5]
+				},
+				audio: {
+					skill: '花鬘/沙场蛮花/audio',
 				},
 			},
 		},

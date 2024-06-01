@@ -40,7 +40,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         },//失去体力
         mianshang: {
             name: "../../../标记补充/animation/mianshang",
-            speed: 2,
         },//免伤
         shuzi: {
             name: "../../../标记补充/animation/shuzi",
@@ -3371,7 +3370,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //癫狂屠戮
                     lib.skill._diankuangtulu_gua = {
                         trigger: {
-                            source: 'damageBegin4',
+                            // taffy: 注释extension.js原版代码喵
+                            // source: 'damageBegin4',
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            source: 'damage',
+                            /* taffy分界线 */
                         },
                         charlotte: true,
                         forced: true,
@@ -3390,7 +3394,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //无双万军取首
                     lib.skill._wanjunqushou_gua = {
                         trigger: {
-                            source: 'damageBegin4',
+                            // taffy: 注释extension.js原版代码喵
+                            // source: 'damageBegin4',
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            source: 'damage',
+                            /* taffy分界线 */
                         },
                         charlotte: true,
                         forced: true,
@@ -3512,7 +3521,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数字2
                         lib.skill._player_baojiA = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -3530,7 +3544,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数字3
                         lib.skill._player_baojiB = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -3547,7 +3566,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数值4
                         lib.skill._player_baojiC = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -3564,7 +3588,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数字5
                         lib.skill._player_baojiD = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -3581,7 +3610,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数值6
                         lib.skill._player_baojiE = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -3598,7 +3632,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数值7
                         lib.skill._player_baojiF = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -3615,7 +3654,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数值8
                         lib.skill._player_baojiG = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -3632,7 +3676,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         //伤害数值9
                         lib.skill._player_baojiH = {
                             trigger: {
-                                player: 'damageBegin4'
+                                // taffy: 注释extension.js原版代码喵
+                                // player: 'damageBegin4'
+                                /* taffy分界线 */
+                                // taffy: 更正受伤时机喵
+                                player: 'damage'
+                                /* taffy分界线 */
                             },
                             forced: true,
                             priority: 10,
@@ -4583,7 +4632,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (config.daojianfu  == 'dao') {
             lib.skill._player_daojianfu_xxgg_dao_ = {
                         trigger: {
-                            player: 'damageBegin4'
+                            // taffy: 注释extension.js原版代码喵
+                            // player: 'damageBegin4'
+                            /* taffy分界线 */
+                            // taffy: 更正受伤时机喵
+                            player: 'damage'
+                            /* taffy分界线 */
                         },
                         charlotte: true,
                         forced: true,

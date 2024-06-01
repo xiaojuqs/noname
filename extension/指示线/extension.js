@@ -26,7 +26,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"指�
         if (config.zhishixian == "yulong") {
             lib.skill._player_xxgg_zhishixian_xxxxx_ggg = {
                 trigger: {
-                    source: 'damageBegin4'
+                    // taffy: 注释extension.js原版代码喵
+                    // source: 'damageBegin4',
+                    /* taffy分界线 */
+                    // taffy: 更正受伤时机喵
+                    source: 'damage',
+                    /* taffy分界线 */
                 },
                 charlotte: true,
                 forced: true,
@@ -294,7 +299,12 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"指�
         if (config.zhishixian == "jingdian") {
             lib.skill._player_xxgg_zhishixian2_xxxxx_ggg = {
                 trigger: {
-                    source: 'damageBegin4'
+                    // taffy: 注释extension.js原版代码喵
+                    // source: 'damageBegin4',
+                    /* taffy分界线 */
+                    // taffy: 更正受伤时机喵
+                    source: 'damage',
+                    /* taffy分界线 */
                 },
                 charlotte: true,
                 forced: true,
