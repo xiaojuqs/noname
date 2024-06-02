@@ -17660,6 +17660,9 @@ export let CONTENT = function (config, pack) {
       }
     });
 
+    // taffy: Web端判断getFileList函数是否存在喵
+    if (game.getFileList) {
+    /* taffy分界线 */
     // @ts-ignore
     // @ts-ignore
     // @ts-ignore
@@ -17673,6 +17676,13 @@ export let CONTENT = function (config, pack) {
         }
       }
     });
+    // Web端判断getFileList函数是否存在喵
+    } else {
+      for (let file of ['ai.js', 'code.js', 'diycard.js', 'effectTest.js', 'record.js']) {
+        lib.init.js(lib.qhly_path + '/plugins/' + file);
+      }
+    }
+    /* taffy分界线 */
 
     // @ts-ignore
     game.qhly_refreshSuits = function(){
