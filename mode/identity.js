@@ -4412,8 +4412,8 @@ game.import("mode", function (lib, game, ui, get, ai, _status) {
 								if (game.zhu.hp>=3&&situation>1) num=6;
 								return num;
 							case "commoner":
-								if (get.population('fan')+get.population('zhong')+get.population('mingzhong')==0) return -1;
-								return situation==0?-1:-3;
+								if (get.population('fan')+get.population('zhong')+get.population('mingzhong')==0&&game.zhu.hp<=2&&situation<=0) return -1;
+								return -6;
 						}
 						break;
 					case "fan":
@@ -4465,7 +4465,7 @@ game.import("mode", function (lib, game, ui, get, ai, _status) {
 								if (game.players.length <= 4 && get.population("nei") == 1)
 									return Math.min(5, to.hp - 1.5 + to.countCards("h") / 3);
 								if (situation > 0) return -3;
-								return 0;
+								return -6;
 							case "fan":
 								return -situation;
 							case "commoner":

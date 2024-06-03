@@ -6967,7 +6967,7 @@ const skills = {
 						}) >= cards.length
 					)
 						return 1;
-					return -1;
+					return -get.damageEffect(target, player, target, "thunder");
 				},
 			},
 		},

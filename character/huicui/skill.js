@@ -4131,7 +4131,11 @@ const skills = {
 		check(event, player) {
 			const target = event.targets[0];
 			if (target.hasMark("dcjizhong")) {
-				return get.effect(target, { name: "shunshou_copy" }, event, player) > 0;
+				let eff = 0;
+				game.countPlayer(current => {
+					eff += get.effect(target, { name: "shunshou_copy" }, current, player);
+				});
+				return eff > 0;
 			} else {
 				const card = { name: event.card.name, nature: event.card.nature, isCard: true };
 				let eff = 0;
