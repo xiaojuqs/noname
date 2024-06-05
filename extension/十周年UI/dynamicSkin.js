@@ -3547,7 +3547,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: '许劭/评世雕龙/chuchang2',
 					action: ['jineng'],
 					scale: 0.7,
-					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use', 'taffyre_pingjian', 'taffyre_pingjian_use'],
+					whitelist: ['pingjian', 'pingjian_use', 'shenpingjian', 'shenpingjian_use', 'shipingjian', 'shipingjian_use', 'spshenpingjian', 'spshenpingjian_use', 'taffyre_pingjian', 'taffyre_pingjian_use', 'taffyshen_pingjian', 'taffyshen_pingjian_use'],
 				},
 				play2: 'play2',
 				shan: 'play3',
