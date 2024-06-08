@@ -1,0 +1,1112 @@
+
+beijing.png
+size: 2017,2017
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+BG11_00000
+  rotate: false
+  xy: 2, 1429
+  size: 1203, 586
+  orig: 1203, 586
+  offset: 0, 0
+  index: -1
+BJ
+  rotate: false
+  xy: 2, 841
+  size: 1203, 586
+  orig: 1203, 586
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00000
+  rotate: true
+  xy: 996, 2
+  size: 46, 55
+  orig: 90, 90
+  offset: 24, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00001
+  rotate: true
+  xy: 1544, 27
+  size: 48, 55
+  orig: 90, 90
+  offset: 23, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00002
+  rotate: false
+  xy: 1650, 66
+  size: 60, 56
+  orig: 90, 90
+  offset: 23, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00003
+  rotate: true
+  xy: 1431, 6
+  size: 60, 56
+  orig: 90, 90
+  offset: 23, 19
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00004
+  rotate: false
+  xy: 1712, 65
+  size: 48, 57
+  orig: 90, 90
+  offset: 24, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00005
+  rotate: false
+  xy: 1708, 9
+  size: 46, 54
+  orig: 90, 90
+  offset: 23, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00006
+  rotate: false
+  xy: 1866, 1038
+  size: 46, 54
+  orig: 90, 90
+  offset: 23, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00007
+  rotate: false
+  xy: 1762, 13
+  size: 47, 53
+  orig: 90, 90
+  offset: 23, 19
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00008
+  rotate: false
+  xy: 1601, 21
+  size: 47, 54
+  orig: 90, 90
+  offset: 23, 19
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00009
+  rotate: true
+  xy: 1489, 22
+  size: 57, 53
+  orig: 90, 90
+  offset: 23, 20
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00010
+  rotate: false
+  xy: 1811, 36
+  size: 58, 54
+  orig: 90, 90
+  offset: 23, 20
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00011
+  rotate: false
+  xy: 1956, 214
+  size: 59, 54
+  orig: 90, 90
+  offset: 23, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00012
+  rotate: false
+  xy: 1956, 270
+  size: 59, 56
+  orig: 90, 90
+  offset: 23, 17
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00013
+  rotate: false
+  xy: 1121, 2
+  size: 60, 57
+  orig: 90, 90
+  offset: 23, 17
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00014
+  rotate: false
+  xy: 1058, 2
+  size: 61, 57
+  orig: 90, 90
+  offset: 23, 17
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00015
+  rotate: true
+  xy: 1957, 151
+  size: 61, 58
+  orig: 90, 90
+  offset: 23, 17
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00016
+  rotate: true
+  xy: 1307, 3
+  size: 62, 58
+  orig: 90, 90
+  offset: 23, 17
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00017
+  rotate: true
+  xy: 1946, 328
+  size: 62, 59
+  orig: 90, 90
+  offset: 23, 16
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00018
+  rotate: false
+  xy: 1367, 6
+  size: 62, 60
+  orig: 90, 90
+  offset: 23, 16
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00019
+  rotate: true
+  xy: 851, 512
+  size: 63, 60
+  orig: 90, 90
+  offset: 23, 16
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00020
+  rotate: true
+  xy: 1245, 2
+  size: 63, 60
+  orig: 90, 90
+  offset: 23, 16
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00021
+  rotate: true
+  xy: 1146, 776
+  size: 63, 59
+  orig: 90, 90
+  offset: 22, 17
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00022
+  rotate: false
+  xy: 1173, 61
+  size: 63, 59
+  orig: 90, 90
+  offset: 22, 17
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00023
+  rotate: true
+  xy: 1957, 92
+  size: 57, 58
+  orig: 90, 90
+  offset: 23, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00024
+  rotate: true
+  xy: 1871, 33
+  size: 57, 58
+  orig: 90, 90
+  offset: 23, 18
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00025
+  rotate: false
+  xy: 1931, 33
+  size: 57, 57
+  orig: 90, 90
+  offset: 23, 19
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00026
+  rotate: true
+  xy: 1183, 2
+  size: 57, 60
+  orig: 90, 90
+  offset: 23, 16
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00027
+  rotate: false
+  xy: 1464, 81
+  size: 54, 58
+  orig: 90, 90
+  offset: 23, 16
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00028
+  rotate: false
+  xy: 1762, 68
+  size: 47, 57
+  orig: 90, 90
+  offset: 23, 16
+  index: -1
+effect/putongdaiji/shuiliu_guaiwanchu/0_00029
+  rotate: true
+  xy: 1650, 17
+  size: 47, 56
+  orig: 90, 90
+  offset: 23, 17
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00000
+  rotate: true
+  xy: 885, 189
+  size: 157, 45
+  orig: 179, 45
+  offset: 9, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00001
+  rotate: true
+  xy: 932, 186
+  size: 160, 45
+  orig: 179, 45
+  offset: 8, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00002
+  rotate: false
+  xy: 1372, 755
+  size: 162, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00003
+  rotate: true
+  xy: 1871, 1310
+  size: 163, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00004
+  rotate: true
+  xy: 979, 185
+  size: 161, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00005
+  rotate: false
+  xy: 995, 582
+  size: 159, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00006
+  rotate: true
+  xy: 1607, 603
+  size: 159, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00007
+  rotate: false
+  xy: 1238, 593
+  size: 160, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00008
+  rotate: true
+  xy: 833, 49
+  size: 161, 45
+  orig: 179, 45
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00009
+  rotate: false
+  xy: 1400, 593
+  size: 160, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00010
+  rotate: true
+  xy: 883, 348
+  size: 162, 45
+  orig: 179, 45
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00011
+  rotate: true
+  xy: 1871, 1145
+  size: 163, 45
+  orig: 179, 45
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00012
+  rotate: true
+  xy: 789, 347
+  size: 163, 45
+  orig: 179, 45
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00013
+  rotate: true
+  xy: 851, 577
+  size: 163, 45
+  orig: 179, 45
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00014
+  rotate: true
+  xy: 836, 347
+  size: 163, 45
+  orig: 179, 45
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00015
+  rotate: false
+  xy: 1207, 802
+  size: 163, 45
+  orig: 179, 45
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00016
+  rotate: true
+  xy: 930, 348
+  size: 162, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00017
+  rotate: false
+  xy: 1372, 802
+  size: 163, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00018
+  rotate: false
+  xy: 1207, 755
+  size: 163, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00019
+  rotate: true
+  xy: 977, 348
+  size: 162, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00020
+  rotate: false
+  xy: 833, 2
+  size: 161, 45
+  orig: 179, 45
+  offset: 8, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00021
+  rotate: true
+  xy: 1024, 349
+  size: 161, 45
+  orig: 179, 45
+  offset: 8, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00022
+  rotate: true
+  xy: 739, 30
+  size: 162, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00023
+  rotate: true
+  xy: 1026, 186
+  size: 161, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00024
+  rotate: true
+  xy: 786, 30
+  size: 162, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00025
+  rotate: true
+  xy: 1071, 349
+  size: 161, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00026
+  rotate: true
+  xy: 1073, 186
+  size: 161, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00027
+  rotate: false
+  xy: 1654, 571
+  size: 160, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00028
+  rotate: true
+  xy: 1904, 571
+  size: 160, 45
+  orig: 179, 45
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_weibu/0_00029
+  rotate: true
+  xy: 1118, 354
+  size: 157, 45
+  orig: 179, 45
+  offset: 9, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00000
+  rotate: false
+  xy: 1673, 733
+  size: 125, 83
+  orig: 140, 113
+  offset: 15, 26
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00001
+  rotate: false
+  xy: 143, 18
+  size: 128, 94
+  orig: 140, 113
+  offset: 12, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00002
+  rotate: true
+  xy: 1918, 1132
+  size: 131, 95
+  orig: 140, 113
+  offset: 9, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00003
+  rotate: true
+  xy: 1769, 959
+  size: 133, 95
+  orig: 140, 113
+  offset: 7, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00004
+  rotate: true
+  xy: 1923, 1471
+  size: 136, 91
+  orig: 140, 113
+  offset: 4, 22
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00005
+  rotate: true
+  xy: 1674, 818
+  size: 131, 94
+  orig: 140, 113
+  offset: 9, 19
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00006
+  rotate: true
+  xy: 699, 194
+  size: 132, 91
+  orig: 140, 113
+  offset: 8, 19
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00007
+  rotate: true
+  xy: 1923, 1881
+  size: 134, 92
+  orig: 140, 113
+  offset: 6, 19
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00008
+  rotate: false
+  xy: 1008, 744
+  size: 136, 95
+  orig: 140, 113
+  offset: 4, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00009
+  rotate: false
+  xy: 283, 232
+  size: 138, 94
+  orig: 140, 113
+  offset: 2, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00010
+  rotate: false
+  xy: 867, 745
+  size: 139, 94
+  orig: 140, 113
+  offset: 1, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00011
+  rotate: false
+  xy: 2, 18
+  size: 139, 94
+  orig: 140, 113
+  offset: 1, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00012
+  rotate: true
+  xy: 1923, 1745
+  size: 134, 92
+  orig: 140, 113
+  offset: 6, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00013
+  rotate: true
+  xy: 1674, 951
+  size: 134, 93
+  orig: 140, 113
+  offset: 6, 17
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00014
+  rotate: false
+  xy: 423, 231
+  size: 136, 95
+  orig: 140, 113
+  offset: 4, 16
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00015
+  rotate: false
+  xy: 144, 229
+  size: 137, 97
+  orig: 140, 113
+  offset: 3, 15
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00016
+  rotate: false
+  xy: 726, 742
+  size: 139, 97
+  orig: 140, 113
+  offset: 1, 14
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00017
+  rotate: false
+  xy: 2, 229
+  size: 140, 97
+  orig: 140, 113
+  offset: 0, 14
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00018
+  rotate: true
+  xy: 1918, 1265
+  size: 132, 95
+  orig: 140, 113
+  offset: 8, 14
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00019
+  rotate: false
+  xy: 273, 17
+  size: 129, 95
+  orig: 140, 113
+  offset: 11, 14
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00020
+  rotate: true
+  xy: 1770, 826
+  size: 131, 96
+  orig: 140, 113
+  offset: 9, 14
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00021
+  rotate: false
+  xy: 404, 18
+  size: 128, 96
+  orig: 140, 113
+  offset: 12, 14
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00022
+  rotate: true
+  xy: 898, 612
+  size: 131, 95
+  orig: 140, 113
+  offset: 9, 15
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00023
+  rotate: true
+  xy: 792, 212
+  size: 133, 91
+  orig: 140, 113
+  offset: 7, 19
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00024
+  rotate: false
+  xy: 1800, 733
+  size: 133, 91
+  orig: 140, 113
+  offset: 7, 19
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00025
+  rotate: true
+  xy: 1923, 1609
+  size: 134, 92
+  orig: 140, 113
+  offset: 6, 19
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00026
+  rotate: false
+  xy: 561, 233
+  size: 136, 93
+  orig: 140, 113
+  offset: 4, 19
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00027
+  rotate: true
+  xy: 880, 51
+  size: 133, 89
+  orig: 140, 113
+  offset: 7, 23
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00028
+  rotate: true
+  xy: 971, 50
+  size: 133, 85
+  orig: 140, 113
+  offset: 7, 24
+  index: -1
+effect/putongdaiji/shuiliu_youbianhou/0_00029
+  rotate: false
+  xy: 1537, 764
+  size: 134, 83
+  orig: 140, 113
+  offset: 6, 26
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00000
+  rotate: false
+  xy: 252, 114
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00001
+  rotate: false
+  xy: 500, 116
+  size: 122, 113
+  orig: 123, 113
+  offset: 1, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00002
+  rotate: false
+  xy: 2, 114
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00003
+  rotate: false
+  xy: 726, 627
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00004
+  rotate: false
+  xy: 726, 512
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00005
+  rotate: false
+  xy: 1120, 629
+  size: 116, 113
+  orig: 123, 113
+  offset: 7, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00006
+  rotate: false
+  xy: 1488, 640
+  size: 117, 113
+  orig: 123, 113
+  offset: 6, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00007
+  rotate: false
+  xy: 1481, 248
+  size: 120, 113
+  orig: 123, 113
+  offset: 3, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00008
+  rotate: false
+  xy: 1404, 478
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00009
+  rotate: false
+  xy: 1280, 363
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00010
+  rotate: false
+  xy: 1403, 363
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00011
+  rotate: true
+  xy: 624, 2
+  size: 122, 113
+  orig: 123, 113
+  offset: 1, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00012
+  rotate: true
+  xy: 1165, 389
+  size: 122, 113
+  orig: 123, 113
+  offset: 1, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00013
+  rotate: false
+  xy: 127, 114
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00014
+  rotate: false
+  xy: 995, 629
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00015
+  rotate: false
+  xy: 375, 116
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00016
+  rotate: true
+  xy: 1058, 61
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00017
+  rotate: false
+  xy: 1238, 640
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00018
+  rotate: false
+  xy: 1363, 640
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00019
+  rotate: false
+  xy: 1654, 618
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00020
+  rotate: false
+  xy: 1779, 618
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00021
+  rotate: false
+  xy: 1235, 248
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00022
+  rotate: false
+  xy: 1358, 248
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00023
+  rotate: false
+  xy: 1526, 363
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00024
+  rotate: false
+  xy: 1527, 478
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00025
+  rotate: false
+  xy: 1280, 478
+  size: 122, 113
+  orig: 123, 113
+  offset: 1, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00026
+  rotate: true
+  xy: 1120, 229
+  size: 123, 113
+  orig: 123, 113
+  offset: 0, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00027
+  rotate: false
+  xy: 1603, 226
+  size: 120, 113
+  orig: 123, 113
+  offset: 3, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00028
+  rotate: false
+  xy: 1650, 456
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_youbianqian/0_00029
+  rotate: false
+  xy: 1649, 341
+  size: 121, 113
+  orig: 123, 113
+  offset: 2, 0
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00000
+  rotate: true
+  xy: 1091, 513
+  size: 67, 95
+  orig: 105, 113
+  offset: 20, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00001
+  rotate: true
+  xy: 1918, 1399
+  size: 70, 97
+  orig: 105, 113
+  offset: 17, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00002
+  rotate: false
+  xy: 913, 512
+  size: 72, 98
+  orig: 105, 113
+  offset: 15, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00003
+  rotate: false
+  xy: 1661, 124
+  size: 73, 100
+  orig: 105, 113
+  offset: 14, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00004
+  rotate: false
+  xy: 1871, 290
+  size: 73, 100
+  orig: 105, 113
+  offset: 14, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00005
+  rotate: false
+  xy: 1811, 92
+  size: 71, 89
+  orig: 105, 113
+  offset: 17, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00006
+  rotate: true
+  xy: 1188, 521
+  size: 70, 90
+  orig: 105, 113
+  offset: 17, 7
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00007
+  rotate: false
+  xy: 1811, 183
+  size: 70, 100
+  orig: 105, 113
+  offset: 17, 7
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00008
+  rotate: false
+  xy: 1883, 188
+  size: 71, 100
+  orig: 105, 113
+  offset: 16, 7
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00009
+  rotate: true
+  xy: 987, 512
+  size: 68, 102
+  orig: 105, 113
+  offset: 19, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00010
+  rotate: false
+  xy: 1725, 234
+  size: 71, 105
+  orig: 105, 113
+  offset: 18, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00011
+  rotate: false
+  xy: 1773, 464
+  size: 72, 105
+  orig: 105, 113
+  offset: 17, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00012
+  rotate: false
+  xy: 1924, 464
+  size: 72, 105
+  orig: 105, 113
+  offset: 17, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00013
+  rotate: false
+  xy: 624, 126
+  size: 73, 105
+  orig: 105, 113
+  offset: 16, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00014
+  rotate: false
+  xy: 1479, 142
+  size: 74, 104
+  orig: 105, 113
+  offset: 15, 9
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00015
+  rotate: true
+  xy: 1555, 150
+  size: 74, 104
+  orig: 105, 113
+  offset: 15, 9
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00016
+  rotate: false
+  xy: 1847, 464
+  size: 75, 105
+  orig: 105, 113
+  offset: 14, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00017
+  rotate: false
+  xy: 1173, 122
+  size: 75, 105
+  orig: 105, 113
+  offset: 14, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00018
+  rotate: false
+  xy: 1250, 141
+  size: 75, 105
+  orig: 105, 113
+  offset: 14, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00019
+  rotate: false
+  xy: 534, 9
+  size: 76, 105
+  orig: 105, 113
+  offset: 14, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00020
+  rotate: false
+  xy: 1327, 141
+  size: 74, 105
+  orig: 105, 113
+  offset: 15, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00021
+  rotate: false
+  xy: 1403, 141
+  size: 74, 105
+  orig: 105, 113
+  offset: 15, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00022
+  rotate: false
+  xy: 1736, 127
+  size: 73, 105
+  orig: 105, 113
+  offset: 16, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00023
+  rotate: true
+  xy: 1250, 67
+  size: 72, 105
+  orig: 105, 113
+  offset: 16, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00024
+  rotate: true
+  xy: 1773, 392
+  size: 70, 105
+  orig: 105, 113
+  offset: 18, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00025
+  rotate: true
+  xy: 1357, 68
+  size: 71, 105
+  orig: 105, 113
+  offset: 17, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00026
+  rotate: true
+  xy: 1880, 392
+  size: 70, 105
+  orig: 105, 113
+  offset: 19, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00027
+  rotate: false
+  xy: 1798, 285
+  size: 71, 105
+  orig: 105, 113
+  offset: 18, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00028
+  rotate: true
+  xy: 1555, 77
+  size: 71, 93
+  orig: 105, 113
+  offset: 18, 8
+  index: -1
+effect/putongdaiji/shuiliu_zuobian/0_00029
+  rotate: false
+  xy: 1884, 92
+  size: 71, 94
+  orig: 105, 113
+  offset: 18, 8
+  index: -1
+s1
+  rotate: false
+  xy: 1207, 1087
+  size: 549, 386
+  orig: 550, 387
+  offset: 0, 1
+  index: -1
+s2
+  rotate: false
+  xy: 2, 495
+  size: 722, 344
+  orig: 724, 344
+  offset: 0, 0
+  index: -1
+s3
+  rotate: false
+  xy: 1207, 849
+  size: 465, 236
+  orig: 469, 238
+  offset: 0, 2
+  index: -1
+s4
+  rotate: false
+  xy: 2, 328
+  size: 785, 165
+  orig: 785, 171
+  offset: 0, 0
+  index: -1
+s5
+  rotate: true
+  xy: 1758, 1094
+  size: 379, 111
+  orig: 381, 113
+  offset: 1, 0
+  index: -1
+s6
+  rotate: false
+  xy: 1207, 1475
+  size: 714, 540
+  orig: 717, 544
+  offset: 1, 1
+  index: -1

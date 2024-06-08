@@ -1,0 +1,250 @@
+
+BeiJing.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: false
+  xy: 2, 1193
+  size: 1653, 853
+  orig: 1653, 853
+  offset: 0, 0
+  index: -1
+bgren1
+  rotate: false
+  xy: 1971, 1904
+  size: 29, 37
+  orig: 29, 37
+  offset: 0, 0
+  index: -1
+bgren10
+  rotate: false
+  xy: 1877, 1003
+  size: 24, 169
+  orig: 24, 169
+  offset: 0, 0
+  index: -1
+bgren11
+  rotate: false
+  xy: 1980, 1423
+  size: 24, 81
+  orig: 24, 81
+  offset: 0, 0
+  index: -1
+bgren12
+  rotate: false
+  xy: 593, 73
+  size: 29, 26
+  orig: 29, 26
+  offset: 0, 0
+  index: -1
+bgren13
+  rotate: false
+  xy: 1934, 1365
+  size: 19, 29
+  orig: 19, 29
+  offset: 0, 0
+  index: -1
+bgren14
+  rotate: true
+  xy: 1577, 2
+  size: 35, 78
+  orig: 35, 78
+  offset: 0, 0
+  index: -1
+bgren15
+  rotate: true
+  xy: 1657, 428
+  size: 84, 195
+  orig: 84, 196
+  offset: 0, 0
+  index: -1
+bgren17
+  rotate: true
+  xy: 1657, 514
+  size: 78, 210
+  orig: 78, 210
+  offset: 0, 0
+  index: -1
+bgren18
+  rotate: false
+  xy: 1577, 39
+  size: 86, 126
+  orig: 86, 127
+  offset: 0, 1
+  index: -1
+bgren19
+  rotate: false
+  xy: 1971, 1943
+  size: 58, 103
+  orig: 58, 103
+  offset: 0, 0
+  index: -1
+bgren2
+  rotate: true
+  xy: 2, 5
+  size: 18, 45
+  orig: 18, 46
+  offset: 0, 1
+  index: -1
+bgren20
+  rotate: true
+  xy: 485, 46
+  size: 53, 106
+  orig: 53, 106
+  offset: 0, 0
+  index: -1
+bgren21
+  rotate: true
+  xy: 763, 108
+  size: 154, 92
+  orig: 154, 94
+  offset: 0, 1
+  index: -1
+bgren22
+  rotate: true
+  xy: 1904, 1506
+  size: 100, 142
+  orig: 102, 142
+  offset: 1, 0
+  index: -1
+bgren23
+  rotate: false
+  xy: 1904, 1277
+  size: 28, 117
+  orig: 28, 118
+  offset: 0, 1
+  index: -1
+bgren24
+  rotate: false
+  xy: 1904, 1396
+  size: 74, 108
+  orig: 74, 108
+  offset: 0, 0
+  index: -1
+bgren3
+  rotate: true
+  xy: 278, 2
+  size: 38, 93
+  orig: 38, 93
+  offset: 0, 0
+  index: -1
+bgren4
+  rotate: false
+  xy: 1904, 1242
+  size: 16, 33
+  orig: 16, 33
+  offset: 0, 0
+  index: -1
+bgren5
+  rotate: false
+  xy: 1577, 167
+  size: 86, 253
+  orig: 86, 257
+  offset: 0, 1
+  index: -1
+bgren6
+  rotate: true
+  xy: 373, 15
+  size: 25, 102
+  orig: 26, 102
+  offset: 0, 0
+  index: -1
+bgren7
+  rotate: true
+  xy: 2, 25
+  size: 74, 274
+  orig: 74, 274
+  offset: 0, 0
+  index: -1
+bgren8
+  rotate: false
+  xy: 1877, 899
+  size: 24, 102
+  orig: 24, 103
+  offset: 0, 0
+  index: -1
+bgren9
+  rotate: true
+  xy: 278, 42
+  size: 57, 205
+  orig: 57, 206
+  offset: 0, 1
+  index: -1
+dao
+  rotate: false
+  xy: 1904, 1608
+  size: 65, 438
+  orig: 66, 443
+  offset: 1, 1
+  index: -1
+laohu
+  rotate: true
+  xy: 1381, 5
+  size: 415, 194
+  orig: 415, 194
+  offset: 0, 0
+  index: -1
+long
+  rotate: false
+  xy: 2, 422
+  size: 1653, 769
+  orig: 1653, 770
+  offset: 0, 0
+  index: -1
+shuiliu
+  rotate: true
+  xy: 867, 97
+  size: 323, 512
+  orig: 323, 513
+  offset: 0, 1
+  index: -1
+tx3
+  rotate: false
+  xy: 2, 101
+  size: 759, 161
+  orig: 760, 164
+  offset: 1, 0
+  index: -1
+tx4
+  rotate: true
+  xy: 1657, 594
+  size: 578, 218
+  orig: 578, 232
+  offset: 0, 10
+  index: -1
+tx5
+  rotate: false
+  xy: 2, 264
+  size: 863, 156
+  orig: 865, 157
+  offset: 0, 0
+  index: -1
+xueji
+  rotate: false
+  xy: 1657, 1174
+  size: 245, 872
+  orig: 245, 872
+  offset: 0, 0
+  index: -1
+
+BeiJing2.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+guangxian1
+  rotate: false
+  xy: 547, 60
+  size: 516, 643
+  orig: 517, 643
+  offset: 0, 0
+  index: -1
+guangxian2
+  rotate: false
+  xy: 2, 2
+  size: 543, 701
+  orig: 544, 701
+  offset: 0, 0
+  index: -1

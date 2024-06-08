@@ -1,0 +1,279 @@
+
+shouji.png
+size: 1440,1440
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect/chuchang/tx_suidian_00
+  rotate: false
+  xy: 485, 377
+  size: 82, 96
+  orig: 210, 210
+  offset: 45, 73
+  index: -1
+effect/chuchang/tx_suidian_01
+  rotate: true
+  xy: 1224, 539
+  size: 65, 72
+  orig: 210, 210
+  offset: 51, 86
+  index: -1
+effect/chuchang/tx_suidian_02
+  rotate: true
+  xy: 1087, 255
+  size: 50, 53
+  orig: 210, 210
+  offset: 61, 100
+  index: -1
+effect/chuchang/tx_suidian_03
+  rotate: true
+  xy: 2, 3
+  size: 121, 133
+  orig: 210, 210
+  offset: 48, 41
+  index: -1
+effect/chuchang/tx_suidian_04
+  rotate: false
+  xy: 137, 6
+  size: 115, 118
+  orig: 210, 210
+  offset: 50, 42
+  index: -1
+effect/chuchang/tx_suidian_05
+  rotate: false
+  xy: 914, 19
+  size: 93, 74
+  orig: 210, 210
+  offset: 56, 53
+  index: -1
+effect/chuchang/tx_suidian_06
+  rotate: true
+  xy: 1009, 25
+  size: 68, 59
+  orig: 210, 210
+  offset: 66, 64
+  index: -1
+effect/chuchang/tx_suidian_07
+  rotate: true
+  xy: 1313, 362
+  size: 126, 114
+  orig: 210, 210
+  offset: 43, 41
+  index: -1
+effect/chuchang/tx_suidian_08
+  rotate: true
+  xy: 816, 2
+  size: 91, 96
+  orig: 210, 210
+  offset: 52, 43
+  index: -1
+effect/chuchang/tx_suidian_09
+  rotate: true
+  xy: 1313, 287
+  size: 73, 84
+  orig: 210, 210
+  offset: 56, 46
+  index: -1
+effect/chuchang/tx_suidian_10
+  rotate: false
+  xy: 1313, 490
+  size: 125, 114
+  orig: 210, 210
+  offset: 49, 52
+  index: -1
+effect/chuchang/tx_suidian_11
+  rotate: false
+  xy: 1327, 1224
+  size: 106, 97
+  orig: 210, 210
+  offset: 61, 65
+  index: -1
+effect/chuchang/tx_suidian_12
+  rotate: false
+  xy: 569, 390
+  size: 58, 83
+  orig: 210, 210
+  offset: 106, 69
+  index: -1
+effect/chuchang/tx_suidian_13
+  rotate: true
+  xy: 1327, 1323
+  size: 115, 111
+  orig: 210, 210
+  offset: 43, 42
+  index: -1
+effect/chuchang/tx_suidian_14
+  rotate: false
+  xy: 1327, 1154
+  size: 98, 68
+  orig: 210, 210
+  offset: 46, 49
+  index: -1
+effect/chuchang/tx_suidian_15
+  rotate: false
+  xy: 1070, 54
+  size: 56, 55
+  orig: 210, 210
+  offset: 53, 56
+  index: -1
+effect/gongji/tx_baokai_00
+  rotate: true
+  xy: 1028, 111
+  size: 141, 132
+  orig: 358, 329
+  offset: 87, 87
+  index: -1
+effect/gongji/tx_baokai_01
+  rotate: false
+  xy: 1087, 307
+  size: 224, 228
+  orig: 358, 329
+  offset: 71, 72
+  index: -1
+effect/gongji/tx_baokai_02
+  rotate: true
+  xy: 2, 780
+  size: 341, 307
+  orig: 358, 329
+  offset: 7, 11
+  index: -1
+effect/gongji/tx_baokai_03
+  rotate: true
+  xy: 2, 126
+  size: 322, 299
+  orig: 358, 329
+  offset: 31, 8
+  index: -1
+effect/gongji/tx_baokai_04
+  rotate: true
+  xy: 2, 450
+  size: 328, 299
+  orig: 358, 329
+  offset: 27, 8
+  index: -1
+effect/gongji/tx_baokai_05
+  rotate: false
+  xy: 303, 85
+  size: 324, 277
+  orig: 358, 329
+  offset: 31, 16
+  index: -1
+effect/gongji/tx_baokai_06
+  rotate: true
+  xy: 311, 797
+  size: 324, 286
+  orig: 358, 329
+  offset: 27, 10
+  index: -1
+effect/gongji/tx_baokai_07
+  rotate: false
+  xy: 682, 1139
+  size: 327, 299
+  orig: 358, 329
+  offset: 21, 6
+  index: -1
+effect/gongji/tx_baokai_08
+  rotate: false
+  xy: 344, 1128
+  size: 336, 310
+  orig: 358, 329
+  offset: 15, 5
+  index: -1
+effect/gongji/tx_baokai_09
+  rotate: false
+  xy: 2, 1123
+  size: 340, 315
+  orig: 358, 329
+  offset: 13, 5
+  index: -1
+effect/gongji/tx_baokai_10
+  rotate: false
+  xy: 599, 810
+  size: 291, 316
+  orig: 358, 329
+  offset: 52, 6
+  index: -1
+effect/gongji/tx_baokai_11
+  rotate: true
+  xy: 1011, 1135
+  size: 303, 314
+  orig: 358, 329
+  offset: 47, 6
+  index: -1
+effect/gongji/tx_baokai_12
+  rotate: false
+  xy: 892, 822
+  size: 298, 311
+  orig: 358, 329
+  offset: 55, 7
+  index: -1
+effect/gongji/tx_baokai_13
+  rotate: false
+  xy: 485, 475
+  size: 261, 320
+  orig: 358, 329
+  offset: 89, 3
+  index: -1
+effect/gongji/tx_changheng_00
+  rotate: false
+  xy: 303, 364
+  size: 180, 414
+  orig: 210, 420
+  offset: 15, 3
+  index: -1
+effect/gongji/tx_guangdian_00
+  rotate: true
+  xy: 863, 95
+  size: 157, 163
+  orig: 179, 179
+  offset: 11, 8
+  index: -1
+effect/gongji/tx_lizikuo_00
+  rotate: false
+  xy: 629, 25
+  size: 185, 168
+  orig: 350, 350
+  offset: 92, 73
+  index: -1
+effect/gongji/tx_lizikuo_01
+  rotate: true
+  xy: 1224, 606
+  size: 238, 204
+  orig: 350, 350
+  offset: 74, 61
+  index: -1
+effect/gongji/tx_lizikuo_02
+  rotate: true
+  xy: 863, 254
+  size: 266, 222
+  orig: 350, 350
+  offset: 66, 55
+  index: -1
+effect/gongji/tx_lizikuo_03
+  rotate: true
+  xy: 629, 195
+  size: 278, 232
+  orig: 350, 350
+  offset: 62, 52
+  index: -1
+effect/gongji/tx_lizikuo_04
+  rotate: true
+  xy: 985, 537
+  size: 283, 237
+  orig: 350, 350
+  offset: 59, 52
+  index: -1
+effect/gongji/tx_lizikuo_05
+  rotate: true
+  xy: 748, 522
+  size: 286, 235
+  orig: 350, 350
+  offset: 57, 56
+  index: -1
+effect/gongji/tx_lizikuo_06
+  rotate: true
+  xy: 1192, 846
+  size: 287, 228
+  orig: 350, 350
+  offset: 57, 61
+  index: -1
