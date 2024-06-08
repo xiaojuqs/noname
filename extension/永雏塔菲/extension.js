@@ -5708,12 +5708,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											}
 											var allList = _status.characterlist.slice(0);
 											game.countPlayer(function (current) {
-												if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 &&
-													current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
-												if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 &&
-													current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
-												if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 &&
-													current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
+												if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
+												if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
+												if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
 											});
 											var list = [];
 											var skills = [];
@@ -5721,33 +5718,20 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											allList.randomSort();
 											var name2 = event.triggername;
 											if (name2 === 'phaseBefore') {
-												name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin',
-													'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei',
-													'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin',
-													'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin',
-													'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter',
-													'phaseUseBefore', 'phaseUseBegin'
-												]
+												name2 = ['phaseBeforeStart', 'phaseBefore', 'phaseBeforeEnd', 'phaseBeginStart', 'phaseBegin', 'phaseChange', 'phaseZhunbeiBefore', 'phaseZhunbeiBegin', 'phaseZhunbei', 'phaseZhunbeiEnd', 'phaseZhunbeiAfter', 'phaseJudgeBefore', 'phaseJudgeBegin', 'phaseJudge', 'phaseJudgeEnd', 'phaseJudgeAfter', 'phaseDrawBefore', 'phaseDrawBegin', 'phaseDrawBegin1', 'phaseDrawBegin2', 'phaseDraw', 'phaseDrawEnd', 'phaseDrawAfter', 'phaseUseBefore', 'phaseUseBegin']
 											} else if (name2 === 'damageBefore') {
-												name2 = ['damageBefore', 'damageBegin', 'damageBegin2', 'damageBegin3', 'damageBegin4',
-													'damage', 'damageSource', 'damageEnd', 'damageAfter'
-												]
+												name2 = ['damageBefore', 'damageBegin', 'damageBegin2', 'damageBegin3', 'damageBegin4', 'damage', 'damageSource', 'damageEnd', 'damageAfter']
 											} else if (name2 === 'phaseJieshuBefore') {
-												name2 = ['phaseJieshuBefore', 'phaseJieshuBegin', 'phaseJieshu', 'phaseJieshuEnd',
-													'phaseJieshuAfter', 'phaseEnd', 'phaseAfter'
-												]
+												name2 = ['phaseJieshuBefore', 'phaseJieshuBegin', 'phaseJieshu', 'phaseJieshuEnd', 'phaseJieshuAfter', 'phaseEnd', 'phaseAfter']
 											}
 											for (let i = 0; i < allList.length; i++) {
 												var name = allList[i];
-												if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') !=
-													-1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1 || name.indexOf(
-														'taffyshen_xushao') != -1) continue;
+												if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1 || name.indexOf('taffyshen_xushao') != -1) continue;
 												var skills2 = lib.character[name][3];
 												for (let j = 0; j < skills2.length; j++) {
 													var playerSkills = player.getSkills(null, false, false).filter(skill => {
 														var info = get.info(skill);
-														if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill,
-																player) === "") return false;
+														if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 														return true;
 													});
 													if (playerSkills.includes(skills2[j])) continue;
@@ -5762,14 +5746,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													game.expandSkills(list2);
 													for (let k = 0; k < list2.length; k++) {
 														var info = lib.skill[list2[k]];
-														if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info
-															.hiddenSkill || info.dutySkill || info.zhuSkill) {
+														if (!info || !info.trigger || info.charlotte || info.limited || info.juexingji || info.hiddenSkill || info.dutySkill || info.zhuSkill) {
 															if (k === 0) break;
 															else continue;
 														}
 														if (info.trigger.player) {
-															if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && lib.skill
-																.taffyre_pingjian.hasCommonElement(info.trigger.player, name2)) {
+															if (name2.includes(info.trigger.player) || Array.isArray(info.trigger.player) && lib.skill.taffyre_pingjian.hasCommonElement(info.trigger.player, name2)) {
 																if (info.filter) {
 																	try {
 																		var bool = info.filter(trigger, player);
@@ -5786,8 +5768,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 															}
 														}
 														if (info.trigger.global) {
-															if (name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && lib.skill
-																.taffyre_pingjian.hasCommonElement(info.trigger.global, name2)) {
+															if (name2.includes(info.trigger.global) || Array.isArray(info.trigger.global) && lib.skill.taffyre_pingjian.hasCommonElement(info.trigger.global, name2)) {
 																if (info.filter) {
 																	try {
 																		var bool = info.filter(trigger, player);
@@ -5826,8 +5807,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													if (!event._result) event._result = {};
 													event._result.skills = [];
 													var rSkill = event._result.skills;
-													var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage
-														.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
+													var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
 													event.dialog = dialog;
 													var table = document.createElement('div');
 													table.classList.add('add-setting');
@@ -5917,8 +5897,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 								prompt: () => lib.translate.taffyre_pingjian_info,
 								content: function () {
 									'step 0'
-									if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage
-										.taffyre_pingjianX = 0;
+									if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage.taffyre_pingjianX = 0;
 									var skills = player.getSkills(null, false, false).filter(skill => {
 										var info = get.info(skill);
 										if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "")
@@ -5969,12 +5948,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											}
 											var allList = _status.characterlist.slice(0);
 											game.countPlayer(function (current) {
-												if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 &&
-													current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
-												if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 &&
-													current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
-												if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 &&
-													current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
+												if (current.name && lib.character[current.name] && current.name.indexOf('gz_shibing') != 0 && current.name.indexOf('gz_jun_') != 0) allList.add(current.name);
+												if (current.name1 && lib.character[current.name1] && current.name1.indexOf('gz_shibing') != 0 && current.name1.indexOf('gz_jun_') != 0) allList.add(current.name1);
+												if (current.name2 && lib.character[current.name2] && current.name2.indexOf('gz_shibing') != 0 && current.name2.indexOf('gz_jun_') != 0) allList.add(current.name2);
 											});
 											var list = [];
 											var skills = [];
@@ -5982,20 +5958,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 											allList.randomSort();
 											for (let i = 0; i < allList.length; i++) {
 												var name = allList[i];
-												if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') !=
-													-1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1 || name.indexOf(
-														'taffyshen_xushao') != -1) continue;
+												if (name.indexOf('xushao') != -1 || name.indexOf('shenxushao') != -1 || name.indexOf('shixushao') != -1 || name.indexOf('spshenxushao') != -1 || name.indexOf('taffyre_xushao') != -1 || name.indexOf('taffyshen_xushao') != -1) continue;
 												var skills2 = lib.character[name][3];
 												for (let j = 0; j < skills2.length; j++) {
 													var playerSkills = player.getSkills(null, false, false).filter(skill => {
 														var info = get.info(skill);
-														if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill,
-																player) === "") return false;
+														if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
 														return true;
 													});
 													if (playerSkills.includes(skills2[j])) continue;
-													if (skills.includes(skills2[j]) || lib.skill.taffyre_pingjian.phaseUse_special.includes(skills2[
-															j])) {
+													if (skills.includes(skills2[j]) || lib.skill.taffyre_pingjian.phaseUse_special.includes(skills2[j])) {
 														list.add(name);
 														if (!map[name]) map[name] = [];
 														map[name].add(skills2[j]);
@@ -6035,8 +6007,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 													if (!event._result) event._result = {};
 													event._result.skills = [];
 													var rSkill = event._result.skills;
-													var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage
-														.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
+													var dialog = ui.create.dialog('评荐：选择获得至多' + get.cnNumber(result.links.length + player.storage.taffyre_pingjianX) + '个技能', [list, 'character'], 'hidden');
 													event.dialog = dialog;
 													var table = document.createElement('div');
 													table.classList.add('add-setting');

@@ -4289,14 +4289,14 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 			潜蛟觊天2: {
 				name: '钟会/潜蛟觊天2/XingXiang-1',
-				x: [0, -0.7],
+				x: [0, -0.8],
 				y: [0, 0.3],
+				scale: 0.5,
 				gongji: {
 					x: [0, 0.5],
 					y: [0, 0.5],
 					scale: 0.5,
 				},
-				scale: 0.5,
 				angle: 0,
 				// speed: 1,
 				// action: 'DaiJi',
