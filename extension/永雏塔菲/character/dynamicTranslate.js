@@ -1,0 +1,30 @@
+import { lib, game, ui, get, ai, _status } from "../extension/noname.js";
+
+const dynamicTranslates = {
+	shidunshi(player) {
+		var info = player.storage.shidunshi;
+		var str = "每回合限一次。你可以视为使用或打出一张";
+		var list = ["sha", "shan", "tao", "jiu"];
+		for (var i of list) {
+			var strx = "【" + get.translation(i) + "】";
+			if (!info || !info[0].includes(i)) strx = '<span style="text-decoration:line-through;">' + strx + "</span>";
+			str += strx;
+			if (i != "jiu") str += "/";
+		}
+		str += "，然后当前回合角色于本回合内下一次造成伤害时，你选择两项：⒈防止此伤害。系统从技能名中包含“仁/义/礼/智/信”字样的技能中随机选择三个其未拥有的技能，然后你令当前回合角色获得其中一个技能。⒉从〖遁世〗中删除你本次使用或打出的牌并获得一个“席”。⒊减1点体力上限并摸X张牌（X为你的“席”数）。";
+		return str;
+	},
+	oldluochong(player) {
+		var storage = player.getStorage("oldluochong");
+		var str = "准备阶段开始时/当你受到伤害后，你可选择本轮内未选择过的一项：";
+		var choiceList = ["⒈令一名角色回复1点体力。", "⒉令一名其他角色失去1点体力。", "⒊弃置一名其他角色的至多两张牌。", "⒋令一名角色摸两张牌。"];
+		for (var i = 0; i < 4; i++) {
+			if (storage.includes(i)) {
+				choiceList[i] = '<span style="text-decoration: line-through;">' + choiceList[i] + "</span>";
+			}
+			str += choiceList[i];
+		}
+		return str;
+	},
+};
+export default dynamicTranslates;
