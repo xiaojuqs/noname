@@ -1101,9 +1101,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 						"dunshi",
 						"dunshi_backup",
 						"dunshi_damage",
-						"shidunshi",
-						"shidunshi_backup",
-						"shidunshi_damage",
+						"taffydc_dunshi",
+						"taffydc_dunshi_backup",
+						"taffydc_dunshi_damage",
 					],
 				},
 				beijing: {
@@ -3912,12 +3912,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					whitelist: [
 						"pingjian",
 						"pingjian_use",
-						"shenpingjian",
-						"shenpingjian_use",
-						"shipingjian",
-						"shipingjian_use",
-						"spshenpingjian",
-						"spshenpingjian_use",
+						"taffyboss_pingjian",
+						"taffyboss_pingjian_use",
+						"taffydc_pingjian",
+						"taffydc_pingjian_use",
+						"taffyhuiwan_pingjian",
+						"taffyhuiwan_pingjian_use",
 						"taffyre_pingjian",
 						"taffyre_pingjian_use",
 						"taffyshen_pingjian",
@@ -3973,12 +3973,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					whitelist: [
 						"pingjian",
 						"pingjian_use",
-						"shenpingjian",
-						"shenpingjian_use",
-						"shipingjian",
-						"shipingjian_use",
-						"spshenpingjian",
-						"spshenpingjian_use",
+						"taffyboss_pingjian",
+						"taffyboss_pingjian_use",
+						"taffydc_pingjian",
+						"taffydc_pingjian_use",
+						"taffyhuiwan_pingjian",
+						"taffyhuiwan_pingjian_use",
 						"taffyre_pingjian",
 						"taffyre_pingjian_use",
 					],
@@ -4015,12 +4015,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					whitelist: [
 						"pingjian",
 						"pingjian_use",
-						"shenpingjian",
-						"shenpingjian_use",
-						"shipingjian",
-						"shipingjian_use",
-						"spshenpingjian",
-						"spshenpingjian_use",
+						"taffyboss_pingjian",
+						"taffyboss_pingjian_use",
+						"taffydc_pingjian",
+						"taffydc_pingjian_use",
+						"taffyhuiwan_pingjian",
+						"taffyhuiwan_pingjian_use",
 						"taffyre_pingjian",
 						"taffyre_pingjian_use",
 					],
@@ -4980,7 +4980,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 杜预
 		sp_duyu: decadeUI.dynamicSkin.duyu,
 		pk_sp_duyu: decadeUI.dynamicSkin.duyu,
-		shenduyu: decadeUI.dynamicSkin.duyu,
+		taffyshen_duyu: decadeUI.dynamicSkin.duyu,
 
 		// 冯妤// 冯芳女
 		re_fengfangnv: decadeUI.dynamicSkin.fengfangnv,
@@ -4989,11 +4989,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		ol_feiyi: decadeUI.dynamicSkin.feiyi,
 		feiyi: decadeUI.dynamicSkin.feiyi,
 		tw_feiyi: decadeUI.dynamicSkin.feiyi,
-		oldol_feiyi: decadeUI.dynamicSkin.feiyi,
+		taffyold_ol_feiyi: decadeUI.dynamicSkin.feiyi,
 
 		// 管宁
-		shiguanning: decadeUI.dynamicSkin.guanning,
-		shenshiguanning: decadeUI.dynamicSkin.guanning,
+		taffydc_guanning: decadeUI.dynamicSkin.guanning,
+		taffyshendc_guanning: decadeUI.dynamicSkin.guanning,
 
 		// 关羽
 		re_guanyu: decadeUI.dynamicSkin.guanyu,
@@ -5077,11 +5077,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 芮姬
 		dc_ruiji: decadeUI.dynamicSkin.ruiji,
-		oldruiji: decadeUI.dynamicSkin.ruiji,
+		taffyold_ruiji: decadeUI.dynamicSkin.ruiji,
 
 		// 神曹操
 		old_caocao: decadeUI.dynamicSkin.shen_caocao,
-		shoushen_caocao: decadeUI.dynamicSkin.shen_caocao,
+		taffymb_shen_caocao: decadeUI.dynamicSkin.shen_caocao,
 
 		// 神关羽
 		tw_shen_guanyu: decadeUI.dynamicSkin.shen_guanyu,
@@ -5133,7 +5133,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 滕芳兰
 		dc_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
-		oldtengfanglan: decadeUI.dynamicSkin.tengfanglan,
+		taffyold_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
 
 		// 王元姬
 		jin_wangyuanji: decadeUI.dynamicSkin.wangyuanji,
@@ -5153,7 +5153,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		taffyold_wu_guanyu: decadeUI.dynamicSkin.wu_guanyu,
 
 		// 武诸葛亮
-		oldwu_zhugeliang: decadeUI.dynamicSkin.wu_zhugeliang,
+		taffyold_wu_zhugeliang: decadeUI.dynamicSkin.wu_zhugeliang,
 
 		// 夏侯氏
 		re_xiahoushi: decadeUI.dynamicSkin.xiahoushi,
@@ -5171,10 +5171,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 许劭
 		jsrg_xushao: decadeUI.dynamicSkin.xushao,
-		shenxushao: decadeUI.dynamicSkin.xushao,
-		shixushao: decadeUI.dynamicSkin.xushao,
-		spshenxushao: decadeUI.dynamicSkin.xushao,
-		boss_xushao: decadeUI.dynamicSkin.xushao,
+		taffyboss_xushao: decadeUI.dynamicSkin.xushao,
+		taffydc_xushao: decadeUI.dynamicSkin.xushao,
+		taffyhuiwan_xushao: decadeUI.dynamicSkin.xushao,
 		taffyre_xushao: decadeUI.dynamicSkin.xushao,
 		taffyshen_xushao: decadeUI.dynamicSkin.xushao,
 
@@ -5196,7 +5195,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		diy_yuji: decadeUI.dynamicSkin.yuji,
 		ns_yuji: decadeUI.dynamicSkin.yuji,
 		ns_yujisp: decadeUI.dynamicSkin.yuji,
-		shenyuji: decadeUI.dynamicSkin.yuji,
+		taffyshen_yuji: decadeUI.dynamicSkin.yuji,
 
 		// 张春华
 		re_zhangchunhua: decadeUI.dynamicSkin.zhangchunhua,

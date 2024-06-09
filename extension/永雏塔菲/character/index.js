@@ -22,20 +22,20 @@ export const characterPackFunc = function () {
 			},
 			characterFilter: { ...characterFilters },
 			characterTitle: {
-				shenxushao: "#gViridian",
+				taffyboss_xushao: "#gViridian",
 				acetaffy: "#gViridian",
 				minitaffy: "#gViridian",
-				shixushao: "#gViridian",
-				spshenxushao: "#gViridian",
-				oldtw_niufudongxie: "#gViridian",
-				shenyuji: "#gViridian",
+				taffydc_xushao: "#gViridian",
+				taffyhuiwan_xushao: "#gViridian",
+				taffyold_tw_niufudongxie: "#gViridian",
+				taffyshen_yuji: "#gViridian",
 				junko: "#gViridian",
-				huiwansunquan: "#gViridian",
-				huiwansunquanplus: "#gViridian",
+				taffyhuiwan_sunquan: "#gViridian",
+				taffyhuiwanplus_sunquan: "#gViridian",
 				taffyboss_lvbu1: "#gViridian",
-				shenduyu: "#gViridian",
-				shenchengui: "#gViridian",
-				shenshiguanning: "#gViridian",
+				taffyshen_duyu: "#gViridian",
+				taffyshen_chengui: "#gViridian",
+				taffyshendc_guanning: "#gViridian",
 				taffyre_xushao: "#gViridian",
 				taffyold_sb_caopi: "#gViridian",
 				taffyold_wu_guanyu: "#gViridian",
@@ -50,26 +50,26 @@ export const characterPackFunc = function () {
 			translate: { ...translates, ...voices, ...characterSortTranslate },
 			pinyins: { ...pinyins },
 		};
-		const whiteList = [...oobj.characterSort.taffy_character.taffy_old, "shoushen_caocao"];
+		const whiteList = [...oobj.characterSort.taffy_character.taffy_old, "taffymb_shen_caocao"];
 		const specialDetails = {
-			shiguanning: {
+			taffydc_guanning: {
 				character: "character:ddd_guanning",
-				die: "die:ext:永雏塔菲/audio/die/shiguanning.mp3",
+				die: "die:ext:永雏塔菲/audio/die/taffydc_guanning.mp3",
 			},
-			spshenxushao: {
-				character: "ext:永雏塔菲/image/character/shenxushao.jpg",
-				die: "die:ext:永雏塔菲/audio/die/shenxushao.mp3",
+			taffyhuiwan_xushao: {
+				character: "ext:永雏塔菲/image/character/taffyboss_xushao.jpg",
+				die: "die:ext:永雏塔菲/audio/die/taffyboss_xushao.mp3",
 			},
-			shenyuji: {
-				character: "ext:永雏塔菲/image/character/shenyuji.jpg",
+			taffyshen_yuji: {
+				character: "ext:永雏塔菲/image/character/taffyshen_yuji.jpg",
 				die: "die_audio:yuji",
 			},
-			huiwansunquan: {
-				character: "ext:永雏塔菲/image/character/huiwansunquan.jpg",
+			taffyhuiwan_sunquan: {
+				character: "ext:永雏塔菲/image/character/taffyhuiwan_sunquan.jpg",
 				die: "die_audio:re_sunquan",
 			},
-			huiwansunquanplus: {
-				character: "ext:永雏塔菲/image/character/huiwansunquan.jpg",
+			taffyhuiwanplus_sunquan: {
+				character: "ext:永雏塔菲/image/character/taffyhuiwan_sunquan.jpg",
 				die: "die_audio:re_sunquan",
 			},
 			taffyboss_lvbu1: {
@@ -80,21 +80,21 @@ export const characterPackFunc = function () {
 				character: "ext:永雏塔菲/image/character/taffybaby_shen_simayi.jpg",
 				die: "die_audio:shen_simayi",
 			},
-			shenduyu: {
-				character: "ext:永雏塔菲/image/character/shenduyu.jpg",
+			taffyshen_duyu: {
+				character: "ext:永雏塔菲/image/character/taffyshen_duyu.jpg",
 				die: "die_audio:sp_duyu",
 			},
-			shenchengui: {
-				character: "ext:永雏塔菲/image/character/shenchengui.jpg",
-				die: "die:ext:永雏塔菲/audio/die/shenchengui.mp3",
+			taffyshen_chengui: {
+				character: "ext:永雏塔菲/image/character/taffyshen_chengui.jpg",
+				die: "die:ext:永雏塔菲/audio/die/taffyshen_chengui.mp3",
 			},
 			taffyre_xushao: {
 				character: "ext:永雏塔菲/image/character/taffyre_xushao.jpg",
-				die: "die:ext:永雏塔菲/audio/die/shixushao.mp3",
+				die: "die:ext:永雏塔菲/audio/die/taffydc_xushao.mp3",
 			},
 			taffyshen_xushao: {
-				character: "ext:永雏塔菲/image/character/shenxushao.jpg",
-				die: "die:ext:永雏塔菲/audio/die/shenxushao.mp3",
+				character: "ext:永雏塔菲/image/character/taffyboss_xushao.jpg",
+				die: "die:ext:永雏塔菲/audio/die/taffyboss_xushao.mp3",
 			},
 		};
 		const specialList = Object.keys(specialDetails);

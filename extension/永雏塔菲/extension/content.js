@@ -12,7 +12,7 @@ export const CONTENT = function (config, pack) {
 		{
 			isExt: false,
 			filterCharacter: function (name) {
-				if (characterList.includes(name) && !lib.characterSort.taffy_character.taffy_old.includes(name) && name !== "shoushen_caocao") return true;
+				if (characterList.includes(name) && !lib.characterSort.taffy_character.taffy_old.includes(name) && name !== "taffymb_shen_caocao") return true;
 			},
 			isLutou: lib.config.xwLutou,
 			prefix: "extension/永雏塔菲/image/character/",
@@ -27,7 +27,7 @@ export const CONTENT = function (config, pack) {
 		{
 			isExt: false,
 			filterCharacter: function (name) {
-				if (!characterList.includes(name) || lib.characterSort.taffy_character.taffy_old.includes(name) || name === "shoushen_caocao") return true;
+				if (!characterList.includes(name) || lib.characterSort.taffy_character.taffy_old.includes(name) || name === "taffymb_shen_caocao") return true;
 			},
 			isLutou: lib.config.xwLutou,
 			prefix: "image/character/",
