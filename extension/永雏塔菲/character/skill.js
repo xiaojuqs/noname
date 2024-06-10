@@ -1349,6 +1349,8 @@ const skills = {
 				"yujin_yujin",
 				"xin_xushu",
 				"wuxian",
+				"zhugeruoxue",
+				"dc_huanghao",
 				// 受到伤害
 				"re_quancong",
 				"guohuanghou",
@@ -1367,7 +1369,7 @@ const skills = {
 				"re_caochong",
 				"caorui",
 				// 'gz_re_lidian',
-				"old_re_lidian",
+				"re_lidian",
 				"manchong",
 				"re_chengong",
 				"re_xunyou",
@@ -1375,6 +1377,7 @@ const skills = {
 				"huaxin",
 				"caomao",
 				"ol_yangyi", // 结束阶段没有狷狭
+				"dukui",
 			];
 			var list = [];
 			var skills = [];
@@ -1411,6 +1414,12 @@ const skills = {
 						}
 					} else if (name2 === "phaseJieshuBegin") {
 						if (skills2[j] === "daiyan") {
+							list.add(name);
+							if (!map[name]) map[name] = [];
+							map[name].push(skills2[j]);
+							skills.add(skills2[j]);
+							continue;
+						} else if (skills2[j] === "junbing") {
 							list.add(name);
 							if (!map[name]) map[name] = [];
 							map[name].push(skills2[j]);
@@ -1479,7 +1488,7 @@ const skills = {
 				lib.skill.taffydc_pingjian.initList();
 			}
 			var allList = [
-				"caoying",
+				// "caoying", // 凌人被删，想你了牢婴
 				"zhangxingcai",
 				"dianwei",
 				"re_yuanshao",
@@ -1492,9 +1501,9 @@ const skills = {
 				"taishici",
 				"liuchen",
 				"huaman",
-				"dc_wangyun",
+				"dc_wangyun", // 技能描述好像有点不对，但是无名杀暂时没有完全一致的
 				"re_zhangyi",
-				"dingfeng",
+				"dingfeng", // 桶面的原画师国战版本的，但是无名杀没有找到国战版本的丁奉
 				"pangtong",
 				"dongzhuo",
 				"re_sunluban",
@@ -1558,6 +1567,10 @@ const skills = {
 				"dc_chenqun",
 				"tongyuan",
 				"re_chendeng",
+				"zhugeruoxue",
+				"dc_sunchen",
+				"re_hansui",
+				"gaoxiang",
 			];
 			allList.randomSort();
 			for (var i = 0; i < allList.length; i++) {
@@ -1573,6 +1586,16 @@ const skills = {
 						skills.add("jianyan");
 						continue;
 					}
+          if (skills2[j] === "nzry_feijun") {
+						list.add(name);
+						if (!map[name]) map[name] = [];
+						map[name].push("nzry_feijun");
+						skills.add("nzry_feijun");
+						continue;
+					}
+          if (["rejijiang", "kanpo", "jijiu", "spniluan", "qinwang", "aocai"].includes(skills2[j])) {
+            continue;
+          }
 					if (get.is.locked(skills2[j], player)) continue;
 					var info = lib.translate[skills2[j] + "_info"];
 					if (skills.includes(skills2[j]) || (info && info.indexOf("当你于出牌阶段") != -1 && info.indexOf("当你于出牌阶段外") == -1) || skills2[j] === "lijian" || skills2[j] === "xinmieji" || skills2[j] === "songci" || skills2[j] === "quji" || skills2[j] === "rechanhui" || skills2[j] === "xinkuangfu" || skills2[j] === "zhijian" || skills2[j] === "chaofeng" || skills2[j] === "quhu" || skills2[j] === "xinfu_lveming") {
@@ -9216,6 +9239,144 @@ const skills = {
 			order: 12,
 			result: {
 				player: 1,
+			},
+		},
+	},
+	// 旧滕公主
+	taffyold_xingchong: {
+		audio: "xingchong",
+		trigger: { global: "roundStart" },
+		direct: true,
+		filter: function (event, player) {
+			return player.maxHp > 0;
+		},
+		content: function () {
+			"step 0";
+			var list = [];
+			for (var i = 0; i <= player.maxHp; i++) {
+				list.push(get.cnNumber(i) + "张");
+			}
+			list.push("cancel2");
+			player
+				.chooseControl(list)
+				.set("prompt", get.prompt("taffyold_xingchong"))
+				.set("prompt2", "请首先选择摸牌的张数")
+				.set("ai", function () {
+					var player = _status.event.player,
+						num1 = player.maxHp,
+						num2 = player.countCards("h");
+					if (num1 <= num2) return 0;
+					return Math.ceil((num1 - num2) / 2);
+				});
+			("step 1");
+			if (result.control != "cancel2") {
+				player.logSkill("taffyold_xingchong");
+				var num2 = result.index;
+				if (num2 > 0) player.draw(num2);
+				var num = player.maxHp - num2;
+				if (num == 0) event.finish();
+				else event.num = num;
+			} else event.finish();
+			("step 2");
+			if (player.countCards("h") > 0) {
+				player.chooseCard("h", [1, Math.min(player.countCards("h"), event.num)], "请选择要展示的牌").set("ai", () => 1 + Math.random());
+			} else event.finish();
+			("step 3");
+			if (result.bool) {
+				var cards = result.cards;
+				player.showCards(cards, get.translation(player) + "发动了【幸宠】");
+				player.addGaintag(cards, "taffyold_xingchong");
+				player.addTempSkill("taffyold_xingchong_effect", "roundStart");
+			}
+		},
+		subSkill: {
+			effect: {
+				audio: "taffyold_xingchong",
+				trigger: {
+					player: ["loseAfter"],
+					global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+				},
+				filter: function (event, player) {
+					var evt = event.getl(player);
+					if (!evt || !evt.cards2 || !evt.cards2.length) return false;
+					if (event.name == "lose") {
+						for (var i in event.gaintag_map) {
+							if (event.gaintag_map[i].includes("taffyold_xingchong")) return true;
+						}
+						return false;
+					}
+					return player.hasHistory("lose", function (evt) {
+						if (event != evt.getParent()) return false;
+						for (var i in evt.gaintag_map) {
+							if (evt.gaintag_map[i].includes("taffyold_xingchong")) return true;
+						}
+						return false;
+					});
+				},
+				forced: true,
+				popup: false,
+				charlotte: true,
+				onremove: function (player) {
+					player.removeGaintag("taffyold_xingchong");
+				},
+				content: function () {
+					"step 0";
+					if (trigger.delay === false) game.delayx();
+					("step 1");
+					player.logSkill("taffyold_xingchong_effect");
+					var num = 0;
+					if (trigger.name == "lose") {
+						for (var i in trigger.gaintag_map) {
+							if (trigger.gaintag_map[i].includes("taffyold_xingchong")) num++;
+						}
+					} else
+						player.getHistory("lose", function (evt) {
+							if (trigger != evt.getParent()) return false;
+							for (var i in evt.gaintag_map) {
+								if (evt.gaintag_map[i].includes("taffyold_xingchong")) num++;
+							}
+						});
+					player.draw(2 * num);
+				},
+			},
+		},
+	},
+	taffyold_liunian: {
+		audio: "liunian",
+		trigger: { global: "phaseEnd" },
+		forced: true,
+		filter: function (event, player) {
+			return game.hasGlobalHistory("cardMove", function (evt) {
+				return evt.washCard && evt.shuffleNumber == 1;
+			});
+		},
+		content: function () {
+			"step 0";
+			if (
+				game.hasGlobalHistory("cardMove", function (evt) {
+					return evt.washCard && evt.shuffleNumber == 1;
+				})
+			) {
+				player.loseMaxHp();
+				if (player.maxHp > player.hp) player.recover(player.maxHp - player.hp);
+				game.delayx();
+			} else event.finish();
+			("step 1");
+			player.addSkill("taffyold_liunian_effect");
+			player.addMark("taffyold_liunian_effect", 10, false);
+		},
+		subSkill: {
+			effect: {
+				charlotte: true,
+				mod: {
+					maxHandcard: function (player, num) {
+						return num + player.countMark("taffyold_liunian_effect");
+					},
+				},
+				marktext: "年",
+				intro: {
+					content: "手牌上限+#",
+				},
 			},
 		},
 	},

@@ -1,8 +1,8 @@
 # noname
 ## 简介
 
-- 本仓库为基于[adeFuLoDgu](https://github.com/adeFuLoDgu)的h5无名杀仓库自改的Web端无名杀
-- [本体仓库](https://github.com/libccy/noname)或者[adeFuLoDgu仓库](https://github.com/adeFuLoDgu/noname)有更新会基本保持同步更新
+- 本仓库为基于 [adeFuLoDgu](https://github.com/adeFuLoDgu) 的h5无名杀仓库自改的 Web 端无名杀
+- [本体仓库](https://github.com/libccy/noname) 或者 [adeFuLoDgu仓库](https://github.com/adeFuLoDgu/noname) 有更新会基本保持同步更新
 - 除此之外自己也会随缘更一些好玩的东西~
 
 ## 项目本体版本
@@ -58,21 +58,42 @@
     - 旧神华佗：初版爆料的神华佗
     - 旧神许褚：未通渠的神许褚
     - 会玩的许劭：自制武将（可选择指定时机的神许劭）
+    - 旧滕公主：未通渠的滕公主
 - 本体乱斗模式添加了轮回七阴模式
+- 引入来自 [noname-server](https://github.com/nonameShijian/noname-server) 的 `index.js`，用于启动 Web 端文件读写服务
 
 ## 启动方法
 
-- 下载/克隆仓库到本地，用终端打开项目根目录后输入`node index.js`后即可游玩（支持文件读写）
-- 部署仓库至自己的服务器后即可在线游玩（同时部署仓库根目录的`index.js`后可支持文件读写）
+- 安装 `Node.js` 后，下载/克隆仓库到本地，用终端打开项目根目录后，输入如下命令后即可游玩（支持文件读写）
+
+  ```
+  npm install body-parser express minimist
+  node index.js
+  ```
+
+  之后再启动只需输入 `node index.js` 即可游玩
+
+  启动联机服务：
+
+  ```
+  cd game
+  node server.js
+  ```
+
+- 部署仓库至自己的服务器后即可在线游玩
+
+- 通过 `VSCode` 的 `Live-Server` 插件启动 `index.html`（不支持文件读写，部分扩展可能不兼容）
+
+- 双击 `index.html` 进行游玩（不推荐，无法引入扩展）
 
 ## 游玩环境
 
-- PC端游玩推荐使用Chromium内核的浏览器（Edge、Chrome等等）
-- 安卓端游玩推荐使用支持原生WebView的浏览器
+- PC端游玩推荐使用 Chromium 内核的浏览器（Edge、Chrome 等）
+- 安卓端游玩推荐使用支持原生 WebView 的浏览器
 
 ## 已知问题
 
-- 皮肤切换扩展报错`Cannot read properties of undefined (reading 'chuchang')`（解决方法：菜单 -> 选项 -> 其他 -> 重置游戏设置）
+- 皮肤切换扩展报错 `Cannot read properties of undefined (reading 'chuchang')`（解决方法：菜单 -> 选项 -> 其他 -> 重置游戏设置）
 
 ## 在线部署地址
 

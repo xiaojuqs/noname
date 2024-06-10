@@ -5135,6 +5135,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		dc_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
 		taffyold_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
 
+    // 滕公主
+		taffyold_tenggongzhu: decadeUI.dynamicSkin.tenggongzhu,
+
 		// 王元姬
 		jin_wangyuanji: decadeUI.dynamicSkin.wangyuanji,
 

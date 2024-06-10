@@ -41,6 +41,7 @@ export const characterPackFunc = function () {
 				taffyold_wu_guanyu: "#gViridian",
 				taffyold_dc_shen_huatuo: "#gViridian",
 				taffyshen_xushao: "#gViridian",
+        taffyold_tenggongzhu: "#gViridian",
 			},
 			dynamicTranslate: { ...dynamicTranslates },
 			characterIntro: { ...characterIntros },
