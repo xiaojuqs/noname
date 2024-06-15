@@ -97,7 +97,7 @@ const skills = {
 						if (skills.includes(skills2[j])) {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							continue;
 						}
@@ -125,7 +125,7 @@ const skills = {
 									}
 									list.add(name);
 									if (!map[name]) map[name] = [];
-									map[name].push(skills2[j]);
+									map[name].add(skills2[j]);
 									skills.add(skills2[j]);
 									break;
 								}
@@ -142,7 +142,7 @@ const skills = {
 									}
 									list.add(name);
 									if (!map[name]) map[name] = [];
-									map[name].push(skills2[j]);
+									map[name].add(skills2[j]);
 									skills.add(skills2[j]);
 									break;
 								}
@@ -423,7 +423,7 @@ const skills = {
 								if (skills.includes(skills2[j]) || lib.skill.taffyboss_pingjian.phaseUse_special.includes(skills2[j])) {
 									list.add(name);
 									if (!map[name]) map[name] = [];
-									map[name].push(skills2[j]);
+									map[name].add(skills2[j]);
 									skills.add(skills2[j]);
 									continue;
 								}
@@ -434,7 +434,7 @@ const skills = {
 									if (!info) continue;
 									list.add(name);
 									if (!map[name]) map[name] = [];
-									map[name].push(skills2[j]);
+									map[name].add(skills2[j]);
 									skills.add(skills2[j]);
 									break;
 								}
@@ -1398,7 +1398,7 @@ const skills = {
 					if (skills.includes(skills2[j])) {
 						list.add(name);
 						if (!map[name]) map[name] = [];
-						map[name].push(skills2[j]);
+						map[name].add(skills2[j]);
 						skills.add(skills2[j]);
 						continue;
 					}
@@ -1406,7 +1406,7 @@ const skills = {
 						if (skills2[j] === "xinyaoming") {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							continue;
 						} else if (skills2[j] === "xinfu_zhenxing") {
@@ -1416,13 +1416,13 @@ const skills = {
 						if (skills2[j] === "daiyan") {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							continue;
 						} else if (skills2[j] === "junbing") {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							continue;
 						} else if (skills2[j] === "oljuanxia") {
@@ -1447,7 +1447,7 @@ const skills = {
 							}
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							break;
 						}
@@ -1582,33 +1582,33 @@ const skills = {
 					if (skills2[j] === "qianxin") {
 						list.add(name);
 						if (!map[name]) map[name] = [];
-						map[name].push("jianyan");
+						map[name].add("jianyan");
 						skills.add("jianyan");
 						continue;
 					}
-          if (skills2[j] === "nzry_feijun") {
+					if (skills2[j] === "nzry_feijun") {
 						list.add(name);
 						if (!map[name]) map[name] = [];
-						map[name].push("nzry_feijun");
+						map[name].add("nzry_feijun");
 						skills.add("nzry_feijun");
 						continue;
 					}
-          if (["rejijiang", "kanpo", "jijiu", "spniluan", "qinwang", "aocai"].includes(skills2[j])) {
-            continue;
-          }
+					if (["rejijiang", "kanpo", "jijiu", "spniluan", "qinwang", "aocai"].includes(skills2[j])) {
+						continue;
+					}
 					if (get.is.locked(skills2[j], player)) continue;
 					var info = lib.translate[skills2[j] + "_info"];
 					if (skills.includes(skills2[j]) || (info && info.indexOf("当你于出牌阶段") != -1 && info.indexOf("当你于出牌阶段外") == -1) || skills2[j] === "lijian" || skills2[j] === "xinmieji" || skills2[j] === "songci" || skills2[j] === "quji" || skills2[j] === "rechanhui" || skills2[j] === "xinkuangfu" || skills2[j] === "zhijian" || skills2[j] === "chaofeng" || skills2[j] === "quhu" || skills2[j] === "xinfu_lveming") {
 						list.add(name);
 						if (!map[name]) map[name] = [];
-						map[name].push(skills2[j]);
+						map[name].add(skills2[j]);
 						skills.add(skills2[j]);
 						continue;
 					}
 					if (skills2[j] === "olshanxi") {
 						list.add(name);
 						if (!map[name]) map[name] = [];
-						map[name].push("shanxi");
+						map[name].add("shanxi");
 						skills.add("shanxi");
 						continue;
 					}
@@ -1616,7 +1616,7 @@ const skills = {
 						if (name === "dc_jsp_guanyu") {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push("dcnuchen");
+							map[name].add("dcnuchen");
 							skills.add("dcnuchen");
 							continue;
 						} else {
@@ -1648,7 +1648,7 @@ const skills = {
 							}
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							break;
 						}
@@ -1964,7 +1964,7 @@ const skills = {
 						if (skills.includes(skills2[j])) {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							continue;
 						}
@@ -1988,7 +1988,7 @@ const skills = {
 									}
 									list.add(name);
 									if (!map[name]) map[name] = [];
-									map[name].push(skills2[j]);
+									map[name].add(skills2[j]);
 									skills.add(skills2[j]);
 									break;
 								}
@@ -2005,7 +2005,7 @@ const skills = {
 									}
 									list.add(name);
 									if (!map[name]) map[name] = [];
-									map[name].push(skills2[j]);
+									map[name].add(skills2[j]);
 									skills.add(skills2[j]);
 									break;
 								}
@@ -2038,7 +2038,7 @@ const skills = {
 							if (skills.includes(skills2[j])) {
 								list.add(name);
 								if (!map[name]) map[name] = [];
-								map[name].push(skills2[j]);
+								map[name].add(skills2[j]);
 								skills.add(skills2[j]);
 								continue;
 							}
@@ -2062,7 +2062,7 @@ const skills = {
 										}
 										list.add(name);
 										if (!map[name]) map[name] = [];
-										map[name].push(skills2[j]);
+										map[name].add(skills2[j]);
 										skills.add(skills2[j]);
 										break;
 									}
@@ -2079,7 +2079,7 @@ const skills = {
 										}
 										list.add(name);
 										if (!map[name]) map[name] = [];
-										map[name].push(skills2[j]);
+										map[name].add(skills2[j]);
 										skills.add(skills2[j]);
 										break;
 									}
@@ -2329,7 +2329,7 @@ const skills = {
 						if (name3.length !== 0) {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							continue;
 						}
@@ -2337,7 +2337,7 @@ const skills = {
 						if (skills.includes(skills2[j]) || ((name2.includes("phaseUseEnd") || name3.includes("phaseUseEnd")) && info && info.indexOf("当你于出牌阶段") != -1 && info.indexOf("当你于出牌阶段外") == -1)) {
 							list.add(name);
 							if (!map[name]) map[name] = [];
-							map[name].push(skills2[j]);
+							map[name].add(skills2[j]);
 							skills.add(skills2[j]);
 							continue;
 						}
@@ -2349,7 +2349,7 @@ const skills = {
 								if (!info) continue;
 								list.add(name);
 								if (!map[name]) map[name] = [];
-								map[name].push(skills2[j]);
+								map[name].add(skills2[j]);
 								skills.add(skills2[j]);
 								break;
 							}
@@ -2376,7 +2376,7 @@ const skills = {
 									}
 									list.add(name);
 									if (!map[name]) map[name] = [];
-									map[name].push(skills2[j]);
+									map[name].add(skills2[j]);
 									skills.add(skills2[j]);
 									break;
 								}
@@ -2393,7 +2393,7 @@ const skills = {
 										}
 										list.add(name);
 										if (!map[name]) map[name] = [];
-										map[name].push(skills2[j]);
+										map[name].add(skills2[j]);
 										skills.add(skills2[j]);
 										break;
 									}
@@ -2410,7 +2410,7 @@ const skills = {
 										}
 										list.add(name);
 										if (!map[name]) map[name] = [];
-										map[name].push(skills2[j]);
+										map[name].add(skills2[j]);
 										skills.add(skills2[j]);
 										break;
 									}
@@ -2445,7 +2445,7 @@ const skills = {
 							if (name3.length !== 0) {
 								list.add(name);
 								if (!map[name]) map[name] = [];
-								map[name].push(skills2[j]);
+								map[name].add(skills2[j]);
 								skills.add(skills2[j]);
 								continue;
 							}
@@ -2453,7 +2453,7 @@ const skills = {
 							if (skills.includes(skills2[j]) || ((name2.includes("phaseUseEnd") || name3.includes("phaseUseEnd")) && info && info.indexOf("当你于出牌阶段") != -1 && info.indexOf("当你于出牌阶段外") == -1)) {
 								list.add(name);
 								if (!map[name]) map[name] = [];
-								map[name].push(skills2[j]);
+								map[name].add(skills2[j]);
 								skills.add(skills2[j]);
 								continue;
 							}
@@ -2484,7 +2484,7 @@ const skills = {
 										}
 										list.add(name);
 										if (!map[name]) map[name] = [];
-										map[name].push(skills2[j]);
+										map[name].add(skills2[j]);
 										skills.add(skills2[j]);
 										break;
 									}
@@ -2501,7 +2501,7 @@ const skills = {
 											}
 											list.add(name);
 											if (!map[name]) map[name] = [];
-											map[name].push(skills2[j]);
+											map[name].add(skills2[j]);
 											skills.add(skills2[j]);
 											break;
 										}
@@ -2518,7 +2518,7 @@ const skills = {
 											}
 											list.add(name);
 											if (!map[name]) map[name] = [];
-											map[name].push(skills2[j]);
+											map[name].add(skills2[j]);
 											skills.add(skills2[j]);
 											break;
 										}
@@ -5739,6 +5739,8 @@ const skills = {
 					var list = [];
 					var skills = [];
 					var map = [];
+					let guaranteeList = [];
+					let set = [];
 					allList.randomSort();
 					for (let i = 0; i < allList.length; i++) {
 						var name = allList[i];
@@ -5758,19 +5760,65 @@ const skills = {
 								skills.add(skills2[j]);
 								continue;
 							}
+							var info = lib.translate[skills2[j] + "_info"];
+							if (info && info.indexOf("当你于出牌阶段") != -1 && info.indexOf("当你于出牌阶段外") == -1) {
+								list.add(name);
+								if (!map[name]) map[name] = [];
+								map[name].add(skills2[j]);
+								skills.add(skills2[j]);
+								guaranteeList.add(name);
+								continue;
+							}
 							var list2 = [skills2[j]];
 							game.expandSkills(list2);
 							for (let k = 0; k < list2.length; k++) {
 								var info = lib.skill[list2[k]];
+								// 先把所有技能都加到list里面
 								if (!info) continue;
 								list.add(name);
 								if (!map[name]) map[name] = [];
-								map[name].push(skills2[j]);
+								map[name].add(skills2[j]);
 								skills.add(skills2[j]);
+								// 再进行保底武将牌名的添加
+								if (info.enable) {
+									if (info.enable == "phaseUse" || (Array.isArray(info.enable) && info.enable.includes("phaseUse")) || info.enable == "chooseToUse" || (Array.isArray(info.enable) && info.enable.includes("chooseToUse"))) {
+										if (info.filter) {
+											try {
+												var bool = info.filter(evt, player);
+												if (!bool) continue;
+											} catch (e) {
+												continue;
+											}
+										} else if (info.viewAs && typeof info.viewAs != "function") {
+											try {
+												if (evt.filterCard && !evt.filterCard(info.viewAs, player, evt)) continue;
+												if (info.viewAsFilter && info.viewAsFilter(player) == false) continue;
+											} catch (e) {
+												continue;
+											}
+										}
+										guaranteeList.add(name);
+									}
+								}
 								break;
 							}
 						}
-						if (list.length >= 2 * (result.links.length + player.storage.taffyre_pingjianX) + 1) break;
+						if (list.length >= 2 * (result.links.length + player.storage.taffyre_pingjianX) + 1 && guaranteeList.length >= 1) {
+							set = new Set([...guaranteeList.randomGets(1)]);
+							break;
+						}
+					}
+					// 遍历完后对抽到的武将牌与技能进行排序处理
+					for (let i of list) {
+						if (set.size >= 2 * (result.links.length + player.storage.taffyre_pingjianX) + 1) {
+							break;
+						}
+						set.add(i);
+					}
+					list = [...set];
+					skills = [];
+					for (let i of list) {
+						skills.push(...map[i]);
 					}
 					if (skills.length) {
 						event.list = list;
@@ -9042,12 +9090,20 @@ const skills = {
 								skills.add(skills2[j]);
 								continue;
 							}
-							var info = lib.translate[skills2[j] + "_info"];
-							if (skills.includes(skills2[j]) || ((name2.includes("phaseUseEnd") || name3.includes("phaseUseEnd")) && info && info.indexOf("当你于出牌阶段") != -1 && info.indexOf("当你于出牌阶段外") == -1)) {
+							if (skills.includes(skills2[j]) || lib.skill.taffyshen_pingjian.phaseUse_special.includes(skills2[j])) {
 								list.add(name);
 								if (!map[name]) map[name] = [];
 								map[name].add(skills2[j]);
 								skills.add(skills2[j]);
+								continue;
+							}
+							var info = lib.translate[skills2[j] + "_info"];
+							if (info && info.indexOf("当你于出牌阶段") != -1 && info.indexOf("当你于出牌阶段外") == -1) {
+								list.add(name);
+								if (!map[name]) map[name] = [];
+								map[name].add(skills2[j]);
+								skills.add(skills2[j]);
+								guaranteeList1.add(name);
 								continue;
 							}
 							var list2 = [skills2[j]];
@@ -9079,6 +9135,7 @@ const skills = {
 											}
 										}
 										guaranteeList1.add(name);
+										break;
 									}
 								} else if (info.trigger) {
 									if (info.trigger.player) {
