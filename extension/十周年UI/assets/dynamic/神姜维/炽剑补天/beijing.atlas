@@ -1,0 +1,153 @@
+
+beijing.png
+size: 1956,1380
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dj_bg_yuan_0
+  rotate: true
+  xy: 1768, 502
+  size: 269, 163
+  orig: 270, 163
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_1
+  rotate: true
+  xy: 1841, 214
+  size: 203, 84
+  orig: 203, 84
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_10
+  rotate: false
+  xy: 1328, 925
+  size: 550, 221
+  orig: 550, 221
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_11
+  rotate: true
+  xy: 1880, 1046
+  size: 100, 74
+  orig: 100, 74
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_12
+  rotate: false
+  xy: 1768, 419
+  size: 181, 81
+  orig: 181, 81
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_13
+  rotate: false
+  xy: 1328, 719
+  size: 119, 38
+  orig: 119, 38
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_14
+  rotate: false
+  xy: 2, 29
+  size: 946, 285
+  orig: 946, 285
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_15
+  rotate: false
+  xy: 1328, 759
+  size: 403, 164
+  orig: 404, 164
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_16
+  rotate: false
+  xy: 1328, 1148
+  size: 626, 230
+  orig: 627, 231
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_17
+  rotate: true
+  xy: 1656, 458
+  size: 299, 110
+  orig: 299, 111
+  offset: 0, 1
+  index: -1
+dj_bg_yuan_18
+  rotate: true
+  xy: 1699, 166
+  size: 251, 140
+  orig: 251, 140
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_19
+  rotate: false
+  xy: 950, 2
+  size: 747, 341
+  orig: 747, 341
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_2
+  rotate: true
+  xy: 1884, 815
+  size: 125, 55
+  orig: 126, 56
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_20
+  rotate: false
+  xy: 2, 716
+  size: 1324, 662
+  orig: 1325, 663
+  offset: 0, 1
+  index: -1
+dj_bg_yuan_3
+  rotate: false
+  xy: 1699, 88
+  size: 130, 76
+  orig: 132, 77
+  offset: 1, 0
+  index: -1
+dj_bg_yuan_4
+  rotate: false
+  xy: 1699, 15
+  size: 128, 71
+  orig: 136, 72
+  offset: 7, 0
+  index: -1
+dj_bg_yuan_5
+  rotate: true
+  xy: 1733, 773
+  size: 150, 149
+  orig: 150, 150
+  offset: 0, 1
+  index: -1
+dj_bg_yuan_6
+  rotate: false
+  xy: 878, 345
+  size: 776, 369
+  orig: 777, 369
+  offset: 1, 0
+  index: -1
+dj_bg_yuan_7
+  rotate: true
+  xy: 1880, 942
+  size: 102, 62
+  orig: 102, 62
+  offset: 0, 0
+  index: -1
+dj_bg_yuan_8
+  rotate: false
+  xy: 2, 316
+  size: 874, 398
+  orig: 874, 401
+  offset: 0, 3
+  index: -1
+dj_bg_yuan_9
+  rotate: false
+  xy: 1841, 158
+  size: 91, 54
+  orig: 91, 54
+  offset: 0, 0
+  index: -1

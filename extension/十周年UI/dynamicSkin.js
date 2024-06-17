@@ -2390,6 +2390,56 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		shen_jiangwei: {
+			// 神姜维
+			炽剑补天: {
+				name: "神姜维/炽剑补天/daiji2",
+				play2: "play2",
+				shan: "play3",
+				x: [0, 0.5],
+				y: [0, 0.5],
+				scale: 0.75,
+				angle: 0,
+				// speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: "神姜维/炽剑补天/chuchang",
+					action: "play",
+					scale: 0.9,
+				},
+				gongji: {
+					name: "神姜维/炽剑补天/chuchang2",
+					action: "gongji",
+					scale: 0.7,
+				},
+				teshu: {
+					name: "神姜维/炽剑补天/chuchang2",
+					action: "jineng",
+					scale: 0.7,
+				},
+				beijing: {
+					name: "神姜维/炽剑补天/beijing",
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				audio: {
+					skill: "神姜维/炽剑补天/audio",
+				},
+				zhishixian: {
+					name: "神姜维/炽剑补天/shouji2",
+					scale: 0.5,
+					speed: 1.2,
+					delay: 0.3,
+					effect: {
+						name: "神姜维/炽剑补天/shouji",
+						scale: 0.6,
+						speed: 0.6,
+						delay: 0.7,
+					},
+				},
+			},
+		},
 		shen_lvmeng: {
 			// 神吕蒙
 			兼资文武: {
@@ -2627,7 +2677,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		shen_zhangjiao: {
 			// 神张角
-			傲睨山河: {
+			驭道震泽: {
 				name: "神张角/驭道震泽/daiji2",
 				play2: "play2",
 				shan: "play3",
