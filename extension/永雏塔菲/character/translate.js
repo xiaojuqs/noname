@@ -276,6 +276,7 @@ const translates = {
   taffyold_xingchong_info: "一轮游戏开始时，你可声明两个自然数X和Y，且(X+Y)≤你的体力上限。你摸X张牌并展示Y张手牌。若如此做，当你于本轮内失去一张以此法展示的牌后，你摸两张牌。",
   taffyold_liunian: "流年",
   taffyold_liunian_info: "锁定技。一名角色的回合结束时，若本回合内进行了本次游戏的第一次洗牌，则你减1点体力上限并回复体力至上限，且本局游戏内的手牌上限+10。",
+  hoshino: "小鸟游星野",
 	aruijier: "瑞吉儿",
 };
 

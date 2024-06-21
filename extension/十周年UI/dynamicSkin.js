@@ -3501,30 +3501,44 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
-		// wu_guanyu: { // 武关羽
-		// 	经典形象: {
-		// 		name: '武关羽/义武春秋/zhujiemian_wuguanyu1',
-		//    teshu: 'play2',
-		// 		x: [0, 1.45],
-		// 		y: [0, 0.35],
-		// 		scale: 0.5,
-		// 		angle: 0,
-		// 		shizhounian: true,
-		// 		speed: 1,
-		// 		background: "武关羽/义武春秋/beijing.png",
-		// 		chuchang: {
-		// 			name: '武关羽/义武春秋/zhujiemian_wuguanyu1',
-		// 			action: 'play2',
-		// 			scale: 0.5,
-		// 		},
-		// 		gongji: {
-		// 			name: '武关羽/义武春秋/zhujiemian_wuguanyu1',
-		// 			action: ['play2'],
-		// 			scale: 0.5,
-		// 			speed: 1.5,
-		// 		},
-		// 	},
-		// },
+		wu_guanyu: {
+			// 武关羽
+			经典形象: {
+				name: "武关羽/经典形象/zhujiemian_wuguanyu1",
+				teshu: {
+					name: "武关羽/经典形象/zhujiemian_wuguanyu1",
+					action: "play",
+					scale: 0.5,
+					showTime: 2,
+				},
+				x: [0, 1.2],
+				y: [0, 0.2],
+				scale: 0.5,
+				angle: 0,
+				shizhounian: true,
+				speed: 1,
+				background: "武关羽/经典形象/beijing.png",
+				chuchang: {
+					name: "武关羽/经典形象/zhujiemian_wuguanyu1",
+					action: "play",
+					scale: 0.5,
+					showTime: 2,
+				},
+				gongji: {
+					name: "武关羽/经典形象/zhujiemian_wuguanyu1",
+					action: ["play"],
+					scale: 0.5,
+					showTime: 2,
+				},
+				beijing: {
+					name: "武关羽/经典形象/zhujiemian_wuguanyu2",
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.4,
+				},
+				version: "4.0",
+			},
+		},
 		wu_luxun: {
 			// 武陆逊
 			经典形象: {
@@ -4968,7 +4982,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				x: [0, 0.98],
 				y: [0, 0.03],
 				scale: 0.78,
-				angle: 20,
+				angle: 0,
 				// speed: 1,
 				// action: 'DaiJi',
 				beijing: {
@@ -4977,6 +4991,31 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					x: [0, 0.4],
 					y: [0, 0.5],
 				},
+			},
+		},
+		hoshino: {
+			// 小鸟游星野
+			静态泳装: {
+				name: "小鸟游星野/静态泳装/hoshino_swimsuit_spr",
+				x: [0, 0.5],
+				y: [0, 0],
+				scale: 0.15,
+				angle: 0,
+				action: "Idle_01",
+				background: "小鸟游星野/静态泳装/BG_IslandBeach.png",
+				version: "3.8",
+				alpha: false,
+			},
+			动态泳装: {
+				name: "小鸟游星野/动态泳装/Hoshino_swimsuit_home",
+				x: [0, 0.1],
+				y: [0, 0],
+				scale: 0.1,
+				angle: 0,
+				action: "Idle_01",
+				background: "小鸟游星野/静态泳装/BG_IslandBeach.png",
+				version: "3.8",
+				alpha: false,
 			},
 		},
 	};
@@ -5185,7 +5224,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		dc_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
 		taffyold_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
 
-    // 滕公主
+		// 滕公主
 		taffyold_tenggongzhu: decadeUI.dynamicSkin.tenggongzhu,
 
 		// 王元姬

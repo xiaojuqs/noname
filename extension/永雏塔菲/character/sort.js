@@ -8,6 +8,7 @@ const characterSort = {
 	taffy_tang: ["acetaffy", "minitaffy"],
 	taffy_gzz: ["junko"],
 	taffy_wu: ["taffyhuiwan_sunquan", "taffyhuiwanplus_sunquan"],
+  taffy_ba: ["hoshino"],
 };
 
 const characterSortTranslate = {
@@ -20,6 +21,7 @@ const characterSortTranslate = {
 	taffy_tang: "东瀛·唐氏",
 	taffy_gzz: "东方·绀珠传",
 	taffy_wu: "东吴·超玩会",
+  taffy_ba: "蔚蓝·档案",
 };
 
 export { characterSort, characterSortTranslate };

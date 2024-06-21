@@ -38,6 +38,7 @@ const characters = {
 	taffyold_shen_xuzhu: ["male", "shen", 5, ["taffyold_zhengqing", "zhuangpo"], ["wei", "character:shen_xuzhu", "die_audio:shen_xuzhu"]],
 	taffyshen_xushao: ["male", "shen", 3, ["taffyshen_pingjian"], ["qun"]],
   taffyold_tenggongzhu: ["female", "wu", 4, ["taffyold_xingchong", "taffyold_liunian"], ["character:tenggongzhu", "die_audio:tenggongzhu"]],
+  hoshino: ["female", "shen", 3, [], ["unseen"]],
 	aruijier: ["female", "shen", "", [], ["unseen"]],
 };
 
