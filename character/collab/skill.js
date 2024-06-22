@@ -1526,7 +1526,7 @@ const skills = {
 		selectCard: 2,
 		complexCard: true,
 		prompt: "弃置两张颜色不同的牌并改变天气",
-		check: card => 4.5 - get.value(card),
+		check: card => 11 - get.value(card),
 		async content(event, trigger, player) {
 			var list = ["烈日", "雷电", "大浪", "暴雨", "大雾"].randomGets(2);
 			const result = await player

@@ -1338,12 +1338,17 @@ const skills = {
 				audio: "sbxingshang",
 				enable: "phaseUse",
 				filter(event, player) {
+					//改方式限制每回合使用兩次
+					if (typeof get.skillCount("sbxingshang") == "number" && get.skillCount("sbxingshang") >= 2) return false;
 					return game.hasPlayer(target => {
 						if (player.countMark("sbxingshang") > 1) return true;
 						return player.countMark("sbxingshang") && (target.isLinked() || target.isTurnedOver());
 					});
 				},
-				usable: 2,
+				//group下的subSkill下的技能的usable不會計數。
+				//原因："計數技能名" 和 "group下的subSkill下的技能名" 不同。
+				//就本技能錯誤，計數函數名為sbxingshang，不是sbxingshang_use。
+				//usable: 2,
 				chooseButton: {
 					dialog() {
 						var dialog = ui.create.dialog("行殇：请选择你要执行的一项", "hidden");
