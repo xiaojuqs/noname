@@ -4903,6 +4903,10 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   for(let arg of arguments){  //将参数拼接成一个字符串，方便查找映射
                                       if(typeof arg == 'string' || typeof arg == 'number'){
                                           string = string+"/"+arg;
+                                      // taffy: 修复皮肤语音失效的问题喵
+                                      } else if (get.objtype(arg) === "object") {
+                                          string = string + "/" + arg.path;
+                                      // taffy分界线
                                       }else{
                                           others.push(arg);
                                       }
@@ -4989,6 +4993,11 @@ game.import("extension",function(lib,game,ui,get,ai,_status) {
                                   }
                                   console.log('string...', string)
                                   if(replace.length){
+                                      // taffy: 修复皮肤语音失效的问题喵
+                                      if (replace.split('.').length > 1) {
+                                        replace = replace.substring(0, replace.lastIndexOf("."))  //截取文件名
+                                      }
+                                      // taffy分界线
                                       let rp = skinSwitch.audioMap[replace];
                                       if(rp){
                                           //如果存在映射，用映射的路径替换原有的路径，并调用原来的音频播放函数，以达到替换配音的效果。
