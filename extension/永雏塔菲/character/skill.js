@@ -9437,6 +9437,158 @@ const skills = {
 			},
 		},
 	},
+	// 大叔
+	hoshino_zhenya: {},
+	hoshino_jijiu: {},
+	hoshino_huizhang: {
+		trigger: { player: "damageBegin4" },
+		forced: true,
+		audio: 2,
+		filter: function (event, player) {
+			if (event.num <= 1) return false;
+			return true;
+		},
+		content: function () {
+			trigger.num = 1;
+		},
+		ai: {
+			filterDamage: true,
+			skillTagFilter: function (player, tag, arg) {
+				if (arg && arg.player) {
+					if (arg.player.hasSkillTag("jueqing", false, player)) return false;
+				}
+			},
+		},
+	},
+	hoshino_shushou: {},
+	// 水大叔
+	hoshino_shuiyuan: {
+		audio: 3,
+		trigger: { player: "phaseUseBegin" },
+		frequent: true,
+		group: "hoshino_shuiyuan_die",
+		content: (event, map) => {
+			"step 0";
+			player
+				.chooseTarget(`水援：移除场上所有“水”标记，并令任意名与你距离小于2的角色获得5个“水”标记`, [0, Infinity], function (card, player, target) {
+					return get.distance(player, target) <= 2;
+				})
+				.set("ai", target => {
+					if (get.attitude(player, target) > 0) {
+						return 1;
+					}
+					return false;
+				});
+			("step 1");
+			if (!result.bool) return event.finish();
+			var clearTargets = game.filterPlayer(current => {
+				return current.countMark("hoshino_shuiyuan_effect") > 0;
+			});
+			player.line(clearTargets);
+			clearTargets.forEach(current => {
+				current.removeSkill("hoshino_shuiyuan_effect");
+				current.removeSkill("hoshino_haile_effect");
+				current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
+			});
+			const targets = result.targets.slice().sortBySeat();
+			player.line(targets);
+			while (targets.length) {
+				const target = targets.shift();
+				if (!target.isIn()) continue;
+				target.addMark("hoshino_shuiyuan_effect", 5, false);
+				target.addSkill("hoshino_shuiyuan_effect");
+				if (player.hasSkill("hoshino_haile")) {
+					target.addSkill("hoshino_haile_effect");
+				}
+			}
+		},
+		subSkill: {
+			effect: {
+				audio: "hoshino_shuiyuan",
+				forced: true,
+				trigger: { source: "damageBegin1" },
+				content: function () {
+					trigger.num = trigger.num * 2;
+				},
+				intro: { content: "造成的伤害翻倍且一名角色的回合结束时移去一个“水”标记并摸一张牌" },
+			},
+			die: {
+				trigger: { player: "die" },
+				filter(event, player) {
+					return game.hasPlayer(current => current.countMark("hoshino_shuiyuan_effect") > 0);
+				},
+				forced: true,
+				locked: false,
+				forceDie: true,
+				content() {
+					var targets = game.filterPlayer(current => {
+						return current.countMark("hoshino_shuiyuan_effect") > 0;
+					});
+					player.line(targets);
+					targets.forEach(current => {
+						current.removeSkill("hoshino_shuiyuan_effect");
+						current.removeSkill("hoshino_haile_effect");
+						current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
+					});
+				},
+			},
+		},
+	},
+	hoshino_shuiji: {
+		audio: 3,
+		enable: "phaseUse",
+		usable: 1,
+		content() {
+			player.chooseUseTarget("shuiyanqijuny", true, 1);
+			player.recover();
+		},
+		ai: {
+			order: 4,
+			result: {
+				player: 1,
+			},
+		},
+	},
+	hoshino_naishu: {
+		trigger: { player: "damageBegin4" },
+		forced: true,
+		audio: 2,
+		filter: function (event, player) {
+			if (event.num <= 1) return false;
+			return true;
+		},
+		content: function () {
+			trigger.num--;
+		},
+		ai: {
+			filterDamage: true,
+			skillTagFilter: function (player, tag, arg) {
+				if (arg && arg.player) {
+					if (arg.player.hasSkillTag("jueqing", false, player)) return false;
+				}
+			},
+		},
+	},
+	hoshino_haile: {
+		audio: 3,
+		forced: true,
+		content: function () {},
+		subSkill: {
+			effect: {
+				audio: "hoshino_haile",
+				trigger: { global: "phaseJieshuBegin" },
+				forced: true,
+				content: () => {
+					player.removeMark("hoshino_shuiyuan_effect", 1);
+					player.draw();
+					if (player.countMark("hoshino_shuiyuan_effect") === 0) {
+						player.removeSkill("hoshino_shuiyuan_effect");
+						player.removeSkill("hoshino_haile_effect");
+					}
+				},
+			},
+		},
+	},
 };
 
 export default skills;

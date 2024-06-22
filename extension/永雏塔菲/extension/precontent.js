@@ -79,9 +79,6 @@ export const PRECONTENT = function (config) {
 			 */
 			getSpan: () => `${get.prefixSpan("欢杀")}${get.prefixSpan("神")}`,
 		});
-		lib.namePrefix.set("面杀", {
-			showName: "面",
-		});
 		lib.namePrefix.set("旧OL", {
 			/**
 			 * @returns {string}
@@ -99,6 +96,11 @@ export const PRECONTENT = function (config) {
 			 * @returns {string}
 			 */
 			getSpan: () => `${get.prefixSpan("旧")}${get.prefixSpan("族")}`,
+		});
+		lib.namePrefix.set("泳装", {
+      color: "#6affe2",
+      nature: "watermm",
+			showName: "水",
 		});
 		characterPackFunc();
 		lib.config.all.characters.splice(21, 0, "taffy_character");

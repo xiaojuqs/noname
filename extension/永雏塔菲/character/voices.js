@@ -35,4 +35,16 @@ export default {
 	"#taffyshendc_dunshi1": "尔之于我若无，我之于世若虚。",
 	"#taffyshendc_dunshi2": "世如浊流，焉能委身自污尔？",
 	"#taffyshendc_guanning:die": "借剑断席，天下无人同我。",
+	"#hoshino_shuiyuan1": "せっかくなんだし～", // 难得有这次机会呢~
+	"#hoshino_shuiyuan2": "ほらほら、そんな固くならないで", // 哎呀哎呀，不要这么僵硬嘛
+	"#hoshino_shuiyuan3": "まあまあ～", // 嘛嘛~
+	"#hoshino_shuiji1": "こ～んなのはどうかな～？", // 这样如何～？
+	"#hoshino_shuiji2": "さーて、次々～", // 好嘞，一个一个来~
+	"#hoshino_shuiji3": "さあ、次へ行こう", // 好，去下一个地方吧
+	"#hoshino_naishu1": "あっつい…暑くて干からびそう…動いていないのに暑いよ～…", // 好热......热得要被晒干了...明明一动不动但还是好热哦~
+	"#hoshino_naishu2": "うーん…そんなにつつかれても、おじさんからは何も出て来ないけど…", // 唔......无论再怎么戳，大叔身上也不会掉出东西哦…
+	"#hoshino_haile1": "もっと気楽に～", // 要更加开心~
+	"#hoshino_haile2": "楽しんで行こう～", // 快乐地出发吧～
+	"#hoshino_haile3": "どう？涼しい～？", // 怎么样？凉快吧？
+	"#swimsuit_hoshino:die": "うへへ、調子に乗りすぎちゃったかな…", // 诶嘿嘿，是我得意过头了吗...
 };

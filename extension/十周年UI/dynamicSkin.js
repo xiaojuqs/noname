@@ -5334,6 +5334,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 左慈
 		re_zuoci: decadeUI.dynamicSkin.zuoci,
+
+    // 大叔
+    swimsuit_hoshino: decadeUI.dynamicSkin.hoshino,
 	};
 	decadeUI.get.extend(decadeUI.dynamicSkin, extend);
 });
