@@ -1483,7 +1483,7 @@ const skills = {
 			}
 		},
 		ai: {
-			halfneg: true,
+			neg: true,
 		},
 	},
 	//蒋济
@@ -6828,9 +6828,9 @@ const skills = {
 				})
 				.set(
 					"damage",
-					get.damageEffect(target, player, player) > 10 &&
+					get.damageEffect(target, player, player) > 0 &&
 						player.countCards("he", card => {
-							return lib.filter.canBeDiscarded(card, player, player) && get.value(card) < 5;
+							return lib.filter.canBeDiscarded(card, player, player) && get.value(card) < 11;
 						}) >= 3
 				);
 			"step 1";
@@ -9697,7 +9697,7 @@ const skills = {
 				charlotte: true,
 				locked: true,
 				skillBlocker: function (skill, player) {
-					return skill != "bazhen" && skill != "dcjiezhen_blocker" && !lib.skill[skill].charlotte && !info.persevereSkill && player.getStorage("dcjiezhen_blocker").includes(skill);
+					return skill != "bazhen" && skill != "dcjiezhen_blocker" && !lib.skill[skill].charlotte && !lib.skill[skill].persevereSkill && player.getStorage("dcjiezhen_blocker").includes(skill);
 				},
 				mark: true,
 				marktext: "阵",

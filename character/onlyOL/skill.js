@@ -14,7 +14,7 @@ const skills = {
 		},
 		async content(event, trigger, player) {
 			const target = event.target;
-			await player.showCards(event.cards, get.translation(player) + "发动了【灭计】");
+			player.$throw(event.cards.length, 1000);
 			const result = await target.chooseToDiscard("he", true).set("prompt", "请弃置一张锦囊牌，或依次弃置两张非锦囊牌。").forResult();
 			if (
 				(!result.cards || get.type(result.cards[0], "trick", result.cards[0].original == "h" ? target : false) != "trick") &&
