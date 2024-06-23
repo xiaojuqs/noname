@@ -9507,10 +9507,13 @@ const skills = {
 				audio: "hoshino_shuiyuan",
 				forced: true,
 				trigger: { source: "damageBegin1" },
+				filter: function (event) {
+					return event.hasNature("fire");
+				},
 				content: function () {
 					trigger.num = trigger.num * 2;
 				},
-				intro: { content: "造成的伤害翻倍且一名角色的回合结束时移去一个“水”标记并摸一张牌" },
+				intro: { content: "造成的火焰伤害翻倍且一名角色的回合结束时移去一个“水”标记并摸一张牌" },
 			},
 			die: {
 				trigger: { player: "die" },
@@ -9539,13 +9542,26 @@ const skills = {
 		enable: "phaseUse",
 		usable: 1,
 		content() {
+      player.recover();
 			player.chooseUseTarget("shuiyanqijuny", true, 1);
-			player.recover();
 		},
+		group: "hoshino_shuiji_effect",
 		ai: {
 			order: 4,
 			result: {
 				player: 1,
+			},
+		},
+		subSkill: {
+			effect: {
+				trigger: { source: "damageBegin1" },
+				forced: true,
+				filter: function (event) {
+					return event.card && event.card.name == "shuiyanqijuny";
+				},
+				content: function () {
+					game.setNature(trigger, "fire");
+				},
 			},
 		},
 	},
@@ -9554,8 +9570,7 @@ const skills = {
 		forced: true,
 		audio: 2,
 		filter: function (event, player) {
-			if (event.num <= 1) return false;
-			return true;
+			return event.num > 1 && event.hasNature("fire");
 		},
 		content: function () {
 			trigger.num--;
