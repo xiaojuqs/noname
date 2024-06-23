@@ -5004,7 +5004,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				action: "Idle_01",
 				background: "小鸟游星野/静态泳装/BG_IslandBeach.png",
 				version: "3.8",
-				alpha: false,
 			},
 			动态泳装: {
 				name: "小鸟游星野/动态泳装/Hoshino_swimsuit_home",
@@ -5013,9 +5012,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				scale: 0.1,
 				angle: 0,
 				action: "Idle_01",
+				ss_jinchang: "Start_Idle_01",
+				gongji: {
+					x: [0, 0.51],
+					y: [0, 0.2],
+					scale: 0.2,
+					action: "Idle_01",
+					showTime: 2,
+					hideSlots: [
+						"B/B_island",
+						"B/B_sand",
+						"B/B_sea",
+						"B/B_sky",
+						"Layer 190",
+						"L_calf_cover_intro",
+						"L_calf_intro",
+						"L_foot_01_intro",
+						"L_foot_big toe_intro",
+						"L_foot_other toes_intro",
+						"R_calf_intro",
+						"R_foot_01_intro",
+						"R_foot_other toes_intro",
+						"R_foot_pinky toe_intro",
+					], // 隐藏不需要的部件，想知道具体部件名称请使用SpineAltasSplit工具查看
+				},
+				clipSlots: ["B/B_sky"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
 				background: "小鸟游星野/静态泳装/BG_IslandBeach.png",
 				version: "3.8",
-				alpha: false,
 			},
 		},
 	};
@@ -5335,8 +5358,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 左慈
 		re_zuoci: decadeUI.dynamicSkin.zuoci,
 
-    // 大叔
-    swimsuit_hoshino: decadeUI.dynamicSkin.hoshino,
+		// 大叔
+		swimsuit_hoshino: decadeUI.dynamicSkin.hoshino,
 	};
 	decadeUI.get.extend(decadeUI.dynamicSkin, extend);
 });

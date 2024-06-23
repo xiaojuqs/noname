@@ -9541,21 +9541,39 @@ const skills = {
 		audio: 3,
 		enable: "phaseUse",
 		usable: 1,
+    filterTarget: function (card, player, current) {
+			return current != player && player.canUse("shuiyanqijuny", current);
+		},
+    selectTarget: [0, 1],
+    filterCard: () => false,
+    selectCard: -1,
+    prompt: "恢复一点体力并视为对至多一名其他角色使用【水淹七军】",
 		content() {
       player.recover();
-			player.chooseUseTarget("shuiyanqijuny", true, 1);
+      if (target) {
+        player.useCard(
+          {
+            name: "shuiyanqijuny",
+            isCard: true,
+          },
+          target,
+          false
+        );
+      }
 		},
 		group: "hoshino_shuiji_effect",
 		ai: {
 			order: 4,
-			result: {
+      result: {
 				player: 1,
+        target: -1,
 			},
 		},
 		subSkill: {
 			effect: {
 				trigger: { source: "damageBegin1" },
 				forced: true,
+        silent: true,
 				filter: function (event) {
 					return event.card && event.card.name == "shuiyanqijuny";
 				},
