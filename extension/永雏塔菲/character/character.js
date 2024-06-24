@@ -28,7 +28,7 @@ const characters = {
 	taffyold_ol_pengyang: ["male", "shu", 3, ["taffyold_olxiaofan", "taffyold_oltuishi", "nzry_cunmu"], ["tempname:ol_pengyang", "character:ol_pengyang", "die:ol_pengyang"]],
 	taffyold_sb_sp_zhugeliang: ["male", "shu", 3, ["taffyold_sbhuoji", "taffyold_sbkanpo"], ["character:sb_sp_zhugeliang", "die:sb_sp_zhugeliang"]],
 	taffyold_sb_zhugeliang: ["male", "shu", 3, ["taffyold_sbguanxing", "taffyold_sbkongcheng"], ["character:sb_zhugeliang", "die:sb_zhugeliang"]],
-	taffyold_sb_guanyu: ["male", "shu", 4, ["taffyold_sbwusheng", "sbyijue"], ["character:sb_guanyu", "die:sb_guanyu"]],
+	taffyold_sb_guanyu: ["male", "shu", 4, ["taffyold_sbwusheng", "taffyold_sbyijue"], ["character:sb_guanyu", "die:sb_guanyu"]],
 	taffyold_bailingyun: ["female", "wei", 3, ["taffyold_dclinghui", "dcxiace", "dcyuxin"], ["character:bailingyun", "die:bailingyun"]],
 	taffyold_clan_zhonghui: ["male", "wei", "3/4", ["taffyold_clanyuzhi", "taffyold_clanxieshu", "taffyold_clanbaozu"], ["clan:颍川钟氏", "character:clan_zhonghui", "die:clan_zhonghui"]],
 	taffyold_ol_luyusheng: ["female", "wu", 3, ["taffyold_olcangxin", "olrunwei"], ["character:ol_luyusheng", "die:ol_luyusheng"]],

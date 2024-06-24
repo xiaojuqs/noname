@@ -7506,6 +7506,52 @@ const skills = {
 			threaten: 114514,
 		},
 	},
+	taffyold_sbyijue: {
+		audio: 2,
+		trigger: { global: "damageBegin4" },
+		filter: function (event, player) {
+			if (!event.source || event.source != player || event.player == player) return false;
+			return event.num >= event.player.hp && !player.getStorage("taffyold_sbyijue").includes(event.player);
+		},
+		forced: true,
+		logTarget: "player",
+		content: function () {
+			trigger.cancel();
+			player.addTempSkill("taffyold_sbyijue_effect");
+			player.markAuto("taffyold_sbyijue", [trigger.player]);
+			player.markAuto("taffyold_sbyijue_effect", [trigger.player]);
+		},
+		ai: {
+			halfneg: true,
+		},
+		marktext: "绝",
+		intro: { content: "已放$一马" },
+		subSkill: {
+			effect: {
+				charlotte: true,
+				onremove: true,
+				audio: "taffyold_sbyijue",
+				trigger: { player: "useCardToPlayer" },
+				filter: function (event, player) {
+					return player.getStorage("taffyold_sbyijue_effect").includes(event.target);
+				},
+				forced: true,
+				logTarget: "target",
+				content: function () {
+					trigger.getParent().excluded.add(trigger.target);
+				},
+				ai: {
+					effect: {
+						player(card, player, target) {
+							if (player.getStorage("taffyold_sbyijue_effect").includes(target)) return "zeroplayertarget";
+						},
+					},
+				},
+				marktext: "义",
+				intro: { content: "本回合放$一马" },
+			},
+		},
+	},
 	// 旧柏灵筠
 	taffyold_dclinghui: {
 		audio: "dclinghui",
@@ -9543,39 +9589,39 @@ const skills = {
 		audio: 3,
 		enable: "phaseUse",
 		usable: 1,
-    filterTarget: function (card, player, current) {
+		filterTarget: function (card, player, current) {
 			return current != player && player.canUse("shuiyanqijuny", current);
 		},
-    selectTarget: [0, 1],
-    filterCard: () => false,
-    selectCard: -1,
-    prompt: "恢复一点体力并视为对至多一名其他角色使用【水淹七军】",
+		selectTarget: [0, 1],
+		filterCard: () => false,
+		selectCard: -1,
+		prompt: "恢复一点体力并视为对至多一名其他角色使用【水淹七军】",
 		content() {
-      player.recover();
-      if (target) {
-        player.useCard(
-          {
-            name: "shuiyanqijuny",
-            isCard: true,
-          },
-          target,
-          false
-        );
-      }
+			player.recover();
+			if (target) {
+				player.useCard(
+					{
+						name: "shuiyanqijuny",
+						isCard: true,
+					},
+					target,
+					false
+				);
+			}
 		},
 		group: "hoshino_shuiji_effect",
 		ai: {
 			order: 4,
-      result: {
+			result: {
 				player: 1,
-        target: -1,
+				target: -1,
 			},
 		},
 		subSkill: {
 			effect: {
 				trigger: { source: "damageBegin1" },
 				forced: true,
-        silent: true,
+				silent: true,
 				filter: function (event) {
 					return event.card && event.card.name == "shuiyanqijuny";
 				},
