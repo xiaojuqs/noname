@@ -9595,14 +9595,6 @@ const skills = {
 		content: function () {
 			trigger.num--;
 		},
-		ai: {
-			filterDamage: true,
-			skillTagFilter: function (player, tag, arg) {
-				if (arg && arg.player) {
-					if (arg.player.hasSkillTag("jueqing", false, player)) return false;
-				}
-			},
-		},
 	},
 	hoshino_haile: {
 		audio: 3,
