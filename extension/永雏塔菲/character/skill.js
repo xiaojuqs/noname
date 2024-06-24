@@ -8547,6 +8547,7 @@ const skills = {
 				},
 				filter(event, player) {
 					if (["global", "equip"].includes(event.type)) return false;
+					if ((get.info(event.skill) || {}).charlotte) return false;
 					const skill = event.sourceSkill || event.skill;
 					const info = get.info(skill);
 					return info && !info.charlotte && !info.equipSkill;
@@ -8568,6 +8569,7 @@ const skills = {
 				},
 				filter(event, player) {
 					if (["global", "equip"].includes(event.type)) return false;
+					if ((get.info(event.skill) || {}).charlotte) return false;
 					const skill = event.sourceSkill || event.skill;
 					const info = get.info(skill);
 					return info && !info.charlotte && !info.equipSkill;
