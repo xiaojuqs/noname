@@ -226,6 +226,8 @@ const translates = {
 	taffyold_sbwusheng: "武圣",
 	taffyold_sbwusheng_wusheng_backup: "武圣",
 	taffyold_sbwusheng_info: "你可以将一张手牌当作任意【杀】使用或打出。出牌阶段开始时，你可以选择一名非主公的其他角色，本阶段对其使用【杀】无距离和次数限制，使用【杀】指定其为目标后摸一张牌，对其使用五张【杀】后不能对其使用【杀】。",
+  taffyold_sbyijue: "义绝",
+	taffyold_sbyijue_info: "锁定技，每名角色每局游戏限一次，一名其他角色受到你对其造成的大于等于其体力值的伤害时，你防止此伤害，且本回合你使用牌指定其为目标时，此牌对其无效。",
 	taffyold_bailingyun: "旧柏灵筠",
 	taffyold_dclinghui: "灵慧",
 	taffyold_dclinghui_info: "一名角色的结束阶段，若当前回合角色为你或本回合有角色进入过濒死状态，则你可以观看牌堆顶的三张牌，然后你可以使用其中一张牌并获得剩余牌。",

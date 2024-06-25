@@ -7507,7 +7507,7 @@ const skills = {
 		},
 	},
 	taffyold_sbyijue: {
-		audio: 2,
+		audio: "sbyijue",
 		trigger: { global: "damageBegin4" },
 		filter: function (event, player) {
 			if (!event.source || event.source != player || event.player == player) return false;
