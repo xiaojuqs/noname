@@ -672,15 +672,25 @@ const skills = {
 				.getAllHistory("damage", evt => evt.source && evt.source.isIn())
 				.map(evt => evt.source)
 				.unique();
-			targets = [...targets, ...targets];
-			targets.removeArray(chosen);
-			event.set("sbganglie_enabledTargets", targets);
+			let new_targets= [];
+			for (let i of targets) {
+				new_targets.push(i);
+				for (let j of chosen) {
+					for (let k of j) {
+						if (k==i) new_targets.remove(i);
+					}
+				}
+			}
+			event.set("sbganglie_enabledTargets", new_targets);
 		},
 		filterTarget(card, player, target) {
 			return get.event("sbganglie_enabledTargets").includes(target);
 		},
+		selectTarget: [1, Infinity],
+		multitarget: true,
+		multiline: true,
 		async content(event, trigger, player) {
-			event.targets[0].damage(2);
+			for (const target of event.targets.sortBySeat()) await target.damage(2);
 		},
 		ai: {
 			order: 6,

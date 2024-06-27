@@ -636,7 +636,7 @@ const skills = {
 							.chooseToGive(`${get.translation(player)}对你发动了【讨州】`, "你可以交给其至多三张手牌", [1, 3], player)
 							.set("ai", card => {
 								if (get.event("att") > 0) {
-									if (get.event("chosenNumber") < ui.selected.cards.length + (get.event("getRand")() < 0.5)) {
+									if (get.event("chosenNumber") < ui.selected.cards.length + (event.getRand() < 0.5)) {
 										return 5.1 - get.value(card);
 									}
 									return 0;
@@ -4706,7 +4706,7 @@ const skills = {
 					(function () {
 						var cards = player.getCards("hs", card => get.name(card, player) !== "sha" && player.hasValueTarget(card));
 						var damage = Math.min(player.getCardUsable({ name: "sha" }), player.countCards("hs", "sha")) + cards.filter(i => get.tag(i, "damage")).length;
-						if (player.isPhaseUsing() || player.hp + player.hujia + player.countCards("hs", i => get.tag(card, "recover")) > 2) {
+						if (player.isPhaseUsing() || player.hp + player.hujia + player.countCards("hs", card => get.tag(card, "recover")) > 2) {
 							if (damage) return Math.min(choices.length - 1, cards.length - damage);
 							return Math.min(choices.length - 1, cards.length - 1);
 						}
