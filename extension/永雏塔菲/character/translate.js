@@ -190,7 +190,7 @@ const translates = {
   鹤影飘摇仙气溢，长风万里永留连。</span>`,
 	taffyre_xushao: "界许劭",
 	taffyre_pingjian: "评荐",
-	taffyre_pingjian_info: "①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去X个非Charlotte技能并令系统随机检索出2<span class=greentext>X</span>+1张“评荐关系”中对应的武将牌，然后你可以获得其中至多<span class=greentext>X</span>个技能。②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的具有颜色的X+1。",
+	taffyre_pingjian_info: "①回合开始前/结束阶段开始前/当你即将受到伤害前/出牌阶段限一次，你可以失去至多1个非Charlotte技能并令系统随机检索出3张“评荐关系”中对应的武将牌，然后你可以获得其中至多X个技能。（X为你以此法失去的技能数）②当你发动〖评荐〗时，若你拥有的非Charlotte技能数小于2，则你令本次〖评荐〗中的X+1。",
 	taffyre_pingjian_use: "评荐",
 	taffyre_pingjian_append: '<span style="font-family: yuanli">一人说尽千秋业，半纸雅评万世人。</span>',
 	taffyre_pingjian_faq: "关于评荐关系",

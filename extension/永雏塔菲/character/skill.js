@@ -5477,7 +5477,7 @@ const skills = {
 			});
 			if (skills.length < 2) player.storage.taffyre_pingjianX = 1;
 			var next = player.chooseButton(true, ["评荐：选择失去任意个技能", [skills.map(i => [i, '<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + "_ab"] || get.translation(i).slice(0, 2)) + "】</div><div>" + get.skillInfoTranslation(i, player) + "</div></div>"]), "textbutton"]]);
-			next.set("selectButton", [0, skills.length]);
+			next.set("selectButton", [0, 1]);
 			next.set("ai", function (button) {
 				if (button.link == "taffyre_pingjian") return -1;
 				return Math.random();
@@ -5708,7 +5708,7 @@ const skills = {
 			});
 			if (skills.length < 2) player.storage.taffyre_pingjianX = 1;
 			var next = player.chooseButton(true, ["评荐：选择失去任意个技能", [skills.map(i => [i, '<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + "_ab"] || get.translation(i).slice(0, 2)) + "】</div><div>" + get.skillInfoTranslation(i, player) + "</div></div>"]), "textbutton"]]);
-			next.set("selectButton", [0, skills.length]);
+			next.set("selectButton", [0, 1]);
 			next.set("ai", function (button) {
 				if (button.link == "taffyre_pingjian") return -1;
 				return Math.random();
