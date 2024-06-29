@@ -37,9 +37,10 @@ const characters = {
 	taffyold_dc_shen_huatuo: ["male", "shen", 3, ["taffyold_jingyu", "taffyold_lvxin", "huandao"], ["qun", "character:dc_shen_huatuo", "die:dc_shen_huatuo"]],
 	taffyold_shen_xuzhu: ["male", "shen", 5, ["taffyold_zhengqing", "zhuangpo"], ["wei", "character:shen_xuzhu", "die:shen_xuzhu"]],
 	taffyshen_xushao: ["male", "shen", 3, ["taffyshen_pingjian"], ["qun"]],
-  taffyold_tenggongzhu: ["female", "wu", 4, ["taffyold_xingchong", "taffyold_liunian"], ["character:tenggongzhu", "die:tenggongzhu"]],
-  hoshino: ["female", "shen", 4, ["hoshino_zhenya", "hoshino_jijiu", "hoshino_huizhang", "hoshino_shushou"], ["unseen"]],
-  swimsuit_hoshino: ["female", "shen", 3, ["hoshino_shuiyuan", "hoshino_shuiji", "hoshino_naishu", "hoshino_haile"]],
+	taffyold_tenggongzhu: ["female", "wu", 4, ["taffyold_xingchong", "taffyold_liunian"], ["character:tenggongzhu", "die:tenggongzhu"]],
+	hoshino: ["female", "shen", 4, ["hoshino_zhenya", "hoshino_jijiu", "hoshino_huizhang", "hoshino_shushou"], ["unseen"]],
+	swimsuit_hoshino: ["female", "shen", 3, ["hoshino_shuiyuan", "hoshino_shuiji", "hoshino_naishu", "hoshino_haile"]],
+	limulu: ["male", "shen", 3, ["limulu_baoshi", "limulu_zhihui", "limulu_mowang"]],
 	aruijier: ["female", "shen", "", [], ["unseen"]],
 };
 

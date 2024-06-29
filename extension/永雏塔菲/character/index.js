@@ -41,9 +41,10 @@ export const characterPackFunc = function () {
 				taffyold_wu_guanyu: "#gViridian",
 				taffyold_dc_shen_huatuo: "#gViridian",
 				taffyshen_xushao: "#gViridian",
-        taffyold_tenggongzhu: "#gViridian",
-        hoshino: "#gViridian",
-        swimsuit_hoshino: "#gViridian",
+				taffyold_tenggongzhu: "#gViridian",
+				hoshino: "#gViridian",
+				swimsuit_hoshino: "#gViridian",
+				limulu: "#gLazysun Viridian",
 			},
 			dynamicTranslate: { ...dynamicTranslates },
 			characterIntro: { ...characterIntros },
@@ -99,11 +100,11 @@ export const characterPackFunc = function () {
 				character: "ext:永雏塔菲/image/character/taffyboss_xushao.jpg",
 				die: "die:../../extension/永雏塔菲/audio/die/taffyboss_xushao.mp3",
 			},
-      hoshino: {
+			hoshino: {
 				character: "ext:永雏塔菲/image/character/hoshino.jpg",
 				die: "die:../../extension/永雏塔菲/audio/die/hoshino.wav",
 			},
-      swimsuit_hoshino: {
+			swimsuit_hoshino: {
 				character: "ext:永雏塔菲/image/character/swimsuit_hoshino.jpg",
 				die: "die:../../extension/永雏塔菲/audio/die/swimsuit_hoshino.ogg",
 			},

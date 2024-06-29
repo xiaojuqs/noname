@@ -9662,6 +9662,319 @@ const skills = {
 			},
 		},
 	},
+	// 利姆露
+	limulu_baoshi: {
+		audio: 3,
+		trigger: {
+			player: "damageEnd",
+			source: "damageSource",
+		},
+		check: () => true,
+		onremove: function (player) {
+			delete player.storage.limulu_baoshi;
+			delete player.storage.limulu_baoshi_draw;
+			player.removeSkill("limulu_baoshi_check");
+			player.removeSkill("limulu_baoshi_draw");
+		},
+		init: function (player) {
+			if (!player.storage.limulu_baoshi) player.storage.limulu_baoshi = [];
+		},
+		filter: function (event, player) {
+			if (!player.storage.limulu_baoshi_draw) player.storage.limulu_baoshi_draw = 0;
+			if (player.storage.limulu_baoshi_draw > game.filterPlayer().length) {
+				return false;
+			}
+			if (event.player && event.source && event.player !== event.source) {
+				return true;
+			}
+			return false;
+		},
+		frequent: true,
+		content: function () {
+			"step 0";
+			if (!player.storage.limulu_baoshi) player.storage.limulu_baoshi = [];
+			if (!player.storage.limulu_baoshi_draw) player.storage.limulu_baoshi_draw = 0;
+			var triggerTraget;
+			if (event.triggername === "damageEnd") {
+				triggerTraget = trigger.source;
+			} else {
+				triggerTraget = trigger.player;
+			}
+			var list = [];
+			var listm = [];
+			var listv = [];
+			if (triggerTraget.name1 != undefined) listm = lib.character[triggerTraget.name1][3];
+			else listm = lib.character[triggerTraget.name][3];
+			if (triggerTraget.name2 != undefined) listv = lib.character[triggerTraget.name2][3];
+			listm = listm.concat(listv);
+			var func = function (skill) {
+				var info = get.info(skill);
+				if (!info || info.charlotte || info.persevereSkill) return false;
+				return true;
+			};
+			for (var i = 0; i < listm.length; i++) {
+				if (func(listm[i]) && !player.storage.limulu_baoshi.includes(listm[i])) list.add(listm[i]);
+			}
+			if (list.length) {
+				player.chooseControl(list).set("prompt", "选择获得" + get.translation(triggerTraget) + "武将牌上的一个技能");
+			} else {
+				player.draw(2);
+				player.storage.limulu_baoshi_draw += 2;
+				event.finish();
+			}
+			("step 1");
+			player.markAuto("limulu_baoshi", [result.control]);
+			player.addSkill(result.control);
+		},
+		group: ["limulu_baoshi_check", "limulu_baoshi_draw"],
+		ai: {
+			maixie: true,
+			maixie_hp: true,
+			threaten: 0.9,
+		},
+	},
+	limulu_baoshi_check: {
+		charlotte: true,
+		trigger: { player: ["logSkillBegin", "useSkill"] },
+		filter: function (event, player) {
+			var info = get.info(event.skill);
+			if (info && info.charlotte) return false;
+			var skill = event.sourceSkill || event.skill;
+			if (!player.storage.limulu_baoshi) player.storage.limulu_baoshi = [];
+			return player.storage.limulu_baoshi.includes(skill);
+		},
+		direct: true,
+		firstDo: true,
+		priority: Infinity,
+		content: function () {
+			var skill = trigger.sourceSkill || trigger.skill;
+			player.removeSkill(skill);
+		},
+	},
+	limulu_baoshi_draw: {
+		trigger: {
+			global: "roundStart",
+		},
+		forced: true,
+		locked: false,
+		marktext: "食",
+		intro: { content: "本轮已通过〖暴食〗获得#张牌" },
+		init: function (player) {
+			player.markSkill("limulu_baoshi_draw");
+			if (!player.storage.limulu_baoshi_draw) {
+				player.storage.limulu_baoshi_draw = 0;
+			}
+		},
+		content: function () {
+			player.storage.limulu_baoshi_draw = 0;
+		},
+	},
+	limulu_zhihui: {
+		audio: 2,
+		enable: ["chooseToUse", "chooseToRespond"],
+		hiddenCard: function (player, name) {
+			if (player.countMark("limulu_zhihui_round") >= player.maxHp) return false;
+			if (!lib.inpile.includes(name)) return false;
+			var level = player.countMark("limulu_zhihui");
+			var type = get.type(name);
+			return level === 0 ? type == "basic" : type == "basic" || type == "trick";
+		},
+		onremove: true,
+		derivation: ["limulu_zhihui1"],
+		filter: function (event, player) {
+			if (player.countMark("limulu_zhihui_round") >= player.maxHp || player.hasSkill("limulu_zhihui_ban")) return false;
+			var level = player.countMark("limulu_zhihui");
+			for (var i of lib.inpile) {
+				var type = get.type(i);
+				if ((level === 0 ? type == "basic" : type == "basic" || type == "trick") && event.filterCard(get.autoViewAs({ name: i }, "unsure"), player, event)) return true;
+			}
+			return false;
+		},
+		chooseButton: {
+			dialog(event, player) {
+				var level = player.countMark("limulu_zhihui");
+				var list = [];
+				for (var i = 0; i < lib.inpile.length; i++) {
+					var name = lib.inpile[i];
+					if (name == "sha") {
+						if (event.filterCard(get.autoViewAs({ name }, "unsure"), player, event)) list.push(["基本", "", "sha"]);
+						for (var nature of lib.inpile_nature) {
+							if (event.filterCard(get.autoViewAs({ name, nature }, "unsure"), player, event)) list.push(["基本", "", "sha", nature]);
+						}
+					} else if (level > 0 && get.type(name) == "trick" && event.filterCard(get.autoViewAs({ name }, "unsure"), player, event)) list.push(["锦囊", "", name]);
+					else if (get.type(name) == "basic" && event.filterCard(get.autoViewAs({ name }, "unsure"), player, event)) list.push(["基本", "", name]);
+				}
+				return ui.create.dialog("智慧", [list, "vcard"]);
+			},
+			check(button, player) {
+				if (_status.event.getParent().type != "phase") return 1;
+				var player = _status.event.player;
+				if (["wugu", "zhulu_card", "yiyi", "lulitongxin", "lianjunshengyan", "diaohulishan"].includes(button.link[2])) return 0;
+				return player.getUseValue({
+					name: button.link[2],
+					nature: button.link[3],
+				});
+			},
+			backup(links, player) {
+				return {
+					chooseButton: {
+						dialog: function (event, player) {
+							var level = player.countMark("limulu_zhihui");
+							const dialogContent =
+								level === 0
+									? [["skill", `失去一个技能，视为使用一张${(get.translation(links[0][3]) || "") + get.translation(links[0][2])}，此牌无法被响应。`]]
+									: [
+											["skill", `失去一个技能，视为使用一张${(get.translation(links[0][3]) || "") + get.translation(links[0][2])}，此牌无法被响应。`],
+											["card", `弃置2张牌，视为使用一张${(get.translation(links[0][3]) || "") + get.translation(links[0][2])}，此牌无法被响应。`],
+                    ];
+							var dialog = ui.create.dialog("智慧：请选择一项", "hidden");
+							dialog.add([[...dialogContent], "textbutton"]);
+							return dialog;
+						},
+						backup: function (result) {
+							if (result[0] === "skill") {
+								return {
+									audio: "limulu_zhihui",
+									filterCard: () => false,
+									selectCard: -1,
+									popname: true,
+									viewAs: { name: links[0][2], nature: links[0][3] },
+									precontent() {
+										"step 0";
+										var skills = player.getSkills(null, false, false).filter(skill => {
+											var info = get.info(skill);
+											if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
+											const tempSkills = Object.keys(player.tempSkills);
+											if (tempSkills.includes(skill)) {
+												return false;
+											}
+											const additionalSkills = Object.keys(player.additionalSkills);
+											for (let i = 0; i < additionalSkills.length; i++) {
+												if (player.additionalSkills[additionalSkills[i]].includes(skill)) {
+													return false;
+												}
+											}
+											return true;
+										});
+										var next = player.chooseButton(true, ["智慧：选择失去1个技能", [skills.map(i => [i, '<div class="popup text" style="width:calc(100% - 25px);display:inline-block"><div class="skill">【' + get.translation(lib.translate[i + "_ab"] || get.translation(i).slice(0, 2)) + "】</div><div>" + get.skillInfoTranslation(i, player) + "</div></div>"]), "textbutton"]]);
+										next.set("selectButton", [1, 1]);
+										next.set("ai", function (button) {
+											if (["limulu_baoshi", "limulu_zhihui", "limullu_mowang"].includes(button.link)) return -1;
+											return Math.random();
+										});
+										("step 1");
+										if (result.bool) {
+											let rSkillInfo;
+											for (let i = 0; i < result.links.length; i++) {
+												rSkillInfo = get.info(result.links[i]);
+												if (rSkillInfo.limited || rSkillInfo.juexingji || rSkillInfo.dutySkill) {
+													player.restoreSkill(result.links[i]);
+												}
+												player.removeSkill(result.links[i]);
+												if (result.links[i] === "limulu_baoshi") {
+													player.gainMaxHp();
+													var list = [];
+													while (list.length < 5) {
+														var card = get.cardPile(function (card) {
+															return !list.includes(card) && get.type(card) == "basic";
+														});
+														if (!card) break;
+														list.push(card);
+													}
+													if (list.length) player.gain(list, "gain2", "log");
+												}
+												game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
+												player.addTempSkill("limulu_zhihui_round", "roundStart");
+												player.addMark("limulu_zhihui_round", 1, false);
+											}
+										}
+									},
+									prompt: function (links, player) {
+										return "选择" + (get.translation(links[0][3]) || "") + get.translation(links[0][2]) + "的目标";
+									},
+								};
+							} else {
+								return {
+									audio: "limulu_zhihui",
+									selectCard: 2,
+									filterCard: true,
+									position: "hse",
+									popname: true,
+									viewAs: {
+										name: links[0][2],
+										nature: links[0][3],
+										suit: "none",
+										number: null,
+										isCard: true,
+									},
+									ignoreMod: true,
+									precontent: function () {
+										player.logSkill("limulu_zhihui");
+										player.addTempSkill("limulu_zhihui_round", "roundStart");
+										player.addMark("limulu_zhihui_round", 1, false);
+										var cards = event.result.cards;
+										player.discard(cards);
+										event.result.card = {
+											name: event.result.card.name,
+											nature: event.result.card.nature,
+											isCard: true,
+										};
+										event.result.cards = [];
+									},
+								};
+							}
+						},
+					},
+				};
+			},
+		},
+		group: ["limulu_zhihui_direct", "limulu_zhihui_damage"],
+		subSkill: {
+			round: { charlotte: true, onremove: true },
+			damage: {
+				trigger: { source: "damageSource" },
+				forced: true,
+				charlotte: true,
+				popup: false,
+				filter: function (event, player) {
+					return event.getParent().skill == "limulu_zhihui_backup_backup";
+				},
+				content: function () {
+					player.addTempSkill("limulu_zhihui_ban");
+				},
+			},
+			ban: { charlotte: true },
+			direct: {
+				trigger: { player: "useCard" },
+				forced: true,
+				popup: false,
+				filter(event) {
+					return event.skill == "limulu_zhihui_backup_backup";
+				},
+				content() {
+					trigger.directHit.addArray(game.players);
+				},
+			},
+		},
+	},
+	limulu_mowang: {
+		audio: 2,
+		trigger: { source: "dieAfter" },
+		forced: true,
+		juexingji: true,
+		skillAnimation: true,
+		animationColor: "gray",
+		content: function () {
+			"step 0";
+			player.addSkill("limulu_mowang");
+			player.gainMaxHp();
+			("step 1");
+			if (player.maxHp > player.hp) player.recover(player.maxHp - player.hp);
+			("step 2");
+			player.addMark("limulu_zhihui", 1, false);
+			game.log(player, "修改了技能", "#g【智慧】");
+		},
+	},
 };
 
 export default skills;
