@@ -4995,6 +4995,55 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		hoshino: {
 			// 小鸟游星野
+			静态经典: {
+				name: "小鸟游星野/静态经典/hoshino_spr",
+				x: [0, 0.5],
+				y: [0, 0],
+				scale: 0.15,
+				angle: 0,
+				action: "00",
+				background: "小鸟游星野/静态经典/BG_Abydos.jpg",
+				version: "3.8",
+			},
+			动态经典: {
+				name: "小鸟游星野/动态经典/Hoshino_home",
+				x: [0, 0.3],
+				y: [0, 0.05],
+				scale: 0.1,
+				angle: 0,
+				action: "Idle_01",
+				ss_jinchang: "Start_Idle_01",
+				gongji: {
+					x: [0, 0.5],
+					y: [0, 0.2],
+					scale: 0.25,
+					action: "Dev_Talk_01_All",
+					showTime: 2,
+					hideSlots: [
+						"floor_00",
+						"flush_plus",
+						"light 1(floor)_guide_00",
+						"window frame_H1_00",
+						"window frame_H2_00",
+						"window frame_V1_00",
+						"window frame_V2_00",
+						"window frame_V3_00",
+						"window frame_V4_00",
+						"window gradation",
+					], // 隐藏不需要的部件，想知道具体部件名称请使用SpineAltasSplit工具查看
+				},
+				beijing: {
+					name: "小鸟游星野/动态经典/Hoshino_home_background",
+					x: [0, 0.5],
+					y: [0, -0.05],
+					scale: 0.1,
+					action: "Dev_Test",
+					version: "3.8",
+				},
+				// clipSlots: [], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				// background: "小鸟游星野/静态经典/BG_Abydos.jpg",
+				version: "3.8",
+			},
 			静态泳装: {
 				name: "小鸟游星野/静态泳装/hoshino_swimsuit_spr",
 				x: [0, 0.5],
@@ -5011,13 +5060,13 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				y: [0, 0],
 				scale: 0.1,
 				angle: 0,
-				action: "Idle_01",
+				action: "Dev_Idle_01",
 				ss_jinchang: "Start_Idle_01",
 				gongji: {
 					x: [0, 0.51],
 					y: [0, 0.2],
 					scale: 0.2,
-					action: "Idle_01",
+					action: "Dev_Idle_01",
 					showTime: 2,
 					hideSlots: [
 						"B/B_island",
