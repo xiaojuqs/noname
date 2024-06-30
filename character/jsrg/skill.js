@@ -322,10 +322,10 @@ const skills = {
 		async cost(event, trigger, player) {
 			const target = lib.skill.jsrgruzong.getTarget(player);
 			if (target !== player) {
-				const bool = await player.chooseBool(get.prompt("jsrgruzong", target), "将手牌数摸至与该角色相同").set("frequentSkill", "jsrgruzong");
+				const bool = await player.chooseBool(get.prompt("jsrgruzong", target), "将手牌数摸至与该角色相同").set("frequentSkill", "jsrgruzong").forResult("bool");
 				if (bool) {
 					event.result = {
-						bool,
+						bool: bool,
 						targets: [target],
 						cost_data: "drawToOthers",
 					};
@@ -338,7 +338,8 @@ const skills = {
 					.set("ai", target => {
 						const player = get.player();
 						return (get.attitude(player, target) * Math.sqrt(player.countCards("h") - target.countCards("h"))) / (target.hasSkillTag("nogain") ? 1 : 10);
-					});
+					})
+					.forResult();
 			}
 		},
 		async content(event, trigger, player) {
@@ -958,7 +959,7 @@ const skills = {
 		async content(event, trigger, player) {
 			const { giver, cards } = event.cost_data;
 			await giver.give(cards, trigger.source);
-			await trigger.cancel();
+			trigger.cancel();
 		},
 		chooseTarget(target, source, current, eventId, eventNum) {
 			const goon = (() => {

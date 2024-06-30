@@ -451,7 +451,7 @@ const skills = {
 			};
 		},
 		async content(event, trigger, player) {
-			await trigger.cancel();
+			trigger.cancel();
 			if (event.cost_data == "选项一") await player.gainPlayerCard(trigger.player, "e", true);
 			else {
 				for (let i = 1; i < 7; i++) {
@@ -4943,6 +4943,9 @@ const skills = {
 				usable: 1,
 				charlotte: true,
 				filter: function (event, player) {
+					//改方式限制每回合使用1次。
+					//原因同sbxingshang。
+					if (typeof get.skillCount("twkaizeng") == "number" && get.skillCount("twkaizeng") >= 1) return false;
 					return game.hasPlayer(current => {
 						return current != player && current.hasSkill("twkaizeng");
 					});
