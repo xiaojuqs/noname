@@ -7320,11 +7320,6 @@ export class Library {
 					init: true,
 					frequent: true,
 				},
-        lunhuiqiyin: {
-          name: "轮回七阴",
-					init: true,
-					frequent: true,
-        },
 				scene: {
 					name: "创建场景",
 					init: true,

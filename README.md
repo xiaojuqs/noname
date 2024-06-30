@@ -61,7 +61,7 @@
     - 旧滕公主：未通渠的滕公主
     - 小鸟游星野(泳装)：自制武将（水大叔可爱喵）
     - 利姆露: Lazysun自制武将（来自异世界的弱小史莱姆）
-- 本体乱斗模式添加了轮回七阴模式
+  - 为乱斗模式添加了轮回七阴模式
 - 引入来自 [noname-server](https://github.com/nonameShijian/noname-server) 的 `index.js`，用于启动 Web 端文件读写服务
 
 ## 启动方法
