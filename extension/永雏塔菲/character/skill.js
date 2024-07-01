@@ -9826,7 +9826,7 @@ const skills = {
 									: [
 											["skill", `失去一个技能，视为使用一张${(get.translation(links[0][3]) || "") + get.translation(links[0][2])}，此牌无法被响应。`],
 											["card", `弃置2张牌，视为使用一张${(get.translation(links[0][3]) || "") + get.translation(links[0][2])}，此牌无法被响应。`],
-                    ];
+									  ];
 							var dialog = ui.create.dialog("智慧：请选择一项", "hidden");
 							dialog.add([[...dialogContent], "textbutton"]);
 							return dialog;
@@ -9933,7 +9933,7 @@ const skills = {
 			round: { charlotte: true, onremove: true },
 			damage: {
 				trigger: { source: "damageSource" },
-				forced: true,
+				silent: true,
 				charlotte: true,
 				popup: false,
 				filter: function (event, player) {
@@ -9966,7 +9966,7 @@ const skills = {
 		animationColor: "gray",
 		content: function () {
 			"step 0";
-			player.addSkill("limulu_mowang");
+			player.awakenSkill("limulu_mowang");
 			player.gainMaxHp();
 			("step 1");
 			if (player.maxHp > player.hp) player.recover(player.maxHp - player.hp);
