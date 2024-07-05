@@ -5456,10 +5456,19 @@ const skills = {
 		trigger: {
 			player: ["damageBefore", "phaseJieshuBefore", "phaseBefore"],
 		},
+    filter: function(event, player) {
+      if (event.name !== "damage") {
+        if (player.storage.taffyre_pingjianCounts > 1) {
+          return false;
+        }
+      }
+      return true;
+    },
 		frequent: true,
 		content: function () {
 			"step 0";
 			if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage.taffyre_pingjianX = 0;
+      if (!player.storage.taffyre_pingjianCounts) player.storage.taffyre_pingjianCounts = 0;
 			var skills = player.getSkills(null, false, false).filter(skill => {
 				var info = get.info(skill);
 				if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -5512,10 +5521,12 @@ const skills = {
 					var name2 = event.triggername;
 					if (name2 === "phaseBefore") {
 						name2 = ["phaseBeforeStart", "phaseBefore", "phaseBeforeEnd", "phaseBeginStart", "phaseBegin", "phaseChange", "phaseZhunbeiBefore", "phaseZhunbeiBegin", "phaseZhunbei", "phaseZhunbeiEnd", "phaseZhunbeiAfter", "phaseJudgeBefore", "phaseJudgeBegin", "phaseJudge", "phaseJudgeEnd", "phaseJudgeAfter", "phaseDrawBefore", "phaseDrawBegin", "phaseDrawBegin1", "phaseDrawBegin2", "phaseDraw", "phaseDrawEnd", "phaseDrawAfter", "phaseUseBefore", "phaseUseBegin"];
+            player.storage.taffyre_pingjianCounts++;
 					} else if (name2 === "damageBefore") {
 						name2 = ["damageBefore", "damageBegin", "damageBegin2", "damageBegin3", "damageBegin4", "damage", "damageSource", "damageEnd", "damageAfter"];
 					} else if (name2 === "phaseJieshuBefore") {
 						name2 = ["phaseJieshuBefore", "phaseJieshuBegin", "phaseJieshu", "phaseJieshuEnd", "phaseJieshuAfter", "phaseEnd", "phaseAfter"];
+            player.storage.taffyre_pingjianCounts++;
 					}
 					for (let i = 0; i < allList.length; i++) {
 						var name = allList[i];
@@ -5677,7 +5688,7 @@ const skills = {
 				player.storage.taffyre_pingjianX = 0;
 			}
 		},
-		group: ["taffyre_pingjian_use"],
+		group: ["taffyre_pingjian_use", "taffyre_pingjian_counts"],
 		phaseUse_special: [],
 		ai: {
 			threaten: 50,
@@ -5688,9 +5699,16 @@ const skills = {
 		enable: "phaseUse",
 		usable: 1,
 		prompt: () => lib.translate.taffyre_pingjian_info,
+    filter: function(event, player) {
+      if (player.storage.taffyre_pingjianCounts > 1) {
+        return false;
+      }
+      return true;
+    },
 		content: function () {
 			"step 0";
 			if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage.taffyre_pingjianX = 0;
+      if (!player.storage.taffyre_pingjianCounts) player.storage.taffyre_pingjianCounts = 0;
 			var skills = player.getSkills(null, false, false).filter(skill => {
 				var info = get.info(skill);
 				if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -5741,6 +5759,7 @@ const skills = {
 					var map = [];
 					let guaranteeList = [];
 					let set = [];
+          player.storage.taffyre_pingjianCounts++;
 					allList.randomSort();
 					for (let i = 0; i < allList.length; i++) {
 						var name = allList[i];
@@ -5923,6 +5942,14 @@ const skills = {
 			},
 		},
 	},
+  taffyre_pingjian_counts: {
+    charlotte: true,
+    forced: true,
+    trigger: { global: ["phaseAfter", "phaseBefore"] },
+    content: function() {
+      player.storage.taffyre_pingjianCounts = 0;
+    },
+  },
 	//旧谋曹丕
 	taffyold_sbxingshang: {
 		audio: "sbxingshang",
@@ -8822,30 +8849,15 @@ const skills = {
 					var list = [];
 					var skills = [];
 					var map = [];
+					allList.randomSort();
 					var name2 = event.triggername;
-					let name3 = [];
-					let guaranteeName1 = [];
-					let guaranteeName2 = [];
-					let guaranteeName3 = [];
-					let guaranteeList1 = [];
-					let guaranteeList2 = [];
-					let guaranteeList3 = [];
-					let set = [];
 					if (name2 === "phaseBefore") {
-						name2 = ["phaseBeforeStart", "phaseBefore", "phaseBeforeEnd", "phaseBeginStart", "phaseBegin", "phaseChange", "phaseZhunbeiBefore", "phaseZhunbeiBegin", "phaseZhunbei", "phaseZhunbeiEnd", "phaseZhunbeiAfter", "phaseJudgeBefore", "phaseJudgeBegin", "phaseJudge", "phaseJudgeEnd", "phaseJudgeAfter", "phaseDrawBefore", "phaseDrawBegin", "phaseDrawBegin1", "phaseDrawBegin2", "phaseDraw", "phaseDrawEnd", "phaseDrawAfter", "phaseUseBefore", "phaseUseBegin", "phaseDiscardBefore", "phaseDiscardBegin", "phaseDiscard", "phaseDiscardEnd", "phaseDiscardAfter"];
-						guaranteeName1 = ["phaseBeforeStart", "phaseBefore", "phaseBeforeEnd", "phaseBeginStart", "phaseBegin", "phaseChange", "phaseZhunbeiBefore", "phaseZhunbeiBegin", "phaseZhunbei", "phaseZhunbeiEnd", "phaseZhunbeiAfter"];
-						guaranteeName2 = ["phaseJudgeBefore", "phaseJudgeBegin", "phaseJudge", "phaseJudgeEnd", "phaseJudgeAfter", "phaseDrawBefore", "phaseDrawBegin", "phaseDrawBegin1", "phaseDrawBegin2", "phaseDraw", "phaseDrawEnd", "phaseDrawAfter", "phaseUseBefore", "phaseUseBegin"];
-						guaranteeName3 = ["phaseDiscardBefore", "phaseDiscardBegin", "phaseDiscard", "phaseDiscardEnd", "phaseDiscardAfter"];
+						name2 = ["phaseBeforeStart", "phaseBefore", "phaseBeforeEnd", "phaseBeginStart", "phaseBegin", "phaseChange", "phaseZhunbeiBefore", "phaseZhunbeiBegin", "phaseZhunbei", "phaseZhunbeiEnd", "phaseZhunbeiAfter", "phaseJudgeBefore", "phaseJudgeBegin", "phaseJudge", "phaseJudgeEnd", "phaseJudgeAfter", "phaseDrawBefore", "phaseDrawBegin", "phaseDrawBegin1", "phaseDrawBegin2", "phaseDraw", "phaseDrawEnd", "phaseDrawAfter", "phaseUseBefore", "phaseUseBegin"];
 					} else if (name2 === "damageBefore") {
 						name2 = ["damageBefore", "damageBegin", "damageBegin2", "damageBegin3", "damageBegin4", "damage", "damageSource", "damageEnd", "damageAfter"];
-						guaranteeName1 = ["damageBefore", "damageBegin", "damageBegin2", "damageBegin3", "damageBegin4"];
-						guaranteeName2 = ["damage", "damageSource", "damageEnd", "damageAfter"];
 					} else if (name2 === "phaseJieshuBefore") {
 						name2 = ["phaseJieshuBefore", "phaseJieshuBegin", "phaseJieshu", "phaseJieshuEnd", "phaseJieshuAfter", "phaseEnd", "phaseAfter"];
-						guaranteeName1 = ["phaseJieshuBefore", "phaseJieshuBegin", "phaseJieshu", "phaseJieshuEnd", "phaseJieshuAfter"];
-						guaranteeName2 = ["phaseEnd", "phaseAfter"];
 					}
-					allList.randomSort();
 					for (let i = 0; i < allList.length; i++) {
 						var name = allList[i];
 						if (name.indexOf("xushao") != -1 || name.indexOf("taffyboss_xushao") != -1 || name.indexOf("taffydc_xushao") != -1 || name.indexOf("taffyhuiwan_xushao") != -1 || name.indexOf("taffyre_xushao") != -1 || name.indexOf("taffyshen_xushao") != -1) continue;
@@ -8873,8 +8885,8 @@ const skills = {
 									else continue;
 								}
 								if (info.trigger.player) {
-									if ((name3.length === 0 ? name2.includes(info.trigger.player) : name3.includes(info.trigger.player)) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, name3.length === 0 ? name2 : name3))) {
-										if (info.filter && !(guaranteeName3.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, guaranteeName3)))) {
+									if (name2.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, name2))) {
+										if (info.filter) {
 											try {
 												var bool = info.filter(trigger, player);
 												if (!bool) continue;
@@ -8886,20 +8898,12 @@ const skills = {
 										if (!map[name]) map[name] = [];
 										map[name].add(skills2[j]);
 										skills.add(skills2[j]);
-										// 添加保底的武将牌名
-										if (guaranteeName1.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, guaranteeName1))) {
-											guaranteeList1.add(name);
-										} else if (guaranteeName2.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, guaranteeName2))) {
-											guaranteeList2.add(name);
-										} else if (guaranteeName3.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, guaranteeName3))) {
-											guaranteeList3.add(name);
-										}
 										break;
 									}
 								}
 								if (info.trigger.global) {
-									if ((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3))) {
-										if (info.filter && !(guaranteeName3.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, guaranteeName3)))) {
+									if (name2.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, name2))) {
+										if (info.filter) {
 											try {
 												var bool = info.filter(trigger, player);
 												if (!bool) continue;
@@ -8911,47 +8915,12 @@ const skills = {
 										if (!map[name]) map[name] = [];
 										map[name].add(skills2[j]);
 										skills.add(skills2[j]);
-										// 添加保底的武将牌名
-										if (guaranteeName1.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, guaranteeName1))) {
-											guaranteeList1.add(name);
-										} else if (guaranteeName2.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, guaranteeName2))) {
-											guaranteeList2.add(name);
-										} else if (guaranteeName3.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, guaranteeName3))) {
-											guaranteeList3.add(name);
-										}
 										break;
 									}
 								}
 							}
 						}
-						if (event.triggername === "phaseBefore") {
-							if (list.length >= 2 * (result.links.length + player.storage.taffyshen_pingjianX) + 1 && guaranteeList1.length >= 1 && guaranteeList2.length >= 1 && guaranteeList3.length >= 1) {
-								set = new Set([...guaranteeList1.randomGets(1), ...guaranteeList2.randomGets(1), ...guaranteeList3.randomGets(1)]);
-								break;
-							}
-						} else if (event.triggername === "damageBefore") {
-							if (list.length >= 2 * (result.links.length + player.storage.taffyshen_pingjianX) + 1 && guaranteeList1.length >= 1 && guaranteeList2.length >= 1) {
-								set = new Set([...guaranteeList1.randomGets(1), ...guaranteeList2.randomGets(1)]);
-								break;
-							}
-						} else if (event.triggername === "phaseJieshuBefore") {
-							if (list.length >= 2 * (result.links.length + player.storage.taffyshen_pingjianX) + 1 && guaranteeList1.length >= 1 && guaranteeList2.length >= 1) {
-								set = new Set([...guaranteeList1.randomGets(1), ...guaranteeList2.randomGets(1)]);
-								break;
-							}
-						}
-					}
-					// 遍历完后对抽到的武将牌与技能进行排序处理
-					for (let i of list) {
-						if (set.size >= 2 * (result.links.length + player.storage.taffyshen_pingjianX) + 1) {
-							break;
-						}
-						set.add(i);
-					}
-					list = [...set];
-					skills = [];
-					for (let i of list) {
-						skills.push(...map[i]);
+						if (list.length >= 2 * (result.links.length + player.storage.taffyshen_pingjianX) + 1) break;
 					}
 					if (skills.length) {
 						event.list = list;
@@ -9111,13 +9080,7 @@ const skills = {
 					var list = [];
 					var skills = [];
 					var map = [];
-					var evt = event.getParent(2);
-					let name2 = ["phaseUseEnd", "phaseUseAfter", "phaseChange", "phaseDiscardBefore", "phaseDiscardBegin", "phaseDiscard", "phaseDiscardEnd", "phaseDiscardAfter"];
-					let name3 = [];
-					let guaranteeName1 = ["phaseUseEnd", "phaseUseAfter"];
-					let guaranteeName2 = ["phaseDiscardBefore", "phaseDiscardBegin", "phaseDiscard", "phaseDiscardEnd", "phaseDiscardAfter"];
-					let guaranteeList1 = [];
-					let guaranteeList2 = [];
+					let guaranteeList = [];
 					let set = [];
 					allList.randomSort();
 					for (let i = 0; i < allList.length; i++) {
@@ -9131,13 +9094,6 @@ const skills = {
 								return true;
 							});
 							if (playerSkills.includes(skills2[j])) continue;
-							if (name3.length !== 0) {
-								list.add(name);
-								if (!map[name]) map[name] = [];
-								map[name].add(skills2[j]);
-								skills.add(skills2[j]);
-								continue;
-							}
 							if (skills.includes(skills2[j]) || lib.skill.taffyshen_pingjian.phaseUse_special.includes(skills2[j])) {
 								list.add(name);
 								if (!map[name]) map[name] = [];
@@ -9151,7 +9107,7 @@ const skills = {
 								if (!map[name]) map[name] = [];
 								map[name].add(skills2[j]);
 								skills.add(skills2[j]);
-								guaranteeList1.add(name);
+								guaranteeList.add(name);
 								continue;
 							}
 							var list2 = [skills2[j]];
@@ -9182,53 +9138,14 @@ const skills = {
 												continue;
 											}
 										}
-										guaranteeList1.add(name);
-										break;
-									}
-								} else if (info.trigger) {
-									if (info.trigger.player) {
-										if ((name3.length === 0 ? name2.includes(info.trigger.player) : name3.includes(info.trigger.player)) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, name3.length === 0 ? name2 : name3))) {
-											if (info.filter && !(guaranteeName2.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, guaranteeName2)))) {
-												try {
-													var bool = info.filter(trigger, player);
-													if (!bool) continue;
-												} catch (e) {
-													continue;
-												}
-											}
-											// 添加保底的武将牌名
-											if (guaranteeName1.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, guaranteeName1))) {
-												guaranteeList1.add(name);
-											} else if (guaranteeName2.includes(info.trigger.player) || (Array.isArray(info.trigger.player) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.player, guaranteeName2))) {
-												guaranteeList2.add(name);
-											}
-											break;
-										}
-									}
-									if (info.trigger.global) {
-										if (((name3.length === 0 ? name2.includes(info.trigger.global) : name3.includes(info.trigger.global)) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, name3.length === 0 ? name2 : name3))) && (!info.trigger.player || info.trigger.player !== "enterGame" || (Array.isArray(info.trigger.player) && !info.trigger.player.includes("enterGame")))) {
-											if (info.filter && !(guaranteeName2.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, guaranteeName2)))) {
-												try {
-													var bool = info.filter(trigger, player);
-													if (!bool) continue;
-												} catch (e) {
-													continue;
-												}
-											}
-											// 添加保底的武将牌名
-											if (guaranteeName1.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, guaranteeName1))) {
-												guaranteeList1.add(name);
-											} else if (guaranteeName2.includes(info.trigger.global) || (Array.isArray(info.trigger.global) && lib.skill.taffyshen_pingjian.hasCommonElement(info.trigger.global, guaranteeName2))) {
-												guaranteeList2.add(name);
-											}
-											break;
-										}
+										guaranteeList.add(name);
 									}
 								}
+								break;
 							}
 						}
-						if (list.length >= 2 * (result.links.length + player.storage.taffyshen_pingjianX) + 1 && guaranteeList1.length >= 1 && guaranteeList2.length >= 1) {
-							set = new Set([...guaranteeList1.randomGets(1), ...guaranteeList2.randomGets(1)]);
+						if (list.length >= 2 * (result.links.length + player.storage.taffyshen_pingjianX) + 1 && guaranteeList.length >= 1) {
+							set = new Set([...guaranteeList.randomGets(1)]);
 							break;
 						}
 					}

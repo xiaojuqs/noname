@@ -21,7 +21,7 @@ const characters = {
 	taffyold_tengfanglan: ["female", "wu", 3, ["taffyold_luochong", "taffyold_aichen"], ["character:tengfanglan", "die:tengfanglan"]],
 	taffyold_ol_feiyi: ["male", "shu", 3, ["taffyold_yanru", "taffyold_hezhong"], ["character:ol_feiyi", "die:ol_feiyi"]],
 	taffyshendc_guanning: ["male", "shen", "3/7", ["taffyshendc_dunshi"]],
-	taffyre_xushao: ["male", "qun", 3, ["taffyre_pingjian"]],
+	taffyre_xushao: ["male", "qun", 4, ["taffyre_pingjian"]],
 	taffyold_sb_caopi: ["male", "wei", 3, ["taffyold_sbxingshang", "taffyold_sbfangzhu", "taffyold_sbsongwei"], ["zhu", "character:sb_caopi", "die:sb_caopi"]],
 	taffyold_yuantanyuanshang: ["male", "qun", 4, ["taffyold_neifa"], ["character:yuantanyuanshang", "die:yuantanyuanshang"]],
 	taffyold_zhanghua: ["male", "jin", 3, ["olbihun", "olchuanwu", "oljianhe"], ["character:zhanghua", "die:zhanghua"]],
