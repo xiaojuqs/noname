@@ -1255,7 +1255,10 @@ const skills = {
 				ai: {
 					result: {
 						target(player, target) {
-							return target.isLinked() + target.isTurnedOver();
+							if (get.attitude(player, target) > 3){
+								if (target.isLinked() && !target.hasSkill("nzry_jieying")) return 5;
+								if (target.isTurnedOver()) return 10;
+							}
 						},
 					},
 				},
@@ -1292,7 +1295,7 @@ const skills = {
 					result: {
 						target(player, target) {
 							return (
-								1 +
+								1 + (target.hp > 1 ? 0 : 100) * (target == player ? 1.5 : 1) +
 								Array.from({ length: 13 })
 									.map((_, i) => "equip" + parseFloat(i + 1))
 									.some(i => target.hasDisabledSlot(i))
@@ -1468,7 +1471,7 @@ const skills = {
 				ai: {
 					result: {
 						target(player, target) {
-							return -target.countCards("hs") - 1;
+							return 0;
 						},
 					},
 				},
@@ -1485,7 +1488,7 @@ const skills = {
 				ai: {
 					result: {
 						target(player, target) {
-							return -target.countCards("hs") - 2;
+							return 0;
 						},
 					},
 				},
@@ -1502,7 +1505,7 @@ const skills = {
 				ai: {
 					result: {
 						target(player, target) {
-							return -target.countCards("hs") - 1;
+							return 0;
 						},
 					},
 				},
@@ -1544,7 +1547,7 @@ const skills = {
 				ai: {
 					result: {
 						target(player, target) {
-							return target.isTurnedOver() ? 1 : -1;
+							return target.isTurnedOver() ? target.countCards("h") : -target.countCards("h");
 						},
 					},
 				},
