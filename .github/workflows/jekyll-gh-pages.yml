@@ -4,9 +4,9 @@ on:
   # Runs on pushes targeting the default branch
   push:
     paths-ignore:
-    	- 'docker/**'
-    	- 'docs/**'
-			- README.md
+      - 'docker/**'
+      - 'docs/**'
+      - README.md
     branches: ["master"]
 
   # Allows you to run this workflow manually from the Actions tab
