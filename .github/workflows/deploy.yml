@@ -44,7 +44,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build
-        run: npm ci
+        run: |
+          npm install
+          npm run build
         working-directory: ./node_modules/@types/node
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
