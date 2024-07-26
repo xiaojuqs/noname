@@ -9453,6 +9453,7 @@ const skills = {
 			clearTargets.forEach(current => {
 				current.removeSkill("hoshino_shuiyuan_effect");
 				current.removeSkill("hoshino_haile_effect");
+        current.removeSkill("hoshino_shuiyuan_remove");
 				current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
 			});
 			const targets = result.targets.slice().sortBySeat();
@@ -9462,12 +9463,25 @@ const skills = {
 				if (!target.isIn()) continue;
 				target.addMark("hoshino_shuiyuan_effect", 5, false);
 				target.addSkill("hoshino_shuiyuan_effect");
+        target.addSkill("hoshino_shuiyuan_remove");
 				if (player.hasSkill("hoshino_haile")) {
 					target.addSkill("hoshino_haile_effect");
 				}
 			}
 		},
 		subSkill: {
+      remove: {
+        trigger: { global: "phaseJieshuBegin" },
+        forced: true,
+        content: () => {
+          player.removeMark("hoshino_shuiyuan_effect", 1);
+          if (player.countMark("hoshino_shuiyuan_effect") === 0) {
+            player.removeSkill("hoshino_shuiyuan_effect");
+            player.removeSkill("hoshino_haile_effect");
+            player.removeSkill("hoshino_shuiyuan_remove");
+          }
+        },
+      },
 			effect: {
 				audio: "hoshino_shuiyuan",
 				forced: true,
@@ -9496,6 +9510,7 @@ const skills = {
 					targets.forEach(current => {
 						current.removeSkill("hoshino_shuiyuan_effect");
 						current.removeSkill("hoshino_haile_effect");
+            current.removeSkill("hoshino_shuiyuan_remove");
 						current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
 					});
 				},
@@ -9567,14 +9582,10 @@ const skills = {
 			effect: {
 				audio: "hoshino_haile",
 				trigger: { global: "phaseJieshuBegin" },
+        priority: 999,
 				forced: true,
 				content: () => {
-					player.removeMark("hoshino_shuiyuan_effect", 1);
 					player.draw();
-					if (player.countMark("hoshino_shuiyuan_effect") === 0) {
-						player.removeSkill("hoshino_shuiyuan_effect");
-						player.removeSkill("hoshino_haile_effect");
-					}
 				},
 			},
 		},
