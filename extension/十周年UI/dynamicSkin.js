@@ -673,22 +673,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					y: [0, 0.5],
 				},
 			},
-			衣垂绿川: {
-				name: "大乔/衣垂绿川/XingXiang",
-				x: [0, 1],
-				y: [0, 0.25],
-				scale: 0.45,
-				angle: 0,
-				clipSlots: ["san"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
-				// speed: 1,
-				// action: 'DaiJi',
-				beijing: {
-					name: "大乔/衣垂绿川/BeiJing",
-					scale: 0.3,
-					x: [0, 0.4],
-					y: [0, 0.5],
-				},
-			},
 		},
 		diaochan: {
 			// 貂蝉
@@ -1266,34 +1250,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 						speed: 0.9,
 						delay: 0.6,
 					},
-				},
-			},
-		},
-		heyan: {
-			// 何晏
-			忆梦慕蝶: {
-				name: "何晏/忆梦慕蝶/daiji2",
-				x: [0, 0.4],
-				y: [0, 0.55],
-				scale: 0.8,
-				angle: 0,
-				// speed: 1,
-				shizhounian: true,
-				chuchang: {
-					name: "何晏/忆梦慕蝶/chuchang",
-					scale: 0.9,
-					action: "play",
-				},
-				gongji: {
-					name: "何晏/忆梦慕蝶/chuchang",
-					scale: 1.1,
-					action: "play",
-				},
-				beijing: {
-					name: "何晏/忆梦慕蝶/beijing",
-					x: [0, -1.2],
-					y: [0, 0.5],
-					scale: 0.4,
 				},
 			},
 		},
