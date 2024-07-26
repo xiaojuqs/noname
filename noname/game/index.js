@@ -24,6 +24,7 @@ import { Check } from "./check.js";
 
 import security from "../util/security.js";
 import { GameCompatible } from "./compatible.js";
+import { save } from "../util/config.js";
 
 export class Game extends GameCompatible {
 	online = false;
@@ -2151,8 +2152,7 @@ export class Game extends GameCompatible {
 					str,
 					{
 						module: ts.ModuleKind.ES2015,
-						//@todo: ES2019 -> ES2020
-						target: ts.ScriptTarget.ES2019,
+						target: ts.ScriptTarget.ES2020,
 						inlineSourceMap: true,
 						resolveJsonModule: true,
 						esModuleInterop: true,
@@ -4904,7 +4904,7 @@ export class Game extends GameCompatible {
 			delete lib.config.extensionInfo[extensionName];
 			game.saveConfigValue("extensionInfo");
 		}
-		if (!game.download || keepFile) return;
+		if (!game.readFile || keepFile) return;
 		game.promises.removeDir(`extension/${extensionName}`).catch(console.error);
 	}
 	addRecentCharacter() {
@@ -8100,34 +8100,30 @@ export class Game extends GameCompatible {
 	 * @param { string } key
 	 * @param { * } [value]
 	 * @param { string | boolean } [local]
-	 * @param { Function } [callback]
+	 * @param { function(): void } [callback]
 	 */
 	saveConfig(key, value, local, callback) {
+		// @ts-ignore
 		if (_status.reloading) return;
+
+		let storeKey = key;
+		let base = lib.config;
+
 		if (local) {
-			const localmode = typeof local == "string" ? local : lib.config.mode;
+			let localmode = typeof local == "string" ? local : lib.config.mode;
+
 			if (!lib.config.mode_config[localmode]) lib.config.mode_config[localmode] = {};
-			if (value == undefined) delete lib.config.mode_config[localmode][key];
-			else lib.config.mode_config[localmode][key] = value;
-			key += `_mode_config_${localmode}`;
-		} else if (value == undefined) delete lib.config[key];
-		else lib.config[key] = value;
-		if (lib.db) {
-			if (value == undefined) game.deleteDB("config", key, callback);
-			else game.putDB("config", key, value, callback);
-			return;
+			base = lib.config.mode_config[localmode];
+			storeKey += `_mode_config_${localmode}`;
 		}
-		let config;
-		try {
-			config = JSON.parse(localStorage.getItem(`${lib.configprefix}config`));
-			if (!config || typeof config != "object") throw "err";
-		} catch (err) {
-			config = {};
+
+		if (typeof value == "undefined") {
+			delete base[key];
+		} else {
+			base[key] = value;
 		}
-		if (value === undefined) delete config[key];
-		else config[key] = value;
-		localStorage.setItem(`${lib.configprefix}config`, JSON.stringify(config));
-		if (callback) callback();
+
+		save(storeKey, "config", value).then(callback);
 	}
 	/**
 	 * @param { string } key
