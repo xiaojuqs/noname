@@ -354,7 +354,7 @@ const skills = {
 							.set("prompt", "良姻：是否令一名角色回复体力？")
 							.set("ai", function () {
 								const player = _status.event.player,
-									target = _status.event.getParent().target;
+									target = _status.event.getParent().targets[0];
 								let list = _status.event.controls.slice(0),
 									eff1 = 0,
 									eff2 = 0;
@@ -1941,7 +1941,6 @@ const skills = {
 			combo: "nzry_huaiju",
 		},
 	},
-	// ----- 审查分界线喵 ----- 上面的代码已经经过了审查喵
 	nzry_kuizhu: {
 		audio: 2,
 		trigger: {
@@ -2692,7 +2691,6 @@ const skills = {
 		},
 	},
 	jianchu: {
-		shaRelated: true,
 		audio: 2,
 		audioname: ["re_pangde"],
 		trigger: { player: "useCardToPlayered" },
@@ -3159,7 +3157,6 @@ const skills = {
 		group: "kuanggu_check",
 	},
 	xinliegong: {
-		shaRelated: true,
 		mod: {
 			aiOrder(player, card, num) {
 				if (num > 0 && (card.name === "sha" || get.tag(card, "draw"))) return num + 6;
@@ -3562,8 +3559,8 @@ const skills = {
 				return true;
 			};
 			const bool = await chooseBool.forResultBool();
-			if (!bool && !event.directbool) return;
-			const addToExpansion = player.addToExpansion(event.card, "gain2");
+			if (!bool) return;
+			const addToExpansion = player.addToExpansion(card, "gain2");
 			addToExpansion.gaintag.add("tuntian");
 			await addToExpansion;
 		},
@@ -3712,7 +3709,6 @@ const skills = {
 		},
 	},
 	jiang: {
-		shaRelated: true,
 		audio: 2,
 		preHidden: true,
 		audioname: ["sp_lvmeng", "re_sunben", "re_sunce"],
@@ -4374,7 +4370,7 @@ const skills = {
 						}
 						event.dialog.close();
 						event.control.close();
-						// game.resume(); // 不再 game.resume 防止 game.loop 被重复执行
+						game.resume(); // 不再 game.resume 防止 game.loop 被重复执行
 						_status.imchoosing = false;
 						resolve(result);
 					});
@@ -4395,7 +4391,12 @@ const skills = {
 			} else if (event.isOnline()) {
 				const { promise, resolve } = Promise.withResolvers();
 				event.player.send(chooseButton, event.player, cards, event.logged);
-				event.player.wait(result => !!void resolve(result)); // 不再 game.resume 防止 game.loop 被重复执行
+				event.player.wait(async result => {
+					if(result =="ai")
+						result = await switchToAuto();
+
+					resolve(result);
+				}); // 不再 game.resume 防止 game.loop 被重复执行
 				game.pause(); // 暂停 game.loop 防止 game.resume2
 				next = promise;
 			} else {
@@ -4599,7 +4600,6 @@ const skills = {
 		},
 	},
 	lieren: {
-		shaRelated: true,
 		audio: 2,
 		audioname: ["boss_lvbu3", "ol_zhurong"],
 		trigger: { source: "damageSource" },
@@ -4632,6 +4632,9 @@ const skills = {
 	},
 	fangzhu: {
 		audio: 2,
+		audioname2: {
+			xin_simayi: "jilue_fangzhu",
+		},
 		trigger: { player: "damageEnd" },
 		preHidden: true,
 		async cost(event, trigger, player) {
@@ -5338,7 +5341,7 @@ const skills = {
 		locked: true,
 		audio: 2,
 		audioname: ["boss_lvbu3"],
-		audioname2: { shen_simayi: "jilue_wansha" },
+		audioname2: { shen_simayi: "jilue_wansha", xin_simayi: "jilue_wansha" },
 		global: "wansha2",
 		trigger: { global: "dying" },
 		priority: 15,
@@ -5372,7 +5375,7 @@ const skills = {
 			if (get.color(event.card) != "black") return false;
 			return (event.card.name == "nanman" && player != event.player) || (event.card.name == "wanjian" && player != event.player) || (event.card.name == "taoyuan" && player.hp < player.maxHp) || event.card.name == "wugu";
 		},
-		async content() {},
+		async content() { },
 		mod: {
 			targetEnabled(card) {
 				if ((get.type(card) == "trick" || get.type(card) == "delay") && get.color(card) == "black") return false;
@@ -6070,7 +6073,6 @@ const skills = {
 		zhuSkill: true,
 	},
 	mengjin: {
-		shaRelated: true,
 		audio: 2,
 		trigger: { player: "shaMiss" },
 		//priority:-1,
@@ -6392,7 +6394,6 @@ const skills = {
 		},
 	},
 	liegong: {
-		shaRelated: true,
 		audio: 2,
 		audioname: ["re_huangzhong"],
 		trigger: { player: "useCardToPlayered" },
