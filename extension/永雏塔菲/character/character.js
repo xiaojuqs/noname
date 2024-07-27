@@ -41,6 +41,7 @@ const characters = {
 	hoshino: ["female", "shen", 4, ["hoshino_zhenya", "hoshino_jijiu", "hoshino_huizhang", "hoshino_shushou"], ["unseen"]],
 	swimsuit_hoshino: ["female", "shen", 3, ["hoshino_shuiyuan", "hoshino_shuiji", "hoshino_naishu", "hoshino_haile"]],
 	limulu: ["male", "shen", 3, ["limulu_baoshi", "limulu_zhihui", "limulu_mowang"]],
+	taffyold_tw_baoxin: ["male", "qun", 4, ["taffyold_twmutao", "twyimou"], ["character:tw_baoxin", "die:tw_baoxin"]],
 	aruijier: ["female", "shen", "", [], ["unseen"]],
 };
 

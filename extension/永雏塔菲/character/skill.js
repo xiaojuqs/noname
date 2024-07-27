@@ -5456,19 +5456,19 @@ const skills = {
 		trigger: {
 			player: ["damageBefore", "phaseJieshuBefore", "phaseBefore"],
 		},
-    filter: function(event, player) {
-      if (event.name !== "damage") {
-        if (player.storage.taffyre_pingjianCounts > 1) {
-          return false;
-        }
-      }
-      return true;
-    },
+		filter: function (event, player) {
+			if (event.name !== "damage") {
+				if (player.storage.taffyre_pingjianCounts > 1) {
+					return false;
+				}
+			}
+			return true;
+		},
 		frequent: true,
 		content: function () {
 			"step 0";
 			if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage.taffyre_pingjianX = 0;
-      if (!player.storage.taffyre_pingjianCounts) player.storage.taffyre_pingjianCounts = 0;
+			if (!player.storage.taffyre_pingjianCounts) player.storage.taffyre_pingjianCounts = 0;
 			var skills = player.getSkills(null, false, false).filter(skill => {
 				var info = get.info(skill);
 				if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -5521,12 +5521,12 @@ const skills = {
 					var name2 = event.triggername;
 					if (name2 === "phaseBefore") {
 						name2 = ["phaseBeforeStart", "phaseBefore", "phaseBeforeEnd", "phaseBeginStart", "phaseBegin", "phaseChange", "phaseZhunbeiBefore", "phaseZhunbeiBegin", "phaseZhunbei", "phaseZhunbeiEnd", "phaseZhunbeiAfter", "phaseJudgeBefore", "phaseJudgeBegin", "phaseJudge", "phaseJudgeEnd", "phaseJudgeAfter", "phaseDrawBefore", "phaseDrawBegin", "phaseDrawBegin1", "phaseDrawBegin2", "phaseDraw", "phaseDrawEnd", "phaseDrawAfter", "phaseUseBefore", "phaseUseBegin"];
-            player.storage.taffyre_pingjianCounts++;
+						player.storage.taffyre_pingjianCounts++;
 					} else if (name2 === "damageBefore") {
 						name2 = ["damageBefore", "damageBegin", "damageBegin2", "damageBegin3", "damageBegin4", "damage", "damageSource", "damageEnd", "damageAfter"];
 					} else if (name2 === "phaseJieshuBefore") {
 						name2 = ["phaseJieshuBefore", "phaseJieshuBegin", "phaseJieshu", "phaseJieshuEnd", "phaseJieshuAfter", "phaseEnd", "phaseAfter"];
-            player.storage.taffyre_pingjianCounts++;
+						player.storage.taffyre_pingjianCounts++;
 					}
 					for (let i = 0; i < allList.length; i++) {
 						var name = allList[i];
@@ -5699,16 +5699,16 @@ const skills = {
 		enable: "phaseUse",
 		usable: 1,
 		prompt: () => lib.translate.taffyre_pingjian_info,
-    filter: function(event, player) {
-      if (player.storage.taffyre_pingjianCounts > 1) {
-        return false;
-      }
-      return true;
-    },
+		filter: function (event, player) {
+			if (player.storage.taffyre_pingjianCounts > 1) {
+				return false;
+			}
+			return true;
+		},
 		content: function () {
 			"step 0";
 			if (!player.storage.taffyre_pingjianX && player.storage.taffyre_pingjianX !== 0) player.storage.taffyre_pingjianX = 0;
-      if (!player.storage.taffyre_pingjianCounts) player.storage.taffyre_pingjianCounts = 0;
+			if (!player.storage.taffyre_pingjianCounts) player.storage.taffyre_pingjianCounts = 0;
 			var skills = player.getSkills(null, false, false).filter(skill => {
 				var info = get.info(skill);
 				if (!info || info.charlotte || get.is.empty(info) || get.skillInfoTranslation(skill, player) === "") return false;
@@ -5759,7 +5759,7 @@ const skills = {
 					var map = [];
 					let guaranteeList = [];
 					let set = [];
-          player.storage.taffyre_pingjianCounts++;
+					player.storage.taffyre_pingjianCounts++;
 					allList.randomSort();
 					for (let i = 0; i < allList.length; i++) {
 						var name = allList[i];
@@ -5942,14 +5942,14 @@ const skills = {
 			},
 		},
 	},
-  taffyre_pingjian_counts: {
-    charlotte: true,
-    forced: true,
-    trigger: { global: ["phaseAfter", "phaseBefore"] },
-    content: function() {
-      player.storage.taffyre_pingjianCounts = 0;
-    },
-  },
+	taffyre_pingjian_counts: {
+		charlotte: true,
+		forced: true,
+		trigger: { global: ["phaseAfter", "phaseBefore"] },
+		content: function () {
+			player.storage.taffyre_pingjianCounts = 0;
+		},
+	},
 	//旧谋曹丕
 	taffyold_sbxingshang: {
 		audio: "sbxingshang",
@@ -9453,7 +9453,7 @@ const skills = {
 			clearTargets.forEach(current => {
 				current.removeSkill("hoshino_shuiyuan_effect");
 				current.removeSkill("hoshino_haile_effect");
-        current.removeSkill("hoshino_shuiyuan_remove");
+				current.removeSkill("hoshino_shuiyuan_remove");
 				current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
 			});
 			const targets = result.targets.slice().sortBySeat();
@@ -9463,25 +9463,25 @@ const skills = {
 				if (!target.isIn()) continue;
 				target.addMark("hoshino_shuiyuan_effect", 5, false);
 				target.addSkill("hoshino_shuiyuan_effect");
-        target.addSkill("hoshino_shuiyuan_remove");
+				target.addSkill("hoshino_shuiyuan_remove");
 				if (player.hasSkill("hoshino_haile")) {
 					target.addSkill("hoshino_haile_effect");
 				}
 			}
 		},
 		subSkill: {
-      remove: {
-        trigger: { global: "phaseJieshuBegin" },
-        forced: true,
-        content: () => {
-          player.removeMark("hoshino_shuiyuan_effect", 1);
-          if (player.countMark("hoshino_shuiyuan_effect") === 0) {
-            player.removeSkill("hoshino_shuiyuan_effect");
-            player.removeSkill("hoshino_haile_effect");
-            player.removeSkill("hoshino_shuiyuan_remove");
-          }
-        },
-      },
+			remove: {
+				trigger: { global: "phaseJieshuBegin" },
+				forced: true,
+				content: () => {
+					player.removeMark("hoshino_shuiyuan_effect", 1);
+					if (player.countMark("hoshino_shuiyuan_effect") === 0) {
+						player.removeSkill("hoshino_shuiyuan_effect");
+						player.removeSkill("hoshino_haile_effect");
+						player.removeSkill("hoshino_shuiyuan_remove");
+					}
+				},
+			},
 			effect: {
 				audio: "hoshino_shuiyuan",
 				forced: true,
@@ -9510,7 +9510,7 @@ const skills = {
 					targets.forEach(current => {
 						current.removeSkill("hoshino_shuiyuan_effect");
 						current.removeSkill("hoshino_haile_effect");
-            current.removeSkill("hoshino_shuiyuan_remove");
+						current.removeSkill("hoshino_shuiyuan_remove");
 						current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
 					});
 				},
@@ -9582,7 +9582,7 @@ const skills = {
 			effect: {
 				audio: "hoshino_haile",
 				trigger: { global: "phaseJieshuBegin" },
-        priority: 999,
+				priority: 999,
 				forced: true,
 				content: () => {
 					player.draw();
@@ -9901,6 +9901,54 @@ const skills = {
 			("step 2");
 			player.addMark("limulu_zhihui", 1, false);
 			game.log(player, "修改了技能", "#g【智慧】");
+		},
+	},
+	// 旧TW鲍信
+	taffyold_twmutao: {
+		audio: "twmutao",
+		enable: "phaseUse",
+		usable: 1,
+		filterTarget: function (card, player, target) {
+			return target.countCards("h");
+		},
+		content: function () {
+			"step 0";
+			event.togive = target.getNext();
+			var cards = target.getCards("h", { name: "sha" });
+			if (!cards.length) {
+				game.log("但", target, "没有", "#y杀", "！");
+				event.finish();
+			}
+			("step 1");
+			var cards = target.getCards("h", { name: "sha" }),
+				card = cards.randomRemove(1)[0];
+			target.give(card, event.togive);
+			if (cards.length) {
+				event.togive = event.togive.getNext();
+				event.redo();
+			}
+			("step 2");
+			target.line(event.togive);
+			event.togive.damage(Math.min(3, event.togive.countCards("h", { name: "sha" })), target);
+		},
+		ai: {
+			order: 10,
+			result: {
+				target: function (player, target) {
+					var num = 0,
+						numx = target.countCards("h", { name: "sha" }),
+						targetx = target;
+					for (var i = 0; i < numx; i++) {
+						targetx = targetx.next;
+						if (targetx == player) targetx = targetx.next;
+					}
+					var att1 = get.attitude(player, target),
+						att2 = get.attitude(player, targetx);
+					if (att1 > 0 && att2 < 0) num = 0.25;
+					if (att1 < 0 && att2 < 0) num = 4;
+					return att1 * num * numx * (targetx.countCards("h", { name: "sha" }) + 1);
+				},
+			},
 		},
 	},
 };

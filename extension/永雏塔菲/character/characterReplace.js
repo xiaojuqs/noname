@@ -24,8 +24,9 @@ const characterReplaces = {
 	wu_guanyu: ["wu_guanyu", "taffyold_wu_guanyu"],
 	shen_huatuo: ["dc_shen_huatuo", "shen_huatuo", "taffyold_dc_shen_huatuo"],
 	shen_xuzhu: ["shen_xuzhu", "taffyold_shen_xuzhu"],
-  tenggongzhu: ["tenggongzhu", "taffyold_tenggongzhu"],
-  hoshino: ["hoshino", "swimsuit_hoshino"],
+	tenggongzhu: ["tenggongzhu", "taffyold_tenggongzhu"],
+	hoshino: ["hoshino", "swimsuit_hoshino"],
+	baoxin: ["tw_baoxin", "baoxin", "taffyold_tw_baoxin"],
 };
 
 export default characterReplaces;
