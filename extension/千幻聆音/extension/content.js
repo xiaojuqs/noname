@@ -2162,11 +2162,9 @@ export let CONTENT = function (config, pack) {
             if (trigger.name == 'phase') player._qhly_gonnaChange[i] = 0;
             // @ts-ignore
             game.qhly_checkPlayerImageAudio(playerName, skin, player, function () {
+              // @ts-ignore
               player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
-              // taffy: 注释content.js原版代码喵
-              // // @ts-ignore
-              // player.node['avatar' + (i ? '2' : '')].qhly_origin_setBackgroundImage(player._qhly_skinChange[i]);
-              /* taffy分界线 */
+              // @ts-ignore
               // taffy: 修复变身后原画消失的问题喵
               // @ts-ignore
               game.qhly_checkFileExist(player._qhly_skinChange[i], function (s) {
@@ -5899,102 +5897,115 @@ export let CONTENT = function (config, pack) {
     // @ts-ignore
     game.qhly_originPlayAudio = game.playAudio;
     // @ts-ignore
-    game.qhly_playAudioPlus = function(){
+    game.qhly_playAudioPlus = function (...args) {
+      const options = (args.length === 1 && get.objtype(args[0]) === "object")
+        ? args[0]
+        : {
+          path: args.filter(arg => typeof arg === 'string' || typeof arg === 'number').join("/"),
+          onError: args.find(arg => typeof arg === "function"),
+        };
+
+      const {
+        path = "",
+        // broadcast = false,
+        addVideo = true,
+        video = false,
+        onCanPlay = (evt => void 0),
+        onPlay = (evt => void 0),
+        onEnded = (evt => void 0),
+        onError = (evt => void 0),
+      } = options;
+
+      // 为了能更美观的写代码，默认返回audio而不额外加一个void类型
       // @ts-ignore
-      if(_status.video&&arguments[1]!='video'&&!_status.qh_volmode) return;
-      var str='';
-      var onerror=null;
-      for(var i=0;i<arguments.length;i++){
-        if(typeof arguments[i]==='string'||typeof arguments[i]=='number'){
-          str+='/'+arguments[i];
-        }
-        else if(typeof arguments[i]=='function'){
-          onerror=arguments[i]
-        }
-        // @ts-ignore
-        if(_status.video) break;
-      }
-      if(!lib.config.repeat_audio&&_status.skillaudio.includes(str)) return;
-      _status.skillaudio.add(str);
+      if (_status.video && !video && !_status.qh_volmode) return;
+
+      let parsedPath = "";
+      if (["blob:", "data:"].some(prefix => path.startsWith(prefix))) parsedPath = path;
+      else if (path.startsWith('ext:')) parsedPath = path.replace(/^ext:/, 'extension/');
+      else if (path.startsWith('db:')) parsedPath = path.replace(/^(db:[^:]*)\//, (_, p) => p + ":");
+      else if (!path.startsWith("../")) parsedPath = `audio/${path}`;
+      else parsedPath = path;
+
       // @ts-ignore
-      game.addVideo('playAudio',null,str);
-      setTimeout(function(){
-        _status.skillaudio.remove(str);
-      },1000);
-      var audio=document.createElement('audio');
-      audio.autoplay=true;
-      var volumn = lib.config.volumn_audio/8;
-      if(lib.config.qhly_volumnAudio){
-        var num = lib.config.qhly_volumnAudio['audio'+str];
-        if(num !== undefined){
+      if (!lib.config.repeat_audio && _status.skillaudio.includes(parsedPath)) return;
+
+      const audio = document.createElement('audio');
+      audio.volume = lib.config.volumn_audio / 8;
+      if (lib.config.qhly_volumnAudio) {
+        var num = lib.config.qhly_volumnAudio['audio' + str];
+        if (num !== undefined) {
           num = parseInt(num);
-          if(!isNaN(num)){
-            audio.volume=num/8;
+          if (!isNaN(num)) {
+            audio.volume = num / 8;
           }
         }
       }
-      audio.volume = volumn;
-      if(str.indexOf('.mp3')!=-1||str.indexOf('.ogg')!=-1){
-        audio.src=lib.assetURL+'audio'+str;
+      audio.autoplay = true;
+
+      audio.oncanplay = ev => {
+        //Some browsers do not support "autoplay", so "oncanplay" listening has been added
+        Promise.resolve(audio.play()).catch(e => console.error(e));
+        if (_status.video || game.online) return;
+        onCanPlay(ev);
       }
-      else{
-        audio.src=lib.assetURL+'audio'+str+'.mp3';
-      }
-      audio.addEventListener('ended',function(){
-        this.remove();
-        // @ts-ignore
-        if(_status.qh_volmode){
+      audio.onplay = ev => {
+        _status.skillaudio.add(parsedPath);
+        setTimeout(() => _status.skillaudio.remove(parsedPath), 1000);
+        // if (broadcast) game.broadcast(game.playAudio, options);
+        if (addVideo) game.addVideo("playAudio", null, path);
+        if (_status.video || game.online) return;
+        onPlay(ev);
+      };
+      audio.onended = ev => {
+        audio.remove();
+        if (_status.qh_volmode) {
           // @ts-ignore
-          game.qhly_openVolumnDialog('audio'+str);
+          game.qhly_openVolumnDialog('audio' + str);
           // @ts-ignore
           _status.qh_volmode = false;
         }
+        if (_status.video || game.online) return;
+        onEnded(ev);
+      };
+      audio.onerror = ev => {
+        audio.remove();
+        if (_status.video || game.online) return;
+        onError(ev);
+      };
+
+      Promise.resolve().then(async () => {
+        let resolvedPath;
+        if (parsedPath.startsWith('db:')) resolvedPath = get.objectURL(await game.getDB('image', parsedPath.slice(3)));
+        else if (lib.path.extname(parsedPath)) resolvedPath = `${lib.assetURL}${parsedPath}`;
+        else if (URL.canParse(path)) resolvedPath = path;
+        else resolvedPath = `${lib.assetURL}${parsedPath}.mp3`;
+
+        audio.src = resolvedPath;
+        ui.window.appendChild(audio);
       });
-      audio.onerror=function(e){
-        if(this._changed){
-          // @ts-ignore
-          this.remove();
-          if(onerror){
-            onerror(e);
-          }
-        }
-        else{
-          this.src=lib.assetURL+'audio'+str+'.ogg';
-          this._changed=true;
-        }
-      };
-      //Some browsers do not support "autoplay", so "oncanplay" listening has been added
-      audio.oncanplay=function(){
-        // @ts-ignore
-        this.play();
-      };
-      ui.window.appendChild(audio);
+
       return audio;
-    };
-    game.playAudio = function () {
+    }
+    game.playAudio = function (...args) {
       if(_status.event && _status.event.name === 'dcbenxi'){
         // @ts-ignore
-        return game.qhly_originPlayAudio.apply(this, args);
+        return game.qhly_originPlayAudio.apply(this, arguments);
       }
-      var string = '';
-      var others = [];
-      for (var arg of arguments) {//将参数拼接成一个字符串，方便查找映射
-        if (typeof arg == 'string' || typeof arg == 'number') {
-          if(typeof arg == 'string'){
-            if(arg.startsWith('ext:')){
-              arg = arg.replace("ext:","../extension/");
-            }
-          }
-          string = string + "/" + arg;
-        } else {
-          others.push(arg);
-        }
+      const options = (args.length === 1 && get.objtype(args[0]) === "object")
+        ? args[0]
+        : {
+          path: args.filter(arg => typeof arg === 'string' || typeof arg === 'number').join("/"),
+          onError: args.find(arg => typeof arg === "function"),
+        };
+      let originPath = options.path;
+      if (originPath.startsWith('ext:')) {
+        originPath = originPath.replace("ext:", "../extension/");
       }
-      var replace = string.slice(1);
-      if (replace.length) {
+      if (originPath.length) {
         // @ts-ignore
         if (lib.config.qhly_notbb && lib.config.qhly_notbb != 'none' && !_status.qhly_previewAudio) {
-          var keySkill = replace;
+          var keySkill = originPath;
           // @ts-ignore
           while (keySkill.length && keySkill[keySkill.length - 1].charCodeAt() >= '0'.charCodeAt() && keySkill[keySkill.length - 1].charCodeAt() <= '9'.charCodeAt()) {
             keySkill = keySkill.slice(0, keySkill.length - 1);
@@ -6027,20 +6038,18 @@ export let CONTENT = function (config, pack) {
             return;
           }
         }
-        var rp = lib.config.qhly_skinset.audioReplace[replace];
-        if((!rp || rp.length == 0) && replace.endsWith('.mp3')){
-          rp = lib.config.qhly_skinset.audioReplace[replace.slice(0,replace.length-4)];
+        let replacedPath = lib.config.qhly_skinset.audioReplace[originPath];
+        if((!replacedPath || replacedPath.length == 0) && originPath.endsWith('.mp3')){
+          replacedPath = lib.config.qhly_skinset.audioReplace[originPath.slice(0,originPath.length-4)];
         }
-        if (rp) {
-          //如果存在映射，用映射的路径替换原有的路径，并调用原来的音频播放函数，以达到替换配音的效果。
-          var args = rp.split("/");
-          args.addArray(others);
+        if (replacedPath) {
+          options.path = replacedPath;
           if(lib.config.qhly_audioPlus){
             // @ts-ignore
-            game.qhly_playAudioPlus.apply(this, args);
+            game.qhly_playAudioPlus.call(this, options);
           }else{
             // @ts-ignore
-            return game.qhly_originPlayAudio.apply(this, args);
+            return game.qhly_originPlayAudio.call(this, options);
           }
         }
       }
