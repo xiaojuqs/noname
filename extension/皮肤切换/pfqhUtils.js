@@ -515,7 +515,7 @@ decadeModule.import(function(lib, game, ui, get, ai, _status){
 \t\t\t\tspeed: 1,\t\t//\t可删掉\t播放速度，不填默认为1；
 \t\t\t\thideSlots: ['隐藏的部件'],\t// 隐藏不需要的部件，想知道具体部件名称请使用SpineAltasSplit工具查看
 \t\t\t\tclipSlots: ['裁剪的部件'],\t// 剪掉超出头的部件，仅针对露头动皮，其他勿用
-\t\t\t\tbackground: "xxx.jpg",\t//\t可删掉\t背景图片，注意后面要写后缀名，如.jpg .png等
+\t\t\t\tbackground: "xxx.jpg",\t//\t可删掉\t背景图片，注意后面要写后缀名，如.jpg .png等 
 \t\t\t}
 \t\t},
 \t- 为了方便得到动皮的显示位置信息，请在游戏选将后，用控制台或调试助手小齿轮执行以下代码(没用到的属性请删掉以免报错):
