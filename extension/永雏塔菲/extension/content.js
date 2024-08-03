@@ -219,4 +219,26 @@ export const CONTENT = function (config, pack) {
 			}
 		},
 	};
+	// 视频背景
+	if (config.videoBg) {
+		lib.skill._taffy_videoBg = {
+			direct: true,
+			trigger: {
+				global: "gameStart",
+			},
+			filter: function (event, player) {
+				return player == game.me;
+			},
+			content: function () {
+				"step 0";
+				var div = ui.create.div();
+				div.style.width = "100%";
+				div.style.height = "100%";
+				div.style.left = "0px";
+				div.style.top = "0px";
+				div.innerHTML = "<video width='320' height='240' muted autoplay loop style='width:100%;height:100%;object-fit:fill;'><source src='" + lib.assetURL + "extension/永雏塔菲/video/bg.mp4' type='video/mp4'></video>";
+				document.body.insertBefore(div, ui.window);
+			},
+		};
+	}
 };

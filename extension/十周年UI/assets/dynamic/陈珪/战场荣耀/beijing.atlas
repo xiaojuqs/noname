@@ -1,0 +1,265 @@
+
+beijing.png
+size: 1952,1952
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bj_01
+  rotate: true
+  xy: 2, 165
+  size: 585, 1110
+  orig: 596, 1110
+  offset: 0, 0
+  index: -1
+bj_02
+  rotate: false
+  xy: 1315, 908
+  size: 559, 257
+  orig: 570, 261
+  offset: 10, 4
+  index: -1
+bj_03
+  rotate: false
+  xy: 1315, 816
+  size: 63, 90
+  orig: 63, 90
+  offset: 0, 0
+  index: -1
+bj_04
+  rotate: false
+  xy: 1315, 1169
+  size: 107, 226
+  orig: 107, 226
+  offset: 0, 0
+  index: -1
+bj_05
+  rotate: false
+  xy: 1716, 455
+  size: 157, 451
+  orig: 164, 459
+  offset: 0, 0
+  index: -1
+bj_06
+  rotate: true
+  xy: 800, 130
+  size: 33, 64
+  orig: 33, 64
+  offset: 0, 0
+  index: -1
+bj_07
+  rotate: false
+  xy: 1899, 1429
+  size: 31, 55
+  orig: 31, 55
+  offset: 0, 0
+  index: -1
+bj_08
+  rotate: true
+  xy: 2, 22
+  size: 141, 472
+  orig: 141, 472
+  offset: 0, 0
+  index: -1
+bj_09
+  rotate: false
+  xy: 2, 1397
+  size: 1438, 553
+  orig: 1438, 553
+  offset: 0, 0
+  index: -1
+bj_10
+  rotate: false
+  xy: 1397, 11
+  size: 187, 135
+  orig: 187, 135
+  offset: 0, 0
+  index: -1
+bj_11
+  rotate: true
+  xy: 1397, 148
+  size: 758, 317
+  orig: 758, 317
+  offset: 0, 0
+  index: -1
+bj_12
+  rotate: false
+  xy: 1442, 1167
+  size: 455, 783
+  orig: 456, 788
+  offset: 0, 5
+  index: -1
+bj_13
+  rotate: true
+  xy: 1114, 9
+  size: 741, 281
+  orig: 743, 281
+  offset: 0, 0
+  index: -1
+bj_14
+  rotate: false
+  xy: 2, 752
+  size: 1311, 643
+  orig: 1312, 643
+  offset: 0, 0
+  index: -1
+daiji/vx_huoyy_0
+  rotate: false
+  xy: 1716, 185
+  size: 48, 66
+  orig: 68, 80
+  offset: 10, 8
+  index: -1
+daiji/vx_huoyy_10
+  rotate: false
+  xy: 1899, 1551
+  size: 49, 63
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_12
+  rotate: false
+  xy: 1899, 1486
+  size: 49, 63
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_14
+  rotate: false
+  xy: 1639, 81
+  size: 50, 65
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_16
+  rotate: false
+  xy: 476, 98
+  size: 51, 65
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_18
+  rotate: false
+  xy: 1716, 388
+  size: 51, 65
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_2
+  rotate: true
+  xy: 1769, 404
+  size: 49, 66
+  orig: 68, 80
+  offset: 9, 8
+  index: -1
+daiji/vx_huoyy_20
+  rotate: false
+  xy: 1899, 1751
+  size: 51, 64
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_22
+  rotate: false
+  xy: 1637, 15
+  size: 51, 64
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_24
+  rotate: false
+  xy: 1586, 81
+  size: 51, 65
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_26
+  rotate: false
+  xy: 1899, 1817
+  size: 51, 65
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_28
+  rotate: false
+  xy: 1899, 1884
+  size: 51, 66
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_30
+  rotate: true
+  xy: 597, 113
+  size: 50, 65
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_32
+  rotate: false
+  xy: 1716, 253
+  size: 50, 65
+  orig: 68, 80
+  offset: 8, 8
+  index: -1
+daiji/vx_huoyy_34
+  rotate: false
+  xy: 1899, 1684
+  size: 50, 65
+  orig: 68, 80
+  offset: 9, 8
+  index: -1
+daiji/vx_huoyy_36
+  rotate: false
+  xy: 476, 30
+  size: 50, 66
+  orig: 68, 80
+  offset: 9, 8
+  index: -1
+daiji/vx_huoyy_38
+  rotate: true
+  xy: 529, 113
+  size: 50, 66
+  orig: 68, 80
+  offset: 9, 8
+  index: -1
+daiji/vx_huoyy_4
+  rotate: false
+  xy: 1899, 1616
+  size: 48, 66
+  orig: 68, 80
+  offset: 9, 8
+  index: -1
+daiji/vx_huoyy_40
+  rotate: false
+  xy: 1716, 320
+  size: 50, 66
+  orig: 68, 80
+  offset: 9, 8
+  index: -1
+daiji/vx_huoyy_42
+  rotate: true
+  xy: 664, 114
+  size: 49, 66
+  orig: 68, 80
+  offset: 10, 8
+  index: -1
+daiji/vx_huoyy_44
+  rotate: true
+  xy: 732, 115
+  size: 48, 66
+  orig: 68, 80
+  offset: 10, 8
+  index: -1
+daiji/vx_huoyy_6
+  rotate: false
+  xy: 1586, 13
+  size: 49, 66
+  orig: 68, 80
+  offset: 9, 8
+  index: -1
+daiji/vx_huoyy_8
+  rotate: true
+  xy: 1315, 764
+  size: 50, 64
+  orig: 68, 80
+  offset: 8, 8
+  index: -1

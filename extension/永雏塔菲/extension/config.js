@@ -4,7 +4,7 @@ export const CONFIG = {
 	version: {
 		nopointer: true,
 		clear: true,
-		name: "更新日期: 2024-06-10",
+		name: "更新日期: 2024-08-04",
 	},
 	github: {
 		clear: true,
@@ -12,5 +12,10 @@ export const CONFIG = {
 		onclick(item) {
 			window.open("https://github.com/Viridian8520/noname");
 		},
+	},
+	videoBg: {
+		name: "视频背景",
+		init: true,
+		intro: "开启视频背景",
 	},
 };

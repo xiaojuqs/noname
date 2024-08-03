@@ -1,0 +1,279 @@
+
+BeiJing.png
+size: 2017,1380
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: false
+  xy: 2, 625
+  size: 1540, 753
+  orig: 1540, 753
+  offset: 0, 0
+  index: -1
+bgup01
+  rotate: true
+  xy: 1865, 115
+  size: 206, 52
+  orig: 207, 52
+  offset: 0, 0
+  index: -1
+bgup02
+  rotate: false
+  xy: 182, 2
+  size: 71, 7
+  orig: 72, 7
+  offset: 0, 0
+  index: -1
+bgup03
+  rotate: true
+  xy: 1889, 330
+  size: 68, 121
+  orig: 68, 121
+  offset: 0, 0
+  index: -1
+bgup04
+  rotate: true
+  xy: 1969, 169
+  size: 159, 39
+  orig: 159, 39
+  offset: 0, 0
+  index: -1
+bgup05
+  rotate: true
+  xy: 1985, 408
+  size: 146, 24
+  orig: 146, 24
+  offset: 0, 0
+  index: -1
+bgup06
+  rotate: true
+  xy: 2009, 1300
+  size: 78, 6
+  orig: 78, 6
+  offset: 0, 0
+  index: -1
+bgup07
+  rotate: false
+  xy: 1639, 627
+  size: 22, 36
+  orig: 22, 37
+  offset: 0, 1
+  index: -1
+bgup08
+  rotate: true
+  xy: 1865, 31
+  size: 82, 114
+  orig: 84, 114
+  offset: 0, 0
+  index: -1
+bgup09
+  rotate: true
+  xy: 1802, 9
+  size: 32, 17
+  orig: 32, 17
+  offset: 0, 0
+  index: -1
+bgup10
+  rotate: false
+  xy: 1663, 621
+  size: 224, 210
+  orig: 224, 210
+  offset: 0, 0
+  index: -1
+bgup11
+  rotate: false
+  xy: 1919, 116
+  size: 33, 25
+  orig: 33, 26
+  offset: 0, 1
+  index: -1
+bgup12
+  rotate: false
+  xy: 1769, 13
+  size: 31, 28
+  orig: 33, 29
+  offset: 1, 1
+  index: -1
+bgup13
+  rotate: true
+  xy: 1889, 556
+  size: 167, 111
+  orig: 167, 111
+  offset: 0, 0
+  index: -1
+bgup14
+  rotate: true
+  xy: 1889, 725
+  size: 182, 109
+  orig: 183, 110
+  offset: 1, 1
+  index: -1
+bgup15
+  rotate: true
+  xy: 1981, 14
+  size: 153, 31
+  orig: 153, 31
+  offset: 0, 0
+  index: -1
+bgup16
+  rotate: true
+  xy: 1769, 43
+  size: 278, 58
+  orig: 278, 59
+  offset: 0, 1
+  index: -1
+bgup17
+  rotate: true
+  xy: 1829, 45
+  size: 276, 34
+  orig: 276, 34
+  offset: 0, 0
+  index: -1
+bgup18
+  rotate: false
+  xy: 1919, 143
+  size: 48, 185
+  orig: 48, 185
+  offset: 0, 0
+  index: -1
+bgup19
+  rotate: false
+  xy: 1663, 833
+  size: 211, 271
+  orig: 211, 271
+  offset: 0, 0
+  index: -1
+bgup20
+  rotate: true
+  xy: 1544, 628
+  size: 35, 93
+  orig: 36, 96
+  offset: 1, 1
+  index: -1
+bgup21
+  rotate: true
+  xy: 2, 2
+  size: 7, 98
+  orig: 7, 98
+  offset: 0, 0
+  index: -1
+bgup22
+  rotate: false
+  xy: 1876, 834
+  size: 9, 73
+  orig: 9, 75
+  offset: 0, 2
+  index: -1
+bgup23
+  rotate: true
+  xy: 1954, 118
+  size: 23, 18
+  orig: 23, 18
+  offset: 0, 0
+  index: -1
+bgup24
+  rotate: false
+  xy: 1889, 400
+  size: 94, 154
+  orig: 94, 154
+  offset: 0, 0
+  index: -1
+bgup25
+  rotate: false
+  xy: 1956, 1116
+  size: 33, 19
+  orig: 34, 19
+  offset: 0, 0
+  index: -1
+bgup26
+  rotate: false
+  xy: 102, 3
+  size: 78, 6
+  orig: 78, 6
+  offset: 0, 0
+  index: -1
+bgup27
+  rotate: true
+  xy: 1956, 1167
+  size: 72, 59
+  orig: 74, 60
+  offset: 1, 1
+  index: -1
+bgup28
+  rotate: false
+  xy: 1544, 665
+  size: 112, 23
+  orig: 112, 23
+  offset: 0, 0
+  index: -1
+bgup29
+  rotate: false
+  xy: 1956, 1137
+  size: 44, 28
+  orig: 44, 28
+  offset: 0, 0
+  index: -1
+bgup30
+  rotate: true
+  xy: 2010, 271
+  size: 57, 5
+  orig: 57, 5
+  offset: 0, 0
+  index: -1
+bgup31
+  rotate: true
+  xy: 1876, 909
+  size: 195, 107
+  orig: 196, 112
+  offset: 1, 5
+  index: -1
+bgup32
+  rotate: true
+  xy: 1659, 9
+  size: 296, 108
+  orig: 299, 110
+  offset: 3, 0
+  index: -1
+bgup33
+  rotate: true
+  xy: 1544, 690
+  size: 414, 117
+  orig: 418, 127
+  offset: 4, 3
+  index: -1
+bgup34
+  rotate: false
+  xy: 1544, 1241
+  size: 463, 137
+  orig: 468, 146
+  offset: 5, 1
+  index: -1
+bgup35
+  rotate: true
+  xy: 1659, 307
+  size: 312, 107
+  orig: 314, 112
+  offset: 1, 0
+  index: -1
+bgup36
+  rotate: false
+  xy: 1544, 1106
+  size: 410, 133
+  orig: 412, 133
+  offset: 1, 0
+  index: -1
+bgup37
+  rotate: true
+  xy: 1768, 323
+  size: 296, 119
+  orig: 302, 126
+  offset: 1, 0
+  index: -1
+cheA
+  rotate: false
+  xy: 2, 11
+  size: 1655, 612
+  orig: 1655, 612
+  offset: 0, 0
+  index: -1

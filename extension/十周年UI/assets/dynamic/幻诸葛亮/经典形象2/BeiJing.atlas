@@ -1,0 +1,146 @@
+
+BeiJing.png
+size: 2033,1174
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+caomao_145
+  rotate: false
+  xy: 1562, 94
+  size: 63, 75
+  orig: 64, 75
+  offset: 1, 0
+  index: -1
+caomao_146
+  rotate: false
+  xy: 1876, 495
+  size: 35, 47
+  orig: 35, 49
+  offset: 0, 2
+  index: -1
+caomao_147
+  rotate: true
+  xy: 1186, 2
+  size: 21, 30
+  orig: 34, 30
+  offset: 0, 0
+  index: -1
+caomao_148
+  rotate: false
+  xy: 1876, 447
+  size: 33, 46
+  orig: 33, 46
+  offset: 0, 0
+  index: -1
+caomao_149
+  rotate: true
+  xy: 2, 9
+  size: 20, 28
+  orig: 21, 28
+  offset: 1, 0
+  index: -1
+caomao_2
+  rotate: false
+  xy: 1562, 33
+  size: 61, 59
+  orig: 61, 59
+  offset: 0, 0
+  index: -1
+caomao_206
+  rotate: false
+  xy: 1642, 94
+  size: 351, 163
+  orig: 351, 163
+  offset: 0, 0
+  index: -1
+caomao_207
+  rotate: false
+  xy: 1186, 25
+  size: 374, 144
+  orig: 374, 145
+  offset: 0, 1
+  index: -1
+caomao_208
+  rotate: false
+  xy: 1186, 171
+  size: 454, 86
+  orig: 455, 86
+  offset: 1, 0
+  index: -1
+caomao_209
+  rotate: true
+  xy: 1876, 681
+  size: 491, 142
+  orig: 491, 142
+  offset: 0, 0
+  index: -1
+caomao_210
+  rotate: false
+  xy: 1876, 544
+  size: 140, 135
+  orig: 140, 135
+  offset: 0, 0
+  index: -1
+caomao_211
+  rotate: false
+  xy: 2, 259
+  size: 1872, 913
+  orig: 1872, 913
+  offset: 0, 0
+  index: -1
+caomao_27
+  rotate: false
+  xy: 2, 31
+  size: 712, 226
+  orig: 717, 244
+  offset: 4, 8
+  index: -1
+caomao_3
+  rotate: false
+  xy: 1913, 507
+  size: 37, 35
+  orig: 37, 35
+  offset: 0, 0
+  index: -1
+caomao_37
+  rotate: false
+  xy: 716, 8
+  size: 468, 249
+  orig: 468, 261
+  offset: 0, 7
+  index: -1
+caomao_5
+  rotate: false
+  xy: 1218, 2
+  size: 21, 21
+  orig: 21, 21
+  offset: 0, 0
+  index: -1
+caomao_52
+  rotate: true
+  xy: 2020, 1140
+  size: 32, 11
+  orig: 32, 11
+  offset: 0, 0
+  index: -1
+caomao_53
+  rotate: false
+  xy: 1876, 430
+  size: 31, 15
+  orig: 31, 15
+  offset: 0, 0
+  index: -1
+caomao_54
+  rotate: true
+  xy: 1627, 135
+  size: 34, 10
+  orig: 34, 10
+  offset: 0, 0
+  index: -1
+caomao_6
+  rotate: true
+  xy: 1241, 2
+  size: 21, 20
+  orig: 21, 20
+  offset: 0, 0
+  index: -1
