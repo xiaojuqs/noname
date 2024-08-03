@@ -568,7 +568,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		caomao: {
 			经典形象2: {
 				name: "曹髦/经典形象2/XingXiang",
-				x: [0, -1.0],
+				x: [0, -0.8],
 				y: [0, 0.2],
 				scale: 0.7,
 				angle: 0,
