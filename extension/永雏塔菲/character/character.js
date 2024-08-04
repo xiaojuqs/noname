@@ -42,6 +42,17 @@ const characters = {
 	swimsuit_hoshino: ["female", "shen", 3, ["hoshino_shuiyuan", "hoshino_shuiji", "hoshino_naishu", "hoshino_haile"]],
 	limulu: ["male", "shen", 3, ["limulu_baoshi", "limulu_zhihui", "limulu_mowang"]],
 	taffyold_tw_baoxin: ["male", "qun", 4, ["taffyold_twmutao", "twyimou"], ["character:tw_baoxin", "die:tw_baoxin"]],
+	taffyold_shichangshi: ["male", "qun", 1, ["taffyold_mbdanggu", "taffyold_mbmowang"], ["sex:male_castrated", "name:张|让-赵|忠-孙|璋-毕|岚-夏|恽-韩|悝-栗|嵩-段|珪-郭|胜-高|望", "character:shichangshi", "die:shichangshi"]],
+	taffyold_scs_zhangrang: ["male", "qun", "", ["taffyold_scstaoluan"], ["unseen", "sex:male_castrated", "character:scs_zhangrang", "die:scs_zhangrang"]],
+	taffyold_scs_zhaozhong: ["male", "qun", "", ["taffyold_scschiyan"], ["unseen", "sex:male_castrated", "character:scs_zhaozhong", "die:scs_zhaozhong"]],
+	taffyold_scs_sunzhang: ["male", "qun", "", ["taffyold_scszimou"], ["unseen", "sex:male_castrated", "character:scs_sunzhang", "die:scs_sunzhang"]],
+	taffyold_scs_bilan: ["male", "qun", "", ["taffyold_scspicai"], ["unseen", "sex:male_castrated", "character:scs_bilan", "die:scs_bilan"]],
+	taffyold_scs_xiayun: ["male", "qun", "", ["taffyold_scsyaozhuo"], ["unseen", "sex:male_castrated", "character:scs_xiayun", "die:scs_xiayun"]],
+	taffyold_scs_hankui: ["male", "qun", "", ["taffyold_scsxiaolu"], ["unseen", "sex:male_castrated", "character:scs_hankui", "die:scs_hankui"]],
+	taffyold_scs_lisong: ["male", "qun", "", ["taffyold_scskuiji"], ["unseen", "sex:male_castrated", "character:scs_lisong", "die:scs_lisong"]],
+	taffyold_scs_duangui: ["male", "qun", "", ["taffyold_scschihe"], ["unseen", "sex:male_castrated", "character:scs_duangui", "die:scs_duangui"]],
+	taffyold_scs_guosheng: ["male", "qun", "", ["taffyold_scsniqu"], ["unseen", "sex:male_castrated", "character:scs_guosheng", "die:scs_guosheng"]],
+	taffyold_scs_gaowang: ["male", "qun", "", ["taffyold_scsanruo"], ["unseen", "sex:male_castrated", "character:scs_gaowang", "die:scs_gaowang"]],
 	aruijier: ["female", "shen", "", [], ["unseen"]],
 };
 

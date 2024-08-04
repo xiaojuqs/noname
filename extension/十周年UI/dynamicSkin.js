@@ -759,6 +759,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			//陈珪
 			战场荣耀: {
 				name: "陈珪/战场荣耀/daiji2",
+				play2: "play2",
 				shan: "play3",
 				version: "3.6",
 				x: [0, 0.53],
@@ -5486,6 +5487,10 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 曹爽
 		dc_caoshuang: decadeUI.dynamicSkin.caoshuang,
+
+		// 陈珪
+		mb_chengui: decadeUI.dynamicSkin.chengui,
+		taffyshen_chengui: decadeUI.dynamicSkin.chengui,
 
 		// 大乔
 		re_daqiao: decadeUI.dynamicSkin.daqiao,
