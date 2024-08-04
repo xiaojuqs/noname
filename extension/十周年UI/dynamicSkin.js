@@ -580,6 +580,22 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					x: [0, -0.8],
 					y: [0, 0.5],
 				},
+				special: {
+					xiandingji: {
+						name: "曹髦/经典形象2/SS_cmskill",
+						x: [0, 0.5],
+						y: [0, 0.5],
+						scale: 0.9,
+						speed: 1,
+						delay: 2,
+					},
+					condition: {
+						xiandingji: {
+							play: "xiandingji",
+							// audio: '神郭嘉/audio/skill/victory', // 触发限定技时候播放的语音
+						},
+					},
+				},
 			},
 		},
 		caopi: {
@@ -5074,6 +5090,39 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					},
 				},
 			},
+			潜蛟觊天1: {
+				name: "钟会/潜蛟觊天/XingXiang",
+				x: [0, -0.5],
+				y: [0, 0.3],
+				scale: 0.45,
+				angle: 0,
+				clipSlots: ["ganzi1qizi"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
+				// speed: 1,
+				// action: 'DaiJi',
+				beijing: {
+					name: "钟会/潜蛟觊天/BeiJing",
+					scale: 0.3,
+					x: [0, 0.5],
+					y: [0, 0.5],
+				},
+				audio: {
+					skill: "钟会/潜蛟觊天/audio",
+					card: "钟会/潜蛟觊天/audio",
+				},
+				special: {
+					变身: {
+						hp: 2,
+						name: "zhonghui/潜蛟觊天2",
+					},
+					condition: {
+						lowhp: {
+							transform: ["变身"],
+							effect: "shaohui",
+							recover: true,
+						},
+					},
+				},
+			},
 			潜蛟觊天2: {
 				name: "钟会/潜蛟觊天2/XingXiang-1",
 				x: [0, -0.8],
@@ -5488,7 +5537,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 郭嘉
 		re_guojia: decadeUI.dynamicSkin.guojia,
+		ps1059_guojia: decadeUI.dynamicSkin.guojia,
+		ps2070_guojia: decadeUI.dynamicSkin.guojia,
+		huan_guojia: decadeUI.dynamicSkin.guojia,
 		jsrg_guojia: decadeUI.dynamicSkin.guojia,
+		dc_sb_guojia: decadeUI.dynamicSkin.guojia,
 
 		// 郭照
 		xin_guozhao: decadeUI.dynamicSkin.guozhao,
@@ -5574,6 +5627,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		ps_shen_machao: decadeUI.dynamicSkin.shen_machao,
 
 		// 神司马懿
+		xin_simayi: decadeUI.dynamicSkin.shen_simayi,
+		new_simayi: decadeUI.dynamicSkin.shen_simayi,
 		taffybaby_shen_simayi: decadeUI.dynamicSkin.shen_simayi,
 
 		// 神许褚
@@ -5702,9 +5757,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		jsrg_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
 
 		// 钟会
-		re_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		xin_zhonghui: decadeUI.dynamicSkin.zhonghui,
+		re_zhonghui: decadeUI.dynamicSkin.zhonghui,
+		old_zhonghui: decadeUI.dynamicSkin.zhonghui,
+		pe_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		clan_zhonghui: decadeUI.dynamicSkin.zhonghui,
+		yj_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		taffyold_clan_zhonghui: decadeUI.dynamicSkin.zhonghui,
 
 		// 钟琰
@@ -5720,9 +5778,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		re_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
-		jsrg_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		taffyold_sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		taffyold_sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+
+		// 幻诸葛亮
+		jsrg_zhugeliang: decadeUI.dynamicSkin.huan_zhugeliang,
 
 		// 左慈
 		re_zuoci: decadeUI.dynamicSkin.zuoci,
