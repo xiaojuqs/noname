@@ -450,13 +450,9 @@ game.import("character", function () {
 				onremove(player) {
 					if (player.node.jiu) {
 						player.node.jiu.delete();
-            // taffy: 注释gwent.js原版代码喵
-						// player.node.jiu2.delete();
-            /* taffy分界线 */
+						player.node.jiu2.delete();
 						delete player.node.jiu;
-            // taffy: 注释gwent.js原版代码喵
-						// delete player.node.jiu2;
-            /* taffy分界线 */
+						delete player.node.jiu2;
 					}
 				},
 				content() {
@@ -3756,13 +3752,8 @@ game.import("character", function () {
 							game.addVideo("gain2", target, get.cardsInfo([card]));
 						}
 						if(!target.node.jiu && lib.config.jiu_effect){
-              // taffy: 注释gwent.js原版代码喵
-              // target.node.jiu = ui.create.div(".playerjiu", target.node.avatar);
-              // target.node.jiu2 = ui.create.div(".playerjiu", target.node.avatar2);
-              /* taffy分界线 */
-              // taffy: 修复动皮状态喝酒样式问题喵
-              target.node.jiu = ui.create.div(".playerjiu", target);
-              /* taffy分界线 */
+              target.node.jiu = ui.create.div(".playerjiu", target.node.avatar);
+              target.node.jiu2 = ui.create.div(".playerjiu", target.node.avatar2);
 						}
 					}
 				},

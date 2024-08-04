@@ -1479,12 +1479,7 @@ div:not(.handcards) > .card > .info > span,
 	height: 100%;
 	left: 0;
 	top: 0;
-  /* taffy: 注释layout.css原版代码喵 */
-	/* z-index: 4; */
-  /* taffy分界线 */
-  /* taffy: 修复动皮状态喝酒样式问题喵 */
-	z-index: 62;
-  /* taffy分界线 */
+	z-index: 4;
 	pointer-events: none;
 	background: rgba(255, 0, 0, 0.3);
 }

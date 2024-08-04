@@ -837,13 +837,9 @@ game.import("card", function () {
 				onremove: function (player) {
 					if (player.node.jiu) {
 						player.node.jiu.delete();
-            // taffy: 注释extra.js原版代码喵
-						// player.node.jiu2.delete();
-            /* taffy分界线 */
+						player.node.jiu2.delete();
 						delete player.node.jiu;
-            // taffy: 注释extra.js原版代码喵
-						// delete player.node.jiu2;
-            /* taffy分界线 */
+						delete player.node.jiu2;
 					}
 					delete player.storage.jiu;
 				},

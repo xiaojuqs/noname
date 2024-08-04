@@ -2539,24 +2539,15 @@ export class Game extends GameCompatible {
 			//Powered by 升麻
 			if (bool) {
 				if (!player.node.jiu && lib.config.jiu_effect) {
-					// taffy: 注释extra.js原版代码喵
-					// player.node.jiu = ui.create.div(".playerjiu", player.node.avatar);
-					// player.node.jiu2 = ui.create.div(".playerjiu", player.node.avatar2);
-					/* taffy分界线 */
-					// taffy: 修复动皮状态喝酒样式问题喵
-          player.node.jiu = ui.create.div(".playerjiu", player);
-					/* taffy分界线 */
+					player.node.jiu = ui.create.div(".playerjiu", player.node.avatar);
+					player.node.jiu2 = ui.create.div(".playerjiu", player.node.avatar2);
 				}
 			} else {
 				if (player.node.jiu) {
 					player.node.jiu.delete();
-					// taffy: 注释extra.js原版代码喵
-					// player.node.jiu2.delete();
-					/* taffy分界线 */
+					player.node.jiu2.delete();
 					delete player.node.jiu;
-					// taffy: 注释extra.js原版代码喵
-					// delete player.node.jiu2;
-					/* taffy分界线 */
+					delete player.node.jiu2;
 				}
 			}
 		},
