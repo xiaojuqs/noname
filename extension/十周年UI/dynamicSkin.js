@@ -3681,13 +3681,13 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 			破云翔宇吴: {
 				name: "文鸯/破云翔宇吴/XingXiang",
-				x: [0, 0.45],
-				y: [0, 0.35],
+				x: [0, 1.2],
+				y: [0, 0.6],
 				gongji: {
 					x: [0, 0.5],
 					y: [0, 0.5],
 				},
-				scale: 0.5,
+				scale: 0.4,
 				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
