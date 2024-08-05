@@ -7360,6 +7360,7 @@ const skills = {
 					return name == "sha" && player.countCards("hs");
 				},
 				filter: function (event, player) {
+					if (!player.countCards("h")) return false;
 					return (
 						event.filterCard(
 							get.autoViewAs(
@@ -7549,7 +7550,7 @@ const skills = {
 			player.markAuto("taffyold_sbyijue_effect", [trigger.player]);
 		},
 		ai: {
-			halfneg: true,
+			neg: true,
 		},
 		marktext: "绝",
 		intro: { content: "已放$一马" },
@@ -10042,7 +10043,7 @@ const skills = {
 				first = list.randomRemove(1);
 			}
 			event.first = first[0];
-      first = first[0];
+			first = first[0];
 			if (list.contains("taffyold_scs_gaowang")) {
 				var others = list
 					.filter(changshi => {
