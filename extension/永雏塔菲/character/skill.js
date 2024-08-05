@@ -9993,15 +9993,8 @@ const skills = {
 					taffyold_scs_lisong: [],
 					taffyold_scs_duangui: ["taffyold_scs_guosheng"],
 					taffyold_scs_guosheng: ["taffyold_scs_duangui"],
-					taffyold_scs_gaowang: [],
+					taffyold_scs_gaowang: ["taffyold_scs_hankui", "taffyold_scs_duangui", "taffyold_scs_guosheng", "taffyold_scs_bilan"],
 				};
-				if (!get.isLuckyStar(player)) {
-					var list = lib.skill.taffyold_mbdanggu.changshi.map(i => i[0]);
-					for (var i of list) {
-						var select = list.filter(scs => scs != i && !_status.taffyold_changshiMap[i].includes(i));
-						_status.taffyold_changshiMap[i].addArray(select.randomGets(get.rand(0, select.length)));
-					}
-				}
 			}
 			return _status.taffyold_changshiMap;
 		},
