@@ -1,5 +1,5 @@
 const characterSort = {
-	taffy_old: ["taffyold_wu_zhugeliang", "taffyold_tw_niufudongxie", "taffyold_tw_zhangmancheng", "taffyold_ruiji", "taffyold_tengfanglan", "taffyold_ol_feiyi", "taffyold_sb_caopi", "taffyold_yuantanyuanshang", "taffyold_zhanghua", "taffyold_ol_pengyang", "taffyold_sb_sp_zhugeliang", "taffyold_sb_zhugeliang", "taffyold_sb_guanyu", "taffyold_bailingyun", "taffyold_clan_zhonghui", "taffyold_ol_luyusheng", "taffyold_shen_lusu", "taffyold_wu_guanyu", "taffyold_dc_shen_huatuo", "taffyold_shen_xuzhu", "taffyold_tenggongzhu", "taffyold_tw_baoxin", "taffyold_shichangshi"],
+	taffy_old: ["taffyold_wu_zhugeliang", "taffyold_tw_niufudongxie", "taffyold_tw_zhangmancheng", "taffyold_ruiji", "taffyold_tengfanglan", "taffyold_ol_feiyi", "taffyold_sb_caopi", "taffyold_yuantanyuanshang", "taffyold_zhanghua", "taffyold_ol_pengyang", "taffyold_sb_sp_zhugeliang", "taffyold_sb_zhugeliang", "taffyold_sb_guanyu", "taffyold_bailingyun", "taffyold_clan_zhonghui", "taffyold_ol_luyusheng", "taffyold_shen_lusu", "taffyold_wu_guanyu", "taffyold_dc_shen_huatuo", "taffyold_shen_xuzhu", "taffyold_tenggongzhu", "taffyold_tw_baoxin", "taffyold_shichangshi", "taffyold_dc_zhangmancheng"],
 	taffy_ol: ["taffyboss_lvbu1"],
 	taffy_shou: ["taffymb_shen_caocao"],
 	taffy_shi: ["taffydc_guanning", "taffydc_xushao"],

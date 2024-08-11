@@ -11354,6 +11354,168 @@ const skills = {
 			},
 		},
 	},
+	//旧张曼成
+	taffyold_dclvecheng: {
+		audio: "dclvecheng",
+		enable: "phaseUse",
+		usable: 1,
+		filterTarget: lib.filter.notMe,
+		content: function () {
+			player.addTempSkill("taffyold_dclvecheng_xiongluan");
+			player.markAuto("taffyold_dclvecheng_xiongluan", [target]);
+		},
+		ai: {
+			threaten: 3.1,
+			order: 9,
+			expose: 0.2,
+			result: {
+				target: function (player, target) {
+					if (player.getStorage("taffyold_dclvecheng_xiongluan").includes(target)) return 0;
+					if (
+						target.hasSkillTag(
+							"freeShan",
+							false,
+							{
+								player: player,
+							},
+							true
+						)
+					)
+						return -0.6;
+					var hs = player.countCards("h", card => {
+						return get.name(card) == "sha" && get.effect(target, card, player, player) != 0;
+					});
+					var ts = target.hp;
+					if (hs >= ts && ts > 1) return -2;
+					return -1;
+				},
+			},
+		},
+		subSkill: {
+			xiongluan: {
+				trigger: { player: "phaseEnd" },
+				charlotte: true,
+				forced: true,
+				popup: false,
+				onremove: true,
+				filter: function (event, player) {
+					return player.getStorage("taffyold_dclvecheng_xiongluan").some(i => i.isIn());
+				},
+				content: function () {
+					"step 0";
+					event.targets = player.getStorage("taffyold_dclvecheng_xiongluan").slice();
+					event.targets.sortBySeat();
+					("step 1");
+					if (!event.targets.length) {
+						event.finish();
+						return;
+					}
+					var target = event.targets.shift();
+					event.target = target;
+					target.showHandcards();
+					var cards = target.getCards("h", "sha");
+					if (!cards.length) event.redo();
+					else event.forced = false;
+					("step 2");
+					var forced = event.forced;
+					var prompt2 = forced ? "掠城：选择对" + get.translation(player) + "使用的【杀】" : "掠城：是否依次对" + get.translation(player) + "使用所有的【杀】？";
+					target
+						.chooseToUse(
+							forced,
+							function (card, player, event) {
+								if (get.itemtype(card) != "card" || get.name(card) != "sha") return false;
+								return lib.filter.filterCard.apply(this, arguments);
+							},
+							prompt2
+						)
+						.set("targetRequired", true)
+						.set("complexSelect", true)
+						.set("filterTarget", function (card, player, target) {
+							if (target != _status.event.sourcex && !ui.selected.targets.includes(_status.event.sourcex)) return false;
+							return lib.filter.targetEnabled.apply(this, arguments);
+						})
+						.set("sourcex", player);
+					("step 3");
+					if (result.bool) {
+						if (target.countCards("h", "sha")) {
+							event.forced = true;
+							event.goto(2);
+							return;
+						}
+					}
+					event.forced = false;
+					event.goto(1);
+				},
+				intro: {
+					content: "可以对$随意大喊大叫",
+				},
+				mod: {
+					cardUsableTarget: function (card, player, target) {
+						if (card.name == "sha" && player.getStorage("taffyold_dclvecheng_xiongluan").includes(target)) return true;
+					},
+				},
+			},
+		},
+	},
+	taffyold_dczhongji: {
+		audio: "dczhongji",
+		trigger: { player: "useCard" },
+		filter: function (event, player) {
+			var suit = get.suit(event.card);
+			return !lib.suit.includes(suit) || !player.countCards("h", { suit: suit });
+		},
+		check: function (event, player) {
+			var num = Math.min(20, player.maxHp - player.countCards("h"));
+			if (num <= 0) return false;
+			var numx =
+				player.getHistory("useSkill", evt => {
+					return evt.skill == "taffyold_dczhongji";
+				}).length + 1;
+			if (numx > num) return false;
+			if (_status.currentPhase != player) return true;
+			if (
+				player.hasCard(card => {
+					var suit = get.suit(card);
+					return (
+						player.hasValueTarget(card) &&
+						!player.hasCard(cardx => {
+							return cardx != card && get.suit(cardx) == suit;
+						})
+					);
+				})
+			)
+				return false;
+			return true;
+		},
+		prompt2: function (event, player) {
+			var num = Math.min(20, player.maxHp - player.countCards("h"));
+			var str = num > 0 ? "摸" + get.cnNumber(num) + "张牌，然后" : "";
+			return (
+				str +
+				"弃置" +
+				get.cnNumber(
+					1 +
+						player.getHistory("useSkill", evt => {
+							return evt.skill == "taffyold_dczhongji";
+						}).length
+				) +
+				"张牌"
+			);
+		},
+		content: function () {
+			"step 0";
+			var num = Math.min(20, player.maxHp - player.countCards("h"));
+			if (num > 0) player.draw(num);
+			("step 1");
+			var num = player.getHistory("useSkill", evt => {
+				return evt.skill == "taffyold_dczhongji";
+			}).length;
+			player.chooseToDiscard("螽集：请弃置" + get.cnNumber(num) + "张牌", "he", true, num).set("ai", get.unuseful);
+		},
+		ai: {
+			threaten: 3.2,
+		},
+	},
 };
 
 export default skills;

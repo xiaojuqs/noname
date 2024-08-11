@@ -53,6 +53,7 @@ const characters = {
 	taffyold_scs_duangui: ["male", "qun", "", ["taffyold_scschihe"], ["unseen", "sex:male_castrated", "character:scs_duangui", "die:scs_duangui"]],
 	taffyold_scs_guosheng: ["male", "qun", "", ["taffyold_scsniqu"], ["unseen", "sex:male_castrated", "character:scs_guosheng", "die:scs_guosheng"]],
 	taffyold_scs_gaowang: ["male", "qun", "", ["taffyold_scsanruo"], ["unseen", "sex:male_castrated", "character:scs_gaowang", "die:scs_gaowang"]],
+	taffyold_dc_zhangmancheng: ["male", "qun", 4, ["taffyold_dclvecheng", "taffyold_dczhongji"], ["character:dc_zhangmancheng", "die:dc_zhangmancheng"]],
 	aruijier: ["female", "shen", "", [], ["unseen"]],
 };
 

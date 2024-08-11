@@ -36,7 +36,7 @@ const translates = {
 	swimsuit_hoshino_prefix: "泳装",
 	taffyold_tw_baoxin_prefix: "旧TW",
 	taffyold_shichangshi_prefix: "旧",
-  taffyold_scs_zhangrang_prefix: "旧",
+	taffyold_scs_zhangrang_prefix: "旧",
 	taffyold_scs_zhaozhong_prefix: "旧",
 	taffyold_scs_sunzhang_prefix: "旧",
 	taffyold_scs_bilan_prefix: "旧",
@@ -46,6 +46,7 @@ const translates = {
 	taffyold_scs_duangui_prefix: "旧",
 	taffyold_scs_guosheng_prefix: "旧",
 	taffyold_scs_gaowang_prefix: "旧",
+	taffyold_dc_zhangmancheng_prefix: "旧",
 
 	taffyboss_xushao: "评世雕龙",
 	taffyboss_pingjian: "评荐",
@@ -365,6 +366,11 @@ const translates = {
 	taffyold_scs_gaowang: "旧高望",
 	taffyold_scsanruo: "安弱",
 	taffyold_scsanruo_info: "你可以将一张♥牌当【桃】、♦牌当火【杀】、♣牌当【闪】、♠牌当【无懈可击】使用。当你以此法使用或打出【杀】或【闪】时，你可以获得对方的一张牌；当你以此法使用【桃】时，你可以获得一名其他角色的一张牌；当你以此法使用【无懈可击】时，你可以获得此牌响应的普通锦囊牌的使用者的一张牌。",
+	taffyold_dc_zhangmancheng: "旧张曼成",
+	taffyold_dclvecheng: "掠城",
+	taffyold_dclvecheng_info: "出牌阶段限一次。你可以选择一名其他角色，你于本回合对其使用【杀】无次数限制。然后回合结束时，其展示所有手牌，若其中有【杀】，其可以选择对你依次使用其中所有的【杀】。",
+	taffyold_dczhongji: "螽集",
+	taffyold_dczhongji_info: "当你使用牌时，若此牌无花色或你手牌区里没有与此牌花色相同的手牌，你可以将手牌摸至体力上限并弃置X张牌（X为本回合发动〖螽集〗的次数）。",
 	aruijier: "瑞吉儿",
 };
 

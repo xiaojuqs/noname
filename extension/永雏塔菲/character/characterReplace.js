@@ -3,7 +3,7 @@ const characterReplaces = {
 	guanning: ["guanning", "taffydc_guanning"],
 	xushao: ["xushao", "jsrg_xushao", "taffydc_xushao", "taffyre_xushao"],
 	niufudongxie: ["tw_niufudongxie", "taffyold_tw_niufudongxie"],
-	zhangmancheng: ["dc_zhangmancheng", "tw_zhangmancheng", "taffyold_tw_zhangmancheng"],
+	zhangmancheng: ["dc_zhangmancheng", "tw_zhangmancheng", "taffyold_tw_zhangmancheng", "taffyold_dc_zhangmancheng"],
 	sunquan: ["sunquan", "re_sunquan", "sb_sunquan", "dc_sunquan", "taffyhuiwan_sunquan", "taffyhuiwanplus_sunquan"],
 	shen_caocao: ["shen_caocao", "taffymb_shen_caocao"],
 	shen_simayi: ["shen_simayi", "taffybaby_shen_simayi"],
@@ -27,6 +27,7 @@ const characterReplaces = {
 	tenggongzhu: ["tenggongzhu", "taffyold_tenggongzhu"],
 	hoshino: ["hoshino", "swimsuit_hoshino"],
 	baoxin: ["tw_baoxin", "baoxin", "taffyold_tw_baoxin"],
+	shichangshi: ["shichangshi", "taffyold_shichangshi"],
 };
 
 export default characterReplaces;
