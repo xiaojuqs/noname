@@ -30545,7 +30545,7 @@ const skills = {
 			targets[event.num].chooseBool("是否押杀？").ai = function (event, player) {
 				var evt = _status.event.getParent();
 				if (get.attitude(targets[event.num], evt.player) > 0) return evt.player.countCards("h", "sha") ? false : true;
-				return Math.random() < 0.5;
+				return evt.player.countCards('h')>3?true:false;
 			};
 			"step 2";
 			if (result.bool) {
@@ -31383,6 +31383,24 @@ const skills = {
 			}
 			if (togain.length) player.gain(togain, trigger.source, "giveAuto", "bySelf");
 		},
+		ai:{
+			effect:{
+				target:function(card,player,target){
+					if(player.hasSkillTag('jueqing',false,target)) return [1,-1];
+					if(get.tag(card,'damage')&&player!=target&&get.attitude(player,target)<0){
+						var cards=player.getCards('h',function(cardx){
+							return card!=cardx&&(!card.cards||!card.cards.includes(cardx))&&get.suit(cardx)=='heart';
+						});
+						if(!cards.length) return 'zeroplayertarget';
+						for(var i of cards){
+							if(get.name(i,target)=='tao') return 'zeroplayertarget';
+						}
+						if(get.value(cards,target)>=(6+target.getDamagedHp())) return 'zeroplayertarget';
+						return [1,0.6];
+					}
+				},
+			},
+		},
 	},
 	xinfu_yingshi: {
 		audio: 2,
@@ -31961,6 +31979,15 @@ const skills = {
 				)
 					return 0;
 			}
+			var has_sha_target=(player.hasSha()&&game.hasPlayer(function(current){
+				return player.canUse(card,current,null,true)
+				&&player.getUseValue(card)>0&&get.effect_use(current,card,player)>0
+				&&!current.hasSkillTag('filterDamage',null,{
+					player:current,
+					card:card,
+				});
+			}));
+			if (!has_sha_target&&player.maxHp==player.hp) return 0;
 			if (card.name == "shan") return 15;
 			if (card.name == "tao" || card.name == "jiu") return 10;
 			return 9 - get.value(card);
