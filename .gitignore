@@ -31,3 +31,4 @@ package.json
 Thumbs.db
 bun.lockb
 deno.lock
+game/*.zip  

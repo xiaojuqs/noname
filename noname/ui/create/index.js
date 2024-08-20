@@ -392,13 +392,14 @@ export class Create {
 		let node =
 			getApplyNode._tempName || ui.create.div(".tempname", getApplyNode);
 		let datasetNature = "";
+		let cardPosition = get.position(card);
 		getApplyNode._tempName = node;
 		if (cardTempNameConfig != "image") {
 			//清空，避免和下面的image部分有冲突
 			node.innerHTML = "";
 			datasetNature = "fire";
 			if (
-				get.position(card) == "j" &&
+				(cardPosition === "e" || cardPosition === "j") &&
 				card.viewAs &&
 				card.viewAs != card.name
 			) {
@@ -423,7 +424,7 @@ export class Create {
 			}
 		} else {
 			if (
-				get.position(card) == "j" &&
+				(cardPosition === "e" || cardPosition === "j") &&
 				card.viewAs &&
 				card.viewAs != card.name
 			) {
@@ -3170,7 +3171,7 @@ export class Create {
 	}
 	buttonPresets = {
 		/**
-		 * @returns { import("../library/index.js").Button }
+		 * @returns { import("../../library/index.js").Button }
 		 */
 		tdnodes: (item, type, position, noclick, node) => {
 			node = ui.create.div(
@@ -3187,7 +3188,7 @@ export class Create {
 			return node;
 		},
 		/**
-		 * @returns { import("../library/index.js").Button }
+		 * @returns { import("../../library/index.js").Button }
 		 */
 		blank: (item, type, position, noclick, node) => {
 			node = ui.create.div(".button.card", position);
@@ -3206,7 +3207,7 @@ export class Create {
 			return node;
 		},
 		/**
-		 * @returns { import("../library/index.js").Button }
+		 * @returns { import("../../library/index.js").Button }
 		 */
 		card: (item, type, position, noclick, node) => {
 			if (typeof item.copy == "function") {
@@ -3231,8 +3232,9 @@ export class Create {
 			if (!noclick) {
 				lib.setIntro(node);
 			}
+			const itemPosition = get.position(item)
 			if (
-				get.position(item) == "j" &&
+				(itemPosition === "e" || itemPosition === "j")  &&
 				item.viewAs &&
 				item.viewAs != item.name &&
 				lib.config.cardtempname != "off"
@@ -3242,7 +3244,7 @@ export class Create {
 			return node;
 		},
 		/**
-		 * @returns { import("../library/index.js").Button }
+		 * @returns { import("../../library/index.js").Button }
 		 */
 		vcard: (item, type, position, noclick, node) => {
 			if (typeof item == "string") {
@@ -3255,7 +3257,7 @@ export class Create {
 			return node;
 		},
 		/**
-		 * @returns { import("../library/index.js").Button }
+		 * @returns { import("../../library/index.js").Button }
 		 */
 		character: (item, type, position, noclick, node) => {
 			if (node) {
@@ -3433,7 +3435,7 @@ export class Create {
 			return node;
 		},
 		/**
-		 * @returns { import("../library/index.js").Button }
+		 * @returns { import("../../library/index.js").Button }
 		 */
 		characterx: (item, type, position, noclick, node) => {
 			return ui.create.buttonPresets.character(
@@ -3445,7 +3447,7 @@ export class Create {
 			);
 		},
 		/**
-		 * @returns { import("../library/index.js").Button }
+		 * @returns { import("../../library/index.js").Button }
 		 */
 		player: (item, type, position, noclick, node) => {
 			if (node) {

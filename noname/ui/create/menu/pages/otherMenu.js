@@ -1413,6 +1413,7 @@ export const otherMenu = function (/** @type { boolean | undefined } */ connectM
 		lib.videos = [];
 		ui.create.videoNode = (video, before) => {
 			lib.videos.remove(video);
+			if (_status.over) return;
 			lib.videos[before === true ? "unshift" : "push"](video);
 		};
 		node._initLink = function () {
