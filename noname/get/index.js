@@ -3722,11 +3722,11 @@ export class Get extends GetCompatible {
 				}
 			}
 			if (!simple || get.is.phoneLayout()) {
-				var es = node.getVCards("e");
+				var es = node.getCards("e");
 				for (var i = 0; i < es.length; i++) {
-					const special = es[i].cards?.find(j => lib.card[j.name]?.cardPrompt);
-					var str = special ? lib.card[special.name].cardPrompt(special) : lib.translate[es[i].name + "_info"];
-					uiintro.add('<div><div class="skill">' + game.createCard(es[i]).outerHTML + "</div><div>" + str + "</div></div>");
+					var cardinfo = lib.card[es[i].name];
+					if (cardinfo && cardinfo.cardPrompt) uiintro.add('<div><div class="skill">' + es[i].outerHTML + "</div><div>" + cardinfo.cardPrompt(es[i]) + "</div></div>");
+					else uiintro.add('<div><div class="skill">' + es[i].outerHTML + "</div><div>" + lib.translate[es[i].name + "_info"] + "</div></div>");
 					uiintro.content.lastChild.querySelector(".skill>.card").style.transform = "";
 
 					if (lib.translate[es[i].name + "_append"]) {
