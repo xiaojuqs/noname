@@ -2734,11 +2734,11 @@ export const Content = {
 		"step 0";
 		if (_status.brawl && _status.brawl.noGameDraw) {
 			if (window.decadeUI){
-				return event.goto(4);
+				event.goto(4);
 			} else {
 				event.finish();
-				return;
 			}
+			return;
 		}
 		var end = player;
 		var numx = num;
@@ -9213,8 +9213,10 @@ export const Content = {
 			} else {
 				game.log(player, '被贴上了<span class="yellowtext">' + get.translation(cardName) + "</span>（", cards, "）");
 			}
+			if (window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].viewAs)[0];
 		} else {
 			game.log(player, "被贴上了", card);
+			if (window.decadeUI) cards[0].node.judgeMark.node.judge.innerHTML = get.translation(cards[0].name)[0];
 		}
 	},
 	addJudge_old: function () {

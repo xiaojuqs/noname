@@ -1283,27 +1283,6 @@ export class Player extends HTMLDivElement {
 		return next;
 	}
 	/**
-	 * 裝備欄排序
-	 */
-	SortEquipNodes() {
-		var player=this;
-		if (!player.node.equips.childNodes) return;
-		var childnodes_Array=[];
-		for (var i in player.node.equips.childNodes){
-			if (player.node.equips.childNodes[i].nodeType==1) childnodes_Array.push(player.node.equips.childNodes[i]);
-		}
-		childnodes_Array.sort(function(a,b){
-			var sort_equip_num=function(old_equip_num){
-				if (old_equip_num==5) return -1;
-				return old_equip_num;
-			}
-			return sort_equip_num(get.equipNum(a))-sort_equip_num(get.equipNum(b));
-		});
-		for (i=0;i<childnodes_Array.length;++i){
-			player.node.equips.appendChild(childnodes_Array[i]);
-		}
-	}
-	/**
 	 * 判断判定区是否被废除
 	 */
 	isDisabledJudge() {
@@ -1370,9 +1349,20 @@ export class Player extends HTMLDivElement {
 					card.classList.remove("drawinghidden");
 					card.classList.add("feichu");
 					delete card._transform;
-					this.node.equips.appendChild(card);
-					if (_status.discarded) {
-						_status.discarded.remove(card);
+					const equipNum = get.sort_equipNum(get.equipNum(card));
+					let equipped = false;
+					for (let j = 0; j < this.node.equips.childNodes.length; j++) {
+						if (get.sort_equipNum(get.equipNum(this.node.equips.childNodes[j])) >= equipNum) {
+							this.node.equips.insertBefore(card, this.node.equips.childNodes[j]);
+							equipped = true;
+							break;
+						}
+					}
+					if (!equipped) {
+						this.node.equips.appendChild(card);
+						if (_status.discarded) {
+							_status.discarded.remove(card);
+						}
 					}
 				}
 			} else if (num < 0) {
@@ -1385,7 +1375,6 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
-		this.SortEquipNodes();
 	}
 	//以下函数涉及到本次更新内容而进行修改
 	/**
@@ -10967,16 +10956,29 @@ export class Player extends HTMLDivElement {
 					sum--;
 					const card = game.createCard("empty_equip" + i, "", "");
 					card.fix();
+					//console.log('add '+card.name);
 					card.style.transform = "";
 					card.classList.remove("drawinghidden");
 					card.classList.add("emptyequip");
 					card.classList.add("hidden");
 					delete card._transform;
-					player.node.equips.appendChild(card);
-					if (_status.discarded) {
-						_status.discarded.remove(card);
+					const equipNum = get.sort_equipNum(get.equipNum(card));
+					let equipped = false;
+					for (let j = 0; j < player.node.equips.childNodes.length; j++) {
+						const card2 = player.vcardsMap.equips.find(i => i.cards?.includes(player.node.equips.childNodes[j]));
+						const cardx = card2 ? card2 : player.node.equips.childNodes[j];
+						if (get.sort_equipNum(get.equipNum(cardx)) >= equipNum) {
+							player.node.equips.insertBefore(card, player.node.equips.childNodes[j]);
+							equipped = true;
+							break;
+						}
 					}
-					player.SortEquipNodes();
+					if (!equipped) {
+						player.node.equips.appendChild(card);
+						if (_status.discarded) {
+							_status.discarded.remove(card);
+						}
+					}
 				}
 			}
 		}
@@ -11038,7 +11040,7 @@ export class Player extends HTMLDivElement {
 		game.addVideo("addVirtualEquip", player, [get.vcardInfo(card), get.cardsInfo(cards)]);
 		player.vcardsMap?.equips.push(card);
 		player.vcardsMap?.equips.sort((a, b) => {
-			return get.equipNum(a) - get.equipNum(b);
+			return get.sort_equipNum(get.equipNum(a)) - get.sort_equipNum(get.equipNum(b));
 		});
 		player.$addVirtualEquip(card, cards);
 		var info = get.info(card, false);
@@ -11108,12 +11110,12 @@ export class Player extends HTMLDivElement {
 			}
 			if (disableEquips.length) {
 				for (const cardx of disableEquips) {
-					const equipNum = get.equipNum(cardx);
+					const equipNum = get.sort_equipNum(get.equipNum(cardx));
 					let equipped = false;
 					for (let j = 0; j < player.node.equips.childNodes.length; j++) {
 						const card2 = player.vcardsMap.equips.find(i => i.cards?.includes(player.node.equips.childNodes[j]));
 						const card3 = card2 ? card2 : player.node.equips.childNodes[j];
-						if (get.equipNum(card3) >= equipNum) {
+						if (get.sort_equipNum(get.equipNum(card3)) >= equipNum) {
 							player.node.equips.insertBefore(cardx, player.node.equips.childNodes[j]);
 							equipped = true;
 							break;
@@ -11125,7 +11127,6 @@ export class Player extends HTMLDivElement {
 					}
 				}
 			}
-			player.SortEquipNodes();
 		}
 	}
 	$equip(card) {
@@ -11141,9 +11142,20 @@ export class Player extends HTMLDivElement {
 		card.classList.remove("drawinghidden");
 		delete card._transform;
 		var player = this;
-		player.node.equips.appendChild(card);
-		if (_status.discarded) {
-			_status.discarded.remove(card);
+		var equipNum = get.sort_equipNum(get.equipNum(card));
+		var equipped = false;
+		for (var i = 0; i < player.node.equips.childNodes.length; i++) {
+			if (get.sort_equipNum(get.equipNum(player.node.equips.childNodes[i])) >= equipNum) {
+				player.node.equips.insertBefore(card, player.node.equips.childNodes[i]);
+				equipped = true;
+				break;
+			}
+		}
+		if (!equipped) {
+			player.node.equips.appendChild(card);
+			if (_status.discarded) {
+				_status.discarded.remove(card);
+			}
 		}
 		var info = get.info(card);
 		if (info.skills) {
@@ -11151,7 +11163,6 @@ export class Player extends HTMLDivElement {
 				player.addSkillTrigger(info.skills[i]);
 			}
 		}
-		player.SortEquipNodes();
 		return player;
 	}
 	$gain(card, log, init) {
