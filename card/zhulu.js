@@ -711,7 +711,9 @@ game.import("card", function () {
 						player.$throw(card2, 1000);
 						game.log(card, "掉落了", card2);
 						game.cardsDiscard(card2);
-						delete _status.jinhe[id];
+						//暫時註解以下。否則錦盒中有牌時，意外扔掉錦盒不會觸發掉落所有手牌
+						//推測原因：onLose函數比loseAfter觸發快，造成jinhe_lose技能中找不到_status.jinhe中的卡牌ID
+						//delete _status.jinhe[id];
 					}
 				},
 				ai: {
