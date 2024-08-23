@@ -553,6 +553,7 @@ game.import("card", function () {
 				forced: true,
 				equipSkill: true,
 				filter(event, player){
+					if (event?.card.name != "qixingbaodao") return false;
 					const baodaos = player.getVCards("e").filter(card => {
 						return card.name == "qixingbaodao";
 					});
