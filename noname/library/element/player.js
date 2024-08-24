@@ -11735,6 +11735,7 @@ export class Player extends HTMLDivElement {
 				game.delay();
 			}
 		}
+		if (window.decadeUI) dui.delay(451);
 	}
 }
 

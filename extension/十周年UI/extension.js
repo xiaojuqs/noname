@@ -3402,11 +3402,6 @@ game.import('extension', async function(lib, game, ui, get, ai, _status){
 						$dieflip() {
 							if (!decadeUI.config.playerDieEffect) super.$dieflip(...arguments);
 						}
-						$phaseJudge(card) {
-							game.addVideo('phaseJudge', this, get.cardInfo(card));
-							this.$throw(card);
-							dui.delay(451);
-						}
 						$dieAfter() {
 							this.stopDynamic();
 
