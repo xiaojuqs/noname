@@ -380,7 +380,7 @@ game.import("card", function () {
 				ai: {
 					order: 9,
 					value: function (card, player) {
-						if (player.getEquips(4).includes(card)) return 0;
+						if (player.getVEquips(4).includes(card)) return 0;
 						return 4;
 					},
 					equipValue: function (card, player) {
@@ -459,7 +459,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						if (player.getEquips(1).includes(card)) {
+						if (player.getVEquips(1).includes(card)) {
 							if (player.hasSkillTag("noh")) return 0;
 							return -3.5;
 						}
@@ -500,7 +500,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						if (player.getEquips(1).includes(card)) return -3.5;
+						if (player.getVEquips(1).includes(card)) return -3.5;
 						return 3;
 					},
 					basic: {
@@ -538,7 +538,7 @@ game.import("card", function () {
 						return 1;
 					},
 					value: function (card, player) {
-						if (player.getEquips(2).includes(card)) return -9;
+						if (player.getVEquips(2).includes(card)) return -9;
 						return 2.5;
 					},
 					basic: {
@@ -609,7 +609,7 @@ game.import("card", function () {
 				ai:{
 					order: 9.5,
 					equipValue: function (card, player) {
-						if (player.getEquips(2).includes(card)) return 0;
+						if (player.getVEquips(2).includes(card)) return 0;
 						return 1;
 					},
 					value: function () {
@@ -724,10 +724,7 @@ game.import("card", function () {
 				ai: {
 					order: 9.5,
 					equipValue: function (card, player) {
-						var e5s=player.getEquips(5);
-						for (var e5 of e5s){
-							if (card!=e5) return 5;
-						}
+						if (!player.getVEquips(5).includes(card)) return 5;
 						if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+3*player.countCards('h');
 						return 0;
 					},
