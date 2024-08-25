@@ -44,12 +44,8 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"挑�
 			["heart",9,"sadouchengbing"],
 			["heart",11,"sadouchengbing"],
 		];
-		var import_boss_mode_javascript=lib.init.js(lib.assetURL+'mode','boss',function(){
-			var boss_mode_javascript_content=lib.imported.mode['boss'];
-			delete lib.imported.mode['boss'];
-			if(get.is.empty(lib.imported.mode)){
-				delete lib.imported.mode;
-			}
+		game.loadModeAsync("boss", function (mode) {
+			let boss_mode_javascript_content=mode;
 			for(var i=0;i<boss_mode_card_pack.list.length;i++){
 				for(var j in boss_mode_javascript_content.card){
 					if(j==boss_mode_card_pack.list[i][2]&&boss_mode_card_pack.card[j]==undefined){
@@ -83,13 +79,13 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"挑�
 					}
 				}
 			}
+			game.import('card',function(lib,game,ui,get,ai,_status){
+				return boss_mode_card_pack;
+			});
+			lib.translate['boss_mode_card_pile_card_config']='挑战卡牌';
+			lib.config.all.cards.push('boss_mode_card_pile');
+			if(!lib.config.cards.includes('boss_mode_card_pile')) lib.config.cards.push('boss_mode_card_pile');
 		});
-		game.import('card',function(lib,game,ui,get,ai,_status){
-			return boss_mode_card_pack;
-		});
-		lib.translate['boss_mode_card_pile_card_config']='挑战卡牌';
-		lib.config.all.cards.push('boss_mode_card_pile');
-		if(!lib.config.cards.includes('boss_mode_card_pile')) lib.config.cards.push('boss_mode_card_pile');
 	}
 },help:{},config:{},package:{
 	character:{
@@ -115,5 +111,5 @@ game.import("extension",function(lib,game,ui,get,ai,_status){return {name:"挑�
 	author:"",
 	diskURL:"",
 	forumURL:"",
-	version:"0.1",
+	version:"0.2",
 },files:{"character":[],"card":[],"skill":[]},editable:false}})

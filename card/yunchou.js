@@ -156,14 +156,14 @@ game.import("card", function () {
 						value: [5, 1],
 					},
 					result: {
-						player: function(player,target) {
+						player: (player, target) => {
 							if (game.players.length>2&&player.hasFriend()){
 								var list=player.getEnemies();
 								for (var i=0;i<list.length;i++){
 									if (list[i].getEquip('shanrangzhaoshu')) return 0;
 								}
 							}
-							return 1;
+							return 1 / game.countPlayer();
 						},
 						target: function (player, target) {
 							if (target.countCards("h") == 0) return 0;
