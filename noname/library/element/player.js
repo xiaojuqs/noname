@@ -1282,6 +1282,30 @@ export class Player extends HTMLDivElement {
 		next.setContent("expandEquip");
 		return next;
 	}
+  // taffy: 重新修复装备栏排序喵
+  /**
+	 * @author: adeFuLoDgu
+	 * @description: 装备栏排序
+	 */
+	SortEquipNodes() {
+		var player=this;
+		if (!player.node.equips.childNodes) return;
+		var childnodes_Array=[];
+		for (var i in player.node.equips.childNodes){
+			if (player.node.equips.childNodes[i].nodeType==1) childnodes_Array.push(player.node.equips.childNodes[i]);
+		}
+		childnodes_Array.sort(function(a,b){
+			var sort_equip_num=function(old_equip_num){
+				if (old_equip_num==5) return -1;
+				return old_equip_num;
+			}
+			return sort_equip_num(get.equipNum(a))-sort_equip_num(get.equipNum(b));
+		});
+		for (i=0;i<childnodes_Array.length;++i){
+			player.node.equips.appendChild(childnodes_Array[i]);
+		}
+	}
+  /* taffy分界线 */
 	/**
 	 * 判断判定区是否被废除
 	 */
@@ -1375,6 +1399,9 @@ export class Player extends HTMLDivElement {
 				}
 			}
 		}
+    // taffy: 重新修复装备栏排序喵
+    this.SortEquipNodes();
+    /* taffy分界线 */
 	}
 	//以下函数涉及到本次更新内容而进行修改
 	/**
@@ -10979,6 +11006,9 @@ export class Player extends HTMLDivElement {
 							_status.discarded.remove(card);
 						}
 					}
+          // taffy: 重新修复装备栏排序喵
+          player.SortEquipNodes();
+          /* taffy分界线 */
 				}
 			}
 		}
@@ -11163,6 +11193,9 @@ export class Player extends HTMLDivElement {
 				player.addSkillTrigger(info.skills[i]);
 			}
 		}
+    // taffy: 重新修复装备栏排序喵
+    player.SortEquipNodes();
+    /* taffy分界线 */
 		return player;
 	}
 	$gain(card, log, init) {

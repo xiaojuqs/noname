@@ -7,6 +7,8 @@ export const PRECONTENT = function (config) {
 		link.rel = "icon";
 		link.href = `${lib.assetURL}extension/永雏塔菲/image/icon.png`;
 		document.head.appendChild(link);
+		// 引入css
+		lib.init.css(lib.assetURL + "extension/永雏塔菲/style", "index");
 		// 联机模式导入所有扩展喵
 		const retryOverride = function (times, timer) {
 			if (times < 0) return;
