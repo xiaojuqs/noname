@@ -8308,12 +8308,12 @@ export const Content = {
 					player.$throw(cardx, null, "nobroadcast");
 					var cardnodes = [];
 					cardnodes._discardtime = get.time();
-					for (var i = 0; i < cards.length; i++) {
-						if (cards[i].clone) {
-							cardnodes.push(cards[i].clone);
+					for (var i = 0; i < cardx.length; i++) {
+						if (cardx[i].clone) {
+							cardnodes.push(cardx[i].clone);
 							if (!visible) {
-								cards[i].clone.classList.add("infohidden");
-								cards[i].clone.classList.add("infoflip");
+								cardx[i].clone.classList.add("infohidden");
+								cardx[i].clone.classList.add("infoflip");
 							}
 						}
 					}
@@ -8359,6 +8359,7 @@ export const Content = {
 		var hej = player.getCards("hejsx");
 		event.stockcards = cards.slice(0);
 		for (var i = 0; i < cards.length; i++) {
+			let cardx = [cards[i]];
 			if (!hej.includes(cards[i])) {
 				cards.splice(i--, 1);
 				continue;
@@ -8427,38 +8428,29 @@ export const Content = {
 					cardx[j].destroyed = info.destroy;
 					continue;
 				}
-			} else if ("destroyed" in cards[i]) {
-				if (event.getlx !== false && event.position && cards[i].willBeDestroyed(event.position.id, null, event)) {
-					cards[i].selfDestroy(event);
-					continue;
-				}
-			} else if (info.destroy) {
-				cards[i].delete();
-				cards[i].destroyed = info.destroy;
-				continue;
-			}
-			if (event.position) {
-				if (_status.discarded) {
-					if (event.position == ui.discardPile) {
-						_status.discarded.add(cards[i]);
-					} else {
-						_status.discarded.remove(cards[i]);
+				if (event.position) {
+					if (_status.discarded) {
+						if (event.position == ui.discardPile) {
+							_status.discarded.add(cardx[j]);
+						} else {
+							_status.discarded.remove(cardx[j]);
+						}
 					}
+					if (event.insert_index) {
+						cardx[j].fix();
+						event.position.insertBefore(cardx[j], event.insert_index(event, cardx[j]));
+					} else if (event.insert_card) {
+						cardx[j].fix();
+						event.position.insertBefore(cardx[j], event.position.firstChild);
+					} else if (event.position == ui.cardPile) {
+						cardx[j].fix();
+						event.position.appendChild(cardx[j]);
+					} else cardx[j].goto(event.position);
+				} else {
+					cardx[j].remove();
 				}
-				if (event.insert_index) {
-					cards[i].fix();
-					event.position.insertBefore(cards[i], event.insert_index(event, cards[i]));
-				} else if (event.insert_card) {
-					cards[i].fix();
-					event.position.insertBefore(cards[i], event.position.firstChild);
-				} else if (event.position == ui.cardPile) {
-					cards[i].fix();
-					event.position.appendChild(cards[i]);
-				} else cards[i].goto(event.position);
-			} else {
-				cards[i].remove();
+				//if(ss.includes(cardx[j])) cards.splice(i--,1);
 			}
-			//if(ss.includes(cards[i])) cards.splice(i--,1);
 		}
 		if (player == game.me) ui.updatehl();
 		ui.updatej(player);
@@ -8524,9 +8516,7 @@ export const Content = {
 		if (num < cards.length) {
 			if (event.es.includes(cards[num]) || cards[num].cards?.some(i => event.es.includes(i))) {
 				event.loseEquip = true;
-				const VEquip = player.getVCards("e").find(card => {
-					return card.cards?.includes(cards[num]);
-				});
+				const VEquip = cards[num].card;
 				if (VEquip) {
 					player.removeVirtualEquip(VEquip);
 					//player.removeEquipTrigger(cards[num]);
