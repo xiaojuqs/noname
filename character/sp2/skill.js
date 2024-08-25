@@ -1255,6 +1255,7 @@ const skills = {
 				ai: {
 					effect: {
 						player(card, player, target) {
+							if (get.itemtype(card) !== "card" || !player || !target) return;
 							var targets = game.filterPlayer(targetx => targetx != player && targetx.getStorage("starcanxi_xiangsi").includes(player.group));
 							if (!targets.length) return;
 							if (get.tag(card, "recover") && target == player && target.hp > 2) return 0;
@@ -1564,10 +1565,11 @@ const skills = {
 					if (get.attitude(player, result.winner) <= 0) return 'cancel2';
 					if (!game.hasPlayer(current => {
 						return result.winner.canUse({ name: 'sha' }, current, false) && get.effect(current, { name: 'sha' }, result.winner, result.winner) > 0;
-					})) return '选项一';
+					}) || !cards.length) return '选项一';
 					let eff1 = result.winner.getUseValue({ name: 'sha' }), eff2 = 0;
-					if (cards[0]) eff2 = get.value(cards[0], result.winner);
-					if (cards[1]) eff2 += get.value(cards[1], result.winner);
+					for (let card of cards) {
+						eff2 += get.value(card, result.winner);
+					}
 					if (eff1 > eff2 * 2.5) return '选项二';
 					return '选项一';
 				}()).forResult();
@@ -1788,7 +1790,7 @@ const skills = {
 				},
 				direct: true,
 				content: function () {
-					player.chooseUseTarget(trigger.cards[0], get.prompt("dcjiaoxia"), false, false).set("prompt2", "使用" + get.translation(card)).logSkill = "dcjiaoxia";
+					player.chooseUseTarget(trigger.cards[0], get.prompt("dcjiaoxia"), false, false).set("prompt2", "使用" + get.translation(trigger.cards[0])).logSkill = "dcjiaoxia";
 				},
 			},
 		},
@@ -2353,12 +2355,12 @@ const skills = {
 				popup: false,
 				onremove: true,
 				filter: function (event, player) {
-					var skill = event.sourceSkill || event.skill;
+					var skill = get.sourceSkillFor(event);
 					return player.getStorage("dclongsong_remove").includes(skill) && !player.getStockSkills(false, true).includes(skill);
 				},
 				content: function () {
 					"step 0";
-					var skill = trigger.sourceSkill || trigger.skill;
+					var skill = get.sourceSkillFor(trigger);
 					player.removeSkills(skill);
 					player.unmarkAuto("dclongsong_remove", [skill]);
 				},
@@ -2759,7 +2761,7 @@ const skills = {
 			},
 			*/
 			attackRange: function (player, num) {
-				if (!player.getEquips(1).length) return num + 1;
+				return num + 1;
 			},
 			selectTarget: function (card, player, range) {
 				if (card.name == "sha") {
@@ -3687,7 +3689,7 @@ const skills = {
 	},
 	//牛辅
 	dcxiaoxi: {
-		auto: 2,
+		audio: 2,
 		trigger: { player: "phaseUseBegin" },
 		forced: true,
 		filter: function (event, player) {
@@ -4998,6 +5000,7 @@ const skills = {
 	},
 	//韩猛
 	jieliang: {
+		audio: 2,
 		trigger: { global: "phaseDrawBegin2" },
 		direct: true,
 		filter: function (event, player) {
@@ -5100,6 +5103,7 @@ const skills = {
 		},
 	},
 	zhongjie: {
+		audio: 2,
 		trigger: { player: "die" },
 		direct: true,
 		forceDie: true,
@@ -5183,6 +5187,7 @@ const skills = {
 		},
 	},
 	difa: {
+		audio: 2,
 		trigger: { player: "gainAfter" },
 		filter: function (event, player) {
 			if (player != _status.currentPhase) return false;
@@ -5362,6 +5367,7 @@ const skills = {
 	},
 	//南华老仙
 	jinghe: {
+		audio: 2,
 		enable: "phaseUse",
 		filter: function (event, player) {
 			return !player.hasSkill("jinghe_clear");
@@ -5449,6 +5455,7 @@ const skills = {
 		},
 	},
 	gongxiu: {
+		audio: 2,
 		trigger: { player: "phaseJieshuBegin" },
 		direct: true,
 		filter: function (event, player) {
@@ -5995,6 +6002,7 @@ const skills = {
 		},
 	},
 	shunshi: {
+		audio: 2,
 		trigger: { player: ["damageEnd", "phaseZhunbeiBegin"] },
 		direct: true,
 		filter: function (event, player) {
@@ -6456,6 +6464,7 @@ const skills = {
 	},
 	//董承
 	xuezhao: {
+		audio: 2,
 		enable: "phaseUse",
 		usable: 1,
 		filter: function (event, player) {
@@ -6692,6 +6701,7 @@ const skills = {
 	},
 	//张横
 	dangzai: {
+		audio: 2,
 		trigger: { player: "phaseUseBegin" },
 		filter: function (event, player) {
 			return (
@@ -6741,6 +6751,7 @@ const skills = {
 		},
 	},
 	liangjue: {
+		audio: 2,
 		trigger: {
 			player: "loseAfter",
 			global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
@@ -6773,6 +6784,7 @@ const skills = {
 	},
 	//狼灭
 	langmie: {
+		audio: 2,
 		trigger: { global: "phaseUseEnd" },
 		//forced:true,
 		filter: function (event, player) {
@@ -6864,6 +6876,7 @@ const skills = {
 	},
 	//张邈
 	mouni: {
+		audio: 2,
 		trigger: { player: "phaseZhunbeiBegin" },
 		direct: true,
 		filter: function (event, player) {
@@ -6963,6 +6976,7 @@ const skills = {
 	},
 	zongfan: {
 		derivation: "zhangu",
+		audio: 2,
 		trigger: { player: "phaseJieshuBegin" },
 		juexingji: true,
 		forced: true,
@@ -7027,6 +7041,7 @@ const skills = {
 		},
 	},
 	zhangu: {
+		audio: 2,
 		trigger: { player: "phaseZhunbeiBegin" },
 		forced: true,
 		filter: function (event, player) {
@@ -10489,14 +10504,14 @@ const skills = {
 		filter: function (event, player) {
 			var info = get.info(event.skill);
 			if (info && info.charlotte) return false;
-			var skill = event.sourceSkill || event.skill;
+			var skill = get.sourceSkillFor(event);
 			return player.storage.pingjian_check[skill];
 		},
 		direct: true,
 		firstDo: true,
 		priority: Infinity,
 		content: function () {
-			var skill = trigger.sourceSkill || trigger.skill;
+			var skill = get.sourceSkillFor(trigger);
 			player.removeSkill(skill);
 			const names = player.tempname && player.tempname.filter(i => lib.character[i][3].includes(skill));
 			if (names) game.broadcastAll((player, names) => player.tempname.removeArray(names), player, names);

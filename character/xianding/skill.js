@@ -714,6 +714,7 @@ const skills = {
 	dctongdao: {
 		unique: true,
 		limited: true,
+		audio: 2,
 		trigger: { player: "dying" },
 		skillAnimation: true,
 		animationColor: "fire",
@@ -9931,6 +9932,7 @@ const skills = {
 		subSkill: { clear: { onremove: true } },
 	},
 	dcanzhi: {
+		audio: 2,
 		enable: "phaseUse",
 		group: "dcanzhi_damage",
 		content: function () {
@@ -10207,12 +10209,19 @@ const skills = {
 					evt.relatedEvent = trigger.relatedEvent || trigger.getParent(2);
 					if (trigger.skill) evt.skill = trigger.skill;
 					else delete evt.skill;
+					evt.wumei_phase = true;
+					if (!lib.onround.includes(lib.skill.dcwumei.onRound)) {
+						lib.onround.push(lib.skill.dcwumei.onRound);
+					}
 					game.broadcastAll(function (player) {
 						player.classList.remove("glow_phase");
 						delete _status.currentPhase;
 					}, player);
 				}
 			}
+		},
+		onRound(event) {
+			return !event.wumei_phase;
 		},
 		subSkill: {
 			used: { charlotte: true },
@@ -11250,6 +11259,7 @@ const skills = {
 	},
 	//赵直
 	dctongguan: {
+		audio: 2,
 		trigger: {
 			global: "phaseBegin",
 		},
@@ -11359,6 +11369,8 @@ const skills = {
 					content: "属性目标：回复体力，或手牌数大于体力值",
 				},
 				charlotte: true,
+				silent: true,
+				nopop: true,
 			},
 			duomou: {
 				marktext: "谋",
@@ -11393,6 +11405,7 @@ const skills = {
 		},
 	},
 	dcmengjie: {
+		audio: 2,
 		trigger: {
 			global: "phaseEnd",
 		},
@@ -11961,6 +11974,7 @@ const skills = {
 	},
 	//丁尚涴
 	dcfengyan: {
+		audio: 2,
 		enable: "phaseUse",
 		usable: 2,
 		chooseButton: {
@@ -12073,6 +12087,7 @@ const skills = {
 		},
 	},
 	dcfudao: {
+		audio: 2,
 		trigger: {
 			global: "phaseBefore",
 			player: "enterGame",
@@ -13725,6 +13740,7 @@ const skills = {
 			});
 			return num >= 2;
 		},
+		seatRelated: true,
 		logTarget: "player",
 		check: function (event, player) {
 			return get.attitude(player, event.player) <= 0;
@@ -14557,6 +14573,7 @@ const skills = {
 		filter: function (event, player) {
 			return event.player.getSeatNum() == game.roundNumber && player.countCards("h") > 0;
 		},
+		seatRelated: true,
 		content: function () {
 			"step 0";
 			var suits = [],
@@ -15155,6 +15172,7 @@ const skills = {
 		},
 	},
 	mengqing: {
+		audio: 2,
 		trigger: { player: "phaseZhunbeiBegin" },
 		forced: true,
 		filter: function (event, player) {
@@ -15174,6 +15192,7 @@ const skills = {
 		derivation: "yuyun",
 	},
 	yuyun: {
+		audio: 2,
 		trigger: { player: "phaseUseBegin" },
 		forced: true,
 		filter: function (event, player) {
@@ -15878,6 +15897,7 @@ const skills = {
 		hiddenCard: function (player, name) {
 			return get.type(name) == "trick" && !player.hasSkill("miaoxian2") && player.countCards("h", { color: "black" }) == 1;
 		},
+		audio: 2,
 		enable: "chooseToUse",
 		filter: function (event, player) {
 			if (player.hasSkill("miaoxian2")) return false;
@@ -17027,6 +17047,7 @@ const skills = {
 		},
 	},
 	qingjiao: {
+		audio: 2,
 		trigger: { player: "phaseUseBegin" },
 		filter: function (event, player) {
 			if (!ui.cardPile.hasChildNodes() && !ui.discardPile.hasChildNodes());
@@ -17092,6 +17113,7 @@ const skills = {
 				if (card.name == "sha") return true;
 			},
 		},
+		audio: 2,
 		trigger: { player: "useCardToTargeted" },
 		filter: function (event, player) {
 			return event.card && event.card.name == "sha" && !player.inRange(event.target);

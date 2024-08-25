@@ -6764,6 +6764,7 @@ const skills = {
 		},
 	},
 	zhaofu: {
+		audio: 2,
 		unique: true,
 		global: "zhaofu2",
 		zhuSkill: true,
