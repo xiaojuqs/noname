@@ -28,6 +28,10 @@ const characterReplaces = {
 	hoshino: ["hoshino", "swimsuit_hoshino"],
 	baoxin: ["tw_baoxin", "baoxin", "taffyold_tw_baoxin"],
 	shichangshi: ["shichangshi", "taffyold_shichangshi"],
+	zhangzhongjing: ["zhangzhongjing", "taffyold_zhangzhongjing"],
+	huanggai: ["huanggai", "re_huanggai", "sb_huanggai", "taffyold_sb_huanggai"],
+	shen_sunce: ["shen_sunce", "taffyold_shen_sunce"],
+	huangzhong: ["re_huangzhong", "ol_huangzhong", "sb_huangzhong", "huangzhong", "jsrg_huangzhong", "yj_huangzhong", "wuhujiang", "taffyold_sb_huangzhong"],
 };
 
 export default characterReplaces;

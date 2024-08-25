@@ -54,6 +54,11 @@ const characters = {
 	taffyold_scs_guosheng: ["male", "qun", "", ["taffyold_scsniqu"], ["unseen", "sex:male_castrated", "character:scs_guosheng", "die:scs_guosheng"]],
 	taffyold_scs_gaowang: ["male", "qun", "", ["taffyold_scsanruo"], ["unseen", "sex:male_castrated", "character:scs_gaowang", "die:scs_gaowang"]],
 	taffyold_dc_zhangmancheng: ["male", "qun", 4, ["taffyold_dclvecheng", "taffyold_dczhongji"], ["character:dc_zhangmancheng", "die:dc_zhangmancheng"]],
+	taffyre_xuyou: ["male", "qun", 3, ["nzry_chenglve", "nzry_shicai", "taffyre_nzry_cunmu"], ["character:xuyou", "die:xuyou"]],
+	taffyold_zhangzhongjing: ["male", "qun", 3, ["taffyold_jishi", "liaoyi", "binglun"], ["character:zhangzhongjing", "die:zhangzhongjing"]],
+	taffyold_sb_huanggai: ["male", "wu", "2/4/2", ["sbkurou", "sbzhaxiang"], ["character:sb_huanggai", "die:sb_huanggai"]],
+	taffyold_shen_sunce: ["male", "shen", "1/6", ["taffyold_yingba", "taffyold_scfuhai", "taffyold_pinghe"], ["wu", "character:shen_sunce", "die:shen_sunce"]],
+	taffyold_sb_huangzhong: ["male", "shu", 4, ["taffyold_sbliegong"], ["character:sb_huangzhong", "die:sb_huangzhong"]],
 	aruijier: ["female", "shen", "", [], ["unseen"]],
 };
 

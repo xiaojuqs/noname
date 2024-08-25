@@ -5618,12 +5618,14 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 黄盖
 		re_huanggai: decadeUI.dynamicSkin.huanggai,
 		sb_huanggai: decadeUI.dynamicSkin.huanggai,
+    taffyold_sb_huanggai: decadeUI.dynamicSkin.huanggai,
 
 		// 黄忠
 		re_huangzhong: decadeUI.dynamicSkin.huangzhong,
 		yj_huangzhong: decadeUI.dynamicSkin.huangzhong,
 		sb_huangzhong: decadeUI.dynamicSkin.huangzhong,
 		ol_huangzhong: decadeUI.dynamicSkin.huangzhong,
+    taffyold_sb_huangzhong: decadeUI.dynamicSkin.huangzhong,
 
 		// 贾充
 		jin_jiachong: decadeUI.dynamicSkin.jiachong,
@@ -5694,6 +5696,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		xin_simayi: decadeUI.dynamicSkin.shen_simayi,
 		new_simayi: decadeUI.dynamicSkin.shen_simayi,
 		taffybaby_shen_simayi: decadeUI.dynamicSkin.shen_simayi,
+
+    // 神孙策
+    taffyold_shen_sunce: decadeUI.dynamicSkin.shen_sunce,
 
 		// 神许褚
 		taffyold_shen_xuzhu: decadeUI.dynamicSkin.shen_xuzhu,
@@ -5784,6 +5789,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		sp_xuyou: decadeUI.dynamicSkin.xuyou,
 		xin_xuyou: decadeUI.dynamicSkin.xuyou,
 		jsrg_xuyou: decadeUI.dynamicSkin.xuyou,
+    taffyre_xuyou: decadeUI.dynamicSkin.xuyou,
 
 		// 荀彧
 		ol_xunyu: decadeUI.dynamicSkin.xunyu,

@@ -29,5 +29,9 @@ const dynamicTranslates = {
 	limulu_zhihui(player) {
 		return ["每轮限X次（X为你的体力上限）。你可以选择失去一个技能，视为使用或打出任意一张基本牌，此牌无法被响应；若你以此法失去了〖暴食〗，你加1点体力上限并获得5张基本牌；若你以此法造成了伤害，此技能于本回合失效。", "每轮限X次（X为你的体力上限）。你可以选择失去一个技能或弃置2张牌，视为使用或打出任意一张基本牌或普通锦囊牌，此牌无法被响应；若你以此法失去了〖暴食〗，你加1点体力上限并获得5张基本牌；若你以此法造成了伤害，此技能于本回合失效。"][player.countMark("limulu_zhihui")];
 	},
+	taffyre_nzry_cunmu(player) {
+		if (player.storage.taffyre_nzry_cunmu) return "转换技，锁定技，当你摸牌时，<span class='bluetext'>阴：改为从牌堆底摸牌。</span>阳：改为从牌堆顶摸牌。";
+		return "转换技，锁定技，当你摸牌时，阴：改为从牌堆底摸牌。<span class='bluetext'>阳：改为从牌堆顶摸牌。</span>";
+	},
 };
 export default dynamicTranslates;
