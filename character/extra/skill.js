@@ -7198,8 +7198,10 @@ const skills = {
 		ai: {
 			effect: {
 				player_use(card, player) {
-					if (get.type(card) == "trick" && get.value(card) < 6) {
-						return [0, -2];
+					if (get.type(card) == "trick") {
+						if (get.tag(card, "draw") && player.hp > 2) return get.value(card);
+						if (get.tag(card, "damage") && player.hp + player.num("h", "tao") > 1) return get.value(card);
+						return "zeroplayertarget";
 					}
 				},
 			},

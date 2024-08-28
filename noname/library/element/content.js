@@ -4967,6 +4967,23 @@ export const Content = {
 			targets.sort(lib.sort.seat);
 		}
 		game.log(player, "对", targets, "发起拼点");
+		if (window.decadeUI) {
+			if (event.parent.name == null || event.parent.name == 'trigger') {
+				event.compareName = event.name;
+			} else {
+				event.compareName = event.parent.name;
+			}
+			game.broadcastAll(function(player, target, eventName){
+				var dialog = decadeUI.create.compareDialog();
+				dialog.caption = get.translation(eventName) + '拼点';
+				dialog.player = player;
+				dialog.target = target;
+				dialog.open();
+	
+				decadeUI.delay(400);
+				ui.dialogs[eventName] = dialog;
+			}, player, targets[0], event.compareName);
+		}
 		"step 1";
 		event._result = [];
 		event.list = targets.filter(function (current) {
@@ -5038,6 +5055,12 @@ export const Content = {
 		event.trigger("compareCardShowBefore");
 		"step 4";
 		game.log(player, "的拼点牌为", event.card1);
+		if (window.decadeUI) {
+			game.broadcastAll(function(eventName, playerCard){
+				var dialog = ui.dialogs[eventName];
+				dialog.playerCard = playerCard.copy();
+			}, event.compareName, event.card1);
+		}
 		"step 5";
 		if (event.iwhile < targets.length) {
 			event.target = targets[event.iwhile];
@@ -5047,10 +5070,30 @@ export const Content = {
 			event.num2 = event.getNum(event.card2);
 			game.log(event.target, "的拼点牌为", event.card2);
 			player.line(event.target);
-			player.$compare(event.card1, event.target, event.card2);
-			event.trigger("compare");
-			game.delay(0, 1500);
+			if (!window.decadeUI) {
+				player.$compare(event.card1, event.target, event.card2);
+				event.trigger("compare");
+				game.delay(0, 1500);
+			} else {
+				game.broadcastAll(function(eventName, player, target, playerCard, targetCard){
+					var dialog = ui.dialogs[eventName];
+					dialog.show();
+					dialog.target = target;
+					dialog.targetCard = targetCard.copy();
+				}, event.compareName, player, event.target, event.card1, event.card2);
+				event.trigger("compare");
+				decadeUI.delay(400);
+			}
 		} else {
+			if (window.decadeUI) {
+				game.broadcastAll(function(eventName){
+					var dialog = ui.dialogs[eventName];
+					dialog.close();
+					setTimeout(function(dialog){
+						dialog.player.$throwordered2(dialog.playerCard, true);
+					}, 110, dialog);
+				}, event.compareName);
+			}
 			event.goto(10);
 		}
 		"step 6";
@@ -5061,12 +5104,15 @@ export const Content = {
 		event.result.num1[event.iiwhile] = event.num1;
 		event.result.num2[event.iiwhile] = event.num2;
 		var str;
+		if (window.decadeUI) var result;
 		if (event.forceWinner === player || (event.forceWinner !== target && event.num1 > event.num2)) {
+			if (window.decadeUI) result = true;
 			event.winner = player;
 			str = get.translation(player) + "拼点成功";
 			player.popup("胜");
 			target.popup("负");
 		} else {
+			if (window.decadeUI) result = false;
 			str = get.translation(player) + "拼点失败";
 			if (event.forceWinner !== target && event.num1 == event.num2) {
 				player.popup("平");
@@ -5077,20 +5123,39 @@ export const Content = {
 				target.popup("胜");
 			}
 		}
-		game.broadcastAll(function (str) {
-			var dialog = ui.create.dialog(str);
-			dialog.classList.add("center");
-			setTimeout(function () {
-				dialog.close();
-			}, 1000);
-		}, str);
-		game.delay(2);
+		if (!window.decadeUI) {
+			game.broadcastAll(function (str) {
+				var dialog = ui.create.dialog(str);
+				dialog.classList.add("center");
+				setTimeout(function () {
+					dialog.close();
+				}, 1000);
+			}, str);
+			game.delay(2);
+		} else {
+			game.broadcastAll(function(str, eventName, result) {
+				var dialog = ui.dialogs[eventName];
+				dialog.$playerCard.dataset.result = result ? '赢' : '没赢';
+
+				setTimeout(function(dialog, eventName){
+					dialog.hide();
+					dialog.$playerCard.dataset.result = '';
+					setTimeout(function(dialog){
+						dialog.target.$throwordered2(dialog.targetCard, true);
+					}, 180, dialog);
+				}, 1400, dialog, eventName);
+
+			}, str, event.compareName, result);
+			decadeUI.delay(1800);
+		}
 		"step 8";
 		if (event.callback) {
 			game.broadcastAll(
 				function (card1, card2) {
-					if (card1.clone) card1.clone.style.opacity = 0.5;
-					if (card2.clone) card2.clone.style.opacity = 0.5;
+					if (!window.decadeUI) {
+						if (card1.clone) card1.clone.style.opacity = 0.5;
+						if (card2.clone) card2.clone.style.opacity = 0.5;
+					}
 				},
 				event.card1,
 				event.card2
@@ -5124,6 +5189,23 @@ export const Content = {
 		}
 		game.log(player, "对", target, "发起拼点");
 		event.lose_list = [];
+		if (window.decadeUI) {
+			if (event.parent.name == null || event.parent.name == 'trigger') {
+				event.compareName = event.name;
+			} else {
+				event.compareName = event.parent.name;
+			}
+			game.broadcastAll(function(player, target, eventName){
+				var dialog = decadeUI.create.compareDialog();
+				dialog.caption = get.translation(eventName) + '拼点';
+				dialog.player = player;
+				dialog.target = target;
+				dialog.open();
+	
+				decadeUI.delay(400);
+				ui.dialogs[eventName] = dialog;
+			}, player, target, event.compareName);
+		}
 		"step 1";
 		var sendback = function () {
 			if (_status.event != event) {
@@ -5166,6 +5248,13 @@ export const Content = {
 				player.logSkill(result.skill);
 			} else event.lose_list.push([player, result.cards[0]]);
 			event.card1 = result.cards[0];
+			if (window.decadeUI) {
+				game.broadcastAll(function(eventName){
+					var dialog = ui.dialogs[eventName];
+					dialog.$playerCard.classList.add('infohidden');
+					dialog.$playerCard.classList.add('infoflip');
+				}, event.compareName);
+			}
 		}
 		if (event.localTarget) {
 			target.chooseCard("请选择拼点牌", true).set("type", "compare").set("glow_result", true).ai = event.ai;
@@ -5177,6 +5266,13 @@ export const Content = {
 				result.cards = lib.skill[result.skill].onCompare(target);
 			} else event.lose_list.push([target, result.cards[0]]);
 			event.card2 = result.cards[0];
+			if (window.decadeUI) {
+				game.broadcastAll(function(eventName){
+					var dialog = ui.dialogs[eventName];
+					dialog.$targetCard.classList.add('infohidden');
+					dialog.$targetCard.classList.add('infoflip');
+				}, event.compareName);
+			}
 		}
 		if (!event.resultOL && event.ol) {
 			game.pause();
@@ -5189,6 +5285,13 @@ export const Content = {
 					event.resultOL[player.playerid].cards = lib.skill[event.resultOL[player.playerid].skill].onCompare(player);
 				} else event.lose_list.push([player, event.resultOL[player.playerid].cards[0]]);
 				event.card1 = event.resultOL[player.playerid].cards[0];
+				if (window.decadeUI) {
+					game.broadcastAll(function(eventName){
+						var dialog = ui.dialogs[eventName];
+						dialog.$playerCard.classList.add('infohidden');
+						dialog.$playerCard.classList.add('infoflip');
+					}, event.compareName);
+				}
 			}
 			if (!event.card2) {
 				if (event.resultOL[target.playerid].skill && lib.skill[event.resultOL[target.playerid].skill] && lib.skill[event.resultOL[target.playerid].skill].onCompare) {
@@ -5196,6 +5299,13 @@ export const Content = {
 					event.resultOL[target.playerid].cards = lib.skill[event.resultOL[target.playerid].skill].onCompare(player);
 				} else event.lose_list.push([target, event.resultOL[target.playerid].cards[0]]);
 				event.card2 = event.resultOL[target.playerid].cards[0];
+				if (window.decadeUI) {
+					game.broadcastAll(function(eventName){
+						var dialog = ui.dialogs[eventName];
+						dialog.$targetCard.classList.add('infohidden');
+						dialog.$targetCard.classList.add('infoflip');
+					}, event.compareName);
+				}
 			}
 			if (!event.card1 || !event.card2) {
 				throw "err";
@@ -5219,12 +5329,20 @@ export const Content = {
 		"step 5";
 		event.trigger("compareCardShowBefore");
 		"step 6";
-		game.broadcast(function () {
+		if (!window.decadeUI) {
+			game.broadcast(function () {
+				ui.arena.classList.add("thrownhighlight");
+			});
 			ui.arena.classList.add("thrownhighlight");
-		});
-		ui.arena.classList.add("thrownhighlight");
-		game.addVideo("thrownhighlight1");
-		player.$compare(event.card1, target, event.card2);
+			game.addVideo("thrownhighlight1");
+			player.$compare(event.card1, target, event.card2);
+		} else {
+			game.broadcastAll(function(eventName, player, target, playerCard, targetCard){
+				var dialog = ui.dialogs[eventName];
+				dialog.playerCard = playerCard.copy();
+				dialog.targetCard = targetCard.copy();
+			}, event.compareName, player, target, event.card1, event.card2);
+		}
 		game.log(player, "的拼点牌为", event.card1);
 		game.log(target, "的拼点牌为", event.card2);
 		var getNum = function (card) {
@@ -5266,14 +5384,33 @@ export const Content = {
 				target.popup("胜");
 			}
 		}
-		game.broadcastAll(function (str) {
-			var dialog = ui.create.dialog(str);
-			dialog.classList.add("center");
-			setTimeout(function () {
-				dialog.close();
-			}, 1000);
-		}, str);
-		game.delay(2);
+		if (!window.decadeUI) {
+			game.broadcastAll(function (str) {
+				var dialog = ui.create.dialog(str);
+				dialog.classList.add("center");
+				setTimeout(function () {
+					dialog.close();
+				}, 1000);
+			}, str);
+			game.delay(2);
+		} else {
+			game.broadcastAll(function(str, eventName, result) {
+				var dialog = ui.dialogs[eventName];
+				dialog.$playerCard.dataset.result = result ? '赢' : '没赢';
+
+				setTimeout(function(dialog, eventName){
+					dialog.close();
+					setTimeout(function(dialog){
+						dialog.player.$throwordered2(dialog.playerCard, true);
+						dialog.target.$throwordered2(dialog.targetCard, true);
+					}, 180, dialog);
+					ui.dialogs[eventName] = undefined;
+
+				}, 1400, dialog, eventName);
+
+			}, str, event.compareName, event.result.bool);
+			decadeUI.delay(1800);
+		}
 		"step 9";
 		if (typeof event.target.ai.shown == "number" && event.target.ai.shown <= 0.85 && event.addToAI) {
 			event.target.ai.shown += 0.1;
