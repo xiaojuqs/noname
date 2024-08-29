@@ -570,26 +570,21 @@ game.import("card", function () {
 				toself: false,
 				loseDelay: false,
 				onEquip: function () {
-					const nvzhuangs = player.getVCards("e").filter(card => {
-						return card.name == "nvzhuang";
-					});
-					const cards = player.getCards("he", card => {
-						return !nvzhuangs.some(nvzhuang => nvzhuang.cards?.includes(card)) && lib.filter.cardDiscardable(card, player, "nvzhuang");
-					});
 					if (
 						player.sex == "male" &&
-						cards.length > 0
-					) {
+						player.countCards("he", function (cardx) {
+							return card.cards && !card.cards.includes(cardx);
+						})
+					)
 						player
 							.chooseToDiscard(
 								true,
 								function (card) {
-									return cards.includes(card);
+									return !_status.event.card?.cards.includes(card);
 								},
 								"he"
 							)
 							.set("card", card);
-					}
 				},
 				onLose: function () {
 					if (player.sex != "male") return;
