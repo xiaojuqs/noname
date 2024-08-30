@@ -212,7 +212,7 @@ game.import("card", function () {
 				ai: {
 					order: 9,
 					value: function (card, player) {
-						if (player.getVEquips(1).includes(card)) return 0.4;
+						if (player.getEquips(1).includes(card)) return 0.4;
 						return 4;
 					},
 					equipValue: function (card, player) {
@@ -257,7 +257,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						if (player.getVEquips(1).includes(card)) return -3;
+						if (player.getEquips(1).includes(card)) return -3;
 						return 3;
 					},
 					basic: {
@@ -293,7 +293,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						if (player.getVEquips(2).includes(card)) {
+						if (player.getEquips(2).includes(card)) {
 							if (player.hasSex("male")) return -8;
 							return 0;
 						}
@@ -330,7 +330,7 @@ game.import("card", function () {
 						return 1;
 					},
 					value: function (card, player) {
-						if (player.getVEquips(2).includes(card)) return -10;
+						if (player.getEquips(2).includes(card)) return -10;
 						return 2.5;
 					},
 					basic: {
@@ -363,7 +363,7 @@ game.import("card", function () {
 					order: 9,
 					equipValue: -1,
 					value: function (card, player) {
-						if (player.getVEquips(4).includes(card)) return 0;
+						if (player.getEquips(4).includes(card)) return 0;
 						return 0.5;
 					},
 					basic: {

@@ -2189,6 +2189,7 @@ game.import("card", function () {
 								return btv + 0.1;
 							return btv + val;
 						}
+						if (get.equipValue(button.link) <= 0) return get.equipValue(button.link);
 						let sub = get.subtype(button.link);
 						if (sub == "equip1") return (btv * Math.min(3.6, target.hp)) / 3;
 						if (sub == "equip2") {
@@ -2511,6 +2512,7 @@ game.import("card", function () {
 						}
 						if (att > 0) val = -val;
 						if (pos !== "e") return val;
+						if (get.equipValue(button.link) <= 0) return get.equipValue(button.link);
 						let sub = get.subtypes(button.link);
 						if (sub.includes("equip1")) return (val * Math.min(3.6, target.hp)) / 3;
 						if (sub.includes("equip2")) {

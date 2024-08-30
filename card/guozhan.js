@@ -1020,6 +1020,24 @@ game.import("card", function () {
 					basic: {
 						equipValue: 6,
 					},
+					result: {
+						player: function (player, target) {
+							let cards=target.getEquips(2);
+							for (let card of cards){
+								if (card) {
+									let equip_value = get.equipValue(card);
+									if (equip_value > 6) {
+										return -1;
+									} else if (equip_value <= 0) {
+										return 3;
+									} else {
+										return 1;
+									}
+								}
+							}
+							return 2;
+						},
+					},
 				},
 			},
 			huoshaolianying: {

@@ -8544,6 +8544,7 @@ const skills = {
 		ai: {
 			order(item, player) {
 				if (player.hasUnknown()) return 0;
+				let cards = player.getCards("h");
 				let list = [];
 				for (let i of cards) {
 					list.add(get.suit(i, player));
