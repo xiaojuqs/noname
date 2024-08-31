@@ -380,11 +380,19 @@ game.import("card", function () {
 				ai: {
 					order: 9,
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip4" && i == card) return 0;
+						}
 						if (player.getEquips(4).includes(card)) return 0;
 						return 4;
 					},
 					equipValue: function (card, player) {
-						if (player.getCards("e").includes(card)) return 0;
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip4" && i == card) return 0;
+						}
+						if (player.getEquips(4).includes(card)) return 0;
 						return -get.value(player.getCards("e"));
 					},
 					basic: {
@@ -459,6 +467,13 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip1" && i == card) {
+								if (player.hasSkillTag("noh")) return 0;
+								return -3.5;
+							}
+						}
 						if (player.getEquips(1).includes(card)) {
 							if (player.hasSkillTag("noh")) return 0;
 							return -3.5;
@@ -500,6 +515,10 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip1" && i == card) return -3.5;
+						}
 						if (player.getEquips(1).includes(card)) return -3.5;
 						return 3;
 					},
@@ -538,6 +557,10 @@ game.import("card", function () {
 						return 1;
 					},
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip2" && i == card) return -9;
+						}
 						if (player.getEquips(2).includes(card)) return -9;
 						return 2.5;
 					},

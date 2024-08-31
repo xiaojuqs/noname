@@ -212,11 +212,19 @@ game.import("card", function () {
 				ai: {
 					order: 9,
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip1" && i == card) return 0.4;
+						}
 						if (player.getEquips(1).includes(card)) return 0.4;
 						return 4;
 					},
 					equipValue: function (card, player) {
-						if (player.getCards("e").includes(card)) return 0.4;
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip1" && i == card) return 0.4;
+						}
+						if (player.getEquips(1).includes(card)) return 0.4;
 						return -get.value(player.getCards("e"));
 					},
 					basic: {
@@ -257,6 +265,10 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip1" && i == card) return -3;
+						}
 						if (player.getEquips(1).includes(card)) return -3;
 						return 3;
 					},
@@ -293,6 +305,13 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip2" && i == card) {
+								if (player.hasSex("male")) return -8;
+								return 0;
+							}
+						}
 						if (player.getEquips(2).includes(card)) {
 							if (player.hasSex("male")) return -8;
 							return 0;
@@ -330,6 +349,10 @@ game.import("card", function () {
 						return 1;
 					},
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip2" && i == card) return -10;
+						}
 						if (player.getEquips(2).includes(card)) return -10;
 						return 2.5;
 					},
@@ -363,6 +386,10 @@ game.import("card", function () {
 					order: 9,
 					equipValue: -1,
 					value: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip4" && i == card) return 0;
+						}
 						if (player.getEquips(4).includes(card)) return 0;
 						return 0.5;
 					},
