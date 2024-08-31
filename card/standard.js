@@ -2565,7 +2565,7 @@ game.import("card", function () {
 								const noh = (hs.length == 0 || target.hasSkillTag('noh'));
 								const noe = (es.length == 0 || target.hasSkillTag('noe'));
 								const noe2 = (noe || !es.some(card => {
-									return get.value(card, target) > 0;
+									return get.equipValue(card, target) > 0;
 								}));
 								const noj = (js.length == 0 || !js.some(card => {
 									const cardj = card.viewAs ? { name: card.viewAs } : card;

@@ -604,6 +604,10 @@ game.import("card", function () {
 				ai:{
 					order: 9.5,
 					equipValue: function (card, player) {
+						let e_cards = player.getCards("e");
+						for (let i of e_cards) {
+							if (get.subtype(i) == "equip2" && i == card) return 0;
+						}
 						if (player.getEquips(2).includes(card)) return 0;
 						return 1;
 					},
@@ -717,7 +721,7 @@ game.import("card", function () {
 				ai: {
 					order: 9.5,
 					equipValue: function (card, player) {
-						if (!player.getEquips(5).includes(card)) return 5;
+						if (!player.getVEquips(5).includes(card)) return 5;
 						if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+3*player.countCards('h');
 						return 0;
 					},
