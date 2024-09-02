@@ -718,6 +718,7 @@ game.import("card", function () {
 					order: 9.5,
 					equipValue: function (card, player) {
 						if ((get.position(card?.cards?.[0]) == "e") && card?.cards?.[0]?.cardid) return 1+3*player.countCards('h');
+						if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+3*player.countCards('h');
 						return 0;
 					},
 					value: function () {
@@ -725,6 +726,10 @@ game.import("card", function () {
 					},
 					basic: {
 						equipValue: 5,
+						value: function(card,player,i) {
+							if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+2*player.countCards('h');
+							return 0;
+						}
 					},
 					result: {
 						keepAI: true,
