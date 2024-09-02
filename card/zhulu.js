@@ -380,19 +380,11 @@ game.import("card", function () {
 				ai: {
 					order: 9,
 					value: function (card, player) {
-						let e_cards = player.getCards("e");
-						for (let i of e_cards) {
-							if (get.subtype(i) == "equip4" && i == card) return 0;
-						}
-						if (player.getEquips(4).includes(card)) return 0;
+						if (get.position(card) == "e") return 0;
 						return 4;
 					},
 					equipValue: function (card, player) {
-						let e_cards = player.getCards("e");
-						for (let i of e_cards) {
-							if (get.subtype(i) == "equip4" && i == card) return 0;
-						}
-						if (player.getEquips(4).includes(card)) return 0;
+						if (get.position(card) == "e") return 0;
 						return -get.value(player.getCards("e"));
 					},
 					basic: {
@@ -467,14 +459,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						let e_cards = player.getCards("e");
-						for (let i of e_cards) {
-							if (get.subtype(i) == "equip1" && i == card) {
-								if (player.hasSkillTag("noh")) return 0;
-								return -3.5;
-							}
-						}
-						if (player.getEquips(1).includes(card)) {
+						if (get.position(card) == "e") {
 							if (player.hasSkillTag("noh")) return 0;
 							return -3.5;
 						}
@@ -515,11 +500,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						let e_cards = player.getCards("e");
-						for (let i of e_cards) {
-							if (get.subtype(i) == "equip1" && i == card) return -3.5;
-						}
-						if (player.getEquips(1).includes(card)) return -3.5;
+						if (get.position(card) == "e") return -3.5;
 						return 3;
 					},
 					basic: {
@@ -557,11 +538,7 @@ game.import("card", function () {
 						return 1;
 					},
 					value: function (card, player) {
-						let e_cards = player.getCards("e");
-						for (let i of e_cards) {
-							if (get.subtype(i) == "equip2" && i == card) return -9;
-						}
-						if (player.getEquips(2).includes(card)) return -9;
+						if (get.position(card) == "e") return -9;
 						return 2.5;
 					},
 					basic: {
@@ -627,11 +604,7 @@ game.import("card", function () {
 				ai:{
 					order: 9.5,
 					equipValue: function (card, player) {
-						let e_cards = player.getCards("e");
-						for (let i of e_cards) {
-							if (get.subtype(i) == "equip2" && i == card) return 0;
-						}
-						if (player.getEquips(2).includes(card)) return 0;
+						if (get.position(card) == "e") return 0;
 						return 1;
 					},
 					value: function () {
@@ -744,8 +717,7 @@ game.import("card", function () {
 				ai: {
 					order: 9.5,
 					equipValue: function (card, player) {
-						if (!player.getVEquips(5).includes(card)) return 5;
-						if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+3*player.countCards('h');
+						if ((get.position(card?.cards?.[0]) == "e") && card?.cards?.[0]?.cardid) return 1+3*player.countCards('h');
 						return 0;
 					},
 					value: function () {
@@ -753,10 +725,6 @@ game.import("card", function () {
 					},
 					basic: {
 						equipValue: 5,
-						value: function(card,player,i) {
-							if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+2*player.countCards('h');
-							return 0;
-						},
 					},
 					result: {
 						keepAI: true,
