@@ -4479,21 +4479,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		yangbiao: {
 			// 杨彪
-			忧心国事: {
-				name: "杨彪/忧心国事/XingXiang",
-				x: [0, 0.45],
-				y: [0, 0.42],
-				scale: 0.4,
-				angle: 0,
-				// speed: 1,
-				// action: 'DaiJi',
-				beijing: {
-					name: "杨彪/忧心国事/BeiJing",
-					scale: 0.5,
-					x: [0, 0.5],
-					y: [0, 0.5],
-				},
-			},
 			国之柱石: {
 				name: "杨彪/国之柱石/XingXiang",
 				x: [0, 0.45],
@@ -4617,34 +4602,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					scale: 0.3,
 					x: [0, 0.4],
 					y: [0, 0.5],
-				},
-			},
-		},
-		zhangfen: {
-			// 张奋
-			天工神机: {
-				name: "张奋/天工神机/daiji2",
-				x: [0, 0.5],
-				y: [0, 0.5],
-				scale: 0.7,
-				angle: 0,
-				// speed: 1,
-				shizhounian: true,
-				chuchang: {
-					name: "张奋/天工神机/chuchang",
-					scale: 1,
-					action: "play",
-				},
-				gongji: {
-					name: "张奋/天工神机/chuchang",
-					scale: 1.2,
-					action: "play",
-				},
-				beijing: {
-					name: "张奋/天工神机/beijing",
-					x: [0, 0.5],
-					y: [0, 0.5],
-					scale: 0.3,
 				},
 			},
 		},
@@ -5685,6 +5642,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 神关羽
 		tw_shen_guanyu: decadeUI.dynamicSkin.shen_guanyu,
+    ty_shen_guanyu: decadeUI.dynamicSkin.shen_guanyu,
 
 		// 神吕蒙
 		tw_shen_lvmeng: decadeUI.dynamicSkin.shen_lvmeng,
@@ -5705,6 +5663,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 神赵云
 		dc_zhaoyun: decadeUI.dynamicSkin.shen_zhaoyun,
+
+    // 神张飞
+    ty_shen_zhangfei: decadeUI.dynamicSkin.shen_zhangfei,
 
 		// 孙策
 		re_sunce: decadeUI.dynamicSkin.sunce,

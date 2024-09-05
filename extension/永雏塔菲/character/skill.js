@@ -19,7 +19,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.characterlist = list;
+			_status.pingjianCharacterList = list;
 		},
 		audio: 4,
 		trigger: {
@@ -60,10 +60,10 @@ const skills = {
 					player.removeSkill(result.links[i]);
 					game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 				}
-				if (!_status.characterlist) {
+				if (!_status.pingjianCharacterList) {
 					lib.skill.taffyboss_pingjian.initList();
 				}
-				var allList = _status.characterlist.slice(0);
+				var allList = _status.pingjianCharacterList.slice(0);
 				game.countPlayer(function (current) {
 					if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 					if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -322,11 +322,11 @@ const skills = {
 								player.removeSkill(result.links[i]);
 								game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 							}
-							if (!_status.characterlist) {
+							if (!_status.pingjianCharacterList) {
 								lib.skill.taffyboss_pingjian.initList();
 							}
 							var list = [];
-							var allList = _status.characterlist.slice(0);
+							var allList = _status.pingjianCharacterList.slice(0);
 							game.countPlayer(function (current) {
 								if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 								if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -399,10 +399,10 @@ const skills = {
 						var list = [];
 						var skills = [];
 						var map = [];
-						if (!_status.characterlist) {
+						if (!_status.pingjianCharacterList) {
 							lib.skill.taffyboss_pingjian.initList();
 						}
-						var allList = _status.characterlist.slice(0);
+						var allList = _status.pingjianCharacterList.slice(0);
 						game.countPlayer(function (current) {
 							if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 							if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -1305,7 +1305,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.characterlist = list;
+			_status.pingjianCharacterList = list;
 		},
 		init: function (player) {
 			player.addSkill("taffydc_pingjian_check");
@@ -1321,7 +1321,7 @@ const skills = {
 		frequent: true,
 		content: function () {
 			"step 0";
-			if (!_status.characterlist) {
+			if (!_status.pingjianCharacterList) {
 				lib.skill.taffydc_pingjian.initList();
 			}
 			var allList = [
@@ -1484,7 +1484,7 @@ const skills = {
 			var skills = [];
 			var map = [];
 			var evt = event.getParent(2);
-			if (!_status.characterlist) {
+			if (!_status.pingjianCharacterList) {
 				lib.skill.taffydc_pingjian.initList();
 			}
 			var allList = [
@@ -1740,7 +1740,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.characterlist = list;
+			_status.pingjianCharacterList = list;
 		},
 		hasCommonElement: function (array1, array2) {
 			for (let i = 0; i < array1.length; i++) {
@@ -1936,10 +1936,10 @@ const skills = {
 					}
 					name2 = triggerList;
 				}
-				if (!_status.characterlist) {
+				if (!_status.pingjianCharacterList) {
 					lib.skill.taffyhuiwan_pingjian.initList();
 				}
-				var allList = _status.characterlist.slice(0);
+				var allList = _status.pingjianCharacterList.slice(0);
 				game.countPlayer(function (current) {
 					if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 					if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -2300,10 +2300,10 @@ const skills = {
 					}
 					name2 = triggerList;
 				}
-				if (!_status.characterlist) {
+				if (!_status.pingjianCharacterList) {
 					lib.skill.taffyhuiwan_pingjian.initList();
 				}
-				var allList = _status.characterlist.slice(0);
+				var allList = _status.pingjianCharacterList.slice(0);
 				game.countPlayer(function (current) {
 					if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 					if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -5442,7 +5442,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.characterlist = list;
+			_status.pingjianCharacterList = list;
 		},
 		hasCommonElement: function (array1, array2) {
 			for (let i = 0; i < array1.length; i++) {
@@ -5505,10 +5505,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.pingjianCharacterList) {
 						lib.skill.taffyre_pingjian.initList();
 					}
-					var allList = _status.characterlist.slice(0);
+					var allList = _status.pingjianCharacterList.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -5745,10 +5745,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.pingjianCharacterList) {
 						lib.skill.taffyre_pingjian.initList();
 					}
-					var allList = _status.characterlist.slice(0);
+					var allList = _status.pingjianCharacterList.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -8784,7 +8784,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.characterlist = list;
+			_status.pingjianCharacterList = list;
 		},
 		hasCommonElement: function (array1, array2) {
 			for (let i = 0; i < array1.length; i++) {
@@ -8838,10 +8838,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.pingjianCharacterList) {
 						lib.skill.taffyshen_pingjian.initList();
 					}
-					var allList = _status.characterlist.slice(0);
+					var allList = _status.pingjianCharacterList.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -9069,10 +9069,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.pingjianCharacterList) {
 						lib.skill.taffyshen_pingjian.initList();
 					}
-					var allList = _status.characterlist.slice(0);
+					var allList = _status.pingjianCharacterList.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -9433,7 +9433,7 @@ const skills = {
 		trigger: { player: "phaseUseBegin" },
 		frequent: true,
 		group: "hoshino_shuiyuan_die",
-		content: (event, map) => {
+		content: () => {
 			"step 0";
 			player
 				.chooseTarget(`水援：移除场上所有“水”标记，并令任意名与你距离小于2的角色获得5个“水”标记`, [0, Infinity], function (card, player, target) {
