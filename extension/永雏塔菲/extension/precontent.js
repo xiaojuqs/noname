@@ -104,6 +104,12 @@ export const PRECONTENT = function (config) {
 			nature: "watermm",
 			showName: "水",
 		});
+		lib.namePrefix.set("旧手杀神", {
+			/**
+			 * @returns {string}
+			 */
+			getSpan: () => `${get.prefixSpan("旧")}${get.prefixSpan("手杀")}${get.prefixSpan("神")}`,
+		});
 		characterPackFunc();
 		lib.config.all.characters.splice(21, 0, "taffy_character");
 		if (!lib.config.characters.includes("taffy_character")) {

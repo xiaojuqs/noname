@@ -19,7 +19,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.pingjianCharacterList = list;
+			_status.characterlist = list;
 		},
 		audio: 4,
 		trigger: {
@@ -60,10 +60,10 @@ const skills = {
 					player.removeSkill(result.links[i]);
 					game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 				}
-				if (!_status.pingjianCharacterList) {
+				if (!_status.characterlist) {
 					lib.skill.taffyboss_pingjian.initList();
 				}
-				var allList = _status.pingjianCharacterList.slice(0);
+				var allList = _status.characterlist.slice(0);
 				game.countPlayer(function (current) {
 					if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 					if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -322,11 +322,11 @@ const skills = {
 								player.removeSkill(result.links[i]);
 								game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 							}
-							if (!_status.pingjianCharacterList) {
+							if (!_status.characterlist) {
 								lib.skill.taffyboss_pingjian.initList();
 							}
 							var list = [];
-							var allList = _status.pingjianCharacterList.slice(0);
+							var allList = _status.characterlist.slice(0);
 							game.countPlayer(function (current) {
 								if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 								if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -399,10 +399,10 @@ const skills = {
 						var list = [];
 						var skills = [];
 						var map = [];
-						if (!_status.pingjianCharacterList) {
+						if (!_status.characterlist) {
 							lib.skill.taffyboss_pingjian.initList();
 						}
-						var allList = _status.pingjianCharacterList.slice(0);
+						var allList = _status.characterlist.slice(0);
 						game.countPlayer(function (current) {
 							if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 							if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -1305,7 +1305,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.pingjianCharacterList = list;
+			_status.characterlist = list;
 		},
 		init: function (player) {
 			player.addSkill("taffydc_pingjian_check");
@@ -1321,7 +1321,7 @@ const skills = {
 		frequent: true,
 		content: function () {
 			"step 0";
-			if (!_status.pingjianCharacterList) {
+			if (!_status.characterlist) {
 				lib.skill.taffydc_pingjian.initList();
 			}
 			var allList = [
@@ -1484,7 +1484,7 @@ const skills = {
 			var skills = [];
 			var map = [];
 			var evt = event.getParent(2);
-			if (!_status.pingjianCharacterList) {
+			if (!_status.characterlist) {
 				lib.skill.taffydc_pingjian.initList();
 			}
 			var allList = [
@@ -1740,7 +1740,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.pingjianCharacterList = list;
+			_status.characterlist = list;
 		},
 		hasCommonElement: function (array1, array2) {
 			for (let i = 0; i < array1.length; i++) {
@@ -1936,10 +1936,10 @@ const skills = {
 					}
 					name2 = triggerList;
 				}
-				if (!_status.pingjianCharacterList) {
+				if (!_status.characterlist) {
 					lib.skill.taffyhuiwan_pingjian.initList();
 				}
-				var allList = _status.pingjianCharacterList.slice(0);
+				var allList = _status.characterlist.slice(0);
 				game.countPlayer(function (current) {
 					if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 					if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -2300,10 +2300,10 @@ const skills = {
 					}
 					name2 = triggerList;
 				}
-				if (!_status.pingjianCharacterList) {
+				if (!_status.characterlist) {
 					lib.skill.taffyhuiwan_pingjian.initList();
 				}
-				var allList = _status.pingjianCharacterList.slice(0);
+				var allList = _status.characterlist.slice(0);
 				game.countPlayer(function (current) {
 					if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 					if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -5442,7 +5442,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.pingjianCharacterList = list;
+			_status.characterlist = list;
 		},
 		hasCommonElement: function (array1, array2) {
 			for (let i = 0; i < array1.length; i++) {
@@ -5505,10 +5505,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.pingjianCharacterList) {
+					if (!_status.characterlist) {
 						lib.skill.taffyre_pingjian.initList();
 					}
-					var allList = _status.pingjianCharacterList.slice(0);
+					var allList = _status.characterlist.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -5745,10 +5745,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.pingjianCharacterList) {
+					if (!_status.characterlist) {
 						lib.skill.taffyre_pingjian.initList();
 					}
-					var allList = _status.pingjianCharacterList.slice(0);
+					var allList = _status.characterlist.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -8784,7 +8784,7 @@ const skills = {
 				list.remove(current.name1);
 				list.remove(current.name2);
 			});
-			_status.pingjianCharacterList = list;
+			_status.characterlist = list;
 		},
 		hasCommonElement: function (array1, array2) {
 			for (let i = 0; i < array1.length; i++) {
@@ -8838,10 +8838,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.pingjianCharacterList) {
+					if (!_status.characterlist) {
 						lib.skill.taffyshen_pingjian.initList();
 					}
-					var allList = _status.pingjianCharacterList.slice(0);
+					var allList = _status.characterlist.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -9069,10 +9069,10 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.pingjianCharacterList) {
+					if (!_status.characterlist) {
 						lib.skill.taffyshen_pingjian.initList();
 					}
-					var allList = _status.pingjianCharacterList.slice(0);
+					var allList = _status.characterlist.slice(0);
 					game.countPlayer(function (current) {
 						if (current.name && lib.character[current.name] && current.name.indexOf("gz_shibing") != 0 && current.name.indexOf("gz_jun_") != 0) allList.add(current.name);
 						if (current.name1 && lib.character[current.name1] && current.name1.indexOf("gz_shibing") != 0 && current.name1.indexOf("gz_jun_") != 0) allList.add(current.name1);
@@ -11915,6 +11915,892 @@ const skills = {
 				},
 				content: function () {
 					player.markAuto("taffyold_sbliegong", [get.suit(trigger.card)]);
+				},
+			},
+		},
+	},
+	//旧神黄忠
+	//丁真神将，赤矢神将，爆头神将，吃人神将
+	"taffyold_1！5！": {
+		audio: "1！5！",
+		trigger: { source: "damageSource" },
+		filter(event, player) {
+			return event.player.isIn() && event.source != event.player;
+		},
+		logTarget: "player",
+		prompt2: (event, player) => "击伤其一个部位",
+		async cost(event, trigger, player) {
+			const target = trigger.player;
+			const places = lib.skill["taffyold_1！5！"].derivation.slice().filter(i => {
+				let storage = target.getStorage("taffyold_1！5！_injury");
+				if (!storage.length && i == "taffyold_1！5！_place1") {
+					return false;
+				}
+				return true;
+			});
+			if (!places.length) return;
+			//射击部位-by 鸽子
+			//牢萌负责精修断后
+			//一个团队要有XX的X，YY的Y，ZZ的Z...
+			await Promise.all(event.next);
+			event.videoId = lib.status.videoId++;
+			if (player.isUnderControl()) game.swapPlayerAuto(player);
+			const switchToAuto = function () {
+				setTimeout(function () {
+					_status.imchoosing = false;
+					if (event.dialog) event.dialog.close();
+					if (event.control) event.control.close();
+					if (event.control2) event.control2.close();
+					game.resume();
+					return Promise.resolve({
+						bool: true,
+						hurt: places.randomGet(),
+					});
+				}, 5000);
+			};
+			const chooseButton = (places, target) => {
+				const { promise, resolve } = Promise.withResolvers();
+				const event = _status.event;
+				event.switchToAuto = function () {
+					_status.imchoosing = false;
+					resolve({
+						bool: true,
+						hurt: places.randomGet(),
+					});
+					if (event.dialog) event.dialog.close();
+					if (event.control) event.control.close();
+					if (event.control2) event.control2.close();
+				};
+				event.control = ui.create.control("cancel2", function (link) {
+					event.dialog.close();
+					event.control.close();
+					if (event.control2) event.control2.close();
+					game.resume();
+					_status.imchoosing = false;
+					event._result = { bool: false };
+					resolve(event._result);
+				});
+				event.control2 = ui.create.control("ok", function (link) {
+					event.dialog.close();
+					event.control.close();
+					event.control2.close();
+					game.resume();
+					_status.imchoosing = false;
+					resolve(event._result);
+				});
+				event.control2.close();
+				const dialog = ui.create.dialog("forcebutton", "hidden");
+				event.dialog = dialog;
+				//白底大图不加textPrompt了
+				dialog.textPrompt = dialog.add('<div class="text center">毅武：是否击伤' + get.translation(target) + "的一个部位？</div>");
+				dialog.style.display = "flex";
+				dialog.style.justifyContent = "center";
+				dialog.style.alignItems = "center";
+				dialog.style.position = "relative";
+				dialog.style.width = "100%";
+				dialog.style.height = "100%";
+				dialog.id = "taffyold_1！5！";
+				dialog.classList.add("fixed");
+				dialog.classList.add("scroll1");
+				dialog.classList.add("scroll2");
+				dialog.classList.add("center");
+				dialog.classList.add("scroll3");
+				dialog.classList.add("fullwidth");
+				dialog.classList.add("fullheight");
+				const target_img = document.createElement("div");
+				const position = lib.skill["taffyold_1！5！"].derivation;
+				target_img.style.width = "50%";
+				target_img.style.height = "100%";
+				target_img.style.position = "relative";
+				target_img.style.overflow = "visible";
+				target_img.style.boxSizing = "border-box";
+				target_img.style.border = "1px solid black";
+				target_img.style.backgroundColor = "rgb(255,178,102,0.5)";
+				dialog.appendChild(target_img);
+				target_img.style.backgroundImage = "url(" + lib.assetURL + "image/card/yiwu_" + (target.hasSex("male") ? "male" : "female") + ".png)";
+				target_img.style.backgroundSize = "cover";
+				target_img.style.backgroundRepeat = "no-repeat";
+				target_img.style.backgroundSize = "contain";
+				target_img.style.backgroundRepeat = "no-repeat";
+				target_img.style.backgroundPosition = "center center";
+				const number = target.hasSex("male")
+					? [
+							["7", "1"],
+							//["5", "3"],
+							//["4", "7"],
+							["9", "5"],
+							["9", "13"],
+							["7", "3"],
+							["7", "6"],
+					  ]
+					: [
+							["7", "1"],
+							//["8", "3"],
+							//["4", "7"],
+							["9", "5"],
+							["9", "13"],
+							["6", "3"],
+							["6", "6"],
+					  ];
+				let list = [];
+				for (let i = 0; i < position.length; i++) {
+					const num_px = document.createElement("div");
+					num_px.style.width = "15%";
+					num_px.style.height = "15%";
+					num_px.id = position[i];
+					num_px.style.position = "absolute";
+					num_px.style.left = `${number[i][0] * 6}%`;
+					num_px.style.top = `${number[i][1] * 6}%`;
+					num_px.style.boxSizing = "border-box";
+					num_px.style.backgroundImage = "url(" + lib.assetURL + "image/card/yiwu_click.png)";
+					num_px.style.backgroundSize = "cover";
+					num_px.style.backgroundRepeat = "no-repeat";
+					num_px.style.backgroundSize = "contain";
+					num_px.style.backgroundRepeat = "no-repeat";
+					num_px.style.backgroundPosition = "center center";
+					num_px.addEventListener(lib.config.touchscreen ? "touchend" : "click", a => {
+						let hurt = event._result?.position;
+						event._result = {
+							bool: true,
+							hurt: a.target.id,
+							position: a.target,
+						};
+						let bool = true;
+						if (hurt) {
+							hurt.style.backgroundImage = "url(" + lib.assetURL + "image/card/yiwu_click.png)";
+							if (hurt == a.target) {
+								event._result = { bool: false };
+								if (event.control2) event.control2.close();
+								if (event.control) event.control.open();
+								bool = false;
+							}
+						}
+						if (bool) {
+							a.target.style.backgroundImage = "url(" + lib.assetURL + "image/card/yiwu_click_chosen.png)";
+							if (event.control) event.control.close();
+							if (event.control2) event.control2.open();
+						}
+					});
+					list.push(num_px);
+				}
+				const selectedList = list.filter(i => places.includes(i.id));
+				for (const i of selectedList) target_img.appendChild(i);
+				dialog.open();
+				game.pause();
+				game.countChoose();
+				return promise;
+			};
+			let next;
+			if (event.isMine()) {
+				next = chooseButton(places, target);
+			} else if (event.isOnline()) {
+				const { promise, resolve } = Promise.withResolvers();
+				event.player.send(chooseButton, places, target);
+				event.player.wait(async result => {
+					if (result == "ai") result = await switchToAuto();
+					resolve(result);
+				});
+				game.pause();
+				next = promise;
+			} else {
+				next = switchToAuto();
+			}
+			const result = await next;
+			game.resume();
+			event.result = {
+				bool: result.bool,
+				targets: [target],
+				cost_data: result.hurt,
+			};
+			event.result.targets = [target];
+		},
+		async content(event, trigger, player) {
+			const target = event.targets[0];
+			const place = event.cost_data;
+			player.popup(place, "fire");
+			game.log(player, "击伤了", target, "的", "#y" + get.translation(place));
+			target.addSkill("taffyold_1！5！_injury");
+			target.markAuto("taffyold_1！5！_injury", [place]);
+			switch (parseInt(place.slice("taffyold_1！5！_place".length))) {
+				case 1:
+					if (target.getHp() > 0) {
+						await target.loseHp(target.getHp());
+						if (
+							game.getGlobalHistory("everything", evt => {
+								if (evt.name != "die" || evt.player != target) return false;
+								return evt.reason?.getParent() == event;
+							}).length > 0
+						) {
+							await player.gainMaxHp();
+						}
+					}
+					break;
+				case 2:
+					const cards = target
+						.getEquips(1)
+						.slice()
+						.concat(target.getEquips("equip3_4"))
+						.filter(card => lib.filter.canBeDiscarded(card, player, target));
+					if (cards.length) await target.discard(cards).set("discarder", player);
+					break;
+				case 3:
+					target.addTempSkill("taffyold_1！5！_maxhand", { player: "phaseEnd" });
+					break;
+				case 4:
+					const cardx = target.getDiscardableCards(target, "h");
+					const num = Math.floor(cardx.length / 2);
+					if (cardx.length) await target.discard(cardx.randomGets(num));
+					break;
+				case 5:
+					target.addTempSkill("taffyold_1！5！_damage", { player: "phaseEnd" });
+					break;
+				case 6:
+					target.addTempSkill("taffyold_1！5！_use", { player: "phaseEnd" });
+					break;
+				case 7:
+					target.addTempSkill("taffyold_1！5！_respond", { player: "phaseEnd" });
+					break;
+			}
+		},
+		marktext: "赤",
+		intro: { content: "mark" },
+		frequent: true,
+		derivation: ["taffyold_1！5！_place1", "taffyold_1！5！_place4", "taffyold_1！5！_place5", "taffyold_1！5！_place6", "taffyold_1！5！_place7"],
+		subSkill: {
+			injury: {
+				charlotte: true,
+			},
+			maxhand: {
+				charlotte: true,
+				mark: true,
+				marktext: "伤",
+				intro: {
+					name: "中伤 - 手部",
+					content: "手牌上限变为原来的一半（向下取整）",
+				},
+				mod: {
+					maxHandcard(player, num) {
+						if (_status["taffyold_1！5！_maxhand"]) return;
+						_status["taffyold_1！5！_maxhand"] = true;
+						const numx = player.getHandcardLimit();
+						delete _status["taffyold_1！5！_maxhand"];
+						return num - Math.ceil(numx);
+					},
+				},
+			},
+			damage: {
+				charlotte: true,
+				mark: true,
+				marktext: "伤",
+				intro: {
+					name: "中伤 - 下肢",
+					content: "体力值大于1时，受到的伤害+1",
+				},
+				trigger: { player: "damageBegin2" },
+				filter(event, player) {
+					return player.getHp() > 1;
+				},
+				forced: true,
+				popup: false,
+				content() {
+					trigger.num++;
+				},
+			},
+			use: {
+				charlotte: true,
+				forced: true,
+				mark: true,
+				marktext: "伤",
+				intro: {
+					name: "中伤 - 胸部",
+					content: (_, player) => (_status.currentPhase === player ? "" : "下回合") + "使用伤害牌造成的伤害-1",
+				},
+				trigger: {
+					source: "damageBegin2",
+				},
+				filter(event, player) {
+					if (get.tag(event.card, "damage")) return true;
+				},
+				async content(event, trigger, player) {
+					trigger.num -= 1;
+				},
+			},
+			respond: {
+				charlotte: true,
+				mark: true,
+				marktext: "伤",
+				intro: {
+					name: "中伤 - 腹部",
+					content: (_, player) => "不能使用【闪】和【桃】",
+				},
+				mod: {
+					cardEnabled(card) {
+						if (card.name == "shan" || card.name == "tao") return false;
+					},
+					cardSavable(card) {
+						if (card.name == "tao") return false;
+					},
+				},
+			},
+		},
+	},
+	taffyold_chiren: {
+		audio: "chiren",
+		trigger: {
+			player: "phaseUseBegin",
+		},
+		async cost(event, trigger, player) {
+			let list = ["摸体力值张牌，此阶段【杀】无距离限制且不能被响应。", "摸已损失体力值张牌，此阶段造成伤害后，回复1点体力。"];
+			let result = await player
+				.chooseControlList(list)
+				.set("ai", function () {
+					//等157优化）
+					return Math.random();
+				})
+				.forResult();
+			event.result = {
+				bool: result.control != "cancel2",
+				cost_data: result.control,
+			};
+		},
+		async content(event, trigger, player) {
+			if (event.cost_data == "选项一") {
+				player.draw(player.getHp());
+				player.addTempSkill("taffyold_chiren_directHit", { player: "phaseUseEnd" });
+			} else {
+				player.draw(player.getDamagedHp());
+				player.addTempSkill("taffyold_chiren_recover", { player: "phaseUseEnd" });
+			}
+		},
+		subSkill: {
+			directHit: {
+				charlotte: true,
+				forced: true,
+				mod: {
+					targetInRange: function (card) {
+						if (card.name == "sha") return true;
+					},
+				},
+				trigger: {
+					player: "useCard",
+				},
+				filter: function (event, player) {
+					return event.card.name == "sha";
+				},
+				content: async function (event, trigger, player) {
+					trigger.directHit.addArray(game.players);
+					game.log(trigger.card, "不可被响应");
+				},
+			},
+			recover: {
+				trigger: {
+					source: "damageSource",
+				},
+				forced: true,
+				charlotte: true,
+				filter: function (event, player) {
+					return player.isDamaged();
+				},
+				content: async function (event, trigger, player) {
+					player.recover();
+				},
+			},
+		},
+	},
+	//旧应天司马懿！肯定又要修改
+	taffyold_jilin: {
+		audio: "jilin",
+		trigger: {
+			global: "phaseBefore",
+			player: "enterGame",
+		},
+		filter(event, player) {
+			return event.name != "phase" || game.phaseNumber == 0;
+		},
+		forced: true,
+		locked: false,
+		logAudio: () => 1,
+		async content(event, trigger, player) {
+			const cards = get.cards(3);
+			const next = player.addToExpansion(cards, "draw");
+			next.gaintag.add(event.name);
+			await next;
+		},
+		marktext: "志",
+		intro: {
+			markcount: "expansion",
+			mark(dialog, content, player) {
+				const cards = player.getExpansions("taffyold_jilin"),
+					mingzhi = cards.filter(card => card.storage.taffyold_jilin),
+					hidden = cards.removeArray(mingzhi);
+				if (mingzhi.length) {
+					dialog.addText("已明之志");
+					dialog.addSmall(mingzhi);
+				}
+				if (hidden.length) {
+					if (player == game.me || player.isUnderControl()) {
+						dialog.addText("未明之志");
+						dialog.addSmall(hidden);
+					} else {
+						return "共有" + get.cnNumber(hidden.length) + "张暗“志”";
+					}
+				}
+			},
+			content(content, player) {
+				const cards = player.getExpansions("taffyold_jilin"),
+					mingzhi = cards.filter(card => card.storage.taffyold_jilin),
+					hidden = cards.removeArray(mingzhi);
+				if (mingzhi.length) {
+					dialog.addText("已明之志");
+					dialog.addSmall(mingzhi);
+				}
+				if (hidden.length) {
+					if (player == game.me || player.isUnderControl()) {
+						dialog.addText("未明之志");
+						dialog.addSmall(hidden);
+					} else {
+						return "共有" + get.cnNumber(hidden.length) + "张暗“志”";
+					}
+				}
+			},
+		},
+		group: ["taffyold_jilin_kanpo", "taffyold_jilin_change"],
+		subSkill: {
+			kanpo: {
+				audio: "taffyold_jilin",
+				logAudio: () => get.rand(2, 3),
+				trigger: {
+					target: "useCardToTarget",
+				},
+				filter(event, player) {
+					return event.player != player && player.getExpansions("taffyold_jilin").some(card => !card.storage.taffyold_jilin);
+				},
+				async cost(event, trigger, player) {
+					const hidden = player.getExpansions("taffyold_jilin").filter(card => !card.storage.taffyold_jilin);
+					const goon = get.effect(player, trigger.card, trigger.player, player) < 0;
+					const suits = player
+						.getExpansions("taffyold_jilin")
+						.filter(card => card.storage.taffyold_jilin)
+						.map(card => get.suit(card))
+						.toUniqued();
+					if (hidden.length == 1) {
+						const bool = await player
+							.chooseBool("戢鳞：明置一张“志”", `令${get.translation(trigger.card)}对你无效`)
+							.set("choice", goon)
+							.forResultBool();
+						event.result = {
+							bool: bool,
+							cost_data: hidden,
+						};
+					} else {
+						const {
+							result: { bool, links },
+						} = await player
+							.chooseButton(["戢鳞：明置一张“志”", hidden])
+							.set("ai", button => {
+								const player = get.player(),
+									card = button.link,
+									suits = get.event("suits");
+								if (!get.event("goon")) return 0;
+								if (!suits.includes(get.suit(card))) return 10;
+								return 6 - get.value(card);
+							})
+							.set("suits", suits)
+							.set("goon", goon);
+						event.result = {
+							bool: bool,
+							cost_data: links,
+						};
+					}
+				},
+				async content(event, trigger, player) {
+					event.cost_data[0].storage.taffyold_jilin = true;
+					trigger.getParent().excluded.add(player);
+				},
+			},
+			change: {
+				audio: "taffyold_jilin",
+				logAudio: () => get.rand(4, 5),
+				trigger: {
+					player: "phaseBegin",
+				},
+				filter(event, player) {
+					return player.countCards("h") && player.getExpansions("taffyold_jilin").some(card => !card.storage.taffyold_jilin);
+				},
+				async cost(event, trigger, player) {
+					const hidden = player.getExpansions("taffyold_jilin").filter(card => !card.storage.taffyold_jilin);
+					const next = player.chooseToMove("戢鳞：是否交换“志”和手牌？");
+					next.set("list", [
+						[get.translation(player) + "（你）的未明之“志”", hidden],
+						["手牌区", player.getCards("h")],
+					]);
+					next.set("filterMove", (from, to) => {
+						return typeof to != "number";
+					});
+					next.set("processAI", list => {
+						let player = get.player(),
+							cards = list[0][1].concat(list[1][1]).sort(function (a, b) {
+								return get.useful(a) - get.useful(b);
+							}),
+							cards2 = cards.splice(0, player.getExpansions("taffyold_jilin").length);
+						return [cards2, cards];
+					});
+					const {
+						result: { bool, moved },
+					} = await next;
+					event.result = {
+						bool: bool,
+						cost_data: moved,
+					};
+				},
+				async content(event, trigger, player) {
+					const moved = event.cost_data;
+					const pushs = moved[0],
+						gains = moved[1];
+					pushs.removeArray(player.getExpansions("taffyold_jilin"));
+					gains.removeArray(player.getCards("h"));
+					if (!pushs.length || pushs.length != gains.length) return;
+					const next = player.addToExpansion(pushs);
+					next.gaintag.add("taffyold_jilin");
+					await next;
+					await player.gain(gains, "draw");
+				},
+			},
+		},
+	},
+	taffyold_yingyou: {
+		audio: "yingyou",
+		trigger: {
+			player: "phaseUseBegin",
+		},
+		filter(event, player) {
+			return player.countCards("h") && player.getExpansions("taffyold_jilin").some(card => !card.storage.taffyold_jilin);
+		},
+		async cost(event, trigger, player) {
+			const hidden = player.getExpansions("taffyold_jilin").filter(card => !card.storage.taffyold_jilin);
+			const suits = player
+				.getExpansions("taffyold_jilin")
+				.filter(card => card.storage.taffyold_jilin)
+				.map(card => get.suit(card))
+				.toUniqued();
+			const {
+				result: { bool, links },
+			} = await player
+				.chooseButton(["英猷：你可以明志", hidden])
+				.set("ai", button => {
+					const player = get.player(),
+						card = button.link,
+						suits = get.event("suits");
+					const getNum = player => {
+						var list = [];
+						for (var i of lib.suit) list.push(player.countCards("h", { suit: i }) + 3);
+						return list.sort((a, b) => b - a)[0];
+					};
+					if (!suits.includes(get.suit(card))) return 10;
+					if (get.suit(card) == getNum(player)) return 5;
+					return 0;
+				})
+				.set("suits", suits);
+			event.result = {
+				bool: bool,
+				cost_data: links,
+			};
+		},
+		logAudio: () => get.rand(1, 2),
+		async content(event, trigger, player) {
+			event.cost_data[0].storage.taffyold_jilin = true;
+			const num = player.getExpansions("taffyold_jilin").filter(card => card.storage.taffyold_jilin).length;
+			await player.draw(num);
+		},
+		ai: {
+			combo: "taffyold_jilin",
+		},
+		group: "taffyold_yingyou_draw",
+		subSkill: {
+			draw: {
+				audio: "taffyold_yingyou",
+				logAudio: () => get.rand(3, 4),
+				trigger: {
+					player: "loseAfter",
+					global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+				},
+				filter(event, player) {
+					const suits = player
+						.getExpansions("taffyold_jilin")
+						.filter(card => card.storage.taffyold_jilin)
+						.map(card => get.suit(card))
+						.toUniqued();
+					const evt = event.getl(player);
+					if (!evt || !evt.cards2 || !evt.cards2.length) return false;
+					return evt.cards2.some(card => {
+						return suits.includes(get.suit(card, player));
+					});
+				},
+				forced: true,
+				locked: false,
+				async content(event, trigger, player) {
+					const suits = player
+						.getExpansions("taffyold_jilin")
+						.filter(card => card.storage.taffyold_jilin)
+						.map(card => get.suit(card))
+						.toUniqued();
+					const num = trigger.getl(player).cards2.filter(card => {
+						return suits.includes(get.suit(card, player));
+					}).length;
+					await player.draw(num);
+				},
+			},
+		},
+	},
+	taffyold_yingtian: {
+		audio: "yingtian",
+		trigger: {
+			global: "dieAfter",
+		},
+		filter(event, player) {
+			return game.countGroup() < 3;
+		},
+		forced: true,
+		juexingji: true,
+		skillAnimation: true,
+		animationColor: "gray",
+		async content(event, trigger, player) {
+			const skill = event.name;
+			player.awakenSkill(skill);
+			await player.changeSkills(get.info(skill).derivation, ["taffyold_yingyou"]);
+			player.addSkill(skill + "_effect");
+		},
+		derivation: ["reguicai", "rewansha", "lianpo"],
+		subSkill: {
+			effect: {
+				mod: {
+					targetInRange: () => true,
+				},
+			},
+		},
+	},
+	//旧手杀神司马？
+	//旧极略神司马！
+	taffyold_xinrenjie: {
+		audio: "renjie2",
+		trigger: {
+			player: ["chooseToUseAfter", "chooseToRespondAfter"],
+			global: "useCardAfter",
+		},
+		filter(event, player) {
+			if (player.getRoundHistory("useSkill", evt => evt.skill == "taffyold_xinrenjie").length >= 4) return false;
+			if (event.name == "useCard") {
+				//......
+				if (get.type(event.card) != "trick") return false;
+				const history = game.getGlobalHistory("everything", evt => evt.player == player && ["useCard", "respond"].includes(evt.name));
+				return !history.some(evt => Array.isArray(evt.respondTo) && evt.respondTo[1] == event.card && evt.card.name == "wuxie");
+			}
+			const evt = event.getParent(2);
+			if (!evt || evt.name != "useCard") return false;
+			return !event.result.bool;
+		},
+		forced: true,
+		async content(event, trigger, player) {
+			player.addMark(event.name, 1);
+		},
+		intro: {
+			name2: "忍",
+			content: "mark",
+		},
+		marktext: "忍",
+		global: "taffyold_xinrenjie_global",
+		subSkill: {
+			global: {
+				hiddenCard: () => true,
+				ai: {
+					respondSha: true,
+					respondShan: true,
+				},
+			},
+		},
+	},
+	taffyold_xinbaiyin: {
+		audio: "sbaiyin",
+		inherit: "sbaiyin",
+		filter(event, player) {
+			return player.countMark("taffyold_xinrenjie") >= 4;
+		},
+		async content(event, trigger, player) {
+			player.awakenSkill("taffyold_xinbaiyin");
+			await player.loseMaxHp();
+			await player.addSkills("taffyold_xinjilve");
+		},
+		derivation: ["taffyold_xinjilve", "reguicai", "fangzhu", "rejizhi", "rezhiheng", "rewansha"],
+		ai: {
+			combo: "taffyold_xinrenjie",
+		},
+	},
+	taffyold_xinlianpo: {
+		audio: "lianpo",
+		trigger: {
+			source: "dieAfter",
+		},
+		async cost(event, trigger, player) {
+			const skills = get
+				.info("taffyold_xinbaiyin")
+				.derivation.removeArray(["taffyold_xinjilve", "reguicai"])
+				.filter(skill => !player.hasSkill(skill, null, null, false));
+			if (skills.length && player.hasSkill("taffyold_xinjilve", null, null, false)) {
+				const next = player.chooseButton(["连破：请选择一项", [skills.map(i => [i, `获得【${get.translation(i)}】`]).concat(["于此回合结束后获得一个额外回合"]), "textbutton"]]);
+				next.set("ai", button => {
+					const link = button.link,
+						skills = get.event("skills");
+					if ((skills.length <= 2 || game.countPlayer() <= 2) && !player.hasSkill("taffyold_xinlianpo_mark", null, null, false) && link == "于此回合结束后获得一个额外回合") return 6;
+					if (link == "rezhiheng" && player.countCards("h") > 0) return 5;
+					if (link == "rejizhi" && (!skills.includes("rezhiheng") || player.countCards("hs", { type: "trick" }))) return 3;
+					if (link == "rewansha" && game.hasPlayer(current => get.attitude(player, current) < 0 && current.getHp() < 2 && (player == _status.currentPhase || player.hasSkill("taffyold_xinlianpo_mark", null, null, false)))) return 2;
+					return 1;
+				});
+				next.set("skills", skills);
+				const {
+					result: { bool, links },
+				} = await next;
+				event.result = {
+					bool: bool,
+					cost_data: links,
+				};
+			} else {
+				const bool = await player.chooseBool("连破：于此回合结束后获得一个额外回合？").forResultBool();
+				event.result = {
+					bool: bool,
+				};
+			}
+		},
+		async content(event, trigger, player) {
+			const links = event.cost_data;
+			if (links && get.info("taffyold_xinbaiyin").derivation.includes(links[0])) await player.addSkills(links[0]);
+			else {
+				player.addTempSkill("taffyold_xinlianpo_mark");
+				player.insertPhase();
+			}
+		},
+		subSkill: {
+			mark: {
+				charlotte: true,
+				mark: true,
+				intro: {
+					content: "本回合结束后执行一个额外回合",
+				},
+			},
+		},
+	},
+	taffyold_xinjilve: {
+		audio: "jilue",
+		trigger: {
+			player: "phaseUseBegin",
+		},
+		filter(event, player) {
+			return player.countMark("taffyold_xinrenjie");
+		},
+		async cost(event, trigger, player) {
+			const limit = Math.min(3, player.countMark("taffyold_xinrenjie"));
+			const choices = Array.from({
+				length: limit,
+			}).map((_, i) => [i, get.cnNumber(i + 1, true)]);
+			const history = game.getAllGlobalHistory("everything", evt => evt.name == "taffyold_xinjilve" && evt.player == player && Array.isArray(evt.cost_data) && get.info("taffyold_xinbaiyin").derivation.includes(evt.cost_data[0]));
+			const num = history.length + 1;
+			const skills = get
+				.info("taffyold_xinbaiyin")
+				.derivation.removeArray(["taffyold_xinjilve", "reguicai"])
+				.filter(skill => !player.hasSkill(skill, null, null, false));
+			if (skills.length && limit >= num) {
+				const next = player.chooseButton(2, ["连破：请选择你要移去的“忍”标记数和相应操作", '<div class="text center">移去“忍”标记数</div>', [choices, "tdnodes"], '<div class="text center">执行的操作</div>', [skills.map(i => [i, `获得【${get.translation(i)}】`]).concat(["摸牌"]), "tdnodes"]]);
+				next.set("filterButton", button => {
+					const link = button.link;
+					if (!ui.selected.buttons.length && typeof link == "number") return false;
+					if (ui.selected.buttons.length) {
+						if (typeof link !== "number") return false;
+						return ui.selected.buttons[0].link == "摸牌" || link == get.event("num") - 1;
+					}
+					return true;
+				});
+				next.set("ai", button => {
+					const link = button.link,
+						num = get.event("num"),
+						skills = get.event("skills");
+					if (!ui.selected.buttons.length) {
+						if (num > 2 && link == "摸牌") return 10;
+						if (link == "rezhiheng" && player.countCards("h") > 0) return 10;
+						if (link == "rejizhi" && (!skills.includes("rezhiheng") || player.countCards("hs", { type: "trick" }))) return 8;
+						if (player.countMark("taffyold_xinrenjie") <= 2) return 0;
+					}
+					return ui.selected.buttons.length && ui.selected.buttons[0].link == "摸牌" ? num - 1 : 1;
+				});
+				next.set("num", num);
+				next.set("skills", skills);
+				const {
+					result: { bool, links },
+				} = await next;
+				event.result = {
+					bool: bool,
+					cost_data: links,
+				};
+			} else {
+				const draw = Array.from({
+					length: limit,
+				}).map((_, i) => get.cnNumber(i + 1, true));
+				const { result } = await player
+					.chooseControl(draw, "cancel2")
+					.set("prompt", get.prompt("taffyold_xinrenjie"))
+					.set("prompt2", `你可以摸至多${get.cnNumber(draw.length)}张牌并移去等量枚“忍”标记`)
+					.set("ai", () => {
+						return get.event("choice");
+					})
+					.set(
+						"choice",
+						(function () {
+							if (!player.hasSkill("jizhi", null, null, false)) return "cancel2";
+							return choices.length - 1;
+						})()
+					);
+				event.result = {
+					bool: result.control != "cancel2",
+					cost_data: result.index,
+				};
+			}
+		},
+		async content(event, trigger, player) {
+			const choice = event.cost_data;
+			if (typeof choice == "number") {
+				player.removeMark("taffyold_xinrenjie", choice + 1);
+				await player.draw(choice + 1);
+			} else if (get.info("taffyold_xinbaiyin").derivation.includes(choice[0])) {
+				const history = game.getAllGlobalHistory("everything", evt => evt.name == "taffyold_xinjilve" && evt.player == player && Array.isArray(evt.cost_data) && get.info("taffyold_xinbaiyin").derivation.includes(evt.cost_data[0]));
+				const num = history.length;
+				player.removeMark("taffyold_xinrenjie", num);
+				await player.addSkills(choice[0]);
+			} else {
+				player.removeMark("taffyold_xinrenjie", choice[1] + 1);
+				await player.draw(choice[1] + 1);
+			}
+		},
+		group: "taffyold_xinjilve_gain",
+		subSkill: {
+			gain: {
+				trigger: {
+					player: "changeSkillsAfter",
+				},
+				filter(event, player) {
+					return event.addSkill.includes("taffyold_xinjilve");
+				},
+				forced: true,
+				async content(event, trigger, player) {
+					let skills = ["reguicai"];
+					const groupList = new Map([
+						["wei", "fangzhu"],
+						["shu", "rejizhi"],
+						["wu", "rezhiheng"],
+						["qun", "rewansha"],
+						["key", "hiroto_zonglve"],
+					]);
+					if (Array.from(groupList.keys()).includes(player.group)) skills.push(groupList.get(player.group));
+					skills = skills.filter(skill => !player.hasSkill(skill, null, null, false));
+					if (skills.length) await player.addSkills(skills);
 				},
 			},
 		},
