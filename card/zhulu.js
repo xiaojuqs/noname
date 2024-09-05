@@ -380,11 +380,11 @@ game.import("card", function () {
 				ai: {
 					order: 9,
 					value: function (card, player) {
-						if (player.getEquips(4).includes(card)) return 0;
+						if (get.position(card) == "e") return 0;
 						return 4;
 					},
 					equipValue: function (card, player) {
-						if (player.getCards("e").includes(card)) return 0;
+						if (get.position(card) == "e") return 0;
 						return -get.value(player.getCards("e"));
 					},
 					basic: {
@@ -459,7 +459,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						if (player.getEquips(1).includes(card)) {
+						if (get.position(card) == "e") {
 							if (player.hasSkillTag("noh")) return 0;
 							return -3.5;
 						}
@@ -500,7 +500,7 @@ game.import("card", function () {
 						return 2;
 					},
 					value: function (card, player) {
-						if (player.getEquips(1).includes(card)) return -3.5;
+						if (get.position(card) == "e") return -3.5;
 						return 3;
 					},
 					basic: {
@@ -538,7 +538,7 @@ game.import("card", function () {
 						return 1;
 					},
 					value: function (card, player) {
-						if (player.getEquips(2).includes(card)) return -9;
+						if (get.position(card) == "e") return -9;
 						return 2.5;
 					},
 					basic: {
@@ -570,26 +570,21 @@ game.import("card", function () {
 				toself: false,
 				loseDelay: false,
 				onEquip: function () {
-					const nvzhuangs = player.getVCards("e").filter(card => {
-						return card.name == "nvzhuang";
-					});
-					const cards = player.getCards("he", card => {
-						return !nvzhuangs.some(nvzhuang => nvzhuang.cards?.includes(card)) && lib.filter.cardDiscardable(card, player, "nvzhuang");
-					});
 					if (
 						player.sex == "male" &&
-						cards.length > 0
-					) {
+						player.countCards("he", function (cardx) {
+							return card.cards && !card.cards.includes(cardx);
+						})
+					)
 						player
 							.chooseToDiscard(
 								true,
 								function (card) {
-									return cards.includes(card);
+									return !_status.event.card?.cards.includes(card);
 								},
 								"he"
 							)
 							.set("card", card);
-					}
 				},
 				onLose: function () {
 					if (player.sex != "male") return;
@@ -609,7 +604,7 @@ game.import("card", function () {
 				ai:{
 					order: 9.5,
 					equipValue: function (card, player) {
-						if (player.getEquips(2).includes(card)) return 0;
+						if (get.position(card) == "e") return 0;
 						return 1;
 					},
 					value: function () {
@@ -707,7 +702,7 @@ game.import("card", function () {
 					if (
 						event.getParent(2) &&
 						event.getParent(2).name != "swapEquip" &&
-						get.position(card) != "d" &&
+						get.position(card?.cards?.[0]) != "d" &&
 						event.parent.type != "equip" &&
 						_status.jinhe &&
 						_status.jinhe[id]
@@ -716,18 +711,13 @@ game.import("card", function () {
 						player.$throw(card2, 1000);
 						game.log(card, "掉落了", card2);
 						game.cardsDiscard(card2);
-						//暫時註解以下。否則錦盒中有牌時，意外扔掉錦盒不會觸發掉落所有手牌
-						//推測原因：onLose函數比loseAfter觸發快，造成jinhe_lose技能中找不到_status.jinhe中的卡牌ID
-						//delete _status.jinhe[id];
+						delete _status.jinhe[id];
 					}
 				},
 				ai: {
 					order: 9.5,
 					equipValue: function (card, player) {
-						var e5s=player.getEquips(5);
-						for (var e5 of e5s){
-							if (card!=e5) return 5;
-						}
+						if ((get.position(card?.cards?.[0]) == "e") && card?.cards?.[0]?.cardid) return 1+3*player.countCards('h');
 						if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+3*player.countCards('h');
 						return 0;
 					},
@@ -739,7 +729,7 @@ game.import("card", function () {
 						value: function(card,player,i) {
 							if (_status.jinhe&&_status.jinhe[card.cardid]&&(_status.event.name=='discardPlayerCard'||_status.event.name=='chooseToDiscard'||_status.event.name=='chooseToUse')) return 1+2*player.countCards('h');
 							return 0;
-						},
+						}
 					},
 					result: {
 						keepAI: true,

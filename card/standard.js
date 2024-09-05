@@ -2189,6 +2189,7 @@ game.import("card", function () {
 								return btv + 0.1;
 							return btv + val;
 						}
+						if (get.equipValue(button.link) <= 0) return get.equipValue(button.link);
 						let sub = get.subtype(button.link);
 						if (sub == "equip1") return (btv * Math.min(3.6, target.hp)) / 3;
 						if (sub == "equip2") {
@@ -2511,6 +2512,7 @@ game.import("card", function () {
 						}
 						if (att > 0) val = -val;
 						if (pos !== "e") return val;
+						if (get.equipValue(button.link) <= 0) return get.equipValue(button.link);
 						let sub = get.subtypes(button.link);
 						if (sub.includes("equip1")) return (val * Math.min(3.6, target.hp)) / 3;
 						if (sub.includes("equip2")) {
@@ -2563,7 +2565,7 @@ game.import("card", function () {
 								const noh = (hs.length == 0 || target.hasSkillTag('noh'));
 								const noe = (es.length == 0 || target.hasSkillTag('noe'));
 								const noe2 = (noe || !es.some(card => {
-									return get.value(card, target) > 0;
+									return get.equipValue(card, target) > 0;
 								}));
 								const noj = (js.length == 0 || !js.some(card => {
 									const cardj = card.viewAs ? { name: card.viewAs } : card;
@@ -2930,7 +2932,16 @@ game.import("card", function () {
 				ai: {
 					basic: {
 						order: 1,
-						useful: 1,
+						useful(card, i) {
+							let player = _status.event.player;
+							if (_status.event.isPhaseUsing()) return game.hasPlayer(cur => {
+								return (
+									cur !== player &&
+									lib.filter.judge(card, player, cur) &&
+									get.effect(cur, card, player, player) > 0
+								);
+							}) ? 4.2 : 1;
+						},
 						value: 8,
 					},
 					result: {
