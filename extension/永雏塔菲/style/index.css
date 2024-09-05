@@ -1,3 +1,4 @@
-.equips-wrap > .equips > .emptyequip {
+.equips-wrap > .equips > .emptyequip,
+.player > .equips > .emptyequip {
   display: none;
 }
