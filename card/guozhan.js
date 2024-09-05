@@ -571,6 +571,12 @@ game.import("card", function () {
 									)
 								)
 									return "discard_card";
+								if (lib.skill.huxinjing.filter({
+									player: player,
+									card: event.card,
+									source: event.player,
+									num: 1
+								}, player)) return "take_damage";
 								if (
 									(player.hp > 2 && player.countCards("e") > 2) ||
 									(player.hp > 1 && player.countCards("e") > 3)
@@ -1013,6 +1019,24 @@ game.import("card", function () {
 				ai: {
 					basic: {
 						equipValue: 6,
+					},
+					result: {
+						player: function (player, target) {
+							let cards=target.getEquips(2);
+							for (let card of cards){
+								if (card) {
+									let equip_value = get.equipValue(card);
+									if (equip_value > 6) {
+										return -1;
+									} else if (equip_value <= 0) {
+										return 3;
+									} else {
+										return 1;
+									}
+								}
+							}
+							return 2;
+						},
 					},
 				},
 			},
@@ -2002,6 +2026,9 @@ game.import("card", function () {
 				trigger: { player: "damageBegin4" },
 				// forced:true,
 				filter: function (event, player) {
+					if (event.num < player.hp && (get.mode() == "guozhan" || event.num <= 1)) return false;
+					let cards = player.getEquips("huxinjing");
+					if (!cards.length) return false;
 					if (player.hasSkillTag("unequip2")) return false;
 					if (
 						event.source &&
@@ -2012,10 +2039,7 @@ game.import("card", function () {
 						})
 					)
 						return false;
-					var cards = player.getEquips("huxinjing");
-					if (!cards.length) return false;
-					if (get.mode() != "guozhan" && event.num > 1) return true;
-					return event.num >= player.hp;
+					return true;
 				},
 				content: function () {
 					trigger.cancel();

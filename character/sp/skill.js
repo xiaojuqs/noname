@@ -11460,6 +11460,7 @@ const skills = {
 		ai: { combo: "huamu" },
 	},
 	liangyuan: {
+		audio: 2,
 		enable: "chooseToUse",
 		hiddenCard: function (player, name) {
 			if (name == "tao") {
@@ -13993,12 +13994,16 @@ const skills = {
 		ai: {
 			result: {
 				player: function (player, target) {
-					return (target.getAllHistory("useCard", evt => evt.card.name == "sha").length + 1) * lib.card.juedou.ai.result.player.apply(this, arguments);
+					let num = target.getAllHistory("useCard", evt => evt.card.name == "sha").length + 1;
+					if (num < target.hp) return 0;
+					return num * lib.card.juedou.ai.result.player.apply(this, arguments);
 				},
 				target: function (player, target) {
-					var num = target.getAllHistory("useCard", evt => evt.card.name == "sha").length + 1;
+					let num = target.getAllHistory("useCard", evt => evt.card.name == "sha").length + 1;
 					if (num < target.hp) return 0;
-					return num * lib.card.juedou.ai.result.target;
+					let res = num * lib.card.juedou.ai.result.target.apply(this, arguments);
+					if (res >= 0) return 0;
+					return res;
 				},
 			},
 		},
@@ -15099,6 +15104,7 @@ const skills = {
 	},
 	//杨仪
 	oljuanxia: {
+		audio: 2,
 		trigger: { player: "phaseJieshuBegin" },
 		direct: true,
 		content: function () {
@@ -15229,6 +15235,7 @@ const skills = {
 		},
 	},
 	oldingcuo: {
+		audio: 2,
 		trigger: {
 			player: "damageEnd",
 			source: "damageSource",
@@ -15251,6 +15258,7 @@ const skills = {
 	},
 	//左棻
 	zhaosong: {
+		audio: 2,
 		trigger: { global: "phaseDrawAfter" },
 		logTarget: "player",
 		filter: function (event, player) {
@@ -15617,6 +15625,7 @@ const skills = {
 		},
 	},
 	olsujian: {
+		audio: 2,
 		trigger: { player: "phaseDiscardBefore" },
 		forced: true,
 		content: function () {
@@ -16099,6 +16108,7 @@ const skills = {
 		},
 	},
 	bixiong: {
+		audio: 2,
 		trigger: {
 			player: "loseAfter",
 			global: "loseAsyncAfter",
@@ -16373,6 +16383,7 @@ const skills = {
 	},
 	//黄承彦
 	guanxu: {
+		audio: 2,
 		enable: "phaseUse",
 		usable: 1,
 		filter: function (event, player) {
@@ -16475,6 +16486,7 @@ const skills = {
 		},
 	},
 	yashi: {
+		audio: 2,
 		trigger: { player: "damageEnd" },
 		direct: true,
 		filter: function (event, player) {
@@ -16574,6 +16586,7 @@ const skills = {
 	},
 	//潘淑
 	weiyi: {
+		audio: 2,
 		trigger: { global: "damageEnd" },
 		filter: function (event, player) {
 			if (player.getStorage("weiyi").includes(event.player) || !event.player.isIn()) return false;
@@ -17643,6 +17656,7 @@ const skills = {
 				return distance - 1;
 			},
 		},
+		audio: 2,
 		trigger: { player: "damageEnd" },
 		forced: true,
 		filter: function (event, player) {
@@ -17673,6 +17687,7 @@ const skills = {
 		},
 	},
 	zlshoufu: {
+		audio: 2,
 		enable: "phaseUse",
 		usable: 1,
 		delay: false,
@@ -18038,6 +18053,7 @@ const skills = {
 		},
 	},
 	yidian: {
+		audio: 2,
 		trigger: { player: "useCard2" },
 		filter: function (event, player) {
 			var info = get.info(event.card);
@@ -19975,6 +19991,7 @@ const skills = {
 		},
 	},
 	chouce: {
+		audio: 2,
 		trigger: { player: "damageEnd" },
 		content: function () {
 			"step 0";
@@ -20857,6 +20874,7 @@ const skills = {
 		},
 	},
 	shuangren: {
+		audio: 2,
 		trigger: { player: "phaseUseBegin" },
 		direct: true,
 		preHidden: true,
@@ -21438,6 +21456,7 @@ const skills = {
 		},
 	},
 	fenxun: {
+		audio: 2,
 		enable: "phaseUse",
 		usable: 1,
 		position: "he",
@@ -22346,6 +22365,7 @@ const skills = {
 		},
 	},
 	dingpan: {
+		audio: 2,
 		enable: "phaseUse",
 		filter: function (event, player) {
 			var num;
@@ -24217,6 +24237,7 @@ const skills = {
 		},
 	},
 	meibu: {
+		audio: 2,
 		trigger: { global: "phaseUseBegin" },
 		filter: function (event, player) {
 			return event.player != player && get.distance(event.player, player, "attack") > 1;
@@ -24316,6 +24337,7 @@ const skills = {
 		},
 	},
 	mumu: {
+		audio: 2,
 		enable: "phaseUse",
 		usable: 1,
 		filterCard: function (card, player, target) {
@@ -24468,6 +24490,7 @@ const skills = {
 		},
 	},
 	danji: {
+		audio: 2,
 		skillAnimation: true,
 		animationColor: "water",
 		trigger: { player: "phaseZhunbeiBegin" },
@@ -24660,6 +24683,7 @@ const skills = {
 			if (mode == "identity" && _status.mode == "purple") return false;
 			if (mode == "versus" && _status.mode != "two") return false;
 		},
+		audio: 2,
 		trigger: { global: ["dieAfter", "damageEnd"] },
 		filter: function (event, player) {
 			var list = ["fan", "zhong", "nei"];
@@ -25224,6 +25248,7 @@ const skills = {
 		},
 	},
 	hanyong: {
+		audio: 2,
 		trigger: { player: "useCard" },
 		filter: function (event, player) {
 			return event.card && (event.card.name == "nanman" || event.card.name == "wanjian" || (event.card.name == "sha" && !game.hasNature(event.card) && get.suit(event.card) == "spade")) && player.isDamaged();
@@ -25757,6 +25782,7 @@ const skills = {
 		},
 	},
 	guiming: {
+		audio: 2,
 		unique: true,
 		zhuSkill: true,
 		locked: true,
@@ -28025,6 +28051,7 @@ const skills = {
 		},
 	},
 	huxiao: {
+		audio: 2,
 		trigger: { source: "damageSource" },
 		forced: true,
 		filter: function (event, player) {
