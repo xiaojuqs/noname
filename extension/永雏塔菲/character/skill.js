@@ -12823,7 +12823,7 @@ const skills = {
 			if (player.hasSkill("taffyold_dcporui_round")) return false;
 			return (
 				game.hasPlayer(current => {
-					if (current == player || current == event.player) return false;
+					if (current == player) return false;
 					return current.getHistory("lose").length > 0;
 				}) &&
 				(_status.connectMode || player.hasCard({ type: "basic" }, "h"))
