@@ -1585,19 +1585,17 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		huanggai: {
 			// 黄盖
-			鏖战赤壁: {
-				name: "黄盖/鏖战赤壁/XingXiang",
-				x: [0, 0.63],
-				y: [0, 0.5],
+			以身证道: {
+				name: "黄盖/以身证道/XingXiang",
+				x: [0, 0.5],
+				y: [0, 0.3],
 				scale: 0.45,
-				angle: 0,
-				clipSlots: ["wuqi"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
-				// speed: 1,
-				// action: 'DaiJi',
+				//speed: 1,
+				//action: 'DaiJi',
 				beijing: {
-					name: "黄盖/鏖战赤壁/BeiJing",
+					name: "黄盖/以身证道/BeiJing",
 					scale: 0.3,
-					x: [0, 1.37],
+					x: [0, 0.4],
 					y: [0, 0.5],
 				},
 			},
@@ -2343,6 +2341,42 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					},
 				},
 			},
+			百战神机: {
+				name: "蒲元/百战神机/daiji",
+				x: [0, 0.55],
+				y: [0, 0.2],
+				scale: 1.2,
+				version: "4.0",
+				json: true,
+				shizhounian: true,
+				chuchang: {
+					name: "蒲元/百战神机/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "HuDong",
+				},
+				gongji: {
+					name: "蒲元/百战神机/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "GongJi",
+				},
+				teshu: {
+					name: "蒲元/百战神机/xingxiang",
+					showTime: 1.6,
+					scale: 1.2,
+					json: true,
+					action: "JiNeng",
+				},
+				beijing: {
+					name: "蒲元/百战神机/beijing",
+					x: [0, 0.69],
+					y: [0, 0.42],
+					version: "4.0",
+					json: true,
+					scale: 0.82,
+				},
+			},
 		},
 		ruanyu: {
 			// 阮瑀
@@ -2425,27 +2459,94 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		shen_caocao: {
 			// 神曹操
-			玄天通冥: {
-				name: "神曹操/玄天通冥/XingXiang",
-				x: [0, 0.55],
-				y: [0, -0.05],
-				scale: 0.6,
-				angle: 0,
-				clipSlots: ["scc-shenxiang"], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
-				// speed: 1,
-				// action: 'DaiJi',
+			昝月皓冕: {
+				name: "神曹操/昝月皓冕/daiji",
+				x: [0, 0.35],
+				y: [0, 0.45],
+				scale: 1.2,
+				version: "4.0",
+				json: true,
+				shizhounian: true,
+				chuchang: {
+					name: "神曹操/昝月皓冕/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "HuDong",
+				},
 				gongji: {
-					action: "TeShu",
-					scale: 0.6,
-					speed: 2,
-					x: [0, 0.8],
-					y: [0, 0.4],
+					name: "神曹操/昝月皓冕/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "GongJi",
+				},
+				teshu: {
+					name: "神曹操/昝月皓冕/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "JiNeng",
 				},
 				beijing: {
-					name: "神曹操/玄天通冥/BeiJing",
-					scale: 0.3,
-					x: [0, 0.4],
-					y: [0, 0.5],
+					name: "神曹操/昝月皓冕/beijing",
+					x: [0, 0.69],
+					y: [0, 0.42],
+					version: "4.0",
+					json: true,
+					scale: 0.82,
+				},
+				special: {
+					变身: {
+						hp: 1, // 如果血量低于等于2, 则会触发变身效果
+						name: "shen_caocao/昝月皓冕2", // 不同骨骼, 格式为 角色名+皮肤名称
+						//audio: 'baorubianshen', // 触发变身, 可以播放语音
+					},
+					play: {
+						name: "神曹操/昝月皓冕2/ChuChang", // 触发时播放的动画
+						//audio: 'baorubianshen', // 触发时播放的语音
+						scale: 0.73,
+					},
+					condition: {
+						lowhp: {
+							transform: ["变身"], // 设置血量需要变换的骨骼
+							recover: true, // 恢复血量是否变回原来的骨骼,
+							effect: "shaohui", // 不想用这个特效, 手动指定其他变身特效
+							play: "play", // 设置触发低血量触发的动画
+						},
+					},
+				},
+			},
+			昝月皓冕2: {
+				name: "神曹操/昝月皓冕2/daiji",
+				x: [0, 0.35],
+				y: [0, 0.2],
+				scale: 1.2,
+				version: "4.0",
+				json: true,
+				shizhounian: true,
+				chuchang: {
+					name: "神曹操/昝月皓冕2/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "Hudong",
+				},
+				gongji: {
+					name: "神曹操/昝月皓冕2/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "GongJi",
+				},
+				teshu: {
+					name: "神曹操/昝月皓冕2/xingxiang",
+					scale: 1.2,
+					json: true,
+					action: "JiNeng",
+				},
+				beijing: {
+					name: "神曹操/昝月皓冕2/beijing",
+					x: [0, 0.69],
+					y: [0, 0.42],
+					version: "4.0",
+					json: true,
+					scale: 0.82,
 				},
 			},
 		},
@@ -5160,6 +5261,58 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					scale: 0.3,
 					x: [0, 0.5],
 					y: [0, 0.5],
+				},
+			},
+		},
+		zhoushan: {
+			// 周善
+			骁勇金衔: {
+				name: "周善/骁勇金衔/daiji",
+				version: "4.0",
+				play2: "play2",
+				shan: "play3",
+				x: [0, 0.55],
+				y: [0, 0.4],
+				scale: 0.4,
+				shizhounian: true,
+				chuchang: {
+					name: "周善/骁勇金衔/chuchang",
+					version: "4.0",
+					action: "play",
+					scale: 0.9,
+				},
+				gongji: {
+					name: "周善/骁勇金衔/chuchang2",
+					version: "4.0",
+					action: "gongji",
+					scale: 0.7,
+				},
+				teshu: {
+					name: "周善/骁勇金衔/chuchang2",
+					version: "4.0",
+					action: "jineng",
+					scale: 0.7,
+				},
+				beijing: {
+					name: "周善/骁勇金衔/beijing",
+					version: "4.0",
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.3,
+				},
+				zhishixian: {
+					name: "周善/骁勇金衔/shouji2",
+					version: "4.0",
+					scale: 0.7,
+					speed: 0.9,
+					delay: 0.7,
+					effect: {
+						name: "周善/骁勇金衔/shouji",
+						version: "4.0",
+						scale: 0.8,
+						speed: 0.8,
+						delay: 0.7,
+					},
 				},
 			},
 		},

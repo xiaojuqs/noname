@@ -60,7 +60,8 @@ const skills = {
 					player.removeSkill(result.links[i]);
 					game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 				}
-				if (!_status.characterlist) {
+				if (!_status.characterlist || !_status.pingjianInitialized) {
+					_status.pingjianInitialized = true;
 					lib.skill.taffyboss_pingjian.initList();
 				}
 				var allList = _status.characterlist.slice(0);
@@ -322,7 +323,8 @@ const skills = {
 								player.removeSkill(result.links[i]);
 								game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 							}
-							if (!_status.characterlist) {
+							if (!_status.characterlist || !_status.pingjianInitialized) {
+								_status.pingjianInitialized = true;
 								lib.skill.taffyboss_pingjian.initList();
 							}
 							var list = [];
@@ -399,7 +401,8 @@ const skills = {
 						var list = [];
 						var skills = [];
 						var map = [];
-						if (!_status.characterlist) {
+						if (!_status.characterlist || !_status.pingjianInitialized) {
+							_status.pingjianInitialized = true;
 							lib.skill.taffyboss_pingjian.initList();
 						}
 						var allList = _status.characterlist.slice(0);
@@ -1321,7 +1324,8 @@ const skills = {
 		frequent: true,
 		content: function () {
 			"step 0";
-			if (!_status.characterlist) {
+			if (!_status.characterlist || !_status.pingjianInitialized) {
+				_status.pingjianInitialized = true;
 				lib.skill.taffydc_pingjian.initList();
 			}
 			var allList = [
@@ -1484,7 +1488,8 @@ const skills = {
 			var skills = [];
 			var map = [];
 			var evt = event.getParent(2);
-			if (!_status.characterlist) {
+			if (!_status.characterlist || !_status.pingjianInitialized) {
+				_status.pingjianInitialized = true;
 				lib.skill.taffydc_pingjian.initList();
 			}
 			var allList = [
@@ -1936,7 +1941,8 @@ const skills = {
 					}
 					name2 = triggerList;
 				}
-				if (!_status.characterlist) {
+				if (!_status.characterlist || !_status.pingjianInitialized) {
+					_status.pingjianInitialized = true;
 					lib.skill.taffyhuiwan_pingjian.initList();
 				}
 				var allList = _status.characterlist.slice(0);
@@ -2300,7 +2306,8 @@ const skills = {
 					}
 					name2 = triggerList;
 				}
-				if (!_status.characterlist) {
+				if (!_status.characterlist || !_status.pingjianInitialized) {
+					_status.pingjianInitialized = true;
 					lib.skill.taffyhuiwan_pingjian.initList();
 				}
 				var allList = _status.characterlist.slice(0);
@@ -5505,7 +5512,8 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.characterlist || !_status.pingjianInitialized) {
+						_status.pingjianInitialized = true;
 						lib.skill.taffyre_pingjian.initList();
 					}
 					var allList = _status.characterlist.slice(0);
@@ -5745,7 +5753,8 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.characterlist || !_status.pingjianInitialized) {
+						_status.pingjianInitialized = true;
 						lib.skill.taffyre_pingjian.initList();
 					}
 					var allList = _status.characterlist.slice(0);
@@ -8838,7 +8847,8 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.characterlist || !_status.pingjianInitialized) {
+						_status.pingjianInitialized = true;
 						lib.skill.taffyshen_pingjian.initList();
 					}
 					var allList = _status.characterlist.slice(0);
@@ -9069,7 +9079,8 @@ const skills = {
 						player.removeSkill(result.links[i]);
 						game.log(player, "失去了技能", "#g【" + get.translation(result.links[i]) + "】");
 					}
-					if (!_status.characterlist) {
+					if (!_status.characterlist || !_status.pingjianInitialized) {
+						_status.pingjianInitialized = true;
 						lib.skill.taffyshen_pingjian.initList();
 					}
 					var allList = _status.characterlist.slice(0);
@@ -11946,17 +11957,15 @@ const skills = {
 			event.videoId = lib.status.videoId++;
 			if (player.isUnderControl()) game.swapPlayerAuto(player);
 			const switchToAuto = function () {
-				setTimeout(function () {
-					_status.imchoosing = false;
-					if (event.dialog) event.dialog.close();
-					if (event.control) event.control.close();
-					if (event.control2) event.control2.close();
-					game.resume();
-					return Promise.resolve({
-						bool: true,
-						hurt: places.randomGet(),
-					});
-				}, 5000);
+				_status.imchoosing = false;
+				if (event.dialog) event.dialog.close();
+				if (event.control) event.control.close();
+				if (event.control2) event.control2.close();
+				game.resume();
+				return Promise.resolve({
+					bool: true,
+					hurt: places.randomGet(),
+				});
 			};
 			const chooseButton = (places, target) => {
 				const { promise, resolve } = Promise.withResolvers();
