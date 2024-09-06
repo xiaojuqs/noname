@@ -34,6 +34,7 @@ const characterReplaces = {
 	huangzhong: ["re_huangzhong", "ol_huangzhong", "sb_huangzhong", "huangzhong", "jsrg_huangzhong", "yj_huangzhong", "wuhujiang", "taffyold_sb_huangzhong"],
 	shen_huangzhong: ["shen_huangzhong", "taffyold_shen_huangzhong"],
 	shen_simayi: ["shen_simayi", "xin_simayi", "new_simayi", "taffyold_xin_simayi", "taffyold_new_simayi"],
+	yuechen: ["yuechen", "taffyold_yuechen"],
 };
 
 export default characterReplaces;

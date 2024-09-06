@@ -62,6 +62,7 @@ const characters = {
 	taffyold_shen_huangzhong: ["male", "shen", 4, ["taffyold_1！5！", "taffyold_chiren"], ["shu", "character:shen_huangzhong", "die:shen_huangzhong"]],
 	taffyold_new_simayi: ["male", "shen", 4, ["taffyold_jilin", "taffyold_yingyou", "taffyold_yingtian"], ["wei", "name:司马|懿", "character:new_simayi", "die:new_simayi"]],
 	taffyold_xin_simayi: ["male", "shen", 4, ["taffyold_xinrenjie", "taffyold_xinbaiyin", "taffyold_xinlianpo"], ["tempname:shen_simayi", "wei", "name:司马|懿", "character:xin_simayi", "die:xin_simayi"]],
+	taffyold_yuechen: ["male", "wei", 4, ["taffyold_dcporui", "taffyold_dcgonghu"], ["character:yuechen", "die:yuechen"]],
 	aruijier: ["female", "shen", "", [], ["unseen"]],
 };
 

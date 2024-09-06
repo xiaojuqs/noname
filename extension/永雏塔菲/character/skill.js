@@ -12814,6 +12814,187 @@ const skills = {
 			},
 		},
 	},
+	//旧乐綝
+	taffyold_dcporui: {
+		audio: "dcporui",
+		trigger: { global: "phaseJieshuBegin" },
+		filter: function (event, player) {
+			if (player == event.player) return false;
+			if (player.hasSkill("taffyold_dcporui_round")) return false;
+			return (
+				game.hasPlayer(current => {
+					if (current == player || current == event.player) return false;
+					return current.getHistory("lose").length > 0;
+				}) &&
+				(_status.connectMode || player.hasCard({ type: "basic" }, "h"))
+			);
+		},
+		direct: true,
+		content: function () {
+			"step 0";
+			player.chooseCardTarget({
+				prompt: get.prompt("taffyold_dcporui"),
+				//prompt2:'弃置一张基本牌并选择一名本回合失去过牌的其他角色，你视为对其依次使用'+get.cnNumber(Math.max(0,player.hp)+1)+'张【杀】',
+				prompt2: get.skillInfoTranslation("taffyold_dcporui", player),
+				filterCard: function (card, player) {
+					if (get.type(card) != "basic") return false;
+					return lib.filter.cardDiscardable.apply(this, arguments);
+				},
+				selectCard: 1,
+				targets: game.filterPlayer(current => {
+					if (current == player) return false;
+					return current.getHistory("lose").length > 0;
+				}),
+				filterTarget: function (card, player, target) {
+					return _status.event.targets.contains(target);
+				},
+				ai1: function (card) {
+					return 7 - get.value(card);
+				},
+				ai2: function (target) {
+					return get.effect(target, { name: "sha" }, _status.event.player, _status.event.player);
+				},
+			});
+			("step 1");
+			if (result.bool) {
+				var target = result.targets[0],
+					cards = result.cards;
+				event.target = target;
+				player.logSkill("taffyold_dcporui", target);
+				player.discard(cards);
+				event.num2 = Math.max(0, player.hp);
+				event.num = event.num2 + 1;
+				player.addTempSkill("taffyold_dcporui_round", "roundStart");
+			} else event.finish();
+			("step 2");
+			var card = { name: "sha", isCard: true, storage: { taffyold_dcporui: true } };
+			if (player.canUse(card, target, false) && target.isIn()) {
+				player.useCard(card, target);
+				event.num--;
+			} else event.goto(4);
+			("step 3");
+			if (event.num > 0) event.goto(2);
+			("step 4");
+			if (!player.hasMark("taffyold_dcgonghu_damage")) {
+				var cards = player.getCards("h");
+				if (cards.length == 0) event._result = { bool: false };
+				else if (cards.length <= event.num2) event._result = { bool: true, cards: cards };
+				else player.chooseCard("破锐：交给" + get.translation(target) + get.cnNumber(event.num2) + "张手牌", true, event.num2);
+			} else event.goto(6);
+			("step 5");
+			if (result.bool) {
+				player.give(result.cards, target);
+			}
+			("step 6");
+			if (player.hasMark("taffyold_dcgonghu_basic")) {
+				if (
+					!target.hasHistory("damage", evt => {
+						return evt.card && evt.card.storage && evt.card.storage.taffyold_dcporui && evt.getParent("taffyold_dcporui") == event;
+					})
+				) {
+					player.recover();
+				}
+			}
+		},
+		subSkill: {
+			round: { charlotte: true },
+		},
+		ai: {
+			expose: 0.4,
+			threaten: 4.8,
+		},
+	},
+	taffyold_dcgonghu: {
+		audio: "dcgonghu",
+		trigger: {
+			player: ["loseAfter", "damageEnd"],
+			source: "damageSource",
+			global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+		},
+		forced: true,
+		filter: function (event, player) {
+			if (event.name == "damage") {
+				if (player.hasMark("taffyold_dcgonghu_damage")) return false;
+				return _status.currentPhase && _status.currentPhase != player;
+			}
+			if (player.hasMark("taffyold_dcgonghu_basic")) return false;
+			var evt = event.getl(player);
+			return evt && evt.cards2 && evt.cards2.some(i => get.type2(i, player) == "basic");
+		},
+		group: ["taffyold_dcgonghu_basic", "taffyold_dcgonghu_trick"],
+		content: function () {
+			player.addMark("taffyold_dcgonghu_" + (trigger.name == "damage" ? "damage" : "basic"), 1, false);
+			game.log(player, "修改了技能", "#g【破锐】");
+		},
+		subSkill: {
+			trick: {
+				audio: "taffyold_dcgonghu",
+				trigger: { player: "useCard2" },
+				direct: true,
+				locked: true,
+				filter: function (event, player) {
+					if (!player.hasMark("taffyold_dcgonghu_basic") || !player.hasMark("taffyold_dcgonghu_damage")) return false;
+					var card = event.card;
+					if (get.color(card, false) != "red" || get.type(card, null, true) != "trick") return false;
+					var info = get.info(card);
+					if (info.allowMultiple == false) return false;
+					if (event.targets && !info.multitarget) {
+						if (
+							game.hasPlayer(function (current) {
+								return !event.targets.contains(current) && lib.filter.targetEnabled2(card, player, current);
+							})
+						) {
+							return true;
+						}
+					}
+					return false;
+				},
+				content: function () {
+					"step 0";
+					var prompt2 = "为" + get.translation(trigger.card) + "增加一个目标";
+					player
+						.chooseTarget(get.prompt("taffyold_dcgonghu_trick"), function (card, player, target) {
+							var player = _status.event.player;
+							return !_status.event.targets.contains(target) && lib.filter.targetEnabled2(_status.event.card, player, target);
+						})
+						.set("prompt2", prompt2)
+						.set("ai", function (target) {
+							var trigger = _status.event.getTrigger();
+							var player = _status.event.player;
+							return get.effect(target, trigger.card, player, player);
+						})
+						.set("card", trigger.card)
+						.set("targets", trigger.targets);
+					("step 1");
+					if (result.bool) {
+						if (!event.isMine() && !event.isOnline()) game.delayx();
+						event.targets = result.targets;
+					} else {
+						event.finish();
+					}
+					("step 2");
+					if (event.targets) {
+						player.logSkill("taffyold_dcgonghu_trick", event.targets);
+						trigger.targets.addArray(event.targets);
+					}
+				},
+			},
+			basic: {
+				audio: "taffyold_dcgonghu",
+				trigger: { player: "useCard" },
+				forced: true,
+				filter: function (event, player) {
+					if (!player.hasMark("taffyold_dcgonghu_basic") || !player.hasMark("taffyold_dcgonghu_damage")) return false;
+					var card = event.card;
+					return get.color(card, false) == "red" && get.type(card, null, false) == "basic";
+				},
+				content: function () {
+					trigger.directHit.addArray(game.filterPlayer());
+					game.log(trigger.card, "不可被响应");
+				},
+			},
+		},
+	},
 };
 
 export default skills;

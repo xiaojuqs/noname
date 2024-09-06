@@ -33,5 +33,8 @@ const dynamicTranslates = {
 		if (player.storage.taffyre_nzry_cunmu) return "转换技，锁定技，当你摸牌时，<span class='bluetext'>阴：改为从牌堆底摸牌。</span>阳：改为从牌堆顶摸牌。";
 		return "转换技，锁定技，当你摸牌时，阴：改为从牌堆底摸牌。<span class='bluetext'>阳：改为从牌堆顶摸牌。</span>";
 	},
+	taffyold_dcporui: function (player) {
+		return "每轮限一次。其他角色的结束阶段，你可以弃置一张基本牌并选择一名于此回合内失去过牌的其他角色，你视为对其依次使用X+1张【杀】" + (player.hasMark("taffyold_dcgonghu_damage") ? "" : "，然后你交给其X张手牌") + "（X为你的体力值）。" + (player.hasMark("taffyold_dcgonghu_basic") ? "若其没有因此受到伤害，你回复1点体力。" : "");
+	},
 };
 export default dynamicTranslates;

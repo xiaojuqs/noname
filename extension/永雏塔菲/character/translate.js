@@ -55,6 +55,7 @@ const translates = {
 	taffyold_shen_huangzhong_prefix: "旧神",
 	taffyold_xin_simayi_prefix: "旧手杀神",
 	taffyold_new_simayi_prefix: "旧手杀神",
+	taffyold_yuechen_prefix: "旧",
 
 	taffyboss_xushao: "评世雕龙",
 	taffyboss_pingjian: "评荐",
@@ -433,6 +434,11 @@ const translates = {
 	taffyold_yingyou_info: "①出牌阶段开始时，你可明置一张“志”然后摸X张牌（X为明置的“志”的数量）。②当你失去与明置的“志”其中一张花色相同的牌时，你摸一张牌。",
 	taffyold_yingtian: "应天",
 	taffyold_yingtian_info: "觉醒技。一名角色死亡后，若场上势力数不大于2，则你获得〖鬼才〗、〖完杀〗、〖连破〗并失去〖英猷〗且你本局游戏使用牌没有距离限制。",
+	taffyold_yuechen: "旧乐綝",
+	taffyold_dcporui: "破锐",
+	taffyold_dcporui_info: "每轮限一次。其他角色的结束阶段，你可以弃置一张基本牌并选择一名于此回合内失去过牌的其他角色，你视为对其依次使用X+1张【杀】，然后你交给其X张手牌（X为你的体力值）。",
+	taffyold_dcgonghu: "共护",
+	taffyold_dcgonghu_info: "锁定技。①当你于回合外失去基本牌后，你于〖破锐〗后增加“若其没有因此受到伤害，你回复1点体力”。②当你于回合外造成或受到伤害后，你删除〖破锐〗中的“，然后你交给其X张手牌”。③当你使用红色基本牌/红色普通锦囊牌时，若你已发动过〖共护①〗和〖共护②〗，则此牌不可被响应/可额外增加一个目标。",
 	aruijier: "瑞吉儿",
 };
 
