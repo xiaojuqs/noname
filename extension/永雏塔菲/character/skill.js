@@ -11964,7 +11964,7 @@ const skills = {
 				game.resume();
 				return Promise.resolve({
 					bool: true,
-					hurt: places.randomGet(),
+					hurt: places.includes("taffyold_1！5！_place1") ? "taffyold_1！5！_place1" : "taffyold_1！5！_place7",
 				});
 			};
 			const chooseButton = (places, target) => {
@@ -11974,7 +11974,7 @@ const skills = {
 					_status.imchoosing = false;
 					resolve({
 						bool: true,
-						hurt: places.randomGet(),
+						hurt: places.includes("taffyold_1！5！_place1") ? "taffyold_1！5！_place1" : "taffyold_1！5！_place7",
 					});
 					if (event.dialog) event.dialog.close();
 					if (event.control) event.control.close();
@@ -12264,7 +12264,8 @@ const skills = {
 				.chooseControlList(list)
 				.set("ai", function () {
 					//等157优化）
-					return Math.random();
+					if (player.hp < player.maxHp - player.hp) return 1;
+					return 0;
 				})
 				.forResult();
 			event.result = {
