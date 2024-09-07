@@ -5786,6 +5786,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 蒲元
 		ol_puyuan: decadeUI.dynamicSkin.puyuan,
 
+    // 阮瑀
+    taffyold_ruanyu: decadeUI.dynamicSkin.ruanyu,
+
 		// 芮姬
 		dc_ruiji: decadeUI.dynamicSkin.ruiji,
 		taffyold_ruiji: decadeUI.dynamicSkin.ruiji,

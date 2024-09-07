@@ -12995,6 +12995,112 @@ const skills = {
 			},
 		},
 	},
+	// 旧阮瑀
+	taffyold_miaoxian: {
+		hiddenCard: function (player, name) {
+			return get.type(name) == "trick" && !player.getStorage("taffyold_miaoxian2").contains(name) && player.countCards("h", { color: "black" }) == 1;
+		},
+		enable: "chooseToUse",
+		filter: function (event, player) {
+			var cards = player.getCards("h", { color: "black" });
+			if (cards.length != 1) return false;
+			var mod2 = game.checkMod(cards[0], player, "unchanged", "cardEnabled2", player);
+			if (mod2 === false) return false;
+			var storage = player.getStorage("taffyold_miaoxian2");
+			for (var i of lib.inpile) {
+				if (
+					!storage.contains(i) &&
+					get.type(i) == "trick" &&
+					event.filterCard(
+						{
+							name: i,
+							cards: cards,
+						},
+						player,
+						event
+					)
+				)
+					return true;
+			}
+			return false;
+		},
+		chooseButton: {
+			dialog: function (event, player) {
+				var cards = player.getCards("h", { color: "black" });
+				var storage = player.getStorage("taffyold_miaoxian2");
+				var list = [];
+				for (var i of lib.inpile) {
+					if (
+						!storage.contains(i) &&
+						get.type(i) == "trick" &&
+						event.filterCard(
+							{
+								name: i,
+								cards: cards,
+							},
+							player,
+							event
+						)
+					) {
+						list.push(["锦囊", "", i]);
+					}
+				}
+				return ui.create.dialog("妙弦", [list, "vcard"], "hidden");
+			},
+			check: function (button) {
+				var player = _status.event.player;
+				return player.getUseValue({ name: button.link[2] }) + 1;
+			},
+			backup: function (links, player) {
+				return {
+					audio: "taffyold_miaoxian",
+					popname: true,
+					filterCard: { color: "black" },
+					selectCard: -1,
+					position: "h",
+					viewAs: {
+						name: links[0][2],
+					},
+					onuse: function (links, player) {
+						if (!player.storage.taffyold_miaoxian2) player.storage.taffyold_miaoxian2 = [];
+						player.storage.taffyold_miaoxian2.add(links.card.name);
+						player.addTempSkill("taffyold_miaoxian2");
+					},
+				};
+			},
+			prompt: function (links, player) {
+				return "将" + get.translation(player.getCards("h", { color: "black" })[0]) + "当做" + get.translation(links[0][2]) + "使用";
+			},
+		},
+		group: "taffyold_miaoxian_use",
+		subfrequent: ["use"],
+		subSkill: {
+			use: {
+				audio: "miaoxian",
+				trigger: { player: "loseAfter" },
+				frequent: true,
+				prompt: "是否发动【妙弦】摸一张牌？",
+				filter: function (event, player) {
+					var evt = event.getParent();
+					if (evt.name != "useCard") return false;
+					return event.hs && event.hs.length == 1 && event.cards && event.cards.length == 1 && get.color(event.hs[0], player) == "red" && !player.countCards("h", { color: "red" });
+				},
+				content: function () {
+					player.draw();
+				},
+			},
+			backup: {
+				audio: "miaoxian",
+			},
+		},
+		ai: {
+			order: 12,
+			result: {
+				player: 1,
+			},
+		},
+	},
+	taffyold_miaoxian2: { onremove: true },
 };
 
 export default skills;

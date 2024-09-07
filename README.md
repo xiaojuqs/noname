@@ -73,6 +73,7 @@
     - 旧应天神司马懿：未通渠的应天神司马懿
     - 旧极略神司马懿：未通渠的极略神司马懿
     - 旧乐綝：未通渠的乐綝
+    - 旧阮瑀：未通渠的阮瑀
   - 为乱斗模式添加了轮回七阴模式
   - 视频背景功能
 - 引入来自 [noname-server](https://github.com/nonameShijian/noname-server) 的 `index.js`，用于启动 Web 端文件读写服务
