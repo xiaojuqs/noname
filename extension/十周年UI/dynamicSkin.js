@@ -875,6 +875,55 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		dianwei: {
+			// 典韦
+			蹈锋睥世: {
+				name: "典韦/蹈锋睥世/daiji",
+				x: [0, 0.5],
+				y: [0, 0.3],
+				scale: 1,
+				version: "4.0",
+				json: true,
+				chuchang: {
+					name: "典韦/蹈锋睥世/xingxiang",
+					scale: 1,
+					json: true,
+					action: "HuDong",
+				},
+				gongji: {
+					name: "典韦/蹈锋睥世/xingxiang",
+					scale: 1,
+					json: true,
+					action: "GongJi",
+				},
+				teshu: {
+					name: "典韦/蹈锋睥世/xingxiang",
+					scale: 1,
+					json: true,
+					action: "JiNeng",
+				},
+				qianjing: {
+					name: "典韦/蹈锋睥世/qianjing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 1,
+				},
+				beijing: {
+					name: "典韦/蹈锋睥世/beijing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					x: [0, 0.8],
+					y: [0, 0.6],
+					scale: 0.4,
+					version: "4.0",
+					json: true,
+				},
+			},
+		},
 		diaochan: {
 			// 貂蝉
 			花好月圆: {
@@ -1379,6 +1428,27 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					},
 				},
 			},
+			依心缱绻: {
+				name: "关索/依心缱绻/XingXiang",
+				x: [0, 0.73],
+				y: [0, 0.41],
+				scale: 0.42,
+				angle: 0,
+				gongji: {
+					action: "TeShu",
+					scale: 0.6,
+					x: [0, 0.8],
+					y: [0, 0.4],
+				},
+				// speed: 1,
+				// action: 'DaiJi',
+				beijing: {
+					name: "关索/依心缱绻/BeiJing",
+					scale: 0.3,
+					x: [0, 0.69],
+					y: [0, 0.5],
+				},
+			},
 		},
 		guojia: {
 			// 郭嘉
@@ -1450,6 +1520,52 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 						scale: 0.5,
 						speed: 0.9,
 						delay: 0.6,
+					},
+				},
+			},
+		},
+		hujinding: {
+			//胡金定
+			金粉福颜: {
+				name: "胡金定/金粉福颜/daiji2",
+				play2: "play2",
+				teshu: {
+					name: "胡金定/金粉福颜/chuchang2",
+					action: "jineng",
+					scale: 0.8,
+				},
+				shan: "play3",
+				x: [0, 0.45],
+				y: [0, 0.5],
+				scale: 0.8,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: "胡金定/金粉福颜/chuchang",
+					action: "play",
+					scale: 0.8,
+				},
+				gongji: {
+					name: "胡金定/金粉福颜/chuchang2",
+					action: "gongji",
+					scale: 0.8,
+				},
+				beijing: {
+					name: "胡金定/金粉福颜/beijing",
+					x: [0, 0.7],
+					y: [0, 0.43],
+					scale: 0.4,
+				},
+				zhishixian: {
+					name: "胡金定/金粉福颜/shouji2",
+					scale: 0.6,
+					speed: 1.1,
+					delay: 0.3,
+					effect: {
+						name: "胡金定/金粉福颜/shouji",
+						scale: 0.5,
+						speed: 0.8,
+						delay: 0.35,
 					},
 				},
 			},
@@ -1543,22 +1659,26 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					scale: 0.4,
 				},
 			},
-			沙场蛮花: {
-				name: "花鬘/沙场蛮花/XingXiang",
-				x: [0, 0.55],
-				y: [0, 0.35],
+			依心缱绻: {
+				name: "花鬘/依心缱绻/XingXiang",
+				x: [0, 0.5],
+				y: [0, 0.4],
 				scale: 0.4,
 				angle: 0,
-				// speed: 1,
-				// action: 'DaiJi',
-				beijing: {
-					name: "花鬘/沙场蛮花/BeiJing",
-					scale: 0.4,
-					x: [0, 0.5],
-					y: [0, 0.5],
+				gongji: {
+					action: "TeShu",
+					scale: 0.6,
+					x: [0, 0.8],
+					y: [0, 0.4],
 				},
-				audio: {
-					skill: "花鬘/沙场蛮花/audio",
+				// speed: 1,
+				ss_jinchang: "Chuchang",
+				action: "DaiJi",
+				beijing: {
+					name: "花鬘/依心缱绻/BeiJing",
+					scale: 0.3,
+					x: [0, 0.7],
+					y: [0, 0.5],
 				},
 			},
 		},
@@ -1602,19 +1722,19 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		huangzhong: {
 			// 黄忠
-			明良千古: {
-				name: "黄忠/明良千古/XingXiang",
-				x: [0, 0.44],
+			烈箭贯云: {
+				name: "黄忠/烈箭贯云/XingXiang",
+				x: [0, 0.5],
 				y: [0, 0.4],
-				scale: 0.4,
+				scale: 0.35,
 				angle: 0,
-				// speed: 1,
-				// action: 'DaiJi',
+				//speed: 1,
+				//action: 'DaiJi',
 				beijing: {
-					name: "黄忠/明良千古/BeiJing",
+					name: "黄忠/烈箭贯云/BeiJing",
 					scale: 0.3,
-					x: [0, 1.5],
-					y: [0, 0.39],
+					x: [0, 0.5],
+					y: [0, 0.5],
 				},
 			},
 		},
@@ -1971,6 +2091,24 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 						speed: 0.6,
 						delay: 0.7,
 					},
+				},
+			},
+		},
+		luxun: {
+			//陆逊
+			烈火烛天: {
+				name: "陆逊/烈火烛天/XingXiang",
+				x: [0, -0.5],
+				y: [0, 0.25],
+				scale: 0.5,
+				angle: 0,
+				//speed: 1,
+				//action: 'DaiJi',
+				beijing: {
+					name: "陆逊/烈火烛天/BeiJing",
+					scale: 0.3,
+					x: [0, 0.76],
+					y: [0, 0.5],
 				},
 			},
 		},
@@ -2348,7 +2486,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				scale: 1.2,
 				version: "4.0",
 				json: true,
-				shizhounian: true,
 				chuchang: {
 					name: "蒲元/百战神机/xingxiang",
 					scale: 1.2,
@@ -2368,13 +2505,68 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					json: true,
 					action: "JiNeng",
 				},
+				qianjing: {
+					name: "蒲元/百战神机/qianjing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 1.2,
+				},
 				beijing: {
 					name: "蒲元/百战神机/beijing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
 					x: [0, 0.69],
 					y: [0, 0.42],
 					version: "4.0",
 					json: true,
 					scale: 0.82,
+				},
+			},
+		},
+		qinghegongzhu: {
+			//清河公主
+			瑞雪芳梅: {
+				name: "清河公主/瑞雪芳梅/xingxiang",
+				version: "4.0",
+				json: true,
+				x: [0, 0.5],
+				y: [0, 0.2],
+				scale: 1,
+				angle: 0,
+				//speed: 1,
+				chuchang: {
+					name: "清河公主/瑞雪芳梅/jineng01",
+					version: "4.0",
+					json: true,
+					scale: 0.9,
+					action: "play",
+				},
+				gongji: {
+					name: "清河公主/瑞雪芳梅/jineng01",
+					version: "4.0",
+					json: true,
+					scale: 1.1,
+					action: "play",
+				},
+				beijing: {
+					name: "清河公主/瑞雪芳梅/beijing",
+					version: "4.0",
+					json: true,
+					scale: 0.6,
+					x: [0, 0.5],
+					y: [0, 0.5],
+				},
+				zhishixian: {
+					name: "清河公主/瑞雪芳梅/jineng02",
+					version: "4.0",
+					json: true,
+					scale: 0.8,
+					speed: 0.8,
+					delay: 0.3,
 				},
 			},
 		},
@@ -3217,6 +3409,23 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: "司马徽/教诲不倦/beijing",
 					x: [0, 0.25],
 					y: [0, 0.48],
+					scale: 0.3,
+				},
+			},
+		},
+		simashi: {
+			//司马师
+			目痛欲狂: {
+				name: "司马师/目痛欲狂/XingXiang",
+				x: [0, 0.8],
+				y: [0, 0.5],
+				scale: 0.45,
+				//speed: 1,
+				//action: 'DaiJi',
+				beijing: {
+					name: "司马师/目痛欲狂/BeiJing",
+					x: [0, 0.8],
+					y: [0, 0.4],
 					scale: 0.3,
 				},
 			},
@@ -4532,49 +4741,266 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				},
 			},
 		},
+		xuncai: {
+			//荀采
+			雅柔映采: {
+				name: "荀采/雅柔映采/xingxiang",
+				version: "4.0",
+				json: true,
+				x: [0, 0.7],
+				y: [0, 0.4],
+				scale: 0.7,
+				//speed: 1,
+				beijing: {
+					name: "荀采/雅柔映采/beijing",
+					version: "4.0",
+					json: true,
+					x: [0, 0.75],
+					y: [0, 0.4],
+					scale: 0.6,
+				},
+			},
+		},
 		xunyu: {
 			// 荀彧
-			驱虎吞狼: {
-				name: "荀彧/驱虎吞狼/XingXiang",
-				x: [0, 1.35],
-				y: [0, 0.08],
-				scale: 0.54,
-				angle: 0,
-				clipSlots: [
-					"hutou",
-					"hufa1",
-					"hufa2",
-					"hufa3",
-					"hufa4",
-					"hufa5",
-					"hufa6",
-					"hufa7",
-				], // 剪掉超出头的部件，仅针对露头动皮，其他勿用
-				// speed: 1,
-				// action: 'DaiJi',
+			书剑定远: {
+				name: "荀彧/书剑定远/daiji",
+				ss_jinchang: "ChuChang",
+				action: "DaiJi",
+				x: [0, 0.45],
+				y: [0, 0.35],
+				scale: 0.9,
+				version: "4.0",
+				json: true,
+				chuchang: {
+					name: "荀彧/书剑定远/xingxiang",
+					action: "HuDong",
+					version: "4.0",
+					json: true,
+					scale: 0.9,
+				},
+				qianjing: {
+					name: "荀彧/书剑定远/qianjing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.55],
+					y: [0, 0.3],
+					scale: 0.9,
+				},
+				gongji: {
+					name: "荀彧/书剑定远/xingxiang",
+					action: "GongJi",
+					version: "4.0",
+					json: true,
+					scale: 0.9,
+				},
+				teshu: {
+					name: "荀彧/书剑定远/xingxiang",
+					action: "JiNeng",
+					version: "4.0",
+					json: true,
+					scale: 0.9,
+				},
 				beijing: {
-					name: "荀彧/驱虎吞狼/BeiJing",
-					scale: 0.25,
-					x: [0, 0.1],
-					y: [0, 0.6],
+					name: "荀彧/书剑定远/beijing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.42],
+					y: [0, 0.56],
+					scale: 0.7,
+				},
+				special: {
+					变身: {
+						hp: 1,
+						name: "xunyu/书剑定远2",
+						audio: "baorubianshen", // 触发变身, 可以播放语音
+					},
+					condition: {
+						lowhp: {
+							transform: ["变身"],
+							recover: true,
+							effect: "shaohui",
+							play: "play",
+						},
+					},
+				},
+			},
+			书剑定远2: {
+				name: "荀彧/书剑定远2/daiji",
+				ss_jinchang: "ChuChang",
+				action: "DaiJi",
+				x: [0, 0.05],
+				y: [0, 0.25],
+				scale: 1,
+				version: "4.0",
+				json: true,
+				chuchang: {
+					name: "荀彧/书剑定远2/xingxiang",
+					action: "HuDong",
+					version: "4.0",
+					json: true,
+					scale: 1,
+				},
+				qianjing: {
+					name: "荀彧/书剑定远2/qianjing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.55],
+					y: [0, 0.3],
+					scale: 1,
+				},
+				gongji: {
+					name: "荀彧/书剑定远2/xingxiang",
+					action: "GongJi",
+					version: "4.0",
+					json: true,
+					scale: 1,
+				},
+				teshu: {
+					name: "荀彧/书剑定远2/xingxiang",
+					action: "JiNeng",
+					version: "4.0",
+					json: true,
+					scale: 1,
+				},
+				beijing: {
+					name: "荀彧/书剑定远2/beijing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.42],
+					y: [0, 0.56],
+					scale: 0.7,
 				},
 			},
 		},
 		xuyou: {
 			// 许攸
-			盛气凌人: {
-				name: "许攸/盛气凌人/XingXiang",
-				x: [0, 0.5],
-				y: [0, 0],
-				scale: 0.65,
-				angle: 0,
-				// speed: 1,
-				// action: 'DaiJi',
+			附势而为: {
+				name: "许攸/附势而为/xingxiang",
+				ss_jinchang: "ChuChang",
+				action: "DaiJi",
+				x: [0, 0.55],
+				y: [0, 0.3],
+				scale: 0.8,
+				version: "4.0",
+				json: true,
+				chuchang: {
+					name: "许攸/附势而为/xingxiang",
+					scale: 0.8,
+					version: "4.0",
+					json: true,
+					action: "HuDong",
+				},
+				qianjing: {
+					name: "许攸/附势而为/qianjing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					scale: 0.8,
+				},
+				gongji: {
+					name: "许攸/附势而为/xingxiang",
+					action: "GongJi",
+					version: "4.0",
+					json: true,
+					scale: 0.9,
+				},
+				teshu: {
+					name: "许攸/附势而为/xingxiang",
+					scale: 1.2,
+					version: "4.0",
+					json: true,
+					action: "JiNeng",
+				},
 				beijing: {
-					name: "许攸/盛气凌人/BeiJing",
-					scale: 0.3,
-					x: [0, 0.8],
-					y: [0, 0.45],
+					name: "许攸/附势而为/beijing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.55],
+					y: [0, 0.55],
+					scale: 0.55,
+				},
+				special: {
+					转换: {
+						name: "xuyou/附势而为2",
+					},
+					condition: {
+						zhuanhuanji: {
+							transform: ["转换"],
+						},
+					},
+				},
+			},
+			附势而为2: {
+				name: "许攸/附势而为2/xingxiang",
+				ss_jinchang: "ChuChang",
+				action: "DaiJi",
+				x: [0, 0.45],
+				y: [0, 0.55],
+				scale: 0.8,
+				version: "4.0",
+				json: true,
+				chuchang: {
+					name: "许攸/附势而为2/xingxiang",
+					scale: 0.8,
+					version: "4.0",
+					json: true,
+					action: "HuDong",
+				},
+				qianjing: {
+					name: "许攸/附势而为2/qianjing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.45],
+					y: [0, 0.55],
+					scale: 0.8,
+				},
+				gongji: {
+					name: "许攸/附势而为2/xingxiang",
+					action: "GongJi",
+					version: "4.0",
+					json: true,
+					scale: 0.9,
+				},
+				teshu: {
+					name: "许攸/附势而为2/xingxiang",
+					scale: 0.9,
+					version: "4.0",
+					json: true,
+					action: "JiNeng",
+				},
+				beijing: {
+					name: "许攸/附势而为2/beijing",
+					ss_jinchang: "ChuChang",
+					action: "DaiJi",
+					version: "4.0",
+					json: true,
+					x: [0, 0.55],
+					y: [0, 0.55],
+					scale: 0.55,
+				},
+				special: {
+					转换: {
+						name: "xuyou/附势而为",
+					},
+					condition: {
+						zhuanhuanji: {
+							transform: ["转换"],
+						},
+					},
 				},
 			},
 		},
@@ -4756,6 +5182,33 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					x: [0, 0],
 					y: [0, 0.5],
 					scale: 0.3,
+				},
+			},
+		},
+		zhangrang: {
+			//张让
+			窃政聚敛: {
+				name: "张让/窃政聚敛/daiji2",
+				x: [0, 0.45],
+				y: [0, 0.5],
+				scale: 0.8,
+				//speed: 1,
+				shizhounian: true,
+				chuchang: {
+					name: "张让/窃政聚敛/chuchang",
+					scale: 0.7,
+					action: "play",
+				},
+				gongji: {
+					name: "张让/窃政聚敛/chuchang",
+					scale: 0.9,
+					action: "play",
+				},
+				beijing: {
+					name: "张让/窃政聚敛/beijing",
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.4,
 				},
 			},
 		},
@@ -5010,6 +5463,41 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 						speed: 0.8,
 						delay: 0.4,
 					},
+				},
+			},
+		},
+		zhaoyǎn: {
+			// 赵俨
+			遐迩一体: {
+				name: "赵俨/遐迩一体/xingxiang",
+				version: "4.0",
+				json: true,
+				x: [0, 1],
+				y: [0, 0.25],
+				scale: 1,
+				angle: 0,
+				// speed: 1,
+				chuchang: {
+					name: "赵俨/遐迩一体/jineng01",
+					version: "4.0",
+					json: true,
+					scale: 1,
+					action: "play",
+				},
+				gongji: {
+					name: "赵俨/遐迩一体/jineng01",
+					version: "4.0",
+					json: true,
+					scale: 1.2,
+					action: "play",
+				},
+				beijing: {
+					name: "赵俨/遐迩一体/beijing",
+					version: "4.0",
+					json: true,
+					scale: 0.6,
+					x: [0, 0.7],
+					y: [0, 0.5],
 				},
 			},
 		},
@@ -5637,8 +6125,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 曹操
 		re_caocao: decadeUI.dynamicSkin.caocao,
 		sb_caocao: decadeUI.dynamicSkin.caocao,
-		jsrg_caocao: decadeUI.dynamicSkin.caocao,
 		dc_caocao: decadeUI.dynamicSkin.caocao,
+		jd_sb_caocao: decadeUI.dynamicSkin.caocao,
+		tw_caocao: decadeUI.dynamicSkin.caocao,
+		jsrg_caocao: decadeUI.dynamicSkin.caocao,
+		yj_caocao: decadeUI.dynamicSkin.caocao,
 
 		// 曹髦
 		mb_caomao: decadeUI.dynamicSkin.caomao,
@@ -5651,12 +6142,16 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 曹仁
 		old_caoren: decadeUI.dynamicSkin.caoren,
-		sp_caoren: decadeUI.dynamicSkin.caoren,
 		sb_caoren: decadeUI.dynamicSkin.caoren,
+		new_caoren: decadeUI.dynamicSkin.caoren,
 		star_caoren: decadeUI.dynamicSkin.caoren,
+		sp_caoren: decadeUI.dynamicSkin.caoren,
+		jsp_caoren: decadeUI.dynamicSkin.caoren,
+		drag_caoren: decadeUI.dynamicSkin.caoren,
 
 		// 曹爽
 		dc_caoshuang: decadeUI.dynamicSkin.caoshuang,
+		ns_caoshuang: decadeUI.dynamicSkin.caoshuang,
 
 		// 陈珪
 		mb_chengui: decadeUI.dynamicSkin.chengui,
@@ -5665,35 +6160,49 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 大乔
 		re_daqiao: decadeUI.dynamicSkin.daqiao,
 		sb_daqiao: decadeUI.dynamicSkin.daqiao,
+		jd_sb_daqiao: decadeUI.dynamicSkin.daqiao,
+		// yue_daqiao: decadeUI.dynamicSkin.daqiao,
+		sp_daqiao: decadeUI.dynamicSkin.daqiao,
+
+		// 典韦
+		ol_dianwei: decadeUI.dynamicSkin.dianwei,
+		re_dianwei: decadeUI.dynamicSkin.dianwei,
+		dc_sb_dianwei: decadeUI.dynamicSkin.dianwei,
+		xia_dianwei: decadeUI.dynamicSkin.dianwei,
 
 		// 貂蝉
 		re_diaochan: decadeUI.dynamicSkin.diaochan,
-		sp_diaochan: decadeUI.dynamicSkin.diaochan,
 		sb_diaochan: decadeUI.dynamicSkin.diaochan,
+		sp_diaochan: decadeUI.dynamicSkin.diaochan,
 
 		// 丁尚涴
 		ol_dingshangwan: decadeUI.dynamicSkin.dingshangwan,
 
 		// 董白
 		re_dongbai: decadeUI.dynamicSkin.dongbai,
+		jsrg_dongbai: decadeUI.dynamicSkin.dongbai,
 
 		// 董卓
 		ol_dongzhuo: decadeUI.dynamicSkin.dongzhuo,
 		re_dongzhuo: decadeUI.dynamicSkin.dongzhuo,
+		star_dongzhuo: decadeUI.dynamicSkin.dongzhuo,
+		jsrg_dongzhuo: decadeUI.dynamicSkin.dongzhuo,
 		sp_dongzhuo: decadeUI.dynamicSkin.dongzhuo,
+		yj_dongzhuo: decadeUI.dynamicSkin.dongzhuo,
 
 		// 杜预
+		dc_duyu: decadeUI.dynamicSkin.duyu,
 		sp_duyu: decadeUI.dynamicSkin.duyu,
 		pk_sp_duyu: decadeUI.dynamicSkin.duyu,
 		taffyshen_duyu: decadeUI.dynamicSkin.duyu,
 
-		// 冯妤// 冯芳女
+		// 冯妤（冯芳女）
 		re_fengfangnv: decadeUI.dynamicSkin.fengfangnv,
 
 		// 费祎
 		ol_feiyi: decadeUI.dynamicSkin.feiyi,
-		feiyi: decadeUI.dynamicSkin.feiyi,
 		tw_feiyi: decadeUI.dynamicSkin.feiyi,
+		std_feiyi: decadeUI.dynamicSkin.feiyi,
 		taffyold_ol_feiyi: decadeUI.dynamicSkin.feiyi,
 
 		// 管宁
@@ -5723,20 +6232,24 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 郭嘉
 		re_guojia: decadeUI.dynamicSkin.guojia,
+		yj_sb_guojia: decadeUI.dynamicSkin.guojia,
 		ps1059_guojia: decadeUI.dynamicSkin.guojia,
 		ps2070_guojia: decadeUI.dynamicSkin.guojia,
 		huan_guojia: decadeUI.dynamicSkin.guojia,
 		jsrg_guojia: decadeUI.dynamicSkin.guojia,
-		dc_sb_guojia: decadeUI.dynamicSkin.guojia,
 
 		// 郭照
 		xin_guozhao: decadeUI.dynamicSkin.guozhao,
 		jsrg_guozhao: decadeUI.dynamicSkin.guozhao,
 		taffyold_xin_guozhao: decadeUI.dynamicSkin.guozhao,
 
+		// 胡金定
+		dc_hujinding: decadeUI.dynamicSkin.hujinding,
+		ol_hujinding: decadeUI.dynamicSkin.hujinding,
+		taffyold_ol_hujinding: decadeUI.dynamicSkin.hujinding,
+
 		// 黄承彦
 		dc_huangchengyan: decadeUI.dynamicSkin.huangchengyan,
-		ns_huangchengyan: decadeUI.dynamicSkin.huangchengyan,
 
 		// 黄盖
 		re_huanggai: decadeUI.dynamicSkin.huanggai,
@@ -5752,23 +6265,34 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		taffyold_sb_huangzhong: decadeUI.dynamicSkin.huangzhong,
 
 		// 贾充
-		jin_jiachong: decadeUI.dynamicSkin.jiachong,
 		dc_jiachong: decadeUI.dynamicSkin.jiachong,
+		jin_jiachong: decadeUI.dynamicSkin.jiachong,
+		mb_jiachong: decadeUI.dynamicSkin.jiachong,
 
 		// 李儒
-		re_liru: decadeUI.dynamicSkin.liru,
-		dc_liru: decadeUI.dynamicSkin.liru,
 		xin_liru: decadeUI.dynamicSkin.liru,
+		dc_liru: decadeUI.dynamicSkin.liru,
+		re_liru: decadeUI.dynamicSkin.liru,
+		yj_liru: decadeUI.dynamicSkin.liru,
+		ol_liru: decadeUI.dynamicSkin.liru,
 
 		// 凌统
-		re_lingtong: decadeUI.dynamicSkin.lingtong,
 		xin_lingtong: decadeUI.dynamicSkin.lingtong,
+		ol_lingtong: decadeUI.dynamicSkin.lingtong,
+		re_lingtong: decadeUI.dynamicSkin.lingtong,
+		old_lingtong: decadeUI.dynamicSkin.lingtong,
 
 		// 刘备
 		re_liubei: decadeUI.dynamicSkin.liubei,
 		sb_liubei: decadeUI.dynamicSkin.liubei,
 		dc_liubei: decadeUI.dynamicSkin.liubei,
+		junk_liubei: decadeUI.dynamicSkin.liubei,
+		jd_sb_liubei: decadeUI.dynamicSkin.liubei,
+		ty_liubei: decadeUI.dynamicSkin.liubei,
+		xia_liubei: decadeUI.dynamicSkin.liubei,
+		sp_liubei: decadeUI.dynamicSkin.liubei,
 		jsrg_liubei: decadeUI.dynamicSkin.liubei,
+		jsp_liubei: decadeUI.dynamicSkin.liubei,
 
 		// 刘永
 		jsrg_liuyong: decadeUI.dynamicSkin.liuyong,
@@ -5776,12 +6300,20 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 留赞
 		re_liuzan: decadeUI.dynamicSkin.liuzan,
 
+		// 陆逊
+		re_luxun: decadeUI.dynamicSkin.luxun,
+		jsrg_luxun: decadeUI.dynamicSkin.luxun,
+		sb_luxun: decadeUI.dynamicSkin.luxun,
+		ty_luxun: decadeUI.dynamicSkin.luxun,
+		huan_luxun: decadeUI.dynamicSkin.luxun,
+
 		// 陆郁生
 		ol_luyusheng: decadeUI.dynamicSkin.luyusheng,
 		taffyold_ol_luyusheng: decadeUI.dynamicSkin.luyusheng,
 
 		// 骆统
 		dc_luotong: decadeUI.dynamicSkin.luotong,
+		std_dc_luotong: decadeUI.dynamicSkin.luotong,
 
 		// 马钧
 		old_majun: decadeUI.dynamicSkin.majun,
@@ -5789,6 +6321,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 祢衡
 		re_miheng: decadeUI.dynamicSkin.miheng,
+		// yue_miheng: decadeUI.dynamicSkin.miheng,
 
 		// 南华老仙
 		re_nanhualaoxian: decadeUI.dynamicSkin.nanhualaoxian,
@@ -5799,6 +6332,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 蒲元
 		ol_puyuan: decadeUI.dynamicSkin.puyuan,
+
+		// 清河公主
+		dc_qinghegongzhu: decadeUI.dynamicSkin.qinghegongzhu,
 
 		// 阮瑀
 		taffyold_ruanyu: decadeUI.dynamicSkin.ruanyu,
@@ -5836,16 +6372,25 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 神赵云
 		dc_zhaoyun: decadeUI.dynamicSkin.shen_zhaoyun,
+		old_shen_zhaoyun: decadeUI.dynamicSkin.shen_zhaoyun,
+		// boss_zhaoyun: decadeUI.dynamicSkin.shen_zhaoyun,
 
 		// 神张飞
 		ty_shen_zhangfei: decadeUI.dynamicSkin.shen_zhangfei,
+
+		// 司马师
+		dc_simashi: decadeUI.dynamicSkin.simashi,
+		jin_simashi: decadeUI.dynamicSkin.simashi,
+		std_simashi: decadeUI.dynamicSkin.simashi,
+		jd_jin_simashi: decadeUI.dynamicSkin.simashi,
 
 		// 孙策
 		re_sunce: decadeUI.dynamicSkin.sunce,
 		re_sunben: decadeUI.dynamicSkin.sunce,
 		sb_sunce: decadeUI.dynamicSkin.sunce,
-		jsrg_sunce: decadeUI.dynamicSkin.sunce,
 		dc_sunce: decadeUI.dynamicSkin.sunce,
+		jsrg_sunce: decadeUI.dynamicSkin.sunce,
+		sp_sunce: decadeUI.dynamicSkin.sunce,
 
 		// 孙寒华
 		dc_sunhanhua: decadeUI.dynamicSkin.sunhanhua,
@@ -5858,6 +6403,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 孙鲁育
 		re_sunluyu: decadeUI.dynamicSkin.sunluyu,
+		mb_sunluyu: decadeUI.dynamicSkin.sunluyu,
 
 		// 孙权
 		re_sunquan: decadeUI.dynamicSkin.sunquan,
@@ -5871,9 +6417,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 孙茹
 		dc_sunru: decadeUI.dynamicSkin.sunru,
+		ol_sunru: decadeUI.dynamicSkin.sunru,
 
 		// 孙翊
 		re_sunyi: decadeUI.dynamicSkin.sunyi,
+		tw_sunyi: decadeUI.dynamicSkin.sunyi,
 
 		// 滕芳兰
 		dc_tengfanglan: decadeUI.dynamicSkin.tengfanglan,
@@ -5884,6 +6432,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 王元姬
 		jin_wangyuanji: decadeUI.dynamicSkin.wangyuanji,
+		sp_wangyuanji: decadeUI.dynamicSkin.wangyuanji,
+		std_wangyuanji: decadeUI.dynamicSkin.wangyuanji,
+		jd_jin_wangyuanji: decadeUI.dynamicSkin.wangyuanji,
 
 		// 文鸯
 		db_wenyang: decadeUI.dynamicSkin.wenyang,
@@ -5918,6 +6469,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 徐盛
 		re_xusheng: decadeUI.dynamicSkin.xusheng,
 		xin_xusheng: decadeUI.dynamicSkin.xusheng,
+		old_xusheng: decadeUI.dynamicSkin.xusheng,
 
 		// 许劭
 		jsrg_xushao: decadeUI.dynamicSkin.xushao,
@@ -5927,46 +6479,67 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		taffyre_xushao: decadeUI.dynamicSkin.xushao,
 		taffyshen_xushao: decadeUI.dynamicSkin.xushao,
 
+		// 荀采
+		clan_xuncai: decadeUI.dynamicSkin.xuncai,
+		taffyold_clan_xuncai: decadeUI.dynamicSkin.xuncai,
+
 		// 许攸
 		sp_xuyou: decadeUI.dynamicSkin.xuyou,
-		xin_xuyou: decadeUI.dynamicSkin.xuyou,
 		jsrg_xuyou: decadeUI.dynamicSkin.xuyou,
+		yj_xuyou: decadeUI.dynamicSkin.xuyou,
+		junk_xuyou: decadeUI.dynamicSkin.xuyou,
 		taffyre_xuyou: decadeUI.dynamicSkin.xuyou,
 
 		// 荀彧
 		ol_xunyu: decadeUI.dynamicSkin.xunyu,
 		re_xunyu: decadeUI.dynamicSkin.xunyu,
+		sb_xunyu: decadeUI.dynamicSkin.xunyu,
 
 		// 袁谭袁尚
+		// yuantanyuanxiyuanshang: decadeUI.dynamicSkin.yuantanyuanshang,
 		taffyold_yuantanyuanshang: decadeUI.dynamicSkin.yuantanyuanshang,
 
 		// 于吉
 		xin_yuji: decadeUI.dynamicSkin.yuji,
 		re_yuji: decadeUI.dynamicSkin.yuji,
-		diy_yuji: decadeUI.dynamicSkin.yuji,
-		ns_yuji: decadeUI.dynamicSkin.yuji,
-		ns_yujisp: decadeUI.dynamicSkin.yuji,
 		taffyshen_yuji: decadeUI.dynamicSkin.yuji,
 
 		// 张春华
 		re_zhangchunhua: decadeUI.dynamicSkin.zhangchunhua,
+		ol_zhangchunhua: decadeUI.dynamicSkin.zhangchunhua,
+		jin_zhangchunhua: decadeUI.dynamicSkin.zhangchunhua,
 		star_zhangchunhua: decadeUI.dynamicSkin.zhangchunhua,
 
 		// 张琪瑛
 		old_zhangqiying: decadeUI.dynamicSkin.zhangqiying,
 
+		// 张让
+		ol_zhangrang: decadeUI.dynamicSkin.zhangrang,
+		junk_zhangrang: decadeUI.dynamicSkin.zhangrang,
+		taffyold_zhangrang: decadeUI.dynamicSkin.zhangrang,
+
 		// 张嫙
 		jsrg_zhangxuan: decadeUI.dynamicSkin.zhangxuan,
 
 		// 赵襄
+		tw_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
 		dc_zhaoxiang: decadeUI.dynamicSkin.zhaoxiang,
 
+		// 赵俨
+		dc_zhaoyǎn: decadeUI.dynamicSkin.zhaoyǎn,
+		taffyold_dc_zhaoyǎn: decadeUI.dynamicSkin.zhaoyǎn,
+
 		// 赵云
-		ol_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
 		re_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
-		sp_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		old_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
 		sb_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
 		jsrg_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		ps2063_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		ps2067_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		huan_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		jd_sb_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		sp_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
+		jsp_zhaoyun: decadeUI.dynamicSkin.zhaoyun,
 
 		// 钟会
 		xin_zhonghui: decadeUI.dynamicSkin.zhonghui,
@@ -5983,6 +6556,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 周处
 		jin_zhouchu: decadeUI.dynamicSkin.zhouchu,
+		tw_zhouchu: decadeUI.dynamicSkin.zhouchu,
+		std_zhouchu: decadeUI.dynamicSkin.zhouchu,
 
 		// 诸葛亮
 		re_zhugeliang: decadeUI.dynamicSkin.zhugeliang,

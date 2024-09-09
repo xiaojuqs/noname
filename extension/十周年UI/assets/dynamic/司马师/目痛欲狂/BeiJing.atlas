@@ -1,0 +1,878 @@
+
+BeiJing.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bg
+  rotate: false
+  xy: 1, 1274
+  size: 1155, 773
+  orig: 1155, 773
+  offset: 0, 0
+  index: -1
+bgheiyun1
+  rotate: true
+  xy: 979, 16
+  size: 410, 315
+  orig: 420, 320
+  offset: 7, 1
+  index: -1
+bgxuanguang
+  rotate: false
+  xy: 1157, 515
+  size: 871, 717
+  orig: 883, 734
+  offset: 3, 17
+  index: -1
+bgyantx2
+  rotate: false
+  xy: 1, 619
+  size: 874, 654
+  orig: 877, 656
+  offset: 2, 1
+  index: -1
+bgyantx5
+  rotate: true
+  xy: 596, 9
+  size: 320, 296
+  orig: 323, 305
+  offset: 1, 2
+  index: -1
+bgyanwu2
+  rotate: false
+  xy: 1157, 1233
+  size: 878, 814
+  orig: 878, 854
+  offset: 0, 0
+  index: -1
+bgyanzhu
+  rotate: false
+  xy: 893, 90
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+huoxing
+  rotate: true
+  xy: 1295, 23
+  size: 491, 750
+  orig: 491, 751
+  offset: 0, 1
+  index: -1
+suipian1
+  rotate: false
+  xy: 893, 261
+  size: 83, 75
+  orig: 83, 75
+  offset: 0, 0
+  index: -1
+suipian3
+  rotate: false
+  xy: 893, 227
+  size: 83, 33
+  orig: 83, 33
+  offset: 0, 0
+  index: -1
+suipianyy1
+  rotate: false
+  xy: 1157, 442
+  size: 127, 72
+  orig: 129, 72
+  offset: 1, 0
+  index: -1
+suipianyy4
+  rotate: false
+  xy: 876, 337
+  size: 102, 89
+  orig: 103, 90
+  offset: 0, 0
+  index: -1
+suipianyy5
+  rotate: true
+  xy: 893, 168
+  size: 58, 81
+  orig: 58, 82
+  offset: 0, 0
+  index: -1
+suipianyy7
+  rotate: false
+  xy: 893, 1
+  size: 66, 88
+  orig: 66, 89
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang2_024
+  rotate: false
+  xy: 876, 427
+  size: 280, 268
+  orig: 288, 288
+  offset: 6, 15
+  index: -1
+vfx/guang/yanguang_012
+  rotate: true
+  xy: 596, 330
+  size: 288, 279
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_016
+  rotate: true
+  xy: 876, 985
+  size: 288, 280
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_017
+  rotate: true
+  xy: 876, 696
+  size: 288, 280
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+youcheng1
+  rotate: true
+  xy: 1, 5
+  size: 613, 594
+  orig: 613, 594
+  offset: 0, 0
+  index: -1
+
+BeiJing2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bgheiyun2
+  rotate: false
+  xy: 1409, 1004
+  size: 462, 351
+  orig: 463, 355
+  offset: 1, 1
+  index: -1
+bgheiyun3
+  rotate: true
+  xy: 1409, 1356
+  size: 691, 408
+  orig: 700, 409
+  offset: 0, 0
+  index: -1
+bgsuishi1
+  rotate: true
+  xy: 1818, 1391
+  size: 309, 192
+  orig: 309, 199
+  offset: 0, 7
+  index: -1
+bgsuishi2
+  rotate: false
+  xy: 1582, 432
+  size: 189, 264
+  orig: 189, 264
+  offset: 0, 0
+  index: -1
+bgyan
+  rotate: true
+  xy: 1872, 1168
+  size: 222, 169
+  orig: 224, 169
+  offset: 1, 0
+  index: -1
+bgyanwu1
+  rotate: false
+  xy: 1, 165
+  size: 820, 476
+  orig: 843, 494
+  offset: 16, 0
+  index: -1
+bgyunceng1
+  rotate: false
+  xy: 1, 1345
+  size: 703, 702
+  orig: 703, 703
+  offset: 0, 0
+  index: -1
+bgyunceng2
+  rotate: false
+  xy: 1, 642
+  size: 703, 702
+  orig: 703, 703
+  offset: 0, 0
+  index: -1
+bgyunceng3
+  rotate: false
+  xy: 705, 1345
+  size: 703, 702
+  orig: 703, 703
+  offset: 0, 0
+  index: -1
+buheiwu1
+  rotate: false
+  xy: 705, 730
+  size: 450, 246
+  orig: 453, 260
+  offset: 1, 5
+  index: -1
+ck
+  rotate: true
+  xy: 1070, 16
+  size: 231, 113
+  orig: 231, 113
+  offset: 0, 0
+  index: -1
+suduxian
+  rotate: false
+  xy: 1203, 268
+  size: 378, 463
+  orig: 378, 463
+  offset: 0, 0
+  index: -1
+suipian2
+  rotate: true
+  xy: 705, 657
+  size: 72, 116
+  orig: 72, 116
+  offset: 0, 0
+  index: -1
+suipian4
+  rotate: false
+  xy: 1353, 1205
+  size: 44, 71
+  orig: 44, 71
+  offset: 0, 0
+  index: -1
+suipian5
+  rotate: false
+  xy: 709, 1
+  size: 53, 41
+  orig: 53, 41
+  offset: 0, 0
+  index: -1
+suipian7
+  rotate: false
+  xy: 1353, 1277
+  size: 50, 67
+  orig: 50, 67
+  offset: 0, 0
+  index: -1
+suipianyy2
+  rotate: true
+  xy: 709, 43
+  size: 121, 104
+  orig: 123, 105
+  offset: 0, 0
+  index: -1
+suipianyy3
+  rotate: true
+  xy: 1957, 6
+  size: 172, 60
+  orig: 174, 60
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang2_000
+  rotate: true
+  xy: 822, 1
+  size: 246, 247
+  orig: 288, 288
+  offset: 22, 20
+  index: -1
+vfx/guang/yanguang2_001
+  rotate: true
+  xy: 1781, 429
+  size: 267, 266
+  orig: 288, 288
+  offset: 11, 11
+  index: -1
+vfx/guang/yanguang2_007
+  rotate: true
+  xy: 1156, 732
+  size: 244, 238
+  orig: 288, 288
+  offset: 26, 30
+  index: -1
+vfx/guang/yanguang2_010
+  rotate: false
+  xy: 1872, 1008
+  size: 162, 159
+  orig: 288, 288
+  offset: 64, 70
+  index: -1
+vfx/guang/yanguang2_011
+  rotate: true
+  xy: 1781, 1
+  size: 177, 175
+  orig: 288, 288
+  offset: 56, 62
+  index: -1
+vfx/guang/yanguang2_016
+  rotate: false
+  xy: 1395, 737
+  size: 270, 266
+  orig: 288, 288
+  offset: 14, 16
+  index: -1
+vfx/guang/yanguang2_018
+  rotate: false
+  xy: 1582, 274
+  size: 181, 157
+  orig: 288, 288
+  offset: 54, 70
+  index: -1
+vfx/guang/yanguang2_023
+  rotate: false
+  xy: 1781, 179
+  size: 266, 249
+  orig: 288, 288
+  offset: 13, 24
+  index: -1
+vfx/guang/yanguang2_025
+  rotate: false
+  xy: 349, 1
+  size: 157, 163
+  orig: 288, 288
+  offset: 64, 64
+  index: -1
+vfx/guang/yanguang_000
+  rotate: false
+  xy: 1203, 1
+  size: 288, 266
+  orig: 288, 288
+  offset: 0, 4
+  index: -1
+vfx/guang/yanguang_001
+  rotate: false
+  xy: 1492, 1
+  size: 288, 266
+  orig: 288, 288
+  offset: 0, 4
+  index: -1
+youcheng1suishi
+  rotate: true
+  xy: 1, 6
+  size: 158, 347
+  orig: 158, 357
+  offset: 0, 1
+  index: -1
+youcheng2
+  rotate: false
+  xy: 705, 977
+  size: 647, 367
+  orig: 647, 367
+  offset: 0, 0
+  index: -1
+zuocheng1
+  rotate: false
+  xy: 822, 248
+  size: 380, 481
+  orig: 380, 482
+  offset: 0, 1
+  index: -1
+zuocheng2
+  rotate: true
+  xy: 1666, 697
+  size: 306, 381
+  orig: 308, 384
+  offset: 1, 0
+  index: -1
+zuochengyan1
+  rotate: false
+  xy: 1818, 1701
+  size: 226, 346
+  orig: 228, 350
+  offset: 1, 3
+  index: -1
+zuochengyan2
+  rotate: false
+  xy: 507, 6
+  size: 201, 158
+  orig: 203, 162
+  offset: 1, 1
+  index: -1
+
+BeiJing3.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bgbiyan
+  rotate: false
+  xy: 1, 1
+  size: 231, 201
+  orig: 237, 210
+  offset: 1, 0
+  index: -1
+bgheiyun4
+  rotate: false
+  xy: 1824, 715
+  size: 221, 218
+  orig: 223, 228
+  offset: 2, 4
+  index: -1
+bgyantx1
+  rotate: false
+  xy: 1, 457
+  size: 259, 190
+  orig: 260, 190
+  offset: 0, 0
+  index: -1
+bgyantx3
+  rotate: true
+  xy: 1153, 968
+  size: 241, 178
+  orig: 243, 180
+  offset: 1, 1
+  index: -1
+bgyantx4
+  rotate: false
+  xy: 284, 726
+  size: 275, 203
+  orig: 279, 207
+  offset: 1, 2
+  index: -1
+suduxian2
+  rotate: true
+  xy: 1840, 60
+  size: 210, 192
+  orig: 212, 192
+  offset: 2, 0
+  index: -1
+suipian6
+  rotate: true
+  xy: 1690, 612
+  size: 71, 121
+  orig: 71, 122
+  offset: 0, 0
+  index: -1
+suipianyy6
+  rotate: true
+  xy: 1732, 178
+  size: 59, 101
+  orig: 60, 103
+  offset: 0, 1
+  index: -1
+vfx/guang/yanguang2_002
+  rotate: false
+  xy: 868, 927
+  size: 284, 282
+  orig: 288, 288
+  offset: 3, 3
+  index: -1
+vfx/guang/yanguang2_004
+  rotate: true
+  xy: 1332, 1022
+  size: 187, 184
+  orig: 288, 288
+  offset: 54, 56
+  index: -1
+vfx/guang/yanguang2_005
+  rotate: false
+  xy: 410, 2
+  size: 204, 200
+  orig: 288, 288
+  offset: 45, 48
+  index: -1
+vfx/guang/yanguang2_006
+  rotate: true
+  xy: 1824, 489
+  size: 225, 219
+  orig: 288, 288
+  offset: 35, 39
+  index: -1
+vfx/guang/yanguang2_008
+  rotate: false
+  xy: 284, 469
+  size: 264, 256
+  orig: 288, 288
+  offset: 14, 21
+  index: -1
+vfx/guang/yanguang2_009
+  rotate: false
+  xy: 577, 659
+  size: 283, 276
+  orig: 288, 288
+  offset: 4, 11
+  index: -1
+vfx/guang/yanguang2_012
+  rotate: true
+  xy: 1055, 477
+  size: 196, 193
+  orig: 288, 288
+  offset: 47, 53
+  index: -1
+vfx/guang/yanguang2_013
+  rotate: true
+  xy: 615, 1
+  size: 214, 212
+  orig: 288, 288
+  offset: 38, 44
+  index: -1
+vfx/guang/yanguang2_014
+  rotate: false
+  xy: 1275, 2
+  size: 230, 230
+  orig: 288, 288
+  offset: 31, 36
+  index: -1
+vfx/guang/yanguang2_015
+  rotate: true
+  xy: 1, 203
+  size: 253, 250
+  orig: 288, 288
+  offset: 21, 26
+  index: -1
+vfx/guang/yanguang2_017
+  rotate: false
+  xy: 1, 648
+  size: 282, 281
+  orig: 288, 288
+  offset: 6, 7
+  index: -1
+vfx/guang/yanguang2_019
+  rotate: true
+  xy: 233, 1
+  size: 201, 176
+  orig: 288, 288
+  offset: 44, 61
+  index: -1
+vfx/guang/yanguang2_020
+  rotate: true
+  xy: 1840, 271
+  size: 217, 192
+  orig: 288, 288
+  offset: 36, 53
+  index: -1
+vfx/guang/yanguang2_021
+  rotate: false
+  xy: 828, 3
+  size: 236, 212
+  orig: 288, 288
+  offset: 27, 43
+  index: -1
+vfx/guang/yanguang2_022
+  rotate: true
+  xy: 252, 203
+  size: 253, 231
+  orig: 288, 288
+  offset: 19, 33
+  index: -1
+vfx/guang/yanguang2_026
+  rotate: true
+  xy: 1517, 1038
+  size: 171, 178
+  orig: 288, 288
+  offset: 58, 56
+  index: -1
+vfx/guang/yanguang2_027
+  rotate: false
+  xy: 1500, 487
+  size: 189, 194
+  orig: 288, 288
+  offset: 50, 49
+  index: -1
+vfx/guang/yanguang2_028
+  rotate: false
+  xy: 1065, 3
+  size: 209, 212
+  orig: 288, 288
+  offset: 40, 39
+  index: -1
+vfx/guang/yanguang2_029
+  rotate: false
+  xy: 1506, 6
+  size: 225, 228
+  orig: 288, 288
+  offset: 32, 30
+  index: -1
+vfx/guang/yanguang_002
+  rotate: false
+  xy: 579, 1211
+  size: 288, 274
+  orig: 288, 288
+  offset: 0, 2
+  index: -1
+vfx/guang/yanguang_003
+  rotate: false
+  xy: 579, 936
+  size: 288, 274
+  orig: 288, 288
+  offset: 0, 2
+  index: -1
+vfx/guang/yanguang_004
+  rotate: false
+  xy: 1, 1486
+  size: 288, 278
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_005
+  rotate: false
+  xy: 290, 1486
+  size: 288, 278
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_006
+  rotate: false
+  xy: 868, 1487
+  size: 288, 278
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_007
+  rotate: false
+  xy: 1157, 1487
+  size: 288, 278
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_008
+  rotate: false
+  xy: 1735, 1211
+  size: 288, 276
+  orig: 288, 288
+  offset: 0, 1
+  index: -1
+vfx/guang/yanguang_009
+  rotate: false
+  xy: 1735, 934
+  size: 288, 276
+  orig: 288, 288
+  offset: 0, 1
+  index: -1
+vfx/guang/yanguang_010
+  rotate: false
+  xy: 868, 1210
+  size: 288, 276
+  orig: 288, 288
+  offset: 0, 1
+  index: -1
+vfx/guang/yanguang_011
+  rotate: false
+  xy: 1157, 1210
+  size: 288, 276
+  orig: 288, 288
+  offset: 0, 1
+  index: -1
+vfx/guang/yanguang_013
+  rotate: false
+  xy: 1735, 1768
+  size: 288, 279
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_014
+  rotate: false
+  xy: 1446, 1488
+  size: 288, 277
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_015
+  rotate: false
+  xy: 1446, 1210
+  size: 288, 277
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_018
+  rotate: false
+  xy: 1, 1765
+  size: 288, 282
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_019
+  rotate: false
+  xy: 290, 1765
+  size: 288, 282
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_020
+  rotate: false
+  xy: 579, 1766
+  size: 288, 281
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_021
+  rotate: false
+  xy: 868, 1766
+  size: 288, 281
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_022
+  rotate: false
+  xy: 1157, 1766
+  size: 288, 281
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_023
+  rotate: false
+  xy: 1446, 1766
+  size: 288, 281
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_024
+  rotate: false
+  xy: 1, 1209
+  size: 288, 276
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_025
+  rotate: false
+  xy: 290, 1209
+  size: 288, 276
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_026
+  rotate: false
+  xy: 1, 930
+  size: 287, 278
+  orig: 288, 288
+  offset: 1, 0
+  index: -1
+vfx/guang/yanguang_027
+  rotate: false
+  xy: 289, 930
+  size: 287, 278
+  orig: 288, 288
+  offset: 1, 0
+  index: -1
+vfx/guang/yanguang_028
+  rotate: false
+  xy: 1735, 1488
+  size: 288, 279
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/guang/yanguang_029
+  rotate: false
+  xy: 579, 1486
+  size: 288, 279
+  orig: 288, 288
+  offset: 0, 0
+  index: -1
+vfx/yan/g1_000
+  rotate: true
+  xy: 1635, 684
+  size: 249, 188
+  orig: 257, 219
+  offset: 5, 14
+  index: -1
+vfx/yan/g1_001
+  rotate: true
+  xy: 1650, 238
+  size: 248, 189
+  orig: 257, 219
+  offset: 6, 14
+  index: -1
+vfx/yan/g1_002
+  rotate: true
+  xy: 1455, 235
+  size: 249, 194
+  orig: 257, 219
+  offset: 6, 13
+  index: -1
+vfx/yan/g1_003
+  rotate: false
+  xy: 1249, 485
+  size: 250, 195
+  orig: 257, 219
+  offset: 5, 13
+  index: -1
+vfx/yan/g1_004
+  rotate: true
+  xy: 1440, 682
+  size: 251, 194
+  orig: 257, 219
+  offset: 5, 13
+  index: -1
+vfx/yan/g1_005
+  rotate: true
+  xy: 1069, 224
+  size: 252, 190
+  orig: 257, 219
+  offset: 5, 13
+  index: -1
+vfx/yan/g1_006
+  rotate: false
+  xy: 549, 469
+  size: 252, 189
+  orig: 257, 219
+  offset: 5, 14
+  index: -1
+vfx/yan/g1_007
+  rotate: false
+  xy: 802, 469
+  size: 252, 189
+  orig: 257, 219
+  offset: 5, 14
+  index: -1
+vfx/yan/g1_008
+  rotate: true
+  xy: 1248, 681
+  size: 252, 191
+  orig: 257, 219
+  offset: 5, 14
+  index: -1
+vfx/yan/g1_009
+  rotate: true
+  xy: 1055, 674
+  size: 252, 192
+  orig: 257, 219
+  offset: 5, 14
+  index: -1
+vfx/yan/g1_010
+  rotate: true
+  xy: 484, 216
+  size: 252, 194
+  orig: 257, 219
+  offset: 5, 14
+  index: -1
+vfx/yan/g1_011
+  rotate: true
+  xy: 679, 216
+  size: 252, 194
+  orig: 257, 219
+  offset: 5, 14
+  index: -1
+vfx/yan/g1_012
+  rotate: true
+  xy: 861, 674
+  size: 252, 193
+  orig: 257, 219
+  offset: 5, 13
+  index: -1
+vfx/yan/g1_013
+  rotate: true
+  xy: 874, 216
+  size: 252, 194
+  orig: 257, 219
+  offset: 5, 13
+  index: -1
+vfx/yan/g1_014
+  rotate: true
+  xy: 1260, 233
+  size: 251, 194
+  orig: 257, 219
+  offset: 5, 13
+  index: -1
+
+BeiJing4.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vfx/guang/yanguang2_003
+  rotate: false
+  xy: 1, 1
+  size: 170, 164
+  orig: 288, 288
+  offset: 63, 66
+  index: -1
