@@ -1235,7 +1235,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		guanyu: {
 			// 关羽
-			啸风从龙: {
+			以身证道: {
 				name: "关羽/以身证道/XingXiang",
 				x: [0, 0.3],
 				y: [0, 0],
@@ -5645,6 +5645,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 曹丕
 		re_caopi: decadeUI.dynamicSkin.caopi,
+		ps_caopi: decadeUI.dynamicSkin.caopi,
 		sb_caopi: decadeUI.dynamicSkin.caopi,
 		taffyold_sb_caopi: decadeUI.dynamicSkin.caopi,
 
@@ -5701,10 +5702,21 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 关羽
 		re_guanyu: decadeUI.dynamicSkin.guanyu,
-		jsp_guanyu: decadeUI.dynamicSkin.guanyu,
-		jsrg_guanyu: decadeUI.dynamicSkin.guanyu,
+		ol_sb_guanyu: decadeUI.dynamicSkin.guanyu,
 		sb_guanyu: decadeUI.dynamicSkin.guanyu,
+		ps_guanyu: decadeUI.dynamicSkin.guanyu,
+		old_guanyu: decadeUI.dynamicSkin.guanyu,
+		junk_guanyu: decadeUI.dynamicSkin.guanyu,
+		jx_guanyu: decadeUI.dynamicSkin.guanyu,
+		jd_sb_guanyu: decadeUI.dynamicSkin.guanyu,
+		ty_guanyu: decadeUI.dynamicSkin.guanyu,
+		xia_guanyu: decadeUI.dynamicSkin.guanyu,
+		drag_guanyu: decadeUI.dynamicSkin.guanyu,
 		taffyold_sb_guanyu: decadeUI.dynamicSkin.guanyu,
+		taffyold_ol_sb_guanyu: decadeUI.dynamicSkin.guanyu,
+		jsp_guanyu: decadeUI.dynamicSkin.guanyu,
+		dc_jsp_guanyu: decadeUI.dynamicSkin.guanyu,
+		jsrg_guanyu: decadeUI.dynamicSkin.guanyu,
 
 		// 关索
 		dc_guansuo: decadeUI.dynamicSkin.guansuo,
@@ -5720,6 +5732,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 郭照
 		xin_guozhao: decadeUI.dynamicSkin.guozhao,
 		jsrg_guozhao: decadeUI.dynamicSkin.guozhao,
+		taffyold_xin_guozhao: decadeUI.dynamicSkin.guozhao,
 
 		// 黄承彦
 		dc_huangchengyan: decadeUI.dynamicSkin.huangchengyan,
@@ -5732,9 +5745,10 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 黄忠
 		re_huangzhong: decadeUI.dynamicSkin.huangzhong,
-		yj_huangzhong: decadeUI.dynamicSkin.huangzhong,
-		sb_huangzhong: decadeUI.dynamicSkin.huangzhong,
 		ol_huangzhong: decadeUI.dynamicSkin.huangzhong,
+		sb_huangzhong: decadeUI.dynamicSkin.huangzhong,
+		jsrg_huangzhong: decadeUI.dynamicSkin.huangzhong,
+		yj_huangzhong: decadeUI.dynamicSkin.huangzhong,
 		taffyold_sb_huangzhong: decadeUI.dynamicSkin.huangzhong,
 
 		// 贾充
@@ -5786,8 +5800,8 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		// 蒲元
 		ol_puyuan: decadeUI.dynamicSkin.puyuan,
 
-    // 阮瑀
-    taffyold_ruanyu: decadeUI.dynamicSkin.ruanyu,
+		// 阮瑀
+		taffyold_ruanyu: decadeUI.dynamicSkin.ruanyu,
 
 		// 芮姬
 		dc_ruiji: decadeUI.dynamicSkin.ruiji,
@@ -5849,6 +5863,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		re_sunquan: decadeUI.dynamicSkin.sunquan,
 		sb_sunquan: decadeUI.dynamicSkin.sunquan,
 		dc_sunquan: decadeUI.dynamicSkin.sunquan,
+		xin_sunquan: decadeUI.dynamicSkin.sunquan,
+		jd_sb_sunquan: decadeUI.dynamicSkin.sunquan,
+		ty_sunquan: decadeUI.dynamicSkin.sunquan,
+		taffyhuiwan_sunquan: decadeUI.dynamicSkin.sunquan,
+		taffyhuiwanplus_sunquan: decadeUI.dynamicSkin.sunquan,
 
 		// 孙茹
 		dc_sunru: decadeUI.dynamicSkin.sunru,
@@ -5868,6 +5887,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 文鸯
 		db_wenyang: decadeUI.dynamicSkin.wenyang,
+		diy_wenyang: decadeUI.dynamicSkin.wenyang,
+		std_db_wenyang: decadeUI.dynamicSkin.wenyang,
+		taffyold_db_wenyang: decadeUI.dynamicSkin.wenyang,
 
 		// 吴苋
 		clan_wuxian: decadeUI.dynamicSkin.wuxian,
@@ -5953,6 +5975,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		pe_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		clan_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		yj_zhonghui: decadeUI.dynamicSkin.zhonghui,
+		std_zhonghui: decadeUI.dynamicSkin.zhonghui,
 		taffyold_clan_zhonghui: decadeUI.dynamicSkin.zhonghui,
 
 		// 钟琰
@@ -5963,12 +5986,14 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 诸葛亮
 		re_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+		ps2066_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+		ps_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+		taffyold_sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		ol_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		re_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
-		sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
-		taffyold_sb_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
+		jd_sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 		taffyold_sb_sp_zhugeliang: decadeUI.dynamicSkin.zhugeliang,
 
 		// 幻诸葛亮

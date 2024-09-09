@@ -36,5 +36,9 @@ const dynamicTranslates = {
 	taffyold_dcporui: function (player) {
 		return "每轮限一次。其他角色的结束阶段，你可以弃置一张基本牌并选择一名于此回合内失去过牌的其他角色，你视为对其依次使用X+1张【杀】" + (player.hasMark("taffyold_dcgonghu_damage") ? "" : "，然后你交给其X张手牌") + "（X为你的体力值）。" + (player.hasMark("taffyold_dcgonghu_basic") ? "若其没有因此受到伤害，你回复1点体力。" : "");
 	},
+	taffyold_lkbushi(player) {
+		var list = lib.skill.taffyold_lkbushi.getBushi(player).map(i => get.translation(i));
+		return "①你使用" + list[0] + "牌无次数限制。②当你使用或打出" + list[1] + "牌后，你摸2张牌。③结束阶段开始时，或当你成为" + list[2] + "牌的目标后，你从牌堆或弃牌堆获得一张" + list[3] + "牌。④准备阶段开始时，你可调整此技能中四种花色的对应顺序。";
+	},
 };
 export default dynamicTranslates;

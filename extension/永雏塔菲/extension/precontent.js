@@ -110,6 +110,24 @@ export const PRECONTENT = function (config) {
 			 */
 			getSpan: () => `${get.prefixSpan("旧")}${get.prefixSpan("手杀")}${get.prefixSpan("神")}`,
 		});
+		lib.namePrefix.set("旧OL谋", {
+			/**
+			 * @returns {string}
+			 */
+			getSpan: () => `${get.prefixSpan("旧")}${get.prefixSpan("OL")}${get.prefixSpan("谋")}`,
+		});
+		lib.namePrefix.set("旧乐", {
+			/**
+			 * @returns {string}
+			 */
+			getSpan: () => `${get.prefixSpan("旧")}${get.prefixSpan("乐")}`,
+		});
+		lib.namePrefix.set("旧手杀", {
+			/**
+			 * @returns {string}
+			 */
+			getSpan: () => `${get.prefixSpan("旧")}${get.prefixSpan("手杀")}`,
+		});
 		characterPackFunc();
 		lib.config.all.characters.splice(21, 0, "taffy_character");
 		if (!lib.config.characters.includes("taffy_character")) {
