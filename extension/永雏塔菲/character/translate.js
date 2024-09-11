@@ -69,6 +69,7 @@ const translates = {
 	taffyold_db_wenyang_prefix: "旧手杀",
 	taffyold_shen_caopi_prefix: "旧神",
 	taffyold_clan_xuncai_prefix: "旧族",
+	taffyold_shen_xunyu_prefix: "旧神",
 
 	taffyboss_xushao: "评世雕龙",
 	taffyboss_pingjian: "评荐",
@@ -508,6 +509,13 @@ const translates = {
 	taffyold_clanlieshi_info: "出牌阶段，你可以选择一项：1.受到你造成的1点火焰伤害，然后废除判定区；2.弃置所有【闪】；3.弃置所有【杀】。然后令一名其他角色从你未选择的选项中选择一项。",
 	taffyold_clandianzhan: "点盏",
 	taffyold_clandianzhan_info: "锁定技。当你每轮第一次使用一种花色的牌后：若此牌仅指定唯一目标，你横置之；若你有此花色的手牌，你重铸这些牌。",
+	taffyold_shen_xunyu: "旧神荀彧",
+	taffyold_tianzuo: "天佐",
+	taffyold_tianzuo_info: "①游戏开始时，将八张【奇正相生】加入牌堆。②当一名角色成为【奇正相生】的目标后，你可以观看其手牌，并为其重新指定“正兵”或“奇兵”。",
+	taffyold_lingce: "灵策",
+	taffyold_lingce_info: "锁定技。当【奇正相生】或智囊或〖定汉①〗记录过的牌被使用时，你摸一张牌。",
+	taffyold_dinghan: "定汉",
+	taffyold_dinghan_info: "①当你成为未记录过的普通锦囊牌的目标时，或有未记录过的延时锦囊牌进入你的判定区时，你记录此牌名并取消之。②回合开始时，你可在〖定汉①〗的记录中增加或移除一种锦囊牌的牌名。",
 	aruijier: "瑞吉儿",
 };
 

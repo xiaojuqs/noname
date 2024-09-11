@@ -227,7 +227,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "鲍三娘/凤舞龙翔2/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.8,
 					hideSlots: ["ren_moanbutouying"], // 隐藏不需要的部件，想知道具体部件名称请使用SpineAltasSplit工具查看
 				},
 				gongji: {
@@ -399,7 +399,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "曹纯/虎啸龙渊2/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.8,
 				},
 				gongji: {
 					name: "曹纯/虎啸龙渊2/chuchang2",
@@ -2016,12 +2016,12 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				shizhounian: true,
 				chuchang: {
 					name: "留赞/高歌陷陈/chuchang",
-					scale: 0.9,
+					scale: 0.7,
 					action: "play",
 				},
 				gongji: {
 					name: "留赞/高歌陷陈/chuchang",
-					scale: 1.1,
+					scale: 0.7,
 					action: "play",
 				},
 				beijing: {
@@ -2062,7 +2062,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "卢弈/姝丽风华/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "卢弈/姝丽风华/chuchang2",
@@ -2127,7 +2127,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "陆郁生/战场绝版/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "陆郁生/战场绝版/chuchang2",
@@ -2917,7 +2917,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "神姜维/炽剑补天/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "神姜维/炽剑补天/chuchang2",
@@ -3085,7 +3085,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "神许褚/龙腾虎跃/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "神许褚/龙腾虎跃/chuchang2",
@@ -3155,7 +3155,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "神张飞/傲睨山河/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "神张飞/傲睨山河/chuchang2",
@@ -3205,7 +3205,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "神张角/驭道震泽/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "神张角/驭道震泽/chuchang2",
@@ -3295,7 +3295,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "神赵云/龙腾虎跃/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "神赵云/龙腾虎跃/chuchang2",
@@ -3422,6 +3422,11 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				scale: 0.45,
 				//speed: 1,
 				//action: 'DaiJi',
+				gongji: {
+					x: [0, 0.5],
+					y: [0, 0.5],
+					scale: 0.8,
+				},
 				beijing: {
 					name: "司马师/目痛欲狂/BeiJing",
 					x: [0, 0.8],
@@ -4186,7 +4191,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "吴懿/骁勇金衔/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "吴懿/骁勇金衔/chuchang2",
@@ -4382,7 +4387,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "许靖/丹枫盈瞳/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "许靖/丹枫盈瞳/chuchang2",
@@ -5767,7 +5772,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 					name: "周善/骁勇金衔/chuchang",
 					version: "4.0",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "周善/骁勇金衔/chuchang2",
@@ -5908,7 +5913,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "朱佩兰/轻罗夏暑/chuchang",
 					action: "play",
-					scale: 0.9,
+					scale: 0.7,
 				},
 				gongji: {
 					name: "朱佩兰/轻罗夏暑/chuchang2",
@@ -6366,6 +6371,9 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 
 		// 神孙策
 		taffyold_shen_sunce: decadeUI.dynamicSkin.shen_sunce,
+
+		// 神荀彧
+		taffyold_shen_xunyu: decadeUI.dynamicSkin.shen_xunyu,
 
 		// 神许褚
 		taffyold_shen_xuzhu: decadeUI.dynamicSkin.shen_xuzhu,

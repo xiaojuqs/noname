@@ -55,7 +55,7 @@ export const characterPackFunc = function () {
 			translate: { ...translates, ...voices, ...characterSortTranslate },
 			pinyins: { ...pinyins },
 		};
-		const whiteList = [...oobj.characterSort.taffy_character.taffy_old, "taffymb_shen_caocao"];
+		const whiteList = [...oobj.characterSort.taffy_character.taffy_old, ...oobj.characterSort.taffy_character.taffy_mobile_changshi, "taffymb_shen_caocao", "taffyre_xuyou"];
 		const specialDetails = {
 			taffydc_guanning: {
 				character: "character:ddd_guanning",

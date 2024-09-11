@@ -86,6 +86,7 @@
     - 旧手杀文鸯：未通渠的手杀文鸯
     - 旧神曹丕：未通渠的神曹丕
     - 旧族荀采：未通渠的族荀采
+    - 旧神荀彧：未通渠的神荀彧
   - 为乱斗模式添加了轮回七阴模式
   - 视频背景功能
 - 引入来自 [noname-server](https://github.com/nonameShijian/noname-server) 的 `index.js`，用于启动 Web 端文件读写服务

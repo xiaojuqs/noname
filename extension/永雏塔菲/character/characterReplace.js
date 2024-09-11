@@ -47,6 +47,7 @@ const characterReplaces = {
 	wenyang: ["wenyang", "db_wenyang", "diy_wenyang", "std_db_wenyang", "taffyold_db_wenyang"],
 	shen_caopi: ["shen_caopi", "taffyold_shen_caopi"],
 	clan_xuncai: ["clan_xuncai", "taffyold_clan_xuncai"],
+	shen_xunyu: ["shen_xunyu", "taffyold_shen_xunyu"],
 };
 
 export default characterReplaces;

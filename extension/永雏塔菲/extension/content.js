@@ -40,6 +40,36 @@ export const CONTENT = function (config, pack) {
 			audio: "extension/永雏塔菲/skin/audio/",
 		}
 	);
+	// 武将配音audioname2添加
+	const setAudioname2 = function (skills, map) {
+		if (!Array.isArray(skills)) skills = [skills];
+		skills.forEach(skill => {
+			if (!lib.skill[skill]) return;
+			if (!lib.skill[skill].audioname2) lib.skill[skill].audioname2 = {};
+			for (let i in map) {
+				lib.skill[skill].audioname2[i] = map[i];
+				// 适配千幻聆音
+				if (!lib.skill[map[i]]) {
+					lib.skill[map[i]] = { audio: 2 };
+					lib.skill[map[i]].audio = skill.audio;
+				}
+			}
+		});
+	};
+	setAudioname2("clanbaozu", { taffyold_clan_zhonghui: "clanbaozu_clan_zhonghui" });
+	setAudioname2("clandaojie", { taffyold_clan_xuncai: "clandaojie_clan_xuncai" });
+	setAudioname2("nzry_cunmu", { taffyold_ol_pengyang: "nzry_cunmu_ol_pengyang" });
+	setAudioname2("reguicai", { taffyold_xin_simayi: "jilue_guicai", taffyold_new_simayi: "reguicai_new_simayi" });
+	setAudioname2("fangzhu", { taffyold_xin_simayi: "jilue_fangzhu" });
+	setAudioname2("rejizhi", { taffyold_xin_simayi: "jilue_jizhi" });
+	setAudioname2("rezhiheng", { taffyold_xin_simayi: "jilue_zhiheng", taffyold_shen_caopi: "rezhiheng_shen_caopi" });
+	setAudioname2("rewansha", { taffyold_xin_simayi: "jilue_wansha", taffyold_new_simayi: "wansha_new_simayi" });
+	setAudioname2("lianpo", { taffyold_new_simayi: "lianpo_new_simayi" });
+	setAudioname2("rejianxiong", { taffyold_shen_caopi: "rejianxiong_shen_caopi" });
+	setAudioname2("rerende", { taffyold_shen_caopi: "rerende_shen_caopi" });
+	setAudioname2("olluanji", { taffyold_shen_caopi: "olluanji_shen_caopi" });
+	setAudioname2("olfangquan", { taffyold_shen_caopi: "olfangquan_shen_caopi" });
+	// 一些全局技能
 	lib.skill._taffy_dieKillEffect = {
 		trigger: {
 			source: ["dieBegin"],
