@@ -4092,7 +4092,7 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				teshu: {
 					name: "武关羽/经典形象/zhujiemian_wuguanyu1",
 					action: "play",
-					scale: 0.5,
+					scale: 0.4,
 					showTime: 2,
 				},
 				x: [0, 1.2],
@@ -4105,13 +4105,13 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 				chuchang: {
 					name: "武关羽/经典形象/zhujiemian_wuguanyu1",
 					action: "play",
-					scale: 0.5,
+					scale: 0.4,
 					showTime: 2,
 				},
 				gongji: {
 					name: "武关羽/经典形象/zhujiemian_wuguanyu1",
 					action: ["play"],
-					scale: 0.5,
+					scale: 0.4,
 					showTime: 2,
 				},
 				beijing: {

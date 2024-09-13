@@ -1048,7 +1048,6 @@ const skills = {
 			source: "damageBefore",
 		},
 		logTarget: "player",
-		usable: 1,
 		check: function (event, player) {
 			var target = event.player;
 			if (get.damageEffect(target, player, player) > 0 && get.attitude(player, target) >= 0) {
@@ -1060,7 +1059,7 @@ const skills = {
 			"step 0";
 			var he = trigger.player.getCards("he");
 			if (he.length > 0) {
-				if (he.length > 1) trigger.player.chooseCard("he", true, [1, Infinity], "选择交给" + get.translation(player) + "任意张牌").set("ai", card => -get.value(card));
+				if (he.length > 1) trigger.player.chooseCard("he", true, [1, Infinity], "选择交给" + get.translation(player) + "至少一张牌").set("ai", card => -get.value(card));
 				else
 					event._result = {
 						bool: true,
@@ -1073,6 +1072,7 @@ const skills = {
 			("step 1");
 			if (result.bool) {
 				event.source = player;
+				player.markAuto("taffybaomi", [trigger.player]);
 				trigger.player.give(result.cards, player);
 				event.num = result.cards.length;
 			}
@@ -1096,6 +1096,34 @@ const skills = {
 				},
 			},
 		},
+		group: "taffybaomi_beg",
+		subSkill: {
+			beg: {
+				trigger: { global: "phaseUseBegin" },
+				filter: function (event, player) {
+					return event.player != player && event.player.countCards("he");
+				},
+				prompt2: "令其交给你至少一张牌。",
+				check: function (event, player) {
+					if (get.attitude(player, event.player) > 0 && event.player.countCards("h") <= event.player.hp) return false;
+					return true;
+				},
+				content: function () {
+					"step 0";
+					var target = trigger.player;
+					event.target = target;
+					target.chooseCard("he", true, [1, Infinity], "交给" + get.translation(player) + "至少一张牌").set("ai", card => -get.value(card));
+					("step 1");
+					if (result.bool) {
+						player.markAuto("taffybaomi", [target]);
+						target.give(result.cards, player);
+					}
+				},
+			},
+			ai: {
+				threaten: 1.1,
+			},
+		},
 	},
 	taffyfeizhu: {
 		audio: 2,
@@ -1103,25 +1131,11 @@ const skills = {
 			player: "damageBegin4",
 		},
 		forced: true,
-		content: () => {
-			if (player.isTurnedOver()) {
-				trigger.num = Math.floor(trigger.num * 2);
-			} else {
-				trigger.num = Math.floor(trigger.num / 2);
-			}
+		filter: function (event, player) {
+			return player.isTurnedOver();
 		},
-		ai: {
-			effect: {
-				target: function (card, player, target) {
-					if (target.isTurnedOver()) return 0.5;
-					if (player.hasSkillTag("jueqing", false, target)) return;
-					var num = get.tag(card, "damage");
-					if (num) {
-						if (num > 1) return 0.5;
-						return 0;
-					}
-				},
-			},
+		content: function () {
+			trigger.num = Math.floor(trigger.num * 2);
 		},
 	},
 	taffyzuoai: {
@@ -1138,7 +1152,7 @@ const skills = {
 		lose: false,
 		delay: 0,
 		filterTarget: function (card, player, target) {
-			return player != target && get.distance(player, target) <= 1;
+			return player != target && get.distance(player, target) <= 1 && player.getStorage("taffybaomi").includes(target) && target.isIn();
 		},
 		check: function (card) {
 			return 0;
@@ -1230,6 +1244,11 @@ const skills = {
 		// limited:true,
 		// skillAnimation:true,
 		// animationColor:'fire',
+		filter: function (event, player) {
+			game.hasPlayer(current => {
+				return current.hasSex("male") && current.countMark("taffyzuoai") > 2;
+			});
+		},
 		filterTarget: function (card, player, current) {
 			return current != player && current.hasSex("male") && current.countMark("taffyzuoai") > 2;
 		},
@@ -9334,61 +9353,44 @@ const skills = {
 			},
 		},
 	},
-	// 大叔
-	hoshino_zhenya: {},
-	hoshino_jijiu: {},
-	hoshino_huizhang: {
-		trigger: { player: "damageBegin4" },
-		forced: true,
-		audio: 2,
-		filter: function (event, player) {
-			if (event.num <= 1) return false;
-			return true;
-		},
-		content: function () {
-			trigger.num = 1;
-		},
-		ai: {
-			filterDamage: true,
-			skillTagFilter: function (player, tag, arg) {
-				if (arg && arg.player) {
-					if (arg.player.hasSkillTag("jueqing", false, player)) return false;
-				}
-			},
-		},
-	},
-	hoshino_shushou: {},
 	// 水大叔
 	hoshino_shuiyuan: {
 		audio: 3,
-		trigger: { player: "phaseUseBegin" },
-		frequent: true,
-		group: "hoshino_shuiyuan_die",
+		enable: "phaseUse",
+		usable: 1,
+		chargeSkill: true,
+		init: function (player) {
+			player.addSkill("hoshino_shuiyuan_charge");
+			player.addSkill("hoshino_shuiyuan_die");
+		},
+		onremove: function (player) {
+			player.removeSkill("hoshino_shuiyuan_charge");
+			player.removeSkill("hoshino_shuiyuan_die");
+		},
+		filter: function (event, player) {
+			if (player.countMark("charge") < 5) return false;
+			return true;
+		},
+		filterTarget: function (card, player, current) {
+			return get.distance(player, current) <= 2;
+		},
+		selectTarget: [0, Infinity],
+		multitarget: true,
+		multiline: true,
+		prompt: "消耗5点蓄力值，移除场上所有“水”标记，并令任意名与你距离小于2的角色获得5个“水”标记",
+		group: ["hoshino_shuiyuan_charge", "hoshino_shuiyuan_die"],
 		content: () => {
-			"step 0";
-			player
-				.chooseTarget(`水援：移除场上所有“水”标记，并令任意名与你距离小于2的角色获得5个“水”标记`, [0, Infinity], function (card, player, target) {
-					return get.distance(player, target) <= 2;
-				})
-				.set("ai", target => {
-					if (get.attitude(player, target) > 0) {
-						return 1;
-					}
-					return false;
-				});
-			("step 1");
-			if (!result.bool) return event.finish();
+			player.removeMark("charge", 5);
 			var clearTargets = game.filterPlayer(current => {
 				return current.countMark("hoshino_shuiyuan_effect") > 0;
 			});
 			player.line(clearTargets);
 			clearTargets.forEach(current => {
 				current.removeSkill("hoshino_shuiyuan_effect");
-				current.removeSkill("hoshino_haile_effect");
 				current.removeSkill("hoshino_shuiyuan_remove");
 				current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
 			});
-			const targets = result.targets.slice().sortBySeat();
+			const targets = event.targets.slice().sortBySeat();
 			player.line(targets);
 			while (targets.length) {
 				const target = targets.shift();
@@ -9396,20 +9398,46 @@ const skills = {
 				target.addMark("hoshino_shuiyuan_effect", 5, false);
 				target.addSkill("hoshino_shuiyuan_effect");
 				target.addSkill("hoshino_shuiyuan_remove");
-				if (player.hasSkill("hoshino_haile")) {
-					target.addSkill("hoshino_haile_effect");
-				}
 			}
 		},
+		ai: {
+			order: 10,
+			result: {
+				player(player, target) {
+					var att = get.attitude(player, target);
+					if (att <= 0) return 0;
+					return 1;
+				},
+			},
+		},
 		subSkill: {
+			charge: {
+				trigger: {
+					global: ["phaseBefore", "phaseEnd"],
+					player: "enterGame",
+				},
+				forced: true,
+				priority: 1000,
+				filter: function (event, player, name) {
+					if (player.countMark("charge") > 9) return false;
+					return name != "phaseBefore" || game.phaseNumber == 0;
+				},
+				content: function () {
+					const name = event.triggername;
+					if (name == "phaseBefore") {
+						player.addMark("charge", 5 + player.countMark("charge") > 10 ? 10 - player.countMark("charge") : 5);
+					} else {
+						player.addMark("charge", 1);
+					}
+				},
+			},
 			remove: {
-				trigger: { global: "phaseJieshuBegin" },
+				trigger: { global: "phaseEnd" },
 				forced: true,
 				content: () => {
 					player.removeMark("hoshino_shuiyuan_effect", 1);
 					if (player.countMark("hoshino_shuiyuan_effect") === 0) {
 						player.removeSkill("hoshino_shuiyuan_effect");
-						player.removeSkill("hoshino_haile_effect");
 						player.removeSkill("hoshino_shuiyuan_remove");
 					}
 				},
@@ -9424,7 +9452,7 @@ const skills = {
 				content: function () {
 					trigger.num = trigger.num * 2;
 				},
-				intro: { content: "造成的火焰伤害翻倍且一名角色的回合结束时移去一个“水”标记并摸一张牌" },
+				intro: { content: "造成的火焰伤害翻倍" },
 			},
 			die: {
 				trigger: { player: "die" },
@@ -9441,7 +9469,6 @@ const skills = {
 					player.line(targets);
 					targets.forEach(current => {
 						current.removeSkill("hoshino_shuiyuan_effect");
-						current.removeSkill("hoshino_haile_effect");
 						current.removeSkill("hoshino_shuiyuan_remove");
 						current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
 					});
@@ -9508,17 +9535,25 @@ const skills = {
 	},
 	hoshino_haile: {
 		audio: 3,
+		trigger: { global: "phaseEnd" },
+		priority: 999,
 		forced: true,
-		content: function () {},
+		filter(event, player) {
+			return game.hasPlayer(function (current) {
+				return current.hasMark("hoshino_shuiyuan_effect") && !current.hasSkill("hoshino_haile_ban");
+			});
+		},
+		content: function () {
+			var targets = game.filterPlayer(current => current.hasMark("hoshino_shuiyuan_effect") && !current.hasSkill("hoshino_haile_ban")).sortBySeat();
+			for (let target of targets) {
+				target.addTempSkill("hoshino_haile_ban");
+			}
+			player.line(targets, "green");
+			game.asyncDraw(targets);
+		},
 		subSkill: {
-			effect: {
-				audio: "hoshino_haile",
-				trigger: { global: "phaseJieshuBegin" },
-				priority: 999,
-				forced: true,
-				content: () => {
-					player.draw();
-				},
+			ban: {
+				charlotte: true,
 			},
 		},
 	},
