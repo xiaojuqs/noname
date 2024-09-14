@@ -9356,8 +9356,8 @@ const skills = {
 	// 水大叔
 	hoshino_shuiyuan: {
 		audio: 3,
-		enable: "phaseUse",
-		usable: 1,
+		trigger: { player: "phaseUseBegin" },
+		frequent: true,
 		chargeSkill: true,
 		init: function (player) {
 			player.addSkill("hoshino_shuiyuan_charge");
@@ -9371,14 +9371,20 @@ const skills = {
 			if (player.countMark("charge") < 5) return false;
 			return true;
 		},
-		filterTarget: function (card, player, current) {
-			return get.distance(player, current) <= 2;
-		},
-		selectTarget: [0, Infinity],
-		multitarget: true,
-		multiline: true,
-		prompt: "消耗5点蓄力值，移除场上所有“水”标记，并令任意名与你距离小于2的角色获得5个“水”标记",
 		content: () => {
+			"step 0";
+			player
+				.chooseTarget(`水援：移除场上所有“水”标记，并令任意名与你距离小于2的角色获得5个“水”标记`, [0, Infinity], function (card, player, target) {
+					return get.distance(player, target) <= 2;
+				})
+				.set("ai", target => {
+					if (get.attitude(player, target) > 0) {
+						return 1;
+					}
+					return false;
+				});
+			("step 1");
+			if (!result.bool) return event.finish();
 			player.removeMark("charge", 5);
 			var clearTargets = game.filterPlayer(current => {
 				return current.countMark("hoshino_shuiyuan_effect") > 0;
@@ -9389,7 +9395,7 @@ const skills = {
 				current.removeSkill("hoshino_shuiyuan_remove");
 				current.removeMark("hoshino_shuiyuan_effect", current.countMark("hoshino_shuiyuan_effect"));
 			});
-			const targets = event.targets.slice().sortBySeat();
+			const targets = result.targets.slice().sortBySeat();
 			player.line(targets);
 			while (targets.length) {
 				const target = targets.shift();
@@ -9398,16 +9404,6 @@ const skills = {
 				target.addSkill("hoshino_shuiyuan_effect");
 				target.addSkill("hoshino_shuiyuan_remove");
 			}
-		},
-		ai: {
-			order: 10,
-			result: {
-				player(player, target) {
-					var att = get.attitude(player, target);
-					if (att <= 0) return 0;
-					return 1;
-				},
-			},
 		},
 		subSkill: {
 			charge: {
