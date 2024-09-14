@@ -518,6 +518,7 @@ const translates = {
 	himari_linghua_info: "限定技。出牌阶段，你可以修改〖见实〗。",
 	himari_zhensui: "真髄",
 	himari_zhensui_info: "一名角色的回合结束时，你可以令任意名角色摸一张牌。",
+	himari_zhensui_append: '<span style="font-family: yuanli">天才美少女黑客的真正实力，就让你见识一下吧。</span>',
 	aruijier: "瑞吉儿",
 };
 
