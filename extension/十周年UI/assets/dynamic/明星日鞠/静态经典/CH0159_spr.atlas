@@ -1,0 +1,139 @@
+
+CH0159_spr.png
+size: 4096,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+00_default
+  rotate: true
+  xy: 3048, 922
+  size: 188, 140
+  orig: 188, 140
+  offset: 0, 0
+  index: -1
+01_normal
+  rotate: false
+  xy: 2252, 132
+  size: 188, 140
+  orig: 188, 140
+  offset: 0, 0
+  index: -1
+02_respond
+  rotate: false
+  xy: 592, 134
+  size: 196, 152
+  orig: 196, 152
+  offset: 0, 0
+  index: -1
+03_smile
+  rotate: false
+  xy: 3016, 230
+  size: 196, 140
+  orig: 196, 140
+  offset: 0, 0
+  index: -1
+04_embarrass
+  rotate: false
+  xy: 166, 1354
+  size: 208, 144
+  orig: 208, 144
+  offset: 0, 0
+  index: -1
+05_serious
+  rotate: false
+  xy: 2992, 372
+  size: 192, 148
+  orig: 192, 148
+  offset: 0, 0
+  index: -1
+06
+  rotate: false
+  xy: 2826, 124
+  size: 186, 148
+  orig: 186, 148
+  offset: 0, 0
+  index: -1
+10_etc
+  rotate: false
+  xy: 2636, 74
+  size: 186, 156
+  orig: 186, 156
+  offset: 0, 0
+  index: -1
+11_etc
+  rotate: false
+  xy: 722, 256
+  size: 188, 158
+  orig: 188, 158
+  offset: 0, 0
+  index: -1
+12_etc
+  rotate: false
+  xy: 394, 32
+  size: 196, 152
+  orig: 196, 152
+  offset: 0, 0
+  index: -1
+7_etc
+  rotate: false
+  xy: 3016, 82
+  size: 188, 144
+  orig: 188, 144
+  offset: 0, 0
+  index: -1
+8_etc
+  rotate: true
+  xy: 3030, 1116
+  size: 192, 136
+  orig: 192, 136
+  offset: 0, 0
+  index: -1
+9_etc
+  rotate: true
+  xy: 792, 42
+  size: 192, 138
+  orig: 192, 138
+  offset: 0, 0
+  index: -1
+CH0159
+  rotate: false
+  xy: 4, 384
+  size: 1768, 1114
+  orig: 1768, 2158
+  offset: 0, 0
+  index: -1
+CH015922
+  rotate: false
+  xy: 1560, 276
+  size: 1656, 1222
+  orig: 1768, 2158
+  offset: 112, 936
+  index: -1
+eyeclose2
+  rotate: false
+  xy: 2444, 132
+  size: 188, 140
+  orig: 188, 140
+  offset: 0, 0
+  index: -1
+halo
+  rotate: false
+  xy: 4, 126
+  size: 464, 264
+  orig: 464, 264
+  offset: 0, 0
+  index: -1
+hologram_normal
+  rotate: true
+  xy: 1774, 24
+  size: 896, 480
+  orig: 896, 554
+  offset: 0, 74
+  index: -1
+hologram_screen
+  rotate: 180
+  xy: 934, 6
+  size: 896, 470
+  orig: 896, 554
+  offset: 0, 84
+  index: -1

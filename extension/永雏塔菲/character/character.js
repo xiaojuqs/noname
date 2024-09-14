@@ -38,7 +38,6 @@ const characters = {
 	taffyold_shen_xuzhu: ["male", "shen", 5, ["taffyold_zhengqing", "zhuangpo"], ["wei", "character:shen_xuzhu", "die:shen_xuzhu"]],
 	taffyshen_xushao: ["male", "shen", 3, ["taffyshen_pingjian"], ["qun"]],
 	taffyold_tenggongzhu: ["female", "wu", 4, ["taffyold_xingchong", "taffyold_liunian"], ["name:孙|null", "character:tenggongzhu", "die:tenggongzhu"]],
-	hoshino: ["female", "shen", 4, ["hoshino_zhenya", "hoshino_jijiu", "hoshino_huizhang", "hoshino_shushou"], ["unseen", "qun", "name:小鸟游|星野"]],
 	swimsuit_hoshino: ["female", "shen", 3, ["hoshino_shuiyuan", "hoshino_shuiji", "hoshino_naishu", "hoshino_haile"], ["qun", "name:小鸟游|星野"]],
 	limulu: ["male", "shen", 3, ["limulu_baoshi", "limulu_zhihui", "limulu_mowang"], ["qun"]],
 	taffyold_tw_baoxin: ["male", "qun", 4, ["taffyold_twmutao", "twyimou"], ["character:tw_baoxin", "die:tw_baoxin"]],
@@ -77,6 +76,7 @@ const characters = {
 	taffyold_shen_caopi: ["male", "shen", 6, ["taffyold_chuyuan", "taffyold_dengji"], ["wei", "character:shen_caopi", "die:shen_caopi"]],
 	taffyold_clan_xuncai: ["female", "qun", 3, ["taffyold_clanlieshi", "taffyold_clandianzhan", "clanhuanyin", "clandaojie"], ["clan:颍川荀氏", "character:clan_xuncai", "die:clan_xuncai"]],
 	taffyold_shen_xunyu: ["male", "shen", 3, ["taffyold_tianzuo", "taffyold_lingce", "taffyold_dinghan"], ["wei", "clan:颍川荀氏", "character:shen_xunyu", "die:shen_xunyu"]],
+	himari: ["female", "shen", 3, ["himari_jianshi", "himari_yiwai", "himari_linghua", "himari_zhensui"], ["qun", "name:明星|日鞠"]],
 	aruijier: ["female", "shen", "", [], ["unseen", "qun"]],
 };
 

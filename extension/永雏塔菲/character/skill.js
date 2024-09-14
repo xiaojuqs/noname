@@ -1119,9 +1119,9 @@ const skills = {
 						target.give(result.cards, player);
 					}
 				},
-			},
-			ai: {
-				threaten: 1.1,
+				ai: {
+					threaten: 1.1,
+				},
 			},
 		},
 	},
@@ -9378,7 +9378,6 @@ const skills = {
 		multitarget: true,
 		multiline: true,
 		prompt: "消耗5点蓄力值，移除场上所有“水”标记，并令任意名与你距离小于2的角色获得5个“水”标记",
-		group: ["hoshino_shuiyuan_charge", "hoshino_shuiyuan_die"],
 		content: () => {
 			player.removeMark("charge", 5);
 			var clearTargets = game.filterPlayer(current => {
@@ -9412,6 +9411,7 @@ const skills = {
 		},
 		subSkill: {
 			charge: {
+				charlotte: true,
 				trigger: {
 					global: ["phaseBefore", "phaseEnd"],
 					player: "enterGame",
@@ -9432,6 +9432,7 @@ const skills = {
 				},
 			},
 			remove: {
+				charlotte: true,
 				trigger: { global: "phaseEnd" },
 				forced: true,
 				content: () => {
@@ -9443,6 +9444,7 @@ const skills = {
 				},
 			},
 			effect: {
+				charlotte: true,
 				audio: "hoshino_shuiyuan",
 				forced: true,
 				trigger: { source: "damageBegin1" },
@@ -14978,6 +14980,153 @@ const skills = {
 					}
 				},
 			},
+		},
+	},
+	// 帅！otto！
+	himari_jianshi: {
+		audio: 3,
+		trigger: { global: ["phaseBegin", "phaseUseBegin"] },
+		chargeSkill: true,
+		init: function (player) {
+			player.addSkill("himari_jianshi_charge");
+		},
+		onremove: function (player) {
+			player.removeSkill("himari_jianshi_charge");
+			delete player.storage.himari_jianshi_modified;
+		},
+		derivation: ["himari_jianshi_modified"],
+		filter: function (event, player, name) {
+			if (player.storage.himari_jianshi_modified) {
+				return event.player != player && name != "phaseUseBegin" && player.countMark("charge") >= 3;
+			}
+			return event.player != player && name != "phaseBegin" && player.countMark("charge") >= 3;
+		},
+		prompt2: "消耗3点蓄力值，令其造成的伤害加倍直到出牌阶段结束。",
+		check: function (event, player) {
+			if (get.attitude(player, event.player) > 0) return true;
+			return false;
+		},
+		content: function () {
+			player.removeMark("charge", 3);
+			var target = trigger.player;
+			player.line(target, "green");
+			target.addTempSkill("himari_jianshi_effect", { player: player.storage.himari_jianshi_modified ? "phaseEnd" : "phaseUseEnd" });
+		},
+		ai: {
+			threaten: 1.1,
+		},
+		subSkill: {
+			charge: {
+				charlotte: true,
+				trigger: {
+					global: ["phaseBefore", "phaseEnd"],
+					player: "enterGame",
+				},
+				forced: true,
+				priority: 1000,
+				filter: function (event, player, name) {
+					if (player.countMark("charge") > 9) return false;
+					return name != "phaseBefore" || game.phaseNumber == 0;
+				},
+				content: function () {
+					const name = event.triggername;
+					if (name == "phaseBefore") {
+						player.addMark("charge", 3 + player.countMark("charge") > 10 ? 10 - player.countMark("charge") : 3);
+					} else {
+						player.addMark("charge", 1);
+					}
+				},
+			},
+			effect: {
+				audio: "himari_jianshi",
+				charlotte: true,
+				mark: true,
+				marktext: "🤬",
+				forced: true,
+				trigger: { source: "damageBegin1" },
+				content: function () {
+					trigger.num = trigger.num * 2;
+				},
+				intro: {
+					name: "爽骂鞠姐",
+					content: "造成的伤害翻倍",
+				},
+			},
+		},
+	},
+	himari_yiwai: {
+		audio: 3,
+		enable: "phaseUse",
+		usable: 1,
+		filterTarget: function (card, player, current) {
+			return current != player;
+		},
+		selectTarget: 1,
+		prompt: "令一名其他角色无法使用【闪】直到其回合结束",
+		content() {
+			if (target) {
+				target.addTempSkill("himari_yiwai_effect", { player: "phaseEnd" });
+			}
+		},
+		ai: {
+			order: 12,
+			result: {
+				player: 1,
+				target: -1,
+			},
+		},
+		subSkill: {
+			effect: {
+				charlotte: true,
+				mark: true,
+				marktext: "😱",
+				intro: {
+					name: "鞠姐の攻击性令白字意外",
+					content: (_, player) => "不能使用【闪】",
+				},
+				mod: {
+					cardEnabled(card) {
+						if (card.name == "shan") return false;
+					},
+				},
+			},
+		},
+	},
+	himari_linghua: {
+		audio: 2,
+		enable: "phaseUse",
+		limited: true,
+		skillAnimation: true,
+		animationColor: "fire",
+		derivation: ["himari_jianshi"],
+		async content(event, trigger, player) {
+			player.awakenSkill("himari_linghua");
+			player.storage.himari_jianshi_modified = true;
+		},
+		ai: {
+			order: 14,
+			result: {
+				player: 1,
+			},
+		},
+	},
+	himari_zhensui: {
+		audio: 3,
+		trigger: { global: "phaseEnd" },
+		frequent: true,
+		content: function () {
+			"step 0";
+			player.chooseTarget(`真髄：令任意名角色摸一张牌`, [0, Infinity]).set("ai", target => {
+				if (get.attitude(player, target) > 0) {
+					return 1;
+				}
+				return false;
+			});
+			("step 1");
+			if (!result.bool) return event.finish();
+			const targets = result.targets.slice().sortBySeat();
+			player.line(targets, "green");
+			game.asyncDraw(targets);
 		},
 	},
 };

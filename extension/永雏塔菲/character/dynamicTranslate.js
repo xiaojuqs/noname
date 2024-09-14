@@ -40,9 +40,9 @@ const dynamicTranslates = {
 		var list = lib.skill.taffyold_lkbushi.getBushi(player).map(i => get.translation(i));
 		return "①你使用" + list[0] + "牌无次数限制。②当你使用或打出" + list[1] + "牌后，你摸2张牌。③结束阶段开始时，或当你成为" + list[2] + "牌的目标后，你从牌堆或弃牌堆获得一张" + list[3] + "牌。④准备阶段开始时，你可调整此技能中四种花色的对应顺序。";
 	},
-	himari_jianshishili(player) {
-		if (player.hasSkill("himari_jianshishili_mark", null, null, false)) return "蓄力技（3/10）。①一名其他角色的回合开始时，你可以消耗3点蓄力值，令其造成的伤害加倍直到回合结束。②一名角色的回合结束时，你获得1点蓄力值。";
-		return "蓄力技（3/10）。①一名其他角色的出牌阶段开始时，你可以消耗3点蓄力值，令其造成的伤害加倍直到出牌阶段结束。②一名角色的回合结束时，你获得1点蓄力值。";
+	himari_jianshi(player) {
+		if (player.storage.himari_jianshi_modified) return "蓄力技（3/10）。①一名其他角色的回合开始时，你可以消耗3点蓄力值，令其造成的伤害加倍直到回合结束。②锁定技。一名角色的回合结束时，你获得1点蓄力值。";
+		return "蓄力技（3/10）。①一名其他角色的出牌阶段开始时，你可以消耗3点蓄力值，令其造成的伤害加倍直到出牌阶段结束。②锁定技。一名角色的回合结束时，你获得1点蓄力值。";
 	},
 };
 export default dynamicTranslates;

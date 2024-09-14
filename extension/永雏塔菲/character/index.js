@@ -42,9 +42,9 @@ export const characterPackFunc = function () {
 				taffyold_dc_shen_huatuo: "#gViridian",
 				taffyshen_xushao: "#gViridian",
 				taffyold_tenggongzhu: "#gViridian",
-				hoshino: "#gViridian",
 				swimsuit_hoshino: "#gViridian",
 				taffyre_xuyou: "#gViridian",
+				himari: "#gViridian",
 				limulu: "#gLazysun Viridian",
 			},
 			dynamicTranslate: { ...dynamicTranslates },
@@ -101,13 +101,13 @@ export const characterPackFunc = function () {
 				character: "ext:永雏塔菲/image/character/taffyboss_xushao.jpg",
 				die: "die:../../extension/永雏塔菲/audio/die/taffyboss_xushao.mp3",
 			},
-			hoshino: {
-				character: "ext:永雏塔菲/image/character/hoshino.jpg",
-				die: "die:../../extension/永雏塔菲/audio/die/hoshino.wav",
-			},
 			swimsuit_hoshino: {
 				character: "ext:永雏塔菲/image/character/swimsuit_hoshino.jpg",
 				die: "die:../../extension/永雏塔菲/audio/die/swimsuit_hoshino.ogg",
+			},
+			himari: {
+				character: "ext:永雏塔菲/image/character/himari.jpg",
+				die: "die:../../extension/永雏塔菲/audio/die/himari.ogg",
 			},
 		};
 		const specialList = Object.keys(specialDetails);

@@ -55,7 +55,7 @@ const characterSort = {
 	taffy_tang: ["acetaffy", "minitaffy"],
 	taffy_gzz: ["junko"],
 	taffy_wu: ["taffyhuiwan_sunquan", "taffyhuiwanplus_sunquan"],
-	taffy_ba: ["hoshino", "swimsuit_hoshino"],
+	taffy_ba: ["swimsuit_hoshino", "himari"],
 	taffy_mobile_changshi: ["taffyold_scs_zhangrang", "taffyold_scs_zhangrang", "taffyold_scs_zhangrang", "taffyold_scs_zhangrangscs_bilan", "taffyold_scs_zhangrangscs_xiayun", "taffyold_scs_hankui", "taffyold_scs_lisong", "taffyold_scs_duangui", "taffyold_scs_guosheng", "taffyold_scs_gaowang"],
 };
 
