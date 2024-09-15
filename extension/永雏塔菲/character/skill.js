@@ -14997,7 +14997,7 @@ const skills = {
 			}
 			return event.player != player && name != "phaseBegin" && player.countMark("charge") >= 3;
 		},
-		prompt2: "消耗3点蓄力值，令其造成的伤害加倍直到出牌阶段结束。",
+		prompt2: "消耗3点蓄力值，令其造成的伤害翻倍直到出牌阶段结束。",
 		check: function (event, player) {
 			if (get.attitude(player, event.player) > 0) return true;
 			return false;
@@ -15097,6 +15097,7 @@ const skills = {
 		derivation: ["himari_jianshi"],
 		async content(event, trigger, player) {
 			player.awakenSkill("himari_linghua");
+			player.addTempSkill("himari_jianshi_effect", { player: "phaseEnd" });
 			player.storage.himari_jianshi_modified = true;
 		},
 		ai: {
