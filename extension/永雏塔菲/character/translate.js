@@ -515,7 +515,7 @@ const translates = {
 	himari_yiwai: "意外",
 	himari_yiwai_info: "出牌阶段限一次，你可以令一名其他角色无法使用【闪】直到其下回合结束。",
 	himari_linghua: "岭花",
-	himari_linghua_info: "限定技。出牌阶段，你可以令自己造成的伤害翻倍直到回合结束，然后修改〖见实〗。",
+	himari_linghua_info: "限定技。出牌阶段，你可以令自己造成的伤害+1直到回合结束，然后修改〖见实〗。",
 	himari_zhensui: "真髄",
 	himari_zhensui_info: "一名角色的回合结束时，你可以令任意名角色摸一张牌。",
 	himari_zhensui_append: '<span style="font-family: yuanli">天才美少女黑客的真正实力，就让你见识一下吧。</span>',

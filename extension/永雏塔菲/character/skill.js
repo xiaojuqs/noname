@@ -15097,13 +15097,30 @@ const skills = {
 		derivation: ["himari_jianshi"],
 		async content(event, trigger, player) {
 			player.awakenSkill("himari_linghua");
-			player.addTempSkill("himari_jianshi_effect", { player: "phaseEnd" });
+			player.addTempSkill("himari_linghua_effect", { player: "phaseEnd" });
 			player.storage.himari_jianshi_modified = true;
 		},
 		ai: {
 			order: 14,
 			result: {
 				player: 1,
+			},
+		},
+		subSkill: {
+			effect: {
+				audio: "himari_linghua",
+				charlotte: true,
+				mark: true,
+				marktext: "😡",
+				forced: true,
+				trigger: { source: "damageBegin1" },
+				content: function () {
+					trigger.num = trigger.num + 1;
+				},
+				intro: {
+					name: "爽骂鞠姐",
+					content: "造成的伤害+1",
+				},
 			},
 		},
 	},
