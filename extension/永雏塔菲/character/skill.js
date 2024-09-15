@@ -1099,6 +1099,7 @@ const skills = {
 		group: "taffybaomi_beg",
 		subSkill: {
 			beg: {
+				audio: "taffybaomi",
 				trigger: { global: "phaseUseBegin" },
 				filter: function (event, player) {
 					return event.player != player && event.player.countCards("he");
