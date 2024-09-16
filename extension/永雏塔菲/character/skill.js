@@ -14263,7 +14263,7 @@ const skills = {
 	},
 	// 旧手杀文鸯
 	taffyold_dbzhuifeng: {
-		audio: 2,
+		audio: "dbzhuifeng",
 		groupSkill: "wei",
 		enable: "chooseToUse",
 		filter: function (event, player) {
@@ -14286,9 +14286,16 @@ const skills = {
 					filterCard: () => false,
 					selectCard: -1,
 					precontent: function () {
+						"step 0";
 						player.logSkill("taffyold_dbzhuifeng");
 						delete event.result.skill;
 						player.loseHp();
+						event.forceDie = true;
+						("step 1");
+						//特殊处理
+						if (player.isDead()) {
+							player.useResult(event.result, event.getParent()).forceDie = true;
+						}
 					},
 				};
 			},
