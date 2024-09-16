@@ -2674,16 +2674,16 @@ const skills = {
 			player: "enterGame",
 		},
 		init: function (player) {
-			lib.skill.oldbaonvezhi.change(player, 0);
+			lib.skill.taffyold_baonvezhi.change(player, 0);
 		},
 		direct: true,
-		derivation: ["oldtwxiongjun", "oldbaonvezhi_faq"],
+		derivation: ["taffyold_twxiongjun", "taffyold_baonvezhi_faq"],
 		group: "taffyold_twjuntun_extra",
 		filter: function (event, player) {
 			return (
 				(event.name != "phase" || game.phaseNumber == 0) &&
 				game.hasPlayer(current => {
-					return !current.hasSkill("oldtwxiongjun");
+					return !current.hasSkill("taffyold_twxiongjun");
 				})
 			);
 		},
@@ -2691,36 +2691,36 @@ const skills = {
 			"step 0";
 			player
 				.chooseTarget(get.prompt("taffyold_twjuntun"), "令一名角色获得〖凶军〗", (card, player, target) => {
-					return !target.hasSkill("oldtwxiongjun");
+					return !target.hasSkill("taffyold_twxiongjun");
 				})
 				.set("ai", target => get.attitude(player, target) - 2);
 			("step 1");
 			if (result.bool) {
 				var target = result.targets[0];
 				player.logSkill("taffyold_twjuntun", target);
-				target.addSkillLog("oldtwxiongjun");
+				target.addSkillLog("taffyold_twxiongjun");
 				if (target != player) player.addExpose(0.25);
 			}
 		},
 		subSkill: {
 			extra: {
-				audio: 2,
+				audio: "twjuntun_extra",
 				trigger: {
 					global: "damageSource",
 				},
 				forced: true,
 				locked: false,
 				filter: function (event, player) {
-					return event.source && event.source.hasSkill("oldtwxiongjun") && event.source != player;
+					return event.source && event.source.hasSkill("taffyold_twxiongjun") && event.source != player;
 				},
 				logTarget: "source",
 				content: function () {
-					lib.skill.oldbaonvezhi.change(player, trigger.num);
+					lib.skill.taffyold_baonvezhi.change(player, trigger.num);
 				},
 			},
 		},
 	},
-	oldbaonvezhi: {
+	taffyold_baonvezhi: {
 		audio: "baonvezhi",
 		trigger: {
 			player: "damageEnd",
@@ -2729,44 +2729,45 @@ const skills = {
 		silent: true,
 		forced: true,
 		charlotte: true,
-		oldbaonvezhi_max: 5,
+		taffyold_baonvezhi_max: 5,
 		change: function (player, num) {
-			var oldbaonvezhi_max = lib.skill.oldbaonvezhi.oldbaonvezhi_max;
-			player.addSkill("oldbaonvezhi");
-			var tmp = player.countMark("oldbaonvezhi");
-			if (tmp + num > oldbaonvezhi_max) num = oldbaonvezhi_max - tmp;
+			var taffyold_baonvezhi_max = lib.skill.taffyold_baonvezhi.taffyold_baonvezhi_max;
+			player.addSkill("taffyold_baonvezhi");
+			var tmp = player.countMark("taffyold_baonvezhi");
+			if (tmp + num > taffyold_baonvezhi_max) num = taffyold_baonvezhi_max - tmp;
 			else if (tmp + num < 0) num = -tmp;
 			if (num === 0) return;
-			player[num > 0 ? "addMark" : "removeMark"]("oldbaonvezhi", Math.abs(num), false);
+			player[num > 0 ? "addMark" : "removeMark"]("taffyold_baonvezhi", Math.abs(num), false);
 			game.log(player, num >= 0 ? "获得了" : "失去了", get.cnNumber(Math.abs(num)) + '点<span class="firetext">暴虐值</span>');
-			player[player.countMark("oldbaonvezhi") > 0 ? "markSkill" : "unmarkSkill"]("oldbaonvezhi");
+			player[player.countMark("taffyold_baonvezhi") > 0 ? "markSkill" : "unmarkSkill"]("taffyold_baonvezhi");
 		},
 		filter: function (event, player) {
-			return player.countMark("oldbaonvezhi") < lib.skill.oldbaonvezhi.oldbaonvezhi_max;
+			return player.countMark("taffyold_baonvezhi") < lib.skill.taffyold_baonvezhi.taffyold_baonvezhi_max;
 		},
 		content: function () {
-			lib.skill.oldbaonvezhi.change(player, trigger.num);
+			lib.skill.taffyold_baonvezhi.change(player, trigger.num);
 		},
 		marktext: "暴",
 		intro: {
 			name: "暴虐值",
 			content: function (storage, player) {
-				return get.translation(player) + "的暴虐值为" + (player.storage.oldbaonvezhi || 0);
+				return get.translation(player) + "的暴虐值为" + (player.storage.taffyold_baonvezhi || 0);
 			},
 		},
 	},
-	oldbaonvezhi_faq: {},
-	oldtwxiongjun: {
+	taffyold_baonvezhi_faq: {},
+	taffyold_twxiongjun: {
 		init: function (player) {
-			lib.skill.oldbaonvezhi.change(player, 0);
+			lib.skill.taffyold_baonvezhi.change(player, 0);
 		},
+		audio: "twxiongjun",
 		trigger: {
 			source: "damageSource",
 		},
 		forced: true,
 		// usable: 1,
 		content: function () {
-			var targets = game.filterPlayer(current => current.hasSkill("oldtwxiongjun")).sortBySeat();
+			var targets = game.filterPlayer(current => current.hasSkill("taffyold_twxiongjun")).sortBySeat();
 			player.line(targets, "green");
 			game.asyncDraw(targets);
 		},
@@ -2776,11 +2777,11 @@ const skills = {
 		enable: "phaseUse",
 		// usable: 1,
 		init: function (player) {
-			lib.skill.oldbaonvezhi.change(player, 0);
+			lib.skill.taffyold_baonvezhi.change(player, 0);
 		},
 		filterCard: () => true,
 		selectCard: function () {
-			return (lib.skill.oldbaonvezhi.oldbaonvezhi_max || 5) - _status.event.player.countMark("oldbaonvezhi");
+			return (lib.skill.taffyold_baonvezhi.taffyold_baonvezhi_max || 5) - _status.event.player.countMark("taffyold_baonvezhi");
 		},
 		check: function (card) {
 			return 6 - get.value(card);
@@ -2823,26 +2824,26 @@ const skills = {
 			player: "phaseUseBegin",
 		},
 		filter: function (event, player) {
-			return player.countMark("oldbaonvezhi") > 0;
+			return player.countMark("taffyold_baonvezhi") > 0;
 		},
 		init: function (player) {
-			lib.skill.oldbaonvezhi.change(player, 0);
+			lib.skill.taffyold_baonvezhi.change(player, 0);
 		},
 		direct: true,
 		content: function () {
 			"step 0";
 			player
-				.chooseButton(["黠凤：选择要消耗的暴虐值", [["oldtw_bn_1", "oldtw_bn_2", "oldtw_bn_3"], "vcard"]], button => {
+				.chooseButton(["黠凤：选择要消耗的暴虐值", [["taffyold_tw_bn_1", "taffyold_tw_bn_2", "taffyold_tw_bn_3"], "vcard"]], button => {
 					var num = player.countCards("hs", card => get.tag(card, "damage") && game.hasPlayer(current => get.effect(current, card, player, player) > 0));
 					if (num <= 0) return 0;
 					if (num >= 3) num = 3;
-					if (button.link[2] == "oldtw_bn_" + num) return 10;
+					if (button.link[2] == "taffyold_tw_bn_" + num) return 10;
 					return 1;
 				})
 				.set("filterButton", button => {
 					var player = _status.event.player;
 					var link = button.link[2];
-					if (link[link.length - 1] * 1 > player.storage.oldbaonvezhi) return false;
+					if (link[link.length - 1] * 1 > player.storage.taffyold_baonvezhi) return false;
 					return true;
 				});
 			("step 1");
@@ -2852,7 +2853,7 @@ const skills = {
 					num = link[link.length - 1] * 1;
 				player.addTempSkill("taffyold_twxiafeng_effect");
 				player.storage.taffyold_twxiafeng_effect = num;
-				lib.skill.oldbaonvezhi.change(player, -num);
+				lib.skill.taffyold_baonvezhi.change(player, -num);
 			}
 		},
 		subSkill: {
