@@ -2006,31 +2006,6 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 		},
 		liuzan: {
 			// 留赞
-			高歌陷陈: {
-				name: "留赞/高歌陷陈/daiji2",
-				x: [0, 0.4],
-				y: [0, 0.6],
-				scale: 0.6,
-				angle: 0,
-				// speed: 1,
-				shizhounian: true,
-				chuchang: {
-					name: "留赞/高歌陷陈/chuchang",
-					scale: 0.7,
-					action: "play",
-				},
-				gongji: {
-					name: "留赞/高歌陷陈/chuchang",
-					scale: 0.7,
-					action: "play",
-				},
-				beijing: {
-					name: "留赞/高歌陷陈/beijing",
-					x: [0, 0.5],
-					y: [0, 0.5],
-					scale: 0.3,
-				},
-			},
 			灵魂歌王: {
 				name: "留赞/灵魂歌王/XingXiang",
 				x: [0, -0.2],
@@ -3996,13 +3971,13 @@ decadeModule.import(function (lib, game, ui, get, ai, _status) {
 			},
 			破云翔宇吴: {
 				name: "文鸯/破云翔宇吴/XingXiang",
-				x: [0, 1.2],
+				x: [0, 0.35],
 				y: [0, 0.6],
 				gongji: {
 					x: [0, 0.5],
 					y: [0, 0.5],
 				},
-				scale: 0.4,
+				scale: 0.45,
 				angle: 0,
 				//speed: 1,
 				//action: 'DaiJi',
